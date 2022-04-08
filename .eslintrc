@@ -1,3 +1,16 @@
 {
-  "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node"]
+  "plugins": ["simple-import-sort", "tailwindcss"],
+  "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node", "plugin:tailwindcss/recommended"],
+  "rules": {
+    "prefer-const": "error",
+    // prettier-ignore
+    "simple-import-sort/imports": ["warn", {
+      "groups": [
+        ["^[@a-z]"],
+        ["^~/"],
+        ["^../"],
+        ["^./"]
+      ]
+    }]
+  }
 }
