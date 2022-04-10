@@ -12,12 +12,6 @@
     background-color: #f9f9fb;
   }
 
-  button {
-    @apply font-semibold text-text-light;
-    @apply disabled:text-text-light/60 disabled:pointer-events-none;
-    @apply hover:text-primary hover:fill-primary transition-colors;
-  }
-
   strong {
     @apply text-opacity-80;
   }
@@ -33,6 +27,12 @@
 }
 
 @layer components {
+  .button {
+    @apply font-semibold text-text-light;
+    @apply disabled:text-text-light/60 disabled:pointer-events-none;
+    @apply hover:text-primary hover:fill-primary transition-colors;
+  }
+
   .card {
     background-color: theme('colors.white');
     border-radius: theme('borderRadius.lg');

@@ -3,6 +3,7 @@
   "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node", "plugin:tailwindcss/recommended"],
   "rules": {
     "prefer-const": "error",
+    "@typescript-eslint/consistent-type-imports": "off",
     // prettier-ignore
     "simple-import-sort/imports": ["warn", {
       "groups": [

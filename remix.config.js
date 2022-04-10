@@ -2,5 +2,10 @@
  * @type {import('@remix-run/dev').AppConfig}
  */
 module.exports = {
-  ignoredRouteFiles: ['.*'],
+  serverDependenciesToBundle: [
+    'micromark',
+    /micromark.*/,
+    'decode-named-character-reference',
+    'character-entities',
+  ],
 };
