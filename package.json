@@ -4,12 +4,8 @@
   "description": "",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "run-p start:*",
-    "start:remix": "remix dev",
-    "start:css": "yarn generate:css --watch",
-    "build": "yarn build:css && yarn build:remix",
-    "build:remix": "remix build",
-    "build:css": "yarn generate:css --minify",
+    "start": "concurrently 'yarn generate:css --watch' 'yarn remix dev'",
+    "build": "yarn generate:css --minify && yarn remix build",
     "generate:css": "tailwindcss -i ./styles/tailwind.css -o ./app/tailwind.css",
     "lint": "eslint app"
   },
