@@ -12,7 +12,7 @@ type FooterProps = {
 export const Footer = ({ className }: FooterProps): JSX.Element => (
   <footer className="py-5">
     <div className={className}>
-      <div className="flex flex-row pt-5 mx-4 border-t border-light-gray">
+      <div className="flex flex-row flex-wrap gap-y-4 pt-5 mx-4 border-t border-light-gray links-nocolor">
         <FooterColumn>
           <Link to="/">Accueil</Link>
           <Link to="/charte">La charte</Link>
@@ -53,7 +53,9 @@ type FooterColumnProps = {
 };
 
 const FooterColumn = ({ className, children }: FooterColumnProps) => (
-  <div className={classNames('flex flex-col flex-1 text-text-light', className)}>{children}</div>
+  <div className={classNames('flex flex-col flex-1 text-text-light min-w-[180px]', className)}>
+    {children}
+  </div>
 );
 
 type SocialLinkProps = {

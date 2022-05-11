@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Footer } from './footer';
 import { Header } from './header';
 
-const width = 'max-w-[920px]';
+const width = 'max-w-[1100px]';
 
 type LayoutProps = {
   children: React.ReactNode;

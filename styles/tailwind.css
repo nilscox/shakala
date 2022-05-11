@@ -13,7 +13,23 @@
   }
 
   strong {
-    @apply text-opacity-80;
+    @apply text-text/80;
+  }
+
+  a {
+    @apply text-text-link;
+  }
+
+  .links-nocolor a {
+    color: inherit;
+  }
+
+  .links-underline a {
+    @apply underline decoration-text-light;
+  }
+
+  p {
+    @apply my-1;
   }
 
   *:focus-visible {

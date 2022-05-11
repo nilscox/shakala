@@ -8,7 +8,7 @@
     "start:css": "yarn generate:css --watch",
     "build": "run-s build:*",
     "build:remix": "remix build",
-    "build:css": "generate:css --minify",
+    "build:css": "yarn generate:css --minify",
     "generate:css": "tailwindcss -i ./styles/tailwind.css -o ./app/tailwind.css",
     "lint": "eslint app"
   },
