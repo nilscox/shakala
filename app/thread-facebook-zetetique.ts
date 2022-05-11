@@ -98,14 +98,12 @@ Belle soirée`,
       id: 'qb0mxo',
       author: Spinoza,
       text: `Daniel Kahneman me semble un auteur pertinent sur le sujet...`,
-      repliesOpen: false,
       replies: [
         createComment({
           id: 'jcbyg3',
           author: Hegel,
           upvotes: 2,
           text: `Spinoza justement je discutais encore aujourd'hui avec des personnes qui me disaient que sur ce sujet c'était ta base Au départ mais que aujourd'hui eh bien il était de loin dépassé etc`,
-          repliesOpen: false,
           replies: [
             createComment({
               id: 'jny71o',
@@ -148,13 +146,11 @@ Vous croyez au paranormal? Biais cognitifs... Vous êtes radicalisé? Biais cogn
 Si vous voyez quelqu'un expliquer un comportement par des biais cognitifs, vous êtes face à un réductionnisme extrême, et vous pouvez déjà tirer comme conclusion que la personne en question ne comprend pas grand chose à la psychologie humaine.
 
 Malheureusement, certains sceptiques et rationalistes donnent bcps trop de place à ces biais cognitifs, même s'ils ne sont pas tous aussi caricaturaux bien sur. Les biais peuvent expliquer certains erreurs de perception assez bien, mais pas vraiment les attitudes des gens.`,
-      repliesOpen: false,
       replies: [
         createComment({
           id: '5ag695',
           author: Nietzsche,
           text: `Et aussi voir Albert Moukheiber chez Meta de Choc + son livre. La discipline dans laquelle l'étude des biais cognitifs est ancrée sont les neurosciences.`,
-          repliesOpen: false,
           replies: [
             createComment({
               id: '8rlep9',
@@ -247,7 +243,6 @@ Par ex le biais de conformation dans les tâches de sélection de Wason est trè
           id: '38hzam',
           author: Sade,
           text: `Voltaire Désolé de te contredire, mais aucune personne de zet-ethique avec qui j'avais discuté avant d'être viré de leur groupe n'a jamais travaillé sur la question des biais cognitifs (ni même lu les travaux des fondateurs et des critiques). J'y ai consacré une bonne partie de ma thèse et certains de mes articles, c'est une hypothèse très forte en psychologie cognitive et sociale (et ça vient en neurosciences), même si bien sûr il y a des critiques. Le fait que les variables sociales agissent aussi concernant par exemple le complotisme, ou le racisme, ou tout ce qu'on veut, n'empêche absolument pas qu'il y ait aussi des biais cognitifs. Donc oui, il est idéologique de croire que par exemple le complotisme n'est que cognitif (cela évite de penser ses racines socio-politiques), mais il est tout aussi idéologique de nier les aspects cognitifs, suggérés par toute une série d'études. Donc plutôt que de nier l'existence de certains facteurs et pas d'autres, le plus intéressant pour les sciences sociales sera de comparer l'effet des variables cognitives et sociales, dans des phénomènes comme le complotisme et les croyances en général. Si tu veux, on peut faire une fois une interview sur cette question des biais, comment on les mesure, en abordant ce que disent les critiques informés (Gigerenzer), et pas informés (zet-ethique) 😉`,
-          repliesOpen: false,
           replies: [
             createComment({
               id: '48ackr',
@@ -361,7 +356,6 @@ Echange peu intéressant mais il me semblait nécessaire de répondre à une fau
 "Si vous voyez quelqu'un expliquer un comportement par des biais cognitifs, vous êtes face à un réductionnisme extrême, et vous pouvez déjà tirer comme conclusion que la personne en question ne comprend pas grand chose à la psychologie humaine." Donc tu veux dire que certains psychologues reconnus comme Stanovich, Pennycook, Kahneman, etc. ne "comprennent pas grand chose à la psychologie humaine ?" Je ne sais pas si tu vois comme moi la force (pour ne pas dire l'énormité) de l'affirmation ??
 
 "Malheureusement, certains sceptiques et rationalistes donnent bcps trop de place à ces biais cognitifs" : encore une fois, juger la place des biais ne se décide pas, c'est une affaire de recherche. "Les biais peuvent expliquer certains erreurs de perception assez bien, mais pas vraiment les attitudes des gens" : Là je peux t'envoyer les travaux sur les biais cognitifs et les croyances, y'en a des dizaines. Donc bref, je pense que la position la plus rationnelle est que les biais, comme les variables sociales, expliquent une part des décisions et des comportements humains, mais il faut pour moi être prudent dans tous les sens, et attendre des recherches (et se baser pour l'instant à celles existantes) pour juger de leur importance relative. Ton post et la critique zet-éthique sont pour moi des critiques bien sûr en partie vraie mais exagérées, et pas assez basées sur les travaux en psychologie.`,
-          repliesOpen: false,
           replies: [
             createComment({
               id: 'x9upkk',

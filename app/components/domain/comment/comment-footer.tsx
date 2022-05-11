@@ -20,6 +20,7 @@ type CommentFooterProps = {
   hover: boolean;
   showActions: boolean;
   onShowActions: () => void;
+  onToggleRepliesOpen: () => void;
 };
 
 export const CommentFooter = ({
@@ -30,6 +31,7 @@ export const CommentFooter = ({
   hover,
   showActions,
   onShowActions,
+  onToggleRepliesOpen,
 }: CommentFooterProps) => (
   <div className="flex flex-row justify-between pt-1">
     <div className="flex flex-row gap-x-2">
@@ -67,7 +69,7 @@ export const CommentFooter = ({
         <path d="M 0 0 V 24" strokeWidth="3" strokeLinecap="round" />
       </svg>
 
-      <RepliesButton repliesCount={repliesCount} repliesOpen={repliesOpen} />
+      <RepliesButton repliesCount={repliesCount} repliesOpen={repliesOpen} onClick={onToggleRepliesOpen} />
     </div>
 
     <FooterButton icon={<ReplyIcon />} className={cx(!hover && 'opacity-0 transition-opacity')}>

@@ -31,6 +31,7 @@ module.exports = {
       text: colors.gray[900],
       'text-light': colors.gray[500],
       'text-white': colors.gray[100],
+      'text-link': colors.blue[600],
     },
     extend: {
       typography: {

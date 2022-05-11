@@ -14,10 +14,11 @@ export type CommentProps = {
 };
 
 export const Comment = ({ className, comment }: CommentProps): JSX.Element => {
-  const { author, date, text, upvotes, downvotes, repliesCount, repliesOpen, replies } = comment;
+  const { author, date, text, upvotes, downvotes, repliesCount, replies } = comment;
 
   const [hover, setHover] = useState(false);
   const [showActions, setShowActions] = useState(false);
+  const [repliesOpen, setRepliesOpen] = useState(false);
 
   const handleMouseEnter = useCallback(() => {
     setHover(true);
@@ -43,6 +44,7 @@ export const Comment = ({ className, comment }: CommentProps): JSX.Element => {
           hover={hover}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
+          onToggleRepliesOpen={() => setRepliesOpen(!repliesOpen)}
         />
       </div>
 

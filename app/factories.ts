@@ -26,7 +26,6 @@ export const createComment = (overrides?: Partial<Comment>): Comment => ({
   upvotes: 0,
   downvotes: 0,
   repliesCount: overrides?.replies?.length ?? 0,
-  repliesOpen: false,
   replies: [],
   ...overrides,
 });

@@ -12,7 +12,6 @@ export type Comment = {
   upvotes: number;
   downvotes: number;
   repliesCount: number;
-  repliesOpen: boolean;
   replies: Comment[];
 };
 

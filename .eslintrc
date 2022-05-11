@@ -7,7 +7,7 @@
     // prettier-ignore
     "simple-import-sort/imports": ["warn", {
       "groups": [
-        ["^[@a-z]"],
+        ["reflect-metadata", "^[@a-z]"],
         ["^~/"],
         ["^../"],
         ["^./"]

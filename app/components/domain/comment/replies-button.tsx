@@ -7,11 +7,13 @@ import { FooterButton } from './comment-footer';
 type RepliesButtonProps = {
   repliesCount: number;
   repliesOpen: boolean;
+  onClick: () => void;
 };
 
 export const RepliesButton = ({
   repliesCount: count,
   repliesOpen: open,
+  onClick,
 }: RepliesButtonProps): JSX.Element => {
   const text = (
     <>
@@ -31,6 +33,7 @@ export const RepliesButton = ({
     <FooterButton
       icon={<CaretIcon className={classNames('transition-transform', open && 'rotate-90')} />}
       className="-ml-1"
+      onClick={onClick}
     >
       {text}
     </FooterButton>
