@@ -98,6 +98,8 @@ Belle soirée`,
       id: 'qb0mxo',
       author: Spinoza,
       text: `Daniel Kahneman me semble un auteur pertinent sur le sujet...`,
+      upvotes: 17,
+      downvotes: 3,
       replies: [
         createComment({
           id: 'jcbyg3',
@@ -131,6 +133,8 @@ Belle soirée`,
     createComment({
       id: '1tj876',
       author: Voltaire,
+      upvotes: 48,
+      downvotes: 9,
       text: `Hello.
 
 Je pense que les billets qui parlent des bais cognitifs sur le blog de Zet Ethique Metacritique résument bien le problème du coup je vais me contenter de renvoyer vers ces billets :
@@ -380,6 +384,8 @@ Pour moi ce sont les sceptiques qui sont visés et pas les chercheurs dont tu pa
     createComment({
       id: 'o7ihv3',
       author: GeraldBronner,
+      upvotes: 10,
+      downvotes: 0,
       text: `Je me permets d indiquer qu il y a une quinzaine d années j ai publié ceci. Un livre qui aborde de façon critique certaines interprétations trop rapides des notions d heuristique et de biais cognitifs. A part cela je suis d accord avec les indications de Sade.
 [https://www.puf.com/content/Lempire_de_lerreur](https://www.puf.com/content/Lempire_de_lerreur)`,
     }),
