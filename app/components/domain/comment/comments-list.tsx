@@ -1,10 +1,10 @@
-import cx from 'classnames';
+import classNames from 'classnames';
 
 import { Comment as CommentType } from '~/types';
 
 import { Comment } from './comment';
 
-const border = false;
+const border = true;
 
 export type CommentsListProps = {
   comments: CommentType[];
@@ -23,13 +23,12 @@ export const CommentsList = ({
     {comments.map((comment) => (
       <div
         key={comment.id}
-        className={cx(
-          'border-l-4 border-light-gray pl-[10px] mt-1 first-of-type:mt-0',
-          border && 'border-b last-of-type:border-b-0',
-          containerClassName,
-        )}
+        className={classNames('border-l-4 border-light-gray mt-1 first-of-type:mt-0', containerClassName)}
       >
-        <Comment className={commentClassName} comment={comment} />
+        <Comment
+          className={classNames('ml-2', border && 'border-b border-b-light-gray/50', commentClassName)}
+          comment={comment}
+        />
         {after}
       </div>
     ))}

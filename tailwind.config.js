@@ -51,8 +51,8 @@ module.exports = {
               marginBottom: '0.3em',
             },
             p: {
-              marginTop: '0.7em',
-              marginBottom: '0.7em',
+              marginTop: '0.5em',
+              marginBottom: '0.5em',
               lineHeight: '1.4rem',
             },
             li: {

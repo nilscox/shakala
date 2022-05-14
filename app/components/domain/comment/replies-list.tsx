@@ -9,8 +9,8 @@ type RepliesListProps = {
 export const RepliesList = ({ replies }: RepliesListProps) => (
   <CommentsList
     comments={replies}
-    containerClassName="relative ml-1"
-    after={<ReplyArrow className="absolute top-4 -left-4 mt-2 stroke-light-gray" />}
+    containerClassName="relative ml-4"
+    after={<ReplyArrow className="absolute top-[-16px] left-[-32px] mt-2 stroke-light-gray" />}
   />
 );
 
@@ -19,11 +19,7 @@ type ReplyArrowProps = {
 };
 
 const ReplyArrow = ({ className }: ReplyArrowProps) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className={className}>
-    <path
-      d="M 0 0 c 2 9 7 12 13 12 h 8 M 20 12 l -8 -7 M 20 12 l -8 6"
-      strokeWidth="3"
-      strokeLinecap="round"
-    />
+  <svg width="29" height="28" viewBox="-2 -2 26 26" fill="none" className={className}>
+    <path d="M 0 0 c 0 10 8 14 15 14 h 8 m 0 0 l -8 -7 m 8 7 l -8 6" strokeWidth="3" strokeLinecap="round" />
   </svg>
 );

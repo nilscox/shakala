@@ -33,7 +33,7 @@ export const CommentFooter = ({
   onShowActions,
   onToggleRepliesOpen,
 }: CommentFooterProps) => (
-  <div className="flex flex-row justify-between pt-1">
+  <div className="flex flex-row justify-between">
     <div className="flex flex-row gap-x-2">
       <FooterButton quiet={!hover} icon={<ThumbUpIcon />}>
         {upvotes}

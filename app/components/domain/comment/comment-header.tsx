@@ -8,7 +8,7 @@ type CommentHeaderProps = {
 };
 
 export const CommentHeader = ({ author, date }: CommentHeaderProps) => (
-  <div className="flex flex-row justify-between py-0.5">
+  <div className="flex flex-row justify-between items-center">
     <AvatarNick user={author} />
     <Date date={date} className="text-sm text-text-light" />
   </div>

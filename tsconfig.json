@@ -12,6 +12,8 @@
     "noEmit": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": false,
     "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {

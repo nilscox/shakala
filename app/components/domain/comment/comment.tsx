@@ -18,7 +18,7 @@ export const Comment = ({ className, comment }: CommentProps): JSX.Element => {
 
   const [hover, setHover] = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const [repliesOpen, setRepliesOpen] = useState(false);
+  const [repliesOpen, setRepliesOpen] = useState(true);
 
   const handleMouseEnter = useCallback(() => {
     setHover(true);
