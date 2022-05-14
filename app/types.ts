@@ -1,7 +1,7 @@
 export type User = {
   id: string;
   nick: string;
-  image: string;
+  image?: string;
 };
 
 export type Comment = {

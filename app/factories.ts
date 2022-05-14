@@ -1,4 +1,3 @@
-import defaultAvatar from './default-avatar.png';
 import { Comment, Thread, User } from './types';
 
 const randomId = () => Math.random().toString(32).slice(-4);
@@ -13,7 +12,6 @@ export const createDate = (dateStr?: string) => {
 
 export const createUser = (overrides?: Partial<User>): User => ({
   id: randomId(),
-  image: defaultAvatar,
   nick: '',
   ...overrides,
 });
