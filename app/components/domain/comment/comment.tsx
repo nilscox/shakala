@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import classNames from 'classnames';
+import { useState } from 'react';
 
 import { Markdown } from '~/components/elements/markdown';
 
@@ -7,48 +8,34 @@ import { Comment as CommentType } from '../../../types';
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
 import { RepliesList } from './replies-list';
+import { useHighlightComment } from './useHighlightComment';
 
 export type CommentProps = {
-  className?: string;
   comment: CommentType;
 };
 
-export const Comment = ({ className, comment }: CommentProps): JSX.Element => {
-  const { author, date, text, upvotes, downvotes, repliesCount, replies } = comment;
-
-  const [hover, setHover] = useState(false);
+export const Comment = ({ comment }: CommentProps): JSX.Element => {
+  const { id, author, date, text, upvotes, downvotes, replies } = comment;
+  const highlight = useHighlightComment(comment);
   const [showActions, setShowActions] = useState(false);
-  const [repliesOpen, setRepliesOpen] = useState(true);
-
-  const handleMouseEnter = useCallback(() => {
-    setHover(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setHover(false);
-    setShowActions(false);
-  }, []);
 
   return (
-    <>
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={className}>
-        <CommentHeader author={author} date={date} />
-
-        <Markdown markdown={text} />
-
+    <div id={id} className="p-0 card">
+      <div
+        className={classNames('p-2', highlight && 'animate-highlight')}
+        onMouseLeave={() => setShowActions(false)}
+      >
+        <CommentHeader commentId={id} author={author} date={date} />
+        <Markdown markdown={text} className="my-2" />
         <CommentFooter
+          isReply={false}
           upvotes={upvotes}
           downvotes={downvotes}
-          repliesCount={repliesCount}
-          repliesOpen={repliesOpen}
-          hover={hover}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
-          onToggleRepliesOpen={() => setRepliesOpen(!repliesOpen)}
         />
       </div>
-
-      {repliesOpen && <RepliesList replies={replies} />}
-    </>
+      <RepliesList replies={replies} />
+    </div>
   );
 };

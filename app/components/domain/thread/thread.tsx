@@ -14,22 +14,18 @@ type ThreadProps = {
 export const Thread = ({ thread }: ThreadProps) => (
   <>
     <div className="my-[60px]">
-      <div className="flex flex-row justify-between items-center my-2">
+      <div className="flex flex-row justify-between items-center mb-2">
         <AvatarNick big user={thread.author} />
         <div className="text-text-light">
           <Date date={thread.date} format="'Le' d MMMM yyyy" />, {thread.comments.length} commentaires
         </div>
       </div>
 
-      <div className="flex-1 card">
-        <Markdown markdown={thread.text} />
-      </div>
+      <Markdown markdown={thread.text} className="p-4 card" />
     </div>
 
     <ThreadFilters className="my-4" />
 
-    <div className="py-1 px-2 bg-white rounded">
-      <CommentsList comments={thread.comments} />
-    </div>
+    <CommentsList comments={thread.comments} />
   </>
 );

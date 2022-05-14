@@ -53,8 +53,8 @@ const LastThreads = () => (
   <>
     <Heading>Dernières discussions</Heading>
 
-    <div className="flex flex-col gap-4 items-center my-5 md:flex-row">
-      <div className="flex-1 max-w-[420px] card">
+    <div className="flex flex-col gap-4 items-center my-5 md:flex-row md:items-stretch">
+      <div className="flex-1 p-2 max-w-[420px] card">
         <Link to="/discussions/38pvde">
           <Markdown
             markdown={`Hello tout le monde
@@ -66,13 +66,13 @@ Parmi la communauté zététique je n'apprends rien à  personne en parlant du f
         </Link>
       </div>
 
-      <div className="flex-1 max-w-[420px] card">
+      <div className="flex-1 p-2 max-w-[420px] card">
         <Markdown
           markdown={`La choucroute est un mets composé de chou coupé finement et transformé par lacto-fermentation dans une saumure, généralement accompagné de garniture....`}
         />
       </div>
 
-      <div className="flex-1 max-w-[420px] card">
+      <div className="flex-1 p-2 max-w-[420px] card">
         <Markdown
           markdown={`Lorem ipsum dolor sit amet. Est voluptas *Qui mollitia aut*. Sed ipsum animi similique dolores. Et ipsa nesciunt sunt [Sit nostrum qui ipsam quibusdam aliquid](https://www.loremipzum.com/) et enim nulla...`}
         />

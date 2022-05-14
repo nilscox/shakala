@@ -30,8 +30,10 @@ export class InMemoryThreadRepository implements ThreadRepository {
       comments = comments.filter((comment) => comment.text.includes(search));
     }
 
-    if (sort === Sort.date) {
+    if (sort === Sort.dateAsc) {
       comments.sort(({ date: a }, { date: b }) => new Date(a).getTime() - new Date(b).getTime());
+    } else if (sort === Sort.dateDesc) {
+      comments.sort(({ date: a }, { date: b }) => new Date(b).getTime() - new Date(a).getTime());
     } else {
       comments.sort(({ upvotes: a }, { upvotes: b }) => b - a);
     }

@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import { createComment, createUser } from '~/factories';
 
@@ -12,16 +13,18 @@ describe('Comment', () => {
       text: 'Hello!',
       upvotes: 41,
       downvotes: 6,
-      repliesCount: 11,
     });
 
-    render(<Comment comment={comment} />);
+    render(
+      <MemoryRouter>
+        <Comment comment={comment} />
+      </MemoryRouter>,
+    );
 
     expect(screen.getByText('Paul')).toBeDefined();
-    expect(screen.getByText('1 mai 2022, 10:00')).toBeDefined();
+    expect(screen.getByText('le 1 mai')).toBeDefined();
     expect(screen.getByText('Hello!')).toBeDefined();
     expect(screen.getByText('41')).toBeDefined();
     expect(screen.getByText('6')).toBeDefined();
-    expect(screen.getByText('11 réponses')).toBeDefined();
   });
 });

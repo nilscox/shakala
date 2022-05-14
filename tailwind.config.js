@@ -33,6 +33,15 @@ module.exports = {
       'text-white': colors.gray[100],
       'text-link': colors.blue[600],
     },
+    animation: {
+      highlight: 'highlight 2s ease-out 1s both',
+    },
+    keyframes: (theme) => ({
+      highlight: {
+        '0%': { background: theme('colors.primary') + '33' },
+        '100%': {},
+      },
+    }),
     extend: {
       typography: {
         DEFAULT: {

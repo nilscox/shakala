@@ -25,5 +25,6 @@ export type Thread = {
 
 export enum Sort {
   relevance = 'relevance',
-  date = 'date',
+  dateAsc = 'date-asc',
+  dateDesc = 'date-desc',
 }

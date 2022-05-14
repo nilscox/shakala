@@ -1,8 +1,10 @@
 import { Form, useSearchParams, useSubmit } from '@remix-run/react';
-import cx from 'classnames';
+import classNames from 'classnames';
 
 import { Input } from '~/components/elements/input';
-import { Select } from '~/components/elements/select';
+import { RadioItem, RadiosGroup } from '~/components/elements/radio-group';
+import { ArrowDownIcon } from '~/components/icons/arrow-down';
+import { ArrowUpIcon } from '~/components/icons/arrow-up';
 import { Sort } from '~/types';
 
 export type ThreadFiltersProps = {
@@ -12,11 +14,12 @@ export type ThreadFiltersProps = {
 export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
   const submit = useSubmit();
   const [searchParams] = useSearchParams();
+  const sort = searchParams.get('sort');
 
   return (
     <Form
       method="get"
-      className={cx('flex flex-row items-center gap-4', className)}
+      className={classNames('flex flex-row items-center gap-4', className)}
       onChange={(e) => submit(e.currentTarget)}
     >
       <Input
@@ -27,17 +30,34 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
         defaultValue={searchParams.get('search') ?? ''}
       />
 
-      <label className="text-text-light">
-        Trier par :
-        <Select
+      <RadiosGroup className="text-text-light">
+        <RadioItem
           name="sort"
-          className="ml-2 text-text"
-          defaultValue={searchParams.get('sort') ?? Sort.relevance}
+          id={Sort.dateAsc}
+          title="Les plus anciens en premier"
+          defaultChecked={sort === Sort.dateAsc}
         >
-          <option value={Sort.relevance}>pertinence</option>
-          <option value={Sort.date}>date</option>
-        </Select>
-      </label>
+          date <ArrowUpIcon className="p-0.5 fill-text-light" />
+        </RadioItem>
+
+        <RadioItem
+          name="sort"
+          id={Sort.dateDesc}
+          title="Les plus récents en premier"
+          defaultChecked={sort === Sort.dateDesc}
+        >
+          date <ArrowDownIcon className="p-0.5 fill-text-light" />
+        </RadioItem>
+
+        <RadioItem
+          name="sort"
+          id={Sort.relevance}
+          title="Les plus upvotés en premier"
+          defaultChecked={sort ? sort === Sort.relevance : true}
+        >
+          pertinence
+        </RadioItem>
+      </RadiosGroup>
     </Form>
   );
 };
