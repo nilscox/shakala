@@ -14,6 +14,7 @@ type CommentFooterProps = {
   showActions: boolean;
   isReply: boolean;
   onShowActions: () => void;
+  onReply?: () => void;
 };
 
 export const CommentFooter = ({
@@ -22,6 +23,7 @@ export const CommentFooter = ({
   showActions,
   isReply,
   onShowActions,
+  onReply,
 }: CommentFooterProps) => (
   <div className="flex flex-row justify-between">
     <div className="flex flex-row gap-x-2">
@@ -40,7 +42,11 @@ export const CommentFooter = ({
       {!showActions && <FooterButton icon={<HorizontalDotsIcon />} onClick={onShowActions} />}
     </div>
 
-    {!isReply && <FooterButton icon={<ReplyIcon />}>Répondre</FooterButton>}
+    {onReply && (
+      <FooterButton icon={<ReplyIcon />} onClick={onReply}>
+        Répondre
+      </FooterButton>
+    )}
   </div>
 );
 

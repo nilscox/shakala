@@ -1,21 +1,26 @@
+import classNames from 'classnames';
+
 import { Comment as CommentType } from '~/types';
+
+import { CommentForm, FormType } from '../comment-form';
 
 import { Reply } from './reply';
 
 type RepliesListProps = {
   replies: CommentType[];
+  replyForm: FormType;
+  setReplyForm: (form: FormType) => void;
 };
 
-export const RepliesList = ({ replies }: RepliesListProps) => {
-  if (replies.length === 0) {
-    return null;
-  }
-
+export const RepliesList = ({ replies, replyForm, setReplyForm }: RepliesListProps) => {
   return (
-    <div className="flex flex-col gap-1 py-2 bg-[#F6F6F9] rounded-b border-t border-light-gray">
+    <div className="flex flex-col gap-1 bg-[#F7F7FA] rounded-b border-t border-light-gray">
       {replies.map((reply) => (
         <Reply key={reply.id} reply={reply} />
       ))}
+      <div className={classNames(replies.length > 0 && 'border-t border-light-gray')}>
+        <CommentForm form={replyForm} setForm={setReplyForm} />
+      </div>
     </div>
   );
 };

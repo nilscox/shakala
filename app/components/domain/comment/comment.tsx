@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Markdown } from '~/components/elements/markdown';
 
 import { Comment as CommentType } from '../../../types';
+import { FormType } from '../comment-form';
 
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
@@ -14,10 +15,12 @@ export type CommentProps = {
   comment: CommentType;
 };
 
-export const Comment = ({ comment }: CommentProps): JSX.Element => {
+export const Comment = ({ comment }: CommentProps) => {
   const { id, author, date, text, upvotes, downvotes, replies } = comment;
+
   const highlight = useHighlightComment(comment);
   const [showActions, setShowActions] = useState(false);
+  const [replyForm, setReplyForm] = useState<FormType>(FormType.fake);
 
   return (
     <div id={id} className="p-0 card">
@@ -33,9 +36,10 @@ export const Comment = ({ comment }: CommentProps): JSX.Element => {
           downvotes={downvotes}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
+          onReply={replyForm === FormType.fake ? () => setReplyForm(FormType.real) : undefined}
         />
       </div>
-      <RepliesList replies={replies} />
+      <RepliesList replies={replies} replyForm={replyForm} setReplyForm={setReplyForm} />
     </div>
   );
 };
