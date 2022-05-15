@@ -1,7 +1,9 @@
 import type { LinksFunction, MetaFunction } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import ReactModal from 'react-modal';
 
-import styles from './tailwind.css';
+import reactModalStyles from './react-modal.css';
+import tailwindStyles from './tailwind.css';
 
 export const links: LinksFunction = () => {
   return [
@@ -20,7 +22,11 @@ export const links: LinksFunction = () => {
     },
     {
       rel: 'stylesheet',
-      href: styles,
+      href: tailwindStyles,
+    },
+    {
+      rel: 'stylesheet',
+      href: reactModalStyles,
     },
   ];
 };
@@ -30,6 +36,8 @@ export const meta: MetaFunction = () => ({
   title: 'Shakala',
   viewport: 'width=device-width,initial-scale=1',
 });
+
+ReactModal.setAppElement('body');
 
 export default function App() {
   return (

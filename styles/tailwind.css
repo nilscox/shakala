@@ -20,14 +20,6 @@
     @apply text-text-link;
   }
 
-  .links-nocolor a {
-    color: inherit;
-  }
-
-  .links-underline a {
-    @apply underline decoration-text-light;
-  }
-
   p {
     @apply my-1;
   }
@@ -44,14 +36,39 @@
 
 @layer components {
   .button {
-    @apply font-semibold text-text-light;
-    @apply disabled:text-text-light/60 disabled:pointer-events-none;
-    @apply hover:text-primary hover:fill-primary transition-colors;
+    @apply font-semibold py-0.5 px-2 cursor-pointer transition-colors;
+    @apply disabled:pointer-events-none;
+  }
+
+  .button-primary {
+    @apply button;
+    @apply bg-primary text-white rounded;
+    @apply disabled:bg-primary/80;
+  }
+
+  .button-secondary {
+    @apply button;
+    @apply text-text-light/80;
+    @apply disabled:text-text-light/60;
   }
 
   .card {
     background-color: theme('colors.white');
     border-radius: theme('borderRadius.lg');
     box-shadow: theme('boxShadow.md');
+  }
+}
+
+@layer utilities {
+  .links-nocolor a {
+    color: inherit;
+  }
+
+  .links-underline a {
+    @apply underline decoration-text-light/80;
+  }
+
+  .links-underline-hover a {
+    @apply hover:underline hover:decoration-text-light/80;
   }
 }

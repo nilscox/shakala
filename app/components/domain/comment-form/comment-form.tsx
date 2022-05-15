@@ -36,10 +36,12 @@ export const RealCommentForm = ({ onCancel }: RealCommentFormProps) => {
       />
 
       <div className="flex flex-row gap-2 justify-end py-1 px-2 border-t border-light-gray">
-        <button className="py-0.5 px-2 font-bold text-text-light/75" onClick={onCancel}>
+        <button className="button-secondary" onClick={onCancel}>
           Annuler
         </button>
-        <button className="py-0.5 px-2 font-bold text-white bg-primary rounded">Envoyer</button>
+        <button disabled={message === ''} className="button-primary">
+          Envoyer
+        </button>
       </div>
     </Form>
   );

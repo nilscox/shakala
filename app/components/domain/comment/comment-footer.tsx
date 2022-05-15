@@ -54,6 +54,6 @@ type FooterButtonProps = IconButtonProps;
 
 export const FooterButton = ({ ...props }: FooterButtonProps) => (
   <>
-    <IconButton small {...props} />
+    <IconButton small className="p-0 hover:text-primary button-secondary" {...props} />
   </>
 );

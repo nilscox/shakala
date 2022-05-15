@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 
+import { AuthenticationModal } from '../domain/authentication/authentication-modal';
+
 import { Footer } from './footer';
 import { Header } from './header';
 
@@ -18,5 +20,7 @@ export const Layout = ({ children }: LayoutProps): JSX.Element => (
     </main>
 
     <Footer className={classNames(width, 'mx-auto')} />
+
+    <AuthenticationModal />
   </>
 );
