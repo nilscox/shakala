@@ -11,7 +11,7 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-export const Layout = ({ children }: LayoutProps): JSX.Element => (
+export const Layout = ({ children }: LayoutProps) => (
   <>
     <Header className={classNames(width, 'mx-auto')} />
 

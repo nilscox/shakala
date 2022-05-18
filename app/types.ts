@@ -1,5 +1,7 @@
 export type User = {
   id: string;
+  email: string;
+  hashedPassword: string;
   nick: string;
   image?: string;
 };

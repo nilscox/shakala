@@ -1,17 +1,17 @@
-import { Service, Token } from 'typedi';
+import { inject, injectable } from 'inversify';
 
 import { Comment, Sort, Thread } from '~/types';
 
-export const ThreadRepositoryToken = new Token<ThreadRepository>('ThreadRepositoryToken');
+export const ThreadRepositoryToken = Symbol('ThreadRepositoryToken');
 
 export interface ThreadRepository {
   findById(threadId: string): Promise<Thread | undefined>;
   findComments(threadId: string, sort?: Sort, search?: string): Promise<Comment[] | undefined>;
 }
 
-@Service()
+@injectable()
 export class InMemoryThreadRepository implements ThreadRepository {
-  constructor(private readonly threads: Thread[]) {}
+  constructor(@inject('threads') private readonly threads: Thread[]) {}
 
   async findById(threadId: string): Promise<Thread | undefined> {
     return this.threads.find((thread) => thread.id === threadId);

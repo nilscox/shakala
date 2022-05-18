@@ -1,5 +1,5 @@
-import { Form } from '@remix-run/react';
-import { useState } from 'react';
+import { Form, useFetcher } from '@remix-run/react';
+import { useEffect, useState, useTransition } from 'react';
 
 import { AcceptRulesCheckbox } from './accept-rules-checkbox';
 import { AuthenticationMessage } from './message';
@@ -29,8 +29,24 @@ type AuthenticationFormProps = {
 };
 
 export const AuthenticationForm = ({ form, onClose }: AuthenticationFormProps) => {
+  const authenticate = useFetcher();
+
   const [didAcceptRules, setDidAcceptRules] = useState(false);
   const [isValid, setIsValid] = useState(false);
+
+  const isFormValid = () => {
+    if (form === AuthenticationFormType.signup && !didAcceptRules) {
+      return false;
+    }
+
+    return isValid;
+  };
+
+  useEffect(() => {
+    if (authenticate.type === 'done') {
+      onClose();
+    }
+  }, [authenticate, onClose]);
 
   return (
     <>
@@ -40,53 +56,62 @@ export const AuthenticationForm = ({ form, onClose }: AuthenticationFormProps) =
         <AuthenticationMessage form={form} />
       </div>
 
-      <Form
+      <authenticate.Form
         method="post"
-        className="flex flex-col gap-2"
+        action="/user"
         onChange={(e) => setIsValid(e.currentTarget.checkValidity())}
       >
-        <AuthenticationFormNavigation form={form} />
+        <fieldset className="flex flex-col gap-2" disabled={authenticate.state === 'submitting'}>
+          <AuthenticationFormNavigation form={form} />
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="py-1 px-2 w-full rounded border border-light-gray"
-          minLength={3}
-        />
+          <input type="hidden" name="authenticationType" value={form} />
 
-        {form !== AuthenticationFormType.emailLogin && (
           <input
-            type="password"
-            placeholder="Mot de passe"
-            className="py-1 px-2 w-full rounded border border-light-gray"
-            autoComplete=""
-            minLength={3}
-          />
-        )}
-
-        {form === AuthenticationFormType.signup && (
-          <input
-            type="text"
-            placeholder="Pseudo"
+            required
+            name="email"
+            type="email"
+            placeholder="Email"
             className="py-1 px-2 w-full rounded border border-light-gray"
             minLength={3}
           />
-        )}
 
-        {form === AuthenticationFormType.signup && (
-          <AcceptRulesCheckbox checked={didAcceptRules} setChecked={setDidAcceptRules} />
-        )}
+          {form !== AuthenticationFormType.emailLogin && (
+            <input
+              required
+              name="password"
+              type="password"
+              placeholder="Mot de passe"
+              className="py-1 px-2 w-full rounded border border-light-gray"
+              autoComplete=""
+              minLength={3}
+            />
+          )}
 
-        <div className="flex flex-row gap-2 justify-end">
-          <input type="button" value="Annuler" className="button-secondary" onClick={onClose} />
-          <input
-            type="submit"
-            value={cta[form]}
-            className="button-primary"
-            disabled={!isValid || !didAcceptRules}
-          />
-        </div>
-      </Form>
+          {form === AuthenticationFormType.signup && (
+            <input
+              required
+              name="nick"
+              type="text"
+              placeholder="Pseudo"
+              className="py-1 px-2 w-full rounded border border-light-gray"
+              minLength={3}
+            />
+          )}
+
+          {form === AuthenticationFormType.signup && (
+            <AcceptRulesCheckbox checked={didAcceptRules} setChecked={setDidAcceptRules} />
+          )}
+
+          <div className="flex flex-row gap-2 justify-end">
+            <button type="reset" className="button-secondary" onClick={onClose}>
+              Annuler
+            </button>
+            <button type="submit" className="button-primary" disabled={!isFormValid()}>
+              {cta[form]}
+            </button>
+          </div>
+        </fieldset>
+      </authenticate.Form>
     </>
   );
 };
