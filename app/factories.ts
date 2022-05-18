@@ -13,6 +13,8 @@ export const createDate = (dateStr?: string) => {
 export const createUser = (overrides?: Partial<User>): User => ({
   id: randomId(),
   nick: '',
+  email: '',
+  hashedPassword: '',
   ...overrides,
 });
 

@@ -85,14 +85,14 @@ export default function RulesRoute() {
   );
 }
 
-const Rule: React.FC<{ rule: ReactNode }> = ({ rule, children }) => (
+const Rule = ({ rule, children }: { rule: ReactNode; children: React.ReactNode }) => (
   <div>
     <em className="block mb-1 text-lg">{rule}</em>
     <div className="pl-2 ml-4 text-text/80 border-l-4 border-light-gray">{children}</div>
   </div>
 );
 
-const Example: React.FC<{ example: ReactNode }> = ({ example, children }) => (
+const Example = ({ example, children }: { example: ReactNode; children: React.ReactNode }) => (
   <div className="example">
     <div className="example-text note">{example}</div>
     <div className="example-description">{children}</div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Modal } from '~/components/elements/modal';
@@ -10,10 +10,10 @@ export const AuthenticationModal = () => {
   const form = searchParams.get('auth');
   const [cachedForm, setCachedForm] = useState(form);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     searchParams.delete('auth');
     setSearchParams(searchParams);
-  };
+  }, [searchParams, setSearchParams]);
 
   if (form && form !== 'login' && form !== 'signup' && form !== 'email-login') {
     handleClose();

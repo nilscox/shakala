@@ -1,9 +1,9 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
-import Container from 'typedi';
 
 import { Thread } from '~/components/domain/thread/thread';
-import { ThreadRepositoryToken } from '~/data/thread.repository';
+import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
+import container from '~/inversify.config.server';
 import { SearchParams } from '~/lib/search-params';
 import { Sort } from '~/types';
 
@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const search = searchParams.getString('search');
   const sort = searchParams.getEnum('sort', Sort) ?? Sort.dateAsc;
 
-  const threadRepository = Container.get(ThreadRepositoryToken);
+  const threadRepository = container.get<ThreadRepository>(ThreadRepositoryToken);
 
   const thread = await threadRepository.findById(threadId);
 
