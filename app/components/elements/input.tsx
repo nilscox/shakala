@@ -1,16 +1,14 @@
 import classNames from 'classnames';
 
+import { FormError } from './field-error';
+
 type InputProps = React.ComponentProps<'input'> & {
-  onTextChange?: (text: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: React.ReactNode;
 };
 
-export const Input = ({ className, onTextChange, onChange, ...props }: InputProps): JSX.Element => (
-  <input
-    className={classNames('py-0.5 px-1 rounded border border-light-gray/60', className)}
-    onChange={(event) => {
-      onChange?.(event);
-      onTextChange?.(event.currentTarget.value, event);
-    }}
-    {...props}
-  />
+export const Input = ({ className, error, ...props }: InputProps): JSX.Element => (
+  <div>
+    <input className={classNames('py-0.5 px-1 rounded border border-light-gray', className)} {...props} />
+    {error && <FormError>{error}</FormError>}
+  </div>
 );

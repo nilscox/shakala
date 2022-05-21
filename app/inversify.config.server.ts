@@ -2,10 +2,10 @@ import { Container } from 'inversify';
 
 import { InMemoryThreadRepository, ThreadRepositoryToken } from './data/thread.repository.server';
 import { InMemoryUserRepository, UserRepositoryToken } from './data/user.repository';
-import { AuthenticationController } from './lib/authentication.controller';
-import { AuthenticationService } from './lib/authentication.service';
-import { CookieSessionService, SessionService, SessionServiceToken } from './lib/session.service';
-import { ValidationService } from './lib/validation.service';
+import { AuthenticationController } from './server/authentication/authentication.controller';
+import { AuthenticationService } from './server/authentication/authentication.service';
+import { CookieSessionService, SessionService, SessionServiceToken } from './server/common/session.service';
+import { ValidationService } from './server/common/validation.service';
 import { threadFacebookZetetique } from './thread-facebook-zetetique';
 import { User } from './types';
 
@@ -13,7 +13,7 @@ const user: User = {
   id: '42',
   email: 'nils@nils.cx',
   hashedPassword: '$2b$10$B0Bfw0ypnDMW1hM/x7L0COD9MoCENH5mSwgda1aAme49h9.du7exu', // tatata123
-  nick: 'nilscox,',
+  nick: 'nilscox',
 };
 
 const container = new Container();

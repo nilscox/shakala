@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
 
-import { AuthenticationFormType } from './authentication-form';
+import { AuthenticationFormType, useAuthenticationFormType } from './use-authentication-form-type';
 
-type AuthenticationMessageProps = {
-  form: AuthenticationFormType;
-};
+export const AuthenticationMessage = () => {
+  const form = useAuthenticationFormType();
 
-export const AuthenticationMessage = ({ form }: AuthenticationMessageProps) => {
   if (form === AuthenticationFormType.login) {
     return <>Connectez-vous sur Shakala pour interagir avec le reste de la communauté.</>;
   }
@@ -24,5 +22,5 @@ export const AuthenticationMessage = ({ form }: AuthenticationMessageProps) => {
     return <>Identifiez-vous sur Shakala via un email contenant un lien de connexion sans mot de passe.</>;
   }
 
-  throw new Error(`AuthenticationForm message: invalid form type "${form}"`);
+  return null;
 };

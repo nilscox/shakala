@@ -4,7 +4,7 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import { Thread } from '~/components/domain/thread/thread';
 import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
 import container from '~/inversify.config.server';
-import { SearchParams } from '~/lib/search-params';
+import { SearchParams } from '~/server/utils/search-params';
 import { Sort } from '~/types';
 
 export class EntityNotFound extends Response {

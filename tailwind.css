@@ -9,7 +9,7 @@
 
   body {
     @apply font-body text-text;
-    background-color: #fafafc;
+    background-color: #fbfbfd;
   }
 
   strong {
@@ -43,7 +43,7 @@
   .button-primary {
     @apply button;
     @apply bg-primary text-white rounded;
-    @apply disabled:bg-primary/80;
+    @apply disabled:bg-primary/60;
   }
 
   .button-secondary {

@@ -10,11 +10,13 @@ export const SessionServiceToken = Symbol('SessionServiceToken');
 
 interface Session {
   get(key: string): string | undefined;
+  unset(key: string): void;
 }
 
 export interface SessionService<S extends Session = Session> {
   createSession(userId: string): S;
-  getUserId(request: Request): Promise<string | null>;
+  getUserSession(request: Request): Promise<S | undefined>;
+  getUserId(request: Request): Promise<string | undefined>;
   save(session: S): Promise<string>;
 }
 
@@ -51,16 +53,16 @@ export class CookieSessionService implements SessionService<RemixSession> {
     return createSession({ userId });
   }
 
-  private async getUserSession(request: Request): Promise<RemixSession> {
+  async getUserSession(request: Request): Promise<RemixSession> {
     return this.sessionStorage.getSession(request.headers.get('Cookie'));
   }
 
-  async getUserId(request: Request): Promise<string | null> {
+  async getUserId(request: Request): Promise<string | undefined> {
     const session = await this.getUserSession(request);
     const userId = session.get('userId');
 
     if (!userId || typeof userId !== 'string') {
-      return null;
+      return;
     }
 
     return userId;
@@ -71,22 +73,33 @@ export class CookieSessionService implements SessionService<RemixSession> {
   }
 }
 
-export class StubSessionService implements SessionService<Session> {
-  session: Session | null = null;
+class StubSession {
+  private attributes = new Map<string, string>();
 
-  createSession(userId: string): Session {
-    return new Map([['userId', userId]]);
+  constructor(userId: string) {
+    this.attributes.set('userId', userId);
   }
 
-  getSession(): Session | null {
+  get = this.attributes.get.bind(this.attributes);
+  unset = this.attributes.delete.bind(this.attributes);
+}
+
+export class StubSessionService implements SessionService<StubSession> {
+  session?: StubSession;
+
+  createSession(userId: string): StubSession {
+    return new StubSession(userId);
+  }
+
+  async getUserSession(_request: Request): Promise<StubSession | undefined> {
     return this.session;
   }
 
-  async getUserId(_request: Request): Promise<string | null> {
-    return null;
+  async getUserId(_request: Request): Promise<string | undefined> {
+    return;
   }
 
-  async save(session: Session): Promise<string> {
+  async save(session: StubSession): Promise<string> {
     this.session = session;
 
     return 'cookie';

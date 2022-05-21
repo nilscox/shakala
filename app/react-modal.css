@@ -10,3 +10,8 @@
 .ReactModal__Overlay--before-close {
   opacity: 0;
 }
+
+.ReactModal__Body--open #app {
+  filter: grayscale(0.9);
+  transition: filter linear 200ms;
+}

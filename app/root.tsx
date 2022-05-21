@@ -1,5 +1,5 @@
 import type { LinksFunction, MetaFunction } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from '@remix-run/react';
 import ReactModal from 'react-modal';
 
 import reactModalStyles from './react-modal.css';
@@ -37,7 +37,7 @@ export const meta: MetaFunction = () => ({
   viewport: 'width=device-width,initial-scale=1',
 });
 
-ReactModal.setAppElement('body');
+ReactModal.setAppElement('#app');
 
 export default function App() {
   return (
@@ -47,11 +47,25 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
+        <div id="app">
+          <Outlet />
+        </div>
+        <DisableableScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
   );
 }
+
+const DisableableScrollRestoration = () => {
+  const location = useLocation();
+  const state = location.state as { scroll?: boolean } | undefined;
+
+  if (state?.scroll === false) {
+    window.history.replaceState({}, document.title);
+    return null;
+  }
+
+  return <ScrollRestoration />;
+};

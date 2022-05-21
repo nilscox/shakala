@@ -1,11 +1,25 @@
+import { LoaderFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Layout } from '~/components/layout/layout';
+import { getUser } from '~/server/session.server';
+import { User } from '~/types';
+
+type LoaderData = {
+  user?: User;
+};
+
+export const loader: LoaderFunction = async ({ request }): Promise<LoaderData> => ({
+  user: await getUser(request),
+});
 
 export default function RulesRoute() {
+  const { user } = useLoaderData();
+
   return (
-    <Layout>
+    <Layout user={user}>
       <div className="flex flex-col gap-3 py-4 links-nocolor links-underline">
         <Rule rule="1. Lire les messages en laissant de côté ses a priori.">
           Les zones de commentaires permettent à chacun d'exprimer publiquement ses opinions, certaines ne

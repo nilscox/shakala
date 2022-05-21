@@ -32,6 +32,7 @@ module.exports = {
       'text-light': colors.gray[500],
       'text-white': colors.gray[100],
       'text-link': colors.blue[600],
+      'text-error': colors.rose[500],
     },
     animation: {
       highlight: 'highlight 2s ease-out 1s both',

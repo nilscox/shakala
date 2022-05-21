@@ -1,17 +1,32 @@
 {
-  "plugins": ["simple-import-sort", "tailwindcss"],
-  "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node", "plugin:tailwindcss/recommended"],
+  "plugins": ["import", "tailwindcss"],
+  "extends": [
+    "@remix-run/eslint-config",
+    "@remix-run/eslint-config/node",
+    "plugin:import/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/consistent-type-imports": "off",
-    // prettier-ignore
-    "simple-import-sort/imports": ["warn", {
-      "groups": [
-        ["reflect-metadata", "^[@a-z]"],
-        ["^~/"],
-        ["^../"],
-        ["^./"]
-      ]
-    }]
+    "import/no-cycle": "error",
+    "import/order": [
+      "warn",
+      {
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc" },
+        "groups": ["builtin", "external", "unknown", "internal", "parent", "sibling", "index"],
+        "pathGroups": [
+          {
+            "pattern": "(components|libs|pages)/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "koyeb",
+            "group": "unknown"
+          }
+        ]
+      }
+    ]
   }
 }
