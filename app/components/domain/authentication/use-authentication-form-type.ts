@@ -20,10 +20,10 @@ export const useAuthenticationFormType = (): AuthenticationFormType | null => {
   const isValidFormType = form && ['login', 'signup', 'email-login'].includes(form);
 
   useEffect(() => {
-    if (!isValidFormType) {
+    if (form && !isValidFormType) {
       closeForm();
     }
-  }, [isValidFormType, closeForm]);
+  }, [form, isValidFormType, closeForm]);
 
   if (!isValidFormType) {
     return debouncedForm;

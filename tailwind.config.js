@@ -22,6 +22,9 @@ module.exports = {
       4: '24px',
       5: '32px',
     },
+    minHeight: {
+      DEFAULT: '280px',
+    },
     colors: {
       transparent: 'transparent',
       white: colors.white,

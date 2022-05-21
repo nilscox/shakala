@@ -1,5 +1,8 @@
+import { useSearchParams } from 'react-router-dom';
+
 import { AvatarNick } from '~/components/domain/avatar/avatar-nick';
 import { Date } from '~/components/elements/date';
+import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
 import { Thread as ThreadType } from '~/types';
 
@@ -27,5 +30,18 @@ export const Thread = ({ thread }: ThreadProps) => (
     <ThreadFilters className="my-4" />
 
     <CommentsList comments={thread.comments} />
+
+    {thread.comments.length === 0 && <NoCommentFallback />}
   </>
 );
+
+const NoCommentFallback = () => {
+  const [params] = useSearchParams();
+  const search = params.get('search');
+
+  if (search) {
+    return <Fallback>Aucun commentaire n'a été trouvé pour cette recherche.</Fallback>;
+  }
+
+  return <Fallback>Aucun commentaire n'a été publié pour le moment.</Fallback>;
+};
