@@ -4,6 +4,7 @@ const jsonResponseFactory = (status: number) => {
   return (body: unknown, init?: ResponseInit) => json(body, { status, ...init });
 };
 
+export const created = jsonResponseFactory(201);
 export const badRequest = jsonResponseFactory(400);
 export const notFound = () => new Response(undefined, { status: 404 });
 export const forbidden = jsonResponseFactory(401);

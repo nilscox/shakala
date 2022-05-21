@@ -1,6 +1,7 @@
 import {
   createCookieSessionStorage,
   createSession,
+  redirect,
   Session as RemixSession,
   SessionStorage,
 } from '@remix-run/node';
@@ -17,6 +18,7 @@ export interface SessionService<S extends Session = Session> {
   createSession(userId: string): S;
   getUserSession(request: Request): Promise<S | undefined>;
   getUserId(request: Request): Promise<string | undefined>;
+  requireUserId(request: Request): Promise<string>;
   save(session: S): Promise<string>;
 }
 
@@ -68,6 +70,20 @@ export class CookieSessionService implements SessionService<RemixSession> {
     return userId;
   }
 
+  async requireUserId(request: Request): Promise<string> {
+    const userId = await this.getUserId(request);
+
+    if (!userId) {
+      const url = new URL(request.url);
+
+      url.searchParams.set('auth', 'login');
+
+      throw redirect([url.pathname, url.searchParams].join('?'));
+    }
+
+    return userId;
+  }
+
   async save(session: RemixSession): Promise<string> {
     return this.sessionStorage.commitSession(session);
   }
@@ -96,7 +112,17 @@ export class StubSessionService implements SessionService<StubSession> {
   }
 
   async getUserId(_request: Request): Promise<string | undefined> {
-    return;
+    return this.session?.get('userId');
+  }
+
+  async requireUserId(request: Request): Promise<string> {
+    const userId = await this.getUserId(request);
+
+    if (!userId) {
+      throw redirect('?auth=login');
+    }
+
+    return userId;
   }
 
   async save(session: StubSession): Promise<string> {

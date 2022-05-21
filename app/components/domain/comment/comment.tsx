@@ -29,7 +29,9 @@ export const Comment = ({ comment }: CommentProps) => {
         onMouseLeave={() => setShowActions(false)}
       >
         <CommentHeader commentId={id} author={author} date={date} />
+
         <Markdown markdown={text} className="my-2" />
+
         <CommentFooter
           isReply={false}
           upvotes={upvotes}
@@ -39,7 +41,8 @@ export const Comment = ({ comment }: CommentProps) => {
           onReply={replyForm === FormType.fake ? () => setReplyForm(FormType.real) : undefined}
         />
       </div>
-      <RepliesList replies={replies} replyForm={replyForm} setReplyForm={setReplyForm} />
+
+      <RepliesList commentId={id} replies={replies} replyForm={replyForm} setReplyForm={setReplyForm} />
     </div>
   );
 };

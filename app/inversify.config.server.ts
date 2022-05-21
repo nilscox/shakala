@@ -6,6 +6,8 @@ import { AuthenticationController } from './server/authentication/authentication
 import { AuthenticationService } from './server/authentication/authentication.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './server/common/session.service';
 import { ValidationService } from './server/common/validation.service';
+import { ThreadController } from './server/thread/thread.controller.server';
+import { ThreadService } from './server/thread/thread.service';
 import { threadFacebookZetetique } from './thread-facebook-zetetique';
 import { User } from './types';
 
@@ -44,9 +46,12 @@ container.bind(ThreadRepositoryToken).to(InMemoryThreadRepository);
 container.bind(UserRepositoryToken).to(InMemoryUserRepository);
 
 container.bind(ValidationService).toSelf();
+container.bind<SessionService>(SessionServiceToken).to(CookieSessionService);
+
 container.bind(AuthenticationService).toSelf();
 container.bind(AuthenticationController).toSelf();
 
-container.bind<SessionService>(SessionServiceToken).to(CookieSessionService);
+container.bind(ThreadService).toSelf();
+container.bind(ThreadController).toSelf();
 
 export default container;

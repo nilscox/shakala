@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { isResponse } from '@remix-run/server-runtime/responses';
 
 declare global {

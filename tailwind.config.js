@@ -39,11 +39,17 @@ module.exports = {
     },
     animation: {
       highlight: 'highlight 2s ease-out 1s both',
+      loading: 'loading 1s linear infinite',
     },
     keyframes: (theme) => ({
       highlight: {
         '0%': { background: theme('colors.primary') + '33' },
         '100%': {},
+      },
+      loading: {
+        '0%': { width: 0, left: 0 },
+        '50%': { width: '100%' },
+        '100%': { width: 0, right: 0 },
       },
     }),
     extend: {

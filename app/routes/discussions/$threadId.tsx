@@ -1,9 +1,11 @@
-import { json, LoaderFunction } from '@remix-run/node';
+import { ActionFunction, json, LoaderFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 
 import { Thread } from '~/components/domain/thread/thread';
+import { Fallback } from '~/components/elements/fallback';
 import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
 import container from '~/inversify.config.server';
+import { ThreadController } from '~/server/thread/thread.controller.server';
 import { SearchParams } from '~/server/utils/search-params';
 import { Sort } from '~/types';
 
@@ -36,6 +38,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   });
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  return container.get(ThreadController).createComment(request);
+};
+
 export default function ThreadRoute() {
   const thread = useLoaderData();
 
@@ -46,11 +52,7 @@ export const CatchBoundary = () => {
   const caught = useCatch();
 
   if (caught.status === 404) {
-    return (
-      <div className="flex justify-center items-center min-h-[220px]">
-        <strong>Cette page n'existe pas.</strong>
-      </div>
-    );
+    return <Fallback>Cette page n'existe pas.</Fallback>;
   }
 
   throw caught;

@@ -7,14 +7,19 @@ export enum FormType {
 }
 
 type CommentFormPros = {
+  parentId: string;
   form: FormType;
   setForm: (form: FormType) => void;
 };
 
-export const CommentForm = ({ form, setForm }: CommentFormPros) => {
+export const CommentForm = ({ parentId, form, setForm }: CommentFormPros) => {
   if (form === FormType.fake) {
     return <FakeForm onFocus={() => setForm(FormType.real)} />;
   }
 
-  return <RealCommentForm onCancel={() => setForm(FormType.fake)} />;
+  const resetForm = () => {
+    setForm(FormType.fake);
+  };
+
+  return <RealCommentForm parentId={parentId} onCancel={resetForm} onSubmitted={resetForm} />;
 };

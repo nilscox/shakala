@@ -1,33 +1,49 @@
-import { Form } from '@remix-run/react';
+import { Form, useParams, useTransition } from '@remix-run/react';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { Button } from '~/components/elements/button';
 import { Markdown } from '~/components/elements/markdown';
 
 import { Tab, Tabs } from './tabs';
 
 type RealCommentFormProps = {
+  parentId?: string;
   onCancel: () => void;
+  onSubmitted: () => void;
 };
 
-export const RealCommentForm = ({ onCancel }: RealCommentFormProps) => {
+export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealCommentFormProps) => {
+  const { threadId } = useParams();
   const [tab, setTab] = useState<Tab>(Tab.edit);
   const [message, setMessage] = useState('');
 
+  const transition = useTransition();
+
+  useEffect(() => {
+    if (transition.state === 'loading' && transition.type === 'actionReload') {
+      onSubmitted();
+    }
+  }, [transition, onSubmitted]);
+
   return (
-    <Form>
+    <Form method="post">
       <Tabs tab={tab} setTab={setTab} />
+
+      <input type="hidden" name="threadId" value={threadId as string} />
+      <input type="hidden" name="parentId" value={parentId} />
 
       <textarea
         autoFocus
         rows={4}
+        name="message"
+        placeholder="Rédigez votre message"
+        value={message}
+        onChange={(e) => setMessage(e.currentTarget.value)}
         className={classNames(
           'block p-1 w-full rounded border-none focus-visible:outline-none',
           tab !== Tab.edit && 'hidden',
         )}
-        placeholder="Rédigez votre message"
-        value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
       />
 
       <Markdown
@@ -39,9 +55,9 @@ export const RealCommentForm = ({ onCancel }: RealCommentFormProps) => {
         <button className="button-secondary" onClick={onCancel}>
           Annuler
         </button>
-        <button disabled={message === ''} className="button-primary">
+        <Button primary loading={transition.state === 'submitting'} disabled={message === ''}>
           Envoyer
-        </button>
+        </Button>
       </div>
     </Form>
   );
