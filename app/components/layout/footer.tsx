@@ -1,6 +1,8 @@
 import { Link } from '@remix-run/react';
 import classNames from 'classnames';
 
+import { SearchParamLink } from '../elements/search-param-link';
+
 import discordLogo from './logos/discord-logo.png';
 import facebookLogo from './logos/facebook-logo.png';
 import twitterLogo from './logos/twitter-logo.png';
@@ -16,7 +18,9 @@ export const Footer = ({ className }: FooterProps): JSX.Element => (
         <FooterColumn>
           <Link to="/">Accueil</Link>
           <Link to="/charte">La charte</Link>
-          <Link to="/utilisation">Utilisation</Link>
+          <SearchParamLink param="auth" value="login">
+            Connexion
+          </SearchParamLink>
         </FooterColumn>
 
         <FooterColumn>
@@ -26,19 +30,19 @@ export const Footer = ({ className }: FooterProps): JSX.Element => (
         </FooterColumn>
 
         <FooterColumn>
-          <Link to="https://zetecom.featureupvote.com/">Proposer une idée</Link>
-          <Link to="https://trello.com/b/CfC8aQ80/tasks">Roadmap</Link>
-          <Link to="https://github.com/nilscox/zetecom">Code source</Link>
+          <a href="https://zetecom.featureupvote.com/">Proposer une idée</a>
+          <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
+          <a href="https://github.com/nilscox/zetecom">Code source</a>
         </FooterColumn>
 
         <FooterColumn>
-          <SocialLink to="https://www.facebook.com/zetecom42" image={facebookLogo} imageAlt="facebook-logo">
+          <SocialLink href="https://www.facebook.com/zetecom42" image={facebookLogo} imageAlt="facebook-logo">
             Page facebook
           </SocialLink>
-          <SocialLink to="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
+          <SocialLink href="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
             Compte twitter
           </SocialLink>
-          <SocialLink to="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
+          <SocialLink href="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
             Groupe discord
           </SocialLink>
         </FooterColumn>
@@ -59,15 +63,15 @@ const FooterColumn = ({ className, children }: FooterColumnProps) => (
 );
 
 type SocialLinkProps = {
-  to: string;
+  href: string;
   image: string;
   imageAlt: string;
   children: string;
 };
 
-const SocialLink = ({ to, image, imageAlt, children }: SocialLinkProps) => (
-  <Link to={to} className="flex flex-row items-center">
+const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => (
+  <a href={href} className="flex flex-row items-center">
     <img className="mr-1 w-3 h-3" src={image} alt={imageAlt} />
     {children}
-  </Link>
+  </a>
 );

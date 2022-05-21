@@ -1,4 +1,5 @@
-import { Link } from '@remix-run/react';
+import { LoaderFunction } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
 
 import { Markdown } from '~/components/elements/markdown';
 import { CommunityIcon } from '~/components/icons/community';
@@ -9,14 +10,26 @@ import { SortIcon } from '~/components/icons/sort';
 import { SubscribeIcon } from '~/components/icons/subscribe';
 import { TrophyIcon } from '~/components/icons/trophy';
 import { Layout } from '~/components/layout/layout';
+import { getUser } from '~/server/session.server';
+import { User } from '~/types';
 
 import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';
 import imageModeration from '../images/moderation.png';
 
+type LoaderData = {
+  user?: User;
+};
+
+export const loader: LoaderFunction = async ({ request }): Promise<LoaderData> => ({
+  user: await getUser(request),
+});
+
 export default function Index() {
+  const { user } = useLoaderData<LoaderData>();
+
   return (
-    <Layout>
+    <Layout user={user}>
       <Outline />
       <LastThreads />
       <Motivations />
@@ -27,23 +40,26 @@ export default function Index() {
 }
 
 const Outline = () => (
-  <div className="my-[80px] md:mx-[120px]">
+  <div className="my-[80px] md:mx-[100px]">
     <div className="my-2 text-[1.6rem]">
       Vous rêvez de pouvoir discuter des sujets qui vous tiennent à cœur dans de « bonnes conditions » ?
     </div>
     <div className="text-lg">
-      Et bien c'est le but de ce site ! Ici, vous pouvez ouvrir des espaces de discussions où chacun s'engage
-      à respecter{' '}
-      <Link to="/charte" prefetch="intent">
-        une charte
-      </Link>
-      , un ensemble de règles pensées pour favoriser <strong>des échanges critiques et bienveillants</strong>.
+      <p>Et bien c'est le but de ce site 😄</p>
+      <p>
+        Ici, vous pouvez ouvrir des espaces de discussions où chacun s'engage à respecter{' '}
+        <Link to="/charte" prefetch="intent">
+          une charte
+        </Link>
+        , un ensemble de règles pensées pour favoriser{' '}
+        <strong>des échanges critiques et bienveillants</strong>.
+      </p>
     </div>
   </div>
 );
 
 const Heading = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex flex-row gap-4 items-center mt-[60px] mb-[30px]">
+  <div className="flex flex-row gap-4 items-center mt-[60px] mb-[20px]">
     <h2 className="text-xl font-bold text-primary">{children}</h2>
     <hr className="flex-1 border-light-gray" />
   </div>
@@ -54,7 +70,7 @@ const LastThreads = () => (
     <Heading>Dernières discussions</Heading>
 
     <div className="flex flex-col gap-4 items-center my-5 md:flex-row md:items-stretch">
-      <div className="flex-1 p-2 max-w-[420px] card">
+      <div className="flex-1 p-3 max-w-[420px] card">
         <Link to="/discussions/38pvde">
           <Markdown
             markdown={`Hello tout le monde
@@ -66,13 +82,13 @@ Parmi la communauté zététique je n'apprends rien à  personne en parlant du f
         </Link>
       </div>
 
-      <div className="flex-1 p-2 max-w-[420px] card">
+      <div className="flex-1 p-3 max-w-[420px] card">
         <Markdown
           markdown={`La choucroute est un mets composé de chou coupé finement et transformé par lacto-fermentation dans une saumure, généralement accompagné de garniture....`}
         />
       </div>
 
-      <div className="flex-1 p-2 max-w-[420px] card">
+      <div className="flex-1 p-3 max-w-[420px] card">
         <Markdown
           markdown={`Lorem ipsum dolor sit amet. Est voluptas *Qui mollitia aut*. Sed ipsum animi similique dolores. Et ipsa nesciunt sunt [Sit nostrum qui ipsam quibusdam aliquid](https://www.loremipzum.com/) et enim nulla...`}
         />
@@ -171,8 +187,8 @@ const KeyFeatures = () => (
     </div>
 
     <p>
-      La charte, la modération et l'indépendance sont les piliers fondateurs qui, on l'espère, feront le
-      succès de la plateforme. Mais d'autres fonctionnalités viennent y apporter de la valeur, par exemple :
+      Ces points sont les piliers fondateurs qui, on l'espère, feront le succès de la plateforme. Mais
+      d'autres fonctionnalités viennent y apporter de la valeur, par exemple :
     </p>
 
     <div className="flex flex-col md:flex-row md:gap-4">
@@ -224,17 +240,17 @@ const CurrentStatus = () => (
     <p>
       Ce projet n'est pour l'instant qu'une idée, présentée sur ce site pour voir à quoi ça pourrait
       ressembler. Il n'y a donc pas encore de communauté active qui fait vivre les discussions. Si vous
-      souhaitez être informé(e) lorsque la toute première version de la plateforme sera lancée officiellement,
-      n'hésitez pas à <a href="https://nilscoxdev.typeform.com/to/aesePz0o">nous laisser votre email</a> (nous
-      ne l'utiliseront que pour ça, promis).
+      souhaitez être informé(e) lorsque la plateforme sera lancée officiellement, vous pouvez{' '}
+      <a href="https://nilscoxdev.typeform.com/to/aesePz0o">nous laisser votre email</a> (nous ne
+      l'utiliseront que pour ça, promis).
     </p>
 
     <p>
       Si vous êtes convaincu que Shakala vous sera utile, nous sommes friands de connaître vos impressions !
       Que ce soit pour partager vos idées, proposer des améliorations, ou même juste discuter du projet, nous
       serions ravis d'échanger <a href="mailto:nilscox.dev@gmail.com">par mail</a> ou{' '}
-      <a href="https://discord.gg/huwfqra">sur discord</a>. Et même si ce n'est que pour dire que vous trouvez
-      l'idée sympa, c'est aussi le genre d'encouragement qui nous fera beaucoup de bien. 🤗
+      <a href="https://discord.gg/huwfqra">sur discord</a>. Et même si c'est juste pour dire que vous trouvez
+      l'idée sympa, c'est aussi le genre d'encouragement qui pourra que nous motiver. 🤗
     </p>
 
     <p>
