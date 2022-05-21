@@ -26,7 +26,7 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
         type="search"
         name="search"
         placeholder="Rechercher..."
-        className="flex-1 py-1 px-2 rounded border border-light-gray/60"
+        className="w-full"
         defaultValue={searchParams.get('search') ?? ''}
       />
 

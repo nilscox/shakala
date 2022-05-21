@@ -7,8 +7,8 @@ type InputProps = React.ComponentProps<'input'> & {
 };
 
 export const Input = ({ className, error, ...props }: InputProps): JSX.Element => (
-  <div>
+  <>
     <input className={classNames('py-0.5 px-1 rounded border border-light-gray', className)} {...props} />
     {error && <FormError>{error}</FormError>}
-  </div>
+  </>
 );

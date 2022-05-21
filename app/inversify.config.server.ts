@@ -16,10 +16,23 @@ const user: User = {
   nick: 'nilscox',
 };
 
+const data = {
+  threads: [threadFacebookZetetique],
+  users: [user],
+};
+
+declare global {
+  var _data: typeof data;
+}
+
+if (!global._data) {
+  global._data = data;
+}
+
 const container = new Container();
 
-container.bind('threads').toConstantValue([threadFacebookZetetique]);
-container.bind('users').toConstantValue([user]);
+container.bind('threads').toConstantValue(global._data.threads);
+container.bind('users').toConstantValue(global._data.users);
 
 container.bind('session.secure').toConstantValue(process.env.NODE_ENV === 'production');
 container.bind('session.secret').toConstantValue('secret');
