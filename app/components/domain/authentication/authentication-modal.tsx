@@ -15,7 +15,7 @@ export const AuthenticationModal = () => {
   return (
     <Modal isOpen={form !== null} onRequestClose={closeForm}>
       {formDebounced && (
-        <div className="flex flex-col gap-4 w-[480px]">
+        <div className="flex flex-col gap-4 w-full max-w-modal">
           <AuthenticationForm />
         </div>
       )}

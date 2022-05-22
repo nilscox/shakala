@@ -14,21 +14,20 @@ type HeaderProps = {
 
 export const Header = ({ user, className }: HeaderProps): JSX.Element => (
   <header className="pt-5 pb-2 text-text-white bg-dark links-nocolor">
-    <div className={className}>
-      <div className="flex flex-row mx-4">
+    <div className={classNames('px-4', className)}>
+      <div className="flex relative flex-row gap-4 justify-between pt-3 xs:pt-0">
+        <Authentication user={user} />
         <Heading />
-        <div className="flex flex-col flex-1 items-end">
-          <Authentication user={user} />
-          <Navigation />
-        </div>
+        <Navigation className="hidden mt-auto sm:flex" />
       </div>
+      <Navigation className="flex mt-2 sm:hidden" />
     </div>
   </header>
 );
 
 const Heading = () => (
   <Link to="/">
-    <h1 className="text-[2rem] font-bold">Shakala</h1>
+    <div className="text-xxl font-bold">Shakala</div>
     <div>des échanges critiques et bienveillants</div>
   </Link>
 );
@@ -38,22 +37,24 @@ type AuthenticationProps = {
 };
 
 const Authentication = ({ user }: AuthenticationProps) => (
-  <div className="flex-1">
-    <AuthenticationLink authenticated={Boolean(user)}>
-      <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
-      <Avatar big image={user?.image} className="border-none" />
-    </AuthenticationLink>
-  </div>
+  <AuthenticationLink
+    authenticated={Boolean(user)}
+    className="flex absolute top-0 right-0 flex-row grow gap-2 items-center"
+  >
+    <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
+    <div className="w-4 h-4 xs:w-5 xs:h-5">
+      <Avatar image={user?.image} className="w-4 h-4 border-none xs:w-5 xs:h-5" />
+    </div>
+  </AuthenticationLink>
 );
 
 type AuthenticationLinkProps = {
   authenticated: boolean;
+  className?: string;
   children: ReactNode;
 };
 
-const AuthenticationLink = ({ authenticated, children }: AuthenticationLinkProps) => {
-  const className = 'flex flex-row gap-2 items-center';
-
+const AuthenticationLink = ({ authenticated, className, children }: AuthenticationLinkProps) => {
   if (authenticated) {
     return (
       <Link to="/profile" className={className}>
@@ -69,8 +70,21 @@ const AuthenticationLink = ({ authenticated, children }: AuthenticationLinkProps
   );
 };
 
-const Navigation = () => (
-  <nav className="hidden flex-row gap-4 font-semibold text-text-white/90 uppercase md:flex">
+type NavigationProps = {
+  className?: string;
+};
+
+const Navigation = ({ className }: NavigationProps) => (
+  <nav
+    className={classNames(
+      'text-text-white/90 font-semibold uppercase whitespace-nowrap',
+      'flex flex-col flex-wrap items-end justify-between gap-y-0.5',
+      'xxs:gap-x-2 xxs:flex-row',
+      'xs:gap-x-3 xs:flex-nowrap xs:justify-end',
+      'md:gap-x-4',
+      className,
+    )}
+  >
     <HeaderNavLink to="/">Accueil</HeaderNavLink>
     <HeaderNavLink to="/discussions">Discussions</HeaderNavLink>
     <HeaderNavLink to="/charte">La charte</HeaderNavLink>

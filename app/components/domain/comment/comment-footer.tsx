@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import { IconButton, IconButtonProps } from '~/components/elements/icon-button';
 import { EditIcon } from '~/components/icons/edit';
 import { HorizontalDotsIcon } from '~/components/icons/horizontal-dots';
@@ -26,7 +28,7 @@ export const CommentFooter = ({
   onReply,
 }: CommentFooterProps) => (
   <div className="flex flex-row justify-between">
-    <div className="flex flex-row gap-x-2">
+    <div className="flex overflow-x-auto flex-row gap-x-2 hide-scrollbars">
       <FooterButton icon={<ThumbUpIcon />}>{upvotes}</FooterButton>
       <FooterButton icon={<ThumbDownIcon />}>{downvotes}</FooterButton>
 
@@ -43,8 +45,8 @@ export const CommentFooter = ({
     </div>
 
     {onReply && (
-      <FooterButton icon={<ReplyIcon />} onClick={onReply}>
-        Répondre
+      <FooterButton icon={<ReplyIcon />} onClick={onReply} className="pl-2">
+        <span className="hidden xxs:block">Répondre</span>
       </FooterButton>
     )}
   </div>
@@ -52,8 +54,12 @@ export const CommentFooter = ({
 
 type FooterButtonProps = IconButtonProps;
 
-export const FooterButton = ({ ...props }: FooterButtonProps) => (
+export const FooterButton = ({ className, ...props }: FooterButtonProps) => (
   <>
-    <IconButton small className="p-0 hover:text-primary button-secondary" {...props} />
+    <IconButton
+      small
+      className={classNames('p-0 hover:text-primary button-secondary', className)}
+      {...props}
+    />
   </>
 );

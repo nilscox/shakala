@@ -4,26 +4,39 @@ const colors = require('tailwindcss/colors');
 module.exports = {
   content: ['./app/**/*.tsx'],
   theme: {
-    fontFamily: {
-      body: ['Montserrat', 'sans-serif'],
-    },
-    fontSize: {
-      sm: '13px',
-      base: '16px',
-      lg: '18px',
-      xl: '24px',
+    screens: {
+      xxs: '280px',
+      xs: '380px',
+      sm: '640px',
+      md: '768px',
     },
     spacing: {
       0: '0px',
-      0.5: '4px',
-      1: '8px',
-      2: '12px',
-      3: '16px',
-      4: '24px',
-      5: '32px',
+      0.5: '0.25rem',
+      1: '0.5rem',
+      2: '0.75rem',
+      3: '1rem',
+      4: '1.5rem',
+      5: '2rem',
+      8: '4rem',
+    },
+    minWidth: {},
+    maxWidth: {
+      none: 'none',
+      DEFAULT: '22rem',
+      modal: '30rem',
+      page: '1100px',
+    },
+    maxHeight: {
+      small: '5.5rem',
+      DEFAULT: '8rem',
+      big: '18rem',
     },
     minHeight: {
-      DEFAULT: '280px',
+      small: '5.5rem',
+      DEFAULT: '8rem',
+      big: '18rem',
+      page: '32rem',
     },
     colors: {
       transparent: 'transparent',
@@ -36,6 +49,21 @@ module.exports = {
       'text-white': colors.gray[100],
       'text-link': colors.blue[600],
       'text-error': colors.rose[500],
+      // domain
+      'replies-background': '#F7F7FA',
+      'modal-overlay': '#000000',
+    },
+    fontFamily: {
+      body: ['Montserrat', 'sans-serif'],
+    },
+    fontSize: {
+      'base-mobile-xs': '13px',
+      'base-mobile': '14px',
+      base: '16px',
+      sm: '0.8125rem',
+      lg: '1.125rem',
+      xl: '1.5rem',
+      xxl: '2rem',
     },
     animation: {
       highlight: 'highlight 2s ease-out 1s both',
@@ -85,6 +113,7 @@ module.exports = {
               color: colors.blue[600],
               textDecoration: 'none',
               fontWeight: 400,
+              wordBreak: 'break-all',
             },
             blockquote: {
               marginTop: '1em',

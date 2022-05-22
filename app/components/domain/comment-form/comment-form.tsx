@@ -48,7 +48,7 @@ export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealComment
 
       <Markdown
         markdown={message}
-        className={classNames('min-h-[80px] bg-white p-1', tab !== Tab.preview && 'hidden')}
+        className={classNames('min-h bg-white p-1', tab !== Tab.preview && 'hidden')}
       />
 
       <div className="flex flex-row gap-2 justify-end py-1 px-2 border-t border-light-gray">

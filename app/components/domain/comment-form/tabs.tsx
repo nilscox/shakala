@@ -32,13 +32,14 @@ type TabComponentProps = {
 
 const TabComponent = ({ selected, onClick, children }: TabComponentProps) => (
   <button
+    type="button"
+    role="tab"
+    onClick={onClick}
     className={classNames(
       'py-1 px-3 mt-1 font-bold rounded-t border',
       selected && 'text-primary bg-white border-light-gray border-b-transparent',
       !selected && 'text-text-light border-b-light-gray border-transparent',
     )}
-    onClick={onClick}
-    role="tab"
   >
     {children}
   </button>

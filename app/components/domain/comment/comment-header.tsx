@@ -11,10 +11,10 @@ type CommentHeaderProps = {
 };
 
 export const CommentHeader = ({ commentId, author, date }: CommentHeaderProps) => (
-  <div className="flex flex-row gap-2 items-center">
+  <div className="flex flex-col-reverse items-start xxs:flex-row xxs:gap-2 xxs:items-center">
     <AvatarNick user={author} />
-    {bullet}
-    <Link to={`#${commentId}`} className="hover:underline decoration-text-light/40">
+    <div className="hidden xxs:block">{bullet}</div>
+    <Link to={`#${commentId}`} className="self-end hover:underline decoration-text-light/40">
       <Date
         date={date}
         format="'le' d MMMM"

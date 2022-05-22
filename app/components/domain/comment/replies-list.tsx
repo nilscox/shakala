@@ -14,7 +14,7 @@ type RepliesListProps = {
 };
 
 export const RepliesList = ({ commentId, replies, replyForm, setReplyForm }: RepliesListProps) => (
-  <div className="flex flex-col gap-1 bg-[#F7F7FA] rounded-b border-t border-light-gray">
+  <div className="flex flex-col gap-1 bg-replies-background rounded-b border-t border-light-gray">
     {replies.map((reply) => (
       <Reply key={reply.id} reply={reply} />
     ))}

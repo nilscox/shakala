@@ -19,7 +19,7 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
   return (
     <Form
       method="get"
-      className={classNames('flex flex-row items-center gap-4', className)}
+      className={classNames('flex flex-col-reverse items-end md:flex-row md:items-center gap-4', className)}
       onChange={(e) => submit(e.currentTarget)}
     >
       <Input

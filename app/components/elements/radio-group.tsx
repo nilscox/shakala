@@ -6,7 +6,12 @@ type RadiosGroupProps = {
 };
 
 export const RadiosGroup = ({ className, children }: RadiosGroupProps) => (
-  <div className={classNames('flex flex-row bg-white rounded border border-light-gray', className)}>
+  <div
+    className={classNames(
+      'flex flex-col xxs:flex-row bg-white rounded border border-light-gray justify-stretch',
+      className,
+    )}
+  >
     {children}
   </div>
 );
@@ -20,7 +25,7 @@ type RadioItemProps = {
 };
 
 export const RadioItem = ({ id, name, title, defaultChecked, children }: RadioItemProps) => (
-  <div className="border-l border-light-gray first-of-type:border-none">
+  <div className="border-t border-light-gray first-of-type:border-none xxs:border-t-0 xxs:border-l">
     <input
       type="radio"
       id={id}
@@ -30,7 +35,7 @@ export const RadioItem = ({ id, name, title, defaultChecked, children }: RadioIt
       className="peer sr-only"
     />
     <label
-      className="flex flex-row py-0.5 px-2 peer-checked:bg-light-gray/50 peer-focus-visible:outline cursor-pointer"
+      className="flex flex-row items-center py-0.5 px-2 h-full peer-checked:bg-light-gray/50 peer-focus-visible:outline cursor-pointer"
       htmlFor={id}
       title={title}
     >

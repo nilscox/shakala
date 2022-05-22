@@ -10,28 +10,65 @@ import { SortIcon } from '~/components/icons/sort';
 import { SubscribeIcon } from '~/components/icons/subscribe';
 import { TrophyIcon } from '~/components/icons/trophy';
 import { Layout } from '~/components/layout/layout';
+import { createThread } from '~/factories';
 import { getUser } from '~/server/session.server';
-import { User } from '~/types';
+import { threadFacebookZetetique } from '~/thread-facebook-zetetique';
+import { Thread, User } from '~/types';
 
 import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';
 import imageModeration from '../images/moderation.png';
 
+const choucroute = `La choucroute est un mets composé de chou coupé finement et transformé par lacto-fermentation dans une saumure, généralement accompagné de garniture.
+
+C'est un plat qui se consomme traditionnellement avec des variantes locales : en Allemagne, Autriche, Belgique, Bosnie, Bulgarie, Estonie, France, Hongrie, Lettonie, Lituanie, au Luxembourg, en Pologne, en Biélorussie, aux Pays-Bas, République tchèque, Roumanie, Russie, Serbie, Slovaquie, Suisse, dans le sud du Brésil, au Chili, aux États-Unis, en République populaire de Chine (et aussi, plus généralement, mais non de manière exclusive, par des populations issues des vagues d'immigration allemandes et germaniques, ainsi, par exemple, en Namibie1,2).`;
+
+const loremWithLink = `Lorem ipsum dolor sit amet. Est voluptas *Qui mollitia aut*. Sed ipsum animi similique dolores. Et ipsa nesciunt sunt [Sit nostrum qui ipsam quibusdam aliquid](https://www.loremipzum.com/) et enim nulla.
+
+- Aut cupiditate nihil qui aliquid perferendis ex porro vero est delectus quos.
+- Aut veniam molestias id similique doloremque ea libero placeat.
+- Et blanditiis velit et temporibus explicabo quo unde sunt.
+- Aut alias quia voluptatem optio.
+
+Et galisum officiis ab assumenda facilis sit quos nobis est dolorem`;
+
+const lorem = `Lorem ipsum dolor sit amet. Est voluptas *Qui mollitia aut*. Sed ipsum animi similique dolores. Et ipsa nesciunt sunt et enim nulla.
+
+- Aut cupiditate nihil qui aliquid perferendis ex porro vero est delectus quos.
+- Aut veniam molestias id similique doloremque ea libero placeat.
+- Et blanditiis velit et temporibus explicabo quo unde sunt.
+- Aut alias quia voluptatem optio.
+
+Et galisum officiis ab assumenda facilis sit quos nobis est dolorem`;
+
 type LoaderData = {
   user?: User;
+  lastThreads: Thread[];
 };
 
 export const loader: LoaderFunction = async ({ request }): Promise<LoaderData> => ({
   user: await getUser(request),
+  lastThreads: [
+    threadFacebookZetetique,
+    createThread({
+      id: 'fakeThread1',
+      date: new Date().toISOString(),
+      text: choucroute,
+    }),
+    createThread({
+      id: 'fakeThread2',
+      text: lorem,
+    }),
+  ],
 });
 
 export default function Index() {
-  const { user } = useLoaderData<LoaderData>();
+  const { user, lastThreads } = useLoaderData<LoaderData>();
 
   return (
     <Layout user={user}>
       <Outline />
-      <LastThreads />
+      <LastThreads threads={lastThreads} />
       <Motivations />
       <KeyFeatures />
       <CurrentStatus />
@@ -40,8 +77,8 @@ export default function Index() {
 }
 
 const Outline = () => (
-  <div className="my-[80px] md:mx-[100px]">
-    <div className="my-2 text-[1.6rem]">
+  <div className="my-[50px] mx-3 md:my-[80px] md:mx-[100px]">
+    <div className="my-2 text-xl">
       Vous rêvez de pouvoir discuter des sujets qui vous tiennent à cœur dans de « bonnes conditions » ?
     </div>
     <div className="text-lg">
@@ -59,40 +96,28 @@ const Outline = () => (
 );
 
 const Heading = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex flex-row gap-4 items-center mt-[60px] mb-[20px]">
+  <div className="flex flex-row gap-4 items-center mt-8 mb-3">
     <h2 className="text-xl font-bold text-primary">{children}</h2>
     <hr className="flex-1 border-light-gray" />
   </div>
 );
 
-const LastThreads = () => (
+type LastThreadsProps = {
+  threads: Thread[];
+};
+
+const LastThreads = ({ threads }: LastThreadsProps) => (
   <>
     <Heading>Dernières discussions</Heading>
 
     <div className="flex flex-col gap-4 items-center my-5 md:flex-row md:items-stretch">
-      <div className="flex-1 p-3 max-w-[420px] card">
-        <Link to="/discussions/38pvde">
-          <Markdown
-            markdown={`Hello tout le monde
-
-J'espère que vous allez bien
-
-Parmi la communauté zététique je n'apprends rien à  personne en parlant du fait qu'une des bases...`}
-          />
-        </Link>
-      </div>
-
-      <div className="flex-1 p-3 max-w-[420px] card">
-        <Markdown
-          markdown={`La choucroute est un mets composé de chou coupé finement et transformé par lacto-fermentation dans une saumure, généralement accompagné de garniture....`}
-        />
-      </div>
-
-      <div className="flex-1 p-3 max-w-[420px] card">
-        <Markdown
-          markdown={`Lorem ipsum dolor sit amet. Est voluptas *Qui mollitia aut*. Sed ipsum animi similique dolores. Et ipsa nesciunt sunt [Sit nostrum qui ipsam quibusdam aliquid](https://www.loremipzum.com/) et enim nulla...`}
-        />
-      </div>
+      {threads.map((thread) => (
+        <div key={thread.id} className="overflow-hidden flex-1 p-3 max-w card">
+          <Link to={`/discussions/${thread.id}`}>
+            <Markdown markdown={thread.text.slice(0, 220) + '...'} />
+          </Link>
+        </div>
+      ))}
     </div>
   </>
 );
@@ -101,12 +126,12 @@ const Motivations = () => (
   <>
     <Heading>Pourquoi ce site ?</Heading>
 
-    <p className="my-[40px] text-lg text-center">
+    <p className="my-8 mx-5 text-lg text-center">
       Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?
     </p>
 
     <div className="flex flex-col md:flex-row">
-      <div className="flex-1 pr-2 mr-2 border-b border-light-gray md:border-r md:border-b-0">
+      <div className="flex-1 pb-2 mb-2 border-b border-light-gray md:pr-2 md:pb-0 md:mr-2 md:mb-0 md:border-r md:border-b-0">
         <p>
           Depuis quelques dizaines d'années, la digitalisation des modes de communication a enclenché une
           vraie <a href="https://fr.wikipedia.org/wiki/R%C3%A9volution_num%C3%A9rique">révolution</a>, qui a
@@ -125,14 +150,14 @@ const Motivations = () => (
           rares.
         </p>
         <p>
-          C'est le but de Shakala : offrir la possibilité à tous d'ouvrir un dialogue avec les personnes
-          intéressées, dans un cadre propice à des échanges qui ont du sens.
+          Le but de Shakala, c'est d'offrir la possibilité à tous d'ouvrir un dialogue avec des personnes
+          intéressées et à l'écoute, dans un cadre propice à des échanges qui ont du sens.
         </p>
       </div>
     </div>
 
     <p className="pt-2">
-      Plus de détails sur les objectifs de la plateforme sont expliqués sur{' '}
+      Plus de détails sur les objectifs et ambitions de la plateforme sont expliqués sur{' '}
       <Link prefetch="intent" to="/motivations">
         la page motivations
       </Link>
@@ -147,9 +172,11 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({ Icon, children }: KeyFeatureProps) => (
-  <li className="flex flex-row gap-2 items-center py-1">
-    <Icon className="w-[42px] h-[42px] fill-dark" />
-    <div>{children}</div>
+  <li className="flex flex-row gap-4 items-center p-1">
+    <div className="w-4 h-4">
+      <Icon className="fill-dark" />
+    </div>
+    <div className="flex-1">{children}</div>
   </li>
 );
 
@@ -157,9 +184,9 @@ const KeyFeatures = () => (
   <>
     <Heading>Les points clés</Heading>
 
-    <div className="flex flex-col gap-4 items-center my-4 sm:flex-row">
-      <div className="flex-1 w-[280px]">
-        <img src={imageCharte} className="mx-auto h-[120px] opacity-80" alt="La charte" />
+    <div className="flex flex-col gap-4 justify-center items-center my-4 sm:flex-row">
+      <div className="flex-1 max-w">
+        <img src={imageCharte} className="mx-auto max-h-small opacity-80 md:max-h" alt="La charte" />
         <div className="text-lg font-bold text-center border-y border-light-gray">La charte</div>
         <div className="mt-1 text-sm">
           Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
@@ -167,8 +194,8 @@ const KeyFeatures = () => (
         </div>
       </div>
 
-      <div className="flex-1 w-[280px]">
-        <img src={imageModeration} className="mx-auto h-[120px] opacity-80" alt="La modération" />
+      <div className="flex-1 max-w">
+        <img src={imageModeration} className="mx-auto max-h-small opacity-80 md:max-h" alt="La modération" />
         <div className="text-lg font-bold text-center border-y border-light-gray">La modération</div>
         <div className="mt-1 text-sm">
           Basée sur un système décentralisé, elle est assurée par des membres volontaires de la communauté en
@@ -176,8 +203,12 @@ const KeyFeatures = () => (
         </div>
       </div>
 
-      <div className="flex-1 w-[280px]">
-        <img src={imageIndépendance} className="mx-auto h-[120px] opacity-80" alt="L'indépendance" />
+      <div className="flex-1 max-w">
+        <img
+          src={imageIndépendance}
+          className="mx-auto max-h-small opacity-80 md:max-h"
+          alt="L'indépendance"
+        />
         <div className="text-lg font-bold text-center border-y border-light-gray">L'indépendance</div>
         <div className="mt-1 text-sm">
           Open-source et gratuit, Shakala ne sera jamais lié à une autorité capable d'influer dans les
