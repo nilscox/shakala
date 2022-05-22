@@ -65,6 +65,9 @@ module.exports = {
       xl: '1.5rem',
       xxl: '2rem',
     },
+    boxShadow: {
+      DEFAULT: 'rgba(100, 100, 100, 0.2) 0px 2px 8px 0px',
+    },
     animation: {
       highlight: 'highlight 2s ease-out 1s both',
       loading: 'loading 1s linear infinite',

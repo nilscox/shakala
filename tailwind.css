@@ -53,9 +53,7 @@
   }
 
   .card {
-    background-color: theme('colors.white');
-    border-radius: theme('borderRadius.lg');
-    box-shadow: theme('boxShadow.md');
+    @apply bg-white rounded-lg shadow;
   }
 }
 

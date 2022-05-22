@@ -8,12 +8,20 @@ import { Markdown } from '~/components/elements/markdown';
 import { Tab, Tabs } from './tabs';
 
 type RealCommentFormProps = {
+  autofocus?: boolean;
+  placeholder?: string;
   parentId?: string;
-  onCancel: () => void;
-  onSubmitted: () => void;
+  onCancel?: () => void;
+  onSubmitted?: () => void;
 };
 
-export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealCommentFormProps) => {
+export const RealCommentForm = ({
+  autofocus = true,
+  placeholder,
+  parentId,
+  onCancel,
+  onSubmitted,
+}: RealCommentFormProps) => {
   const { threadId } = useParams();
   const [tab, setTab] = useState<Tab>(Tab.edit);
   const [message, setMessage] = useState('');
@@ -22,7 +30,8 @@ export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealComment
 
   useEffect(() => {
     if (transition.state === 'loading' && transition.type === 'actionReload') {
-      onSubmitted();
+      setMessage('');
+      onSubmitted?.();
     }
   }, [transition, onSubmitted]);
 
@@ -34,10 +43,10 @@ export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealComment
       <input type="hidden" name="parentId" value={parentId} />
 
       <textarea
-        autoFocus
+        autoFocus={autofocus}
         rows={4}
         name="message"
-        placeholder="Rédigez votre message"
+        placeholder={placeholder ?? 'Rédigez votre message'}
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
         className={classNames(
@@ -52,9 +61,11 @@ export const RealCommentForm = ({ parentId, onCancel, onSubmitted }: RealComment
       />
 
       <div className="flex flex-row gap-2 justify-end py-1 px-2 border-t border-light-gray">
-        <button className="button-secondary" onClick={onCancel}>
-          Annuler
-        </button>
+        {onCancel && (
+          <button className="button-secondary" onClick={onCancel}>
+            Annuler
+          </button>
+        )}
         <Button primary loading={transition.state === 'submitting'} disabled={message === ''}>
           Envoyer
         </Button>

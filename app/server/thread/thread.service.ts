@@ -11,6 +11,10 @@ export class ThreadService {
     private readonly threadRepository: ThreadRepository,
   ) {}
 
+  async findLastThreads() {
+    return this.threadRepository.findLasts();
+  }
+
   async createComment(
     author: User,
     threadId: string,

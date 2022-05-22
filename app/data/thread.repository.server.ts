@@ -5,6 +5,7 @@ import { Comment, Sort, Thread } from '~/types';
 export const ThreadRepositoryToken = Symbol('ThreadRepositoryToken');
 
 export interface ThreadRepository {
+  findLasts(): Promise<Thread[]>;
   findById(threadId: string): Promise<Thread | undefined>;
   findComments(threadId: string, sort?: Sort, search?: string): Promise<Comment[] | undefined>;
   addComment(threadId: string, parentId: string | null, comment: Comment): Promise<void>;
@@ -13,6 +14,10 @@ export interface ThreadRepository {
 @injectable()
 export class InMemoryThreadRepository implements ThreadRepository {
   constructor(@inject('threads') private readonly threads: Thread[]) {}
+
+  async findLasts(): Promise<Thread[]> {
+    return this.threads;
+  }
 
   async findById(threadId: string): Promise<Thread | undefined> {
     return this.threads.find((thread) => thread.id === threadId);

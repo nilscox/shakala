@@ -1,6 +1,8 @@
 import { Link } from '@remix-run/react';
 import classNames from 'classnames';
 
+import { useUser } from '~/user.provider';
+
 import { SearchParamLink } from '../elements/search-param-link';
 
 import discordLogo from './logos/discord-logo.png';
@@ -11,45 +13,56 @@ type FooterProps = {
   className?: string;
 };
 
-export const Footer = ({ className }: FooterProps): JSX.Element => (
-  <footer className="py-5">
-    <div className={classNames('px-3 md:px-4', className)}>
-      <div className="grid grid-cols-1 gap-4 pt-5 border-t border-light-gray xxs:grid-cols-2 md:grid-cols-4 links-nocolor">
-        <FooterColumn>
-          <Link to="/">Accueil</Link>
-          <Link to="/charte">La charte</Link>
-          <SearchParamLink param="auth" value="login">
-            Connexion
-          </SearchParamLink>
-        </FooterColumn>
+export const Footer = ({ className }: FooterProps): JSX.Element => {
+  const user = useUser();
 
-        <FooterColumn>
-          <Link to="/motivations">Motivations</Link>
-          <Link to="/faq">Questions fréquentes</Link>
-          <Link to="/faq#contact">Contact</Link>
-        </FooterColumn>
+  return (
+    <footer className="py-5">
+      <div className={classNames('px-3 md:px-4', className)}>
+        <div className="grid grid-cols-1 gap-4 pt-5 border-t border-light-gray xxs:grid-cols-2 md:grid-cols-4 links-nocolor">
+          <FooterColumn>
+            <Link to="/">Accueil</Link>
+            <Link to="/charte">La charte</Link>
+            {!user && (
+              <SearchParamLink param="auth" value="login">
+                Connexion
+              </SearchParamLink>
+            )}
+            {user && <Link to="/profile">Profile</Link>}
+          </FooterColumn>
 
-        <FooterColumn>
-          <a href="https://zetecom.featureupvote.com/">Proposer une idée</a>
-          <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
-          <a href="https://github.com/nilscox/zetecom">Code source</a>
-        </FooterColumn>
+          <FooterColumn>
+            <Link to="/motivations">Motivations</Link>
+            <Link to="/faq">Questions fréquentes</Link>
+            <Link to="/faq#contact">Contact</Link>
+          </FooterColumn>
 
-        <FooterColumn>
-          <SocialLink href="https://www.facebook.com/zetecom42" image={facebookLogo} imageAlt="facebook-logo">
-            Page facebook
-          </SocialLink>
-          <SocialLink href="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
-            Compte twitter
-          </SocialLink>
-          <SocialLink href="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
-            Groupe discord
-          </SocialLink>
-        </FooterColumn>
+          <FooterColumn>
+            <a href="https://zetecom.featureupvote.com/">Proposer une idée</a>
+            <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
+            <a href="https://github.com/nilscox/zetecom">Code source</a>
+          </FooterColumn>
+
+          <FooterColumn>
+            <SocialLink
+              href="https://www.facebook.com/zetecom42"
+              image={facebookLogo}
+              imageAlt="facebook-logo"
+            >
+              Page facebook
+            </SocialLink>
+            <SocialLink href="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
+              Compte twitter
+            </SocialLink>
+            <SocialLink href="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
+              Groupe discord
+            </SocialLink>
+          </FooterColumn>
+        </div>
       </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 type FooterColumnProps = {
   className?: string;

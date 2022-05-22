@@ -2,21 +2,20 @@ import { Link, NavLink, NavLinkProps } from '@remix-run/react';
 import classNames from 'classnames';
 import { ReactNode } from 'react';
 
-import { User } from '~/types';
+import { useUser } from '~/user.provider';
 
 import { Avatar } from '../domain/avatar/avatar';
 import { SearchParamLink } from '../elements/search-param-link';
 
 type HeaderProps = {
-  user?: User;
   className?: string;
 };
 
-export const Header = ({ user, className }: HeaderProps): JSX.Element => (
+export const Header = ({ className }: HeaderProps): JSX.Element => (
   <header className="pt-5 pb-2 text-text-white bg-dark links-nocolor">
     <div className={classNames('px-4', className)}>
       <div className="flex relative flex-row gap-4 justify-between pt-3 xs:pt-0">
-        <Authentication user={user} />
+        <Authentication />
         <Heading />
         <Navigation className="hidden mt-auto sm:flex" />
       </div>
@@ -32,21 +31,21 @@ const Heading = () => (
   </Link>
 );
 
-type AuthenticationProps = {
-  user?: User;
-};
+const Authentication = () => {
+  const user = useUser();
 
-const Authentication = ({ user }: AuthenticationProps) => (
-  <AuthenticationLink
-    authenticated={Boolean(user)}
-    className="flex absolute top-0 right-0 flex-row grow gap-2 items-center"
-  >
-    <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
-    <div className="w-4 h-4 xs:w-5 xs:h-5">
-      <Avatar image={user?.image} className="w-4 h-4 border-none xs:w-5 xs:h-5" />
-    </div>
-  </AuthenticationLink>
-);
+  return (
+    <AuthenticationLink
+      authenticated={Boolean(user)}
+      className="flex absolute top-0 right-0 flex-row grow gap-2 items-center"
+    >
+      <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
+      <div className="w-4 h-4 xs:w-5 xs:h-5">
+        <Avatar image={user?.image} className="w-4 h-4 border-none xs:w-5 xs:h-5" />
+      </div>
+    </AuthenticationLink>
+  );
+};
 
 type AuthenticationLinkProps = {
   authenticated: boolean;
