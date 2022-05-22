@@ -14,11 +14,11 @@ type RepliesListProps = {
 };
 
 export const RepliesList = ({ commentId, replies, replyForm, setReplyForm }: RepliesListProps) => (
-  <div className="flex flex-col gap-1 bg-replies-background rounded-b border-t border-light-gray">
+  <div className="flex flex-col gap-1 bg-replies-background rounded-b border-t">
     {replies.map((reply) => (
       <Reply key={reply.id} reply={reply} />
     ))}
-    <div className={classNames(replies.length > 0 && 'border-t border-light-gray')}>
+    <div className={classNames(replies.length > 0 && 'border-t')}>
       <CommentForm parentId={commentId} form={replyForm} setForm={setReplyForm} />
     </div>
   </div>

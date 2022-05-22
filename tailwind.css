@@ -12,6 +12,10 @@
     background-color: #fbfbfd;
   }
 
+  * {
+    @apply border-light-gray;
+  }
+
   strong {
     @apply text-text/80;
   }
@@ -43,6 +47,7 @@
   .button-primary {
     @apply button;
     @apply bg-primary text-white rounded;
+    @apply hover:bg-primary/95;
     @apply disabled:bg-primary/60;
   }
 

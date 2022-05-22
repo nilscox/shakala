@@ -7,10 +7,7 @@ type RadiosGroupProps = {
 
 export const RadiosGroup = ({ className, children }: RadiosGroupProps) => (
   <div
-    className={classNames(
-      'flex flex-col xxs:flex-row bg-white rounded border border-light-gray justify-stretch',
-      className,
-    )}
+    className={classNames('flex flex-col xxs:flex-row bg-white rounded border justify-stretch', className)}
   >
     {children}
   </div>
@@ -25,7 +22,7 @@ type RadioItemProps = {
 };
 
 export const RadioItem = ({ id, name, title, defaultChecked, children }: RadioItemProps) => (
-  <div className="border-t border-light-gray first-of-type:border-none xxs:border-t-0 xxs:border-l">
+  <div className="border-t first-of-type:border-none xxs:border-t-0 xxs:border-l">
     <input
       type="radio"
       id={id}

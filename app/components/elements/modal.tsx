@@ -18,7 +18,7 @@ export const Modal = (props: ReactModal.Props) => {
   return (
     <ReactModal
       overlayClassName="fixed top-0 bottom-0 left-0 right-0 bg-modal-overlay/30 flex flex-col items-center justify-center"
-      className="p-4 m-2 bg-white rounded-lg border border-light-gray outline-none"
+      className="p-4 m-2 bg-white rounded-lg border outline-none"
       closeTimeoutMS={200}
       preventScroll
       {...props}

@@ -12,15 +12,15 @@ type TabsProps = {
 
 export const Tabs = ({ tab, setTab }: TabsProps) => (
   <div className="flex flex-row" role="tablist">
-    <div className="w-2 border-b border-light-gray" />
+    <div className="w-2 border-b" />
     <TabComponent selected={tab === Tab.edit} onClick={() => setTab(Tab.edit)}>
       Éditer
     </TabComponent>
-    <div className="w-2 border-b border-light-gray" />
+    <div className="w-2 border-b" />
     <TabComponent selected={tab === Tab.preview} onClick={() => setTab(Tab.preview)}>
       Aperçu
     </TabComponent>
-    <div className="flex-1 w-2 border-b border-light-gray" />
+    <div className="flex-1 w-2 border-b" />
   </div>
 );
 
@@ -37,7 +37,7 @@ const TabComponent = ({ selected, onClick, children }: TabComponentProps) => (
     onClick={onClick}
     className={classNames(
       'py-1 px-3 mt-1 font-bold rounded-t border',
-      selected && 'text-primary bg-white border-light-gray border-b-transparent',
+      selected && 'text-primary bg-white border-b-transparent',
       !selected && 'text-text-light border-b-light-gray border-transparent',
     )}
   >

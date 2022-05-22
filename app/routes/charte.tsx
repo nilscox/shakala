@@ -102,7 +102,7 @@ export default function RulesRoute() {
 const Rule = ({ rule, children }: { rule: ReactNode; children: React.ReactNode }) => (
   <div>
     <em className="block mb-1 text-lg">{rule}</em>
-    <div className="pl-2 ml-4 text-text/80 border-l-4 border-light-gray">{children}</div>
+    <div className="pl-2 ml-4 text-text/80 border-l-4">{children}</div>
   </div>
 );
 

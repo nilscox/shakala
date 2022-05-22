@@ -2,6 +2,7 @@ import { Container } from 'inversify';
 
 import { InMemoryThreadRepository, ThreadRepositoryToken } from './data/thread.repository.server';
 import { InMemoryUserRepository, UserRepositoryToken } from './data/user.repository';
+import { createComment, createThread, createUser } from './factories';
 import { AuthenticationController } from './server/authentication/authentication.controller';
 import { AuthenticationService } from './server/authentication/authentication.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './server/common/session.service';
@@ -19,7 +20,26 @@ const user: User = {
 };
 
 const data = {
-  threads: [threadFacebookZetetique],
+  // threads: [threadFacebookZetetique],
+  threads: [
+    createThread({
+      id: 'fake',
+      author: createUser({ nick: 'Thread author' }),
+      text: 'Is the earth flat?',
+      comments: [
+        createComment({
+          author: createUser({ nick: 'Me' }),
+          text: 'yes',
+          replies: [createComment({ author: createUser({ nick: 'You' }), text: 'I doubt that is true' })],
+        }),
+        createComment({
+          author: createUser({ nick: 'You' }),
+          text: 'no',
+          replies: [],
+        }),
+      ],
+    }),
+  ],
   users: [user],
 };
 

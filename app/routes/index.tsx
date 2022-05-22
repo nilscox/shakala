@@ -98,7 +98,7 @@ const Outline = () => (
 const Heading = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-row gap-4 items-center mt-8 mb-3">
     <h2 className="text-xl font-bold text-primary">{children}</h2>
-    <hr className="flex-1 border-light-gray" />
+    <hr className="flex-1" />
   </div>
 );
 
@@ -131,7 +131,7 @@ const Motivations = () => (
     </p>
 
     <div className="flex flex-col md:flex-row">
-      <div className="flex-1 pb-2 mb-2 border-b border-light-gray md:pr-2 md:pb-0 md:mr-2 md:mb-0 md:border-r md:border-b-0">
+      <div className="flex-1 pb-2 mb-2 border-b md:pr-2 md:pb-0 md:mr-2 md:mb-0 md:border-r md:border-b-0">
         <p>
           Depuis quelques dizaines d'années, la digitalisation des modes de communication a enclenché une
           vraie <a href="https://fr.wikipedia.org/wiki/R%C3%A9volution_num%C3%A9rique">révolution</a>, qui a
@@ -187,7 +187,7 @@ const KeyFeatures = () => (
     <div className="flex flex-col gap-4 justify-center items-center my-4 sm:flex-row">
       <div className="flex-1 max-w">
         <img src={imageCharte} className="mx-auto max-h-small opacity-80 md:max-h" alt="La charte" />
-        <div className="text-lg font-bold text-center border-y border-light-gray">La charte</div>
+        <div className="text-lg font-bold text-center border-y">La charte</div>
         <div className="mt-1 text-sm">
           Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
           garantir des échanges pertinents
@@ -196,7 +196,7 @@ const KeyFeatures = () => (
 
       <div className="flex-1 max-w">
         <img src={imageModeration} className="mx-auto max-h-small opacity-80 md:max-h" alt="La modération" />
-        <div className="text-lg font-bold text-center border-y border-light-gray">La modération</div>
+        <div className="text-lg font-bold text-center border-y">La modération</div>
         <div className="mt-1 text-sm">
           Basée sur un système décentralisé, elle est assurée par des membres volontaires de la communauté en
           échange de points de réputation
@@ -209,7 +209,7 @@ const KeyFeatures = () => (
           className="mx-auto max-h-small opacity-80 md:max-h"
           alt="L'indépendance"
         />
-        <div className="text-lg font-bold text-center border-y border-light-gray">L'indépendance</div>
+        <div className="text-lg font-bold text-center border-y">L'indépendance</div>
         <div className="mt-1 text-sm">
           Open-source et gratuit, Shakala ne sera jamais lié à une autorité capable d'influer dans les
           discussions d'une quelconque manière
