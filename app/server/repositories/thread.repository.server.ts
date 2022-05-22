@@ -26,6 +26,14 @@ export class InMemoryThreadRepository implements ThreadRepository {
     );
   }
 
+  async addThread(thread: Thread): Promise<void> {
+    this.threads.push(thread);
+    this.comments.set(thread.id, [
+      ...thread.comments,
+      ...thread.comments.flatMap((comment) => comment.replies),
+    ]);
+  }
+
   async findLasts(): Promise<Thread[]> {
     return this.threads;
   }

@@ -1,51 +1,23 @@
-import { ActionFunction, json, LoaderFunction } from '@remix-run/node';
+import { ActionFunction, LoaderFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 
 import { Thread } from '~/components/domain/thread/thread';
 import { Fallback } from '~/components/elements/fallback';
 import container from '~/inversify.config.server';
-import { ThreadRepository, ThreadRepositoryToken } from '~/server/repositories/thread.repository.server';
 import { ThreadController } from '~/server/thread/thread.controller.server';
 import { methodNotAllowed } from '~/server/utils/responses.server';
-import { SearchParams } from '~/server/utils/search-params';
-import { Sort } from '~/types';
 
-export class EntityNotFound extends Response {
-  constructor(entity: string, readonly predicate?: unknown) {
-    super(`${entity} not found`, { status: 404 });
-  }
-}
+const controller = () => container.get(ThreadController);
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const threadId = params.threadId as string;
-
-  const searchParams = new SearchParams(request);
-  const search = searchParams.getString('search');
-  const sort = searchParams.getEnum('sort', Sort) ?? Sort.dateAsc;
-
-  const threadRepository = container.get<ThreadRepository>(ThreadRepositoryToken);
-
-  const thread = await threadRepository.findById(threadId);
-
-  if (!thread) {
-    throw new EntityNotFound('thread');
-  }
-
-  const comments = await threadRepository.findComments(threadId, sort, search);
-
-  return json({
-    ...thread,
-    comments,
-  });
+  return controller().getThread(request, params.threadId as string);
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const controller = container.get(ThreadController);
-
   if (request.method === 'POST') {
-    return controller.createComment(request);
+    return controller().createComment(request);
   } else if (request.method === 'PUT') {
-    return controller.updateComment(request);
+    return controller().updateComment(request);
   }
 
   return methodNotAllowed({ message: 'Only POST and PUT methods are allowed' });

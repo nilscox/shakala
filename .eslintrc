@@ -9,6 +9,7 @@
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/consistent-type-imports": "off",
+    "@typescript-eslint/no-useless-constructor": "off",
     "import/no-cycle": "error",
     "import/order": [
       "warn",

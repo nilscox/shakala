@@ -1,12 +1,14 @@
 import { FormData } from '@remix-run/node';
 import { MockedObject } from 'vitest';
 
-import { createComment, createUser } from '~/factories';
-import { InMemoryUserRepository } from '~/server/repositories/user.repository';
+import { createComment, createThread } from '~/factories';
+import { StubSessionService } from '~/server/common/session.service';
+import { ValidationService } from '~/server/common/validation.service';
+import { InMemoryUserRepository } from '~/server/data/user/in-memory-user.repository';
+import { createRequest } from '~/server/test/create-request';
+import { createUserEntity } from '~/server/test/factories';
 
-import { StubSessionService } from '../common/session.service';
-import { ValidationService } from '../common/validation.service';
-import { createRequest } from '../test/create-request';
+import { InMemoryThreadRepository } from '../repositories/thread.repository.server';
 
 import { ThreadController } from './thread.controller.server';
 import { ThreadService } from './thread.service';
@@ -14,7 +16,8 @@ import { ThreadService } from './thread.service';
 describe('ThreadController', () => {
   const sessionService = new StubSessionService();
 
-  const userRepository = new InMemoryUserRepository([]);
+  const userRepository = new InMemoryUserRepository();
+  const threadRepository = new InMemoryThreadRepository([]);
 
   const threadService = {
     createComment: vi.fn(),
@@ -25,8 +28,23 @@ describe('ThreadController', () => {
     sessionService,
     new ValidationService(),
     userRepository,
+    threadRepository,
     threadService,
   );
+
+  it('retrieves an existing thread', async () => {
+    const threadId = 'threadId';
+    const thread = createThread({ id: threadId });
+
+    await threadRepository.addThread(thread);
+
+    const request = createRequest();
+
+    const response = await controller.getThread(request, threadId);
+
+    expect(response).toHaveStatus(200);
+    expect(await response.json()).toEqual(thread);
+  });
 
   it('creates a new root comment on a thread', async () => {
     const form = new FormData();
@@ -36,7 +54,7 @@ describe('ThreadController', () => {
 
     const request = createRequest({ form });
 
-    userRepository.save(createUser({ id: 'userId' }));
+    userRepository.save(createUserEntity({ id: 'userId' }));
     sessionService.save(sessionService.createSession('userId'));
 
     const comment = createComment();
@@ -46,7 +64,7 @@ describe('ThreadController', () => {
     const response = await controller.createComment(request);
 
     expect(response).toHaveStatus(201);
-    expect(await response.json()).toEqual(comment);
+    expect(response.body).toBeNull();
   });
 
   it('updates an existing comment', async () => {
@@ -57,7 +75,7 @@ describe('ThreadController', () => {
 
     const request = createRequest({ form });
 
-    userRepository.save(createUser({ id: 'userId' }));
+    userRepository.save(createUserEntity({ id: 'userId' }));
     sessionService.save(sessionService.createSession('userId'));
 
     const comment = createComment();
@@ -67,5 +85,6 @@ describe('ThreadController', () => {
     const response = await controller.updateComment(request);
 
     expect(response).toHaveStatus(204);
+    expect(response.body).toBeNull();
   });
 });

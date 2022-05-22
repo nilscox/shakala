@@ -1,10 +1,10 @@
 import { redirect } from '@remix-run/node';
 
 import container from '~/inversify.config.server';
-import { UserRepository, UserRepositoryToken } from '~/server/repositories/user.repository';
 import { User } from '~/types';
 
 import { SessionService, SessionServiceToken } from './common/session.service';
+import { UserRepository, UserRepositoryToken } from './data/user/user.repository';
 
 export const getUserId = async (request: Request): Promise<string | undefined> => {
   return container.get<SessionService>(SessionServiceToken).getUserId(request);
