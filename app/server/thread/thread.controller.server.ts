@@ -1,12 +1,12 @@
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { inject, injectable } from 'inversify';
 
-import { UserRepository, UserRepositoryToken } from '~/data/user.repository';
+import { UserRepository, UserRepositoryToken } from '~/server/repositories/user.repository';
 
 import { SessionService, SessionServiceToken } from '../common/session.service';
 import { ValidationError, ValidationService } from '../common/validation.service';
 import { FormValues } from '../types/form-values';
-import { badRequest, created, noContent } from '../utils/responses';
+import { badRequest, created, noContent } from '../utils/responses.server';
 import { tryCatch } from '../utils/try-catch';
 
 import { ThreadService } from './thread.service';

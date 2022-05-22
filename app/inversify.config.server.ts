@@ -1,11 +1,14 @@
 import { Container } from 'inversify';
 
-import { InMemoryThreadRepository, ThreadRepositoryToken } from './data/thread.repository.server';
-import { InMemoryUserRepository, UserRepositoryToken } from './data/user.repository';
 import { AuthenticationController } from './server/authentication/authentication.controller';
 import { AuthenticationService } from './server/authentication/authentication.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './server/common/session.service';
 import { ValidationService } from './server/common/validation.service';
+import {
+  InMemoryThreadRepository,
+  ThreadRepositoryToken,
+} from './server/repositories/thread.repository.server';
+import { InMemoryUserRepository, UserRepositoryToken } from './server/repositories/user.repository';
 import { ThreadController } from './server/thread/thread.controller.server';
 import { ThreadService } from './server/thread/thread.service';
 import { threadFacebookZetetique } from './thread-facebook-zetetique';

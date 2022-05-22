@@ -5,7 +5,7 @@ import { User } from '~/types';
 
 import { SessionService, SessionServiceToken } from '../common/session.service';
 import { ValidationError, ValidationService } from '../common/validation.service';
-import { badRequest, forbidden } from '../utils/responses';
+import { badRequest, forbidden } from '../utils/responses.server';
 import { SearchParams } from '../utils/search-params';
 import { tryCatch } from '../utils/try-catch';
 

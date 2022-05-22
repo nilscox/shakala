@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { inject, injectable } from 'inversify';
 
-import { UserRepository, UserRepositoryToken } from '~/data/user.repository';
+import { UserRepository, UserRepositoryToken } from '~/server/repositories/user.repository';
 import { User } from '~/types';
 
 export class DomainError extends Error {

@@ -3,10 +3,10 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 
 import { Thread } from '~/components/domain/thread/thread';
 import { Fallback } from '~/components/elements/fallback';
-import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
 import container from '~/inversify.config.server';
+import { ThreadRepository, ThreadRepositoryToken } from '~/server/repositories/thread.repository.server';
 import { ThreadController } from '~/server/thread/thread.controller.server';
-import { methodNotAllowed } from '~/server/utils/responses';
+import { methodNotAllowed } from '~/server/utils/responses.server';
 import { SearchParams } from '~/server/utils/search-params';
 import { Sort } from '~/types';
 

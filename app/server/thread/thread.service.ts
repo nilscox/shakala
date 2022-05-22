@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
+import { ThreadRepository, ThreadRepositoryToken } from '~/server/repositories/thread.repository.server';
 
 import { Comment, User } from '../../types';
 

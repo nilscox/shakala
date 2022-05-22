@@ -1,8 +1,8 @@
 import { FormData } from '@remix-run/node';
 import { MockedObject } from 'vitest';
 
-import { InMemoryUserRepository } from '~/data/user.repository';
 import { createComment, createUser } from '~/factories';
+import { InMemoryUserRepository } from '~/server/repositories/user.repository';
 
 import { StubSessionService } from '../common/session.service';
 import { ValidationService } from '../common/validation.service';

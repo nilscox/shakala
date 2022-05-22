@@ -1,7 +1,7 @@
 import { redirect } from '@remix-run/node';
 
-import { UserRepository, UserRepositoryToken } from '~/data/user.repository';
 import container from '~/inversify.config.server';
+import { UserRepository, UserRepositoryToken } from '~/server/repositories/user.repository';
 import { User } from '~/types';
 
 import { SessionService, SessionServiceToken } from './common/session.service';
