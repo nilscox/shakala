@@ -11,30 +11,36 @@ import { ThumbDownIcon } from '~/components/icons/thumb-down';
 import { ThumbUpIcon } from '~/components/icons/thumb-up';
 
 type CommentFooterProps = {
+  className?: string;
   upvotes: number;
   downvotes: number;
   showActions: boolean;
   isReply: boolean;
   onShowActions: () => void;
+  onEdit: () => void;
   onReply?: () => void;
 };
 
 export const CommentFooter = ({
+  className,
   upvotes,
   downvotes,
   showActions,
   isReply,
   onShowActions,
+  onEdit,
   onReply,
 }: CommentFooterProps) => (
-  <div className="flex flex-row justify-between">
+  <div className={classNames('flex flex-row justify-between', className)}>
     <div className="flex overflow-x-auto flex-row gap-x-2 hide-scrollbars">
       <FooterButton icon={<ThumbUpIcon />}>{upvotes}</FooterButton>
       <FooterButton icon={<ThumbDownIcon />}>{downvotes}</FooterButton>
 
       {showActions && (
         <>
-          <FooterButton icon={<EditIcon />}>Éditer</FooterButton>
+          <FooterButton icon={<EditIcon />} onClick={onEdit}>
+            Éditer
+          </FooterButton>
           {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
           <FooterButton icon={<ReportIcon />}>Signaler</FooterButton>
           <FooterButton icon={<ShareIcon />}>Partager</FooterButton>

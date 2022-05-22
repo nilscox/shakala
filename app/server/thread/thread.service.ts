@@ -36,4 +36,14 @@ export class ThreadService {
 
     return comment;
   }
+
+  async updateComment(author: User, commentId: string, message: string): Promise<void> {
+    const comment = await this.threadRepository.findCommentById(commentId);
+
+    if (!comment) {
+      throw new Error(`Cannot find comment with id ${commentId}`);
+    }
+
+    await this.threadRepository.updateComment({ ...comment, text: message });
+  }
 }

@@ -39,7 +39,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  return container.get(ThreadController).createComment(request);
+  const controller = container.get(ThreadController);
+
+  if (request.method === 'POST') {
+    return controller.createComment(request);
+  } else if (request.method === 'PUT') {
+    return controller.updateComment(request);
+  }
+
+  return new Response(undefined, { status: 405 });
 };
 
 export default function ThreadRoute() {

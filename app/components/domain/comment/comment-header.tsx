@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { AvatarNick } from '~/components/domain/avatar/avatar-nick';
@@ -8,10 +9,16 @@ type CommentHeaderProps = {
   commentId: string;
   author: User;
   date: string;
+  className?: string;
 };
 
-export const CommentHeader = ({ commentId, author, date }: CommentHeaderProps) => (
-  <div className="flex flex-col-reverse items-start xxs:flex-row xxs:gap-2 xxs:items-center">
+export const CommentHeader = ({ commentId, author, date, className }: CommentHeaderProps) => (
+  <div
+    className={classNames(
+      'flex flex-col-reverse items-start xxs:flex-row xxs:gap-2 xxs:items-center',
+      className,
+    )}
+  >
     <AvatarNick {...author} />
     <div className="hidden xxs:block">{bullet}</div>
     <Link to={`#${commentId}`} className="self-end hover:underline decoration-text-light/40">

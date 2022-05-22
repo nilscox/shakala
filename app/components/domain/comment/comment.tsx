@@ -5,6 +5,7 @@ import { Markdown } from '~/components/elements/markdown';
 
 import { Comment as CommentType } from '../../../types';
 import { FormType } from '../comment-form';
+import { RealCommentForm } from '../comment-form/comment-form';
 
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
@@ -20,24 +21,36 @@ export const Comment = ({ comment }: CommentProps) => {
 
   const highlight = useHighlightComment(comment);
   const [showActions, setShowActions] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [replyForm, setReplyForm] = useState<FormType>(FormType.fake);
 
   return (
     <div id={id} className="p-0 card">
       <div
-        className={classNames('p-2', highlight && 'animate-highlight')}
+        className={classNames(highlight && 'animate-highlight')}
         onMouseLeave={() => setShowActions(false)}
       >
-        <CommentHeader commentId={id} author={author} date={date} />
+        <CommentHeader commentId={id} author={author} date={date} className="px-2 pt-2" />
 
-        <Markdown markdown={text} className="my-2" />
+        {editing && (
+          <RealCommentForm
+            commentId={comment.id}
+            initialText={text}
+            onCancel={() => setEditing(false)}
+            onSubmitted={() => setEditing(false)}
+          />
+        )}
+
+        <Markdown markdown={text} className={classNames('m-2', editing && 'hidden')} />
 
         <CommentFooter
+          className={classNames('px-2 pb-1', editing && 'hidden')}
           isReply={false}
           upvotes={upvotes}
           downvotes={downvotes}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
+          onEdit={() => setEditing(true)}
           onReply={replyForm === FormType.fake ? () => setReplyForm(FormType.real) : undefined}
         />
       </div>

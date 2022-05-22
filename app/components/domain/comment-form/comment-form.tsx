@@ -4,13 +4,16 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/elements/button';
 import { Markdown } from '~/components/elements/markdown';
+import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
 
 import { Tab, Tabs } from './tabs';
 
 type RealCommentFormProps = {
   autofocus?: boolean;
   placeholder?: string;
+  commentId?: string;
   parentId?: string;
+  initialText?: string;
   onCancel?: () => void;
   onSubmitted?: () => void;
 };
@@ -18,13 +21,15 @@ type RealCommentFormProps = {
 export const RealCommentForm = ({
   autofocus = true,
   placeholder,
+  commentId,
   parentId,
+  initialText,
   onCancel,
   onSubmitted,
 }: RealCommentFormProps) => {
   const { threadId } = useParams();
   const [tab, setTab] = useState<Tab>(Tab.edit);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(initialText ?? '');
 
   const transition = useTransition();
 
@@ -36,13 +41,14 @@ export const RealCommentForm = ({
   }, [transition, onSubmitted]);
 
   return (
-    <Form method="post">
+    <Form method={commentId ? 'put' : 'post'}>
       <Tabs tab={tab} setTab={setTab} />
 
       <input type="hidden" name="threadId" value={threadId as string} />
+      <input type="hidden" name="commentId" value={commentId} />
       <input type="hidden" name="parentId" value={parentId} />
 
-      <textarea
+      <TextAreaAutoResize
         autoFocus={autofocus}
         rows={4}
         name="message"

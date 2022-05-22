@@ -30,6 +30,21 @@ class CreateCommentDto {
   message!: string;
 }
 
+class UpdateCommentDto {
+  constructor(data: FormValues<UpdateCommentDto>) {
+    Object.assign(this, data);
+  }
+
+  @IsString()
+  @IsNotEmpty()
+  commentId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  message!: string;
+}
+
 @injectable()
 export class ThreadController {
   constructor(
@@ -69,6 +84,31 @@ export class ThreadController {
       );
 
       return created(comment);
+    })
+      .catch(ValidationError, (error) => badRequest(error.formatted))
+      .value();
+  }
+
+  async updateComment(request: Request): Promise<Response> {
+    const userId = await this.sessionService.requireUserId(request);
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new Error(`cannot find user with id "${userId}"`);
+    }
+
+    const form = await request.formData();
+    const dto = new UpdateCommentDto({
+      commentId: form.get('commentId'),
+      message: form.get('message'),
+    });
+
+    return tryCatch(async () => {
+      await this.validationService.validate(dto);
+
+      await this.threadService.updateComment(user, dto.commentId, dto.message);
+
+      return new Response(undefined, { status: 204 });
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
       .value();

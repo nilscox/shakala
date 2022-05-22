@@ -7,13 +7,24 @@ export const ThreadRepositoryToken = Symbol('ThreadRepositoryToken');
 export interface ThreadRepository {
   findLasts(): Promise<Thread[]>;
   findById(threadId: string): Promise<Thread | undefined>;
+  findCommentById(commentId: string): Promise<Comment | undefined>;
   findComments(threadId: string, sort?: Sort, search?: string): Promise<Comment[] | undefined>;
   addComment(threadId: string, parentId: string | null, comment: Comment): Promise<void>;
+  updateComment(comment: Comment): Promise<void>;
 }
 
 @injectable()
 export class InMemoryThreadRepository implements ThreadRepository {
-  constructor(@inject('threads') private readonly threads: Thread[]) {}
+  private comments: Map<string, Comment[]>;
+
+  constructor(@inject('threads') private readonly threads: Thread[]) {
+    this.comments = new Map(
+      threads.map((thread) => [
+        thread.id,
+        [...thread.comments, ...thread.comments.flatMap((comment) => comment.replies)],
+      ]),
+    );
+  }
 
   async findLasts(): Promise<Thread[]> {
     return this.threads;
@@ -21,6 +32,12 @@ export class InMemoryThreadRepository implements ThreadRepository {
 
   async findById(threadId: string): Promise<Thread | undefined> {
     return this.threads.find((thread) => thread.id === threadId);
+  }
+
+  async findCommentById(commentId: string) {
+    return Array.from(this.comments.values())
+      .flat()
+      .find((comment) => comment.id === commentId);
   }
 
   async findComments(threadId: string, sort?: Sort, search?: string): Promise<Comment[] | undefined> {
@@ -33,7 +50,10 @@ export class InMemoryThreadRepository implements ThreadRepository {
     let comments = thread.comments;
 
     if (search) {
-      comments = comments.filter((comment) => comment.text.includes(search));
+      comments = comments.filter(
+        (comment) =>
+          comment.text.includes(search) || comment.replies.some((reply) => reply.text.includes(search)),
+      );
     }
 
     if (sort === Sort.dateAsc) {
@@ -65,5 +85,15 @@ export class InMemoryThreadRepository implements ThreadRepository {
     } else {
       thread.comments.push(comment);
     }
+  }
+
+  async updateComment({ id: commentId, ...rest }: Comment): Promise<void> {
+    const comment = await this.findCommentById(commentId);
+
+    if (!comment) {
+      throw new Error(`Cannot find comment with id "${commentId}"`);
+    }
+
+    Object.assign(comment, rest);
   }
 }

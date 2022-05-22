@@ -18,6 +18,7 @@ describe('ThreadController', () => {
 
   const threadService = {
     createComment: vi.fn(),
+    updateComment: vi.fn(),
   } as MockedObject<ThreadService>;
 
   const controller = new ThreadController(
@@ -27,7 +28,7 @@ describe('ThreadController', () => {
     threadService,
   );
 
-  it('creates a new comment on an existing thread', async () => {
+  it('creates a new root comment on a thread', async () => {
     const form = new FormData();
 
     form.set('threadId', 'threadId');
@@ -46,5 +47,25 @@ describe('ThreadController', () => {
 
     expect(response).toHaveStatus(201);
     expect(await response.json()).toEqual(comment);
+  });
+
+  it('updates an existing comment', async () => {
+    const form = new FormData();
+
+    form.set('commentId', 'commentId');
+    form.set('message', 'Hello!');
+
+    const request = createRequest({ form });
+
+    userRepository.save(createUser({ id: 'userId' }));
+    sessionService.save(sessionService.createSession('userId'));
+
+    const comment = createComment();
+
+    threadService.createComment.mockResolvedValueOnce(comment);
+
+    const response = await controller.updateComment(request);
+
+    expect(response).toHaveStatus(204);
   });
 });
