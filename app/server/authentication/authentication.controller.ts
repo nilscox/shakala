@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 
 import { User } from '~/types';
 
-import { SessionServiceToken, SessionService } from '../common/session.service';
+import { SessionService, SessionServiceToken } from '../common/session.service';
 import { ValidationError, ValidationService } from '../common/validation.service';
 import { badRequest, forbidden } from '../utils/responses';
 import { SearchParams } from '../utils/search-params';
@@ -75,7 +75,7 @@ export class AuthenticationController {
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
       .catch(EmailAlreadyExistsError, () =>
-        badRequest(new ValidationError({ email: ['alreadyExists'] }).formatted),
+        badRequest(ValidationError.formatted({ email: ['alreadyExists'] })),
       )
       .value();
   }

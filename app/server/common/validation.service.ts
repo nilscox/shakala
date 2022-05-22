@@ -6,6 +6,10 @@ export class ValidationError extends Error {
     super('ValidationError');
   }
 
+  static formatted(errors: Record<string, string[]>) {
+    return new ValidationError(errors).formatted;
+  }
+
   get formatted() {
     return {
       error: this.message,

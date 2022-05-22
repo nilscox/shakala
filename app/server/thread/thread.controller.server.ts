@@ -6,7 +6,7 @@ import { UserRepository, UserRepositoryToken } from '~/data/user.repository';
 import { SessionService, SessionServiceToken } from '../common/session.service';
 import { ValidationError, ValidationService } from '../common/validation.service';
 import { FormValues } from '../types/form-values';
-import { badRequest, created } from '../utils/responses';
+import { badRequest, created, noContent } from '../utils/responses';
 import { tryCatch } from '../utils/try-catch';
 
 import { ThreadService } from './thread.service';
@@ -108,7 +108,7 @@ export class ThreadController {
 
       await this.threadService.updateComment(user, dto.commentId, dto.message);
 
-      return new Response(undefined, { status: 204 });
+      return noContent();
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
       .value();

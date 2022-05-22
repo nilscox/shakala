@@ -1,11 +1,22 @@
 import { json } from '@remix-run/node';
 
-const jsonResponseFactory = (status: number) => {
-  return (body: unknown, init?: ResponseInit) => json(body, { status, ...init });
+const responseFactory = (status: number) => {
+  return (body?: unknown, init?: ResponseInit) => {
+    if (body === undefined) {
+      return new Response(undefined, { status, ...init });
+    }
+
+    return json(body, { status, ...init });
+  };
 };
 
-export const created = jsonResponseFactory(201);
-export const badRequest = jsonResponseFactory(400);
-export const notFound = () => new Response(undefined, { status: 404 });
-export const forbidden = jsonResponseFactory(401);
-export const notImplemented = jsonResponseFactory(501);
+export const ok = responseFactory(200);
+export const created = responseFactory(201);
+export const noContent = responseFactory(204);
+
+export const badRequest = responseFactory(400);
+export const notFound = responseFactory(404);
+export const forbidden = responseFactory(401);
+export const methodNotAllowed = responseFactory(405);
+
+export const notImplemented = responseFactory(501);

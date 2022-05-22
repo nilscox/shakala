@@ -6,6 +6,7 @@ import { Fallback } from '~/components/elements/fallback';
 import { ThreadRepository, ThreadRepositoryToken } from '~/data/thread.repository.server';
 import container from '~/inversify.config.server';
 import { ThreadController } from '~/server/thread/thread.controller.server';
+import { methodNotAllowed } from '~/server/utils/responses';
 import { SearchParams } from '~/server/utils/search-params';
 import { Sort } from '~/types';
 
@@ -47,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
     return controller.updateComment(request);
   }
 
-  return new Response(undefined, { status: 405 });
+  return methodNotAllowed({ message: 'Only POST and PUT methods are allowed' });
 };
 
 export default function ThreadRoute() {
