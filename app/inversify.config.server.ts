@@ -2,7 +2,6 @@ import { Container } from 'inversify';
 
 import { InMemoryThreadRepository, ThreadRepositoryToken } from './data/thread.repository.server';
 import { InMemoryUserRepository, UserRepositoryToken } from './data/user.repository';
-import { createComment, createThread, createUser } from './factories';
 import { AuthenticationController } from './server/authentication/authentication.controller';
 import { AuthenticationService } from './server/authentication/authentication.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './server/common/session.service';
@@ -10,6 +9,7 @@ import { ValidationService } from './server/common/validation.service';
 import { ThreadController } from './server/thread/thread.controller.server';
 import { ThreadService } from './server/thread/thread.service';
 import { threadFacebookZetetique } from './thread-facebook-zetetique';
+import { threadFlatEarth } from './thread-flat-earth';
 import { User } from './types';
 
 const user: User = {
@@ -20,26 +20,7 @@ const user: User = {
 };
 
 const data = {
-  // threads: [threadFacebookZetetique],
-  threads: [
-    createThread({
-      id: 'fake',
-      author: createUser({ nick: 'Thread author' }),
-      text: 'Is the earth flat?',
-      comments: [
-        createComment({
-          author: createUser({ nick: 'Me' }),
-          text: 'yes',
-          replies: [createComment({ author: createUser({ nick: 'You' }), text: 'I doubt that is true' })],
-        }),
-        createComment({
-          author: createUser({ nick: 'You' }),
-          text: 'no',
-          replies: [],
-        }),
-      ],
-    }),
-  ],
+  threads: [threadFacebookZetetique, threadFlatEarth],
   users: [user],
 };
 
