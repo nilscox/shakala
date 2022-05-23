@@ -2,6 +2,7 @@ import { Container } from 'inversify';
 
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
+import { BcryptService, CryptoService, CryptoToken } from './common/crypto.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './common/session.service';
 import { ValidationService } from './common/validation.service';
 import { CommentEntity } from './data/comment/comment.entity';
@@ -65,6 +66,7 @@ container.bind(UserRepositoryToken).to(InMemoryUserRepository);
 
 container.bind(ValidationService).toSelf();
 container.bind<SessionService>(SessionServiceToken).to(CookieSessionService);
+container.bind<CryptoService>(CryptoToken).to(BcryptService);
 
 container.bind(AuthenticationService).toSelf();
 container.bind(AuthenticationController).toSelf();

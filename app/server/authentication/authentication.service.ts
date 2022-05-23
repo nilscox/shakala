@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
 import { inject, injectable } from 'inversify';
 
 import { UserRepository, UserRepositoryToken } from '~/server/data/user/user.repository';
 
+import { CryptoService, CryptoToken } from '../common/crypto.service';
 import { UserEntity } from '../data/user/user.entity';
 
 export class DomainError extends Error {
@@ -26,6 +26,8 @@ export class EmailAlreadyExistsError extends DomainError {
 @injectable()
 export class AuthenticationService {
   constructor(
+    @inject(CryptoToken)
+    private readonly cryptoService: CryptoService,
     @inject(UserRepositoryToken)
     private readonly userRepository: UserRepository,
   ) {}
@@ -37,7 +39,7 @@ export class AuthenticationService {
       throw new InvalidCredentialsError();
     }
 
-    if (!(await bcrypt.compare(password, user.hashedPassword))) {
+    if (!(await this.cryptoService.compare(password, user.hashedPassword))) {
       throw new InvalidCredentialsError();
     }
 
@@ -51,7 +53,7 @@ export class AuthenticationService {
       throw new EmailAlreadyExistsError(email);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.cryptoService.hash(password);
 
     const user = new UserEntity({
       id: Math.random().toString(36).slice(-6),
