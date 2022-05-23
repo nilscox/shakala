@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 
+import { GeneratorService, GeneratorServiceToken } from '../common/generator.service';
 import { CommentEntity } from '../data/comment/comment.entity';
 import { CommentRepository, CommentRepositoryToken } from '../data/comment/comment.repository';
 import { UserEntity } from '../data/user/user.entity';
@@ -7,6 +8,8 @@ import { UserEntity } from '../data/user/user.entity';
 @injectable()
 export class CommentService {
   constructor(
+    @inject(GeneratorServiceToken)
+    private readonly generatorService: GeneratorService,
     @inject(CommentRepositoryToken)
     private readonly commentRepository: CommentRepository,
   ) {}
@@ -21,7 +24,7 @@ export class CommentService {
     text: string,
   ): Promise<CommentEntity> {
     const comment = new CommentEntity({
-      id: Math.random().toString(36).slice(-6),
+      id: await this.generatorService.generateId(),
       threadId,
       authorId: author.id,
       parentId,

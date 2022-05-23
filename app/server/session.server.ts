@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/node';
 
-import container from '~/inversify.config.server';
+import container from '~/server/inversify.config.server';
 import { User } from '~/types';
 
 import { SessionService, SessionServiceToken } from './common/session.service';

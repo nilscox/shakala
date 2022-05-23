@@ -1,7 +1,7 @@
 import { ActionFunction } from '@remix-run/node';
 
-import container from '~/inversify.config.server';
 import { AuthenticationController } from '~/server/authentication/authentication.controller';
+import container from '~/server/inversify.config.server';
 import { notFound } from '~/server/utils/responses.server';
 
 export const action: ActionFunction = async ({ request }) => {

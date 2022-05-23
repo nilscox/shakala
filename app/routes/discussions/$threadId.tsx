@@ -3,7 +3,7 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 
 import { Thread } from '~/components/domain/thread/thread';
 import { Fallback } from '~/components/elements/fallback';
-import container from '~/inversify.config.server';
+import container from '~/server/inversify.config.server';
 import { ThreadController } from '~/server/thread/thread.controller.server';
 import { methodNotAllowed } from '~/server/utils/responses.server';
 
