@@ -50,7 +50,7 @@ export const CommentsList = ({ thread }: CommentsListProps) => {
       ))}
       <div className="card">
         <div className="flex flex-row gap-4 items-center p-2 pb-0">
-          <AvatarNick image={user?.image} nick={user?.nick ?? 'Moi'} />
+          <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
         </div>
         <RealCommentForm autofocus={false} placeholder={`Répondre à ${thread.author.nick}`} />
       </div>

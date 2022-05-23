@@ -1,9 +1,15 @@
-export type User = {
+export type AuthUser = {
   id: string;
   email: string;
-  hashedPassword: string;
   nick: string;
-  image?: string;
+  profileImage?: string;
+  signupDate: string;
+};
+
+export type User = {
+  id: string;
+  nick: string;
+  profileImage?: string;
 };
 
 export type Comment = {
@@ -13,7 +19,6 @@ export type Comment = {
   date: string;
   upvotes: number;
   downvotes: number;
-  repliesCount: number;
   replies: Comment[];
 };
 

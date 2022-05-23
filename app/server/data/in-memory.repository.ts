@@ -31,4 +31,8 @@ export class InMemoryRepository<Item extends { id: string }> {
   protected find(predicate: (item: Item) => boolean) {
     return this.all().find(predicate);
   }
+
+  protected filter(predicate: (item: Item) => boolean) {
+    return this.all().filter(predicate);
+  }
 }

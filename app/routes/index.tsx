@@ -12,12 +12,27 @@ import { TrophyIcon } from '~/components/icons/trophy';
 import { Layout } from '~/components/layout/layout';
 import { createThread } from '~/factories';
 import { getUser } from '~/server/session.server';
-import { threadFacebookZetetique } from '~/thread-facebook-zetetique';
 import { Thread, User } from '~/types';
 
 import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';
 import imageModeration from '../images/moderation.png';
+
+const facebookZetetique = `Hello tout le monde
+
+J'espère que vous allez bien
+
+Parmi la communauté zététique je n'apprends rien à  personne en parlant du fait qu'une des bases des outils qu'on manie sont les biais cognitifs.
+
+Et je vois souvent des personnes issues du joli monde des sciences humaines rappeler qu'il y a tout un état de l'art, des ressources etc et que connaître seul les biais cognitifs avec zéro connaissance du contexte autour, du fonctionnement du cerveau et toutes choses égales par ailleurs que je ne connais pas moi même, ignorante du sujet que je suis, ne permet pas une lecture complète des choses.
+
+J'aurai aimé avoir des explications sur : dans quoi s'ancrent comme disciplines etc les biais cognitifs ? Quelles sont les évolutions, remises en questions et critiques s'il y a ?
+
+Je serais aussi preneuse de ressources, quelles soient sous forme de livre, articles  podcast, vidéos etc
+
+Merci d'avance de vos retours
+
+Belle soirée`;
 
 const choucroute = `La choucroute est un mets composé de chou coupé finement et transformé par lacto-fermentation dans une saumure, généralement accompagné de garniture.
 
@@ -49,7 +64,11 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }): Promise<LoaderData> => ({
   user: await getUser(request),
   lastThreads: [
-    threadFacebookZetetique,
+    createThread({
+      id: '38pvde',
+      date: new Date().toISOString(),
+      text: facebookZetetique,
+    }),
     createThread({
       id: 'fakeThread1',
       date: new Date().toISOString(),

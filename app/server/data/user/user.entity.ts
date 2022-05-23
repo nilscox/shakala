@@ -27,6 +27,10 @@ export class UserEntity {
     return this.props.nick;
   }
 
+  get profileImage() {
+    return this.props.profileImage;
+  }
+
   get signupDate() {
     return this.props.signupDate;
   }

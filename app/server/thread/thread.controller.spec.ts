@@ -1,15 +1,13 @@
 import { FormData } from '@remix-run/node';
 import { MockedObject } from 'vitest';
 
-import { createComment, createThread } from '~/factories';
 import { StubSessionService } from '~/server/common/session.service';
 import { ValidationService } from '~/server/common/validation.service';
 import { InMemoryUserRepository } from '~/server/data/user/in-memory-user.repository';
 import { createRequest } from '~/server/test/create-request';
-import { createUserEntity } from '~/server/test/factories';
+import { createCommentEntity, createThreadEntity, createUserEntity } from '~/server/test/factories';
 
-import { InMemoryThreadRepository } from '../repositories/thread.repository.server';
-
+import { CommentService } from './comment.service';
 import { ThreadController } from './thread.controller.server';
 import { ThreadService } from './thread.service';
 
@@ -17,33 +15,120 @@ describe('ThreadController', () => {
   const sessionService = new StubSessionService();
 
   const userRepository = new InMemoryUserRepository();
-  const threadRepository = new InMemoryThreadRepository([]);
 
   const threadService = {
+    findLastThreads: vi.fn(),
+    findThreadById: vi.fn(),
+  } as MockedObject<ThreadService>;
+
+  const commentService = {
+    findForThread: vi.fn(),
+    findReplies: vi.fn(),
     createComment: vi.fn(),
     updateComment: vi.fn(),
-  } as MockedObject<ThreadService>;
+  } as MockedObject<CommentService>;
 
   const controller = new ThreadController(
     sessionService,
     new ValidationService(),
     userRepository,
-    threadRepository,
     threadService,
+    commentService,
   );
 
-  it('retrieves an existing thread', async () => {
+  describe('getThread', () => {
+    const threadAuthorId = 'threadAuthorId';
+    const threadAuthor = createUserEntity({
+      id: threadAuthorId,
+      nick: 'thread author',
+      profileImage: 'image',
+    });
+
     const threadId = 'threadId';
-    const thread = createThread({ id: threadId });
+    const thread = createThreadEntity({
+      id: threadId,
+      authorId: threadAuthorId,
+      text: 'Thread',
+      createdAt: new Date('2022-01-01').toISOString(),
+    });
 
-    await threadRepository.addThread(thread);
+    const commentAuthorId = 'commentAuthorId';
+    const commentAuthor = createUserEntity({ id: commentAuthorId, nick: 'comment author' });
 
-    const request = createRequest();
+    const commentId = 'commentId';
+    const comment = createCommentEntity({
+      id: commentId,
+      authorId: commentAuthorId,
+      text: 'Comment',
+      upvotes: 1,
+      downvotes: 2,
+      createdAt: new Date('2022-01-01').toISOString(),
+    });
 
-    const response = await controller.getThread(request, threadId);
+    const replyAuthorId = 'replyAuthorId';
+    const replyAuthor = createUserEntity({ id: replyAuthorId, nick: 'reply author' });
 
-    expect(response).toHaveStatus(200);
-    expect(await response.json()).toEqual(thread);
+    const replyId = 'replyId';
+    const reply = createCommentEntity({
+      id: replyId,
+      authorId: replyAuthorId,
+      text: 'Reply',
+      upvotes: 0,
+      downvotes: 0,
+      createdAt: new Date('2022-01-01').toISOString(),
+    });
+
+    it('retrieves an existing thread', async () => {
+      await userRepository.save(threadAuthor);
+      await userRepository.save(commentAuthor);
+      await userRepository.save(replyAuthor);
+
+      threadService.findThreadById.mockResolvedValueOnce(thread);
+      commentService.findForThread.mockResolvedValueOnce([comment]);
+      commentService.findReplies.mockResolvedValue([]);
+      commentService.findReplies.mockResolvedValueOnce([reply]);
+
+      const response = await controller.getThread(createRequest(), threadId);
+
+      expect(response).toHaveStatus(200);
+      expect(await response.json()).toEqual({
+        id: threadId,
+        date: thread.createdAt,
+        author: {
+          id: threadAuthorId,
+          nick: threadAuthor.nick,
+          profileImage: threadAuthor.profileImage,
+        },
+        text: 'Hello!',
+        comments: [
+          {
+            id: comment.id,
+            author: {
+              id: commentAuthorId,
+              nick: commentAuthor.nick,
+            },
+            text: comment.text,
+            date: comment.createdAt,
+            upvotes: 1,
+            downvotes: 2,
+            replies: [
+              {
+                id: reply.id,
+                author: {
+                  id: replyAuthorId,
+                  nick: replyAuthor.nick,
+                },
+                text: reply.text,
+                date: reply.createdAt,
+                upvotes: 0,
+                downvotes: 0,
+                replies: [],
+              },
+            ],
+          },
+        ],
+      });
+    });
   });
 
   it('creates a new root comment on a thread', async () => {
@@ -57,9 +142,7 @@ describe('ThreadController', () => {
     userRepository.save(createUserEntity({ id: 'userId' }));
     sessionService.save(sessionService.createSession('userId'));
 
-    const comment = createComment();
-
-    threadService.createComment.mockResolvedValueOnce(comment);
+    commentService.createComment.mockResolvedValueOnce(createCommentEntity());
 
     const response = await controller.createComment(request);
 
@@ -78,9 +161,7 @@ describe('ThreadController', () => {
     userRepository.save(createUserEntity({ id: 'userId' }));
     sessionService.save(sessionService.createSession('userId'));
 
-    const comment = createComment();
-
-    threadService.createComment.mockResolvedValueOnce(comment);
+    commentService.createComment.mockResolvedValueOnce(createCommentEntity());
 
     const response = await controller.updateComment(request);
 

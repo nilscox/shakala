@@ -1,52 +1,18 @@
-import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { inject, injectable } from 'inversify';
 
 import { SessionService, SessionServiceToken } from '~/server/common/session.service';
 import { ValidationError, ValidationService } from '~/server/common/validation.service';
 import { UserRepository, UserRepositoryToken } from '~/server/data/user/user.repository';
-import { FormValues } from '~/server/types/form-values';
 import { badRequest, created, noContent, notFound, ok } from '~/server/utils/responses.server';
 import { tryCatch } from '~/server/utils/try-catch';
-import { Sort } from '~/types';
+import { Comment, Sort, Thread } from '~/types';
 
-import { ThreadRepository, ThreadRepositoryToken } from '../repositories/thread.repository.server';
+import { CommentEntity } from '../data/comment/comment.entity';
 import { SearchParams } from '../utils/search-params';
 
+import { CommentService } from './comment.service';
+import { CreateCommentDto, UpdateCommentDto } from './thread.dtos';
 import { ThreadService } from './thread.service';
-
-class CreateCommentDto {
-  constructor(data: FormValues<CreateCommentDto>) {
-    Object.assign(this, data);
-  }
-
-  @IsString()
-  @IsNotEmpty()
-  threadId!: string;
-
-  @IsString()
-  @IsOptional()
-  parentId?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  message!: string;
-}
-
-class UpdateCommentDto {
-  constructor(data: FormValues<UpdateCommentDto>) {
-    Object.assign(this, data);
-  }
-
-  @IsString()
-  @IsNotEmpty()
-  commentId!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  message!: string;
-}
 
 @injectable()
 export class ThreadController {
@@ -57,10 +23,10 @@ export class ThreadController {
     private readonly validationService: ValidationService,
     @inject(UserRepositoryToken)
     private readonly userRepository: UserRepository,
-    @inject(ThreadRepositoryToken)
-    private readonly threadRepository: ThreadRepository,
     @inject(ThreadService)
     private readonly threadService: ThreadService,
+    @inject(CommentService)
+    private readonly commentService: CommentService,
   ) {}
 
   async getThread(request: Request, threadId: string): Promise<Response> {
@@ -68,18 +34,58 @@ export class ThreadController {
     const search = searchParams.getString('search');
     const sort = searchParams.getEnum('sort', Sort) ?? Sort.dateAsc;
 
-    const thread = await this.threadRepository.findById(threadId);
+    const thread = await this.threadService.findThreadById(threadId);
 
     if (!thread) {
       throw notFound();
     }
 
-    const comments = await this.threadRepository.findComments(threadId, sort, search);
+    // todo: add the author to the thread aggregate
+    const author = await this.userRepository.findById(thread.authorId);
+    const comments = await this.commentService.findForThread(threadId, sort, search);
 
-    return ok({
-      ...thread,
-      comments,
-    });
+    if (!author) {
+      throw notFound();
+    }
+
+    const transformComment = async (comment: CommentEntity): Promise<Comment> => {
+      // todo: add the author to the comment entity (or aggregate?)
+      const author = await this.userRepository.findById(comment.authorId);
+      // todo: n+1 select
+      const replies = await this.commentService.findReplies(comment.id);
+
+      if (!author) {
+        throw notFound();
+      }
+
+      return {
+        id: comment.id,
+        author: {
+          id: author.id,
+          nick: author.nick,
+          profileImage: author.profileImage ?? undefined,
+        },
+        text: comment.text,
+        date: comment.createdAt,
+        upvotes: comment.upvotes,
+        downvotes: comment.downvotes,
+        replies: await Promise.all(replies.map(transformComment)),
+      };
+    };
+
+    const result: Thread = {
+      id: thread.id,
+      date: thread.createdAt,
+      author: {
+        id: author.id,
+        nick: author.nick,
+        profileImage: author.profileImage ?? undefined,
+      },
+      text: thread.text,
+      comments: await Promise.all(comments.map(transformComment)),
+    };
+
+    return ok(result);
   }
 
   async createComment(request: Request): Promise<Response> {
@@ -99,8 +105,7 @@ export class ThreadController {
 
     return tryCatch(async () => {
       await this.validationService.validate(dto);
-
-      await this.threadService.createComment(user, dto.threadId, dto.parentId ?? null, dto.message);
+      await this.commentService.createComment(user, dto.threadId, dto.parentId ?? null, dto.message);
 
       return created();
     })
@@ -124,8 +129,7 @@ export class ThreadController {
 
     return tryCatch(async () => {
       await this.validationService.validate(dto);
-
-      await this.threadService.updateComment(user, dto.commentId, dto.message);
+      await this.commentService.updateComment(user, dto.commentId, dto.message);
 
       return noContent();
     })
