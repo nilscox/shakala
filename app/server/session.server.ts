@@ -1,46 +1,25 @@
-import { redirect } from '@remix-run/node';
-
 import container from '~/server/inversify.config.server';
 import { User } from '~/types';
 
-import { SessionService, SessionServiceToken } from './common/session.service';
-import { UserRepository, UserRepositoryToken } from './data/user/user.repository';
+import { UserEntity } from './data/user/user.entity';
+import { UserService } from './user/user.service';
 
-export const getUserId = async (request: Request): Promise<string | undefined> => {
-  return container.get<SessionService>(SessionServiceToken).getUserId(request);
+const transformUser = (user: UserEntity): User => {
+  return {
+    id: user.id,
+    nick: user.nick,
+    profileImage: user.profileImage ?? undefined,
+  };
 };
 
 export const getUser = async (request: Request): Promise<User | undefined> => {
-  const userId = await getUserId(request);
-  const userRepository = container.get<UserRepository>(UserRepositoryToken);
+  const user = await container.get(UserService).getUser(request);
 
-  if (!userId) {
-    return;
+  if (user) {
+    return transformUser(user);
   }
-
-  const user = await userRepository.findById(userId);
-
-  if (!user) {
-    // todo: handle this case
-    return;
-  }
-
-  return user;
 };
 
 export const requireUser = async (request: Request): Promise<User> => {
-  const user = await getUser(request);
-
-  if (!user) {
-    const url = new URL(request.url);
-    const params = new URLSearchParams({
-      auth: 'login',
-      next: url.pathname,
-      ...Object.fromEntries(url.searchParams),
-    });
-
-    throw redirect('/?' + params.toString());
-  }
-
-  return user;
+  return transformUser(await container.get(UserService).requireUser(request));
 };

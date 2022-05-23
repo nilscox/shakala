@@ -25,6 +25,7 @@ import { createUserEntity } from './test/factories';
 import { CommentService } from './thread/comment.service';
 import { ThreadController } from './thread/thread.controller.server';
 import { ThreadService } from './thread/thread.service';
+import { UserService } from './user/user.service';
 
 const nilscox = createUserEntity({
   id: '42',
@@ -73,6 +74,8 @@ container.bind(ValidationService).toSelf();
 container.bind<SessionService>(SessionServiceToken).to(CookieSessionService);
 container.bind<CryptoService>(CryptoServiceToken).to(BcryptService);
 container.bind<GeneratorService>(GeneratorServiceToken).to(MathRandomGeneratorService);
+
+container.bind(UserService).toSelf();
 
 container.bind(AuthenticationService).toSelf();
 container.bind(AuthenticationController).toSelf();

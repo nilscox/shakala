@@ -1,20 +1,21 @@
 import { FormData } from '@remix-run/node';
 import { MockedObject } from 'vitest';
 
-import { StubSessionService } from '~/server/common/session.service';
 import { ValidationService } from '~/server/common/validation.service';
-import { InMemoryUserRepository } from '~/server/data/user/in-memory-user.repository';
 import { createRequest } from '~/server/test/create-request';
 import { createCommentEntity, createThreadEntity, createUserEntity } from '~/server/test/factories';
+
+import { UserService } from '../user/user.service';
 
 import { CommentService } from './comment.service';
 import { ThreadController } from './thread.controller.server';
 import { ThreadService } from './thread.service';
 
 describe('ThreadController', () => {
-  const sessionService = new StubSessionService();
-
-  const userRepository = new InMemoryUserRepository();
+  const userService = {
+    findById: vi.fn(),
+    requireUser: vi.fn(),
+  } as MockedObject<UserService>;
 
   const threadService = {
     findLastThreads: vi.fn(),
@@ -29,9 +30,8 @@ describe('ThreadController', () => {
   } as MockedObject<CommentService>;
 
   const controller = new ThreadController(
-    sessionService,
     new ValidationService(),
-    userRepository,
+    userService,
     threadService,
     commentService,
   );
@@ -79,9 +79,9 @@ describe('ThreadController', () => {
     });
 
     it('retrieves an existing thread', async () => {
-      await userRepository.save(threadAuthor);
-      await userRepository.save(commentAuthor);
-      await userRepository.save(replyAuthor);
+      await userService.findById.mockResolvedValueOnce(threadAuthor);
+      await userService.findById.mockResolvedValueOnce(commentAuthor);
+      await userService.findById.mockResolvedValueOnce(replyAuthor);
 
       threadService.findThreadById.mockResolvedValueOnce(thread);
       commentService.findForThread.mockResolvedValueOnce([comment]);
@@ -99,7 +99,7 @@ describe('ThreadController', () => {
           nick: threadAuthor.nick,
           profileImage: threadAuthor.profileImage,
         },
-        text: 'Hello!',
+        text: thread.text,
         comments: [
           {
             id: comment.id,
@@ -131,41 +131,47 @@ describe('ThreadController', () => {
     });
   });
 
-  it('creates a new root comment on a thread', async () => {
+  describe('createComment', () => {
     const form = new FormData();
+    const user = createUserEntity();
 
-    form.set('threadId', 'threadId');
-    form.set('message', 'Hello!');
+    beforeEach(() => {
+      form.set('threadId', 'threadId');
+      form.set('message', 'Hello!');
 
-    const request = createRequest({ form });
+      userService.requireUser.mockResolvedValueOnce(user);
+      commentService.createComment.mockResolvedValueOnce(createCommentEntity());
+    });
 
-    userRepository.save(createUserEntity({ id: 'userId' }));
-    sessionService.save(sessionService.createSession('userId'));
+    it('creates a new root comment on a thread', async () => {
+      const response = await controller.createComment(createRequest({ form }));
 
-    commentService.createComment.mockResolvedValueOnce(createCommentEntity());
+      expect(response).toHaveStatus(201);
+      expect(response.body).toBeNull();
 
-    const response = await controller.createComment(request);
-
-    expect(response).toHaveStatus(201);
-    expect(response.body).toBeNull();
+      expect(commentService.createComment).toHaveBeenCalledWith(user, 'threadId', null, 'Hello!');
+    });
   });
 
-  it('updates an existing comment', async () => {
+  describe('updateComment', () => {
     const form = new FormData();
+    const user = createUserEntity();
 
-    form.set('commentId', 'commentId');
-    form.set('message', 'Hello!');
+    beforeEach(() => {
+      form.set('commentId', 'commentId');
+      form.set('message', 'Hello!');
 
-    const request = createRequest({ form });
+      userService.requireUser.mockResolvedValueOnce(user);
+      commentService.createComment.mockResolvedValueOnce(createCommentEntity());
+    });
 
-    userRepository.save(createUserEntity({ id: 'userId' }));
-    sessionService.save(sessionService.createSession('userId'));
+    it('updates an existing comment', async () => {
+      const response = await controller.updateComment(createRequest({ form }));
 
-    commentService.createComment.mockResolvedValueOnce(createCommentEntity());
+      expect(response).toHaveStatus(204);
+      expect(response.body).toBeNull();
 
-    const response = await controller.updateComment(request);
-
-    expect(response).toHaveStatus(204);
-    expect(response.body).toBeNull();
+      expect(commentService.updateComment).toHaveBeenCalledWith(user, 'commentId', 'Hello!');
+    });
   });
 });

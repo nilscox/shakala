@@ -4,8 +4,8 @@ import { injectable } from 'inversify';
 export class InMemoryRepository<Item extends { id: string }> {
   private items: Map<string, Item>;
 
-  constructor(items: Item[] = []) {
-    this.items = new Map(items.map((item) => [item.id, item]));
+  constructor(private _items: Item[] = []) {
+    this.items = new Map(_items.map((item) => [item.id, item]));
   }
 
   async findAll(): Promise<Item[]> {
@@ -16,8 +16,16 @@ export class InMemoryRepository<Item extends { id: string }> {
     return this.items.get(id);
   }
 
-  async save(user: Item): Promise<void> {
-    this.items.set(user.id, user);
+  async save(item: Item): Promise<void> {
+    this.items.set(item.id, item);
+
+    const idx = this._items.findIndex(({ id }) => id === item.id);
+
+    if (idx < 0) {
+      this._items.push(item);
+    } else {
+      this._items[idx] = item;
+    }
   }
 
   protected all() {
