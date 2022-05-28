@@ -17,7 +17,7 @@ type CommentFooterProps = {
   showActions: boolean;
   isReply: boolean;
   onShowActions: () => void;
-  onEdit: () => void;
+  onEdit?: () => void;
   onReply?: () => void;
 };
 
@@ -38,9 +38,11 @@ export const CommentFooter = ({
 
       {showActions && (
         <>
-          <FooterButton icon={<EditIcon />} onClick={onEdit}>
-            Éditer
-          </FooterButton>
+          {onEdit && (
+            <FooterButton icon={<EditIcon />} onClick={onEdit}>
+              Éditer
+            </FooterButton>
+          )}
           {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
           <FooterButton icon={<ReportIcon />}>Signaler</FooterButton>
           <FooterButton icon={<ShareIcon />}>Partager</FooterButton>

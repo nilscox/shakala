@@ -1,10 +1,11 @@
-import { Form, useParams, useTransition } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/elements/button';
 import { Markdown } from '~/components/elements/markdown';
 import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
+import { toast } from '~/toast';
 
 import { Tab, Tabs } from './tabs';
 
@@ -31,17 +32,21 @@ export const RealCommentForm = ({
   const [tab, setTab] = useState<Tab>(Tab.edit);
   const [message, setMessage] = useState(initialText ?? '');
 
-  const transition = useTransition();
+  const fetcher = useFetcher();
 
   useEffect(() => {
-    if (transition.state === 'loading' && transition.type === 'actionReload') {
-      setMessage('');
-      onSubmitted?.();
+    if (fetcher.type === 'done') {
+      if (fetcher.data?.ok) {
+        setMessage('');
+        onSubmitted?.();
+      } else {
+        handleError(fetcher.data);
+      }
     }
-  }, [transition, onSubmitted]);
+  }, [fetcher, onSubmitted]);
 
   return (
-    <Form method={commentId ? 'put' : 'post'}>
+    <fetcher.Form method={commentId ? 'put' : 'post'}>
       <Tabs tab={tab} setTab={setTab} />
 
       <input type="hidden" name="threadId" value={threadId as string} />
@@ -72,10 +77,21 @@ export const RealCommentForm = ({
             Annuler
           </button>
         )}
-        <Button primary loading={transition.state === 'submitting'} disabled={message === ''}>
+
+        <Button primary loading={fetcher.state === 'submitting'} disabled={message === ''}>
           Envoyer
         </Button>
       </div>
-    </Form>
+    </fetcher.Form>
   );
+};
+
+const handleError = (data: any) => {
+  if (data?.error === 'UserMustBeAuthorError') {
+    toast.error("Vous devez être l'auteur du message pour pouvoir l'éditer");
+  } else if (data?.error === 'ValidationError' && data?.message?.includes('minLength')) {
+    toast.error('Votre message est trop court.', { duration: 10000000, style: {} });
+  } else {
+    toast.error("Quelque chose s'est mal passé, veuillez réessayer plus tard");
+  }
 };

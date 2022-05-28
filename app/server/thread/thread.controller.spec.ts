@@ -147,7 +147,7 @@ describe('ThreadController', () => {
       const response = await controller.createComment(createRequest({ form }));
 
       expect(response).toHaveStatus(201);
-      expect(response.body).toBeNull();
+      expect(await response.json()).toEqual({ ok: true });
 
       expect(commentService.createComment).toHaveBeenCalledWith(user, 'threadId', null, 'Hello!');
     });
@@ -168,8 +168,8 @@ describe('ThreadController', () => {
     it('updates an existing comment', async () => {
       const response = await controller.updateComment(createRequest({ form }));
 
-      expect(response).toHaveStatus(204);
-      expect(response.body).toBeNull();
+      expect(response).toHaveStatus(200);
+      expect(await response.json()).toEqual({ ok: true });
 
       expect(commentService.updateComment).toHaveBeenCalledWith(user, 'commentId', 'Hello!');
     });

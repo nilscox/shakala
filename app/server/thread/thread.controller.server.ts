@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { ValidationError, ValidationService } from '~/server/common/validation.service';
-import { badRequest, created, noContent, notFound, ok } from '~/server/utils/responses.server';
+import { badRequest, created, forbidden, noContent, notFound, ok } from '~/server/utils/responses.server';
 import { tryCatch } from '~/server/utils/try-catch';
 import { Comment, Sort, Thread } from '~/types';
 
@@ -9,7 +9,7 @@ import { CommentEntity } from '../data/comment/comment.entity';
 import { UserService } from '../user/user.service';
 import { SearchParams } from '../utils/search-params';
 
-import { CommentService } from './comment.service';
+import { CommentService, UserMustBeAuthorError } from './comment.service';
 import { CreateCommentDto, UpdateCommentDto } from './thread.dtos';
 import { ThreadService } from './thread.service';
 
@@ -99,7 +99,7 @@ export class ThreadController {
       await this.validationService.validate(dto);
       await this.commentService.createComment(user, dto.threadId, dto.parentId || null, dto.message);
 
-      return created();
+      return created({ ok: true });
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
       .value();
@@ -118,9 +118,12 @@ export class ThreadController {
       await this.validationService.validate(dto);
       await this.commentService.updateComment(user, dto.commentId, dto.message);
 
-      return noContent();
+      return ok({ ok: true });
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
+      .catch(UserMustBeAuthorError, (error) =>
+        forbidden({ error: 'UserMustBeAuthorError', details: error.message }),
+      )
       .value();
   }
 }

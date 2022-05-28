@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 
 import { Markdown } from '~/components/elements/markdown';
+import { useUser } from '~/user.provider';
 
 import { Comment as CommentType } from '../../../types';
 import { FormType } from '../comment-form';
@@ -23,6 +24,9 @@ export const Comment = ({ comment }: CommentProps) => {
   const [showActions, setShowActions] = useState(false);
   const [editing, setEditing] = useState(false);
   const [replyForm, setReplyForm] = useState<FormType>(FormType.fake);
+
+  const user = useUser();
+  const isAuthor = user?.id === author.id;
 
   return (
     <div id={id} className="p-0 card">
@@ -50,7 +54,7 @@ export const Comment = ({ comment }: CommentProps) => {
           downvotes={downvotes}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
-          onEdit={() => setEditing(true)}
+          onEdit={isAuthor ? () => setEditing(true) : undefined}
           onReply={replyForm === FormType.fake ? () => setReplyForm(FormType.real) : undefined}
         />
       </div>

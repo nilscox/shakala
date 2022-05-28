@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import clone from 'lodash.clonedeep';
 
 @injectable()
 export class InMemoryRepository<Item extends { id: string }> {
@@ -13,11 +14,11 @@ export class InMemoryRepository<Item extends { id: string }> {
   }
 
   async findById(id: string): Promise<Item | undefined> {
-    return this.items.get(id);
+    return this.get(id);
   }
 
   async save(item: Item): Promise<void> {
-    this.items.set(item.id, item);
+    this.set(item);
 
     const idx = this._items.findIndex(({ id }) => id === item.id);
 
@@ -28,19 +29,27 @@ export class InMemoryRepository<Item extends { id: string }> {
     }
   }
 
-  protected all() {
-    return Array.from(this.items.values());
+  clear() {
+    this.items.clear();
   }
 
-  protected get(id: string) {
-    return this.items.get(id);
+  all() {
+    return Array.from(this.items.values()).map(clone);
   }
 
-  protected find(predicate: (item: Item) => boolean) {
+  get(id: string) {
+    return clone(this.items.get(id));
+  }
+
+  set(item: Item) {
+    return clone(this.items.set(item.id, clone(item)));
+  }
+
+  find(predicate: (item: Item) => boolean) {
     return this.all().find(predicate);
   }
 
-  protected filter(predicate: (item: Item) => boolean) {
+  filter(predicate: (item: Item) => boolean) {
     return this.all().filter(predicate);
   }
 }

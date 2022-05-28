@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 
 import reactModalStyles from './react-modal.css';
 import tailwindStyles from './tailwind.css';
+import { Toaster } from './toast';
 
 export const links: LinksFunction = () => {
   return [
@@ -50,6 +51,7 @@ export default function App() {
         <div id="app">
           <Outlet />
         </div>
+        <Toaster />
         <DisableableScrollRestoration />
         <Scripts />
         <LiveReload />

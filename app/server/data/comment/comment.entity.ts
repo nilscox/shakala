@@ -52,4 +52,8 @@ export class CommentEntity {
   get updatedAt() {
     return this.props.updatedAt;
   }
+
+  set updatedAt(updatedAt: string) {
+    this.props.updatedAt = updatedAt;
+  }
 }

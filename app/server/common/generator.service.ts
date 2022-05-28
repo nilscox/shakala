@@ -12,3 +12,16 @@ export class MathRandomGeneratorService implements GeneratorService {
     return Math.random().toString(36).slice(-6);
   }
 }
+
+@injectable()
+export class StubGeneratorService implements GeneratorService {
+  public nextId: string = '';
+
+  async generateId(): Promise<string> {
+    return this.nextId;
+  }
+
+  reset() {
+    this.nextId = '';
+  }
+}

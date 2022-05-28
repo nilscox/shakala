@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { Markdown } from '~/components/elements/markdown';
 import { Comment } from '~/types';
+import { useUser } from '~/user.provider';
 
 import { RealCommentForm } from '../comment-form/comment-form';
 
@@ -20,6 +21,9 @@ export const Reply = ({ reply }: ReplyProps) => {
   const highlight = useHighlightComment(reply);
   const [showActions, setShowActions] = useState(false);
   const [editing, setEditing] = useState(false);
+
+  const user = useUser();
+  const isAuthor = user?.id === author.id;
 
   return (
     <div
@@ -48,7 +52,7 @@ export const Reply = ({ reply }: ReplyProps) => {
           downvotes={downvotes}
           showActions={showActions}
           onShowActions={() => setShowActions(true)}
-          onEdit={() => setEditing(true)}
+          onEdit={isAuthor ? () => setEditing(true) : undefined}
         />
       </div>
     </div>

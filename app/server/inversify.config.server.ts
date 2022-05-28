@@ -3,6 +3,7 @@ import { Container } from 'inversify';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
 import { CryptoService, BcryptService, CryptoServiceToken } from './common/crypto.service';
+import { DateService, DateServiceToken, RealDateService } from './common/date.service';
 import {
   GeneratorService,
   GeneratorServiceToken,
@@ -71,6 +72,7 @@ container.bind(ThreadRepositoryToken).to(InMemoryThreadRepository);
 container.bind(UserRepositoryToken).to(InMemoryUserRepository);
 
 container.bind(ValidationService).toSelf();
+container.bind<DateService>(DateServiceToken).to(RealDateService);
 container.bind<SessionService>(SessionServiceToken).to(CookieSessionService);
 container.bind<CryptoService>(CryptoServiceToken).to(BcryptService);
 container.bind<GeneratorService>(GeneratorServiceToken).to(MathRandomGeneratorService);
