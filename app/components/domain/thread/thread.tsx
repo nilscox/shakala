@@ -9,6 +9,7 @@ import { useUser } from '~/user.provider';
 
 import { RealCommentForm } from '../comment-form/comment-form';
 import { Comment } from '../comment/comment';
+import { ShareCommentModal } from '../share-comment/share-comment-modal';
 
 import { ThreadFilters } from './thread-filters';
 
@@ -33,6 +34,8 @@ export const Thread = ({ thread }: ThreadProps) => (
 
     {thread.comments.length === 0 && <NoCommentFallback />}
     <CommentsList thread={thread} />
+
+    <ShareCommentModal comments={thread.comments} />
   </>
 );
 

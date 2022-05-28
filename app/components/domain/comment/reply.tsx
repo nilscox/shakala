@@ -36,7 +36,7 @@ export const Reply = ({ reply }: ReplyProps) => {
       <div className={classNames(!editing && 'relative left-[-2px] px-2 mt-1 ml-4 border-l-4')}>
         {editing && (
           <RealCommentForm
-            commentId={reply.id}
+            commentId={id}
             initialText={text}
             onCancel={() => setEditing(false)}
             onSubmitted={() => setEditing(false)}
@@ -47,6 +47,7 @@ export const Reply = ({ reply }: ReplyProps) => {
 
         <CommentFooter
           className={classNames('mt-0.5', editing && 'hidden')}
+          commentId={id}
           isReply
           upvotes={upvotes}
           downvotes={downvotes}

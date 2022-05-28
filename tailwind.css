@@ -53,7 +53,7 @@
 
   .button-secondary {
     @apply button;
-    @apply text-text-light/80;
+    @apply text-text-light/90;
     @apply disabled:text-text-light/60;
   }
 

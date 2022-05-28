@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 
 import { IconButton, IconButtonProps } from '~/components/elements/icon-button';
+import { SearchParamLink } from '~/components/elements/search-param-link';
 import { EditIcon } from '~/components/icons/edit';
 import { HorizontalDotsIcon } from '~/components/icons/horizontal-dots';
 import { ReplyIcon } from '~/components/icons/reply';
@@ -12,6 +13,7 @@ import { ThumbUpIcon } from '~/components/icons/thumb-up';
 
 type CommentFooterProps = {
   className?: string;
+  commentId: string;
   upvotes: number;
   downvotes: number;
   showActions: boolean;
@@ -23,6 +25,7 @@ type CommentFooterProps = {
 
 export const CommentFooter = ({
   className,
+  commentId,
   upvotes,
   downvotes,
   showActions,
@@ -43,9 +46,18 @@ export const CommentFooter = ({
               Éditer
             </FooterButton>
           )}
+
           {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
+
           <FooterButton icon={<ReportIcon />}>Signaler</FooterButton>
-          <FooterButton icon={<ShareIcon />}>Partager</FooterButton>
+
+          <SearchParamLink
+            param="share"
+            value={commentId}
+            className="flex flex-row items-center p-0 text-sm hover:text-primary fill-text-light hover:fill-primary button-secondary button"
+          >
+            <ShareIcon className="mr-0.5 w-3 h-3" /> Partager
+          </SearchParamLink>
         </>
       )}
 
@@ -63,11 +75,12 @@ export const CommentFooter = ({
 type FooterButtonProps = IconButtonProps;
 
 export const FooterButton = ({ className, ...props }: FooterButtonProps) => (
-  <>
-    <IconButton
-      small
-      className={classNames('p-0 hover:text-primary button-secondary', className)}
-      {...props}
-    />
-  </>
+  <IconButton
+    small
+    className={classNames(
+      'p-0 hover:text-primary button-secondary fill-text-light hover:fill-primary',
+      className,
+    )}
+    {...props}
+  />
 );

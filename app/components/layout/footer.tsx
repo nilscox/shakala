@@ -1,13 +1,12 @@
 import { Link } from '@remix-run/react';
 import classNames from 'classnames';
 
+import discordLogo from '~/images/logos/discord-logo.png';
+import facebookLogo from '~/images/logos/facebook-logo.png';
+import twitterLogo from '~/images/logos/twitter-logo.png';
 import { useUser } from '~/user.provider';
 
 import { SearchParamLink } from '../elements/search-param-link';
-
-import discordLogo from './logos/discord-logo.png';
-import facebookLogo from './logos/facebook-logo.png';
-import twitterLogo from './logos/twitter-logo.png';
 
 type FooterProps = {
   className?: string;
@@ -82,7 +81,7 @@ type SocialLinkProps = {
 
 const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => (
   <a href={href} className="flex flex-row items-center whitespace-nowrap">
-    <img className="mr-1 w-3 h-3" src={image} alt={imageAlt} />
+    <img className="mr-1 w-3 h-3 grayscale" src={image} alt={imageAlt} />
     {children}
   </a>
 );

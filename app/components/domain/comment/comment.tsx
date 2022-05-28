@@ -49,6 +49,7 @@ export const Comment = ({ comment }: CommentProps) => {
 
         <CommentFooter
           className={classNames('px-2 pb-1', editing && 'hidden')}
+          commentId={id}
           isReply={false}
           upvotes={upvotes}
           downvotes={downvotes}

@@ -40,6 +40,7 @@ module.exports = {
     },
     colors: {
       transparent: 'transparent',
+      inherit: 'inherit',
       white: colors.white,
       primary: colors.amber[600],
       dark: colors.slate[800],
