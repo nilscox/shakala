@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 
 import { SessionService, SessionServiceToken } from '../common/session.service';
 import { ValidationError, ValidationService } from '../common/validation.service';
-import { UserEntity } from '../data/user/user.entity';
+import { User } from '../user/user.entity';
 import { badRequest, forbidden } from '../utils/responses.server';
 import { SearchParams } from '../utils/search-params';
 import { tryCatch } from '../utils/try-catch';
@@ -79,7 +79,7 @@ export class AuthenticationController {
       .value();
   }
 
-  private async redirectResponse(request: Request, user: UserEntity) {
+  private async redirectResponse(request: Request, user: User) {
     const session = await this.sessionService.createSession(user.id);
 
     const params = new SearchParams(request);
@@ -94,7 +94,7 @@ export class AuthenticationController {
     }
   }
 
-  private async jsonResponse(status: number, user: UserEntity) {
+  private async jsonResponse(status: number, user: User) {
     const session = await this.sessionService.createSession(user.id);
 
     return json(user, {

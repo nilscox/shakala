@@ -11,24 +11,24 @@ import {
 } from './common/generator.service';
 import { CookieSessionService, SessionService, SessionServiceToken } from './common/session.service';
 import { ValidationService } from './common/validation.service';
-import { CommentEntity } from './data/comment/comment.entity';
 import { CommentRepositoryToken } from './data/comment/comment.repository';
 import { InMemoryCommentRepository } from './data/comment/in-memory-comment.repository';
 import { InMemoryThreadRepository } from './data/thread/in-memory-thread.repository';
-import { ThreadEntity } from './data/thread/thread.entity';
 import { ThreadRepositoryToken } from './data/thread/thread.repository';
 import { InMemoryUserRepository } from './data/user/in-memory-user.repository';
-import { UserEntity } from './data/user/user.entity';
 import { UserRepositoryToken } from './data/user/user.repository';
 import threadFacebookZetetique from './fixtures/thread-facebook-zetetique';
 import threadFlatEarth from './fixtures/thread-flat-earth';
-import { createUserEntity } from './test/factories';
+import { createUser } from './test/factories';
+import { Comment } from './thread/comment.entity';
 import { CommentService } from './thread/comment.service';
 import { ThreadController } from './thread/thread.controller.server';
+import { Thread } from './thread/thread.entity';
 import { ThreadService } from './thread/thread.service';
+import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
 
-const nilscox = createUserEntity({
+const nilscox = createUser({
   id: '42',
   email: 'nils@nils.cx',
   hashedPassword: '$2b$10$B0Bfw0ypnDMW1hM/x7L0COD9MoCENH5mSwgda1aAme49h9.du7exu', // tatata123
@@ -36,15 +36,15 @@ const nilscox = createUserEntity({
 });
 
 type Data = {
-  threads: ThreadEntity[];
-  comments: CommentEntity[];
-  users: UserEntity[];
+  threads: Thread[];
+  comments: Comment[];
+  users: User[];
 };
 
 const data: Data = {
   threads: [threadFacebookZetetique.thread, threadFlatEarth.thread],
   comments: [...threadFacebookZetetique.comments, ...threadFlatEarth.comments],
-  users: [...threadFacebookZetetique.users, ...threadFlatEarth.users, nilscox],
+  users: [nilscox],
 };
 
 declare global {

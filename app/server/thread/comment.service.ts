@@ -1,17 +1,13 @@
 import { inject, injectable } from 'inversify';
 
-import { DomainError } from '../authentication/authentication.service';
 import { DateService, DateServiceToken } from '../common/date.service';
 import { GeneratorService, GeneratorServiceToken } from '../common/generator.service';
-import { CommentEntity } from '../data/comment/comment.entity';
+import { Timestamp } from '../common/timestamp.value-object';
 import { CommentRepository, CommentRepositoryToken } from '../data/comment/comment.repository';
-import { UserEntity } from '../data/user/user.entity';
+import { User } from '../user/user.entity';
 
-export class UserMustBeAuthorError extends DomainError {
-  constructor() {
-    super('User is not the author of the comment');
-  }
-}
+import { Comment, CommentAuthor } from './comment.entity';
+import { Markdown } from './markdown.value-object';
 
 @injectable()
 export class CommentService {
@@ -28,21 +24,21 @@ export class CommentService {
   findReplies = this.commentRepository.findReplies.bind(this.commentRepository);
 
   async createComment(
-    author: UserEntity,
+    author: User,
     threadId: string,
     parentId: string | null,
     text: string,
-  ): Promise<CommentEntity> {
-    const comment = new CommentEntity({
+  ): Promise<Comment> {
+    const comment = Comment.create({
       id: await this.generatorService.generateId(),
       threadId,
-      authorId: author.id,
+      author: CommentAuthor.create(author),
       parentId,
-      text: text,
+      text: Markdown.create(text),
       upvotes: 0,
       downvotes: 0,
-      createdAt: this.dateService.nowAsString(),
-      updatedAt: this.dateService.nowAsString(),
+      creationDate: Timestamp.now(this.dateService),
+      lastEditionDate: Timestamp.now(this.dateService),
     });
 
     await this.commentRepository.save(comment);
@@ -50,19 +46,14 @@ export class CommentService {
     return comment;
   }
 
-  async updateComment(author: UserEntity, commentId: string, text: string): Promise<void> {
+  async updateComment(author: User, commentId: string, text: string): Promise<void> {
     const comment = await this.commentRepository.findById(commentId);
 
     if (!comment) {
       throw new Error(`Cannot find comment with id ${commentId}`);
     }
 
-    if (comment.authorId !== author.id) {
-      throw new UserMustBeAuthorError();
-    }
-
-    comment.text = text;
-    comment.updatedAt = this.dateService.nowAsString();
+    comment.edit(this.dateService, author, text);
 
     await this.commentRepository.save(comment);
   }

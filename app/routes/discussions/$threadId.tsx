@@ -36,5 +36,10 @@ export const CatchBoundary = () => {
     return <Fallback>Cette page n'existe pas.</Fallback>;
   }
 
-  throw caught;
+  return (
+    <Fallback>
+      <p className="my-4">Une erreur s'est produite...</p>
+      <pre className="p-2 w-full max-w-modal bg-white rounded border">{JSON.stringify(caught, null, 2)}</pre>
+    </Fallback>
+  );
 };

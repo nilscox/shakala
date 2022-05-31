@@ -5,7 +5,7 @@ import { MockedObject } from 'vitest';
 import { StubSessionService } from '~/server/common/session.service';
 import { ValidationService } from '~/server/common/validation.service';
 import { createRequest, CreateRequestOptions } from '~/server/test/create-request';
-import { createUserEntity } from '~/server/test/factories';
+import { createUser } from '~/server/test/factories';
 
 import { AuthenticationController } from './authentication.controller';
 import {
@@ -30,7 +30,7 @@ describe('AuthenticationController', () => {
 
   describe('login', () => {
     const form = new FormData();
-    const user = createUserEntity();
+    const user = createUser();
 
     beforeEach(() => {
       form.set('email', 'email@domain.tld');
@@ -96,7 +96,7 @@ describe('AuthenticationController', () => {
 
   describe('signup', () => {
     const form = new FormData();
-    const user = createUserEntity();
+    const user = createUser();
 
     beforeEach(() => {
       form.set('email', 'email@domain.tld');

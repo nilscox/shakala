@@ -1,15 +1,15 @@
 import { inject, injectable } from 'inversify';
 
 import { ValidationError, ValidationService } from '~/server/common/validation.service';
-import { badRequest, created, forbidden, noContent, notFound, ok } from '~/server/utils/responses.server';
+import { badRequest, created, forbidden, notFound, ok } from '~/server/utils/responses.server';
 import { tryCatch } from '~/server/utils/try-catch';
-import { Comment, Sort, Thread } from '~/types';
+import { Comment as CommentDto, Sort, Thread as ThreadDto } from '~/types';
 
-import { CommentEntity } from '../data/comment/comment.entity';
 import { UserService } from '../user/user.service';
 import { SearchParams } from '../utils/search-params';
 
-import { CommentService, UserMustBeAuthorError } from './comment.service';
+import { Comment, UserMustBeAuthorError } from './comment.entity';
+import { CommentService } from './comment.service';
 import { CreateCommentDto, UpdateCommentDto } from './thread.dtos';
 import { ThreadService } from './thread.service';
 
@@ -38,47 +38,36 @@ export class ThreadController {
     }
 
     // todo: add the author to the thread aggregate
-    const author = await this.userService.findById(thread.authorId);
     const comments = await this.commentService.findForThread(threadId, sort, search);
 
-    if (!author) {
-      throw notFound();
-    }
-
-    const transformComment = async (comment: CommentEntity): Promise<Comment> => {
-      // todo: add the author to the comment entity (or aggregate?)
-      const author = await this.userService.findById(comment.authorId);
+    const transformComment = async (comment: Comment): Promise<CommentDto> => {
       // todo: n+1 select
       const replies = await this.commentService.findReplies(comment.id);
-
-      if (!author) {
-        throw notFound();
-      }
 
       return {
         id: comment.id,
         author: {
-          id: author.id,
-          nick: author.nick,
-          profileImage: author.profileImage ?? undefined,
+          id: comment.author.id,
+          nick: comment.author.nick.value,
+          profileImage: comment.author.profileImage.value ?? undefined,
         },
-        text: comment.text,
-        date: comment.createdAt,
+        text: comment.text.value,
+        date: comment.lastEditionDate.value,
         upvotes: comment.upvotes,
         downvotes: comment.downvotes,
         replies: await Promise.all(replies.map(transformComment)),
       };
     };
 
-    const result: Thread = {
+    const result: ThreadDto = {
       id: thread.id,
-      date: thread.createdAt,
+      date: thread.created.value,
       author: {
-        id: author.id,
-        nick: author.nick,
-        profileImage: author.profileImage ?? undefined,
+        id: thread.author.id,
+        nick: thread.author.nick.value,
+        profileImage: thread.author.profileImage.value ?? undefined,
       },
-      text: thread.text,
+      text: thread.text.value,
       comments: await Promise.all(comments.map(transformComment)),
     };
 
@@ -122,7 +111,7 @@ export class ThreadController {
     })
       .catch(ValidationError, (error) => badRequest(error.formatted))
       .catch(UserMustBeAuthorError, (error) =>
-        forbidden({ error: 'UserMustBeAuthorError', details: error.message }),
+        forbidden({ error: 'UserMustBeAuthor', details: error.message }),
       )
       .value();
   }

@@ -1,18 +1,18 @@
 import container from '~/server/inversify.config.server';
-import { User } from '~/types';
+import { User as UserDto } from '~/types';
 
-import { UserEntity } from './data/user/user.entity';
+import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
 
-const transformUser = (user: UserEntity): User => {
+const transformUser = (user: User): UserDto => {
   return {
     id: user.id,
-    nick: user.nick,
-    profileImage: user.profileImage ?? undefined,
+    nick: user.nick.value,
+    profileImage: user.profileImage.value ?? undefined,
   };
 };
 
-export const getUser = async (request: Request): Promise<User | undefined> => {
+export const getUser = async (request: Request): Promise<UserDto | undefined> => {
   const user = await container.get(UserService).getUser(request);
 
   if (user) {
@@ -20,6 +20,6 @@ export const getUser = async (request: Request): Promise<User | undefined> => {
   }
 };
 
-export const requireUser = async (request: Request): Promise<User> => {
+export const requireUser = async (request: Request): Promise<UserDto> => {
   return transformUser(await container.get(UserService).requireUser(request));
 };

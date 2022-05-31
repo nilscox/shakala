@@ -1,10 +1,10 @@
-import { UserEntity } from './user.entity';
+import { User } from '../../user/user.entity';
 
 export const UserRepositoryToken = Symbol('UserRepositoryToken');
 
 export interface UserRepository {
-  findAll(): Promise<UserEntity[]>;
-  findById(userId: string): Promise<UserEntity | undefined>;
-  findByEmail(email: string): Promise<UserEntity | undefined>;
-  save(user: UserEntity): Promise<void>;
+  findAll(): Promise<User[]>;
+  findById(userId: string): Promise<User | undefined>;
+  findByEmail(email: string): Promise<User | undefined>;
+  save(user: User): Promise<void>;
 }

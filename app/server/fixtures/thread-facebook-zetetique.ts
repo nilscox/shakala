@@ -1,85 +1,111 @@
-import { createDate } from '~/factories';
-import { createCommentEntity, createThreadEntity, createUserEntity } from '~/server/test/factories';
+import { createCommentEntity, createThreadEntity, createUser } from '~/server/test/factories';
 
-const Hegel = createUserEntity({
-  id: 'avsj9o',
-  nick: 'Hegel',
-});
+import { CommentAuthor } from '../thread/comment.entity';
 
-const Spinoza = createUserEntity({
-  id: '7mykjc',
-  nick: 'Spinoza',
-  profileImage: 'https://centresevres.com/content/uploads/2017/07/spinoza.jpg',
-});
+const Hegel = CommentAuthor.create(
+  createUser({
+    id: 'avsj9o',
+    nick: 'Hegel',
+  }),
+);
 
-const Descartes = createUserEntity({
-  id: 't5tpe8',
-  nick: 'Descartes',
-  profileImage: 'https://www.superprof.fr/blog/wp-content/uploads/2019/01/descartes-maths-histoire.jpg',
-});
+const Spinoza = CommentAuthor.create(
+  createUser({
+    id: '7mykjc',
+    nick: 'Spinoza',
+    profileImage: 'https://centresevres.com/content/uploads/2017/07/spinoza.jpg',
+  }),
+);
 
-const Voltaire = createUserEntity({
-  id: '8t0gzh',
-  nick: 'Voltaire',
-  profileImage:
-    'https://static.lexpress.fr/medias_1683/w_664,h_289,c_crop,x_0,y_103/w_968,h_545,c_fill,g_north/v1404805238/francois-marie-arouet-dit-voltaire_861724.jpg',
-});
+const Descartes = CommentAuthor.create(
+  createUser({
+    id: 't5tpe8',
+    nick: 'Descartes',
+    profileImage: 'https://www.superprof.fr/blog/wp-content/uploads/2019/01/descartes-maths-histoire.jpg',
+  }),
+);
 
-const Nietzsche = createUserEntity({
-  id: 'x33knw',
-  nick: 'Nietzsche',
-  profileImage:
-    'https://cdn.radiofrance.fr/s3/cruiser-production/2017/12/19e7e490-e2cf-4dd7-aab4-787c17053135/838_054_zep1939.jpg',
-});
+const Voltaire = CommentAuthor.create(
+  createUser({
+    id: '8t0gzh',
+    nick: 'Voltaire',
+    profileImage:
+      'https://static.lexpress.fr/medias_1683/w_664,h_289,c_crop,x_0,y_103/w_968,h_545,c_fill,g_north/v1404805238/francois-marie-arouet-dit-voltaire_861724.jpg',
+  }),
+);
 
-const Leibniz = createUserEntity({
-  id: 'vxl5je',
-  nick: 'Leibniz',
-  profileImage:
-    'https://unphilosophe.files.wordpress.com/2017/11/161110_ft_gottfried-leibniz-crop-promo-xlarge2.jpg',
-});
+const Nietzsche = CommentAuthor.create(
+  createUser({
+    id: 'x33knw',
+    nick: 'Nietzsche',
+    profileImage:
+      'https://cdn.radiofrance.fr/s3/cruiser-production/2017/12/19e7e490-e2cf-4dd7-aab4-787c17053135/838_054_zep1939.jpg',
+  }),
+);
 
-const Socrate = createUserEntity({
-  id: 'vcz0gf',
-  nick: 'Socrate',
-  profileImage: 'https://i.ytimg.com/vi/OH6sBelUfak/maxresdefault.jpg',
-});
+const Leibniz = CommentAuthor.create(
+  createUser({
+    id: 'vxl5je',
+    nick: 'Leibniz',
+    profileImage:
+      'https://unphilosophe.files.wordpress.com/2017/11/161110_ft_gottfried-leibniz-crop-promo-xlarge2.jpg',
+  }),
+);
 
-const Montaigne = createUserEntity({
-  id: 'gjatw4',
-  nick: 'Montaigne',
-  profileImage: 'https://www.philomag.com/sites/default/files/images/_web_montaigne_michel_de_0.jpg',
-});
+const Socrate = CommentAuthor.create(
+  createUser({
+    id: 'vcz0gf',
+    nick: 'Socrate',
+    profileImage: 'https://i.ytimg.com/vi/OH6sBelUfak/maxresdefault.jpg',
+  }),
+);
 
-const Sade = createUserEntity({
-  id: '85pezg',
-  nick: 'Sade',
-});
+const Montaigne = CommentAuthor.create(
+  createUser({
+    id: 'gjatw4',
+    nick: 'Montaigne',
+    profileImage: 'https://www.philomag.com/sites/default/files/images/_web_montaigne_michel_de_0.jpg',
+  }),
+);
 
-const Kant = createUserEntity({
-  id: 'ic61bm',
-  nick: 'Kant',
-  profileImage:
-    'https://static.lpnt.fr/images/2017/04/13/8231207lpw-8241898-article-emmanuel-kant-jpg_4224233_1250x625.jpg',
-});
+const Sade = CommentAuthor.create(
+  createUser({
+    id: '85pezg',
+    nick: 'Sade',
+  }),
+);
 
-const Astrocept = createUserEntity({
-  id: 'yyr3ku',
-  nick: 'Astrocept',
-  profileImage: 'https://images.ladepeche.fr/api/v1/images/view/610f4bb03e4546786f7ff37b/large/image.jpg?v=1',
-});
+const Kant = CommentAuthor.create(
+  createUser({
+    id: 'ic61bm',
+    nick: 'Kant',
+    profileImage:
+      'https://static.lpnt.fr/images/2017/04/13/8231207lpw-8241898-article-emmanuel-kant-jpg_4224233_1250x625.jpg',
+  }),
+);
 
-const GeraldBronner = createUserEntity({
-  id: 'n8yp34',
-  nick: 'Gerald Bronner',
-  profileImage:
-    'https://cdn.radiofrance.fr/s3/cruiser-production/2019/10/2815dc1e-749a-4903-a3ea-ba959a40aa1f/1136_bronner_parloic_thebaud_couleur2.jpg',
-});
+const Astrocept = CommentAuthor.create(
+  createUser({
+    id: 'yyr3ku',
+    nick: 'Astrocept',
+    profileImage:
+      'https://images.ladepeche.fr/api/v1/images/view/610f4bb03e4546786f7ff37b/large/image.jpg?v=1',
+  }),
+);
+
+const GeraldBronner = CommentAuthor.create(
+  createUser({
+    id: 'n8yp34',
+    nick: 'Gerald Bronner',
+    profileImage:
+      'https://cdn.radiofrance.fr/s3/cruiser-production/2019/10/2815dc1e-749a-4903-a3ea-ba959a40aa1f/1136_bronner_parloic_thebaud_couleur2.jpg',
+  }),
+);
 
 const thread = createThreadEntity({
   id: '38pvde',
-  authorId: Hegel.id,
-  createdAt: createDate(),
+  author: Hegel,
+  created: '2022-02-03T11:42',
   text: `Hello tout le monde
 
 J'espère que vous allez bien
@@ -101,8 +127,8 @@ const comments = [
   createCommentEntity({
     id: 'qb0mxo',
     threadId: thread.id,
-    authorId: Spinoza.id,
-    createdAt: createDate('2022-02-04T18:51'),
+    author: Spinoza,
+    creationDate: '2022-02-04T18:51',
     text: `Daniel Kahneman me semble un auteur pertinent sur le sujet...`,
     upvotes: 17,
     downvotes: 3,
@@ -110,8 +136,8 @@ const comments = [
   createCommentEntity({
     id: '1tj876',
     threadId: thread.id,
-    authorId: Voltaire.id,
-    createdAt: createDate('2022-02-05T19:05'),
+    author: Voltaire,
+    creationDate: '2022-02-05T19:05',
     upvotes: 48,
     downvotes: 9,
     text: `Hello.
@@ -133,8 +159,8 @@ Malheureusement, certains sceptiques et rationalistes donnent bcps trop de place
   createCommentEntity({
     id: 'o7ihv3',
     threadId: thread.id,
-    authorId: GeraldBronner.id,
-    createdAt: createDate('2022-02-08T11:43'),
+    author: GeraldBronner,
+    creationDate: '2022-02-08T11:43',
     upvotes: 10,
     downvotes: 0,
     text: `Je me permets d indiquer qu il y a une quinzaine d années j ai publié ceci. Un livre qui aborde de façon critique certaines interprétations trop rapides des notions d heuristique et de biais cognitifs. A part cela je suis d accord avec les indications de Sade.
@@ -146,9 +172,9 @@ const replies = [
   createCommentEntity({
     id: 'jcbyg3',
     threadId: thread.id,
-    authorId: Hegel.id,
+    author: Hegel,
     parentId: comments[0].id,
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
     upvotes: 2,
     text: `Spinoza justement je discutais encore aujourd'hui avec des personnes qui me disaient que sur ce sujet c'était ta base Au départ mais que aujourd'hui eh bien il était de loin dépassé etc`,
   }),
@@ -156,36 +182,36 @@ const replies = [
   createCommentEntity({
     id: '5ag695',
     threadId: thread.id,
-    authorId: Nietzsche.id,
+    author: Nietzsche,
     parentId: comments[1].id,
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
     text: `Et aussi voir Albert Moukheiber chez Meta de Choc + son livre. La discipline dans laquelle l'étude des biais cognitifs est ancrée sont les neurosciences.`,
   }),
 
   createCommentEntity({
     id: 'w2rbxb',
     threadId: thread.id,
-    authorId: Montaigne.id,
+    author: Montaigne,
     parentId: comments[1].id,
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
     text: `Voltaire en d'autres termes, ne parlons plus de biais cognitifs, parlons d'habitus c'est bien plus intéressant 👍`,
   }),
 
   createCommentEntity({
     id: '38hzam',
     threadId: thread.id,
-    authorId: Sade.id,
+    author: Sade,
     parentId: comments[1].id,
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
     text: `Voltaire Désolé de te contredire, mais aucune personne de zet-ethique avec qui j'avais discuté avant d'être viré de leur groupe n'a jamais travaillé sur la question des biais cognitifs (ni même lu les travaux des fondateurs et des critiques). J'y ai consacré une bonne partie de ma thèse et certains de mes articles, c'est une hypothèse très forte en psychologie cognitive et sociale (et ça vient en neurosciences), même si bien sûr il y a des critiques. Le fait que les variables sociales agissent aussi concernant par exemple le complotisme, ou le racisme, ou tout ce qu'on veut, n'empêche absolument pas qu'il y ait aussi des biais cognitifs. Donc oui, il est idéologique de croire que par exemple le complotisme n'est que cognitif (cela évite de penser ses racines socio-politiques), mais il est tout aussi idéologique de nier les aspects cognitifs, suggérés par toute une série d'études. Donc plutôt que de nier l'existence de certains facteurs et pas d'autres, le plus intéressant pour les sciences sociales sera de comparer l'effet des variables cognitives et sociales, dans des phénomènes comme le complotisme et les croyances en général. Si tu veux, on peut faire une fois une interview sur cette question des biais, comment on les mesure, en abordant ce que disent les critiques informés (Gigerenzer), et pas informés (zet-ethique) 😉`,
   }),
 
   createCommentEntity({
     id: '7azsus',
     threadId: thread.id,
-    authorId: Sade.id,
+    author: Sade,
     parentId: comments[1].id,
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
     text: `Voltaire Si tu veux que je sois plus précis dans ma critique, je changerais passablement les qualificatifs que tu utilises dans ton post : "Expliquer le comportement de quelqu'un ou ses choix en se basant sur des biais cognitifs est extrêmement réducteur et caricatural" : non, ce n'est pas extrêmement réducteur et caricatural. Il y a certains choix et certains comportement qui sont certainement en grande partie dus aux biais cognitifs, ce n'est pas une affaire de décalration mais de recherche. "Aucun psychologue cognitiviste n'utilise ce genre d'explications qu'on trouve parfois chez les rationalistes". On peut statistiquement contrôler l'effet des variables sociales, et regarder si les biais cognitifs expliquent encore une partie de la variance. Par exemple, dans notre étude sur les Gilets Jaunes, on peut contrôler toutes les variables sociales (comme le niveau d'éducation, le salaire, etc.) et constater qu'il y a toujours une corrélation entre croyances aux complots et au paranormal ; cela suggère au moins une explication en termes cognitifs, et du moins ce sera une question à répondre avec des études empiriques :
 
 "Vous croyez au paranormal? Biais cognitifs... Vous êtes radicalisé? Biais cognitifs... " : il y a des études scientifiques qui le suggèrent (que c'est en partie dus à certains biais), donc si on veut démontrer le contraire, on ne peut le faire que par des études scientifiques.
@@ -201,18 +227,4 @@ const replies = [
 export default {
   thread,
   comments: [...comments, ...replies],
-  users: [
-    Hegel,
-    Spinoza,
-    Descartes,
-    Voltaire,
-    Nietzsche,
-    Leibniz,
-    Socrate,
-    Montaigne,
-    Sade,
-    Kant,
-    Astrocept,
-    GeraldBronner,
-  ],
 };

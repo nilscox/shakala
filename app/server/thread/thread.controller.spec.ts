@@ -3,12 +3,14 @@ import { MockedObject } from 'vitest';
 
 import { ValidationService } from '~/server/common/validation.service';
 import { createRequest } from '~/server/test/create-request';
-import { createCommentEntity, createThreadEntity, createUserEntity } from '~/server/test/factories';
+import { createCommentEntity, createThreadEntity, createUser } from '~/server/test/factories';
 
 import { UserService } from '../user/user.service';
 
+import { CommentAuthor } from './comment.entity';
 import { CommentService } from './comment.service';
 import { ThreadController } from './thread.controller.server';
+import { ThreadAuthor } from './thread.entity';
 import { ThreadService } from './thread.service';
 
 describe('ThreadController', () => {
@@ -38,7 +40,7 @@ describe('ThreadController', () => {
 
   describe('getThread', () => {
     const threadAuthorId = 'threadAuthorId';
-    const threadAuthor = createUserEntity({
+    const threadAuthor = createUser({
       id: threadAuthorId,
       nick: 'thread author',
       profileImage: 'image',
@@ -47,35 +49,35 @@ describe('ThreadController', () => {
     const threadId = 'threadId';
     const thread = createThreadEntity({
       id: threadId,
-      authorId: threadAuthorId,
+      author: ThreadAuthor.create(threadAuthor),
       text: 'Thread',
-      createdAt: new Date('2022-01-01').toISOString(),
+      created: '2022-01-01',
     });
 
     const commentAuthorId = 'commentAuthorId';
-    const commentAuthor = createUserEntity({ id: commentAuthorId, nick: 'comment author' });
+    const commentAuthor = createUser({ id: commentAuthorId, nick: 'comment author' });
 
     const commentId = 'commentId';
     const comment = createCommentEntity({
       id: commentId,
-      authorId: commentAuthorId,
+      author: CommentAuthor.create(commentAuthor),
       text: 'Comment',
       upvotes: 1,
       downvotes: 2,
-      createdAt: new Date('2022-01-01').toISOString(),
+      lastEditionDate: '2022-01-01',
     });
 
     const replyAuthorId = 'replyAuthorId';
-    const replyAuthor = createUserEntity({ id: replyAuthorId, nick: 'reply author' });
+    const replyAuthor = createUser({ id: replyAuthorId, nick: 'reply author' });
 
     const replyId = 'replyId';
     const reply = createCommentEntity({
       id: replyId,
-      authorId: replyAuthorId,
+      author: CommentAuthor.create(replyAuthor),
       text: 'Reply',
       upvotes: 0,
       downvotes: 0,
-      createdAt: new Date('2022-01-01').toISOString(),
+      lastEditionDate: '2022-01-01',
     });
 
     it('retrieves an existing thread', async () => {
@@ -93,22 +95,22 @@ describe('ThreadController', () => {
       expect(response).toHaveStatus(200);
       expect(await response.json()).toEqual({
         id: threadId,
-        date: thread.createdAt,
+        date: thread.created.value,
         author: {
           id: threadAuthorId,
-          nick: threadAuthor.nick,
-          profileImage: threadAuthor.profileImage,
+          nick: threadAuthor.nick.value,
+          profileImage: threadAuthor.profileImage.value,
         },
-        text: thread.text,
+        text: thread.text.value,
         comments: [
           {
             id: comment.id,
             author: {
               id: commentAuthorId,
-              nick: commentAuthor.nick,
+              nick: commentAuthor.nick.value,
             },
-            text: comment.text,
-            date: comment.createdAt,
+            text: comment.text.value,
+            date: comment.lastEditionDate.value,
             upvotes: 1,
             downvotes: 2,
             replies: [
@@ -116,10 +118,10 @@ describe('ThreadController', () => {
                 id: reply.id,
                 author: {
                   id: replyAuthorId,
-                  nick: replyAuthor.nick,
+                  nick: replyAuthor.nick.value,
                 },
-                text: reply.text,
-                date: reply.createdAt,
+                text: reply.text.value,
+                date: reply.lastEditionDate.value,
                 upvotes: 0,
                 downvotes: 0,
                 replies: [],
@@ -133,7 +135,7 @@ describe('ThreadController', () => {
 
   describe('createComment', () => {
     const form = new FormData();
-    const user = createUserEntity();
+    const user = createUser();
 
     beforeEach(() => {
       form.set('threadId', 'threadId');
@@ -155,7 +157,7 @@ describe('ThreadController', () => {
 
   describe('updateComment', () => {
     const form = new FormData();
-    const user = createUserEntity();
+    const user = createUser();
 
     beforeEach(() => {
       form.set('commentId', 'commentId');

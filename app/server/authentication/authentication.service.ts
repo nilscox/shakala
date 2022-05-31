@@ -3,14 +3,13 @@ import { inject, injectable } from 'inversify';
 import { UserRepository, UserRepositoryToken } from '~/server/data/user/user.repository';
 
 import { CryptoService, CryptoServiceToken } from '../common/crypto.service';
+import { DateServiceToken, DateService } from '../common/date.service';
+import { DomainError } from '../common/domain-error';
 import { GeneratorServiceToken, GeneratorService } from '../common/generator.service';
-import { UserEntity } from '../data/user/user.entity';
-
-export class DomainError extends Error {
-  constructor(message: string, public readonly details?: Record<string, unknown>) {
-    super(message);
-  }
-}
+import { Nick } from '../common/nick.value-object';
+import { ProfileImage } from '../common/profile-image.value-object';
+import { Timestamp } from '../common/timestamp.value-object';
+import { User } from '../user/user.entity';
 
 export class InvalidCredentialsError extends DomainError {
   constructor() {
@@ -27,6 +26,8 @@ export class EmailAlreadyExistsError extends DomainError {
 @injectable()
 export class AuthenticationService {
   constructor(
+    @inject(DateServiceToken)
+    private readonly dateService: DateService,
     @inject(CryptoServiceToken)
     private readonly cryptoService: CryptoService,
     @inject(GeneratorServiceToken)
@@ -35,21 +36,21 @@ export class AuthenticationService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async login(email: string, password: string): Promise<UserEntity> {
+  async login(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new InvalidCredentialsError();
     }
 
-    if (!(await this.cryptoService.compare(password, user.hashedPassword))) {
+    if (!(await user.checkPassword(this.cryptoService, password))) {
       throw new InvalidCredentialsError();
     }
 
     return user;
   }
 
-  async signup(email: string, password: string, nick: string): Promise<UserEntity> {
+  async signup(email: string, password: string, nick: string): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
 
     if (existingUser) {
@@ -58,13 +59,13 @@ export class AuthenticationService {
 
     const hashedPassword = await this.cryptoService.hash(password);
 
-    const user = new UserEntity({
+    const user = User.create({
       id: await this.generatorService.generateId(),
       email,
       hashedPassword,
-      nick,
-      profileImage: null,
-      signupDate: new Date().toISOString(),
+      nick: Nick.create(nick),
+      profileImage: ProfileImage.create(),
+      signupDate: Timestamp.now(this.dateService),
       lastLoginDate: null,
     });
 

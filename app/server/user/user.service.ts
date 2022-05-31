@@ -2,8 +2,9 @@ import { redirect } from '@remix-run/node';
 import { inject, injectable } from 'inversify';
 
 import { SessionService, SessionServiceToken } from '../common/session.service';
-import { UserEntity } from '../data/user/user.entity';
 import { UserRepositoryToken, UserRepository } from '../data/user/user.repository';
+
+import { User } from './user.entity';
 
 @injectable()
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
 
   findById = this.userRepository.findById.bind(this.userRepository);
 
-  async getUser(request: Request): Promise<UserEntity | undefined> {
+  async getUser(request: Request): Promise<User | undefined> {
     const userId = await this.sessionService.getUserId(request);
 
     if (!userId) {

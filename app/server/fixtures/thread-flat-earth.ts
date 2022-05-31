@@ -1,28 +1,29 @@
-import { createDate } from '~/factories';
-import { createCommentEntity, createThreadEntity, createUserEntity } from '~/server/test/factories';
+import { createCommentEntity, createThreadEntity, createUser } from '~/server/test/factories';
 
-const him = createUserEntity({ nick: 'Him' });
-const me = createUserEntity({ nick: 'Me' });
-const you = createUserEntity({ nick: 'You' });
+import { CommentAuthor } from '../thread/comment.entity';
+
+const him = CommentAuthor.create(createUser({ nick: 'Him' }));
+const myself = CommentAuthor.create(createUser({ nick: 'Myself' }));
+const you = CommentAuthor.create(createUser({ nick: 'You' }));
 
 const thread = createThreadEntity({
   id: 'flat',
-  authorId: him.id,
+  author: him,
   text: 'Is the earth flat?',
 });
 
 const comments = [
   createCommentEntity({
     threadId: thread.id,
-    authorId: me.id,
+    author: myself,
     text: 'yes',
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
   }),
   createCommentEntity({
     threadId: thread.id,
-    authorId: you.id,
+    author: you,
     text: 'no',
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
   }),
 ];
 
@@ -30,14 +31,13 @@ const replies = [
   createCommentEntity({
     threadId: thread.id,
     parentId: comments[0].id,
-    authorId: you.id,
+    author: you,
     text: 'I doubt that is true',
-    createdAt: createDate('2022-02-08T11:43'),
+    creationDate: '2022-02-08T11:43',
   }),
 ];
 
 export default {
   thread,
   comments: [...comments, ...replies],
-  users: [him, me, you],
 };

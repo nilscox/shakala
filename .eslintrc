@@ -16,15 +16,11 @@
       {
         "newlines-between": "always",
         "alphabetize": { "order": "asc" },
-        "groups": ["builtin", "external", "unknown", "internal", "parent", "sibling", "index"],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
         "pathGroups": [
           {
-            "pattern": "(components|libs|pages)/**",
+            "pattern": "~/**",
             "group": "internal"
-          },
-          {
-            "pattern": "koyeb",
-            "group": "unknown"
           }
         ]
       }

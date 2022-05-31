@@ -1,46 +1,89 @@
-import { createDate } from '~/factories';
+import { Nick } from '../common/nick.value-object';
+import { ProfileImage } from '../common/profile-image.value-object';
+import { Timestamp } from '../common/timestamp.value-object';
+import { Comment, CommentAuthor, CommentProps } from '../thread/comment.entity';
+import { Markdown } from '../thread/markdown.value-object';
+import { Thread, ThreadAuthor, ThreadProps } from '../thread/thread.entity';
+import { User, UserProps } from '../user/user.entity';
 
-import { CommentProps, CommentEntity } from '../data/comment/comment.entity';
-import { ThreadEntity, ThreadProps } from '../data/thread/thread.entity';
-import { UserEntity, UserProps } from '../data/user/user.entity';
+type Replace<T, W> = Omit<T, keyof W> & W;
 
 const randomId = () => Math.random().toString(36).slice(-6);
 
-export const createUserEntity = (props?: Partial<UserProps>): UserEntity => {
-  return new UserEntity({
+export const createTimestamp = (date?: string) => {
+  return Timestamp.create(date ?? '2000-01-01T00:00:00.000Z');
+};
+
+type CreateUserProps = Replace<
+  UserProps,
+  {
+    nick: string;
+    profileImage: string;
+    signupDate: string;
+  }
+>;
+
+export const createUser = ({
+  nick,
+  profileImage,
+  signupDate,
+  ...props
+}: Partial<CreateUserProps> = {}): User => {
+  return User.create({
     id: randomId(),
     email: '',
     hashedPassword: '',
-    nick: '',
-    profileImage: null,
-    signupDate: createDate(),
+    nick: Nick.create(nick ?? 'nick'),
+    profileImage: ProfileImage.create(profileImage),
+    signupDate: createTimestamp(signupDate),
     lastLoginDate: null,
     ...props,
   });
 };
 
-export const createCommentEntity = (props?: Partial<CommentProps>): CommentEntity => {
-  return new CommentEntity({
+type CreateCommentProps = Replace<
+  CommentProps,
+  {
+    text: string;
+    creationDate: string;
+    lastEditionDate: string;
+  }
+>;
+
+export const createCommentEntity = ({
+  text,
+  creationDate,
+  lastEditionDate,
+  ...props
+}: Partial<CreateCommentProps> = {}): Comment => {
+  return Comment.create({
     id: randomId(),
     threadId: '',
-    authorId: '',
+    author: CommentAuthor.create(createUser()),
     parentId: null,
-    text: '',
+    text: Markdown.create(text ?? ''),
     upvotes: 0,
     downvotes: 0,
-    createdAt: createDate(),
-    updatedAt: createDate(),
+    creationDate: createTimestamp(creationDate),
+    lastEditionDate: createTimestamp(lastEditionDate),
     ...props,
   });
 };
 
-export const createThreadEntity = (props?: Partial<ThreadProps>): ThreadEntity => {
-  return new ThreadEntity({
+type CreateThreadProps = Replace<
+  ThreadProps,
+  {
+    text: string;
+    created: string;
+  }
+>;
+
+export const createThreadEntity = ({ text, created, ...props }: Partial<CreateThreadProps> = {}): Thread => {
+  return Thread.create({
     id: randomId(),
-    authorId: '',
-    text: '',
-    createdAt: createDate(),
-    updatedAt: createDate(),
+    author: ThreadAuthor.create(createUser()),
+    text: Markdown.create(text ?? ''),
+    created: createTimestamp(created),
     ...props,
   });
 };

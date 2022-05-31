@@ -1,9 +1,11 @@
 import { StubDateService } from '../common/date.service';
 import { StubGeneratorService } from '../common/generator.service';
 import { InMemoryCommentRepository } from '../data/comment/in-memory-comment.repository';
-import { createCommentEntity, createThreadEntity, createUserEntity } from '../test/factories';
+import { createCommentEntity, createThreadEntity, createTimestamp, createUser } from '../test/factories';
 
-import { CommentService, UserMustBeAuthorError } from './comment.service';
+import { CommentAuthor, UserMustBeAuthorError } from './comment.entity';
+import { CommentService } from './comment.service';
+import { Markdown } from './markdown.value-object';
 
 describe('CommentService', () => {
   const dateService = new StubDateService();
@@ -18,13 +20,13 @@ describe('CommentService', () => {
     commentRepository.clear();
   });
 
-  const now = new Date('2022-01-01');
-  const author = createUserEntity();
+  const now = createTimestamp();
+  const author = createUser();
   const thread = createThreadEntity();
   const commentId = 'commentId';
 
   beforeEach(() => {
-    dateService.setNow(now);
+    dateService.setNow(new Date(now.value));
   });
 
   describe('createComment', () => {
@@ -38,19 +40,25 @@ describe('CommentService', () => {
       expect(createdComment).toBeDefined();
       expect(createdComment).toHaveProperty('id', commentId);
       expect(createdComment).toHaveProperty('threadId', thread.id);
-      expect(createdComment).toHaveProperty('authorId', author.id);
+      expect(createdComment).toHaveProperty('author.id', author.id);
+      expect(createdComment).toHaveProperty('author.nick', author.nick);
+      expect(createdComment).toHaveProperty('author.profileImage', author.profileImage);
       expect(createdComment).toHaveProperty('parentId', null);
-      expect(createdComment).toHaveProperty('text', 'Hello!');
+      expect(createdComment).toHaveProperty('text.value', 'Hello!');
       expect(createdComment).toHaveProperty('upvotes', 0);
       expect(createdComment).toHaveProperty('downvotes', 0);
-      expect(createdComment).toHaveProperty('createdAt', now.toISOString());
-      expect(createdComment).toHaveProperty('updatedAt', now.toISOString());
+      expect(createdComment).toHaveProperty('creationDate', now);
+      expect(createdComment).toHaveProperty('lastEditionDate', now);
     });
   });
 
   describe('updateComment', () => {
-    const author = createUserEntity();
-    const comment = createCommentEntity({ id: commentId, authorId: author.id, text: 'Hello!' });
+    const author = createUser();
+    const comment = createCommentEntity({
+      id: commentId,
+      author: CommentAuthor.create(author),
+      text: 'Hello!',
+    });
 
     beforeEach(() => {
       commentRepository.set(comment);
@@ -61,12 +69,12 @@ describe('CommentService', () => {
 
       const updatedComment = await commentRepository.findById(commentId);
 
-      expect(updatedComment).toHaveProperty('text', 'Updated!');
-      expect(updatedComment).toHaveProperty('updatedAt', now.toISOString());
+      expect(updatedComment).toHaveProperty('text', Markdown.create('Updated!'));
+      expect(updatedComment).toHaveProperty('lastEditionDate', now);
     });
 
     it('prevents a user to update a comment when he is not the author', async () => {
-      const notAuthor = createUserEntity();
+      const notAuthor = createUser();
 
       await expect(service.updateComment(notAuthor, commentId, 'Updated!')).rejects.toThrow(
         UserMustBeAuthorError,

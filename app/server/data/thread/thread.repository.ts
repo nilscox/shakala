@@ -1,9 +1,9 @@
-import { ThreadEntity } from './thread.entity';
+import { Thread } from '../../thread/thread.entity';
 
 export const ThreadRepositoryToken = Symbol('ThreadRepositoryToken');
 
 export interface ThreadRepository {
-  findLasts(count: number): Promise<ThreadEntity[]>;
-  findById(threadId: string): Promise<ThreadEntity | undefined>;
-  save(thread: ThreadEntity): Promise<void>;
+  findLasts(count: number): Promise<Thread[]>;
+  findById(threadId: string): Promise<Thread | undefined>;
+  save(thread: Thread): Promise<void>;
 }

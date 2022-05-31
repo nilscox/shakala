@@ -1,17 +1,17 @@
 import { inject, injectable } from 'inversify';
 
+import { User } from '../../user/user.entity';
 import { InMemoryRepository } from '../in-memory.repository';
 
-import { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
 
 @injectable()
-export class InMemoryUserRepository extends InMemoryRepository<UserEntity> implements UserRepository {
-  constructor(@inject('users') users?: UserEntity[]) {
+export class InMemoryUserRepository extends InMemoryRepository<User> implements UserRepository {
+  constructor(@inject('users') users?: User[]) {
     super(users);
   }
 
-  async findByEmail(email: string): Promise<UserEntity | undefined> {
+  async findByEmail(email: string): Promise<User | undefined> {
     return this.find((user) => user.email === email);
   }
 }
