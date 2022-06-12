@@ -1,15 +1,26 @@
 {
-  "plugins": ["import", "tailwindcss"],
+  "parser": "@typescript-eslint/parser",
+
   "extends": [
-    "@remix-run/eslint-config",
-    "@remix-run/eslint-config/node",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
-    "plugin:tailwindcss/recommended"
+    "plugin:import/typescript"
   ],
+
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+
   "rules": {
-    "prefer-const": "error",
-    "@typescript-eslint/consistent-type-imports": "off",
-    "@typescript-eslint/no-useless-constructor": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "import/no-cycle": "error",
     "import/order": [
       "warn",

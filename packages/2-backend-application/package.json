@@ -1,0 +1,13 @@
+{
+  "name": "backend-application",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@types/supertest": "^2.0.12",
+    "supertest": "^6.2.3"
+  }
+}

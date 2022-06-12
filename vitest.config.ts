@@ -1,13 +1,17 @@
-import reactJsx from 'vite-react-jsx';
+// import reactJsx from 'vite-react-jsx';
+import path from 'path';
+
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
+    watch: false,
     mockReset: true,
-    setupFiles: ['./app/vitest.setup.ts'],
+    setupFiles: [path.resolve(__dirname, 'vitest.setup.ts')],
+    environment: 'happy-dom',
   },
-  plugins: [tsconfigPaths(), reactJsx()],
+  plugins: [tsconfigPaths()],
+  // plugins: [tsconfigPaths(), reactJsx()],
 });

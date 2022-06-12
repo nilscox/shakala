@@ -1,0 +1,13 @@
+{
+  "name": "backend-domain",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "exit 0",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "typescript": "^4.7.2"
+  }
+}
