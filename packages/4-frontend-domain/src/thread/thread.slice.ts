@@ -1,13 +1,14 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
+import type { State } from '../store';
 import { Thread } from '../types';
 
 import { fetchLastThreads } from './use-cases/fetch-last-threads';
 
 const threadEntityAdapter = createEntityAdapter<Thread>();
 
-export const threadSlice = createSlice({
-  name: 'thread',
+export const threadsSlice = createSlice({
+  name: 'threads',
   initialState: threadEntityAdapter.getInitialState<{ loading: boolean; error?: unknown }>({
     loading: false,
   }),
@@ -28,3 +29,7 @@ export const threadSlice = createSlice({
     });
   },
 });
+
+const selectors = threadEntityAdapter.getSelectors<State>((state) => state.threads);
+
+export const { selectAll: selectThreads } = selectors;

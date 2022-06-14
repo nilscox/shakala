@@ -1,16 +1,23 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { State } from '../store';
-
-export type AuthenticationField = 'email' | 'password' | 'nick';
+import { AuthenticationField, AuthenticationForm } from './authentication.types';
 
 type AuthenticationSlice = {
+  isModalOpen: boolean;
+  form?: AuthenticationForm;
+  rulesAccepted: boolean;
+  acceptRulesWarningVisible: boolean;
+  isValid: boolean;
   authenticating: boolean;
   fieldErrors: Partial<Record<AuthenticationField, string>>;
   formError?: string;
 };
 
 const initialState: AuthenticationSlice = {
+  isModalOpen: false,
+  rulesAccepted: false,
+  acceptRulesWarningVisible: false,
+  isValid: false,
   authenticating: false,
   fieldErrors: {},
 };
@@ -19,6 +26,21 @@ export const authenticationSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
+    setIsModalOpen(state, { payload }: PayloadAction<{ open: boolean }>) {
+      state.isModalOpen = payload.open;
+    },
+    setAuthenticationForm(state, { payload }: PayloadAction<{ form?: AuthenticationForm }>) {
+      state.form = payload.form;
+    },
+    setAcceptRulesWarningVisible(state, { payload }: PayloadAction<{ visible: boolean }>) {
+      state.acceptRulesWarningVisible = payload.visible;
+    },
+    setRulesAccepted(state, { payload }: PayloadAction<{ accepted: boolean }>) {
+      state.rulesAccepted = payload.accepted;
+    },
+    setIsAuthenticationFormValid(state, { payload }: PayloadAction<{ valid: boolean }>) {
+      state.isValid = payload.valid;
+    },
     setAuthenticating(state, { payload }: PayloadAction<{ authenticating: boolean }>) {
       state.authenticating = payload.authenticating;
     },
@@ -28,39 +50,18 @@ export const authenticationSlice = createSlice({
     ) {
       state.fieldErrors[payload.field] = payload.error;
     },
-    setAuthenticationFormError(state, { payload }: PayloadAction<{ error: string }>) {
-      state.formError = payload.error;
-    },
     clearAuthenticationFieldError(state, { payload }: PayloadAction<{ field: AuthenticationField }>) {
       delete state.fieldErrors[payload.field];
     },
-    clearAllAuthenticationFieldErrors(state) {
+    setAuthenticationFormError(state, { payload }: PayloadAction<{ error: string }>) {
+      state.formError = payload.error;
+    },
+    clearAuthenticationFormError(state) {
+      delete state.formError;
+    },
+    clearAllAuthenticationErrors(state) {
+      delete state.formError;
       state.fieldErrors = {};
     },
   },
 });
-
-export const {
-  setAuthenticating,
-  setAuthenticationFieldError,
-  setAuthenticationFormError,
-  clearAuthenticationFieldError,
-  clearAllAuthenticationFieldErrors,
-} = authenticationSlice.actions;
-
-const selectAuthenticationSlice = (state: State) => state.authentication;
-
-export const selectIsAuthenticating = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.authenticating,
-);
-
-export const selectAuthenticationFieldError = createSelector(
-  [selectAuthenticationSlice, (_, field: AuthenticationField) => field],
-  (slice, field) => slice.fieldErrors[field],
-);
-
-export const selectAuthenticationFormError = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.formError,
-);

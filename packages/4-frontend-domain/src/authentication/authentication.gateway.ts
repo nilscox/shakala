@@ -1,8 +1,8 @@
-import { User } from '../types';
+import { AuthUser } from '../types';
 
 export interface AuthenticationGateway {
-  fetchUser(): Promise<User | undefined>;
-  login(email: string, password: string): Promise<User>;
-  signup(email: string, password: string, nick: string): Promise<User>;
+  fetchUser(): Promise<AuthUser | undefined>;
+  login(email: string, password: string): Promise<AuthUser>;
+  signup(email: string, password: string, nick: string): Promise<AuthUser>;
   logout(): Promise<void>;
 }

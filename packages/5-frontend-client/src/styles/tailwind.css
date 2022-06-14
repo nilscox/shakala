@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply text-base-mobile md:text-base;
+  }
+
+  body {
+    background-color: #fbfbfd;
+  }
+
+  strong {
+    @apply text-DEFAULT/75;
+  }
+
+  a {
+    @apply text-link;
+  }
+
+  p {
+    @apply my-1;
+  }
+
+  *:focus-visible {
+    outline: solid 1px;
+    @apply outline-inverted/30;
+  }
+
+  *:active {
+    outline: none;
+  }
+}
+
+@layer components {
+  .button {
+    @apply font-semibold py-0.5 px-2 cursor-pointer transition-colors;
+    @apply disabled:pointer-events-none;
+  }
+
+  .button-primary {
+    @apply button;
+    @apply bg-primary text-white rounded;
+    @apply hover:bg-primary/95;
+    @apply disabled:bg-primary/60;
+  }
+
+  .button-secondary {
+    @apply button;
+    @apply text-muted/90;
+    @apply disabled:text-muted/60;
+  }
+
+  .card {
+    @apply bg-neutral rounded-lg shadow;
+  }
+}
+
+@layer utilities {
+  .links-nocolor a {
+    color: inherit;
+  }
+
+  .links-underline a {
+    /* @apply underline decoration-text-muted/80; */
+  }
+
+  .links-underline-hover a {
+    /* @apply hover:underline hover:decoration-text-muted/80; */
+  }
+
+  .hide-scrollbars::-webkit-scrollbar {
+    display: none;
+  }
+}

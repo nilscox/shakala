@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["nocolor", "Shakala", "zetetique", "Zetetique"]
+  "cSpell.words": ["micromark", "nocolor", "Shakala", "zetetique", "Zetetique"],
+  "eslint.workingDirectories": [
+    "packages/0-shared",
+    "packages/1-backend-domain",
+    "packages/2-backend-application",
+    "packages/3-backend-infrastructure",
+    "packages/4-frontend-domain",
+    "packages/5-frontend-client"
+  ]
 }

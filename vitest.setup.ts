@@ -2,6 +2,8 @@ import { expect } from 'vitest';
 
 import { Response } from './packages/3-backend-infrastructure/src/infrastructure';
 
+global.FormData = URLSearchParams;
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {

@@ -1,6 +1,6 @@
-// import reactJsx from 'vite-react-jsx';
 import path from 'path';
 
+import reactJsx from 'vite-react-jsx';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
@@ -12,6 +12,5 @@ export default defineConfig({
     setupFiles: [path.resolve(__dirname, 'vitest.setup.ts')],
     environment: 'happy-dom',
   },
-  plugins: [tsconfigPaths()],
-  // plugins: [tsconfigPaths(), reactJsx()],
+  plugins: [tsconfigPaths(), reactJsx()],
 });

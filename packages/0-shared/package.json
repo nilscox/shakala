@@ -5,5 +5,8 @@
   "scripts": {
     "test": "exit 0",
     "lint": "eslint src"
+  },
+  "dependencies": {
+    "yup": "^0.32.11"
   }
 }

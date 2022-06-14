@@ -1,10 +1,3 @@
-import { User } from '../types';
+import { createAuthUserDto } from 'shared';
 
-export const createAuthUser = (overrides: Partial<User> = {}): User => ({
-  id: '',
-  nick: '',
-  email: '',
-  signupDate: '',
-  profileImage: undefined,
-  ...overrides,
-});
+export const createAuthUser = createAuthUserDto;

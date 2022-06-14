@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Vite React",
   "compilerOptions": {
     "target": "ESNext",
     "noEmit": true,

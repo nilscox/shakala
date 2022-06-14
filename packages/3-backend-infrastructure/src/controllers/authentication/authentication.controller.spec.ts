@@ -7,9 +7,11 @@ import {
   NickAlreadyExistsError,
   SignupCommand,
 } from 'backend-application';
+import { get, LoginDto, SignupDto } from 'shared';
 
 import {
   Forbidden,
+  HttpError,
   NotImplemented,
   Request,
   StubSessionService,
@@ -17,9 +19,8 @@ import {
   ValidationService,
 } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest } from '../../test';
-import { get } from '../../utils';
 
-import { AuthenticationController, LoginBodySchema, SignupBodySchema } from './authentication.controller';
+import { AuthenticationController } from './authentication.controller';
 
 describe('AuthenticationController', () => {
   const sessionService = new StubSessionService();
@@ -34,7 +35,7 @@ describe('AuthenticationController', () => {
   );
 
   describe('login', () => {
-    const body: LoginBodySchema = { email: 'user@email.tld', password: 'p4ssw0rd' };
+    const body: LoginDto = { email: 'user@email.tld', password: 'p4ssw0rd' };
     const user = createUser();
 
     beforeEach(() => {
@@ -68,7 +69,10 @@ describe('AuthenticationController', () => {
     it('fails to log in when the user is already authenticated', async () => {
       sessionService.user = createUser();
 
-      await expect(login()).rejects.toThrow(Forbidden);
+      await expect(login()).rejects.test((error: HttpError) => {
+        expect(error).toBeInstanceOf(Forbidden);
+        expect(error).toHaveProperty('body.message', 'AlreadyAuthenticated');
+      });
     });
 
     it('handles InvalidCredentials errors', async () => {
@@ -82,7 +86,7 @@ describe('AuthenticationController', () => {
   });
 
   describe('signup', () => {
-    const body: SignupBodySchema = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
+    const body: SignupDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
     const user = createUser();
 
     beforeEach(() => {
@@ -113,7 +117,10 @@ describe('AuthenticationController', () => {
     it('fails to sign up when the user is already authenticated', async () => {
       sessionService.user = createUser();
 
-      await expect(signup()).rejects.toThrow(Forbidden);
+      await expect(signup()).rejects.test((error: HttpError) => {
+        expect(error).toBeInstanceOf(Forbidden);
+        expect(error).toHaveProperty('body.message', 'AlreadyAuthenticated');
+      });
     });
 
     it('handles EmailAlreadyExists errors', async () => {
@@ -169,6 +176,29 @@ describe('AuthenticationController', () => {
       sessionService.reset();
 
       await expect(logout()).rejects.toThrow(Forbidden);
+    });
+  });
+
+  describe('getAuthenticatedUser', () => {
+    const getAuthenticatedUser = async () => {
+      return controller.getAuthenticatedUser(new MockRequest());
+    };
+
+    it('returns no content when no user is authenticated', async () => {
+      const response = await getAuthenticatedUser();
+
+      expect(response).toHaveStatus(204);
+    });
+
+    it('returns the authenticated user', async () => {
+      const user = createUser();
+
+      sessionService.user = user;
+
+      const response = await getAuthenticatedUser();
+
+      expect(response).toHaveStatus(200);
+      expect(response).toHaveBody(expect.objectContaining({ id: user.id }));
     });
   });
 });

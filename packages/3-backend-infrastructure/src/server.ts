@@ -1,11 +1,11 @@
 import {
   CreateCommentCommand,
   CreateCommentCommandHandler,
-  createComment,
-  createThread,
   createUser,
-  GetThreadQuery,
+  GetLastThreadsHandler,
+  GetLastThreadsQuery,
   GetThreadHandler,
+  GetThreadQuery,
   GetUserByEmailHandler,
   GetUserByEmailQuery,
   GetUserByIdHandler,
@@ -17,24 +17,24 @@ import {
   LoginCommandHandler,
   SignupCommand,
   SignupCommandHandler,
-  GetLastThreadsHandler,
-  GetLastThreadsQuery,
 } from 'backend-application';
 import cors from 'cors';
-import express, { ErrorRequestHandler, json } from 'express';
+import express, { json } from 'express';
 import session from 'express-session';
 
 import { AuthenticationController } from './controllers/authentication/authentication.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
+import threadChoucroute from './fixtures/thread-choucroute';
+import threadFacebookZetetique from './fixtures/thread-facebook-zetetique';
+import threadFlatEarth from './fixtures/thread-flat-earth';
 import {
-  RealCommandBus,
-  RealQueryBus,
   BcryptService,
-  MathRandomGeneratorService,
-  RealDateService,
   ExpressSessionService,
+  MathRandomGeneratorService,
+  RealCommandBus,
+  RealDateService,
+  RealQueryBus,
   ValidationService,
-  Response,
 } from './infrastructure';
 
 const users = [
@@ -47,20 +47,17 @@ const users = [
 ];
 
 const threads = [
-  createThread({
-    id: 'thread1',
-  }),
+  //
+  threadFacebookZetetique.thread,
+  threadFlatEarth.thread,
+  threadChoucroute.thread,
 ];
 
 const comments = [
-  createComment({
-    id: 'comment1',
-    threadId: 'thread1',
-  }),
-  createComment({
-    threadId: 'thread1',
-    parentId: 'comment1',
-  }),
+  //
+  ...threadFacebookZetetique.comments,
+  ...threadFlatEarth.comments,
+  ...threadChoucroute.comments,
 ];
 
 export class Server {
@@ -131,7 +128,7 @@ export class Server {
 
   private configureDefaultMiddlewares() {
     this.app.use(json());
-    this.app.use(cors({ origin: true }));
+    this.app.use(cors({ origin: true, credentials: true }));
     this.app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
   }
 

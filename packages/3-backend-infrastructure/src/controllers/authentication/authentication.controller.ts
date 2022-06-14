@@ -7,8 +7,7 @@ import {
   SignupCommand,
 } from 'backend-application';
 import { User } from 'backend-domain';
-import { AuthUserDto } from 'shared';
-import * as yup from 'yup';
+import { AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
 
 import {
   CommandBus,
@@ -26,29 +25,6 @@ import { tryCatch } from '../../utils';
 
 import { userToDto } from './authentication.dtos';
 
-const loginBodySchema = yup
-  .object({
-    email: yup.string().required().email(),
-    password: yup.string().required(),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-export type LoginBodySchema = yup.InferType<typeof loginBodySchema>;
-
-const signupBodySchema = yup
-  .object({
-    nick: yup.string().required().min(4).max(40),
-    email: yup.string().required().email(),
-    password: yup.string().required().min(4).max(100),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-export type SignupBodySchema = yup.InferType<typeof signupBodySchema>;
-
 export class AuthenticationController extends Controller {
   constructor(
     private readonly validationService: ValidationService,
@@ -65,6 +41,7 @@ export class AuthenticationController extends Controller {
       'POST /signup': this.signup,
       'POST /request-login-email': this.requestLoginEmail,
       'POST /logout': this.logout,
+      'GET  /me': this.getAuthenticatedUser,
     };
   }
 
@@ -120,9 +97,19 @@ export class AuthenticationController extends Controller {
     return Response.noContent();
   }
 
+  async getAuthenticatedUser(request: Request): Promise<Response<AuthUserDto | undefined>> {
+    const user = await this.sessionService.getUser(request);
+
+    if (!user) {
+      return Response.noContent();
+    }
+
+    return Response.ok(userToDto(user));
+  }
+
   private async assertUnauthenticated(req: Request) {
     if (await this.sessionService.getUser(req)) {
-      throw new Forbidden('you must not be authenticated', { error: 'AlreadyAuthenticated' });
+      throw new Forbidden('AlreadyAuthenticated');
     }
   }
 }

@@ -14,7 +14,8 @@
     "test:all": "yarn vitest",
     "lint": "yarn workspaces run lint",
     "typecheck": "yarn workspaces run tsc --noEmit",
-    "start:backend": "yarn workspace backend-infrastructure start"
+    "start:backend": "yarn workspace backend-infrastructure start",
+    "start:frontend": "yarn workspace frontend-client start"
   },
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.7",

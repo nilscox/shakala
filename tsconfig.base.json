@@ -9,7 +9,6 @@
     "strict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
     "types": ["vitest/globals"]
   },
   "exclude": ["./app"]

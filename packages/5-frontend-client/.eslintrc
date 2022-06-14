@@ -1,0 +1,34 @@
+{
+  "extends": [
+    "../../.eslintrc",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": "tsconfig.json"
+      }
+    }
+  },
+  "rules": {
+    "no-restricted-imports": ["error", "react-redux"],
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "tailwindcss/no-arbitrary-value": "warn"
+  },
+  "overrides": [
+    {
+      "files": "*.stories.tsx",
+      "rules": {
+        "react-hooks/rules-of-hooks": "off"
+      }
+    }
+  ]
+}

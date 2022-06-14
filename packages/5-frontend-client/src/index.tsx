@@ -1,101 +1,78 @@
-import {
-  AuthenticationGateway,
-  createStore,
-  Dependencies,
-  fetchLastThreads,
-  login,
-  Thread,
-  ThreadGateway,
-  User,
-} from 'frontend-domain';
-import { AuthUserDto, get, ThreadDto } from 'shared';
+import { Dependencies, LocationChange } from 'frontend-domain';
+import { useEffect, useMemo, useRef } from 'react';
+import * as ReactDOM from 'react-dom/client';
+import ReactModal from 'react-modal';
+import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
 
-import { FetchHttpGateway } from './fetch-http.gateway';
-import { HttpGateway } from './http.gateway';
+import { ApiAuthenticationGateway } from './adapters/authentication-gateway/api-authentication.gateway';
+import { FetchHttpGateway } from './adapters/http-gateway/fetch-http.gateway';
+import { ConsoleLoggerGateway } from './adapters/logger-gateway/console-logger.gateway';
+import { ReactRouterGateway } from './adapters/router-gateway/react-router-gateway';
+import { ApiThreadGateway } from './adapters/thread-gateway/thread-gateway';
+import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
+import { SnackbarProvider, useSnackbar } from './components/elements/snackbar/snackbar';
+import { Routes } from './routes';
+import { ReduxProvider } from './utils/redux-provider';
 
-type LoginDto = {
-  email: string;
-  password: string;
+import '@fontsource/montserrat/latin.css';
+
+import './styles/tailwind.css';
+import './styles/react-modal.css';
+
+const useReactRouterGateway = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const routerGateway = useRef(new ReactRouterGateway(location, navigate));
+
+  useEffect(() => {
+    routerGateway.current.location = location;
+    routerGateway.current.emit(LocationChange);
+  }, [location]);
+
+  useEffect(() => {
+    routerGateway.current.navigate = navigate;
+  }, [navigate]);
+
+  return routerGateway.current;
 };
 
-type SignupDto = {
-  email: string;
-  password: string;
-  nick: string;
+const useDependencies = () => {
+  const http = useRef(new FetchHttpGateway('http://localhost:3000'));
+  const routerGateway = useReactRouterGateway();
+  const snackbarGateway = useSnackbar();
+
+  return useMemo<Dependencies>(
+    () => ({
+      loggerGateway: new ConsoleLoggerGateway(),
+      routerGateway,
+      snackbarGateway,
+      timerGateway: new RealTimerGateway(),
+      authenticationGateway: new ApiAuthenticationGateway(http.current),
+      threadGateway: new ApiThreadGateway(http.current),
+    }),
+    [routerGateway, snackbarGateway],
+  );
 };
 
-export class ApiAuthenticationGateway implements AuthenticationGateway {
-  constructor(private readonly http: HttpGateway) {}
+const App = () => {
+  const dependencies = useDependencies();
 
-  async fetchUser(): Promise<AuthUserDto | undefined> {
-    const response = await this.http.get<AuthUserDto | undefined>('/auth/me');
-
-    if (response.error) {
-      throw response.error;
-    }
-
-    return response.body;
-  }
-
-  async login(email: string, password: string): Promise<User> {
-    const response = await this.http.post<LoginDto, AuthUserDto>('/auth/login', {
-      body: { email, password },
-    });
-
-    if (response.error) {
-      if (get(response.error, 'error') === 'InvalidCredentials') {
-        throw new Error('InvalidCredentials');
-      }
-
-      throw response.error;
-    }
-
-    return response.body;
-  }
-
-  async signup(email: string, password: string, nick: string): Promise<User> {
-    const response = await this.http.post<SignupDto, AuthUserDto>('/auth/signup', {
-      body: { email, password, nick },
-    });
-
-    if (response.error) {
-      throw response.error;
-    }
-
-    return response.body;
-  }
-
-  async logout(): Promise<void> {
-    await this.http.post('/auth/logout');
-  }
-}
-
-export class ApiThreadGateway implements ThreadGateway {
-  constructor(private readonly http: HttpGateway) {}
-
-  async getLast(count: number): Promise<Thread[]> {
-    const response = await this.http.get<ThreadDto[]>('/thread/last', {
-      query: { count },
-    });
-
-    return response.body;
-  }
-}
-
-const http = new FetchHttpGateway('http://localhost:3000');
-
-const main = async () => {
-  const dependencies: Dependencies = {
-    authenticationGateway: new ApiAuthenticationGateway(http),
-    threadGateway: new ApiThreadGateway(http),
-  };
-
-  const store = createStore(dependencies);
-
-  await store.dispatch(fetchLastThreads());
-  await store.dispatch(login('nils@nils.cx', 'tatata123'));
-
-  console.dir(store.getState(), { depth: null });
+  return (
+    <ReduxProvider dependencies={dependencies}>
+      <Routes />
+    </ReduxProvider>
+  );
 };
 
-main().catch(console.error);
+const app = document.getElementById('app') as HTMLElement;
+
+ReactModal.setAppElement(app);
+
+ReactDOM.createRoot(app).render(
+  <BrowserRouter>
+    <SnackbarProvider>
+      <App />
+    </SnackbarProvider>
+  </BrowserRouter>,
+);

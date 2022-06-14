@@ -21,6 +21,9 @@ const config = (module.exports = {
 
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
+    alias: {
+      '~': path.resolve(__dirname, 'src'),
+    },
   },
 
   module: {
@@ -36,16 +39,22 @@ const config = (module.exports = {
 
       {
         test: /\.css$/,
-        use: ['postcss-loader', 'css-loader', 'styles-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      },
+
+      {
+        test: /\.png$/,
+        type: 'asset/resource',
       },
     ],
   },
 
   plugins: [
-    //
     new EnvironmentPlugin(),
     new ProvidePlugin({ React: 'react' }),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'Shakala',
+    }),
   ],
 });
 
