@@ -3,14 +3,24 @@
   "tasks": [
     {
       "type": "typescript",
-      "tsconfig": "tsconfig.base.json",
+      "tsconfig": "tsconfig.backend.json",
       "option": "watch",
       "problemMatcher": ["$tsc-watch"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "label": "tsc: watch - tsconfig.json"
+      "label": "tsc: watch - tsconfig.backend.json"
+    },
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.frontend.json",
+      "option": "watch",
+      "problemMatcher": ["$tsc-watch"],
+      "group": {
+        "kind": "build"
+      },
+      "label": "tsc: watch - tsconfig.frontend.json"
     }
   ]
 }

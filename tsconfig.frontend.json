@@ -15,6 +15,5 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals"],
     "jsx": "react-jsx"
-  },
-  "exclude": ["./app"]
+  }
 }

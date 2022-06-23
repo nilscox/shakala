@@ -1,13 +1,6 @@
 node_modules
+yarn-error.log
 
-/.cache
-/build
-/public/build
-.env
-
-/app/tailwind.css
-
-/packages/*/yarn-error.log
 /packages/*/tsconfig.tsbuildinfo
 /packages/*/dist
 
