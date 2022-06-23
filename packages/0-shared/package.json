@@ -1,9 +1,9 @@
 {
   "name": "shared",
   "version": "0.1.0",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "scripts": {
-    "test": "exit 0",
+    "test": "vitest",
     "lint": "eslint src"
   },
   "dependencies": {

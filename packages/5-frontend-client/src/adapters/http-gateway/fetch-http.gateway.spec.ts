@@ -2,6 +2,8 @@ import { ValidationError } from 'frontend-domain';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 
+import 'shared/src/vitest.setup';
+
 const mockFetch = (overrides?: Partial<Response>) => {
   return vi.fn<Parameters<typeof fetch>, ReturnType<typeof fetch>>(
     async () =>
@@ -28,6 +30,7 @@ describe('FetchHttpGateway', () => {
     expect(fetch).toHaveBeenCalledWith('https://base.url/path', {
       method: 'GET',
       headers: expect.anything(),
+      credentials: 'include',
     });
   });
 
@@ -94,6 +97,7 @@ describe('FetchHttpGateway', () => {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body: '{"bo":"dy"}',
+      credentials: 'include',
     });
   });
 

@@ -14,11 +14,10 @@ import {
   HttpError,
   NotImplemented,
   Request,
-  StubSessionService,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest } from '../../test';
+import { StubSessionService, MockCommandBus, MockQueryBus, MockRequest } from '../../test';
 
 import { AuthenticationController } from './authentication.controller';
 

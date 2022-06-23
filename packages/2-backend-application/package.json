@@ -1,7 +1,7 @@
 {
   "name": "backend-application",
   "version": "0.1.0",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "scripts": {
     "lint": "eslint src",
     "test": "vitest"

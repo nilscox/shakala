@@ -2,8 +2,8 @@ import { Timestamp } from 'backend-domain';
 
 import { StubCryptoService } from '../test/crypto.stub';
 import { StubDateService } from '../test/date.stub';
-import { createUser } from '../test/factories';
-import { InMemoryUserRepository } from '../test/user.in-memory-repository';
+import { createUser } from '../utils/factories';
+import { InMemoryUserRepository } from '../utils/user.in-memory-repository';
 
 import { InvalidCredentialsError, LoginCommand, LoginCommandHandler } from './login.command';
 

@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.frontend.json",
-  "include": ["src"]
+  "include": ["src"],
+  "references": [{ "path": "../0-shared" }],
+  "compilerOptions": {
+    "outDir": "dist",
+    "composite": true
+  }
 }

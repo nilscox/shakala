@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.frontend.json",
   "files": [".storybook/preview.ts"],
   "include": ["src"],
+  "references": [{ "path": "../4-frontend-domain" }],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

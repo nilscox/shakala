@@ -9,8 +9,8 @@ import {
   Sort,
 } from 'backend-application';
 
-import { StubSessionService, ValidationError, ValidationService } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest } from '../../test';
+import { ValidationError, ValidationService } from '../../infrastructure';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
 

@@ -13,7 +13,9 @@
     "test": "yarn workspaces run test",
     "test:all": "yarn vitest",
     "lint": "yarn workspaces run lint",
-    "typecheck": "yarn workspaces run tsc --noEmit",
+    "build:backend": "yarn workspace backend-infrastructure build",
+    "build:frontend": "yarn workspace frontend-client build",
+    "build": "yarn build:backend && yarn build:frontend",
     "start:backend": "yarn workspace backend-infrastructure start",
     "start:frontend": "yarn workspace frontend-client start"
   },

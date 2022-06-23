@@ -101,6 +101,12 @@ const GeraldBronner = CommentAuthor.create(
   }),
 );
 
+Descartes;
+Leibniz;
+Socrate;
+Kant;
+Astrocept;
+
 const thread = createThread({
   id: '38pvde',
   author: Hegel,

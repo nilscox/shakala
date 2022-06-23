@@ -1,10 +1,10 @@
 import { Markdown, Timestamp } from 'backend-domain';
 
-import { InMemoryCommentRepository } from '../test/comment.in-memory-repository';
 import { StubDateService } from '../test/date.stub';
-import { createUser } from '../test/factories';
 import { StubGeneratorService } from '../test/generator.stub';
-import { InMemoryUserRepository } from '../test/user.in-memory-repository';
+import { InMemoryCommentRepository } from '../utils/comment.in-memory-repository';
+import { createUser } from '../utils/factories';
+import { InMemoryUserRepository } from '../utils/user.in-memory-repository';
 
 import { CreateCommentCommandHandler } from './create-comment.command';
 

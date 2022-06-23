@@ -1,8 +1,7 @@
 import type { Nick, User } from 'backend-domain';
 
 import type { UserRepository } from '../interfaces/user.repository';
-
-import { InMemoryRepository } from './in-memory-repository';
+import { InMemoryRepository } from '../utils/in-memory-repository';
 
 export class InMemoryUserRepository extends InMemoryRepository<User> implements UserRepository {
   async findByEmail(email: string): Promise<User | undefined> {

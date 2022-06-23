@@ -1,8 +1,6 @@
 import { expect } from 'vitest';
 
-import { Response } from './packages/3-backend-infrastructure/src/infrastructure';
-
-global.FormData = URLSearchParams;
+import { Response } from './infrastructure';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -16,21 +14,14 @@ declare global {
   }
 }
 
-const pass = () => ({
+export const pass = () => ({
   pass: true,
   message: () => 'ok',
 });
 
-const fail = (message: string) => ({
+export const fail = (message: string) => ({
   pass: false,
   message: () => message,
-});
-
-expect.extend({
-  test(received: any, cb: (received: any) => void) {
-    cb(received);
-    return pass();
-  },
 });
 
 expect.extend({

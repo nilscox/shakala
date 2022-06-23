@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.backend.json",
   "include": ["src"],
+  "references": [{ "path": "../2-backend-application" }],
   "compilerOptions": {
+    "outDir": "dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }
