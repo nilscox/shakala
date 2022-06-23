@@ -10,3 +10,5 @@ node_modules
 /packages/*/yarn-error.log
 /packages/*/tsconfig.tsbuildinfo
 /packages/*/dist
+
+/packages/5-frontend-client/storybook-static

@@ -46,6 +46,10 @@ module.exports = {
 
     config.plugins.push(new ProvidePlugin({ React: 'react' }));
 
+    if (process.env.PUBLIC_PATH) {
+      config.output.publicPath = process.env.PUBLIC_PATH;
+    }
+
     return config;
   },
 };
