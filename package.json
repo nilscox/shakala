@@ -1,5 +1,6 @@
 {
   "name": "shakala",
+  "version": "0.1.0",
   "private": true,
   "workspaces": [
     "packages/0-shared",
@@ -14,7 +15,7 @@
     "test:all": "yarn vitest",
     "lint": "yarn workspaces run lint",
     "build:backend": "yarn workspace backend-infrastructure build",
-    "build:frontend": "yarn workspace frontend-client build",
+    "build:frontend": "yarn workspace shared build && yarn workspace frontend-client build",
     "build": "yarn build:backend && yarn build:frontend",
     "start:backend": "yarn workspace backend-infrastructure start",
     "start:frontend": "yarn workspace frontend-client start"
