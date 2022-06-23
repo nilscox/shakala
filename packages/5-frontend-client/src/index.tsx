@@ -11,6 +11,7 @@ import { ReactRouterGateway } from './adapters/router-gateway/react-router-gatew
 import { ApiThreadGateway } from './adapters/thread-gateway/thread-gateway';
 import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
 import { SnackbarProvider, useSnackbar } from './components/elements/snackbar/snackbar';
+import { useConfig } from './hooks/use-config';
 import { Routes } from './routes';
 import { ReduxProvider } from './utils/redux-provider';
 
@@ -38,7 +39,8 @@ const useReactRouterGateway = () => {
 };
 
 const useDependencies = () => {
-  const http = useRef(new FetchHttpGateway('http://localhost:3000'));
+  const config = useConfig();
+  const http = useRef(new FetchHttpGateway(config.apiUrl));
   const routerGateway = useReactRouterGateway();
   const snackbarGateway = useSnackbar();
 

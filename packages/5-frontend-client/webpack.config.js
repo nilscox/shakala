@@ -51,7 +51,9 @@ const config = (module.exports = {
   },
 
   plugins: [
-    new EnvironmentPlugin(),
+    new EnvironmentPlugin({
+      API_URL: 'http://localhost:3000',
+    }),
     new ProvidePlugin({ React: 'react' }),
     new HtmlWebpackPlugin({
       title: 'Shakala',
