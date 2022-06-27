@@ -9,7 +9,6 @@ export * from './store';
 
 export * from './test/factories';
 
-export * from './thread/thread.gateway';
-export * from './thread/use-cases/fetch-last-threads';
+export * from './thread';
 
 export * from './types';

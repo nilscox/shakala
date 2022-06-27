@@ -4,16 +4,34 @@ import { RouterGateway, LocationChange, RemoveListener } from 'frontend-domain';
 import { Location, NavigateFunction } from 'react-router-dom';
 
 export class ReactRouterGateway extends EventEmitter implements RouterGateway {
-  constructor(public location: Location, public navigate: NavigateFunction) {
+  private queryParams: URLSearchParams;
+
+  constructor(private _location: Location, public navigate: NavigateFunction) {
     super();
+
+    this.queryParams = new URLSearchParams(this.location.search);
   }
 
-  get queryParams() {
-    return new URLSearchParams(this.location.search);
+  set location(location: Location) {
+    this._location = location;
+    this.queryParams = new URLSearchParams(this.location.search);
+
+    this.emit(LocationChange);
+  }
+
+  get location() {
+    return this._location;
   }
 
   getQueryParam(key: string): string | undefined {
     return this.queryParams.get(key) ?? undefined;
+  }
+
+  setQueryParam(key: string, value: string): void {
+    const params = this.queryParams;
+
+    params.set(key, value);
+    this._navigate(this.location.pathname, params);
   }
 
   removeQueryParam(key: string): void {
@@ -23,8 +41,18 @@ export class ReactRouterGateway extends EventEmitter implements RouterGateway {
     this._navigate(this.location.pathname, params);
   }
 
+  private navigateTimeout?: number;
+
   private _navigate(pathname: string, queryParams = this.queryParams) {
-    setTimeout(() => this.navigate(pathname + '?' + queryParams.toString()), 0);
+    if (this.navigateTimeout) {
+      window.clearTimeout(this.navigateTimeout);
+      this.navigateTimeout = undefined;
+    }
+
+    this.navigateTimeout = window.setTimeout(() => {
+      this.navigateTimeout = undefined;
+      this.navigate(pathname + '?' + queryParams.toString());
+    }, 0);
   }
 
   onLocationChange(listener: () => void): RemoveListener {

@@ -1,4 +1,4 @@
-import { Dependencies, LocationChange } from 'frontend-domain';
+import { Dependencies } from 'frontend-domain';
 import { useEffect, useMemo, useRef } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import ReactModal from 'react-modal';
@@ -13,12 +13,13 @@ import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
 import { SnackbarProvider, useSnackbar } from './components/elements/snackbar/snackbar';
 import { useConfig } from './hooks/use-config';
 import { Routes } from './routes';
+import { ErrorBoundary } from './utils/error-boundary';
 import { ReduxProvider } from './utils/redux-provider';
 
 import '@fontsource/montserrat/latin.css';
 
-import './styles/tailwind.css';
 import './styles/react-modal.css';
+import './styles/tailwind.css';
 
 const useReactRouterGateway = () => {
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ const useReactRouterGateway = () => {
 
   useEffect(() => {
     routerGateway.current.location = location;
-    routerGateway.current.emit(LocationChange);
   }, [location]);
 
   useEffect(() => {
@@ -62,7 +62,9 @@ const App = () => {
 
   return (
     <ReduxProvider dependencies={dependencies}>
-      <Routes />
+      <ErrorBoundary>
+        <Routes />
+      </ErrorBoundary>
     </ReduxProvider>
   );
 };

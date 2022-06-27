@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
   AuthenticationForm as AuthenticationFormType,
   closeAuthenticationForm,
@@ -70,7 +70,7 @@ export const AuthenticationForm = () => {
 
           <FormInputs />
 
-          <FormError className={classNames('my-1 text-center', !formError && 'hidden')}>
+          <FormError className={clsx('my-1 text-center', !formError && 'hidden')}>
             {formError === 'InvalidCredentials' && 'Combinaison email / mot de passe non valide'}
           </FormError>
 

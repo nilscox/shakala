@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { CSSProperties } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -16,13 +16,13 @@ type SpacingProps = {
 };
 
 const Label = ({ className, children }: { className?: string; children: string }) => (
-  <div className={classNames('font-bold text-muted', className)}>{children}</div>
+  <div className={clsx('font-bold text-muted', className)}>{children}</div>
 );
 
 const Size = ({ name, className, style }: SpacingProps) => (
   <div className="flex flex-row gap-2 items-center">
     <Label className="w-6 text-right">{name}</Label>
-    <div className={classNames('bg-primary', className)} style={style} />
+    <div className={clsx('bg-primary', className)} style={style} />
   </div>
 );
 
@@ -54,7 +54,7 @@ type BorderRadiusProps = {
 const BorderRadius = ({ className, name }: BorderRadiusProps) => (
   <div className="flex flex-row gap-2 items-center">
     <div
-      className={classNames('w-6 h-6 border-t border-l', className)}
+      className={clsx('w-6 h-6 border-t border-l', className)}
       style={{ borderEndStartRadius: 0, borderEndEndRadius: 0, borderStartEndRadius: 0 }}
     />
     <Label>{name}</Label>
@@ -76,7 +76,7 @@ type ColorProps = {
 
 const Color = ({ name, className }: ColorProps) => (
   <div className="flex flex-row gap-2 items-center">
-    <div className={classNames('w-6 h-6 rounded', className)} />
+    <div className={clsx('w-6 h-6 rounded', className)} />
     <Label>{name}</Label>
   </div>
 );
@@ -112,7 +112,7 @@ type TextProps = {
 const Text = ({ name, className }: TextProps) => (
   <div className="flex flex-row gap-2 items-center">
     <Label className="w-[6rem]">{name}</Label>
-    <div className={classNames('px-1', className)}>Two driven jocks help fax my big quiz.</div>
+    <div className={clsx('px-1', className)}>Two driven jocks help fax my big quiz.</div>
   </div>
 );
 

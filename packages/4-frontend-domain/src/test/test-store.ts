@@ -3,7 +3,7 @@ import { LoggerGateway } from '../interfaces/logger.gateway';
 import { RemoveListener, RouterGateway } from '../interfaces/router.gateway';
 import { SnackbarGateway } from '../interfaces/snackbar.gateway';
 import { TimerGateway } from '../interfaces/timer.gateway';
-import { createStore, Dependencies, Selector } from '../store';
+import { createStore, Dependencies, Dispatch, Selector } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 
 import { mockFn } from './mock-fn';
@@ -87,7 +87,9 @@ class MockAuthenticationGateway implements AuthenticationGateway {
 }
 
 class MockThreadGateway implements ThreadGateway {
+  getById = mockFn<ThreadGateway['getById']>();
   getLast = mockFn<ThreadGateway['getLast']>();
+  getComments = mockFn<ThreadGateway['getComments']>();
 }
 
 export class TestStore implements Dependencies {
@@ -110,11 +112,15 @@ export class TestStore implements Dependencies {
     return this.reduxStore.getState();
   }
 
-  dispatch(...args: Parameters<typeof this.reduxStore.dispatch>) {
+  dispatch(...args: Parameters<Dispatch>) {
     return this.reduxStore.dispatch(...args);
   }
 
   select<Params extends unknown[], Result>(selector: Selector<Params, Result>, ...params: Params) {
     return selector(this.getState(), ...params);
+  }
+
+  logState() {
+    console.dir(this.getState(), { depth: null });
   }
 }

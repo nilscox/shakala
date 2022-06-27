@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 type FormErrorProps = {
   className?: string;
@@ -6,5 +6,5 @@ type FormErrorProps = {
 };
 
 export const FormError = ({ className, children }: FormErrorProps) => {
-  return <div className={classNames('text-sm font-bold text-error', className)}>{children}</div>;
+  return <div className={clsx('text-sm font-bold text-error', className)}>{children}</div>;
 };

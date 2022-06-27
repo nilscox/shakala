@@ -5,14 +5,18 @@ import {
   setIsAuthenticationModalOpen,
 } from '../../actions/authentication.actions';
 import { isAuthenticationForm } from '../../authentication.types';
+import { selectHasAuthenticationForm } from '../../selectors/authentication.selectors';
 import { fetchAuthenticatedUser } from '../fetch-authenticated-user/fetch-authenticated-user';
 
 export const initializeAuthentication = (): Thunk => {
-  return async (dispatch, _getState, { routerGateway }) => {
+  return async (dispatch, getState, { routerGateway }) => {
     dispatch(setForm());
 
     routerGateway.onLocationChange(() => {
-      dispatch(clearAllAuthenticationErrors());
+      if (selectHasAuthenticationForm(getState())) {
+        dispatch(clearAllAuthenticationErrors());
+      }
+
       dispatch(setForm());
     });
 
@@ -21,11 +25,14 @@ export const initializeAuthentication = (): Thunk => {
 };
 
 const setForm = (): Thunk => {
-  return (dispatch, _getState, { routerGateway, loggerGateway }) => {
+  return (dispatch, getState, { routerGateway, loggerGateway }) => {
     const form = routerGateway.getQueryParam('auth');
 
     if (!form) {
-      dispatch(setAuthenticationForm(undefined));
+      if (selectHasAuthenticationForm(getState())) {
+        dispatch(setAuthenticationForm(undefined));
+      }
+
       return;
     }
 

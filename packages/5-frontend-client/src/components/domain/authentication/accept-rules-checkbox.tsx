@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
   acceptRules,
   AuthenticationField,
@@ -37,7 +37,7 @@ export const AcceptRulesCheckbox = () => {
         </Link>
       </label>
 
-      <div className={classNames('my-2', !warningVisible && 'hidden')}>
+      <div className={clsx('my-2', !warningVisible && 'hidden')}>
         Il est important que chaque membre ait pris connaissance de la charte. Si ce n'est pas encore fait,
         accordez <strong>5 minutes</strong> à sa lecture avant de vous inscrire.
       </div>

@@ -8,6 +8,7 @@
   }
 
   body {
+    @apply text;
     background-color: #fbfbfd;
   }
 
@@ -58,6 +59,14 @@
 }
 
 @layer utilities {
+  .col {
+    @apply flex flex-col;
+  }
+
+  .row {
+    @apply flex flex-row;
+  }
+
   .links-nocolor a {
     color: inherit;
   }

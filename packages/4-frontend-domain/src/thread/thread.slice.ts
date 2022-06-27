@@ -1,35 +1,43 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { State } from '../store';
-import { Thread } from '../types';
+import { Comment, Sort, Thread } from '../types';
 
-import { fetchLastThreads } from './use-cases/fetch-last-threads';
+type ThreadSliceEntity = Thread & {
+  loadingComments: boolean;
+  loadingCommentsError?: unknown;
+  commentsFilter?: string;
+  commentsSort?: Sort;
+  comments?: Comment[];
+};
 
-const threadEntityAdapter = createEntityAdapter<Thread>();
+type ExtraPayload = {
+  loadingThreads: boolean;
+  loadingThreadsError?: unknown;
+  loadingThread: Record<string, boolean>;
+  loadingThreadError: Record<string, unknown>;
+};
+
+export const threadEntityAdapter = createEntityAdapter<ThreadSliceEntity>();
+
+const initialState = threadEntityAdapter.getInitialState<ExtraPayload>({
+  loadingThreads: false,
+  loadingThreadsError: undefined,
+  loadingThread: {},
+  loadingThreadError: {},
+});
 
 export const threadsSlice = createSlice({
   name: 'threads',
-  initialState: threadEntityAdapter.getInitialState<{ loading: boolean; error?: unknown }>({
-    loading: false,
-  }),
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(fetchLastThreads.pending, (state) => {
-      state.loading = true;
-    });
-
-    builder.addCase(fetchLastThreads.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error;
-    });
-
-    builder.addCase(fetchLastThreads.fulfilled, (state, action) => {
-      state.loading = false;
-      threadEntityAdapter.addMany(state, action.payload);
-    });
+  initialState,
+  reducers: {
+    setLoadingThread: (state, { payload }: PayloadAction<{ threadId: string; loading: boolean }>) => {
+      state.loadingThread[payload.threadId] = payload.loading;
+    },
+    setLoadingThreadError: (state, { payload }: PayloadAction<{ threadId: string; error: unknown }>) => {
+      state.loadingThreadError[payload.threadId] = payload.error;
+    },
+    addThread: threadEntityAdapter.addOne,
+    addThreads: threadEntityAdapter.addMany,
+    updateThread: threadEntityAdapter.updateOne,
   },
 });
-
-const selectors = threadEntityAdapter.getSelectors<State>((state) => state.threads);
-
-export const { selectAll: selectThreads } = selectors;

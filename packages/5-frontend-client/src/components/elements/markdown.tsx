@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { micromark } from 'micromark';
 
 type MarkdownProps = {
@@ -8,7 +8,7 @@ type MarkdownProps = {
 
 export const Markdown = ({ className, markdown }: MarkdownProps): JSX.Element => (
   <div
-    className={classNames('max-w-none prose', className)}
+    className={clsx('max-w-none prose', className)}
     dangerouslySetInnerHTML={{ __html: micromark(markdown) }}
   />
 );

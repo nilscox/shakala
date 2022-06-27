@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 export enum SnackType {
@@ -27,7 +27,7 @@ export type SnackbarProps = {
 
 export const Snackbar = ({ className, type, children }: SnackbarProps) => (
   <div
-    className={classNames(
+    className={clsx(
       'p-2 w-fit min-w-snackbar max-w-snackbar font-semibold text-white rounded shadow',
       colorsMap[type],
       className,

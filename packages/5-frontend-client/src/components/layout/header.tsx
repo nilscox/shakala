@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 import { Link, NavLink, NavLinkProps } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ type HeaderProps = {
 
 export const Header = ({ className }: HeaderProps): JSX.Element => (
   <header className="pt-6 pb-2 text-inverted bg-inverted links-nocolor">
-    <div className={classNames('px-4', className)}>
+    <div className={clsx('px-4', className)}>
       <div className="flex relative flex-row gap-4 justify-between">
         <Authentication />
         <Heading />
@@ -40,8 +40,8 @@ const Authentication = () => {
       className="flex absolute top-0 right-0 flex-row gap-2 items-center"
     >
       <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
-      <div className="w-4 h-4 sm:w-6 sm:h-6">
-        <Avatar big image={user?.profileImage} className="w-4 h-4 border-none sm:w-6 sm:h-6" />
+      <div className="w-6 h-6">
+        <Avatar big image={user?.profileImage} className="w-6 h-6 border-none" />
       </div>
     </AuthenticationLink>
   );
@@ -75,9 +75,9 @@ type NavigationProps = {
 
 const Navigation = ({ className }: NavigationProps) => (
   <nav
-    className={classNames(
-      'text-inverted/90 font-semibold uppercase whitespace-nowrap',
-      'flex flex-row flex-nowrap items-end justify-between gap-x-2',
+    className={clsx(
+      'font-semibold text-inverted/90 uppercase whitespace-nowrap',
+      'flex flex-row flex-nowrap gap-x-2 justify-between items-end',
       'overflow-x-auto hide-scrollbars',
       'sm:gap-x-4 sm:justify-end',
       className,
@@ -93,10 +93,7 @@ const Navigation = ({ className }: NavigationProps) => (
 const HeaderNavLink = (props: NavLinkProps) => (
   <NavLink
     className={({ isActive }) =>
-      classNames(
-        'hover:underline decoration-2 decoration-primary underline-offset-4',
-        isActive && '!text-primary',
-      )
+      clsx('hover:underline decoration-primary decoration-2 underline-offset-4', isActive && '!text-primary')
     }
     {...props}
   />

@@ -19,6 +19,10 @@ export const selectAuthenticationFormUnsafe = createSelector(selectAuthenticatio
   return slice.form;
 });
 
+export const selectHasAuthenticationForm = createSelector(selectAuthenticationFormUnsafe, (form) => {
+  return Boolean(form);
+});
+
 export const selectAuthenticationForm = createSelector(selectAuthenticationFormUnsafe, (form) => {
   if (!form) {
     throw new Error(`selectAuthenticationForm: form is not defined`);

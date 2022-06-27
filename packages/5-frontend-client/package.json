@@ -11,7 +11,7 @@
   "dependencies": {
     "@fontsource/montserrat": "^4.5.11",
     "@fontsource/open-sans": "^4.5.10",
-    "classnames": "^2.3.1",
+    "clsx": "^1.1.1",
     "date-fns": "^2.28.0",
     "micromark": "^3.0.10",
     "no-scroll": "^2.1.1",

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 
 import { useUser } from '~/hooks/use-user';
@@ -17,7 +17,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
 
   return (
     <footer className="py-5">
-      <div className={classNames('px-2 md:px-4', className)}>
+      <div className={clsx('px-2 md:px-4', className)}>
         <div className="grid grid-cols-1 gap-4 pt-5 border-t sm:grid-cols-2 md:grid-cols-4 links-nocolor">
           <FooterColumn>
             <Link to="/">Accueil</Link>
@@ -48,13 +48,13 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
               image={facebookLogo}
               imageAlt="facebook-logo"
             >
-              Page facebook
+              Facebook
             </SocialLink>
             <SocialLink href="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
-              Compte twitter
+              Twitter
             </SocialLink>
             <SocialLink href="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
-              Groupe discord
+              Discord
             </SocialLink>
           </FooterColumn>
         </div>
@@ -69,7 +69,7 @@ type FooterColumnProps = {
 };
 
 const FooterColumn = ({ className, children }: FooterColumnProps) => (
-  <div className={classNames('flex flex-col text-text-light', className)}>{children}</div>
+  <div className={clsx('leading-7 text-muted col', className)}>{children}</div>
 );
 
 type SocialLinkProps = {
@@ -80,7 +80,7 @@ type SocialLinkProps = {
 };
 
 const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => (
-  <a href={href} className="flex flex-row items-center whitespace-nowrap">
+  <a href={href} className="items-center whitespace-nowrap row">
     <img className="mr-1 w-4 h-4 grayscale" src={image} alt={imageAlt} />
     {children}
   </a>

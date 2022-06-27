@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   primary?: boolean;
@@ -8,7 +8,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export const Button = ({ primary, small, loading, className, children, ...props }: ButtonProps) => (
   <button
-    className={classNames('button relative', primary && 'button-primary', small && 'text-sm', className)}
+    className={clsx('relative button', primary && 'button-primary', small && 'text-sm', className)}
     {...props}
   >
     {children}
@@ -17,5 +17,5 @@ export const Button = ({ primary, small, loading, className, children, ...props 
 );
 
 const LoadingIndicator = () => {
-  return <div className="absolute inset-y-0 right-0 bg-white/20 animate-loading" />;
+  return <div className="absolute inset-y-0 right-0 bg-neutral/20 animate-loading" />;
 };

@@ -1,7 +1,6 @@
 /* eslint-disable tailwindcss/no-arbitrary-value */
 
-import { fetchLastThreads } from 'frontend-domain';
-import { selectThreads } from 'frontend-domain/src/thread/thread.slice';
+import { fetchLastThreads, selectThreads } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -84,9 +83,7 @@ const Motivations = () => (
   <>
     <Heading>Pourquoi ce site ?</Heading>
 
-    <p className="my-[4rem] mx-5 text-lg text-center">
-      Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?
-    </p>
+    <p className="m-[4rem] text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
 
     <div className="flex flex-col md:flex-row">
       <div className="flex-1 pb-2 mb-2 border-b md:pr-2 md:pb-0 md:mr-2 md:mb-0 md:border-r md:border-b-0">
