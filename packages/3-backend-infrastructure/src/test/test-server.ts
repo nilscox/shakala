@@ -1,4 +1,5 @@
-import { User } from 'backend-domain';
+import { createUser } from 'backend-application';
+import { Thread } from 'backend-domain';
 import { agent } from 'supertest';
 
 import { Server } from '../server';
@@ -8,7 +9,16 @@ export class TestServer extends Server {
     return agent(this.app);
   }
 
-  async saveUser(user: User) {
-    await this.userRepository.save(user);
+  async saveUser(email: string, password: string) {
+    await this.userRepository.save(
+      createUser({
+        email,
+        hashedPassword: await this.cryptoService.hash(password),
+      }),
+    );
+  }
+
+  async saveThread(thread: Thread) {
+    await this.threadRepository.save(thread);
   }
 }

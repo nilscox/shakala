@@ -49,4 +49,16 @@ export class ApiThreadGateway implements ThreadGateway {
 
     return response.body.comments;
   }
+
+  async createComment(threadId: string, text: string): Promise<string> {
+    const response = await this.http.post<{ text: string }, { id: string }>(`/thread/${threadId}/comment`, {
+      body: { text },
+    });
+
+    if (response.status !== 201) {
+      throw new FetchError(response);
+    }
+
+    return response.body.id;
+  }
 }

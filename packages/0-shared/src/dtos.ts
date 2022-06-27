@@ -1,3 +1,5 @@
+import { isEnumValue } from './libs/is-enum-value';
+
 export type AuthUserDto = {
   id: string;
   email: string;
@@ -41,3 +43,5 @@ export enum Sort {
   dateAsc = 'date-asc',
   dateDesc = 'date-desc',
 }
+
+export const isSort = isEnumValue(Sort);

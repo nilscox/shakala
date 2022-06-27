@@ -9,6 +9,7 @@ import {
 import { AuthenticationGateway } from './authentication/authentication.gateway';
 import { authenticationSlice } from './authentication/authentication.slice';
 import { userSlice } from './authentication/user.slice';
+import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
 import { RouterGateway } from './interfaces/router.gateway';
 import { SnackbarGateway } from './interfaces/snackbar.gateway';
@@ -31,6 +32,7 @@ export const createStore = (dependencies: Dependencies) => {
 };
 
 export type Dependencies = {
+  dateGateway: DateGateway;
   snackbarGateway: SnackbarGateway;
   loggerGateway: LoggerGateway;
   routerGateway: RouterGateway;

@@ -70,3 +70,11 @@ export const selectThreadCommentsUnsafe = createSelector(selectThread, (thread) 
 export const selectThreadComments = (state: State, threadId: string) => {
   return selectThreadCommentsUnsafe(state, threadId) ?? [];
 };
+
+export const selectIsCreatingComment = createSelector(selectThread, (thread) => {
+  return thread.createCommentForm.isSubmitting;
+});
+
+export const selectCreateCommentText = createSelector(selectThread, (thread) => {
+  return thread.createCommentForm.text;
+});

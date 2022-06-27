@@ -56,7 +56,7 @@ export abstract class Controller {
         console.error(error);
 
         if (error instanceof Error) {
-          res.status(500).send(error?.stack);
+          res.status(500).set('Content-Type', 'text/plain').send(error?.stack);
         } else {
           res.status(500).json(error);
         }

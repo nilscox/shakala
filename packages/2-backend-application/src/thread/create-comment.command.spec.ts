@@ -24,12 +24,14 @@ describe('CreateCommentCommand', () => {
     generator.nextId = 'commentId';
     date.setNow(now);
 
-    await handler.handle({
+    const commentId = await handler.handle({
       threadId: 'threadId',
       authorId: 'authorId',
       parentId: null,
       text: 'hello!',
     });
+
+    expect(commentId).toEqual('commentId');
 
     const created = await commentRepository.findById('commentId');
 

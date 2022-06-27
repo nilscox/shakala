@@ -30,6 +30,10 @@ describe('fetchThreadById', () => {
       ...thread,
       loadingComments: false,
       comments,
+      createCommentForm: {
+        isSubmitting: false,
+        text: '',
+      },
     });
   });
 

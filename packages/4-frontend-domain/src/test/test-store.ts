@@ -1,4 +1,5 @@
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
+import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
 import { RemoveListener, RouterGateway } from '../interfaces/router.gateway';
 import { SnackbarGateway } from '../interfaces/snackbar.gateway';
@@ -7,6 +8,18 @@ import { createStore, Dependencies, Dispatch, Selector } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 
 import { mockFn } from './mock-fn';
+
+class StubDateGateway implements DateGateway {
+  private _now = new Date();
+
+  now(): Date {
+    return this._now;
+  }
+
+  setNow(now: Date) {
+    this._now = now;
+  }
+}
 
 class MockSnackbarGateway implements SnackbarGateway {
   success = mockFn<SnackbarGateway['success']>();
@@ -90,9 +103,11 @@ class MockThreadGateway implements ThreadGateway {
   getById = mockFn<ThreadGateway['getById']>();
   getLast = mockFn<ThreadGateway['getLast']>();
   getComments = mockFn<ThreadGateway['getComments']>();
+  createComment = mockFn<ThreadGateway['createComment']>();
 }
 
 export class TestStore implements Dependencies {
+  readonly dateGateway = new StubDateGateway();
   readonly snackbarGateway = new MockSnackbarGateway();
   readonly loggerGateway = new MockLoggerGateway();
   readonly routerGateway = new StubRouterGateway();

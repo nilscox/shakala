@@ -37,7 +37,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
   const renderComments = (comments: CommentType[]) => (
     <>
       {comments.length === 0 && <NoCommentFallback />}
-      <CommentsList author={thread.author} comments={comments} />
+      <CommentsList threadId={threadId} author={thread.author} comments={comments} />
     </>
   );
 
@@ -75,11 +75,12 @@ export const Thread = ({ threadId }: ThreadProps) => {
 };
 
 export type CommentsListProps = {
+  threadId: string;
   author: User;
   comments: CommentType[];
 };
 
-export const CommentsList = ({ author, comments }: CommentsListProps) => {
+export const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
   const user = useUser();
 
   return (
@@ -93,7 +94,7 @@ export const CommentsList = ({ author, comments }: CommentsListProps) => {
           <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
         </div>
 
-        <RealCommentForm autofocus={false} placeholder={`Répondre à ${author.nick}`} />
+        <RealCommentForm threadId={threadId} autofocus={false} placeholder={`Répondre à ${author.nick}`} />
       </div>
     </div>
   );

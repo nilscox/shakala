@@ -14,7 +14,7 @@ export class CreateCommentCommand {
   ) {}
 }
 
-export class CreateCommentCommandHandler implements CommandHandler<CreateCommentCommand> {
+export class CreateCommentCommandHandler implements CommandHandler<CreateCommentCommand, string> {
   constructor(
     private readonly generatorService: GeneratorService,
     private readonly dateService: DateService,
@@ -22,7 +22,7 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
     private readonly userRepository: UserRepository,
   ) {}
 
-  async handle(command: CreateCommentCommand): Promise<void> {
+  async handle(command: CreateCommentCommand): Promise<string> {
     const { threadId, authorId, parentId, text } = command;
 
     const author = await this.userRepository.findByIdOrFail(authorId);
@@ -40,5 +40,7 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
     });
 
     await this.commentRepository.save(comment);
+
+    return comment.id;
   }
 }

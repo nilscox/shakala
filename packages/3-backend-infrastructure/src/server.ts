@@ -2,6 +2,8 @@ import {
   CreateCommentCommand,
   CreateCommentCommandHandler,
   createUser,
+  GetCommentQuery,
+  GetCommentQueryHandler,
   GetLastThreadsHandler,
   GetLastThreadsQuery,
   GetThreadHandler,
@@ -91,6 +93,7 @@ export class Server {
 
   protected getLastThreadsHandler = new GetLastThreadsHandler(this.threadRepository);
   protected getThreadHandler = new GetThreadHandler(this.threadRepository, this.commentRepository);
+  protected getCommentHandler = new GetCommentQueryHandler(this.commentRepository);
   protected createCommentCommandHandler = new CreateCommentCommandHandler(
     this.generatorService,
     this.dateService,
@@ -140,6 +143,7 @@ export class Server {
 
     this.queryBus.register(GetLastThreadsQuery, this.getLastThreadsHandler);
     this.queryBus.register(GetThreadQuery, this.getThreadHandler);
+    this.queryBus.register(GetCommentQuery, this.getCommentHandler);
     this.commandBus.register(CreateCommentCommand, this.createCommentCommandHandler);
   }
 

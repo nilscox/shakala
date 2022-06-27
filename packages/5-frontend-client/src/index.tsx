@@ -5,6 +5,7 @@ import ReactModal from 'react-modal';
 import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
 
 import { ApiAuthenticationGateway } from './adapters/authentication-gateway/api-authentication.gateway';
+import { RealDateGateway } from './adapters/date-gateway/real-date-gateway';
 import { FetchHttpGateway } from './adapters/http-gateway/fetch-http.gateway';
 import { ConsoleLoggerGateway } from './adapters/logger-gateway/console-logger.gateway';
 import { ReactRouterGateway } from './adapters/router-gateway/react-router-gateway';
@@ -46,6 +47,7 @@ const useDependencies = () => {
 
   return useMemo<Dependencies>(
     () => ({
+      dateGateway: new RealDateGateway(),
       loggerGateway: new ConsoleLoggerGateway(),
       routerGateway,
       snackbarGateway,

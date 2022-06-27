@@ -13,11 +13,21 @@ export const setLoadingThreadError = (threadId: string, error: unknown) => {
 };
 
 export const addThread = (thread: Thread) => {
-  return actions.addThread({ ...thread, loadingComments: false });
+  return actions.addThread({
+    ...thread,
+    loadingComments: false,
+    createCommentForm: { text: '', isSubmitting: false },
+  });
 };
 
 export const addThreads = (threads: Thread[]) => {
-  return actions.addThreads(threads.map((thread) => ({ ...thread, loadingComments: false })));
+  return actions.addThreads(
+    threads.map((thread) => ({
+      ...thread,
+      loadingComments: false,
+      createCommentForm: { text: '', isSubmitting: false },
+    })),
+  );
 };
 
 export const setLoadingComments = (threadId: string, loading = true) => {
@@ -38,4 +48,16 @@ export const setThreadCommentsSort = (threadId: string, sort?: Sort) => {
 
 export const setThreadComments = (threadId: string, comments: Comment[]) => {
   return actions.updateThread({ id: threadId, changes: { comments } });
+};
+
+export const addThreadComment = (threadId: string, comment: Comment) => {
+  return actions.addThreadComment({ threadId, comment });
+};
+
+export const setIsCreatingComment = (threadId: string, isCreatingComment = true) => {
+  return actions.setIsCreatingComment({ threadId, isCreatingComment });
+};
+
+export const setCreateCommentText = (threadId: string, text: string) => {
+  return actions.setCreateCommentText({ threadId, text });
 };

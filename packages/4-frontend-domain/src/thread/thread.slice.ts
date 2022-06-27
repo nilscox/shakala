@@ -8,6 +8,10 @@ type ThreadSliceEntity = Thread & {
   commentsFilter?: string;
   commentsSort?: Sort;
   comments?: Comment[];
+  createCommentForm: {
+    isSubmitting: boolean;
+    text: string;
+  };
 };
 
 type ExtraPayload = {
@@ -39,5 +43,25 @@ export const threadsSlice = createSlice({
     addThread: threadEntityAdapter.addOne,
     addThreads: threadEntityAdapter.addMany,
     updateThread: threadEntityAdapter.updateOne,
+    addThreadComment: (state, { payload }: PayloadAction<{ threadId: string; comment: Comment }>) => {
+      state.entities[payload.threadId]?.comments?.push(payload.comment);
+    },
+    setIsCreatingComment: (
+      state,
+      { payload }: PayloadAction<{ threadId: string; isCreatingComment: boolean }>,
+    ) => {
+      const thread = state.entities[payload.threadId];
+
+      if (thread) {
+        thread.createCommentForm.isSubmitting = payload.isCreatingComment;
+      }
+    },
+    setCreateCommentText: (state, { payload }: PayloadAction<{ threadId: string; text: string }>) => {
+      const thread = state.entities[payload.threadId];
+
+      if (thread) {
+        thread.createCommentForm.text = payload.text;
+      }
+    },
   },
 });
