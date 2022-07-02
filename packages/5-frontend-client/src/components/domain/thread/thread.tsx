@@ -43,6 +43,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
   return (
     <>
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="my-5 md:my-[4rem]">
         <div className="flex-wrap gap-4 justify-between items-center mb-2 row">
           <AvatarNick big {...thread.author} />

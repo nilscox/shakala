@@ -33,6 +33,7 @@ export const Reply = ({ reply }: ReplyProps) => {
     >
       <CommentHeader commentId={id} author={author} date={date} className="px-2" />
 
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className={clsx(!editing && 'relative left-[-2px] px-2 mt-1 ml-4 border-l-4')}>
         {editing && (
           <RealCommentForm
