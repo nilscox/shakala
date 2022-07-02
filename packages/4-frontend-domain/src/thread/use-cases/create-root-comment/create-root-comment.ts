@@ -1,6 +1,8 @@
 import { selectUser } from '../../../authentication';
+import { addComments } from '../../../comment/comment.actions';
 import { Thunk } from '../../../store';
-import { addThreadComment, setCreateCommentText, setIsCreatingComment } from '../../thread.actions';
+import { Comment } from '../../../types';
+import { setThreadComments, setCreateCommentText, setIsCreatingComment } from '../../thread.actions';
 
 export const createRootComment = (threadId: string, text: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
@@ -11,21 +13,23 @@ export const createRootComment = (threadId: string, text: string): Thunk => {
 
       const id = await threadGateway.createComment(threadId, text);
 
-      dispatch(
-        addThreadComment(threadId, {
-          id,
-          author: {
-            id: user!.id,
-            nick: user!.nick,
-            profileImage: user!.profileImage,
-          },
-          text,
-          date: dateGateway.now().toISOString(),
-          upvotes: 0,
-          downvotes: 0,
-          replies: [],
-        }),
-      );
+      const comment: Comment = {
+        id,
+        author: {
+          id: user!.id,
+          nick: user!.nick,
+          profileImage: user!.profileImage,
+        },
+        text,
+        date: dateGateway.now().toISOString(),
+        upvotes: 0,
+        downvotes: 0,
+        replies: [],
+        isEditing: false,
+      };
+
+      dispatch(addComments([comment]));
+      dispatch(setThreadComments(threadId, [comment]));
 
       dispatch(setCreateCommentText(threadId, ''));
 

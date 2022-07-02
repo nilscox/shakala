@@ -1,18 +1,6 @@
-import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Comment, Sort, Thread } from '../types';
-
-type ThreadSliceEntity = Thread & {
-  loadingComments: boolean;
-  loadingCommentsError?: unknown;
-  commentsFilter?: string;
-  commentsSort?: Sort;
-  comments?: Comment[];
-  createCommentForm: {
-    isSubmitting: boolean;
-    text: string;
-  };
-};
+import { Thread } from '../types';
 
 type ExtraPayload = {
   loadingThreads: boolean;
@@ -21,7 +9,17 @@ type ExtraPayload = {
   loadingThreadError: Record<string, unknown>;
 };
 
-export const threadEntityAdapter = createEntityAdapter<ThreadSliceEntity>();
+export const updateThreadCommentForm = createAction(
+  'threads/updateCommentForm',
+  (threadId: string, changes: Partial<Thread['createCommentForm']>) => ({
+    payload: {
+      threadId,
+      changes,
+    },
+  }),
+);
+
+export const threadEntityAdapter = createEntityAdapter<Thread>();
 
 const initialState = threadEntityAdapter.getInitialState<ExtraPayload>({
   loadingThreads: false,
@@ -43,25 +41,24 @@ export const threadsSlice = createSlice({
     addThread: threadEntityAdapter.addOne,
     addThreads: threadEntityAdapter.addMany,
     updateThread: threadEntityAdapter.updateOne,
-    addThreadComment: (state, { payload }: PayloadAction<{ threadId: string; comment: Comment }>) => {
-      state.entities[payload.threadId]?.comments?.push(payload.comment);
-    },
-    setIsCreatingComment: (
-      state,
-      { payload }: PayloadAction<{ threadId: string; isCreatingComment: boolean }>,
-    ) => {
+    setThreadComments(state, { payload }: PayloadAction<{ threadId: string; commentsIds: string[] }>) {
       const thread = state.entities[payload.threadId];
 
       if (thread) {
-        thread.createCommentForm.isSubmitting = payload.isCreatingComment;
+        thread.comments = payload.commentsIds;
       }
     },
-    setCreateCommentText: (state, { payload }: PayloadAction<{ threadId: string; text: string }>) => {
+  },
+  extraReducers(builder) {
+    builder.addCase(updateThreadCommentForm, (state, { payload }) => {
       const thread = state.entities[payload.threadId];
 
       if (thread) {
-        thread.createCommentForm.text = payload.text;
+        thread.createCommentForm = {
+          ...thread.createCommentForm,
+          ...payload.changes,
+        };
       }
-    },
+    });
   },
 });

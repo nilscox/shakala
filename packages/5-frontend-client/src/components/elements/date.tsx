@@ -1,4 +1,4 @@
-/* eslint-disable-next-line import/no-duplicates */
+/* eslint-disable import/no-duplicates */
 import formatDate from 'date-fns/format';
 import { fr } from 'date-fns/locale';
 

@@ -1,6 +1,6 @@
 import { Comment, Sort, Thread } from '../types';
 
-import { threadsSlice } from './thread.slice';
+import { threadsSlice, updateThreadCommentForm } from './thread.slice';
 
 const { actions } = threadsSlice;
 
@@ -13,21 +13,11 @@ export const setLoadingThreadError = (threadId: string, error: unknown) => {
 };
 
 export const addThread = (thread: Thread) => {
-  return actions.addThread({
-    ...thread,
-    loadingComments: false,
-    createCommentForm: { text: '', isSubmitting: false },
-  });
+  return actions.addThread(thread);
 };
 
 export const addThreads = (threads: Thread[]) => {
-  return actions.addThreads(
-    threads.map((thread) => ({
-      ...thread,
-      loadingComments: false,
-      createCommentForm: { text: '', isSubmitting: false },
-    })),
-  );
+  return actions.addThreads(threads);
 };
 
 export const setLoadingComments = (threadId: string, loading = true) => {
@@ -47,17 +37,13 @@ export const setThreadCommentsSort = (threadId: string, sort?: Sort) => {
 };
 
 export const setThreadComments = (threadId: string, comments: Comment[]) => {
-  return actions.updateThread({ id: threadId, changes: { comments } });
-};
-
-export const addThreadComment = (threadId: string, comment: Comment) => {
-  return actions.addThreadComment({ threadId, comment });
+  return actions.setThreadComments({ threadId, commentsIds: comments.map(({ id }) => id) });
 };
 
 export const setIsCreatingComment = (threadId: string, isCreatingComment = true) => {
-  return actions.setIsCreatingComment({ threadId, isCreatingComment });
+  return updateThreadCommentForm(threadId, { isSubmitting: isCreatingComment });
 };
 
 export const setCreateCommentText = (threadId: string, text: string) => {
-  return actions.setCreateCommentText({ threadId, text });
+  return updateThreadCommentForm(threadId, { text });
 };

@@ -1,10 +1,11 @@
 import { isEnumValue, Sort } from 'shared';
 
+import { addComments } from '../../../comment/comment.actions';
 import { Thunk } from '../../../store';
 import {
+  setThreadComments,
   setLoadingComments,
   setLoadingCommentsError,
-  setThreadComments,
   setThreadCommentsSearch,
   setThreadCommentsSort,
 } from '../../thread.actions';
@@ -40,6 +41,7 @@ export const fetchThreadComments = (threadId: string): Thunk => {
         return;
       }
 
+      dispatch(addComments(comments));
       dispatch(setThreadComments(threadId, comments));
     } catch (error) {
       dispatch(setLoadingCommentsError(threadId, error));

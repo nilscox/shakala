@@ -1,5 +1,5 @@
 import { Comment, GetCommentsOptions, Thread, ThreadGateway } from 'frontend-domain';
-import { ThreadDto, ThreadWithCommentDto } from 'shared';
+import { CommentWithRepliesDto, ThreadDto, ThreadWithCommentDto } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
@@ -17,7 +17,7 @@ export class ApiThreadGateway implements ThreadGateway {
       query: { count },
     });
 
-    return response.body;
+    return response.body.map(this.threadDtoToEntity);
   }
 
   async getById(threadId: string): Promise<[Thread, Comment[]] | undefined> {
@@ -33,7 +33,7 @@ export class ApiThreadGateway implements ThreadGateway {
 
     const { comments, ...thread } = response.body;
 
-    return [thread, comments];
+    return [this.threadDtoToEntity(thread), comments.map(this.commentDtoToEntity)];
   }
 
   async getComments(threadId: string, options: GetCommentsOptions): Promise<Comment[] | undefined> {
@@ -47,7 +47,7 @@ export class ApiThreadGateway implements ThreadGateway {
       throw new FetchError(response);
     }
 
-    return response.body.comments;
+    return response.body.comments.map(this.commentDtoToEntity);
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
@@ -60,5 +60,24 @@ export class ApiThreadGateway implements ThreadGateway {
     }
 
     return response.body.id;
+  }
+
+  private threadDtoToEntity(dto: ThreadDto): Thread {
+    return {
+      ...dto,
+      loadingComments: false,
+      comments: [],
+      createCommentForm: {
+        isSubmitting: false,
+        text: '',
+      },
+    };
+  }
+
+  private commentDtoToEntity(dto: CommentWithRepliesDto): Comment {
+    return {
+      ...dto,
+      isEditing: false,
+    };
   }
 }

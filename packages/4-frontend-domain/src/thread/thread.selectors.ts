@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
+import { selectComments } from '../comment/comment.slice';
 import { State } from '../store';
 
 import { GetCommentsOptions } from './thread.gateway';
@@ -63,12 +64,12 @@ export const selectGetCommentsOptions = createSelector(
   },
 );
 
-export const selectThreadCommentsUnsafe = createSelector(selectThread, (thread) => {
-  return thread.comments;
-});
-
 export const selectThreadComments = (state: State, threadId: string) => {
-  return selectThreadCommentsUnsafe(state, threadId) ?? [];
+  const commentsIds = selectThread(state, threadId)?.comments;
+
+  if (commentsIds) {
+    return selectComments(state, commentsIds);
+  }
 };
 
 export const selectIsCreatingComment = createSelector(selectThread, (thread) => {

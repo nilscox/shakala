@@ -3,7 +3,7 @@ import {
   selectLoadingComments,
   selectLoadingCommentsError,
   selectThread,
-  selectThreadCommentsUnsafe,
+  selectThreadComments,
   User,
 } from 'frontend-domain';
 import { useSearchParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
   const loadingComments = useSelector(selectLoadingComments, threadId);
   const loadingCommentsError = useSelector(selectLoadingCommentsError, threadId);
-  const comments = useSelector(selectThreadCommentsUnsafe, threadId);
+  const comments = useSelector(selectThreadComments, threadId);
 
   const renderComments = (comments: CommentType[]) => (
     <>

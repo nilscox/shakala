@@ -1,6 +1,6 @@
 import { setUser } from '../../../authentication/user.slice';
 import { createAuthUser, createThread, TestStore } from '../../../test';
-import { addThread, setCreateCommentText, setThreadComments } from '../../thread.actions';
+import { addThread, setCreateCommentText } from '../../thread.actions';
 import {
   selectCreateCommentText,
   selectIsCreatingComment,
@@ -23,7 +23,6 @@ describe('createRootComment', () => {
   beforeEach(() => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(createThread({ id: threadId })));
-    store.dispatch(setThreadComments(threadId, []));
 
     store.dateGateway.setNow(now);
     store.threadGateway.createComment.mockResolvedValue(commentId);
@@ -56,6 +55,7 @@ describe('createRootComment', () => {
       upvotes: 0,
       downvotes: 0,
       replies: [],
+      isEditing: false,
     });
   });
 
