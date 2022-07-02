@@ -1,12 +1,13 @@
 {
   "name": "frontend-domain",
   "version": "0.1.0",
+  "private": true,
   "main": "src/index.ts",
   "scripts": {
     "lint": "eslint src",
     "test": "vitest"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.8.2"
+    "@reduxjs/toolkit": "^1.8.3"
   }
 }
