@@ -1,4 +1,5 @@
 import type { Thunk } from '../../../store';
+import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
 import { addThread, setLoadingThread, setLoadingThreadError } from '../../thread.actions';
 import { fetchThreadComments } from '../fetch-thread-comments/fetch-thread-comments';
 
@@ -29,7 +30,7 @@ export const fetchThreadById = (threadId: string): Thunk => {
 
       const [thread] = result;
 
-      dispatch(addThread(thread));
+      dispatch(addThread(threadDtoToEntity(thread)));
       await dispatch(fetchThreadComments(threadId));
     } catch (error) {
       dispatch(setLoadingThreadError(threadId, serializeError(error)));

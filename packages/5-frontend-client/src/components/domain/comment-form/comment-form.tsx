@@ -1,48 +1,41 @@
 import clsx from 'clsx';
-import { createRootComment, selectCreateCommentText } from 'frontend-domain';
-import { setCreateCommentText } from 'frontend-domain/src/thread/thread.actions';
 import { FormEventHandler, useCallback, useState } from 'react';
 
 import { Button } from '~/components/elements/button';
 import { Markdown } from '~/components/elements/markdown';
 import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
 
 import { Tab, Tabs } from './tabs';
 
-type RealCommentFormProps = {
+type CommentFormProps = {
   autofocus?: boolean;
   placeholder?: string;
-  threadId: string;
-  commentId?: string;
-  parentId?: string;
-  initialText?: string;
+  message: string;
+  setMessage: (message: string) => void;
+  canSubmit: boolean;
+  isSubmitting: boolean;
   onCancel?: () => void;
+  onSubmit: () => void;
 };
 
-export const RealCommentForm = ({
+export const CommentForm = ({
   autofocus = true,
   placeholder,
-  threadId,
-  commentId,
-  initialText,
+  message,
+  setMessage,
+  canSubmit,
+  isSubmitting,
   onCancel,
-}: RealCommentFormProps) => {
+  onSubmit,
+}: CommentFormProps) => {
   const [tab, setTab] = useState(Tab.edit);
 
-  const dispatch = useDispatch();
-  const message = useSelector(selectCreateCommentText, threadId);
-
-  const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
+  const handleSubmit = useCallback<FormEventHandler>(
     (event) => {
       event.preventDefault();
-
-      const form = new FormData(event.currentTarget);
-
-      dispatch(createRootComment(threadId, String(form.get('message'))));
+      onSubmit();
     },
-    [threadId, dispatch],
+    [onSubmit],
   );
 
   return (
@@ -56,7 +49,7 @@ export const RealCommentForm = ({
         name="message"
         placeholder={placeholder ?? 'Rédigez votre message'}
         value={message}
-        onChange={(e) => dispatch(setCreateCommentText(threadId, e.currentTarget.value))}
+        onChange={(e) => setMessage(e.currentTarget.value)}
         className={clsx(
           'block p-1 w-full rounded border-none focus-visible:outline-none',
           tab !== Tab.edit && 'hidden',
@@ -70,16 +63,15 @@ export const RealCommentForm = ({
 
       <div className="flex flex-row gap-2 justify-end py-1 px-2 border-t">
         {onCancel && (
-          <button className="button-secondary" onClick={onCancel}>
+          <Button secondary type="button" onClick={onCancel}>
             Annuler
-          </button>
+          </Button>
         )}
 
-        <Button primary loading={false} disabled={message === ''}>
+        <Button primary loading={isSubmitting} disabled={!canSubmit}>
           Envoyer
         </Button>
       </div>
     </form>
   );
 };
-

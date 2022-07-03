@@ -1,6 +1,7 @@
-import { isEnumValue, Sort } from 'shared';
+import { isDefined, isEnumValue, Sort } from 'shared';
 
-import { addComments } from '../../../comment/comment.actions';
+import { addComments } from '../../../comment/comments.actions';
+import { commentDtoToEntity } from '../../../comment/domain/comment-dto-to-entity';
 import { Thunk } from '../../../store';
 import {
   setThreadComments,
@@ -35,13 +36,19 @@ export const fetchThreadComments = (threadId: string): Thunk => {
       dispatch(setLoadingComments(threadId));
 
       const options = selectGetCommentsOptions(getState(), threadId);
-      const comments = await threadGateway.getComments(threadId, options);
+      const commentDtos = await threadGateway.getComments(threadId, options);
 
-      if (!comments) {
+      if (!commentDtos) {
         return;
       }
 
-      dispatch(addComments(comments));
+      const comments = commentDtos.map(commentDtoToEntity);
+      const replies = commentDtos
+        .flatMap(({ replies }) => replies)
+        .filter(isDefined)
+        .map(commentDtoToEntity);
+
+      dispatch(addComments(comments, replies));
       dispatch(setThreadComments(threadId, comments));
     } catch (error) {
       dispatch(setLoadingCommentsError(threadId, error));

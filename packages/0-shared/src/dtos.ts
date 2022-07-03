@@ -21,10 +21,7 @@ export type CommentDto = {
   date: string;
   upvotes: number;
   downvotes: number;
-};
-
-export type CommentWithRepliesDto = CommentDto & {
-  replies: CommentDto[];
+  replies?: CommentDto[];
 };
 
 export type ThreadDto = {
@@ -34,8 +31,8 @@ export type ThreadDto = {
   date: string;
 };
 
-export type ThreadWithCommentDto = ThreadDto & {
-  comments: CommentWithRepliesDto[];
+export type ThreadWithCommentsDto = ThreadDto & {
+  comments: CommentDto[];
 };
 
 export enum Sort {

@@ -1,8 +1,8 @@
-import { Comment, Reply } from 'frontend-domain';
+import { Comment } from 'frontend-domain';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export const useHighlightComment = (comment: Comment | Reply) => {
+export const useHighlightComment = (comment: Comment) => {
   const [highlight, setHighlight] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
   const { hash } = useLocation();
@@ -16,6 +16,12 @@ export const useHighlightComment = (comment: Comment | Reply) => {
 
     if (hash === `#${comment.id}`) {
       setHighlight(true);
+
+      const element = document.getElementById(comment.id);
+
+      if (element) {
+        element.scrollIntoView();
+      }
     }
   }, [firstRender, hash, comment]);
 

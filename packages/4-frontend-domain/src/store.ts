@@ -1,6 +1,7 @@
 import {
   AnyAction,
   configureStore,
+  Middleware,
   Selector as RTKSelector,
   ThunkAction,
   ThunkDispatch,
@@ -9,7 +10,7 @@ import {
 import { AuthenticationGateway } from './authentication/authentication.gateway';
 import { authenticationSlice } from './authentication/authentication.slice';
 import { userSlice } from './authentication/user.slice';
-import { commentsSlice } from './comment/comment.slice';
+import { commentsSlice } from './comment/comments.slice';
 import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
 import { RouterGateway } from './interfaces/router.gateway';
@@ -18,7 +19,7 @@ import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
 import { threadsSlice } from './thread/thread.slice';
 
-export const createStore = (dependencies: Dependencies) => {
+export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
   return configureStore({
     reducer: {
       [authenticationSlice.name]: authenticationSlice.reducer,
@@ -29,7 +30,7 @@ export const createStore = (dependencies: Dependencies) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: { extraArgument: dependencies },
-      }),
+      }).concat(...middlewares),
   });
 };
 

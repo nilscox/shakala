@@ -2,13 +2,28 @@ import clsx from 'clsx';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   primary?: boolean;
+  secondary?: boolean;
   small?: boolean;
   loading?: boolean;
 };
 
-export const Button = ({ primary, small, loading, className, children, ...props }: ButtonProps) => (
+export const Button = ({
+  primary,
+  secondary,
+  small,
+  loading,
+  className,
+  children,
+  ...props
+}: ButtonProps) => (
   <button
-    className={clsx('relative button', primary && 'button-primary', small && 'text-sm', className)}
+    className={clsx(
+      'relative button',
+      primary && 'button-primary',
+      secondary && 'button-secondary',
+      small && 'text-sm',
+      className,
+    )}
     {...props}
   >
     {children}

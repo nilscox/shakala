@@ -22,5 +22,6 @@ export const createThread = createFactory<Thread>(() => ({
 
 export const createComment = createFactory<Comment>(() => ({
   ...createCommentDto(),
+  replies: [],
   isEditing: false,
 }));

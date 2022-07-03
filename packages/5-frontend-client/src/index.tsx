@@ -1,4 +1,4 @@
-import { Dependencies } from 'frontend-domain';
+import { createStore, Dependencies } from 'frontend-domain';
 import { useEffect, useMemo, useRef } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import ReactModal from 'react-modal';
@@ -61,9 +61,10 @@ const useDependencies = () => {
 
 const App = () => {
   const dependencies = useDependencies();
+  const store = useMemo(() => createStore(dependencies), [dependencies]);
 
   return (
-    <ReduxProvider dependencies={dependencies}>
+    <ReduxProvider store={store}>
       <ErrorBoundary>
         <Routes />
       </ErrorBoundary>

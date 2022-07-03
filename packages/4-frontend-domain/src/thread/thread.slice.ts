@@ -41,11 +41,11 @@ export const threadsSlice = createSlice({
     addThread: threadEntityAdapter.addOne,
     addThreads: threadEntityAdapter.addMany,
     updateThread: threadEntityAdapter.updateOne,
-    setThreadComments(state, { payload }: PayloadAction<{ threadId: string; commentsIds: string[] }>) {
+    addThreadComment(state, { payload }: PayloadAction<{ threadId: string; commentsId: string }>) {
       const thread = state.entities[payload.threadId];
 
       if (thread) {
-        thread.comments = payload.commentsIds;
+        thread.comments.push(payload.commentsId);
       }
     },
   },

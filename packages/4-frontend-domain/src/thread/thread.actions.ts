@@ -1,3 +1,5 @@
+import { getIds } from 'shared';
+
 import { Comment, Sort, Thread } from '../types';
 
 import { threadsSlice, updateThreadCommentForm } from './thread.slice';
@@ -37,13 +39,17 @@ export const setThreadCommentsSort = (threadId: string, sort?: Sort) => {
 };
 
 export const setThreadComments = (threadId: string, comments: Comment[]) => {
-  return actions.setThreadComments({ threadId, commentsIds: comments.map(({ id }) => id) });
+  return actions.updateThread({ id: threadId, changes: { comments: getIds(comments) } });
 };
 
-export const setIsCreatingComment = (threadId: string, isCreatingComment = true) => {
+export const addThreadComment = (threadId: string, comment: Comment) => {
+  return actions.addThreadComment({ threadId, commentsId: comment.id });
+};
+
+export const setIsCreatingRootComment = (threadId: string, isCreatingComment = true) => {
   return updateThreadCommentForm(threadId, { isSubmitting: isCreatingComment });
 };
 
-export const setCreateCommentText = (threadId: string, text: string) => {
+export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThreadCommentForm(threadId, { text });
 };

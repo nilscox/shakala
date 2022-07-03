@@ -1,3 +1,5 @@
+import { Middleware } from '@reduxjs/toolkit';
+
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
 import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
@@ -104,6 +106,7 @@ class MockThreadGateway implements ThreadGateway {
   getLast = mockFn<ThreadGateway['getLast']>();
   getComments = mockFn<ThreadGateway['getComments']>();
   createComment = mockFn<ThreadGateway['createComment']>();
+  createReply = mockFn<ThreadGateway['createReply']>();
 }
 
 export class TestStore implements Dependencies {
@@ -114,6 +117,20 @@ export class TestStore implements Dependencies {
   readonly timerGateway = new FakeTimerGateway();
   readonly authenticationGateway = new MockAuthenticationGateway();
   readonly threadGateway = new MockThreadGateway();
+
+  private _logActions = false;
+
+  public logActions(log = true) {
+    this._logActions = log;
+  }
+
+  private logActionsMiddleware: Middleware = () => () => (action) => {
+    if (this._logActions) {
+      console.dir(action, { depth: null });
+    }
+
+    return action;
+  };
 
   private reduxStore = createStore(this);
 
@@ -137,5 +154,9 @@ export class TestStore implements Dependencies {
 
   logState() {
     console.dir(this.getState(), { depth: null });
+  }
+
+  getReduxStore() {
+    return this.reduxStore;
   }
 }

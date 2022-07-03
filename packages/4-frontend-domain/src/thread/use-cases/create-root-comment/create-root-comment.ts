@@ -1,15 +1,17 @@
 import { selectUser } from '../../../authentication';
-import { addComments } from '../../../comment/comment.actions';
+import { addComments } from '../../../comment/comments.actions';
 import { Thunk } from '../../../store';
 import { Comment } from '../../../types';
-import { setThreadComments, setCreateCommentText, setIsCreatingComment } from '../../thread.actions';
+import { addThreadComment, setCreateRootCommentText, setIsCreatingRootComment } from '../../thread.actions';
+import { selectRootCommentFormText } from '../../thread.selectors';
 
-export const createRootComment = (threadId: string, text: string): Thunk => {
+export const createRootComment = (threadId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+    const text = selectRootCommentFormText(getState(), threadId);
     const user = selectUser(getState());
 
     try {
-      dispatch(setIsCreatingComment(threadId));
+      dispatch(setIsCreatingRootComment(threadId));
 
       const id = await threadGateway.createComment(threadId, text);
 
@@ -29,15 +31,15 @@ export const createRootComment = (threadId: string, text: string): Thunk => {
       };
 
       dispatch(addComments([comment]));
-      dispatch(setThreadComments(threadId, [comment]));
+      dispatch(addThreadComment(threadId, comment));
 
-      dispatch(setCreateCommentText(threadId, ''));
+      dispatch(setCreateRootCommentText(threadId, ''));
 
       snackbarGateway.success('Votre commentaire a bien été créé.');
     } catch (error) {
       snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été créé.");
     } finally {
-      dispatch(setIsCreatingComment(threadId, false));
+      dispatch(setIsCreatingRootComment(threadId, false));
     }
   };
 };

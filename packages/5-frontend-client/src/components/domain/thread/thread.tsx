@@ -1,11 +1,16 @@
 import {
   Comment as CommentType,
+  createRootComment,
+  selectRootCommentFormText,
   selectLoadingComments,
   selectLoadingCommentsError,
   selectThread,
   selectThreadComments,
   User,
+  selectCanSubmitRootComment,
+  selectIsSubmittingRootComment,
 } from 'frontend-domain';
+import { setCreateRootCommentText } from 'frontend-domain/src/thread/thread.actions';
 import { useSearchParams } from 'react-router-dom';
 
 import { AsyncResource } from '~/async-resource';
@@ -13,10 +18,11 @@ import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Date } from '~/components/elements/date';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
+import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
-import { RealCommentForm } from '../comment-form/comment-form';
+import { CommentForm } from '../comment-form';
 import { Comment } from '../comment/comment';
 
 // import { ShareCommentModal } from '../share-comment/share-comment-modal';
@@ -75,13 +81,13 @@ export const Thread = ({ threadId }: ThreadProps) => {
   );
 };
 
-export type CommentsListProps = {
+type CommentsListProps = {
   threadId: string;
   author: User;
   comments: CommentType[];
 };
 
-export const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
+const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
   const user = useUser();
 
   return (
@@ -95,9 +101,34 @@ export const CommentsList = ({ threadId, author, comments }: CommentsListProps) 
           <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
         </div>
 
-        <RealCommentForm threadId={threadId} autofocus={false} placeholder={`Répondre à ${author.nick}`} />
+        <RootCommentForm threadId={threadId} author={author} />
       </div>
     </div>
+  );
+};
+
+type RootCommentFormProps = {
+  threadId: string;
+  author: User;
+};
+
+const RootCommentForm = ({ threadId, author }: RootCommentFormProps) => {
+  const dispatch = useDispatch();
+
+  const message = useSelector(selectRootCommentFormText, threadId);
+  const canSubmit = useSelector(selectCanSubmitRootComment, threadId);
+  const isSubmitting = useSelector(selectIsSubmittingRootComment, threadId);
+
+  return (
+    <CommentForm
+      autofocus={false}
+      placeholder={`Répondre à ${author.nick}`}
+      message={message}
+      setMessage={(text) => dispatch(setCreateRootCommentText(threadId, text))}
+      canSubmit={canSubmit}
+      isSubmitting={isSubmitting}
+      onSubmit={() => dispatch(createRootComment(threadId))}
+    />
   );
 };
 

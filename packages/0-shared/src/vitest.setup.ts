@@ -1,5 +1,7 @@
 import { expect } from 'vitest';
 
+Error.stackTraceLimit = 100;
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {

@@ -1,4 +1,4 @@
-import { AuthUserDto, CommentWithRepliesDto, ThreadDto, UserDto } from './dtos';
+import { AuthUserDto, CommentDto, ThreadDto, UserDto } from './dtos';
 
 const createId = () => Math.random().toString(36).slice(-6);
 
@@ -26,7 +26,7 @@ export const createThreadDto = (overrides?: Partial<ThreadDto>): ThreadDto => ({
   ...overrides,
 });
 
-export const createCommentDto = (overrides?: Partial<CommentWithRepliesDto>): CommentWithRepliesDto => ({
+export const createCommentDto = (overrides?: Partial<CommentDto>): CommentDto => ({
   id: createId(),
   author: createUserDto(),
   date: '',

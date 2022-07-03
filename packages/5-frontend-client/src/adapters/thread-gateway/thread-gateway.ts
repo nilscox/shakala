@@ -1,5 +1,5 @@
-import { Comment, GetCommentsOptions, Thread, ThreadGateway } from 'frontend-domain';
-import { CommentWithRepliesDto, ThreadDto, ThreadWithCommentDto } from 'shared';
+import { GetCommentsOptions, ThreadGateway } from 'frontend-domain';
+import { CommentDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
@@ -12,16 +12,16 @@ export class FetchError extends Error {
 export class ApiThreadGateway implements ThreadGateway {
   constructor(private readonly http: HttpGateway) {}
 
-  async getLast(count: number): Promise<Thread[]> {
+  async getLast(count: number): Promise<ThreadDto[]> {
     const response = await this.http.get<ThreadDto[]>('/thread/last', {
       query: { count },
     });
 
-    return response.body.map(this.threadDtoToEntity);
+    return response.body;
   }
 
-  async getById(threadId: string): Promise<[Thread, Comment[]] | undefined> {
-    const response = await this.http.get<ThreadWithCommentDto>(`/thread/${threadId}`);
+  async getById(threadId: string): Promise<[ThreadDto, CommentDto[]] | undefined> {
+    const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`);
 
     if (response.status === 404) {
       return;
@@ -33,11 +33,11 @@ export class ApiThreadGateway implements ThreadGateway {
 
     const { comments, ...thread } = response.body;
 
-    return [this.threadDtoToEntity(thread), comments.map(this.commentDtoToEntity)];
+    return [thread, comments];
   }
 
-  async getComments(threadId: string, options: GetCommentsOptions): Promise<Comment[] | undefined> {
-    const response = await this.http.get<ThreadWithCommentDto>(`/thread/${threadId}`, { query: options });
+  async getComments(threadId: string, options: GetCommentsOptions): Promise<CommentDto[] | undefined> {
+    const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`, { query: options });
 
     if (response.status === 404) {
       return;
@@ -47,7 +47,7 @@ export class ApiThreadGateway implements ThreadGateway {
       throw new FetchError(response);
     }
 
-    return response.body.comments.map(this.commentDtoToEntity);
+    return response.body.comments;
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
@@ -62,22 +62,18 @@ export class ApiThreadGateway implements ThreadGateway {
     return response.body.id;
   }
 
-  private threadDtoToEntity(dto: ThreadDto): Thread {
-    return {
-      ...dto,
-      loadingComments: false,
-      comments: [],
-      createCommentForm: {
-        isSubmitting: false,
-        text: '',
+  async createReply(threadId: string, parentId: string, text: string): Promise<string> {
+    const response = await this.http.post<{ parentId: string; text: string }, { id: string }>(
+      `/thread/${threadId}/comment`,
+      {
+        body: { parentId, text },
       },
-    };
-  }
+    );
 
-  private commentDtoToEntity(dto: CommentWithRepliesDto): Comment {
-    return {
-      ...dto,
-      isEditing: false,
-    };
+    if (response.status !== 201) {
+      throw new FetchError(response);
+    }
+
+    return response.body.id;
   }
 }

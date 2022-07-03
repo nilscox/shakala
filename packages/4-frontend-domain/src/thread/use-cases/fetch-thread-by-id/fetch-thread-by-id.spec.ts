@@ -1,5 +1,6 @@
-import { createThread, TestStore } from '../../../test';
-import { Comment } from '../../../types';
+import { createCommentDto, createThreadDto, getIds } from 'shared';
+
+import { TestStore } from '../../../test';
 import { selectIsLoadingThread, selectLoadingThreadError, selectThread } from '../../thread.selectors';
 
 import { fetchThreadById, NotFound } from './fetch-thread-by-id';
@@ -8,12 +9,12 @@ describe('fetchThreadById', () => {
   const store = new TestStore();
 
   const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
-  const comments: Comment[] = [];
+  const threadDto = createThreadDto({ id: threadId });
+  const commentsDto = [createCommentDto()];
 
   it('fetches a thread from its id', async () => {
-    store.threadGateway.getById.mockResolvedValue([thread, comments]);
-    store.threadGateway.getComments.mockResolvedValue(comments);
+    store.threadGateway.getById.mockResolvedValue([threadDto, commentsDto]);
+    store.threadGateway.getComments.mockResolvedValue(commentsDto);
 
     const promise = store.dispatch(fetchThreadById(threadId));
 
@@ -27,9 +28,9 @@ describe('fetchThreadById', () => {
     expect(store.select(selectLoadingThreadError, threadId)).toBeUndefined();
 
     expect(store.select(selectThread, threadId)).toEqual({
-      ...thread,
+      ...threadDto,
       loadingComments: false,
-      comments,
+      comments: getIds(commentsDto),
       createCommentForm: {
         isSubmitting: false,
         text: '',

@@ -1,4 +1,6 @@
 export * from './libs/get';
+export * from './libs/get-ids';
+export * from './libs/is-defined';
 export * from './libs/is-enum-value';
 export * from './libs/is-type';
 

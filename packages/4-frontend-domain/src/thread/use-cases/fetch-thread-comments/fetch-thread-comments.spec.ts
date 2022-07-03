@@ -1,4 +1,6 @@
-import { addComments } from '../../../comment/comment.actions';
+import { createCommentDto } from 'shared';
+
+import { addComments } from '../../../comment/comments.actions';
 import { createComment, createThread, TestStore } from '../../../test';
 import { Sort } from '../../../types';
 import {
@@ -21,24 +23,39 @@ describe('fetchThreadComments', () => {
 
   const threadId = 'threadId';
   const thread = createThread({ id: threadId });
-  const comments = [createComment()];
+
+  const replyDto = createCommentDto();
+  const commentDto = createCommentDto({ replies: [replyDto] });
 
   beforeEach(() => {
     store.dispatch(addThread(thread));
-    store.threadGateway.getComments.mockResolvedValue(comments);
+    store.threadGateway.getComments.mockResolvedValue([commentDto]);
   });
 
+  const execute = () => {
+    return store.dispatch(fetchThreadComments(threadId));
+  };
+
   it("fetches a thread's comments", async () => {
-    const promise = store.dispatch(fetchThreadComments(threadId));
+    const promise = execute();
 
     expect(store.select(selectLoadingComments, threadId)).toBe(true);
-
     await promise;
+    expect(store.select(selectLoadingComments, threadId)).toBe(false);
 
     expect(store.threadGateway.getComments).toHaveBeenCalledWith(threadId, {});
+  });
 
-    expect(store.select(selectLoadingComments, threadId)).toBe(false);
-    expect(store.select(selectThreadComments, threadId)).toEqual(comments);
+  it('adds the comments and replies to the thread', async () => {
+    await execute();
+
+    expect(store.select(selectThreadComments, threadId)).toEqual([
+      {
+        ...commentDto,
+        replies: [replyDto.id],
+        isEditing: false,
+      },
+    ]);
   });
 
   it('replaces the existing comments', async () => {
@@ -47,7 +64,7 @@ describe('fetchThreadComments', () => {
     store.dispatch(addComments(existingComments));
     store.dispatch(setThreadComments(threadId, existingComments));
 
-    await store.dispatch(fetchThreadComments(threadId));
+    await execute();
 
     expect(store.select(selectThreadComments, threadId)).toHaveLength(1);
   });
@@ -57,7 +74,7 @@ describe('fetchThreadComments', () => {
     store.dispatch(setThreadCommentsSearch(threadId, 'search'));
     store.dispatch(setThreadCommentsSort(threadId, Sort.dateDesc));
 
-    await store.dispatch(fetchThreadComments(threadId));
+    await execute();
 
     expect(store.threadGateway.getComments).toHaveBeenCalledWith(threadId, {
       search: 'search',
@@ -71,7 +88,7 @@ describe('fetchThreadComments', () => {
 
     store.dispatch(addThread(thread));
 
-    await store.dispatch(fetchThreadComments(threadId));
+    await execute();
 
     expect(store.select(selectThreadCommentsSearch, threadId)).toEqual('science');
     expect(store.select(selectThreadCommentsSort, threadId)).toEqual(Sort.dateDesc);

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { selectComments } from '../comment/comment.slice';
+import { selectComments, selectParentComment } from '../comment/comments.selectors';
 import { State } from '../store';
 
 import { GetCommentsOptions } from './thread.gateway';
@@ -72,10 +72,30 @@ export const selectThreadComments = (state: State, threadId: string) => {
   }
 };
 
-export const selectIsCreatingComment = createSelector(selectThread, (thread) => {
+export const selectCommentThreadId = (state: State, commentId: string): string => {
+  const parent = selectParentComment(state, commentId);
+
+  if (parent) {
+    return selectCommentThreadId(state, parent.id);
+  }
+
+  const thread = selectThreads(state).find((thread) => thread.comments.includes(commentId));
+
+  if (!thread) {
+    throw new Error(`selectCommentThreadId: cannot find thread for commentId "${commentId}"`);
+  }
+
+  return thread?.id;
+};
+
+export const selectIsSubmittingRootComment = createSelector(selectThread, (thread) => {
   return thread.createCommentForm.isSubmitting;
 });
 
-export const selectCreateCommentText = createSelector(selectThread, (thread) => {
+export const selectRootCommentFormText = createSelector(selectThread, (thread) => {
   return thread.createCommentForm.text;
+});
+
+export const selectCanSubmitRootComment = createSelector(selectRootCommentFormText, (text) => {
+  return text !== '';
 });

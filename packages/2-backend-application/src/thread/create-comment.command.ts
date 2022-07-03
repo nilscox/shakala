@@ -22,6 +22,7 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
     private readonly userRepository: UserRepository,
   ) {}
 
+  // todo: assert that parentId c threadId
   async handle(command: CreateCommentCommand): Promise<string> {
     const { threadId, authorId, parentId, text } = command;
 
