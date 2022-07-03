@@ -19,6 +19,7 @@ export type CommentDto = {
   author: UserDto;
   text: string;
   date: string;
+  edited: string | false;
   upvotes: number;
   downvotes: number;
   replies?: CommentDto[];

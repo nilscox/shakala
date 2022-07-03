@@ -5,6 +5,10 @@ export class ValidationError {
   constructor(public readonly fields: Array<{ field: string; error: string }>) {}
 }
 
+export class AuthorizationError {
+  constructor(public readonly code: string) {}
+}
+
 export type AuthUser = AuthUserDto;
 export type User = UserDto;
 
@@ -25,5 +29,5 @@ export type Thread = ThreadDto & {
 export type Comment = Omit<CommentDto, 'replies'> & {
   replies: string[];
   replyForm?: CommentForm;
-  isEditing: boolean;
+  editionForm?: CommentForm;
 };

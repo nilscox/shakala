@@ -1,5 +1,5 @@
-import { GetCommentsOptions, ThreadGateway } from 'frontend-domain';
-import { CommentDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
+import { AuthorizationError, GetCommentsOptions, ThreadGateway } from 'frontend-domain';
+import { CommentDto, get, ThreadDto, ThreadWithCommentsDto } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
@@ -75,5 +75,21 @@ export class ApiThreadGateway implements ThreadGateway {
     }
 
     return response.body.id;
+  }
+
+  async editComment(threadId: string, commentId: string, text: string): Promise<void> {
+    const response = await this.http.put<{ text: string }>(`/thread/${threadId}/comment/${commentId}`, {
+      body: { text },
+    });
+
+    const code = get(response.body, 'message');
+
+    if (response.status === 401 && code === 'UserMustBeAuthor') {
+      throw new AuthorizationError(code);
+    }
+
+    if (response.status !== 200) {
+      throw new FetchError(response);
+    }
   }
 }

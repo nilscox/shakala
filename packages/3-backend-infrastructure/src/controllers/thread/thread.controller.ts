@@ -5,9 +5,10 @@ import {
   GetThreadQuery,
   GetThreadQueryResult,
   Sort,
+  UpdateCommentCommand,
 } from 'backend-application';
-import { Comment, Thread } from 'backend-domain';
-import { CommentDto, ThreadDto, ThreadWithCommentDto } from 'shared';
+import { Comment, Thread, UserMustBeAuthorError } from 'backend-domain';
+import { CommentDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
 import * as yup from 'yup';
 
 import {
@@ -18,8 +19,10 @@ import {
   Request,
   Response,
   SessionService,
+  Unauthorized,
   ValidationService,
 } from '../../infrastructure';
+import { tryCatch } from '../../utils';
 
 import { commentToDto, threadToDto, threadToSummaryDto } from './dtos';
 
@@ -41,6 +44,14 @@ const createCommentBodySchema = yup
   .noUnknown()
   .strict();
 
+const updateCommentBodySchema = yup
+  .object({
+    text: yup.string().required().trim().min(4).max(20000),
+  })
+  .required()
+  .noUnknown()
+  .strict();
+
 export class ThreadController extends Controller {
   constructor(
     private readonly queryBus: QueryBus,
@@ -56,6 +67,7 @@ export class ThreadController extends Controller {
       'GET  /last': this.getLastThreads,
       'GET  /:id': this.getThread,
       'POST /:id/comment': this.createComment,
+      'PUT  /:id/comment/:commentId': this.updateComment,
     };
   }
 
@@ -66,7 +78,7 @@ export class ThreadController extends Controller {
     return Response.ok(lastThreads.map((thread) => threadToSummaryDto(thread)));
   }
 
-  async getThread(req: Request): Promise<Response<ThreadWithCommentDto>> {
+  async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
     const threadId = req.params.get('id') as string;
     const query = await this.validationService.query(req, getThreadQuerySchema);
 
@@ -93,5 +105,27 @@ export class ThreadController extends Controller {
     const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
 
     return Response.created(commentToDto(comment));
+  }
+
+  async updateComment(req: Request): Promise<Response<CommentDto>> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore todo: check that commentId c threadId
+    const threadId = req.params.get('id') as string;
+    const commentId = req.params.get('commentId') as string;
+    const user = await this.sessionService.requireUser(req);
+    const body = await this.validationService.body(req, updateCommentBodySchema);
+
+    await tryCatch(async () => {
+      await this.commandBus.execute(new UpdateCommentCommand(commentId, user.id, body.text));
+    })
+      .catch(
+        UserMustBeAuthorError,
+        (error) => new Unauthorized('UserMustBeAuthor', { message: error.message }),
+      )
+      .run();
+
+    const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
+
+    return Response.ok(commentToDto(comment));
   }
 }

@@ -1,6 +1,6 @@
 import { Comment } from '../types';
 
-import { commentsSlice, updateCommentReplyForm } from './comments.slice';
+import { commentsSlice, updateCommentEditionForm, updateCommentReplyForm } from './comments.slice';
 
 const { actions } = commentsSlice;
 
@@ -10,6 +10,14 @@ export const addComments = (comments: Comment[], replies: Comment[] = []) => {
 
 export const addCommentReply = (commentId: string, reply: Comment) => {
   return actions.addCommentReply({ commentId, replyId: reply.id });
+};
+
+export const setCommentText = (commentId: string, text: string) => {
+  return actions.updateComment({ id: commentId, changes: { text } });
+};
+
+export const setCommentEdited = (commentId: string, edited: string) => {
+  return actions.updateComment({ id: commentId, changes: { edited } });
 };
 
 export const setIsReplying = (commentId: string, isReplying = true) => {
@@ -22,4 +30,16 @@ export const setReplyFormText = (commentId: string, text: string) => {
 
 export const setIsSubmittingReply = (commentId: string, isSubmitting = true) => {
   return updateCommentReplyForm(commentId, { isSubmitting });
+};
+
+export const setIsEditingComment = (commentId: string, isEditing = true) => {
+  return actions.setIsEditing({ commentId, isEditing });
+};
+
+export const setCommentEditionFormText = (commentId: string, text: string) => {
+  return updateCommentEditionForm(commentId, { text });
+};
+
+export const setIsSubmittingCommentEdition = (commentId: string, isSubmitting = true) => {
+  return updateCommentEditionForm(commentId, { isSubmitting });
 };

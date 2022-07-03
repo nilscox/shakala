@@ -3,6 +3,7 @@ import { isDefined } from 'shared';
 
 import { Selector, State } from '../store';
 import { Comment } from '../types';
+import { formatDate } from '../utils/format-date';
 
 import { commentsEntityAdapter } from './comments.slice';
 
@@ -29,6 +30,30 @@ export const selectComment: Selector<[string], Comment> = (state, id) => {
   }
 
   return comment;
+};
+
+export const selectFormattedCommentDate: Selector<[string], string> = (state, id) => {
+  const { date, edited } = selectComment(state, id);
+
+  const formatted = formatDate(date, "'le' d MMMM");
+
+  if (!edited) {
+    return formatted;
+  }
+
+  return formatted + ' *';
+};
+
+export const selectFormattedCommentDateDetailed: Selector<[string], string> = (state, id) => {
+  const { date, edited } = selectComment(state, id);
+
+  const formatted = formatDate(date, "'Le' d MMMM yyyy 'à' HH:mm");
+
+  if (!edited) {
+    return formatted;
+  }
+
+  return formatted + ' (édité)';
 };
 
 export const selectCommentReplies = createSelector(
@@ -76,6 +101,22 @@ export const selectCanReply = createSelector(selectIsReply, (isReply) => {
   return !isReply;
 });
 
-export const selectIsEditingComment = createSelector(selectComment, (comment) => {
-  return comment.isEditing;
+export const selectCommentEditionForm = createSelector(selectComment, (comment) => {
+  return comment.editionForm;
+});
+
+export const selectIsEditingComment = createSelector(selectCommentEditionForm, (form) => {
+  return form !== undefined;
+});
+
+export const selectCommentEditionText = createSelector(selectCommentEditionForm, (form) => {
+  return form?.text;
+});
+
+export const selectCanSubmitCommentEdition = createSelector(selectCommentEditionText, (text) => {
+  return text !== '';
+});
+
+export const selectIsSubmittingCommentEdition = createSelector(selectCommentEditionForm, (form) => {
+  return form?.isSubmitting;
 });

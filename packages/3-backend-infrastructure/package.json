@@ -6,8 +6,7 @@
     "build": "tsc -b",
     "lint": "eslint src",
     "test": "vitest",
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon"
+    "start": "nodemon"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

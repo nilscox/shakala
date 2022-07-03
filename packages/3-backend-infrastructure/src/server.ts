@@ -19,6 +19,8 @@ import {
   LoginCommandHandler,
   SignupCommand,
   SignupCommandHandler,
+  UpdateCommentCommand,
+  UpdateCommentCommandHandler,
 } from 'backend-application';
 import cors from 'cors';
 import express, { json } from 'express';
@@ -94,8 +96,13 @@ export class Server {
   protected getLastThreadsHandler = new GetLastThreadsHandler(this.threadRepository);
   protected getThreadHandler = new GetThreadHandler(this.threadRepository, this.commentRepository);
   protected getCommentHandler = new GetCommentQueryHandler(this.commentRepository);
-  protected createCommentCommandHandler = new CreateCommentCommandHandler(
+  protected createCommentHandler = new CreateCommentCommandHandler(
     this.generatorService,
+    this.dateService,
+    this.commentRepository,
+    this.userRepository,
+  );
+  protected updateCommentHandler = new UpdateCommentCommandHandler(
     this.dateService,
     this.commentRepository,
     this.userRepository,
@@ -144,7 +151,8 @@ export class Server {
     this.queryBus.register(GetLastThreadsQuery, this.getLastThreadsHandler);
     this.queryBus.register(GetThreadQuery, this.getThreadHandler);
     this.queryBus.register(GetCommentQuery, this.getCommentHandler);
-    this.commandBus.register(CreateCommentCommand, this.createCommentCommandHandler);
+    this.commandBus.register(CreateCommentCommand, this.createCommentHandler);
+    this.commandBus.register(UpdateCommentCommand, this.updateCommentHandler);
   }
 
   private configureControllers() {

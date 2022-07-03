@@ -5,7 +5,7 @@ import { Button } from '~/components/elements/button';
 import { Markdown } from '~/components/elements/markdown';
 import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
 
-import { Tab, Tabs } from './tabs';
+import { Tab, CommentFormTabs } from './comment-form-tabs';
 
 type CommentFormProps = {
   autofocus?: boolean;
@@ -40,7 +40,7 @@ export const CommentForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Tabs tab={tab} setTab={setTab} />
+      <CommentFormTabs tab={tab} setTab={setTab} />
 
       <TextAreaAutoResize
         // eslint-disable-next-line jsx-a11y/no-autofocus

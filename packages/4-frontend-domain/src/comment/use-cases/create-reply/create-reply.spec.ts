@@ -1,6 +1,7 @@
 import { setUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
-import { addThread } from '../../../thread/thread.actions';
+import { addThread, setThreadComments } from '../../../thread/thread.actions';
+import { Comment } from '../../../types';
 import { addComments, setIsReplying, setReplyFormText } from '../../comments.actions';
 import { selectCommentReplies, selectIsSubmittingReply, selectReplyForm } from '../../comments.selectors';
 
@@ -12,7 +13,10 @@ describe('createReply', () => {
   const user = createAuthUser();
 
   const threadId = 'threadId';
+  const thread = createThread({ id: threadId });
+
   const parentId = 'parentId';
+  const parent = createComment({ id: parentId });
   const text = 'text';
 
   const now = new Date('2022-01-01');
@@ -20,8 +24,11 @@ describe('createReply', () => {
 
   beforeEach(() => {
     store.dispatch(setUser({ user }));
-    store.dispatch(addThread(createThread({ id: threadId })));
-    store.dispatch(addComments([createComment({ id: parentId })]));
+
+    store.dispatch(addThread(thread));
+    store.dispatch(addComments([parent]));
+    store.dispatch(setThreadComments(threadId, [parent]));
+
     store.dispatch(setIsReplying(parentId));
     store.dispatch(setReplyFormText(parentId, text));
 
@@ -30,7 +37,7 @@ describe('createReply', () => {
   });
 
   const execute = () => {
-    return store.dispatch(createReply(threadId, parentId));
+    return store.dispatch(createReply(parentId));
   };
 
   it('creates a new reply', async () => {
@@ -46,7 +53,7 @@ describe('createReply', () => {
   it('adds the created comment to list of replies', async () => {
     await execute();
 
-    expect(store.select(selectCommentReplies, parentId)).toContainEqual({
+    const created: Comment = {
       id: createdCommentId,
       author: {
         id: user.id,
@@ -55,11 +62,13 @@ describe('createReply', () => {
       },
       text,
       date: now.toISOString(),
+      edited: false,
       upvotes: 0,
       downvotes: 0,
       replies: [],
-      isEditing: false,
-    });
+    };
+
+    expect(store.select(selectCommentReplies, parentId)).toContainEqual(created);
   });
 
   it('closes the reply form', async () => {

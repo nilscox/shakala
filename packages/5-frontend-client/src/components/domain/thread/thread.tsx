@@ -1,28 +1,22 @@
 import {
   Comment as CommentType,
-  createRootComment,
-  selectRootCommentFormText,
+  selectFormattedThreadDate,
   selectLoadingComments,
   selectLoadingCommentsError,
   selectThread,
   selectThreadComments,
   User,
-  selectCanSubmitRootComment,
-  selectIsSubmittingRootComment,
 } from 'frontend-domain';
-import { setCreateRootCommentText } from 'frontend-domain/src/thread/thread.actions';
 import { useSearchParams } from 'react-router-dom';
 
 import { AsyncResource } from '~/async-resource';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
-import { Date } from '~/components/elements/date';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
-import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
-import { CommentForm } from '../comment-form';
+import { RootCommentForm } from '../comment-form';
 import { Comment } from '../comment/comment';
 
 // import { ShareCommentModal } from '../share-comment/share-comment-modal';
@@ -40,6 +34,8 @@ export const Thread = ({ threadId }: ThreadProps) => {
   const loadingCommentsError = useSelector(selectLoadingCommentsError, threadId);
   const comments = useSelector(selectThreadComments, threadId);
 
+  const dateFormatted = useSelector(selectFormattedThreadDate, threadId);
+
   const renderComments = (comments: CommentType[]) => (
     <>
       {comments.length === 0 && <NoCommentFallback />}
@@ -54,7 +50,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
         <div className="flex-wrap gap-4 justify-between items-center mb-2 row">
           <AvatarNick big {...thread.author} />
           <div className="text-muted">
-            <Date date={thread.date} format="'Le' d MMMM yyyy" />, {comments?.length ?? '?'} commentaires
+            <time dateTime={thread.date}>{dateFormatted}</time>, {comments?.length ?? '?'} commentaires
           </div>
         </div>
 
@@ -92,8 +88,8 @@ const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
+      {comments.map(({ id }) => (
+        <Comment key={id} commentId={id} />
       ))}
 
       <div className="card">
@@ -104,31 +100,6 @@ const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
         <RootCommentForm threadId={threadId} author={author} />
       </div>
     </div>
-  );
-};
-
-type RootCommentFormProps = {
-  threadId: string;
-  author: User;
-};
-
-const RootCommentForm = ({ threadId, author }: RootCommentFormProps) => {
-  const dispatch = useDispatch();
-
-  const message = useSelector(selectRootCommentFormText, threadId);
-  const canSubmit = useSelector(selectCanSubmitRootComment, threadId);
-  const isSubmitting = useSelector(selectIsSubmittingRootComment, threadId);
-
-  return (
-    <CommentForm
-      autofocus={false}
-      placeholder={`Répondre à ${author.nick}`}
-      message={message}
-      setMessage={(text) => dispatch(setCreateRootCommentText(threadId, text))}
-      canSubmit={canSubmit}
-      isSubmitting={isSubmitting}
-      onSubmit={() => dispatch(createRootComment(threadId))}
-    />
   );
 };
 

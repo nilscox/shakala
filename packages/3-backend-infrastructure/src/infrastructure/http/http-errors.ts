@@ -30,6 +30,7 @@ const createHttpError = (status: number, error: string) => {
 };
 
 export const BadRequest = createHttpError(400, 'BadRequest');
-export const Forbidden = createHttpError(401, 'Forbidden');
+export const Unauthorized = createHttpError(401, 'Unauthorized');
+export const Forbidden = createHttpError(403, 'Forbidden');
 export const NotFound = createHttpError(404, 'NotFound');
 export const NotImplemented = createHttpError(501, 'NotImplemented');

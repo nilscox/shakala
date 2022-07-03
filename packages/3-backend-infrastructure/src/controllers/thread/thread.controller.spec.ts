@@ -7,9 +7,12 @@ import {
   GetLastThreadsQuery,
   GetThreadQuery,
   Sort,
+  UpdateCommentCommand,
 } from 'backend-application';
+import { UserMustBeAuthorError } from 'backend-domain';
+import { CommentDto, ThreadWithCommentsDto } from 'shared';
 
-import { ValidationError, ValidationService } from '../../infrastructure';
+import { Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
@@ -59,7 +62,7 @@ describe('ThreadController', () => {
     const comment = createComment({ author: commentAuthor });
 
     const replyAuthor = createUser();
-    const reply = createComment({ author: replyAuthor });
+    const reply = createComment({ author: replyAuthor, lastEditionDate: '2022-01-01' });
 
     beforeEach(() => {
       queryBus.for(GetThreadQuery).return({
@@ -69,48 +72,52 @@ describe('ThreadController', () => {
       });
     });
 
+    const replyDto: CommentDto = {
+      id: reply.id,
+      author: {
+        id: replyAuthor.id,
+        nick: replyAuthor.nick.value,
+        profileImage: undefined,
+      },
+      text: reply.text.value,
+      date: reply.creationDate.value,
+      edited: reply.lastEditionDate.value,
+      upvotes: 0,
+      downvotes: 0,
+    };
+
+    const commentDto: CommentDto = {
+      id: comment.id,
+      author: {
+        id: commentAuthor.id,
+        nick: commentAuthor.nick.value,
+        profileImage: undefined,
+      },
+      text: comment.text.value,
+      date: comment.creationDate.value,
+      edited: false,
+      upvotes: comment.upvotes,
+      downvotes: comment.downvotes,
+      replies: [replyDto],
+    };
+
+    const threadDto: ThreadWithCommentsDto = {
+      id: thread.id,
+      author: {
+        id: threadAuthor.id,
+        nick: threadAuthor.nick.value,
+        profileImage: undefined,
+      },
+      text: thread.text.value,
+      comments: [commentDto],
+      date: thread.created.value,
+    };
+
     it('retrieves a thread', async () => {
       const response = await controller.getThread(new MockRequest().withParam('id', thread.id));
 
       expect(response).toHaveStatus(200);
-      expect(response.body).toEqual({
-        id: thread.id,
-        author: {
-          id: threadAuthor.id,
-          nick: threadAuthor.nick.value,
-          profileImage: undefined,
-        },
-        text: thread.text.value,
-        comments: [
-          {
-            id: comment.id,
-            author: {
-              id: commentAuthor.id,
-              nick: commentAuthor.nick.value,
-              profileImage: undefined,
-            },
-            text: comment.text.value,
-            upvotes: comment.upvotes,
-            downvotes: comment.downvotes,
-            date: comment.creationDate.value,
-            replies: [
-              {
-                id: reply.id,
-                author: {
-                  id: replyAuthor.id,
-                  nick: replyAuthor.nick.value,
-                  profileImage: undefined,
-                },
-                text: reply.text.value,
-                upvotes: 0,
-                downvotes: 0,
-                date: reply.creationDate.value,
-              },
-            ],
-          },
-        ],
-        date: thread.created.value,
-      });
+      expect(response.body).toEqual(threadDto);
 
       expect(queryBus.lastQuery).toEqual(new GetThreadQuery(thread.id, Sort.relevance));
     });
@@ -173,6 +180,55 @@ describe('ThreadController', () => {
         expect(error).toBeInstanceOf(ValidationError);
         expect(error).toHaveProperty('fields.0.field', 'text');
         expect(error).toHaveProperty('fields.0.error', 'required');
+      });
+    });
+  });
+
+  describe('updateComment', () => {
+    const user = createUser();
+    const thread = createThread();
+    const text = 'updated!';
+
+    const comment = createComment({ author: user, text: 'text' });
+
+    beforeEach(() => {
+      sessionService.user = user;
+      queryBus.for(GetCommentQuery).return(comment);
+    });
+
+    it('updates an existing comment', async () => {
+      const response = await controller.updateComment(
+        new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+      );
+
+      expect(response).toHaveStatus(200);
+      expect(response).toHaveBody(expect.objectContaining({ id: comment.id }));
+
+      expect(commandBus.execute).toHaveBeenCalledWith(new UpdateCommentCommand(comment.id, user.id, text));
+    });
+
+    it('fails to create a comment with an invalid body', async () => {
+      await expect(
+        controller.updateComment(
+          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({}),
+        ),
+      ).rejects.test((error) => {
+        expect(error).toBeInstanceOf(ValidationError);
+        expect(error).toHaveProperty('fields.0.field', 'text');
+        expect(error).toHaveProperty('fields.0.error', 'required');
+      });
+    });
+
+    it('handles UserMustBeAuthor errors', async () => {
+      commandBus.execute.mockRejectedValue(new UserMustBeAuthorError());
+
+      await expect(
+        controller.updateComment(
+          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+        ),
+      ).rejects.test((error) => {
+        expect(error).toBeInstanceOf(Unauthorized);
+        expect(error).toHaveProperty('body.message', 'UserMustBeAuthor');
       });
     });
   });

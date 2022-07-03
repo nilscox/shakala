@@ -1,5 +1,11 @@
 import clsx from 'clsx';
-import { selectCanReply, selectComment, setIsReplying } from 'frontend-domain';
+import {
+  selectCanReply,
+  selectComment,
+  selectIsReply,
+  setIsEditingComment,
+  setIsReplying,
+} from 'frontend-domain';
 
 import { IconButton, IconButtonProps } from '~/components/elements/icon-button';
 import { SearchParamLink } from '~/components/elements/search-param-link';
@@ -18,18 +24,12 @@ type CommentFooterProps = {
   className?: string;
   commentId: string;
   showActions: boolean;
-  isReply: boolean;
   onShowActions: () => void;
 };
 
-export const CommentFooter = ({
-  className,
-  commentId,
-  showActions,
-  isReply,
-  onShowActions,
-}: CommentFooterProps) => {
+export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
   const { upvotes, downvotes } = useSelector(selectComment, commentId);
+  const isReply = useSelector(selectIsReply, commentId);
 
   return (
     <div className={clsx('row', className)}>
@@ -73,10 +73,6 @@ const FooterButton = ({ className, ...props }: FooterButtonProps) => (
   />
 );
 
-const setEditingComment =
-  (...args: unknown[]) =>
-  () => {};
-
 type EditCommentProps = {
   commentId: string;
 };
@@ -85,7 +81,7 @@ const EditButton = ({ commentId }: EditCommentProps) => {
   const dispatch = useDispatch();
 
   return (
-    <FooterButton icon={<EditIcon />} onClick={() => dispatch(setEditingComment(commentId, true))}>
+    <FooterButton icon={<EditIcon />} onClick={() => dispatch(setIsEditingComment(commentId))}>
       Éditer
     </FooterButton>
   );

@@ -72,7 +72,7 @@ export const createComment = ({
     upvotes: 0,
     downvotes: 0,
     creationDate: createTimestamp(creationDate),
-    lastEditionDate: createTimestamp(lastEditionDate),
+    lastEditionDate: createTimestamp(lastEditionDate ?? creationDate),
     ...props,
   });
 };

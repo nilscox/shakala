@@ -4,11 +4,9 @@ import { CommandHandler } from '../cqs/command-handler';
 import { CommentRepository } from '../interfaces/comment.repository';
 import { UserRepository } from '../interfaces/user.repository';
 
-export type UpdateCommentCommand = {
-  commentId: string;
-  authorId: string;
-  text: string;
-};
+export class UpdateCommentCommand {
+  constructor(public commentId: string, public authorId: string, public text: string) {}
+}
 
 export class UpdateCommentCommandHandler implements CommandHandler<UpdateCommentCommand> {
   constructor(
@@ -17,8 +15,8 @@ export class UpdateCommentCommandHandler implements CommandHandler<UpdateComment
     private readonly userRepository: UserRepository,
   ) {}
 
-  async handle(query: UpdateCommentCommand): Promise<void> {
-    const { commentId, authorId, text } = query;
+  async handle(command: UpdateCommentCommand): Promise<void> {
+    const { commentId, authorId, text } = command;
 
     const comment = await this.commentRepository.findByIdOrFail(commentId);
     const author = await this.userRepository.findByIdOrFail(authorId);

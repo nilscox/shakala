@@ -14,11 +14,22 @@ export const updateCommentReplyForm = createAction(
   }),
 );
 
+export const updateCommentEditionForm = createAction(
+  'comments/updateEditionForm',
+  (commentId: string, changes: Partial<CommentForm>) => ({
+    payload: {
+      commentId,
+      changes,
+    },
+  }),
+);
+
 export const commentsSlice = createSlice({
   name: 'comments',
   initialState: commentsEntityAdapter.getInitialState(),
   reducers: {
     addComments: commentsEntityAdapter.addMany,
+    updateComment: commentsEntityAdapter.updateOne,
     addCommentReply(state, { payload }: PayloadAction<{ commentId: string; replyId: string }>) {
       const { commentId, replyId } = payload;
       const comment = state.entities[commentId];
@@ -38,6 +49,17 @@ export const commentsSlice = createSlice({
         }
       }
     },
+    setIsEditing(state, { payload }: PayloadAction<{ commentId: string; isEditing: boolean }>) {
+      const comment = state.entities[payload.commentId];
+
+      if (comment) {
+        if (payload.isEditing) {
+          comment.editionForm = { text: comment.text, isSubmitting: false };
+        } else {
+          delete comment.editionForm;
+        }
+      }
+    },
   },
   extraReducers(builder) {
     builder.addCase(updateCommentReplyForm, (state, { payload }) => {
@@ -46,6 +68,17 @@ export const commentsSlice = createSlice({
       if (comment && comment.replyForm) {
         comment.replyForm = {
           ...comment.replyForm,
+          ...payload.changes,
+        };
+      }
+    });
+
+    builder.addCase(updateCommentEditionForm, (state, { payload }) => {
+      const comment = state.entities[payload.commentId];
+
+      if (comment && comment.editionForm) {
+        comment.editionForm = {
+          ...comment.editionForm,
           ...payload.changes,
         };
       }

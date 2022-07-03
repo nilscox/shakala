@@ -2,6 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { selectComments, selectParentComment } from '../comment/comments.selectors';
 import { State } from '../store';
+import { formatDate } from '../utils/format-date';
 
 import { GetCommentsOptions } from './thread.gateway';
 import { threadEntityAdapter } from './thread.slice';
@@ -30,6 +31,12 @@ export const selectThread = (state: State, threadId: string) => {
 
   return thread;
 };
+
+export const selectFormattedThreadDate = createSelector(selectThread, (thread) => {
+  const { date } = thread;
+
+  return formatDate(date, "'Le' d MMMM yyyy");
+});
 
 export const selectLoadingComments = createSelector(selectThread, (thread) => {
   return thread.loadingComments;
@@ -65,11 +72,9 @@ export const selectGetCommentsOptions = createSelector(
 );
 
 export const selectThreadComments = (state: State, threadId: string) => {
-  const commentsIds = selectThread(state, threadId)?.comments;
+  const commentsIds = selectThread(state, threadId).comments;
 
-  if (commentsIds) {
-    return selectComments(state, commentsIds);
-  }
+  return selectComments(state, commentsIds);
 };
 
 export const selectCommentThreadId = (state: State, commentId: string): string => {

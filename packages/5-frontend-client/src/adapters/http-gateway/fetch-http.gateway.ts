@@ -41,6 +41,13 @@ export class FetchHttpGateway implements HttpGateway {
     return this.request('POST', path, options);
   }
 
+  async put<RequestBody, ResponseBody>(
+    path: string,
+    options?: RequestOptions<RequestBody>,
+  ): Promise<Response<ResponseBody>> {
+    return this.request('PUT', path, options);
+  }
+
   private async request<RequestBody, ResponseBody>(
     method: string,
     path: string,

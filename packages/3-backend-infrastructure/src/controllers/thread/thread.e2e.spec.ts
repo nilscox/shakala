@@ -1,5 +1,5 @@
 import { createThread } from 'backend-application';
-import { LoginDto } from 'shared';
+import { CommentDto, LoginDto } from 'shared';
 import { Request } from 'supertest';
 
 import { TestServer } from '../../test';
@@ -23,13 +23,23 @@ describe('Thread e2e', () => {
     const createComment = async () => {
       const body = { text: 'hello' };
 
-      await agent.post(`/thread/${threadId}/comment`).send(body).expect(201);
+      return agent.post(`/thread/${threadId}/comment`).send(body).expect(201);
+    };
+
+    const updateComment = async (commentId: string) => {
+      const body = { text: 'updated' };
+
+      await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(200);
     };
 
     await server.saveUser(user.email, user.password);
     await server.saveThread(createThread({ id: threadId }));
 
     await login();
-    await createComment();
+
+    const createResponse = await createComment();
+    const created: CommentDto = createResponse.body;
+
+    await updateComment(created.id);
   });
 });

@@ -30,6 +30,7 @@ export const createCommentDto = (overrides?: Partial<CommentDto>): CommentDto =>
   id: createId(),
   author: createUserDto(),
   date: '',
+  edited: false,
   text: '',
   downvotes: 0,
   upvotes: 0,

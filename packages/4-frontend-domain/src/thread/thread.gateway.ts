@@ -11,4 +11,5 @@ export interface ThreadGateway {
   getComments(threadId: string, options?: GetCommentsOptions): Promise<CommentDto[] | undefined>;
   createComment(threadId: string, text: string): Promise<string>;
   createReply(threadId: string, parentId: string, text: string): Promise<string>;
+  editComment(threadId: string, commentId: string, text: string): Promise<void>;
 }

@@ -12,9 +12,14 @@ export interface RequestOptions<Body> {
 }
 
 export interface HttpGateway {
-  get<ResponseBody>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>>;
+  get<ResponseBody = unknown>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>>;
 
-  post<RequestBody, ResponseBody>(
+  post<RequestBody, ResponseBody = unknown>(
+    path: string,
+    options?: RequestOptions<RequestBody>,
+  ): Promise<Response<ResponseBody>>;
+
+  put<RequestBody, ResponseBody = unknown>(
     path: string,
     options?: RequestOptions<RequestBody>,
   ): Promise<Response<ResponseBody>>;

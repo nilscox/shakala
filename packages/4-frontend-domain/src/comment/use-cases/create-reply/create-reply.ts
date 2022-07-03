@@ -1,11 +1,13 @@
 import { selectUser } from '../../../authentication';
 import { Thunk } from '../../../store';
+import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
 import { addCommentReply, addComments, setIsReplying, setIsSubmittingReply } from '../../comments.actions';
 import { selectReplyFormText } from '../../comments.selectors';
 
-export const createReply = (threadId: string, parentId: string): Thunk => {
+export const createReply = (parentId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+    const threadId = selectCommentThreadId(getState(), parentId);
     const text = selectReplyFormText(getState(), parentId) as string;
     const user = selectUser(getState());
 
@@ -23,10 +25,10 @@ export const createReply = (threadId: string, parentId: string): Thunk => {
         },
         text,
         date: dateGateway.now().toISOString(),
+        edited: false,
         upvotes: 0,
         downvotes: 0,
         replies: [],
-        isEditing: false,
       };
 
       dispatch(addComments([reply]));

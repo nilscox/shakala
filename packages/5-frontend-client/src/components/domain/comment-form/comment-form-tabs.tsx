@@ -5,12 +5,12 @@ export enum Tab {
   preview = 'preview',
 }
 
-type TabsProps = {
+type CommentFormTabsProps = {
   tab: Tab;
   setTab: (tab: Tab) => void;
 };
 
-export const Tabs = ({ tab, setTab }: TabsProps) => (
+export const CommentFormTabs = ({ tab, setTab }: CommentFormTabsProps) => (
   <div className="row" role="tablist">
     <div className="w-2 border-b" />
     <TabComponent selected={tab === Tab.edit} onClick={() => setTab(Tab.edit)}>
