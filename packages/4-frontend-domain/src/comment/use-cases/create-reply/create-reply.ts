@@ -1,4 +1,5 @@
 import { selectUser } from '../../../authentication';
+import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
@@ -7,6 +8,10 @@ import { selectReplyFormText } from '../../comments.selectors';
 
 export const createReply = (parentId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+    if (!dispatch(requireAuthentication())) {
+      return;
+    }
+
     const threadId = selectCommentThreadId(getState(), parentId);
     const text = selectReplyFormText(getState(), parentId) as string;
     const user = selectUser(getState());

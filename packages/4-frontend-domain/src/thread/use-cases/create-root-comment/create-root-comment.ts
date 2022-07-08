@@ -1,4 +1,5 @@
 import { selectUser } from '../../../authentication';
+import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { addComments } from '../../../comment/comments.actions';
 import { Thunk } from '../../../store';
 import { Comment } from '../../../types';
@@ -7,6 +8,10 @@ import { selectRootCommentFormText } from '../../thread.selectors';
 
 export const createRootComment = (threadId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+    if (!dispatch(requireAuthentication())) {
+      return;
+    }
+
     const text = selectRootCommentFormText(getState(), threadId);
     const user = selectUser(getState());
 
@@ -24,10 +29,10 @@ export const createRootComment = (threadId: string): Thunk => {
         },
         text,
         date: dateGateway.now().toISOString(),
+        edited: false,
         upvotes: 0,
         downvotes: 0,
         replies: [],
-        isEditing: false,
       };
 
       dispatch(addComments([comment]));

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import {
   selectCanReply,
   selectComment,
+  selectIsEditingComment,
   selectIsReply,
   setIsEditingComment,
   setIsReplying,
@@ -30,6 +31,11 @@ type CommentFooterProps = {
 export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
   const { upvotes, downvotes } = useSelector(selectComment, commentId);
   const isReply = useSelector(selectIsReply, commentId);
+  const isEditing = useSelector(selectIsEditingComment, commentId);
+
+  if (isEditing) {
+    return null;
+  }
 
   return (
     <div className={clsx('row', className)}>
@@ -68,7 +74,7 @@ type FooterButtonProps = IconButtonProps;
 const FooterButton = ({ className, ...props }: FooterButtonProps) => (
   <IconButton
     small
-    className={clsx('p-0 hover:text-primary fill-muted hover:fill-primary button-secondary', className)}
+    className={clsx('hover:text-primary fill-muted hover:fill-primary button-secondary', className)}
     {...props}
   />
 );

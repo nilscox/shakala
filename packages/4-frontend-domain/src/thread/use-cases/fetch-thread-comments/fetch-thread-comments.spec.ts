@@ -53,7 +53,6 @@ describe('fetchThreadComments', () => {
       {
         ...commentDto,
         replies: [replyDto.id],
-        isEditing: false,
       },
     ]);
   });

@@ -1,4 +1,5 @@
-import { setUser } from '../../../authentication/user.slice';
+import { selectIsAuthenticationModalOpen } from '../../../authentication';
+import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError } from '../../../types';
@@ -55,6 +56,14 @@ describe('editComment', () => {
 
     expect(comment).toHaveProperty('text', text);
     expect(comment).toHaveProperty('edited', now.toISOString());
+  });
+
+  it('requires user authentication', async () => {
+    store.dispatch(unsetUser());
+
+    execute();
+
+    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });
 
   it('closes the edition form', async () => {

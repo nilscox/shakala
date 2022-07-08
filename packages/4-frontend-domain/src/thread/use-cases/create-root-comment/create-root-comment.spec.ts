@@ -1,4 +1,5 @@
-import { setUser } from '../../../authentication/user.slice';
+import { selectIsAuthenticationModalOpen } from '../../../authentication';
+import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { addComments } from '../../../comment';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread, setCreateRootCommentText, setThreadComments } from '../../thread.actions';
@@ -63,11 +64,19 @@ describe('createRootComment', () => {
       },
       text,
       date: now.toISOString(),
+      edited: false,
       upvotes: 0,
       downvotes: 0,
       replies: [],
-      isEditing: false,
     });
+  });
+
+  it('requires user authentication', async () => {
+    store.dispatch(unsetUser());
+
+    await execute();
+
+    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });
 
   it('clears the message input text', async () => {

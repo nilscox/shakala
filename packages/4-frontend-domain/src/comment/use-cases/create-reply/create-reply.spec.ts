@@ -1,4 +1,5 @@
-import { setUser } from '../../../authentication/user.slice';
+import { selectIsAuthenticationModalOpen } from '../../../authentication';
+import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Comment } from '../../../types';
@@ -69,6 +70,14 @@ describe('createReply', () => {
     };
 
     expect(store.select(selectCommentReplies, parentId)).toContainEqual(created);
+  });
+
+  it('requires user authentication', async () => {
+    store.dispatch(unsetUser());
+
+    await execute();
+
+    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });
 
   it('closes the reply form', async () => {

@@ -1,3 +1,4 @@
+import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { AuthorizationError } from '../../../types';
@@ -10,6 +11,10 @@ import {
 
 export const editComment = (commentId: string, text: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+    if (!dispatch(requireAuthentication())) {
+      return;
+    }
+
     const threadId = selectCommentThreadId(getState(), commentId);
 
     try {
