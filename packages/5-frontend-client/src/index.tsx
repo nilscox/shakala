@@ -65,9 +65,7 @@ const App = () => {
 
   return (
     <ReduxProvider store={store}>
-      <ErrorBoundary>
-        <Routes />
-      </ErrorBoundary>
+      <Routes />
     </ReduxProvider>
   );
 };
@@ -77,9 +75,11 @@ const app = document.getElementById('app') as HTMLElement;
 ReactModal.setAppElement(app);
 
 ReactDOM.createRoot(app).render(
-  <BrowserRouter>
-    <SnackbarProvider>
-      <App />
-    </SnackbarProvider>
-  </BrowserRouter>,
+  <ErrorBoundary>
+    <BrowserRouter>
+      <SnackbarProvider>
+        <App />
+      </SnackbarProvider>
+    </BrowserRouter>
+  </ErrorBoundary>,
 );

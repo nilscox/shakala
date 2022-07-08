@@ -3,7 +3,7 @@
 
 const colors = require('tailwindcss/colors');
 
-/** @type {import("@types/tailwindcss/tailwind-config").TailwindConfig } */
+/** @type {import("@types/tailwindcss/tailwind-config").TailwindConfig} */
 module.exports = {
   content: ['./src/**/*.tsx'],
   theme: {
@@ -20,6 +20,7 @@ module.exports = {
       4:    '1rem',       // 16px
       5:    '1.5rem',     // 24px
       6:    '2rem',       // 32px
+      8:    '3rem',       // 48px
     },
     // prettier-ignore
     minWidth: {
@@ -55,16 +56,22 @@ module.exports = {
       warning: colors.amber[500],
       error: colors.rose[600],
     },
-    borderColor: {
+    borderColor: (theme) => ({
       transparent: 'transparent',
       DEFAULT: colors.neutral[200],
-    },
+      success: theme('colors.success'),
+      error: theme('colors.error'),
+      warning: theme('colors.warning'),
+    }),
     textColor: (theme) => ({
       DEFAULT: colors.gray[900],
+      inherit: 'inherit',
       primary: theme('colors.primary'),
       muted: theme('colors.muted'),
       inverted: colors.gray[100],
       link: colors.blue[600],
+      success: colors.emerald[800],
+      warning: colors.amber[700],
       error: colors.rose[500],
       white: colors.white,
     }),
@@ -85,11 +92,17 @@ module.exports = {
       DEFAULT: 'rgba(100, 100, 100, 0.2) 0px 2px 8px 0px',
     },
     animation: {
-      highlight: 'highlight 2s ease-out 1s both',
+      'fade-in': 'fade 280ms ease-out',
+      'fade-out': 'fade 280ms ease-out reverse',
+      highlight: 'highlight 2s ease-out 2s both',
       loading: 'loading 1s linear infinite',
       'loading-surface': 'loading-surface 2s ease infinite',
     },
     keyframes: (theme) => ({
+      fade: {
+        '0%': { opacity: 0 },
+        '100%': { opacity: 1 },
+      },
       highlight: {
         '0%': { background: theme('colors.primary') + '33' },
         '100%': {},

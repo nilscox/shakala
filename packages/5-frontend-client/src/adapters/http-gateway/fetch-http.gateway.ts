@@ -28,6 +28,8 @@ class FetchResponse<Body> implements Response<Body> {
 }
 
 export class FetchHttpGateway implements HttpGateway {
+  public fakeLag?: number;
+
   constructor(private readonly baseUrl: string, private readonly fetch = window.fetch.bind(window)) {}
 
   async get<ResponseBody>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>> {
@@ -72,6 +74,10 @@ export class FetchHttpGateway implements HttpGateway {
 
     const response = await this.fetch(url, init);
     const responseBody = await this.getResponseBody(response);
+
+    if (this.fakeLag) {
+      await new Promise((r) => setTimeout(r, this.fakeLag));
+    }
 
     if (get(responseBody, 'error') === 'ValidationError') {
       throw new ValidationError(responseBody.details.fields);

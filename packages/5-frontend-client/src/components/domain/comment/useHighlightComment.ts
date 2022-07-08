@@ -19,7 +19,7 @@ export const useHighlightComment = (commentId: string) => {
       const element = document.getElementById(commentId);
 
       if (element) {
-        element.scrollIntoView();
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   }, [firstRender, hash, commentId]);

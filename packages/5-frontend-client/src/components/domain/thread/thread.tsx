@@ -18,8 +18,7 @@ import { useUser } from '~/hooks/use-user';
 
 import { RootCommentForm } from '../comment-form';
 import { Comment } from '../comment/comment';
-
-// import { ShareCommentModal } from '../share-comment/share-comment-modal';
+import { ShareCommentModal } from '../share-comment/share-comment-modal';
 
 import { ThreadFilters } from './thread-filters';
 
@@ -72,7 +71,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
         render={renderComments}
       />
 
-      {/* <ShareCommentModal comments={comments} /> */}
+      <ShareCommentModal />
     </>
   );
 };

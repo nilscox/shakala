@@ -13,7 +13,7 @@
   }
 
   strong {
-    @apply text-DEFAULT/75;
+    @apply strong;
   }
 
   a {
@@ -67,8 +67,12 @@
     @apply flex flex-row;
   }
 
+  .strong {
+    @apply text-DEFAULT/75;
+  }
+
   .links-nocolor a {
-    color: inherit;
+    @apply text-inherit;
   }
 
   .links-underline a {

@@ -113,6 +113,7 @@ const Text = ({ name, className }: TextProps) => (
   <div className="flex flex-row gap-2 items-center">
     <Label className="w-[6rem]">{name}</Label>
     <div className={clsx('px-1', className)}>Two driven jocks help fax my big quiz.</div>
+    <div className={clsx('px-1 font-bold', className)}>Two driven jocks help fax my big quiz.</div>
   </div>
 );
 
@@ -122,6 +123,8 @@ export const textColors = () => (
     <Text className="text-muted" name="muted" />
     <Text className="text-inverted bg-inverted" name="inverted" />
     <Text className="text-link" name="link" />
+    <Text className="text-success" name="success" />
+    <Text className="text-warning" name="warning" />
     <Text className="text-error" name="error" />
   </div>
 );

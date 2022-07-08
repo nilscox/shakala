@@ -15,6 +15,8 @@ const {
   selectAll: selectAllComments,
 } = selectors;
 
+export { selectCommentUnsafe };
+
 export const selectComments = createSelector(
   [selectCommentsMap, (_, ids: string[]) => ids],
   (comments, ids) => {
