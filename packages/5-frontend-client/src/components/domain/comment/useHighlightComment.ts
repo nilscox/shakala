@@ -1,28 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+// delay + animation time
+const unsetHighlightedTimeout = (2 + 2) * 1000;
+
 export const useHighlightComment = (commentId: string) => {
-  const [highlight, setHighlight] = useState(false);
-  const [firstRender, setFirstRender] = useState(true);
+  const [isHighlighted, setIsHighlighted] = useState(false);
   const { hash } = useLocation();
 
+  const highlight = useCallback(() => {
+    setIsHighlighted(true);
+
+    const element = document.getElementById(commentId);
+
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [commentId]);
+
   useEffect(() => {
-    if (!firstRender) {
-      return;
-    }
-
-    setFirstRender(false);
-
     if (hash === `#${commentId}`) {
-      setHighlight(true);
+      highlight();
 
-      const element = document.getElementById(commentId);
+      const timeout = setTimeout(() => {
+        setIsHighlighted(false);
+      }, unsetHighlightedTimeout);
 
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      return () => {
+        clearTimeout(timeout);
+      };
     }
-  }, [firstRender, hash, commentId]);
+  }, [hash, commentId, highlight]);
 
-  return highlight;
+  return isHighlighted;
 };
