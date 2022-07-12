@@ -6,6 +6,7 @@ import {
   GetCommentQuery,
   GetLastThreadsQuery,
   GetThreadQuery,
+  GetThreadQueryResult,
   Sort,
   UpdateCommentCommand,
 } from 'backend-application';
@@ -65,7 +66,7 @@ describe('ThreadController', () => {
     const reply = createComment({ author: replyAuthor, lastEditionDate: '2022-01-01' });
 
     beforeEach(() => {
-      queryBus.for(GetThreadQuery).return({
+      queryBus.for(GetThreadQuery).return<GetThreadQueryResult>({
         thread,
         comments: [comment],
         replies: new Map([[comment.id, [reply]]]),

@@ -9,7 +9,7 @@ export class MockQueryBus implements QueryBus {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for(query: { new (...args: any[]): Query }) {
     return {
-      return: (result: unknown) => {
+      return: <T>(result: T) => {
         this.map.set(query, result);
       },
     };

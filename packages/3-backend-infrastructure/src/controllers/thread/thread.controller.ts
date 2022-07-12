@@ -24,7 +24,7 @@ import {
 } from '../../infrastructure';
 import { tryCatch } from '../../utils';
 
-import { commentToDto, threadToDto, threadToSummaryDto } from './dtos';
+import { ThreadPresenter } from './thread.presenter';
 
 const getLastThreadQuerySchema = yup.object({
   count: yup.number().min(1).max(50).default(10),
@@ -75,7 +75,7 @@ export class ThreadController extends Controller {
     const query = await this.validationService.query(req, getLastThreadQuerySchema);
     const lastThreads = await this.queryBus.execute<Thread[]>(new GetLastThreadsQuery(query.count));
 
-    return Response.ok(lastThreads.map((thread) => threadToSummaryDto(thread)));
+    return Response.ok(lastThreads.map((thread) => ThreadPresenter.transformThreadSummary(thread)));
   }
 
   async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
@@ -90,7 +90,7 @@ export class ThreadController extends Controller {
       throw new NotFound('thread not found', { threadId });
     }
 
-    return Response.ok(threadToDto(result.thread, result.comments, result.replies));
+    return Response.ok(ThreadPresenter.transformThread(result));
   }
 
   async createComment(req: Request): Promise<Response<CommentDto>> {
@@ -104,7 +104,7 @@ export class ThreadController extends Controller {
 
     const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
 
-    return Response.created(commentToDto(comment));
+    return Response.created(ThreadPresenter.transformComment(comment));
   }
 
   async updateComment(req: Request): Promise<Response<CommentDto>> {
@@ -126,6 +126,6 @@ export class ThreadController extends Controller {
 
     const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
 
-    return Response.ok(commentToDto(comment));
+    return Response.ok(ThreadPresenter.transformComment(comment));
   }
 }
