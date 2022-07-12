@@ -14,6 +14,11 @@ export type UserDto = {
   profileImage: string | undefined;
 };
 
+export enum ReactionTypeDto {
+  upvote = 'upvote',
+  downvote = 'downvote',
+}
+
 export type CommentDto = {
   id: string;
   author: UserDto;
@@ -22,6 +27,7 @@ export type CommentDto = {
   edited: string | false;
   upvotes: number;
   downvotes: number;
+  userReaction?: ReactionTypeDto;
   replies?: CommentDto[];
 };
 

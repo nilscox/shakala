@@ -4,13 +4,31 @@ import { Query, QueryHandler } from '../cqs/query-handler';
 import { CommentRepository } from '../interfaces/comment.repository';
 
 export class GetCommentQuery implements Query {
-  constructor(public readonly commentId: string) {}
+  constructor(public readonly commentId: string, public readonly userId?: string) {}
 }
 
-export class GetCommentQueryHandler implements QueryHandler<GetCommentQuery, Comment | undefined> {
+export type GetCommentQueryResult = {
+  comment: Comment;
+  replies: Comment[];
+};
+
+export class GetCommentQueryHandler
+  implements QueryHandler<GetCommentQuery, GetCommentQueryResult | undefined>
+{
   constructor(private readonly commentRepository: CommentRepository) {}
 
-  async handle(query: GetCommentQuery): Promise<Comment | undefined> {
-    return this.commentRepository.findById(query.commentId);
+  async handle(query: GetCommentQuery): Promise<GetCommentQueryResult | undefined> {
+    const comment = await this.commentRepository.findById(query.commentId);
+
+    if (!comment) {
+      return;
+    }
+
+    const replies = await this.commentRepository.findReplies([comment.id]);
+
+    return {
+      comment,
+      replies: replies.get(comment.id) ?? [],
+    };
   }
 }

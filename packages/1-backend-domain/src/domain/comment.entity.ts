@@ -8,12 +8,6 @@ import type { ProfileImage } from './profile-image.value-object';
 import { Timestamp } from './timestamp.value-object';
 import type { User } from './user.entity';
 
-class InvalidVotesNumberError extends DomainError<{ votes: number }> {
-  constructor(votes: number) {
-    super('Invalid vote number', { votes });
-  }
-}
-
 export class UserMustBeAuthorError extends DomainError {
   constructor() {
     super('User is not the author of the comment', undefined);
@@ -44,8 +38,6 @@ export type CommentProps = EntityProps<{
   author: CommentAuthor;
   parentId: string | null;
   text: Markdown;
-  upvotes: number;
-  downvotes: number;
   creationDate: Timestamp;
   lastEditionDate: Timestamp;
 }>;
@@ -67,14 +59,6 @@ export class Comment extends Entity<CommentProps> {
     return this.props.text;
   }
 
-  get upvotes() {
-    return this.props.upvotes;
-  }
-
-  get downvotes() {
-    return this.props.downvotes;
-  }
-
   get creationDate() {
     return this.props.creationDate;
   }
@@ -84,14 +68,6 @@ export class Comment extends Entity<CommentProps> {
   }
 
   static create(props: CommentProps) {
-    if (props.downvotes < 0) {
-      throw new InvalidVotesNumberError(props.downvotes);
-    }
-
-    if (props.upvotes < 0) {
-      throw new InvalidVotesNumberError(props.upvotes);
-    }
-
     return new Comment(props);
   }
 

@@ -34,8 +34,6 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
       author: CommentAuthor.create(author),
       parentId,
       text: Markdown.create(text),
-      upvotes: 0,
-      downvotes: 0,
       creationDate: Timestamp.now(this.dateService),
       lastEditionDate: Timestamp.now(this.dateService),
     });

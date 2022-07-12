@@ -1,16 +1,22 @@
-import { createThread } from 'backend-application';
-import { CommentDto, LoginDto } from 'shared';
-import { Request } from 'supertest';
+import { createComment, createThread } from 'backend-application';
+import { LoginDto, ReactionTypeDto } from 'shared';
+import { Request, SuperAgentTest } from 'supertest';
 
 import { TestServer } from '../../test';
 
+import { SetReactionDto } from './thread.controller';
+
 export const logResponse = (req: Request) => {
-  req.on('response', (res) => console.log(res.body));
+  req.on('response', (res) => console.dir(res.body, { depth: null }));
 };
 
 describe('Thread e2e', () => {
   const server = new TestServer();
-  const agent = server.agent();
+  let agent: SuperAgentTest;
+
+  beforeEach(() => {
+    agent = server.agent();
+  });
 
   test('create a comment', async () => {
     const user: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
@@ -29,7 +35,7 @@ describe('Thread e2e', () => {
     const updateComment = async (commentId: string) => {
       const body = { text: 'updated' };
 
-      await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(200);
+      await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(204);
     };
 
     await server.saveUser(user.email, user.password);
@@ -38,8 +44,34 @@ describe('Thread e2e', () => {
     await login();
 
     const createResponse = await createComment();
-    const created: CommentDto = createResponse.body;
+    const createdId: string = createResponse.body;
 
-    await updateComment(created.id);
+    await updateComment(createdId);
+  });
+
+  test('set a reaction', async () => {
+    const user: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
+    const threadId = 'threadId';
+    const commentId = 'commentId';
+
+    const login = async () => {
+      await agent.post('/auth/login').send(user).expect(200);
+    };
+
+    const setReaction = async (type: ReactionTypeDto | null) => {
+      const body: SetReactionDto = { type };
+
+      await agent.put(`/thread/${threadId}/comment/${commentId}/reaction`).send(body).expect(204);
+    };
+
+    await server.saveUser(user.email, user.password);
+    await server.saveThread(createThread({ id: threadId }));
+    await server.saveComment(createComment({ id: commentId }));
+
+    await login();
+
+    await setReaction(ReactionTypeDto.upvote);
+    await setReaction(ReactionTypeDto.downvote);
+    await setReaction(null);
   });
 });

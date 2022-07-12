@@ -1,4 +1,4 @@
-import { Comment } from '../types';
+import { Comment, ReactionType } from '../types';
 
 import { commentsSlice, updateCommentEditionForm, updateCommentReplyForm } from './comments.slice';
 
@@ -42,4 +42,19 @@ export const setCommentEditionFormText = (commentId: string, text: string) => {
 
 export const setIsSubmittingCommentEdition = (commentId: string, isSubmitting = true) => {
   return updateCommentEditionForm(commentId, { isSubmitting });
+};
+
+export const setReactionCounts = (
+  commentId: string,
+  reactionsCounts: Record<'upvotes' | 'downvotes', number>,
+) => {
+  return actions.updateComment({ id: commentId, changes: reactionsCounts });
+};
+
+export const setUserReaction = (commentId: string, userReaction: ReactionType) => {
+  return actions.updateComment({ id: commentId, changes: { userReaction } });
+};
+
+export const unsetUserReaction = (commentId: string) => {
+  return actions.updateComment({ id: commentId, changes: { userReaction: undefined } });
 };

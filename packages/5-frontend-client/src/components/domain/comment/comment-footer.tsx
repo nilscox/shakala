@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import {
+  ReactionType,
   selectCanReply,
   selectComment,
   selectIsEditingComment,
   selectIsReply,
   setIsEditingComment,
   setIsReplying,
+  setReaction,
 } from 'frontend-domain';
 
 import { IconButton, IconButtonProps } from '~/components/elements/icon-button';
@@ -40,8 +42,12 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
   return (
     <div className={clsx('row', className)}>
       <div className="overflow-x-auto gap-x-2 row hide-scrollbars">
-        <FooterButton icon={<ThumbUpIcon />}>{upvotes}</FooterButton>
-        <FooterButton icon={<ThumbDownIcon />}>{downvotes}</FooterButton>
+        <ReactionButton commentId={commentId} reactionType={ReactionType.upvote}>
+          {upvotes}
+        </ReactionButton>
+        <ReactionButton commentId={commentId} reactionType={ReactionType.downvote}>
+          {downvotes}
+        </ReactionButton>
 
         {showActions && (
           <>
@@ -69,15 +75,44 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
   );
 };
 
-type FooterButtonProps = IconButtonProps;
+type FooterButtonProps = IconButtonProps & {
+  active?: boolean;
+};
 
-const FooterButton = ({ className, ...props }: FooterButtonProps) => (
+const FooterButton = ({ className, active, ...props }: FooterButtonProps) => (
   <IconButton
     small
-    className={clsx('hover:text-primary fill-muted hover:fill-primary button-secondary', className)}
+    className={clsx('text-muted hover:text-primary button-secondary', active && '!text-primary', className)}
     {...props}
   />
 );
+
+type ReactionButtonProps = {
+  commentId: string;
+  reactionType: ReactionType;
+  children: React.ReactNode;
+};
+
+const ReactionButton = ({ commentId, reactionType, children }: ReactionButtonProps) => {
+  const dispatch = useDispatch();
+
+  const { userReaction } = useSelector(selectComment, commentId);
+
+  return (
+    <FooterButton
+      icon={reactionIconMap[reactionType]}
+      active={userReaction === reactionType}
+      onClick={() => dispatch(setReaction(commentId, reactionType))}
+    >
+      {children}
+    </FooterButton>
+  );
+};
+
+const reactionIconMap: Record<ReactionType, JSX.Element> = {
+  [ReactionType.upvote]: <ThumbUpIcon />,
+  [ReactionType.downvote]: <ThumbDownIcon />,
+};
 
 type EditCommentProps = {
   commentId: string;

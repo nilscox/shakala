@@ -1,5 +1,5 @@
 import { createUser } from 'backend-application';
-import { Thread } from 'backend-domain';
+import { Comment, Thread } from 'backend-domain';
 import { agent } from 'supertest';
 
 import { Server } from '../server';
@@ -20,5 +20,9 @@ export class TestServer extends Server {
 
   async saveThread(thread: Thread) {
     await this.threadRepository.save(thread);
+  }
+
+  async saveComment(comment: Comment) {
+    await this.commentRepository.save(comment);
   }
 }

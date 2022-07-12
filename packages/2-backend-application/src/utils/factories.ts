@@ -11,7 +11,12 @@ import {
   Timestamp,
   UserProps,
   User,
+  Reaction,
+  ReactionProps,
+  ReactionType,
 } from 'backend-domain';
+
+import { ReactionsCount } from '../interfaces/reaction.repository';
 
 type Replace<T, W> = Omit<T, keyof W> & W;
 
@@ -69,12 +74,32 @@ export const createComment = ({
     author: CommentAuthor.create(createUser()),
     parentId: null,
     text: Markdown.create(text ?? ''),
-    upvotes: 0,
-    downvotes: 0,
     creationDate: createTimestamp(creationDate),
     lastEditionDate: createTimestamp(lastEditionDate ?? creationDate),
     ...props,
   });
+};
+
+type CreateReactionProps = ReactionProps;
+
+export const createReaction = ({ ...props }: Partial<CreateReactionProps> = {}): Reaction => {
+  return Reaction.create({
+    id: randomId(),
+    commentId: '',
+    userId: '',
+    type: ReactionType.upvote,
+    ...props,
+  });
+};
+
+type CreateReactionsCount = ReactionsCount;
+
+export const createReactionsCount = ({ ...props }: Partial<CreateReactionsCount> = {}): ReactionsCount => {
+  return {
+    [ReactionType.upvote]: 0,
+    [ReactionType.downvote]: 0,
+    ...props,
+  };
 };
 
 type CreateThreadProps = Replace<

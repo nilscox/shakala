@@ -108,6 +108,7 @@ class MockThreadGateway implements ThreadGateway {
   createComment = mockFn<ThreadGateway['createComment']>();
   createReply = mockFn<ThreadGateway['createReply']>();
   editComment = mockFn<ThreadGateway['editComment']>();
+  setReaction = mockFn<ThreadGateway['setReaction']>();
 }
 
 export class TestStore implements Dependencies {

@@ -1,3 +1,4 @@
+export * from './libs/create-map';
 export * from './libs/get';
 export * from './libs/get-ids';
 export * from './libs/is-defined';

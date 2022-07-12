@@ -25,7 +25,7 @@ export class InMemoryRepository<Item extends { id: string }> {
     const item = this.get(id);
 
     if (!item) {
-      throw new Error();
+      throw new Error('Not found');
     }
 
     return item;
@@ -40,6 +40,16 @@ export class InMemoryRepository<Item extends { id: string }> {
       this._items.push(item);
     } else {
       this._items[idx] = item;
+    }
+  }
+
+  async delete(item: Item): Promise<void> {
+    this.items.delete(item.id);
+
+    const idx = this._items.findIndex(({ id }) => id === item.id);
+
+    if (idx >= 0) {
+      this._items.splice(idx, 1);
     }
   }
 

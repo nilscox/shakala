@@ -4,6 +4,7 @@ import { StubDateService } from '../test/date.stub';
 import { StubGeneratorService } from '../test/generator.stub';
 import { InMemoryCommentRepository } from '../utils/comment.in-memory-repository';
 import { createUser } from '../utils/factories';
+import { InMemoryReactionRepository } from '../utils/reaction.in-memory-repository';
 import { InMemoryUserRepository } from '../utils/user.in-memory-repository';
 
 import { CreateCommentCommandHandler } from './create-comment.command';
@@ -11,7 +12,7 @@ import { CreateCommentCommandHandler } from './create-comment.command';
 describe('CreateCommentCommand', () => {
   const generator = new StubGeneratorService();
   const date = new StubDateService();
-  const commentRepository = new InMemoryCommentRepository();
+  const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
   const userRepository = new InMemoryUserRepository();
 
   const handler = new CreateCommentCommandHandler(generator, date, commentRepository, userRepository);
@@ -41,8 +42,6 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('author.id', 'authorId');
     expect(created).toHaveProperty('parentId', null);
     expect(created).toHaveProperty('text', Markdown.create('hello!'));
-    expect(created).toHaveProperty('upvotes', 0);
-    expect(created).toHaveProperty('downvotes', 0);
     expect(created).toHaveProperty('creationDate', Timestamp.create(now));
     expect(created).toHaveProperty('lastEditionDate', Timestamp.create(now));
   });

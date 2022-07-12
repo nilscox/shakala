@@ -1,4 +1,4 @@
-import { AuthUserDto, CommentDto, Sort, ThreadDto, UserDto } from 'shared';
+import { AuthUserDto, CommentDto, ReactionTypeDto, Sort, ThreadDto, UserDto } from 'shared';
 export { Sort } from 'shared';
 
 export class ValidationError {
@@ -31,3 +31,6 @@ export type Comment = Omit<CommentDto, 'replies'> & {
   replyForm?: CommentForm;
   editionForm?: CommentForm;
 };
+
+export type ReactionType = ReactionTypeDto;
+export const ReactionType = ReactionTypeDto;

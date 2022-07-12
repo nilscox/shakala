@@ -61,7 +61,7 @@ describe('editComment', () => {
   it('requires user authentication', async () => {
     store.dispatch(unsetUser());
 
-    execute();
+    await execute();
 
     expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });

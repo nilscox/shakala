@@ -1,5 +1,5 @@
-import { AuthorizationError, GetCommentsOptions, ThreadGateway } from 'frontend-domain';
-import { CommentDto, get, ThreadDto, ThreadWithCommentsDto } from 'shared';
+import { AuthorizationError, GetCommentsOptions, ReactionType, ThreadGateway } from 'frontend-domain';
+import { CommentDto, get, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
@@ -89,6 +89,17 @@ export class ApiThreadGateway implements ThreadGateway {
     }
 
     if (response.status !== 200) {
+      throw new FetchError(response);
+    }
+  }
+
+  async setReaction(threadId: string, commentId: string, reactionType: ReactionType | null): Promise<void> {
+    const response = await this.http.put<{ type: ReactionTypeDto | null }>(
+      `/thread/${threadId}/comment/${commentId}/reaction`,
+      { body: { type: reactionType } },
+    );
+
+    if (response.status !== 204) {
       throw new FetchError(response);
     }
   }

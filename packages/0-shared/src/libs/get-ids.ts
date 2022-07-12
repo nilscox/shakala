@@ -1,3 +1,3 @@
-export const getIds = <T extends { id: string }>(items: T[]): string[] => {
+export const getIds = (items: Array<{ id: string }>): string[] => {
   return items.map(({ id }) => id);
 };

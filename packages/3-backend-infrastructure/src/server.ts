@@ -13,10 +13,13 @@ import {
   GetUserByIdHandler,
   GetUserByIdQuery,
   InMemoryCommentRepository,
+  InMemoryReactionRepository,
   InMemoryThreadRepository,
   InMemoryUserRepository,
   LoginCommand,
   LoginCommandHandler,
+  SetReactionCommand,
+  SetReactionCommandHandler,
   SignupCommand,
   SignupCommandHandler,
   UpdateCommentCommand,
@@ -69,7 +72,8 @@ export class Server {
 
   protected userRepository = new InMemoryUserRepository(users);
   protected threadRepository = new InMemoryThreadRepository(threads);
-  protected commentRepository = new InMemoryCommentRepository(comments);
+  protected reactionRepository = new InMemoryReactionRepository();
+  protected commentRepository = new InMemoryCommentRepository(this.reactionRepository, comments);
 
   protected generatorService = new MathRandomGeneratorService();
   protected dateService = new RealDateService();
@@ -94,7 +98,11 @@ export class Server {
   );
 
   protected getLastThreadsHandler = new GetLastThreadsHandler(this.threadRepository);
-  protected getThreadHandler = new GetThreadHandler(this.threadRepository, this.commentRepository);
+  protected getThreadHandler = new GetThreadHandler(
+    this.threadRepository,
+    this.commentRepository,
+    this.reactionRepository,
+  );
   protected getCommentHandler = new GetCommentQueryHandler(this.commentRepository);
   protected createCommentHandler = new CreateCommentCommandHandler(
     this.generatorService,
@@ -106,6 +114,10 @@ export class Server {
     this.dateService,
     this.commentRepository,
     this.userRepository,
+  );
+  protected setReactionHandler = new SetReactionCommandHandler(
+    this.generatorService,
+    this.reactionRepository,
   );
 
   protected sessionService = new ExpressSessionService(this.queryBus);
@@ -153,6 +165,7 @@ export class Server {
     this.queryBus.register(GetCommentQuery, this.getCommentHandler);
     this.commandBus.register(CreateCommentCommand, this.createCommentHandler);
     this.commandBus.register(UpdateCommentCommand, this.updateCommentHandler);
+    this.commandBus.register(SetReactionCommand, this.setReactionHandler);
   }
 
   private configureControllers() {

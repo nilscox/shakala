@@ -1,14 +1,14 @@
 import {
   CreateCommentCommand,
-  GetCommentQuery,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
+  SetReactionCommand,
   Sort,
   UpdateCommentCommand,
 } from 'backend-application';
-import { Comment, Thread, UserMustBeAuthorError } from 'backend-domain';
-import { CommentDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
+import { ReactionType, Thread, UserMustBeAuthorError } from 'backend-domain';
+import { ThreadDto, ThreadWithCommentsDto } from 'shared';
 import * as yup from 'yup';
 
 import {
@@ -52,6 +52,20 @@ const updateCommentBodySchema = yup
   .noUnknown()
   .strict();
 
+const setReactionBodySchema = yup
+  .object({
+    type: yup
+      .string()
+      .nullable()
+      .defined()
+      .oneOf([...Object.values(ReactionType), null]),
+  })
+  .required()
+  .noUnknown()
+  .strict();
+
+export type SetReactionDto = yup.InferType<typeof setReactionBodySchema>;
+
 export class ThreadController extends Controller {
   constructor(
     private readonly queryBus: QueryBus,
@@ -68,6 +82,7 @@ export class ThreadController extends Controller {
       'GET  /:id': this.getThread,
       'POST /:id/comment': this.createComment,
       'PUT  /:id/comment/:commentId': this.updateComment,
+      'PUT  /:id/comment/:commentId/reaction': this.setReaction,
     };
   }
 
@@ -75,15 +90,16 @@ export class ThreadController extends Controller {
     const query = await this.validationService.query(req, getLastThreadQuerySchema);
     const lastThreads = await this.queryBus.execute<Thread[]>(new GetLastThreadsQuery(query.count));
 
-    return Response.ok(lastThreads.map((thread) => ThreadPresenter.transformThreadSummary(thread)));
+    return Response.ok(lastThreads.map(ThreadPresenter.transformThreadSummary));
   }
 
   async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
     const threadId = req.params.get('id') as string;
     const query = await this.validationService.query(req, getThreadQuerySchema);
+    const user = await this.sessionService.getUser(req);
 
     const result = await this.queryBus.execute<GetThreadQueryResult>(
-      new GetThreadQuery(threadId, query.sort as Sort, query.search),
+      new GetThreadQuery(threadId, query.sort as Sort, query.search, user?.id),
     );
 
     if (!result) {
@@ -93,7 +109,7 @@ export class ThreadController extends Controller {
     return Response.ok(ThreadPresenter.transformThread(result));
   }
 
-  async createComment(req: Request): Promise<Response<CommentDto>> {
+  async createComment(req: Request): Promise<Response<string>> {
     const threadId = req.params.get('id') as string;
     const user = await this.sessionService.requireUser(req);
     const body = await this.validationService.body(req, createCommentBodySchema);
@@ -102,12 +118,10 @@ export class ThreadController extends Controller {
       new CreateCommentCommand(threadId, user.id, body.parentId ?? null, body.text),
     );
 
-    const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
-
-    return Response.created(ThreadPresenter.transformComment(comment));
+    return Response.created(commentId);
   }
 
-  async updateComment(req: Request): Promise<Response<CommentDto>> {
+  async updateComment(req: Request): Promise<Response<void>> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore todo: check that commentId c threadId
     const threadId = req.params.get('id') as string;
@@ -124,8 +138,19 @@ export class ThreadController extends Controller {
       )
       .run();
 
-    const comment = await this.queryBus.execute<Comment>(new GetCommentQuery(commentId));
+    return Response.noContent();
+  }
 
-    return Response.ok(ThreadPresenter.transformComment(comment));
+  async setReaction(req: Request): Promise<Response<void>> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore todo: check that commentId c threadId
+    const threadId = req.params.get('id') as string;
+    const commentId = req.params.get('commentId') as string;
+    const user = await this.sessionService.requireUser(req);
+    const body = await this.validationService.body(req, setReactionBodySchema);
+
+    await this.commandBus.execute(new SetReactionCommand(user.id, commentId, body.type as ReactionType));
+
+    return Response.noContent();
   }
 }

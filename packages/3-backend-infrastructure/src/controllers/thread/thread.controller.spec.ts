@@ -7,11 +7,11 @@ import {
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
+  SetReactionCommand,
   Sort,
   UpdateCommentCommand,
 } from 'backend-application';
-import { UserMustBeAuthorError } from 'backend-domain';
-import { CommentDto, ThreadWithCommentsDto } from 'shared';
+import { ReactionType, UserMustBeAuthorError } from 'backend-domain';
 
 import { Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
@@ -56,71 +56,36 @@ describe('ThreadController', () => {
   });
 
   describe('getThread', () => {
-    const threadAuthor = createUser();
-    const thread = createThread({ author: threadAuthor });
-
-    const commentAuthor = createUser();
-    const comment = createComment({ author: commentAuthor });
-
-    const replyAuthor = createUser();
-    const reply = createComment({ author: replyAuthor, lastEditionDate: '2022-01-01' });
+    const threadId = 'threadId';
+    const thread = createThread({ id: threadId });
 
     beforeEach(() => {
       queryBus.for(GetThreadQuery).return<GetThreadQueryResult>({
         thread,
-        comments: [comment],
-        replies: new Map([[comment.id, [reply]]]),
+        comments: [],
+        replies: new Map(),
+        reactionsCounts: new Map(),
+        userReactions: new Map(),
       });
     });
-
-    const replyDto: CommentDto = {
-      id: reply.id,
-      author: {
-        id: replyAuthor.id,
-        nick: replyAuthor.nick.value,
-        profileImage: undefined,
-      },
-      text: reply.text.value,
-      date: reply.creationDate.value,
-      edited: reply.lastEditionDate.value,
-      upvotes: 0,
-      downvotes: 0,
-    };
-
-    const commentDto: CommentDto = {
-      id: comment.id,
-      author: {
-        id: commentAuthor.id,
-        nick: commentAuthor.nick.value,
-        profileImage: undefined,
-      },
-      text: comment.text.value,
-      date: comment.creationDate.value,
-      edited: false,
-      upvotes: comment.upvotes,
-      downvotes: comment.downvotes,
-      replies: [replyDto],
-    };
-
-    const threadDto: ThreadWithCommentsDto = {
-      id: thread.id,
-      author: {
-        id: threadAuthor.id,
-        nick: threadAuthor.nick.value,
-        profileImage: undefined,
-      },
-      text: thread.text.value,
-      comments: [commentDto],
-      date: thread.created.value,
-    };
 
     it('retrieves a thread', async () => {
       const response = await controller.getThread(new MockRequest().withParam('id', thread.id));
 
       expect(response).toHaveStatus(200);
-      expect(response.body).toEqual(threadDto);
+      expect(response.body).toHaveProperty('id', threadId);
 
       expect(queryBus.lastQuery).toEqual(new GetThreadQuery(thread.id, Sort.relevance));
+    });
+
+    it('retrieves a thread as an authenticated user', async () => {
+      const userId = 'userId';
+
+      sessionService.user = createUser({ id: userId });
+
+      await controller.getThread(new MockRequest().withParam('id', thread.id));
+
+      expect(queryBus.lastQuery).toEqual(new GetThreadQuery(thread.id, Sort.relevance, undefined, userId));
     });
 
     it('fails to retrieves an thread that does not exist', async () => {
@@ -144,11 +109,11 @@ describe('ThreadController', () => {
     const parent = createComment();
     const text = 'hello!';
 
-    const comment = createComment({ author: user });
+    const commentId = 'commentId';
 
     beforeEach(() => {
       sessionService.user = user;
-      queryBus.for(GetCommentQuery).return(comment);
+      commandBus.execute.mockResolvedValue(commentId);
     });
 
     it('creates a new root comment', async () => {
@@ -157,7 +122,7 @@ describe('ThreadController', () => {
       );
 
       expect(response).toHaveStatus(201);
-      expect(response).toHaveBody(expect.objectContaining({ id: comment.id }));
+      expect(response).toHaveBody(commentId);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new CreateCommentCommand(thread.id, user.id, null, text),
@@ -202,8 +167,8 @@ describe('ThreadController', () => {
         new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
       );
 
-      expect(response).toHaveStatus(200);
-      expect(response).toHaveBody(expect.objectContaining({ id: comment.id }));
+      expect(response).toHaveStatus(204);
+      expect(response).toHaveBody(undefined);
 
       expect(commandBus.execute).toHaveBeenCalledWith(new UpdateCommentCommand(comment.id, user.id, text));
     });
@@ -231,6 +196,30 @@ describe('ThreadController', () => {
         expect(error).toBeInstanceOf(Unauthorized);
         expect(error).toHaveProperty('body.message', 'UserMustBeAuthor');
       });
+    });
+  });
+
+  describe('setReaction', () => {
+    const user = createUser();
+    const thread = createThread();
+    const type = ReactionType.upvote;
+
+    const comment = createComment({ author: user, text: type });
+
+    beforeEach(() => {
+      sessionService.user = user;
+      queryBus.for(GetCommentQuery).return(comment);
+    });
+
+    it('sets a reaction on a comment', async () => {
+      const response = await controller.setReaction(
+        new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ type }),
+      );
+
+      expect(response).toHaveStatus(204);
+      expect(response).toHaveBody(undefined);
+
+      expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(user.id, comment.id, type));
     });
   });
 });
