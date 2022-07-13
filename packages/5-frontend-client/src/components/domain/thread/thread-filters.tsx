@@ -10,10 +10,10 @@ import { isSort } from 'shared';
 
 import { Input } from '~/components/elements/input';
 import { RadioItem, RadiosGroup } from '~/components/elements/radio-group';
-import { ArrowDownIcon } from '~/components/icons/arrow-down';
-import { ArrowUpIcon } from '~/components/icons/arrow-up';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
+import ArrowDownIcon from '~/icons/arrow-down.svg';
+import ArrowUpIcon from '~/icons/arrow-up.svg';
 
 export type ThreadFiltersProps = {
   className?: string;

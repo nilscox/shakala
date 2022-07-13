@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import { createContext, ReactNode, SVGProps, useCallback, useContext, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { CheckIcon } from '~/components/icons/check';
-import { CrossIcon } from '~/components/icons/cross';
-import { ExplanationMarkIcon } from '~/components/icons/explanation-mark';
+import CheckIcon from '~/icons/check.svg';
+import CrossIcon from '~/icons/cross.svg';
+import ExplanationMarkIcon from '~/icons/explanation-mark.svg';
 
 import { IconButton } from '../icon-button';
 

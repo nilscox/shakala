@@ -5,15 +5,15 @@ import { ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Markdown } from '~/components/elements/markdown';
-import { CommunityIcon } from '~/components/icons/community';
-import { EditIcon } from '~/components/icons/edit';
-import { MarkdownIcon } from '~/components/icons/markdown';
-import { SearchIcon } from '~/components/icons/search';
-import { SortIcon } from '~/components/icons/sort';
-import { SubscribeIcon } from '~/components/icons/subscribe';
-import { TrophyIcon } from '~/components/icons/trophy';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
+import CommunityIcon from '~/icons/community.svg';
+import EditIcon from '~/icons/edit.svg';
+import MarkdownIcon from '~/icons/markdown.svg';
+import SearchIcon from '~/icons/search.svg';
+import SortIcon from '~/icons/sort.svg';
+import SubscribeIcon from '~/icons/subscribe.svg';
+import TrophyIcon from '~/icons/trophy.svg';
 
 import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';

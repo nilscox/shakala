@@ -12,16 +12,16 @@ import {
 
 import { IconButton, IconButtonProps } from '~/components/elements/icon-button';
 import { SearchParamLink } from '~/components/elements/search-param-link';
-import { EditIcon } from '~/components/icons/edit';
-import { HorizontalDotsIcon } from '~/components/icons/horizontal-dots';
-import { ReplyIcon } from '~/components/icons/reply';
-import { ReportIcon } from '~/components/icons/report';
-import { ShareIcon } from '~/components/icons/share';
-import { SubscribeIcon } from '~/components/icons/subscribe';
-import { ThumbDownIcon } from '~/components/icons/thumb-down';
-import { ThumbUpIcon } from '~/components/icons/thumb-up';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
+import EditIcon from '~/icons/edit.svg';
+import HorizontalDotsIcon from '~/icons/horizontal-dots.svg';
+import ReplyIcon from '~/icons/reply.svg';
+import ReportIcon from '~/icons/report.svg';
+import ShareIcon from '~/icons/share.svg';
+import SubscribeIcon from '~/icons/subscribe.svg';
+import ThumbDownIcon from '~/icons/thumb-down.svg';
+import ThumbUpIcon from '~/icons/thumb-up.svg';
 
 type CommentFooterProps = {
   className?: string;

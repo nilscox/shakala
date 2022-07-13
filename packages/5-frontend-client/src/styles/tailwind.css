@@ -24,6 +24,10 @@
     @apply my-1;
   }
 
+  svg {
+    fill: currentColor;
+  }
+
   *:focus-visible {
     outline: solid 1px;
     @apply outline-inverted/30;
