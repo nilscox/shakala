@@ -28,7 +28,7 @@ export const commentsSlice = createSlice({
   name: 'comments',
   initialState: commentsEntityAdapter.getInitialState(),
   reducers: {
-    addComments: commentsEntityAdapter.addMany,
+    addComments: commentsEntityAdapter.setMany,
     updateComment: commentsEntityAdapter.updateOne,
     addCommentReply(state, { payload }: PayloadAction<{ commentId: string; replyId: string }>) {
       const { commentId, replyId } = payload;

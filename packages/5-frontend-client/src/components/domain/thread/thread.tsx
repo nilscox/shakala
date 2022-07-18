@@ -9,7 +9,7 @@ import {
 } from 'frontend-domain';
 import { useSearchParams } from 'react-router-dom';
 
-import { AsyncResource } from '~/async-resource';
+import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
@@ -62,12 +62,6 @@ export const Thread = ({ threadId }: ThreadProps) => {
         data={comments}
         loading={loadingComments}
         error={loadingCommentsError}
-        renderLoading={(comments) => (
-          <div className="relative">
-            {renderComments(comments ?? [])}
-            <div className="absolute inset-0 bg-neutral/50 animate-loading-surface" />
-          </div>
-        )}
         render={renderComments}
       />
 

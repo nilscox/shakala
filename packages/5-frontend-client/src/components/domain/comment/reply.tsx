@@ -31,7 +31,7 @@ export const Reply = ({ replyId }: ReplyProps) => {
       <CommentHeader commentId={id} className="px-2" />
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-      <div className={clsx(!isEditing && 'relative left-[-2px] px-2 mt-1 ml-4 border-l-4')}>
+      <div className={clsx(!isEditing && 'relative px-2 mt-1 ml-[1.3rem] border-l-4')}>
         {isEditing && <CommentEditionForm commentId={id} />}
 
         <Markdown markdown={text} className={clsx(isEditing && 'hidden')} />

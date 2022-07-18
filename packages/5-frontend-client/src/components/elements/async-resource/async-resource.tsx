@@ -7,18 +7,10 @@ type AsyncResourceProps<T> = {
   loading: boolean;
   error?: unknown;
   renderError?: (error: unknown) => JSX.Element;
-  renderLoading?: (data: T | undefined) => JSX.Element;
   render: (data: T) => JSX.Element;
 };
 
-export const AsyncResource = <T,>({
-  data,
-  loading,
-  error,
-  renderLoading,
-  renderError,
-  render,
-}: AsyncResourceProps<T>) => {
+export const AsyncResource = <T,>({ data, loading, error, renderError, render }: AsyncResourceProps<T>) => {
   const [displayLoader, setDisplayLoader] = useState(false);
 
   useEffect(() => {
@@ -38,8 +30,13 @@ export const AsyncResource = <T,>({
   }
 
   if (loading) {
-    if (renderLoading) {
-      return renderLoading(data);
+    if (data) {
+      return (
+        <div className="relative">
+          {render(data)}
+          {displayLoader && <div className="absolute inset-0 bg-neutral/50 animate-loading-surface" />}
+        </div>
+      );
     }
 
     return <Fallback>{displayLoader && 'Loading...'}</Fallback>;
