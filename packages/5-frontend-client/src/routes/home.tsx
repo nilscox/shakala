@@ -241,7 +241,7 @@ const CurrentStatus = () => (
   </>
 );
 
-const TargetUsers = () => (
+const _TargetUsers = () => (
   <>
     <Heading>À qui s'adresse Shakala ?</Heading>
 

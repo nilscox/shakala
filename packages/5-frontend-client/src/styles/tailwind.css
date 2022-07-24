@@ -80,11 +80,7 @@
   }
 
   .links-underline a {
-    /* @apply underline decoration-text-muted/80; */
-  }
-
-  .links-underline-hover a {
-    /* @apply hover:underline hover:decoration-text-muted/80; */
+    @apply underline;
   }
 
   .hide-scrollbars::-webkit-scrollbar {
