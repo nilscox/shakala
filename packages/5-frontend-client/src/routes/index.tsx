@@ -5,6 +5,7 @@ import { Layout } from '~/components/layout/layout';
 import { CharterRoute } from './charter';
 import { FaqRoute } from './faq';
 import { Home } from './home';
+import { NotFoundRoute } from './not-found';
 import { Profile } from './profile';
 import { ThreadsRoute } from './thread';
 import { ThreadRoute } from './thread/thread-route';
@@ -20,6 +21,7 @@ export const Routes = () => (
         <Route path=":threadId" element={<ThreadRoute />} />
         <Route index element={<ThreadsRoute />} />
       </Route>
+      <Route path="*" element={<NotFoundRoute />} />
     </Route>
   </RRRoutes>
 );
