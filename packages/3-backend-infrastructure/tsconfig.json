@@ -4,6 +4,7 @@
   "references": [{ "path": "../2-backend-application" }],
   "compilerOptions": {
     "outDir": "dist",
+    "noEmit": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }
