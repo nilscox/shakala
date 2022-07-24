@@ -67,16 +67,12 @@ export class Comment extends Entity<CommentProps> {
     return this.props.lastEditionDate;
   }
 
-  static create(props: CommentProps) {
-    return new Comment(props);
-  }
-
   edit(dateService: DateService, user: User, text: string) {
     if (!user.equals(this.author)) {
       throw new UserMustBeAuthorError();
     }
 
-    this.props.text = Markdown.create(text);
-    this.props.lastEditionDate = Timestamp.create(dateService.nowAsString());
+    this.props.text = new Markdown(text);
+    this.props.lastEditionDate = new Timestamp(dateService.nowAsString());
   }
 }

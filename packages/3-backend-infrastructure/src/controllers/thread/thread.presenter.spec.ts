@@ -37,12 +37,12 @@ describe('ThreadPresenter', () => {
     id: reply.id,
     author: {
       id: replyAuthor.id,
-      nick: replyAuthor.nick.value,
+      nick: replyAuthor.nick.toString(),
       profileImage: undefined,
     },
-    text: reply.text.value,
-    date: reply.creationDate.value,
-    edited: reply.lastEditionDate.value,
+    text: reply.text.toString(),
+    date: reply.creationDate.toString(),
+    edited: reply.lastEditionDate.toString(),
     upvotes: 1,
     downvotes: 0,
   };
@@ -51,11 +51,11 @@ describe('ThreadPresenter', () => {
     id: comment.id,
     author: {
       id: commentAuthor.id,
-      nick: commentAuthor.nick.value,
+      nick: commentAuthor.nick.toString(),
       profileImage: undefined,
     },
-    text: comment.text.value,
-    date: comment.creationDate.value,
+    text: comment.text.toString(),
+    date: comment.creationDate.toString(),
     edited: false,
     upvotes: 0,
     downvotes: 1,
@@ -66,12 +66,12 @@ describe('ThreadPresenter', () => {
     id: thread.id,
     author: {
       id: threadAuthor.id,
-      nick: threadAuthor.nick.value,
+      nick: threadAuthor.nick.toString(),
       profileImage: undefined,
     },
-    text: thread.text.value,
+    text: thread.text.toString(),
     comments: [commentDto],
-    date: thread.created.value,
+    date: thread.created.toString(),
   };
 
   it('transforms a thread', () => {

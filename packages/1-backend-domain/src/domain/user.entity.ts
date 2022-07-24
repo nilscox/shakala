@@ -23,10 +23,6 @@ type CreateUserProps = {
 };
 
 export class User extends Entity<UserProps> {
-  static create(props: UserProps) {
-    return new User(props);
-  }
-
   static async createNew(
     cryptoService: CryptoService,
     dateService: DateService,
@@ -34,11 +30,11 @@ export class User extends Entity<UserProps> {
   ) {
     return new User({
       id,
-      nick: Nick.create(nick),
+      nick: new Nick(nick),
       email,
       hashedPassword: await cryptoService.hash(password),
-      profileImage: ProfileImage.create(),
-      signupDate: Timestamp.create(dateService.nowAsString()),
+      profileImage: new ProfileImage(),
+      signupDate: new Timestamp(dateService.nowAsString()),
       lastLoginDate: null,
     });
   }
@@ -68,6 +64,6 @@ export class User extends Entity<UserProps> {
   }
 
   login(dateService: DateService) {
-    this.props.lastLoginDate = Timestamp.create(dateService.now());
+    this.props.lastLoginDate = new Timestamp(dateService.now());
   }
 }

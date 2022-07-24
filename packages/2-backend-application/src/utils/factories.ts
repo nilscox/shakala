@@ -22,8 +22,8 @@ type Replace<T, W> = Omit<T, keyof W> & W;
 
 const randomId = () => Math.random().toString(36).slice(-6);
 
-export const createTimestamp = (date?: string) => {
-  return Timestamp.create(date ?? '2000-01-01T00:00:00.000Z');
+export const createTimestamp = (date?: string | Date) => {
+  return new Timestamp(date ?? new Date('2000-01-01'));
 };
 
 type CreateUserProps = Replace<
@@ -41,12 +41,12 @@ export const createUser = ({
   signupDate,
   ...props
 }: Partial<CreateUserProps> = {}): User => {
-  return User.create({
+  return new User({
     id: randomId(),
     email: '',
     hashedPassword: '',
-    nick: Nick.create(nick ?? 'nick'),
-    profileImage: ProfileImage.create(profileImage),
+    nick: new Nick(nick ?? 'nick'),
+    profileImage: new ProfileImage(profileImage),
     signupDate: createTimestamp(signupDate),
     lastLoginDate: null,
     ...props,
@@ -68,12 +68,12 @@ export const createComment = ({
   lastEditionDate,
   ...props
 }: Partial<CreateCommentProps> = {}): Comment => {
-  return Comment.create({
+  return new Comment({
     id: randomId(),
     threadId: '',
     author: CommentAuthor.create(createUser()),
     parentId: null,
-    text: Markdown.create(text ?? ''),
+    text: new Markdown(text ?? ''),
     creationDate: createTimestamp(creationDate),
     lastEditionDate: createTimestamp(lastEditionDate ?? creationDate),
     ...props,
@@ -83,7 +83,7 @@ export const createComment = ({
 type CreateReactionProps = ReactionProps;
 
 export const createReaction = ({ ...props }: Partial<CreateReactionProps> = {}): Reaction => {
-  return Reaction.create({
+  return new Reaction({
     id: randomId(),
     commentId: '',
     userId: '',
@@ -111,10 +111,10 @@ type CreateThreadProps = Replace<
 >;
 
 export const createThread = ({ text, created, ...props }: Partial<CreateThreadProps> = {}): Thread => {
-  return Thread.create({
+  return new Thread({
     id: randomId(),
-    author: ThreadAuthor.create(createUser()),
-    text: Markdown.create(text ?? ''),
+    author: new ThreadAuthor(createUser()),
+    text: new Markdown(text ?? ''),
     created: createTimestamp(created),
     ...props,
   });

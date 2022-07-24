@@ -38,7 +38,7 @@ describe('LoginCommand', () => {
   it('updates the last login date', async () => {
     await login();
 
-    expect(userRepository.get(userId)).toHaveProperty('lastLoginDate', Timestamp.create(now));
+    expect(userRepository.get(userId)).toHaveProperty('lastLoginDate', new Timestamp(now));
   });
 
   it('fails to log in when the user does not exist', async () => {

@@ -28,12 +28,12 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
 
     const author = await this.userRepository.findByIdOrFail(authorId);
 
-    const comment = Comment.create({
+    const comment = new Comment({
       id: await this.generatorService.generateId(),
       threadId,
       author: CommentAuthor.create(author),
       parentId,
-      text: Markdown.create(text),
+      text: new Markdown(text),
       creationDate: Timestamp.now(this.dateService),
       lastEditionDate: Timestamp.now(this.dateService),
     });

@@ -11,10 +11,6 @@ export type ThreadAuthorProps = EntityProps<{
 }>;
 
 export class ThreadAuthor extends Entity<ThreadAuthorProps> {
-  static create(props: ThreadAuthorProps) {
-    return new ThreadAuthor(props);
-  }
-
   get nick() {
     return this.props.nick;
   }
@@ -31,10 +27,6 @@ export type ThreadProps = EntityProps<{
 }>;
 
 export class Thread extends Entity<ThreadProps> {
-  static create(props: ThreadProps) {
-    return new Thread(props);
-  }
-
   get author() {
     return this.props.author;
   }

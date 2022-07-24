@@ -7,9 +7,9 @@ export class ThreadPresenter {
   static transformThreadSummary(thread: Thread): ThreadDto {
     return {
       id: thread.id,
-      date: thread.created.value,
+      date: thread.created.toString(),
       author: ThreadPresenter.transformAuthor(thread.author),
-      text: thread.text.value,
+      text: thread.text.toString(),
     };
   }
 
@@ -32,8 +32,8 @@ export class ThreadPresenter {
   private static transformAuthor(author: ThreadAuthor | CommentAuthor): UserDto {
     return {
       id: author.id,
-      nick: author.nick.value,
-      profileImage: author.profileImage.value ?? undefined,
+      nick: author.nick.toString(),
+      profileImage: author.profileImage.toString() ?? undefined,
     };
   }
 
@@ -48,9 +48,11 @@ export class ThreadPresenter {
     const dto: CommentDto = {
       id: comment.id,
       author: ThreadPresenter.transformAuthor(comment.author),
-      text: comment.text.value,
-      date: comment.creationDate.value,
-      edited: !comment.lastEditionDate.equals(comment.creationDate) ? comment.lastEditionDate.value : false,
+      text: comment.text.toString(),
+      date: comment.creationDate.toString(),
+      edited: !comment.lastEditionDate.equals(comment.creationDate)
+        ? comment.lastEditionDate.toString()
+        : false,
       upvotes: reactionCounts[ReactionType.upvote],
       downvotes: reactionCounts[ReactionType.downvote],
     };

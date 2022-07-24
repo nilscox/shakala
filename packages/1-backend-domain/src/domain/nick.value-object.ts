@@ -9,15 +9,16 @@ export class NickTooShortError extends DomainError<{ nick: string; minLength: nu
 }
 
 export class Nick extends ValueObject<string> {
-  get value() {
-    return this.val;
-  }
-
-  static create(value: string) {
+  constructor(value: string) {
     if (value.length < 3) {
       throw new NickTooShortError(value, 3);
     }
 
-    return new Nick(value);
+    super(value);
   }
+
+  override toString() {
+    return this.value;
+  }
+
 }

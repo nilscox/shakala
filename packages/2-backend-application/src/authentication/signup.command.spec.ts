@@ -42,9 +42,9 @@ describe('SignupCommand', () => {
 
     expect(createdUser).toBeDefined();
     expect(createdUser?.email).toEqual(email);
-    expect(createdUser?.nick.equals(Nick.create(nick))).toBe(true);
-    expect(createdUser?.profileImage.equals(ProfileImage.create())).toBe(true);
-    expect(createdUser?.signupDate.equals(Timestamp.create(now))).toBe(true);
+    expect(createdUser?.nick.equals(new Nick(nick))).toBe(true);
+    expect(createdUser?.profileImage.equals(new ProfileImage())).toBe(true);
+    expect(createdUser?.signupDate.equals(new Timestamp(now))).toBe(true);
     expect(createdUser?.lastLoginDate).toBeNull();
   });
 

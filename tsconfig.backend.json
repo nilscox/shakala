@@ -1,6 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "include": [
+    "packages/0-shared/src/**/*",
+    "packages/1-backend-domain/src/**/*",
+    "packages/2-backend-application/src/**/*",
+    "packages/3-backend-infrastructure/src/**/*"
+  ],
   "compilerOptions": {
+    "noEmit": true,
     "module": "commonjs",
     "target": "es2021",
     "moduleResolution": "node",

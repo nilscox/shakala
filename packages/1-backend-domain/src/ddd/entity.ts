@@ -3,11 +3,7 @@ export type EntityProps<T = unknown> = T & {
 };
 
 export class Entity<Props extends EntityProps> {
-  protected props: Props;
-
-  protected constructor(props: Props) {
-    this.props = props;
-  }
+  constructor(protected props: Props) {}
 
   get id() {
     return this.props.id;

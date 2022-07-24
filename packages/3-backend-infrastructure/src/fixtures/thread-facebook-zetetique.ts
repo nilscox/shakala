@@ -135,16 +135,12 @@ const comments = [
     author: Spinoza,
     creationDate: '2022-02-04T18:51',
     text: `Daniel Kahneman me semble un auteur pertinent sur le sujet...`,
-    upvotes: 17,
-    downvotes: 3,
   }),
   createComment({
     id: '1tj876',
     threadId: thread.id,
     author: Voltaire,
     creationDate: '2022-02-05T19:05',
-    upvotes: 48,
-    downvotes: 9,
     text: `Hello.
 
 Je pense que les billets qui parlent des bais cognitifs sur le blog de Zet Ethique Metacritique résument bien le problème du coup je vais me contenter de renvoyer vers ces billets :
@@ -166,8 +162,6 @@ Malheureusement, certains sceptiques et rationalistes donnent bcps trop de place
     threadId: thread.id,
     author: GeraldBronner,
     creationDate: '2022-02-08T11:43',
-    upvotes: 10,
-    downvotes: 0,
     text: `Je me permets d indiquer qu il y a une quinzaine d années j ai publié ceci. Un livre qui aborde de façon critique certaines interprétations trop rapides des notions d heuristique et de biais cognitifs. A part cela je suis d accord avec les indications de Sade.
 [https://www.puf.com/content/Lempire_de_lerreur](https://www.puf.com/content/Lempire_de_lerreur)`,
   }),
@@ -180,7 +174,6 @@ const replies = [
     author: Hegel,
     parentId: comments[0]?.id,
     creationDate: '2022-02-08T11:43',
-    upvotes: 2,
     text: `Spinoza justement je discutais encore aujourd'hui avec des personnes qui me disaient que sur ce sujet c'était ta base Au départ mais que aujourd'hui eh bien il était de loin dépassé etc`,
   }),
 

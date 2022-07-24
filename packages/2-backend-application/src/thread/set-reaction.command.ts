@@ -24,14 +24,14 @@ export class SetReactionCommandHandler implements CommandHandler<SetReactionComm
     const reaction = await this.reactionRepository.getUserReaction(commentId, userId);
 
     if (!reaction && reactionType) {
-      await this.reactionRepository.save(
-        Reaction.create({
-          id: await this.generatorService.generateId(),
-          commentId,
-          userId,
-          type: reactionType,
-        }),
-      );
+      const newReaction = new Reaction({
+        id: await this.generatorService.generateId(),
+        commentId,
+        userId,
+        type: reactionType,
+      });
+
+      await this.reactionRepository.save(newReaction);
     } else if (reaction) {
       if (!reactionType) {
         await this.reactionRepository.delete(reaction);

@@ -51,10 +51,10 @@ describe('AuthenticationController', () => {
       expect(response).toHaveStatus(200);
       expect(response).toHaveBody({
         id: user.id,
-        nick: user.nick.value,
+        nick: user.nick.toString(),
         email: user.email,
         profileImage: undefined,
-        signupDate: user.signupDate.value,
+        signupDate: user.signupDate.toString(),
       });
 
       expect(commandBus.execute).toHaveBeenCalledWith(new LoginCommand(body.email, body.password));

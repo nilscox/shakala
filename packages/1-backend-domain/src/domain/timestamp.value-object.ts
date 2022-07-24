@@ -10,22 +10,22 @@ export class InvalidDateError extends DomainError<{ date: string | Date }> {
 }
 
 export class Timestamp extends ValueObject<string> {
-  get value() {
-    return this.val;
-  }
-
-  get epoch() {
-    return new Date(this.val).getTime();
-  }
-
-  static create(value: string | Date) {
+  constructor(value: string | Date) {
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
       throw new InvalidDateError(value);
     }
 
-    return new Timestamp(date.toISOString());
+    super(date.toISOString());
+  }
+
+  override toString() {
+    return this.value;
+  }
+
+  get epoch() {
+    return new Date(this.value).getTime();
   }
 
   static now(dateService: DateService) {

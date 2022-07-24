@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["src"],
+  "include": ["src/**/*"],
   "references": [{ "path": "../1-backend-domain" }],
   "compilerOptions": {
     "outDir": "dist",
+    "noEmit": false,
     "composite": true
   }
 }

@@ -1,11 +1,7 @@
 export class ValueObject<Value> {
-  protected val: Value;
-
-  protected constructor(value: Value) {
-    this.val = value;
-  }
+  constructor(protected value: Value) {}
 
   equals(other: ValueObject<Value>) {
-    return JSON.stringify(this.val) === JSON.stringify(other.val);
+    return JSON.stringify(this.value) === JSON.stringify(other.value);
   }
 }

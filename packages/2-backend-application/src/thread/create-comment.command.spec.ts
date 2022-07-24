@@ -41,8 +41,8 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('threadId', 'threadId');
     expect(created).toHaveProperty('author.id', 'authorId');
     expect(created).toHaveProperty('parentId', null);
-    expect(created).toHaveProperty('text', Markdown.create('hello!'));
-    expect(created).toHaveProperty('creationDate', Timestamp.create(now));
-    expect(created).toHaveProperty('lastEditionDate', Timestamp.create(now));
+    expect(created).toHaveProperty('text', new Markdown('hello!'));
+    expect(created).toHaveProperty('creationDate', new Timestamp(now));
+    expect(created).toHaveProperty('lastEditionDate', new Timestamp(now));
   });
 });

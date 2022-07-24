@@ -1,12 +1,8 @@
 import { ValueObject } from '../ddd/value-object';
 
 export class Markdown extends ValueObject<string> {
-  static create(value: string) {
-    return new Markdown(value);
-  }
-
-  get value() {
-    return this.val;
+  override toString() {
+    return this.value;
   }
 
   match(search: string) {

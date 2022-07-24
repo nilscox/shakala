@@ -3,11 +3,11 @@ import { ValueObject } from '../ddd/value-object';
 type ProfileImageProps = string | null;
 
 export class ProfileImage extends ValueObject<ProfileImageProps> {
-  get value() {
-    return this.val;
+  constructor(value?: string) {
+    super(value ?? null)
   }
 
-  static create(value?: ProfileImageProps) {
-    return new ProfileImage(value ?? null);
+  override toString() {
+    return this.value;
   }
 }

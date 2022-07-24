@@ -27,8 +27,4 @@ export class Reaction extends Entity<ReactionProps> {
   setType(type: ReactionType) {
     this.props.type = type;
   }
-
-  static create(props: ReactionProps) {
-    return new Reaction(props);
-  }
 }

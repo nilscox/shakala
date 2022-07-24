@@ -53,7 +53,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand> {
   }
 
   private async assertNickDontExist(nick: string) {
-    const user = await this.userRepository.findByNick(Nick.create(nick));
+    const user = await this.userRepository.findByNick(new Nick(nick));
 
     if (user) {
       throw new NickAlreadyExistsError(nick);
