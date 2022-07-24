@@ -6,9 +6,5 @@
   "scripts": {
     "test": "exit 0",
     "lint": "eslint src"
-  },
-  "devDependencies": {
-    "eslint": "^8.19.0",
-    "typescript": "^4.7.4"
   }
 }

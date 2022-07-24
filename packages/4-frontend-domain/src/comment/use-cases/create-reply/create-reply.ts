@@ -1,4 +1,4 @@
-import { selectUser } from '../../../authentication';
+import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
@@ -14,7 +14,7 @@ export const createReply = (parentId: string): Thunk => {
 
     const threadId = selectCommentThreadId(getState(), parentId);
     const text = selectReplyFormText(getState(), parentId) as string;
-    const user = selectUser(getState());
+    const user = selectUserOrFail(getState());
 
     try {
       dispatch(setIsSubmittingReply(parentId));
@@ -24,9 +24,9 @@ export const createReply = (parentId: string): Thunk => {
       const reply: Comment = {
         id,
         author: {
-          id: user!.id,
-          nick: user!.nick,
-          profileImage: user!.profileImage,
+          id: user.id,
+          nick: user.nick,
+          profileImage: user.profileImage,
         },
         text,
         date: dateGateway.now().toISOString(),

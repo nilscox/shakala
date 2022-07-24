@@ -1,8 +1,10 @@
 type ClassType<T> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new (...args: any[]): T;
 };
 
 export function tryCatch<T>(cb: () => T | Promise<T>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const catchers: Array<[ClassType<Error>, (error: any) => any]> = [];
 
   return {

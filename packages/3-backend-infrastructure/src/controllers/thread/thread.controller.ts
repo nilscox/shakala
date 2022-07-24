@@ -124,7 +124,7 @@ export class ThreadController extends Controller {
   async updateComment(req: Request): Promise<Response<void>> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore todo: check that commentId c threadId
-    const threadId = req.params.get('id') as string;
+    const _threadId = req.params.get('id') as string;
     const commentId = req.params.get('commentId') as string;
     const user = await this.sessionService.requireUser(req);
     const body = await this.validationService.body(req, updateCommentBodySchema);
@@ -144,7 +144,7 @@ export class ThreadController extends Controller {
   async setReaction(req: Request): Promise<Response<void>> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore todo: check that commentId c threadId
-    const threadId = req.params.get('id') as string;
+    const _threadId = req.params.get('id') as string;
     const commentId = req.params.get('commentId') as string;
     const user = await this.sessionService.requireUser(req);
     const body = await this.validationService.body(req, setReactionBodySchema);

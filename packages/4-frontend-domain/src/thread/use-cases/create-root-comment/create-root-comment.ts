@@ -1,4 +1,4 @@
-import { selectUser } from '../../../authentication';
+import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { addComments } from '../../../comment/comments.actions';
 import { Thunk } from '../../../store';
@@ -13,7 +13,7 @@ export const createRootComment = (threadId: string): Thunk => {
     }
 
     const text = selectRootCommentFormText(getState(), threadId);
-    const user = selectUser(getState());
+    const user = selectUserOrFail(getState());
 
     try {
       dispatch(setIsCreatingRootComment(threadId));
@@ -23,9 +23,9 @@ export const createRootComment = (threadId: string): Thunk => {
       const comment: Comment = {
         id,
         author: {
-          id: user!.id,
-          nick: user!.nick,
-          profileImage: user!.profileImage,
+          id: user.id,
+          nick: user.nick,
+          profileImage: user.profileImage,
         },
         text,
         date: dateGateway.now().toISOString(),

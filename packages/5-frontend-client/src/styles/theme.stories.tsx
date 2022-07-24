@@ -111,6 +111,7 @@ type TextProps = {
 
 const Text = ({ name, className }: TextProps) => (
   <div className="flex flex-row gap-2 items-center">
+    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
     <Label className="w-[6rem]">{name}</Label>
     <div className={clsx('px-1', className)}>Two driven jocks help fax my big quiz.</div>
     <div className={clsx('px-1 font-bold', className)}>Two driven jocks help fax my big quiz.</div>
