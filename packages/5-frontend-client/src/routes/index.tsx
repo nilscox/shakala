@@ -5,6 +5,7 @@ import { Layout } from '~/components/layout/layout';
 import { CharterRoute } from './charter';
 import { FaqRoute } from './faq';
 import { Home } from './home';
+import { MotivationsRoute } from './motivations';
 import { NotFoundRoute } from './not-found';
 import { Profile } from './profile';
 import { ThreadsRoute } from './thread';
@@ -17,6 +18,7 @@ export const Routes = () => (
       <Route path="profile" element={<Profile />} />
       <Route path="charte" element={<CharterRoute />} />
       <Route path="faq" element={<FaqRoute />} />
+      <Route path="motivations" element={<MotivationsRoute />} />
       <Route path="discussions">
         <Route path=":threadId" element={<ThreadRoute />} />
         <Route index element={<ThreadsRoute />} />

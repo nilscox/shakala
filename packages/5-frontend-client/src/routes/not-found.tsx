@@ -1,8 +1,10 @@
 import notFoundImage from '~/images/404.png';
 
+import { PageTitle } from './components/page-title';
+
 export const NotFoundRoute = () => (
   <>
-    <h1 className="my-6 text-xl font-bold text-center">Cette page n'existe pas</h1>
+    <PageTitle className="text-center">Cette page n'existe pas</PageTitle>
 
     <img
       src={notFoundImage}

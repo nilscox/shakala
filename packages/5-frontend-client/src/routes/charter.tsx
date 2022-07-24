@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
+import { PageTitle } from './components/page-title';
+
 export const CharterRoute = () => (
   <>
-    <h1 className="py-6 text-xl">La charte de Shakala</h1>
+    <PageTitle>La charte de Shakala</PageTitle>
 
     <p>
       Cette charte définit l'état d'esprit à adopter sur Shakala. Elle est composée de sept règles simples,

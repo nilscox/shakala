@@ -3,6 +3,9 @@ import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/components/elements/link';
 
+import { PageTitle } from './components/page-title';
+import { SectionHeading } from './components/section-heading';
+
 type QuestionProps = {
   question: ReactNode;
   answer: ReactNode;
@@ -167,20 +170,9 @@ const questions: Record<string, QuestionProps[]> = {
   ],
 };
 
-type SectionHeadingProps = {
-  id?: string;
-  children: ReactNode;
-};
-
-const SectionHeading = ({ id, children }: SectionHeadingProps) => (
-  <h2 id={id} className="pt-4 text-lg font-bold text-muted">
-    {children}
-  </h2>
-);
-
 export const FaqRoute = () => (
   <>
-    <h1 className="py-6 text-xl">Questions posées fréquemment</h1>
+    <PageTitle>Questions posées fréquemment</PageTitle>
 
     <SectionHeading>Compte utilisateur</SectionHeading>
 
