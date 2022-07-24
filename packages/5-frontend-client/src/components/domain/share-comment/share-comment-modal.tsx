@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Button } from '~/components/elements/button';
 import { Modal } from '~/components/elements/modal';
-import { useSnackbar } from '~/components/elements/snackbar/snackbar';
+import { useSnackbar } from '~/components/elements/snackbar';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import facebook from '~/images/logos/facebook-logo.png';

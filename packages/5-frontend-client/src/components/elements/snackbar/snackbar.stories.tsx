@@ -1,6 +1,10 @@
+import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
 
-import { Snackbar, SnackbarProps, SnackbarProvider, SnackType, useSnackbar } from './snackbar';
+import { Snackbar, SnackbarProps } from './snackbar';
+import { SnackbarProvider } from './snackbar-provider';
+import { SnackType } from './snackbar.types';
+import { useSnackbar } from './use-snackbar';
 
 export default {
   title: 'Elements/Snackbar',
@@ -13,9 +17,8 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<Partial<SnackbarProps>> = (props) => (
-  // eslint-disable-next-line react/no-children-prop
-  <Snackbar type={SnackType.success} children={null} {...props} />
+const Template: Story<Partial<SnackbarProps> & { children: string }> = (props) => (
+  <Snackbar type={SnackType.success} transition={undefined} onRemove={action('remove')} {...props} />
 );
 
 export const success = () => <Template type={SnackType.success}>Bien joué !</Template>;

@@ -1,5 +1,5 @@
 import { GetCommentsOptions, ThreadGateway } from 'frontend-domain';
-import { CommentDto, ThreadDto } from 'shared';
+import { CommentDto, ReactionTypeDto, ThreadDto } from 'shared';
 
 import { gatewayAction } from '~/utils/gateway-action';
 
@@ -26,5 +26,13 @@ export class StorybookThreadGateway implements ThreadGateway {
 
   createReply(threadId: string, parentId: string, text: string): Promise<string> {
     return this.action('createComments', [threadId, parentId, text], '');
+  }
+
+  editComment(threadId: string, commentId: string, text: string): Promise<void> {
+    return this.action('editComment', [threadId, commentId, text], undefined);
+  }
+
+  setReaction(threadId: string, commentId: string, reactionType: ReactionTypeDto | null): Promise<void> {
+    return this.action('setReaction', [threadId, commentId, reactionType], undefined);
   }
 }

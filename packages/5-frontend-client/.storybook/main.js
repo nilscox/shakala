@@ -1,6 +1,8 @@
 const path = require('path');
 const { ProvidePlugin } = require('webpack');
 
+const webpackConfig = require('../webpack.config');
+
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
 
@@ -31,18 +33,7 @@ module.exports = {
       '~': path.resolve(__dirname, '..', 'src'),
     });
 
-    config.module.rules = config.module.rules.filter(
-      (rule) => rule.test?.toString() !== '/\\.(mjs|tsx?|jsx?)$/',
-    );
-
-    config.module.rules.push({
-      test: /\.[jt]sx?$/,
-      loader: 'esbuild-loader',
-      options: {
-        loader: 'tsx',
-        target: 'es6',
-      },
-    });
+    config.module.rules = webpackConfig.module.rules;
 
     config.plugins.push(new ProvidePlugin({ React: 'react' }));
 

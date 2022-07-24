@@ -18,7 +18,7 @@ import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';
 import { StorybookThreadGateway } from '~/adapters/thread-gateway/storybook-thread.gateway';
 import { RealTimerGateway } from '~/adapters/timer-gateway/timer-gateway';
-import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar/snackbar';
+import { useSnackbar, SnackbarProvider } from '~/components/elements/snackbar';
 
 export const maxWidthDecorator = () => {
   const MaxWidthDecorator: DecoratorFn = (Story) => (

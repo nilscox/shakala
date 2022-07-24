@@ -16,7 +16,7 @@ export default {
 const Template: Story<{ setup: SetupRedux; commentId: string }> = ({ commentId }) => {
   const comment = useSelector(selectComment, commentId);
 
-  return <Comment comment={comment} />;
+  return <Comment commentId={comment.id} />;
 };
 
 const bopzor = createUser({ nick: 'Bopzor' });

@@ -11,7 +11,7 @@ import { ConsoleLoggerGateway } from './adapters/logger-gateway/console-logger.g
 import { ReactRouterGateway } from './adapters/router-gateway/react-router-gateway';
 import { ApiThreadGateway } from './adapters/thread-gateway/thread-gateway';
 import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
-import { SnackbarProvider, useSnackbar } from './components/elements/snackbar/snackbar';
+import { SnackbarProvider, useSnackbar } from './components/elements/snackbar';
 import { useConfig } from './hooks/use-config';
 import { Routes } from './routes';
 import { ErrorBoundary } from './utils/error-boundary';

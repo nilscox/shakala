@@ -25,7 +25,7 @@ describe('Comment', () => {
     new TestRenderer()
       .withMemoryRouter()
       .withRedux(store)
-      .render(<Comment comment={comment} />);
+      .render(<Comment commentId={comment.id} />);
 
     expect(screen.getByText('Paul')).toBeDefined();
     expect(screen.getByText('le 1 mai')).toBeDefined();

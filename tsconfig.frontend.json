@@ -1,6 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "include": [
+    "packages/0-shared/src/**/*",
+    "packages/4-frontend-domain/src/**/*",
+    "packages/5-frontend-client/src/**/*"
+  ],
   "compilerOptions": {
+    "noEmit": true,
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
