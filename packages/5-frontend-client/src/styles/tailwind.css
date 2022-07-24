@@ -80,7 +80,7 @@
   }
 
   .links-underline a {
-    @apply underline;
+    @apply underline decoration-muted/80;
   }
 
   .hide-scrollbars::-webkit-scrollbar {

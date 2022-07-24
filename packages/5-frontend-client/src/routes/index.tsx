@@ -3,6 +3,7 @@ import { Outlet, Route, Routes as RRRoutes } from 'react-router-dom';
 import { Layout } from '~/components/layout/layout';
 
 import { CharterRoute } from './charter';
+import { FaqRoute } from './faq';
 import { Home } from './home';
 import { Profile } from './profile';
 import { ThreadsRoute } from './thread';
@@ -14,6 +15,7 @@ export const Routes = () => (
       <Route index element={<Home />} />
       <Route path="profile" element={<Profile />} />
       <Route path="charte" element={<CharterRoute />} />
+      <Route path="faq" element={<FaqRoute />} />
       <Route path="discussions">
         <Route path=":threadId" element={<ThreadRoute />} />
         <Route index element={<ThreadsRoute />} />
