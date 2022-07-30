@@ -2,25 +2,28 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "typescript",
-      "tsconfig": "tsconfig.backend.json",
-      "option": "watch",
+      "label": "tsc watch backend",
+      "command": "tsc",
+      "args": ["--build", "--watch"],
       "problemMatcher": ["$tsc-watch"],
-      "group": {
-        "kind": "build",
-        "isDefault": true
+      "options": {
+        "cwd": "packages/3-backend-infrastructure"
       },
-      "label": "tsc: watch - tsconfig.backend.json"
-    },
-    {
-      "type": "typescript",
-      "tsconfig": "tsconfig.frontend.json",
-      "option": "watch",
-      "problemMatcher": ["$tsc-watch"],
       "group": {
         "kind": "build"
+      }
+    },
+    {
+      "label": "tsc watch frontend",
+      "command": "tsc",
+      "args": ["--build", "--watch"],
+      "problemMatcher": ["$tsc-watch"],
+      "options": {
+        "cwd": "packages/5-frontend-client"
       },
-      "label": "tsc: watch - tsconfig.frontend.json"
+      "group": {
+        "kind": "build"
+      }
     }
   ]
 }
