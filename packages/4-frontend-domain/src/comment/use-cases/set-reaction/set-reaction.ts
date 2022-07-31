@@ -2,8 +2,23 @@ import { requireAuthentication } from '../../../authentication/use-cases/require
 import { Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { ReactionType } from '../../../types';
-import { setReactionCounts, setUserReaction, unsetUserReaction } from '../../comments.actions';
+import { updateComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
+
+export const setReactionCounts = (
+  commentId: string,
+  reactionsCounts: Record<'upvotes' | 'downvotes', number>,
+) => {
+  return updateComment(commentId, reactionsCounts);
+};
+
+export const setUserReaction = (commentId: string, userReaction: ReactionType) => {
+  return updateComment(commentId, { userReaction });
+};
+
+export const unsetUserReaction = (commentId: string) => {
+  return updateComment(commentId, { userReaction: undefined });
+};
 
 export const setReaction = (commentId: string, reactionType: ReactionType): Thunk<Promise<void>> => {
   return async (dispatch, getState, { threadGateway }) => {

@@ -1,28 +1,13 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { isDefined } from 'shared';
+import { createNormalizedSelectors } from '@nilscox/redux-query';
+import { getIds } from 'shared';
 
+import { schemas, selectNormalizedEntities } from '../normalization';
 import { Selector, State } from '../store';
 import { Comment } from '../types';
 import { formatDate } from '../utils/format-date';
 
-import { commentsEntityAdapter } from './comments.slice';
-
-const selectCommentsSlice = (state: State) => state.comments;
-const selectors = commentsEntityAdapter.getSelectors(selectCommentsSlice);
-const {
-  selectById: selectCommentUnsafe,
-  selectEntities: selectCommentsMap,
-  selectAll: selectAllComments,
-} = selectors;
-
-export { selectCommentUnsafe };
-
-export const selectComments = createSelector(
-  [selectCommentsMap, (_, ids: string[]) => ids],
-  (comments, ids) => {
-    return ids.map((id) => comments[id]).filter(isDefined);
-  },
-);
+export const { selectEntity: selectCommentUnsafe, selectEntities: selectComments } =
+  createNormalizedSelectors<State, Comment>(selectNormalizedEntities, schemas.comment);
 
 export const selectComment: Selector<[string], Comment> = (state, id) => {
   const comment = selectCommentUnsafe(state, id);
@@ -58,67 +43,18 @@ export const selectFormattedCommentDateDetailed: Selector<[string], string> = (s
   return formatted + ' (édité)';
 };
 
-export const selectCommentReplies = createSelector(
-  [selectCommentsMap, selectComment],
-  (comments, comment) => {
-    return comment.replies.map((replyId) => comments[replyId]).filter(isDefined);
-  },
-);
+export const selectCommentReplies = (state: State, commentId: string) => {
+  return selectComment(state, commentId).replies;
+};
 
-export const selectReplyForm = createSelector(selectComment, (comment) => {
-  return comment.replyForm;
-});
+const selectAllComments = (state: State) => {
+  return selectComments(state, Object.keys(state.comments.entities));
+};
 
-export const selectIsReplying = createSelector(selectReplyForm, (form) => {
-  return form !== undefined;
-});
+export const selectParentComment = (state: State, replyId: string) => {
+  return selectAllComments(state).find((comment) => getIds(comment.replies).includes(replyId));
+};
 
-export const selectIsSubmittingReply = createSelector(selectReplyForm, (form) => {
-  return form?.isSubmitting;
-});
-
-export const selectReplyFormText = createSelector(selectReplyForm, (form) => {
-  return form?.text;
-});
-
-export const selectCanSubmitReply = createSelector(selectReplyFormText, (text) => {
-  return text !== '';
-});
-
-export const selectParentComment = createSelector(
-  [selectAllComments, (_, replyId: string) => replyId],
-  (comments, replyId: string) => {
-    return comments.find(({ replies }) => replies.includes(replyId));
-  },
-);
-
-export const selectIsReply = createSelector(
-  [selectAllComments, (_, commentId: string) => commentId],
-  (comments, commentId) => {
-    return comments.some(({ replies }) => replies.includes(commentId));
-  },
-);
-
-export const selectCanReply = createSelector(selectIsReply, (isReply) => {
-  return !isReply;
-});
-
-export const selectCommentEditionForm = createSelector(selectComment, (comment) => {
-  return comment.editionForm;
-});
-
-export const selectIsEditingComment = createSelector(selectCommentEditionForm, (form) => {
-  return form !== undefined;
-});
-
-export const selectCommentEditionText = createSelector(selectCommentEditionForm, (form) => {
-  return form?.text;
-});
-
-export const selectCanSubmitCommentEdition = createSelector(selectCommentEditionText, (text) => {
-  return text !== '';
-});
-
-export const selectIsSubmittingCommentEdition = createSelector(selectCommentEditionForm, (form) => {
-  return form?.isSubmitting;
-});
+export const selectIsReply = (state: State, commentId: string) => {
+  return selectParentComment(state, commentId) !== undefined;
+};

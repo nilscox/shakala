@@ -10,7 +10,7 @@ import {
 import { AuthenticationGateway } from './authentication/authentication.gateway';
 import { authenticationSlice } from './authentication/authentication.slice';
 import { userSlice } from './authentication/user.slice';
-import { commentsSlice } from './comment/comments.slice';
+import { commentsReducer } from './comment/comments.slice';
 import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
 import { RouterGateway } from './interfaces/router.gateway';
@@ -27,7 +27,7 @@ export const createStore = (dependencies: Dependencies, middlewares: Middleware[
       [userSlice.name]: userSlice.reducer,
       users: usersReducer,
       threads: threadsReducer,
-      [commentsSlice.name]: commentsSlice.reducer,
+      comments: commentsReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

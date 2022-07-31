@@ -3,10 +3,10 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { ReactionType } from '../../../types';
-import { addComments, setUserReaction } from '../../comments.actions';
+import { addComments } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
-import { setReaction } from './set-reaction';
+import { setReaction, setUserReaction } from './set-reaction';
 
 describe('setReaction', () => {
   const store = new TestStore();
@@ -23,7 +23,7 @@ describe('setReaction', () => {
   });
 
   const threadId = 'threadId';
-  const thread = createThread({ id: threadId, comments: [commentId] });
+  const thread = createThread({ id: threadId, comments: [comment] });
 
   beforeEach(() => {
     store.dispatch(setUser({ user }));

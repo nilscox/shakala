@@ -20,14 +20,10 @@ const selectors = createRootCommentQuery.selectors(
   (state: State) => state.threads.mutations.createRootComment,
 );
 
-export const { reducer: CreateRootCommentQueryReducer } = createRootCommentQuery;
+export const { reducer: createRootCommentQueryReducer } = createRootCommentQuery;
 
 export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThread(threadId, { createCommentForm: { text } });
-};
-
-export const selectIsCreatingRootComment = (state: State, threadId: string) => {
-  return selectors.selectState(state, { threadId }) === QueryState.pending;
 };
 
 export const selectCreateRootCommentForm = (state: State, threadId: string) => {
@@ -40,6 +36,10 @@ export const selectCreateRootCommentFormText = (state: State, threadId: string) 
 
 export const selectCanSubmitRootComment = (state: State, threadId: string) => {
   return selectCreateRootCommentFormText(state, threadId) !== '';
+};
+
+export const selectIsSubmittingRootCommentForm = (state: State, threadId: string) => {
+  return selectors.selectState(state, { threadId }) === QueryState.pending;
 };
 
 export const createRootComment = (threadId: string): Thunk => {

@@ -41,7 +41,7 @@ describe('fetchThreadComments', () => {
     expect(store.select(selectThreadComments, threadId)).toEqual([
       {
         ...commentDto,
-        replies: [replyDto.id],
+        replies: [expect.objectContaining({ id: replyDto.id })],
       },
     ]);
   });

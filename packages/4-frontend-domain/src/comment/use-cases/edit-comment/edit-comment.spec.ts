@@ -3,10 +3,16 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError } from '../../../types';
-import { addComments, setIsEditingComment } from '../../comments.actions';
-import { selectComment, selectCommentEditionText, selectIsEditingComment } from '../../comments.selectors';
+import { addComments } from '../../comments.actions';
+import { selectComment } from '../../comments.selectors';
 
-import { editComment } from './edit-comment';
+import {
+  editComment,
+  selectEditCommentFormText,
+  selectIsSubmittingCommentEditionForm,
+  setEditCommentFormText,
+  setIsEditingComment,
+} from './edit-comment';
 
 describe('editComment', () => {
   const store = new TestStore();
@@ -17,7 +23,7 @@ describe('editComment', () => {
   const comment = createComment({ id: commentId, text: 'text' });
 
   const threadId = 'threadId';
-  const thread = createThread({ id: threadId, comments: [commentId] });
+  const thread = createThread({ id: threadId, comments: [comment] });
 
   const text = 'updated';
   const now = new Date('2022-01-01');
@@ -32,24 +38,28 @@ describe('editComment', () => {
   });
 
   const execute = () => {
-    return store.dispatch(editComment(commentId, text));
+    return store.dispatch(editComment(commentId));
   };
 
   it("initializes the edition form text with the comment's text", () => {
-    expect(store.select(selectCommentEditionText, commentId)).toEqual(comment.text);
+    expect(store.select(selectEditCommentFormText, commentId)).toEqual(comment.text);
   });
 
   it('updates an existing comment', async () => {
+    store.dispatch(setEditCommentFormText(commentId, text));
+
     const promise = execute();
 
-    expect(store.select(selectIsEditingComment, commentId)).toBe(true);
+    expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(true);
     await promise;
-    expect(store.select(selectIsEditingComment, commentId)).toBe(false);
+    expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(false);
 
     expect(store.threadGateway.editComment).toHaveBeenCalledWith(threadId, commentId, text);
   });
 
   it('updates the comment text and edition date', async () => {
+    store.dispatch(setEditCommentFormText(commentId, text));
+
     await execute();
 
     const comment = store.select(selectComment, commentId);
@@ -69,7 +79,7 @@ describe('editComment', () => {
   it('closes the edition form', async () => {
     await execute();
 
-    expect(store.select(selectIsEditingComment, commentId)).toBe(false);
+    expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(false);
   });
 
   it('shows a snack when the edition succeeded', async () => {

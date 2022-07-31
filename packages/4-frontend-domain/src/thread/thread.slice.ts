@@ -5,7 +5,7 @@ import { schemas } from '../normalization';
 import { Thread } from '../types';
 
 import {
-  CreateRootCommentQueryReducer,
+  createRootCommentQueryReducer,
   getThreadCommentsQueryReducer,
   getThreadQueryReducer,
 } from './use-cases';
@@ -19,6 +19,6 @@ export const threadsReducer = combineReducers({
     getThreadComments: getThreadCommentsQueryReducer,
   }),
   mutations: combineReducers({
-    createRootComment: CreateRootCommentQueryReducer,
+    createRootComment: createRootCommentQueryReducer,
   }),
 });

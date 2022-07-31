@@ -5,6 +5,6 @@ import { Comment } from '../../types';
 export const commentDtoToEntity = (dto: CommentDto): Comment => {
   return {
     ...dto,
-    replies: dto.replies?.map(commentDtoToEntity).map(({ id }) => id) ?? [],
+    replies: dto.replies?.map(commentDtoToEntity) ?? [],
   };
 };

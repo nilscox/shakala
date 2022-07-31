@@ -3,10 +3,16 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Comment } from '../../../types';
-import { addComments, setIsReplying, setReplyFormText } from '../../comments.actions';
-import { selectCommentReplies, selectIsSubmittingReply, selectReplyForm } from '../../comments.selectors';
+import { addComments } from '../../comments.actions';
+import { selectCommentReplies } from '../../comments.selectors';
 
-import { createReply } from './create-reply';
+import {
+  createReply,
+  selectIsReplying,
+  selectIsSubmittingReply,
+  setIsReplying,
+  setReplyFormText,
+} from './create-reply';
 
 describe('createReply', () => {
   const store = new TestStore();
@@ -46,7 +52,7 @@ describe('createReply', () => {
 
     expect(store.select(selectIsSubmittingReply, parentId)).toBe(true);
     await promise;
-    expect(store.select(selectIsSubmittingReply, parentId)).toBeUndefined();
+    expect(store.select(selectIsSubmittingReply, parentId)).toBe(false);
 
     expect(store.threadGateway.createReply).toHaveBeenCalledWith(threadId, parentId, text);
   });
@@ -83,7 +89,7 @@ describe('createReply', () => {
   it('closes the reply form', async () => {
     await execute();
 
-    expect(store.select(selectReplyForm, parentId)).toBeUndefined();
+    expect(store.select(selectIsReplying, parentId)).toBe(false);
   });
 
   it('shows a snack when the creation succeeded', async () => {

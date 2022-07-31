@@ -34,10 +34,8 @@ describe('fetchThreadById', () => {
 
     expect(store.select(selectThread, threadId)).toEqual({
       ...threadDto,
-      loadingComments: false,
       comments: [expect.objectContaining({ id: commentsDto[0].id })],
       createCommentForm: {
-        isSubmitting: false,
         text: '',
       },
     });

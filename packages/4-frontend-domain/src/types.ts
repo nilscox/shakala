@@ -14,17 +14,15 @@ export type User = UserDto;
 
 export type CommentForm = {
   text: string;
-  // to remove
-  isSubmitting?: boolean;
 };
 
 export type Thread = ThreadDto & {
-  comments: string[];
+  comments: Comment[];
   createCommentForm: CommentForm;
 };
 
 export type Comment = Omit<CommentDto, 'replies'> & {
-  replies: string[];
+  replies: Comment[];
   replyForm?: CommentForm;
   editionForm?: CommentForm;
 };

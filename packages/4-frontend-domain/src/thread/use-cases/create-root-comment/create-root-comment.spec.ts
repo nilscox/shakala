@@ -10,7 +10,7 @@ import {
 } from '../../index';
 import { addThread, setThreadComments } from '../../thread.actions';
 
-import { createRootComment, selectIsCreatingRootComment } from './create-root-comment';
+import { createRootComment, selectIsSubmittingRootCommentForm } from './create-root-comment';
 
 describe('createRootComment', () => {
   const store = new TestStore();
@@ -19,7 +19,7 @@ describe('createRootComment', () => {
 
   const existingComment = createComment();
   const threadId = 'threadId';
-  const thread = createThread({ id: threadId, comments: [existingComment.id] });
+  const thread = createThread({ id: threadId, comments: [existingComment] });
   const text = 'text';
 
   const now = new Date('2022-01-01');
@@ -44,9 +44,9 @@ describe('createRootComment', () => {
   it('creates a new comment', async () => {
     const promise = execute();
 
-    expect(store.select(selectIsCreatingRootComment, threadId)).toBe(true);
+    expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(true);
     await promise;
-    expect(store.select(selectIsCreatingRootComment, threadId)).toBe(false);
+    expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(false);
 
     expect(store.threadGateway.createComment).toHaveBeenCalledWith(threadId, text);
   });

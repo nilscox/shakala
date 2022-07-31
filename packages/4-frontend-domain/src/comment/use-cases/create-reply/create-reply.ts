@@ -1,10 +1,55 @@
+import { query, QueryState } from '@nilscox/redux-query';
+
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
-import { Thunk } from '../../../store';
+import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
-import { addCommentReply, addComments, setIsReplying, setIsSubmittingReply } from '../../comments.actions';
-import { selectReplyFormText } from '../../comments.selectors';
+import { addComments, updateComment } from '../../comments.actions';
+import { selectComment, selectCommentReplies } from '../../comments.selectors';
+
+type Key = {
+  parentId: string;
+};
+
+const createReplyMutation = query<Key, undefined>('createReply');
+
+const actions = createReplyMutation.actions();
+const selectors = createReplyMutation.selectors((state: State) => state.comments.mutations.createReply);
+
+export const { reducer: createReplyReducer } = createReplyMutation;
+
+export const setIsReplying = (commentId: string, isReplying = true) => {
+  return updateComment(commentId, { replyForm: isReplying ? { text: '' } : undefined });
+};
+
+export const setReplyFormText = (commentId: string, text: string) => {
+  return updateComment(commentId, { replyForm: { text } });
+};
+
+export const setCommentEditionFormText = (commentId: string, text: string) => {
+  return updateComment(commentId, { editionForm: { text } });
+};
+
+export const selectReplyForm = (state: State, parentId: string) => {
+  return selectComment(state, parentId).replyForm;
+};
+
+export const selectIsReplying = (state: State, parentId: string) => {
+  return selectReplyForm(state, parentId) !== undefined;
+};
+
+export const selectReplyFormText = (state: State, parentId: string) => {
+  return selectReplyForm(state, parentId)?.text;
+};
+
+export const selectCanSubmitReply = (state: State, parentId: string) => {
+  return selectReplyFormText(state, parentId) !== '';
+};
+
+export const selectIsSubmittingReply = (state: State, parentId: string) => {
+  return selectors.selectState(state, { parentId }) === QueryState.pending;
+};
 
 export const createReply = (parentId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
@@ -12,12 +57,14 @@ export const createReply = (parentId: string): Thunk => {
       return;
     }
 
+    const key: Key = { parentId };
+
     const threadId = selectCommentThreadId(getState(), parentId);
     const text = selectReplyFormText(getState(), parentId) as string;
     const user = selectUserOrFail(getState());
 
     try {
-      dispatch(setIsSubmittingReply(parentId));
+      dispatch(actions.setPending(key));
 
       const id = await threadGateway.createReply(threadId, parentId, text);
 
@@ -41,11 +88,21 @@ export const createReply = (parentId: string): Thunk => {
 
       dispatch(setIsReplying(parentId, false));
 
+      dispatch(actions.setSuccess(key, undefined));
+
       snackbarGateway.success('Votre réponse a bien été créée.');
     } catch (error) {
+      // todo: serialize error
+      // dispatch(actions.setError(key, error));
       snackbarGateway.error("Une erreur s'est produite, votre réponse n'a pas été créée.");
-    } finally {
-      dispatch(setIsSubmittingReply(parentId, false));
     }
+  };
+};
+
+const addCommentReply = (commentId: string, reply: Comment): Thunk => {
+  return (dispatch, getState) => {
+    const replies = selectCommentReplies(getState(), commentId);
+
+    dispatch(updateComment(commentId, { replies: [...replies, reply] }));
   };
 };

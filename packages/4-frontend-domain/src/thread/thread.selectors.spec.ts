@@ -9,11 +9,11 @@ describe('thread selectors', () => {
 
   describe('selectCommentThreadId', () => {
     const reply = createComment();
-    const comment = createComment({ replies: [reply.id] });
+    const comment = createComment({ replies: [reply] });
     const threadId = 'threadId';
 
     beforeEach(() => {
-      store.dispatch(addComments([comment], [reply]));
+      store.dispatch(addComments([comment, reply]));
       store.dispatch(addThread(createThread({ id: threadId })));
       store.dispatch(setThreadComments(threadId, [comment]));
     });

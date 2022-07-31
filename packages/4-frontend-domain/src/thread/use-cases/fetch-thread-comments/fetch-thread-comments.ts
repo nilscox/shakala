@@ -1,11 +1,12 @@
 import { query, QueryState } from '@nilscox/redux-query';
-import { getIds, isDefined, Sort } from 'shared';
+import { getIds, isDefined, isSort, Sort } from 'shared';
 
 import { selectComments } from '../../../comment';
 import { addComments } from '../../../comment/comments.actions';
 import { commentDtoToEntity } from '../../../comment/domain/comment-dto-to-entity';
 import { State, Thunk } from '../../../store';
 import { setThreadComments } from '../../thread.actions';
+import { GetCommentsOptions } from '../../thread.gateway';
 
 type Key = {
   threadId: string;
@@ -47,14 +48,22 @@ export const selectThreadComments = (state: State, threadId: string, search?: st
   return selectComments(state, commentsIds);
 };
 
-export const fetchThreadComments = (threadId: string, search?: string, sort?: Sort): Thunk => {
-  return async (dispatch, getState, { threadGateway }) => {
+export const fetchThreadComments = (threadId: string): Thunk => {
+  return async (dispatch, getState, { threadGateway, routerGateway }) => {
+    const search = routerGateway.getQueryParam('search');
+    let sort = routerGateway.getQueryParam('sort');
+
+    if (!isSort(sort)) {
+      routerGateway.removeQueryParam('sort');
+      sort = undefined;
+    }
+
     const key = { threadId, search, sort };
 
     try {
       dispatch(actions.setPending(key));
 
-      const options = { search, sort };
+      const options = getOptions(search, sort);
       const commentDtos = await threadGateway.getComments(threadId, options);
 
       if (!commentDtos) {
@@ -69,11 +78,25 @@ export const fetchThreadComments = (threadId: string, search?: string, sort?: So
 
       dispatch(actions.setSuccess(key, getIds(comments)));
       dispatch(setThreadComments(threadId, comments));
-      dispatch(addComments(comments, replies));
+      dispatch(addComments([...comments, ...replies]));
     } catch (error) {
       dispatch(actions.setError(key, error));
     }
   };
+};
+
+const getOptions = (search?: string, sort?: Sort) => {
+  const options: GetCommentsOptions = {};
+
+  if (search && search !== '') {
+    options.search = search;
+  }
+
+  if (sort && sort !== Sort.relevance) {
+    options.sort = sort;
+  }
+
+  return options;
 };
 
 // todo: use a fallback reducer for the query result
