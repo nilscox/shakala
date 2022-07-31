@@ -1,9 +1,14 @@
-import { createCommentDto, createThreadDto, getIds } from 'shared';
+import { createCommentDto, createThreadDto } from 'shared';
 
 import { TestStore } from '../../../test';
-import { selectIsLoadingThread, selectLoadingThreadError, selectThread } from '../../thread.selectors';
+import { selectThread } from '../../thread.selectors';
 
-import { fetchThreadById, NotFound } from './fetch-thread-by-id';
+import {
+  fetchThreadById,
+  NotFound,
+  selectIsLoadingThread,
+  selectLoadingThreadError,
+} from './fetch-thread-by-id';
 
 describe('fetchThreadById', () => {
   const store = new TestStore();
@@ -30,7 +35,7 @@ describe('fetchThreadById', () => {
     expect(store.select(selectThread, threadId)).toEqual({
       ...threadDto,
       loadingComments: false,
-      comments: getIds(commentsDto),
+      comments: [expect.objectContaining({ id: commentsDto[0].id })],
       createCommentForm: {
         isSubmitting: false,
         text: '',

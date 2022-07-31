@@ -2,14 +2,15 @@ import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { addComments } from '../../../comment';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
-import { addThread, setCreateRootCommentText, setThreadComments } from '../../thread.actions';
 import {
-  selectRootCommentFormText,
-  selectIsSubmittingRootComment,
+  selectCreateRootCommentFormText,
   selectThreadComments,
-} from '../../thread.selectors';
+  setCreateRootCommentText,
+  setGetThreadCommentsQueryResult,
+} from '../../index';
+import { addThread, setThreadComments } from '../../thread.actions';
 
-import { createRootComment } from './create-root-comment';
+import { createRootComment, selectIsCreatingRootComment } from './create-root-comment';
 
 describe('createRootComment', () => {
   const store = new TestStore();
@@ -29,6 +30,7 @@ describe('createRootComment', () => {
     store.dispatch(addThread(thread));
     store.dispatch(addComments([existingComment]));
     store.dispatch(setThreadComments(threadId, [existingComment]));
+    store.dispatch(setGetThreadCommentsQueryResult(threadId, [existingComment.id]));
     store.dispatch(setCreateRootCommentText(threadId, text));
 
     store.dateGateway.setNow(now);
@@ -42,9 +44,9 @@ describe('createRootComment', () => {
   it('creates a new comment', async () => {
     const promise = execute();
 
-    expect(store.select(selectIsSubmittingRootComment, threadId)).toBe(true);
+    expect(store.select(selectIsCreatingRootComment, threadId)).toBe(true);
     await promise;
-    expect(store.select(selectIsSubmittingRootComment, threadId)).toBe(false);
+    expect(store.select(selectIsCreatingRootComment, threadId)).toBe(false);
 
     expect(store.threadGateway.createComment).toHaveBeenCalledWith(threadId, text);
   });
@@ -84,7 +86,7 @@ describe('createRootComment', () => {
 
     await execute();
 
-    expect(store.select(selectRootCommentFormText, threadId)).toEqual('');
+    expect(store.select(selectCreateRootCommentFormText, threadId)).toEqual('');
   });
 
   it('shows a snack when the creation succeeded', async () => {

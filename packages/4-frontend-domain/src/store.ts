@@ -17,14 +17,16 @@ import { RouterGateway } from './interfaces/router.gateway';
 import { SnackbarGateway } from './interfaces/snackbar.gateway';
 import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
-import { threadsSlice } from './thread/thread.slice';
+import { threadsReducer } from './thread/thread.slice';
+import { usersReducer } from './user/user.slice';
 
 export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
   return configureStore({
     reducer: {
       [authenticationSlice.name]: authenticationSlice.reducer,
       [userSlice.name]: userSlice.reducer,
-      [threadsSlice.name]: threadsSlice.reducer,
+      users: usersReducer,
+      threads: threadsReducer,
       [commentsSlice.name]: commentsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

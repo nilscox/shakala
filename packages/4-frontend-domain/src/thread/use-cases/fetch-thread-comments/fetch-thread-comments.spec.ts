@@ -3,20 +3,9 @@ import { createCommentDto } from 'shared';
 import { addComments } from '../../../comment/comments.actions';
 import { createComment, createThread, TestStore } from '../../../test';
 import { Sort } from '../../../types';
-import {
-  setThreadComments,
-  addThread,
-  setThreadCommentsSearch,
-  setThreadCommentsSort,
-} from '../../thread.actions';
-import {
-  selectLoadingComments,
-  selectThreadComments,
-  selectThreadCommentsSearch,
-  selectThreadCommentsSort,
-} from '../../thread.selectors';
+import { addThread, setThreadComments } from '../../thread.actions';
 
-import { fetchThreadComments } from './fetch-thread-comments';
+import { fetchThreadComments, selectLoadingComments, selectThreadComments } from './fetch-thread-comments';
 
 describe('fetchThreadComments', () => {
   const store = new TestStore();
@@ -32,8 +21,8 @@ describe('fetchThreadComments', () => {
     store.threadGateway.getComments.mockResolvedValue([commentDto]);
   });
 
-  const execute = () => {
-    return store.dispatch(fetchThreadComments(threadId));
+  const execute = (search?: string, sort?: Sort) => {
+    return store.dispatch(fetchThreadComments(threadId, search, sort));
   };
 
   it("fetches a thread's comments", async () => {
@@ -70,26 +59,12 @@ describe('fetchThreadComments', () => {
 
   it("fetches a thread's comments with search and sort parameters", async () => {
     store.dispatch(addThread(thread));
-    store.dispatch(setThreadCommentsSearch(threadId, 'search'));
-    store.dispatch(setThreadCommentsSort(threadId, Sort.dateDesc));
 
-    await execute();
+    await execute('search', Sort.dateDesc);
 
     expect(store.threadGateway.getComments).toHaveBeenCalledWith(threadId, {
       search: 'search',
       sort: Sort.dateDesc,
     });
-  });
-
-  it('stores the search and sort parameters when they are not present', async () => {
-    store.routerGateway.setQueryParam('search', 'science');
-    store.routerGateway.setQueryParam('sort', Sort.dateDesc);
-
-    store.dispatch(addThread(thread));
-
-    await execute();
-
-    expect(store.select(selectThreadCommentsSearch, threadId)).toEqual('science');
-    expect(store.select(selectThreadCommentsSort, threadId)).toEqual(Sort.dateDesc);
   });
 });

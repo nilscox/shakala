@@ -1,6 +1,5 @@
 import { Thunk } from '../../../store';
 import { Sort } from '../../../types';
-import { setThreadCommentsSearch, setThreadCommentsSort } from '../../thread.actions';
 import { fetchThreadComments } from '../fetch-thread-comments/fetch-thread-comments';
 
 type ThreadFilters = {
@@ -10,9 +9,6 @@ type ThreadFilters = {
 
 export const setThreadFilters = (threadId: string, { search, sort }: ThreadFilters): Thunk => {
   return async (dispatch, getState, { routerGateway }) => {
-    dispatch(setThreadCommentsSearch(threadId, search));
-    dispatch(setThreadCommentsSort(threadId, sort));
-
     if (search === '') {
       routerGateway.removeQueryParam('search');
     } else {
@@ -25,6 +21,6 @@ export const setThreadFilters = (threadId: string, { search, sort }: ThreadFilte
       routerGateway.setQueryParam('sort', sort);
     }
 
-    await dispatch(fetchThreadComments(threadId));
+    await dispatch(fetchThreadComments(threadId, search, sort));
   };
 };
