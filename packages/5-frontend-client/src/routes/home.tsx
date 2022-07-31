@@ -1,6 +1,6 @@
 /* eslint-disable tailwindcss/no-arbitrary-value */
 
-import { fetchLastThreads, selectThreads } from 'frontend-domain';
+import { fetchLastThreads, selectLastThreads } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -53,7 +53,7 @@ const Heading = ({ children }: { children: React.ReactNode }) => (
 );
 
 const LastThreads = () => {
-  const threads = useSelector(selectThreads);
+  const threads = useSelector(selectLastThreads);
   const dispatch = useDispatch();
 
   useEffect(() => {

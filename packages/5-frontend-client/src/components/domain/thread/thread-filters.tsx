@@ -1,17 +1,12 @@
 import clsx from 'clsx';
-import {
-  selectThreadCommentsSearch,
-  selectThreadCommentsSort,
-  setThreadFilters,
-  Sort,
-} from 'frontend-domain';
+import { setThreadFilters, Sort } from 'frontend-domain';
 import { FormEventHandler, useCallback } from 'react';
 import { isSort } from 'shared';
 
 import { Input } from '~/components/elements/input';
 import { RadioItem, RadiosGroup } from '~/components/elements/radio-group';
 import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+import { useSearchParam } from '~/hooks/use-search-param';
 import ArrowDownIcon from '~/icons/arrow-down.svg';
 import ArrowUpIcon from '~/icons/arrow-up.svg';
 
@@ -23,8 +18,8 @@ export type ThreadFiltersProps = {
 export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
   const dispatch = useDispatch();
 
-  const search = useSelector(selectThreadCommentsSearch, threadId);
-  const sort = useSelector(selectThreadCommentsSort, threadId);
+  const search = useSearchParam('search');
+  const sort = useSearchParam('sort');
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {

@@ -51,7 +51,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ text: string }, { id: string }>(`/thread/${threadId}/comment`, {
+    const response = await this.http.post<{ text: string }, string>(`/thread/${threadId}/comment`, {
       body: { text },
     });
 
@@ -59,11 +59,11 @@ export class ApiThreadGateway implements ThreadGateway {
       throw new FetchError(response);
     }
 
-    return response.body.id;
+    return response.body;
   }
 
   async createReply(threadId: string, parentId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ parentId: string; text: string }, { id: string }>(
+    const response = await this.http.post<{ parentId: string; text: string }, string>(
       `/thread/${threadId}/comment`,
       {
         body: { parentId, text },
@@ -74,7 +74,7 @@ export class ApiThreadGateway implements ThreadGateway {
       throw new FetchError(response);
     }
 
-    return response.body.id;
+    return response.body;
   }
 
   async editComment(threadId: string, commentId: string, text: string): Promise<void> {

@@ -21,8 +21,8 @@ describe('fetchThreadComments', () => {
     store.threadGateway.getComments.mockResolvedValue([commentDto]);
   });
 
-  const execute = (search?: string, sort?: Sort) => {
-    return store.dispatch(fetchThreadComments(threadId, search, sort));
+  const execute = () => {
+    return store.dispatch(fetchThreadComments(threadId));
   };
 
   it("fetches a thread's comments", async () => {
@@ -60,7 +60,10 @@ describe('fetchThreadComments', () => {
   it("fetches a thread's comments with search and sort parameters", async () => {
     store.dispatch(addThread(thread));
 
-    await execute('search', Sort.dateDesc);
+    store.routerGateway.setQueryParam('search', 'search');
+    store.routerGateway.setQueryParam('sort', Sort.dateDesc);
+
+    await execute();
 
     expect(store.threadGateway.getComments).toHaveBeenCalledWith(threadId, {
       search: 'search',

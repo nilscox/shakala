@@ -69,8 +69,7 @@ export class FetchHttpGateway implements HttpGateway {
       init.body = JSON.stringify(body);
     }
 
-    const searchParams = new URLSearchParams(query as Record<string, string>);
-    const url = this.baseUrl + path + (query ? '?' + searchParams.toString() : '');
+    const url = this.baseUrl + path + this.getQueryString(query);
 
     const response = await this.fetch(url, init);
     const responseBody = await this.getResponseBody(response);
@@ -84,6 +83,14 @@ export class FetchHttpGateway implements HttpGateway {
     }
 
     return new FetchResponse(response, responseBody);
+  }
+
+  private getQueryString(query: Record<string, string | number> | undefined): string {
+    if (!query || Object.keys(query).length === 0) {
+      return '';
+    }
+
+    return '?' + new URLSearchParams(query as Record<string, string>).toString();
   }
 
   private async getResponseBody(response: globalThis.Response) {

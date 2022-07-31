@@ -36,7 +36,7 @@ export const ShareCommentModal = () => {
 
   return (
     <Modal
-      isOpen={commentId !== null}
+      isOpen={commentId !== undefined}
       onRequestClose={closeModal}
       className="flex flex-col gap-5 max-w-[36rem]"
     >

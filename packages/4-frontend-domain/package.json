@@ -8,8 +8,9 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@nilscox/redux-query": "/home/nils/dev/my-redux-query",
+    "@nilscox/redux-query": "^0.1.2",
     "@reduxjs/toolkit": "^1.8.3",
-    "normalizr": "^3.6.2"
+    "normalizr": "^3.6.2",
+    "redux": "^4.2.0"
   }
 }

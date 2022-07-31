@@ -5,14 +5,15 @@ import {
   selectLoadingCommentsError,
   selectThread,
   selectThreadComments,
+  Sort,
   User,
 } from 'frontend-domain';
-import { useSearchParams } from 'react-router-dom';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
+import { useSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
@@ -29,9 +30,12 @@ type ThreadProps = {
 export const Thread = ({ threadId }: ThreadProps) => {
   const thread = useSelector(selectThread, threadId);
 
-  const loadingComments = useSelector(selectLoadingComments, threadId);
-  const loadingCommentsError = useSelector(selectLoadingCommentsError, threadId);
-  const comments = useSelector(selectThreadComments, threadId);
+  const search = useSearchParam('search');
+  const sort = useSearchParam('sort') as Sort;
+
+  const loadingComments = useSelector(selectLoadingComments, threadId, search, sort);
+  const loadingCommentsError = useSelector(selectLoadingCommentsError, threadId, search, sort);
+  const comments = useSelector(selectThreadComments, threadId, search, sort);
 
   const dateFormatted = useSelector(selectFormattedThreadDate, threadId);
 
@@ -97,8 +101,7 @@ const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
 };
 
 const NoCommentFallback = () => {
-  const [params] = useSearchParams();
-  const search = params.get('search');
+  const search = useSearchParam('search');
 
   if (search) {
     return <Fallback>Aucun commentaire n'a été trouvé pour cette recherche.</Fallback>;

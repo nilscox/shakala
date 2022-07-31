@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { addComments, createComment, createThread, createUser, selectComment } from 'frontend-domain';
 import { addThread } from 'frontend-domain/src/thread/thread.actions';
-import { getIds } from 'shared';
 
 import { useSelector } from '~/hooks/use-selector';
 import { maxWidthDecorator, reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
@@ -50,14 +49,14 @@ Rien ne me permet de dire que la balance bénéfice/risque en est affectée. Pru
   date: new Date().toISOString(),
   upvotes: 61,
   downvotes: 25,
-  replies: getIds(repliesFixtures),
+  replies: repliesFixtures,
 });
 
 export const comment = Template.bind({});
 comment.args = {
   setup: (dispatch) => {
-    dispatch(addThread(createThread({ comments: [commentFixture.id, ...commentFixture.replies] })));
-    dispatch(addComments([commentFixture], repliesFixtures));
+    dispatch(addThread(createThread({ comments: [commentFixture] })));
+    dispatch(addComments([commentFixture, ...repliesFixtures]));
   },
   commentId: commentFixture.id,
 };

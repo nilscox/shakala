@@ -17,7 +17,7 @@ export const RepliesList = ({ commentId }: RepliesListProps) => {
   return (
     // eslint-disable-next-line tailwindcss/no-arbitrary-value
     <div className="gap-1 bg-[#F7F7FA] rounded-b border-t col">
-      {replies.map((replyId) => (
+      {replies.map(({ id: replyId }) => (
         <Reply key={replyId} replyId={replyId} />
       ))}
 

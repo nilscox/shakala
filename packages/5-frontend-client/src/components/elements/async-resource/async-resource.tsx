@@ -12,6 +12,7 @@ type AsyncResourceProps<T> = {
 
 export const AsyncResource = <T,>({ data, loading, error, renderError, render }: AsyncResourceProps<T>) => {
   const [displayLoader, setDisplayLoader] = useState(false);
+  const [prevData, setPrevData] = useState(data);
 
   useEffect(() => {
     if (loading) {
@@ -21,6 +22,12 @@ export const AsyncResource = <T,>({ data, loading, error, renderError, render }:
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (data) {
+      setPrevData(data);
+    }
+  }, [data]);
+
   if (error) {
     if (!renderError) {
       throw error;
@@ -29,11 +36,13 @@ export const AsyncResource = <T,>({ data, loading, error, renderError, render }:
     return renderError(error);
   }
 
-  if (loading) {
-    if (data) {
+  if (loading && !data) {
+    const d = data ?? prevData;
+
+    if (d) {
       return (
         <div className="relative">
-          {render(data)}
+          {render(d)}
           {displayLoader && <div className="absolute inset-0 bg-neutral/50 animate-loading-surface" />}
         </div>
       );

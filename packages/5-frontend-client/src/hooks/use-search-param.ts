@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 export const useSearchParam = (name: string) => {
   const [params] = useSearchParams();
 
-  return params.get(name);
+  return params.get(name) ?? undefined;
 };
 
 export const useSetSearchParam = () => {

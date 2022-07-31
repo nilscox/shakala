@@ -85,6 +85,17 @@ describe('FetchHttpGateway', () => {
     expect(fetch).toHaveBeenCalledWith('https://base.url/?one=1&two=2', expect.anything());
   });
 
+  it('does not append a question mark to the URL when the query is an empty object', async () => {
+    const fetch = mockFetch();
+    const http = new FetchHttpGateway(baseUrl, fetch);
+
+    await http.get('/', {
+      query: {},
+    });
+
+    expect(fetch).toHaveBeenCalledWith('https://base.url/', expect.anything());
+  });
+
   it('performs a mutation', async () => {
     const fetch = mockFetch();
     const http = new FetchHttpGateway(baseUrl, fetch);
