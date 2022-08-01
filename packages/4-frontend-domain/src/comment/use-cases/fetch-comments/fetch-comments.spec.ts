@@ -1,11 +1,15 @@
 import { createCommentDto } from 'shared';
 
 import { createComment, createThread, TestStore } from '../../../test';
+import {
+  addCreatedRootComment,
+  selectCreatedRootComments,
+} from '../../../thread/lists/created-root-comments';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Sort } from '../../../types';
 import { addComments } from '../../comments.actions';
 
-import { fetchComments, selectLoadingComments, selectThreadComments } from './fetch-comments';
+import { fetchComments, selectIsFetchingComments, selectThreadComments } from './fetch-comments';
 
 describe('fetchComments', () => {
   const store = new TestStore();
@@ -28,9 +32,9 @@ describe('fetchComments', () => {
   it("fetches a thread's comments", async () => {
     const promise = execute();
 
-    expect(store.select(selectLoadingComments, threadId)).toBe(true);
+    expect(store.select(selectIsFetchingComments, threadId)).toBe(true);
     await promise;
-    expect(store.select(selectLoadingComments, threadId)).toBe(false);
+    expect(store.select(selectIsFetchingComments, threadId)).toBe(false);
 
     expect(store.threadGateway.getComments).toHaveBeenCalledWith(threadId, {});
   });
@@ -69,5 +73,16 @@ describe('fetchComments', () => {
       search: 'search',
       sort: Sort.dateDesc,
     });
+  });
+
+  it('clears the all created comments', async () => {
+    const createdComment = createComment();
+
+    store.dispatch(addComments([createdComment]));
+    store.dispatch(addCreatedRootComment(createdComment));
+
+    await execute();
+
+    expect(store.select(selectCreatedRootComments), 'created comments were not cleared').toHaveLength(0);
   });
 });

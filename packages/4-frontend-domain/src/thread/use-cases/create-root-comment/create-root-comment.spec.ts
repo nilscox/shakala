@@ -1,20 +1,23 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
-import { addComments, selectThreadComments, setGetCommentsQueryResult } from '../../../comment';
-import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
-import { selectCreateRootCommentFormText, setCreateRootCommentText } from '../../index';
-import { addThread, setThreadComments } from '../../thread.actions';
+import { createAuthUser, createThread, TestStore } from '../../../test';
+import { selectCreatedRootComments } from '../../lists/created-root-comments';
+import { addThread } from '../../thread.actions';
 
-import { createRootComment, selectIsSubmittingRootCommentForm } from './create-root-comment';
+import {
+  createRootComment,
+  selectCreateRootCommentFormText,
+  selectIsSubmittingRootCommentForm,
+  setCreateRootCommentText,
+} from './create-root-comment';
 
 describe('createRootComment', () => {
   const store = new TestStore();
 
   const user = createAuthUser();
 
-  const existingComment = createComment();
   const threadId = 'threadId';
-  const thread = createThread({ id: threadId, comments: [existingComment] });
+  const thread = createThread({ id: threadId });
   const text = 'text';
 
   const now = new Date('2022-01-01');
@@ -23,9 +26,6 @@ describe('createRootComment', () => {
   beforeEach(() => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
-    store.dispatch(addComments([existingComment]));
-    store.dispatch(setThreadComments(threadId, [existingComment]));
-    store.dispatch(setGetCommentsQueryResult(threadId, [existingComment.id]));
     store.dispatch(setCreateRootCommentText(threadId, text));
 
     store.dateGateway.setNow(now);
@@ -49,10 +49,10 @@ describe('createRootComment', () => {
   it('adds the created comment to the thread', async () => {
     await execute();
 
-    const comments = store.select(selectThreadComments, threadId);
+    const createdComments = store.select(selectCreatedRootComments);
 
-    expect(comments).toHaveLength(2);
-    expect(comments).toContainEqual({
+    expect(createdComments).toHaveLength(1);
+    expect(createdComments[0]).toEqual({
       id: commentId,
       author: {
         id: user.id,

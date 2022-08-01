@@ -1,8 +1,9 @@
 import { query, QueryState } from '@nilscox/redux-query';
-import { getIds, isDefined, isSort, Sort } from 'shared';
+import { getIds, isDefined, Sort } from 'shared';
 
 import { selectComments } from '../..';
 import { State, Thunk } from '../../../store';
+import { clearCreatedRootComments } from '../../../thread/lists/created-root-comments';
 import { setThreadComments } from '../../../thread/thread.actions';
 import { GetCommentsOptions } from '../../../thread/thread.gateway';
 import { addComments } from '../../comments.actions';
@@ -14,14 +15,14 @@ type Key = {
   sort: Sort | undefined;
 };
 
-const getCommentsQuery = query<Key, string[]>('getComments');
+const fetchCommentsQuery = query<Key, string[]>('fetchComments');
 
-const actions = getCommentsQuery.actions();
-const selectors = getCommentsQuery.selectors((state: State) => state.comments.queries.getComments);
+export const fetchCommentsQueryReducer = fetchCommentsQuery.reducer();
 
-export const { reducer: getCommentsQueryReducer } = getCommentsQuery;
+const actions = fetchCommentsQuery.actions();
+const selectors = fetchCommentsQuery.selectors((state: State) => state.comments.queries.fetchComments);
 
-export const setGetCommentsQueryResult = (
+export const setFetchCommentsQueryResult = (
   threadId: string,
   commentIds: string[],
   search?: string,
@@ -30,11 +31,11 @@ export const setGetCommentsQueryResult = (
   return actions.setSuccess({ threadId, search, sort }, commentIds);
 };
 
-export const selectLoadingComments = (state: State, threadId: string, search?: string, sort?: Sort) => {
+export const selectIsFetchingComments = (state: State, threadId: string, search?: string, sort?: Sort) => {
   return selectors.selectState(state, { threadId, search, sort }) === QueryState.pending;
 };
 
-export const selectLoadingCommentsError = (state: State, threadId: string, search?: string, sort?: Sort) => {
+export const selectFetchCommentsError = (state: State, threadId: string, search?: string, sort?: Sort) => {
   return selectors.selectError(state, { threadId, search, sort });
 };
 
@@ -51,12 +52,7 @@ export const selectThreadComments = (state: State, threadId: string, search?: st
 export const fetchComments = (threadId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, routerGateway }) => {
     const search = routerGateway.getQueryParam('search');
-    let sort = routerGateway.getQueryParam('sort');
-
-    if (!isSort(sort)) {
-      routerGateway.removeQueryParam('sort');
-      sort = undefined;
-    }
+    const sort = routerGateway.getQueryParam('sort') as Sort;
 
     const key = { threadId, search, sort };
 
@@ -76,9 +72,11 @@ export const fetchComments = (threadId: string): Thunk => {
         .filter(isDefined)
         .map(commentDtoToEntity);
 
-      dispatch(actions.setSuccess(key, getIds(comments)));
-      dispatch(setThreadComments(threadId, comments));
+      dispatch(clearCreatedRootComments());
       dispatch(addComments([...comments, ...replies]));
+      dispatch(setThreadComments(threadId, comments));
+
+      dispatch(actions.setSuccess(key, getIds(comments)));
     } catch (error) {
       dispatch(actions.setError(key, error));
     }
@@ -97,19 +95,4 @@ const getOptions = (search?: string, sort?: Sort) => {
   }
 
   return options;
-};
-
-// todo: use a fallback reducer for the query result
-export const addCommentToThreadQuery = (
-  threadId: string,
-  commentId: string,
-  search?: string,
-  sort?: Sort,
-): Thunk => {
-  return (dispatch, getState) => {
-    const key = { threadId, search, sort };
-    const commentIds = selectors.selectResult(getState(), key) ?? [];
-
-    dispatch(actions.setSuccess(key, [...commentIds, commentId]));
-  };
 };

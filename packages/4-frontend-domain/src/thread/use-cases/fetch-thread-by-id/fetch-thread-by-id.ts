@@ -21,10 +21,11 @@ const serializeError = (error: unknown) => {
 type Key = { threadId: string };
 
 const getThreadQuery = query<Key, string>('getThread');
+
+export const getThreadQueryReducer = getThreadQuery.reducer();
+
 const actions = getThreadQuery.actions();
 const selectors = getThreadQuery.selectors((state: State) => state.threads.queries.getThread);
-
-export const { reducer: getThreadQueryReducer } = getThreadQuery;
 
 export const selectIsLoadingThread = (state: State, threadId: string) => {
   return selectors.selectState(state, { threadId }) === QueryState.pending;

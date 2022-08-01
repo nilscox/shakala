@@ -14,10 +14,10 @@ type Key = {
 
 const createReplyMutation = query<Key, undefined>('createReply');
 
+export const createReplyReducer = createReplyMutation.reducer();
+
 const actions = createReplyMutation.actions();
 const selectors = createReplyMutation.selectors((state: State) => state.comments.mutations.createReply);
-
-export const { reducer: createReplyReducer } = createReplyMutation;
 
 export const setIsReplying = (commentId: string, isReplying = true) => {
   return updateComment(commentId, { replyForm: isReplying ? { text: '' } : undefined });

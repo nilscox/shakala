@@ -3,9 +3,9 @@ import { query, QueryState } from '@nilscox/redux-query';
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases';
 import { addComments } from '../../../comment/comments.actions';
-import { addCommentToThreadQuery } from '../../../comment/use-cases';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
+import { addCreatedRootComment } from '../../lists/created-root-comments';
 import { updateThread } from '../../thread.actions';
 import { selectThread } from '../../thread.selectors';
 
@@ -15,12 +15,12 @@ type Key = {
 
 const createRootCommentQuery = query<Key, undefined>('createRootComment');
 
+export const createRootCommentQueryReducer = createRootCommentQuery.reducer();
+
 const actions = createRootCommentQuery.actions();
 const selectors = createRootCommentQuery.selectors(
   (state: State) => state.threads.mutations.createRootComment,
 );
-
-export const { reducer: createRootCommentQueryReducer } = createRootCommentQuery;
 
 export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThread(threadId, { createCommentForm: { text } });
@@ -74,10 +74,7 @@ export const createRootComment = (threadId: string): Thunk => {
       };
 
       dispatch(addComments([comment]));
-
-      // todo: search / sort
-      dispatch(addCommentToThreadQuery(threadId, comment.id));
-
+      dispatch(addCreatedRootComment(comment));
       dispatch(setCreateRootCommentText(threadId, ''));
 
       dispatch(actions.setSuccess(key, undefined));

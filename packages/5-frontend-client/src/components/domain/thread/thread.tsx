@@ -1,12 +1,13 @@
 import {
   Comment as CommentType,
   selectFormattedThreadDate,
-  selectLoadingComments,
-  selectLoadingCommentsError,
+  selectFetchCommentsError,
   selectThread,
   selectThreadComments,
   Sort,
   User,
+  selectIsFetchingComments,
+  selectCreatedRootComments,
 } from 'frontend-domain';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
@@ -33,16 +34,21 @@ export const Thread = ({ threadId }: ThreadProps) => {
   const search = useSearchParam('search');
   const sort = useSearchParam('sort') as Sort;
 
-  const loadingComments = useSelector(selectLoadingComments, threadId, search, sort);
-  const loadingCommentsError = useSelector(selectLoadingCommentsError, threadId, search, sort);
+  const loadingComments = useSelector(selectIsFetchingComments, threadId, search, sort);
+  const loadingCommentsError = useSelector(selectFetchCommentsError, threadId, search, sort);
   const comments = useSelector(selectThreadComments, threadId, search, sort);
+  const createdComments = useSelector(selectCreatedRootComments);
 
   const dateFormatted = useSelector(selectFormattedThreadDate, threadId);
 
   const renderComments = (comments: CommentType[]) => (
     <>
       {comments.length === 0 && <NoCommentFallback />}
-      <CommentsList threadId={threadId} author={thread.author} comments={comments} />
+      <CommentsList
+        threadId={threadId}
+        threadAuthor={thread.author}
+        comments={[...comments, ...createdComments]}
+      />
     </>
   );
 
@@ -76,11 +82,11 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
 type CommentsListProps = {
   threadId: string;
-  author: User;
+  threadAuthor: User;
   comments: CommentType[];
 };
 
-const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
+const CommentsList = ({ threadId, threadAuthor, comments }: CommentsListProps) => {
   const user = useUser();
 
   return (
@@ -94,7 +100,7 @@ const CommentsList = ({ threadId, author, comments }: CommentsListProps) => {
           <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
         </div>
 
-        <RootCommentForm threadId={threadId} author={author} />
+        <RootCommentForm threadId={threadId} author={threadAuthor} />
       </div>
     </div>
   );

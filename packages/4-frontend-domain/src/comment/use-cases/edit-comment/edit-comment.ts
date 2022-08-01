@@ -13,10 +13,10 @@ type Key = {
 
 const editCommentMutation = query<Key, undefined>('editComment');
 
+export const editCommentReducer = editCommentMutation.reducer();
+
 const actions = editCommentMutation.actions();
 const selectors = editCommentMutation.selectors((state: State) => state.comments.mutations.editComment);
-
-export const { reducer: editCommentReducer } = editCommentMutation;
 
 // todo: add a reducer case
 export const setIsEditingComment = (commentId: string, isEditing = true): Thunk => {
