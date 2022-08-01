@@ -16,11 +16,11 @@ describe('handleAuthenticationFormChange', () => {
   const store = new TestStore();
 
   it('updates the isValid flag', () => {
-    store.dispatch(handleAuthenticationFormChange(new FormData(), true, 'email'));
+    store.dispatch(handleAuthenticationFormChange(true, 'email'));
 
     expect(store.select(selectIsAuthenticationFormValid)).toBe(true);
 
-    store.dispatch(handleAuthenticationFormChange(new FormData(), false, 'email'));
+    store.dispatch(handleAuthenticationFormChange(false, 'email'));
 
     expect(store.select(selectIsAuthenticationFormValid)).toBe(false);
   });
@@ -28,7 +28,7 @@ describe('handleAuthenticationFormChange', () => {
   it('clears the error on the changed field', () => {
     store.dispatch(setAuthenticationFieldError(AuthenticationField.email, 'invalid'));
 
-    store.dispatch(handleAuthenticationFormChange(new FormData(), true, 'email'));
+    store.dispatch(handleAuthenticationFormChange(true, 'email'));
 
     expect(store.select(selectAuthenticationFieldError, AuthenticationField.email)).toBeUndefined();
   });
@@ -36,7 +36,7 @@ describe('handleAuthenticationFormChange', () => {
   it('clears the form error', () => {
     store.dispatch(setAuthenticationFormError('error'));
 
-    store.dispatch(handleAuthenticationFormChange(new FormData(), true, 'email'));
+    store.dispatch(handleAuthenticationFormChange(true, 'email'));
 
     expect(store.select(selectAuthenticationFormError)).toBeUndefined();
   });

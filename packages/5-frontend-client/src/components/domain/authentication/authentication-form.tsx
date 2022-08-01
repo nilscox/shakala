@@ -41,11 +41,10 @@ export const AuthenticationForm = () => {
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
-      const formData = new FormData(event.currentTarget);
       const isValid = event.currentTarget.checkValidity();
       const field = get(event.target, 'name') as string;
 
-      dispatch(handleAuthenticationFormChange(formData, isValid, field));
+      dispatch(handleAuthenticationFormChange(isValid, field));
     },
     [dispatch],
   );
