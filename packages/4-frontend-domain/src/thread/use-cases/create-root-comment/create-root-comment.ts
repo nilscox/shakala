@@ -5,6 +5,7 @@ import { requireAuthentication } from '../../../authentication/use-cases';
 import { addComment } from '../../../comment/comments.actions';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
+import { serializeError } from '../../../utils/serialize-error';
 import { addCreatedRootComment } from '../../lists/created-root-comments';
 import { updateThread } from '../../thread.actions';
 import { selectThread } from '../../thread.selectors';
@@ -38,8 +39,12 @@ export const selectIsSubmittingRootCommentForm = (state: State, threadId: string
   return selectors.selectState(state, { threadId }) === QueryState.pending;
 };
 
+export const selectCreateRootCommentError = (state: State, threadId: string) => {
+  return selectors.selectError(state, { threadId });
+};
+
 export const createRootComment = (threadId: string): Thunk => {
-  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {
     if (!dispatch(requireAuthentication())) {
       return;
     }
@@ -76,8 +81,9 @@ export const createRootComment = (threadId: string): Thunk => {
       dispatch(actions.setSuccess(key, undefined));
       snackbarGateway.success('Votre commentaire a bien été créé.');
     } catch (error) {
-      // todo: serialize error
-      // dispatch(actions.setError(key, error));
+      dispatch(actions.setError(key, serializeError(error)));
+
+      loggerGateway.error(error);
       snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été créé.");
     }
   };

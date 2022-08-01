@@ -41,12 +41,12 @@ describe('fetchThreadById', () => {
     });
   });
 
-  it('stores the error message when the gateway throws', async () => {
+  it('stores the error and re-throws it when the gateway throws', async () => {
     const error = new Error('nope');
 
     store.threadGateway.getById.mockRejectedValue(error);
 
-    await store.dispatch(fetchThreadById(threadId));
+    await expect(store.dispatch(fetchThreadById(threadId))).rejects.toThrow(error);
 
     expect(store.select(selectIsLoadingThread, threadId)).toBe(false);
     expect(store.select(selectLoadingThreadError, threadId)).toHaveProperty('message', error.message);

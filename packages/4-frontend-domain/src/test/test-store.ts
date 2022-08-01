@@ -31,6 +31,7 @@ class MockSnackbarGateway implements SnackbarGateway {
 
 class MockLoggerGateway implements LoggerGateway {
   warn = mockFn<LoggerGateway['warn']>();
+  error = mockFn<LoggerGateway['error']>();
 }
 
 class StubRouterGateway implements RouterGateway {
@@ -38,6 +39,14 @@ class StubRouterGateway implements RouterGateway {
   private locationChangeListener?: () => void;
 
   private _pathname = '/';
+
+  constructor() {
+    beforeEach(() => {
+      this.queryParams.clear();
+      this.locationChangeListener = undefined;
+      this.pathname = '/';
+    });
+  }
 
   get pathname() {
     return this._pathname;
@@ -126,15 +135,15 @@ export class TestStore implements Dependencies {
     this._logActions = log;
   }
 
-  private logActionsMiddleware: Middleware = () => () => (action) => {
+  private logActionsMiddleware: Middleware = () => (next) => (action) => {
     if (this._logActions) {
       console.dir(action, { depth: null });
     }
 
-    return action;
+    return next(action);
   };
 
-  private reduxStore = createStore(this);
+  private reduxStore = createStore(this, [this.logActionsMiddleware]);
 
   constructor() {
     beforeEach(() => {

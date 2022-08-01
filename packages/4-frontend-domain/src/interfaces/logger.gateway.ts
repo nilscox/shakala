@@ -1,3 +1,4 @@
 export interface LoggerGateway {
-  warn(message: string): void;
+  warn(...args: unknown[]): void;
+  error(...args: unknown[]): void;
 }

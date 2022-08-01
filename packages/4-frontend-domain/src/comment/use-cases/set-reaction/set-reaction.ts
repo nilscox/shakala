@@ -1,3 +1,5 @@
+import { pick } from 'shared';
+
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
@@ -21,7 +23,7 @@ export const unsetUserReaction = (commentId: string) => {
 };
 
 export const setReaction = (commentId: string, reactionType: ReactionType): Thunk<Promise<void>> => {
-  return async (dispatch, getState, { threadGateway }) => {
+  return async (dispatch, getState, { threadGateway, snackbarGateway }) => {
     if (!dispatch(requireAuthentication())) {
       return;
     }
@@ -30,8 +32,6 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
     const comment = selectComment(getState(), commentId);
 
     const type = comment.userReaction === reactionType ? null : reactionType;
-
-    await threadGateway.setReaction(threadId, commentId, type);
 
     if (type) {
       dispatch(setUserReaction(commentId, type));
@@ -43,6 +43,8 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
       [ReactionType.upvote]: comment.upvotes,
       [ReactionType.downvote]: comment.downvotes,
     };
+
+    const initialReactionsCounts = pick(comment, 'upvotes', 'downvotes');
 
     if (comment.userReaction) {
       reactionsCounts[comment.userReaction]--;
@@ -58,5 +60,12 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
         downvotes: reactionsCounts[ReactionType.downvote],
       }),
     );
+
+    try {
+      await threadGateway.setReaction(threadId, commentId, type);
+    } catch (error) {
+      dispatch(setReactionCounts(commentId, initialReactionsCounts));
+      snackbarGateway.error("Une erreur s'est produite, votre action n'a pas été comptabilisée.");
+    }
   };
 };

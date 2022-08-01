@@ -101,4 +101,27 @@ describe('setReaction', () => {
 
     expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });
+
+  describe('error handling', () => {
+    const error = new Error('nope.');
+
+    beforeEach(() => {
+      store.threadGateway.setReaction.mockRejectedValue(error);
+    });
+
+    it('shows a snack', async () => {
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        "Une erreur s'est produite, votre action n'a pas été comptabilisée.",
+      );
+    });
+
+    it('rollbacks to the previous value', async () => {
+      await execute();
+
+      expect(store.select(selectComment, commentId)).toHaveProperty('upvotes', 3);
+      expect(store.select(selectComment, commentId)).toHaveProperty('downvotes', 1);
+    });
+  });
 });

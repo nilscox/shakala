@@ -9,7 +9,12 @@ import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Sort } from '../../../types';
 import { addComment, addComments } from '../../comments.actions';
 
-import { fetchComments, selectIsFetchingComments, selectThreadComments } from './fetch-comments';
+import {
+  fetchComments,
+  selectFetchCommentsError,
+  selectIsFetchingComments,
+  selectThreadComments,
+} from './fetch-comments';
 
 describe('fetchComments', () => {
   const store = new TestStore();
@@ -84,5 +89,16 @@ describe('fetchComments', () => {
     await execute();
 
     expect(store.select(selectCreatedRootComments), 'created comments were not cleared').toHaveLength(0);
+  });
+
+  it('stores and re-throws the error when the call to the gateway fails', async () => {
+    const error = new Error('nope.');
+
+    store.threadGateway.getComments.mockRejectedValue(error);
+
+    await expect(execute()).rejects.toThrow(error);
+
+    expect(store.select(selectIsFetchingComments, threadId)).toBe(false);
+    expect(store.select(selectFetchCommentsError, threadId)).toHaveProperty('message', error.message);
   });
 });

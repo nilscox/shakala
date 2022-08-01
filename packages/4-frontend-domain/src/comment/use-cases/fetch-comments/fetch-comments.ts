@@ -6,6 +6,7 @@ import { State, Thunk } from '../../../store';
 import { clearCreatedRootComments } from '../../../thread/lists/created-root-comments';
 import { setThreadComments } from '../../../thread/thread.actions';
 import { GetCommentsOptions } from '../../../thread/thread.gateway';
+import { serializeError } from '../../../utils/serialize-error';
 import { addComments } from '../../comments.actions';
 import { commentDtoToEntity } from '../../domain/comment-dto-to-entity';
 
@@ -78,7 +79,8 @@ export const fetchComments = (threadId: string): Thunk => {
 
       dispatch(actions.setSuccess(key, getIds(comments)));
     } catch (error) {
-      dispatch(actions.setError(key, error));
+      dispatch(actions.setError(key, serializeError(error)));
+      throw error;
     }
   };
 };

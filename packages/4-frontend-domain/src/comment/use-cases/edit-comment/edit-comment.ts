@@ -4,6 +4,7 @@ import { requireAuthentication } from '../../../authentication/use-cases/require
 import { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { AuthorizationError } from '../../../types';
+import { serializeError } from '../../../utils/serialize-error';
 import { setCommentEdited, setCommentText, updateComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
@@ -49,8 +50,12 @@ export const selectIsSubmittingCommentEditionForm = (state: State, commentId: st
   return selectors.selectState(state, { commentId }) === QueryState.pending;
 };
 
+export const selectEditCommentError = (state: State, commentId: string) => {
+  return selectors.selectError(state, { commentId });
+};
+
 export const editComment = (commentId: string): Thunk => {
-  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {
     if (!dispatch(requireAuthentication())) {
       return;
     }
@@ -74,9 +79,9 @@ export const editComment = (commentId: string): Thunk => {
 
       snackbarGateway.success('Votre commentaire a bien été mis à jour.');
     } catch (error) {
-      // todo: serialize error
-      // dispatch(actions.setError(key, error));
-      console.error(error);
+      loggerGateway.error(error);
+
+      dispatch(actions.setError(key, serializeError(error)));
 
       if (error instanceof AuthorizationError && error.code === 'UserMustBeAuthor') {
         snackbarGateway.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");

@@ -2,21 +2,11 @@ import { query, QueryState } from '@nilscox/redux-query';
 
 import { fetchComments } from '../../../comment/use-cases';
 import type { State, Thunk } from '../../../store';
+import { serializeError } from '../../../utils/serialize-error';
 import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
 import { addThread } from '../../thread.actions';
 
 export const NotFound = 'NotFound';
-
-const serializeError = (error: unknown) => {
-  if (error instanceof Error) {
-    return {
-      message: error.message,
-      stack: error.stack,
-    };
-  }
-
-  return JSON.stringify(error);
-};
 
 type Key = { threadId: string };
 
@@ -58,6 +48,7 @@ export const fetchThreadById = (threadId: string): Thunk => {
       await dispatch(fetchComments(threadId));
     } catch (error) {
       dispatch(actions.setError(key, serializeError(error)));
+      throw error;
     }
   };
 };

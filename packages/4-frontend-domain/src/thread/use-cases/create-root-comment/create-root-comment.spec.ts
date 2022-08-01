@@ -6,6 +6,7 @@ import { addThread } from '../../thread.actions';
 
 import {
   createRootComment,
+  selectCreateRootCommentError,
   selectCreateRootCommentFormText,
   selectIsSubmittingRootCommentForm,
   setCreateRootCommentText,
@@ -90,15 +91,32 @@ describe('createRootComment', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre commentaire a bien été créé.');
   });
 
-  it('shows a snack when the creation failed', async () => {
+  describe('error handling', () => {
     const error = new Error('nope.');
 
-    store.threadGateway.createComment.mockRejectedValue(error);
+    beforeEach(() => {
+      store.threadGateway.createComment.mockRejectedValue(error);
+    });
 
-    await execute();
+    it('stores the error', async () => {
+      await execute();
 
-    expect(store.snackbarGateway.error).toHaveBeenCalledWith(
-      "Une erreur s'est produite, votre commentaire n'a pas été créé.",
-    );
+      expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(false);
+      expect(store.select(selectCreateRootCommentError, threadId)).toHaveProperty('message', error.message);
+    });
+
+    it('logs the error', async () => {
+      await execute();
+
+      expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+    });
+
+    it('shows a snack', async () => {
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        "Une erreur s'est produite, votre commentaire n'a pas été créé.",
+      );
+    });
   });
 });

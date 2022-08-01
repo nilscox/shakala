@@ -8,6 +8,7 @@ import { selectCommentReplies } from '../../comments.selectors';
 
 import {
   createReply,
+  selectCreateReplyError,
   selectIsReplying,
   selectIsSubmittingReply,
   setIsReplying,
@@ -98,15 +99,32 @@ describe('createReply', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre réponse a bien été créée.');
   });
 
-  it('shows a snack when the creation failed', async () => {
+  describe('error handling', () => {
     const error = new Error('nope.');
 
-    store.threadGateway.createReply.mockRejectedValue(error);
+    beforeEach(() => {
+      store.threadGateway.createReply.mockRejectedValue(error);
+    });
 
-    await execute();
+    it('stores the error', async () => {
+      await execute();
 
-    expect(store.snackbarGateway.error).toHaveBeenCalledWith(
-      "Une erreur s'est produite, votre réponse n'a pas été créée.",
-    );
+      expect(store.select(selectIsSubmittingReply, parentId)).toBe(false);
+      expect(store.select(selectCreateReplyError, parentId)).toHaveProperty('message', error.message);
+    });
+
+    it('logs the error', async () => {
+      await execute();
+
+      expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+    });
+
+    it('shows a snack', async () => {
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        "Une erreur s'est produite, votre réponse n'a pas été créée.",
+      );
+    });
   });
 });

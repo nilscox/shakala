@@ -5,6 +5,7 @@ export * from './libs/get-ids';
 export * from './libs/is-defined';
 export * from './libs/is-enum-value';
 export * from './libs/is-type';
+export * from './libs/pick';
 export * from './libs/random-id';
 
 export * from './types/replace';

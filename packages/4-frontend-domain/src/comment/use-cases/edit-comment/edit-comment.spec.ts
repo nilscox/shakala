@@ -8,6 +8,7 @@ import { selectComment } from '../../comments.selectors';
 
 import {
   editComment,
+  selectEditCommentError,
   selectEditCommentFormText,
   selectIsEditingComment,
   selectIsSubmittingCommentEditionForm,
@@ -89,25 +90,42 @@ describe('editComment', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre commentaire a bien été mis à jour.');
   });
 
-  it('shows a snack when the edition failed', async () => {
+  describe('error handling', () => {
     const error = new Error('nope.');
 
-    store.threadGateway.editComment.mockRejectedValue(error);
+    beforeEach(() => {
+      store.threadGateway.editComment.mockRejectedValue(error);
+    });
 
-    await execute();
+    it('stores the error', async () => {
+      await execute();
 
-    expect(store.snackbarGateway.error).toHaveBeenCalledWith(
-      "Une erreur s'est produite, votre commentaire n'a pas été mis à jour.",
-    );
-  });
+      expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(false);
+      expect(store.select(selectEditCommentError, commentId)).toHaveProperty('message', error.message);
+    });
 
-  it("shows an error when the user tries to edit someone else's comment", async () => {
-    store.threadGateway.editComment.mockRejectedValue(new AuthorizationError('UserMustBeAuthor'));
+    it('logs the error', async () => {
+      await execute();
 
-    await execute();
+      expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+    });
 
-    expect(store.snackbarGateway.error).toHaveBeenCalledWith(
-      "Vous devez être l'auteur du message pour pouvoir l'éditer.",
-    );
+    it('shows a snack', async () => {
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        "Une erreur s'est produite, votre commentaire n'a pas été mis à jour.",
+      );
+    });
+
+    it("shows an error when the user tries to edit someone else's comment", async () => {
+      store.threadGateway.editComment.mockRejectedValue(new AuthorizationError('UserMustBeAuthor'));
+
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        "Vous devez être l'auteur du message pour pouvoir l'éditer.",
+      );
+    });
   });
 });

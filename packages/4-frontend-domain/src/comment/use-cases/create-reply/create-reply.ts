@@ -5,6 +5,7 @@ import { requireAuthentication } from '../../../authentication/use-cases/require
 import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
+import { serializeError } from '../../../utils/serialize-error';
 import { addComment, updateComment } from '../../comments.actions';
 import { selectComment, selectCommentReplies } from '../../comments.selectors';
 
@@ -47,8 +48,12 @@ export const selectIsSubmittingReply = (state: State, parentId: string) => {
   return selectors.selectState(state, { parentId }) === QueryState.pending;
 };
 
+export const selectCreateReplyError = (state: State, parentId: string) => {
+  return selectors.selectError(state, { parentId });
+};
+
 export const createReply = (parentId: string): Thunk => {
-  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway }) => {
+  return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {
     if (!dispatch(requireAuthentication())) {
       return;
     }
@@ -88,8 +93,9 @@ export const createReply = (parentId: string): Thunk => {
 
       snackbarGateway.success('Votre réponse a bien été créée.');
     } catch (error) {
-      // todo: serialize error
-      // dispatch(actions.setError(key, error));
+      dispatch(actions.setError(key, serializeError(error)));
+
+      loggerGateway.error(error);
       snackbarGateway.error("Une erreur s'est produite, votre réponse n'a pas été créée.");
     }
   };
