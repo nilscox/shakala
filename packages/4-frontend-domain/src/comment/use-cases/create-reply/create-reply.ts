@@ -7,7 +7,7 @@ import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
 import { addComment, updateComment } from '../../comments.actions';
-import { selectComment, selectCommentReplies } from '../../comments.selectors';
+import { selectComment, selectCommentReplies, selectIsReply } from '../../comments.selectors';
 
 type Key = {
   parentId: string;
@@ -26,6 +26,10 @@ export const setIsReplying = (commentId: string, isReplying = true) => {
 
 export const setReplyFormText = (commentId: string, text: string) => {
   return updateComment(commentId, { replyForm: { text } });
+};
+
+export const selectCanReply = (state: State, commentId: string) => {
+  return !selectIsReply(state, commentId);
 };
 
 export const selectReplyForm = (state: State, parentId: string) => {

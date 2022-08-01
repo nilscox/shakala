@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import {
   ReactionType,
-  selectCanSubmitReply,
+  selectCanReply,
   selectComment,
   selectIsEditingComment,
   selectIsReply,
@@ -134,7 +134,7 @@ type ReplyButtonProps = {
 
 const ReplyButton = ({ commentId }: ReplyButtonProps) => {
   const dispatch = useDispatch();
-  const canReply = useSelector(selectCanSubmitReply, commentId);
+  const canReply = useSelector(selectCanReply, commentId);
 
   if (!canReply) {
     return null;
