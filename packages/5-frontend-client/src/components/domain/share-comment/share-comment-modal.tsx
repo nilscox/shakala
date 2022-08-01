@@ -25,10 +25,6 @@ export const ShareCommentModal = () => {
     setSearchParam('share', undefined);
   };
 
-  const showNotImplementedWarning = () => {
-    snackbar.warning("Cette fonctionnalité n'est pas encore disponible.");
-  };
-
   const copyPermalink = async () => {
     await window.navigator.clipboard.writeText(permalink);
     snackbar.success('Lien copié');
@@ -38,6 +34,7 @@ export const ShareCommentModal = () => {
     <Modal
       isOpen={commentId !== undefined}
       onRequestClose={closeModal}
+      // eslint-disable-next-line tailwindcss/no-arbitrary-value
       className="flex flex-col gap-5 max-w-[36rem]"
     >
       <h2 className="text-lg font-bold text-primary">
@@ -45,15 +42,26 @@ export const ShareCommentModal = () => {
       </h2>
 
       <div className="flex flex-row justify-evenly py-4">
-        <ShareIcon title="Partager sur Facebook" onClick={showNotImplementedWarning}>
+        <ShareIcon
+          title="Partager sur Facebook"
+          href={`https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({ u: permalink })}`}
+        >
           <img className="w-full" src={facebook} alt="Facebook" />
         </ShareIcon>
 
-        <ShareIcon title="Partager sur Twitter" onClick={showNotImplementedWarning}>
+        <ShareIcon
+          title="Partager sur Twitter"
+          href={`https://twitter.com/intent/tweet?${new URLSearchParams({
+            text: `Venez découvrir ce que dit ${comment?.author.nick} sur #shakala !\n${permalink}`,
+          })}`}
+        >
           <img className="w-full" src={twitter} alt="Twitter" />
         </ShareIcon>
 
-        <ShareIcon title="Partager sur LinkedIn" onClick={showNotImplementedWarning}>
+        <ShareIcon
+          title="Partager sur LinkedIn"
+          href={`https://www.linkedin.com/sharing/share-offsite/?${new URLSearchParams({ url: permalink })}`}
+        >
           <img className="w-full" src={linkedin} alt="LinkedIn" />
         </ShareIcon>
 
@@ -90,17 +98,20 @@ const usePermalink = (commentId: string) => {
 
 type ShareIconProps = {
   title: string;
-  onClick: () => void;
+  href?: string;
+  onClick?: () => void;
   children: ReactNode;
 };
 
-const ShareIcon = ({ title, onClick, children }: ShareIconProps) => (
-  <div
-    role="button"
+const ShareIcon = ({ title, href = '#', onClick, children }: ShareIconProps) => (
+  <a
     className="flex justify-center items-center w-8 h-8 cursor-pointer"
+    href={href}
     title={title}
     onClick={onClick}
+    target={href !== '#' ? '_blank' : undefined}
+    rel="noreferrer"
   >
     {children}
-  </div>
+  </a>
 );

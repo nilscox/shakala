@@ -25,7 +25,10 @@ export const Comment = ({ commentId }: CommentProps) => {
 
   return (
     <div id={id} className="p-0 card">
-      <div className={clsx(highlight && 'animate-highlight')} onMouseLeave={() => setShowActions(false)}>
+      <div
+        className={clsx(highlight && 'animate-highlight')}
+        onMouseLeave={() => setShowActions(false)}
+      >
         <CommentHeader commentId={id} className="px-2 pt-2" />
 
         {isEditing && <CommentEditionForm commentId={id} />}
