@@ -1,6 +1,5 @@
 import { isEnumValue } from 'shared';
 
-// todo: transform to enum
 export enum AuthenticationField {
   email = 'email',
   password = 'password',

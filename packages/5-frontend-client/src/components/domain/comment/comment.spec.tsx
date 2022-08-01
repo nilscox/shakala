@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { addComments, createComment, createThread, createUser, TestStore } from 'frontend-domain';
+import { addComment, createComment, createThread, createUser, TestStore } from 'frontend-domain';
 import { addThread, setThreadComments } from 'frontend-domain/src/thread/thread.actions';
 
 import { TestRenderer } from '~/test/render';
@@ -19,7 +19,7 @@ describe('Comment', () => {
     });
 
     store.dispatch(addThread(createThread({ id: 'threadId' })));
-    store.dispatch(addComments([comment]));
+    store.dispatch(addComment(comment));
     store.dispatch(setThreadComments('threadId', [comment]));
 
     new TestRenderer()

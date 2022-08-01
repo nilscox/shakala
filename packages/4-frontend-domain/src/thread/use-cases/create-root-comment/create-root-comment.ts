@@ -2,7 +2,7 @@ import { query, QueryState } from '@nilscox/redux-query';
 
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases';
-import { addComments } from '../../../comment/comments.actions';
+import { addComment } from '../../../comment/comments.actions';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
 import { addCreatedRootComment } from '../../lists/created-root-comments';
@@ -26,12 +26,8 @@ export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThread(threadId, { createCommentForm: { text } });
 };
 
-export const selectCreateRootCommentForm = (state: State, threadId: string) => {
-  return selectThread(state, threadId).createCommentForm;
-};
-
 export const selectCreateRootCommentFormText = (state: State, threadId: string) => {
-  return selectCreateRootCommentForm(state, threadId).text;
+  return selectThread(state, threadId).createCommentForm.text;
 };
 
 export const selectCanSubmitRootComment = (state: State, threadId: string) => {
@@ -48,7 +44,7 @@ export const createRootComment = (threadId: string): Thunk => {
       return;
     }
 
-    const { text } = selectCreateRootCommentForm(getState(), threadId);
+    const text = selectCreateRootCommentFormText(getState(), threadId);
     const user = selectUserOrFail(getState());
 
     const key: Key = { threadId };
@@ -73,7 +69,7 @@ export const createRootComment = (threadId: string): Thunk => {
         replies: [],
       };
 
-      dispatch(addComments([comment]));
+      dispatch(addComment(comment));
       dispatch(addCreatedRootComment(comment));
       dispatch(setCreateRootCommentText(threadId, ''));
 

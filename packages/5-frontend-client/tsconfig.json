@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.frontend.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "./vitest.setup.ts"],
   "files": [".storybook/preview.ts"],
   "references": [{ "path": "../4-frontend-domain" }],
   "compilerOptions": {

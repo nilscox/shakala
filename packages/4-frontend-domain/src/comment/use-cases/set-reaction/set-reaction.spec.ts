@@ -3,7 +3,7 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { ReactionType } from '../../../types';
-import { addComments } from '../../comments.actions';
+import { addComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
 import { setReaction, setUserReaction } from './set-reaction';
@@ -28,7 +28,7 @@ describe('setReaction', () => {
   beforeEach(() => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
-    store.dispatch(addComments([comment]));
+    store.dispatch(addComment(comment));
   });
 
   const execute = async (reactionType = ReactionType.upvote) => {

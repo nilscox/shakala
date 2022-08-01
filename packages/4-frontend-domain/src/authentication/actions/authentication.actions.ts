@@ -1,7 +1,13 @@
+import { AuthUser } from '../../types';
 import { authenticationSlice } from '../authentication.slice';
 import { AuthenticationField, AuthenticationForm } from '../authentication.types';
+import { setUser as setUserAction } from '../user.slice';
 
 const actions = authenticationSlice.actions;
+
+export const setUser = (user: AuthUser) => {
+  return setUserAction({ user });
+};
 
 export const setIsAuthenticationModalOpen = (open: boolean) => {
   return actions.setIsModalOpen({ open });

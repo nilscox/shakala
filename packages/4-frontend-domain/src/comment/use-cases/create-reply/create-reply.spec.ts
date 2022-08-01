@@ -3,7 +3,7 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Comment } from '../../../types';
-import { addComments } from '../../comments.actions';
+import { addComment } from '../../comments.actions';
 import { selectCommentReplies } from '../../comments.selectors';
 
 import {
@@ -33,7 +33,7 @@ describe('createReply', () => {
     store.dispatch(setUser({ user }));
 
     store.dispatch(addThread(thread));
-    store.dispatch(addComments([parent]));
+    store.dispatch(addComment(parent));
     store.dispatch(setThreadComments(threadId, [parent]));
 
     store.dispatch(setIsReplying(parentId));

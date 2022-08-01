@@ -1,6 +1,6 @@
 import { createComment, TestStore } from '../test';
 
-import { addComments, setCommentEdited } from './comments.actions';
+import { addComment, addComments, setCommentEdited } from './comments.actions';
 import {
   selectFormattedCommentDate,
   selectFormattedCommentDateDetailed,
@@ -16,7 +16,7 @@ describe('comments selectors', () => {
     });
 
     beforeEach(() => {
-      store.dispatch(addComments([comment]));
+      store.dispatch(addComment(comment));
     });
 
     it('returns the formatted comment date', () => {
@@ -36,7 +36,7 @@ describe('comments selectors', () => {
     });
 
     beforeEach(() => {
-      store.dispatch(addComments([comment]));
+      store.dispatch(addComment(comment));
     });
 
     it('returns the formatted comment date', () => {

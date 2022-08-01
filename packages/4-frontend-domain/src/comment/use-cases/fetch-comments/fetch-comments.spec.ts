@@ -7,7 +7,7 @@ import {
 } from '../../../thread/lists/created-root-comments';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Sort } from '../../../types';
-import { addComments } from '../../comments.actions';
+import { addComment, addComments } from '../../comments.actions';
 
 import { fetchComments, selectIsFetchingComments, selectThreadComments } from './fetch-comments';
 
@@ -78,7 +78,7 @@ describe('fetchComments', () => {
   it('clears the all created comments', async () => {
     const createdComment = createComment();
 
-    store.dispatch(addComments([createdComment]));
+    store.dispatch(addComment(createdComment));
     store.dispatch(addCreatedRootComment(createdComment));
 
     await execute();

@@ -2,8 +2,9 @@ import {
   editComment,
   selectCanSubmitEditCommentForm,
   selectEditCommentFormText,
+  selectIsEditingComment,
   selectIsSubmittingCommentEditionForm,
-  setCommentEditionFormText,
+  setEditCommentFormText,
   setIsEditingComment,
 } from 'frontend-domain';
 
@@ -19,14 +20,19 @@ type CommentEditionFormProps = {
 export const CommentEditionForm = ({ commentId }: CommentEditionFormProps) => {
   const dispatch = useDispatch();
 
+  const isEditing = useSelector(selectIsEditingComment, commentId);
   const message = useSelector(selectEditCommentFormText, commentId);
   const canSubmit = useSelector(selectCanSubmitEditCommentForm, commentId);
   const isSubmitting = useSelector(selectIsSubmittingCommentEditionForm, commentId);
 
+  if (!isEditing) {
+    return null;
+  }
+
   return (
     <CommentForm
       message={message as string}
-      setMessage={(message) => dispatch(setCommentEditionFormText(commentId, message))}
+      setMessage={(message) => dispatch(setEditCommentFormText(commentId, message))}
       canSubmit={canSubmit}
       isSubmitting={isSubmitting as boolean}
       onCancel={() => dispatch(setIsEditingComment(commentId, false))}

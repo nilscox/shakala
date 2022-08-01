@@ -1,4 +1,4 @@
-import { query, QueryState } from '@nilscox/redux-query';
+import { query, QueryState, createAction } from '@nilscox/redux-query';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { State, Thunk } from '../../../store';
@@ -18,14 +18,12 @@ export const editCommentReducer = editCommentMutation.reducer();
 const actions = editCommentMutation.actions();
 const selectors = editCommentMutation.selectors((state: State) => state.comments.mutations.editComment);
 
-// todo: add a reducer case
-export const setIsEditingComment = (commentId: string, isEditing = true): Thunk => {
-  return (dispatch, getState) => {
-    const comment = selectComment(getState(), commentId);
+export const setIsEditingComment = createAction(
+  'comment/set-editing',
+  (commentId: string, isEditing = true) => ({ commentId, isEditing }),
+);
 
-    dispatch(updateComment(commentId, { editionForm: isEditing ? { text: comment.text } : undefined }));
-  };
-};
+export type SetIsEditingCommentAction = ReturnType<typeof setIsEditingComment>;
 
 export const setEditCommentFormText = (commentId: string, text: string) => {
   return updateComment(commentId, { editionForm: { text } });
@@ -78,6 +76,7 @@ export const editComment = (commentId: string): Thunk => {
     } catch (error) {
       // todo: serialize error
       // dispatch(actions.setError(key, error));
+      console.error(error);
 
       if (error instanceof AuthorizationError && error.code === 'UserMustBeAuthor') {
         snackbarGateway.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");

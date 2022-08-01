@@ -88,7 +88,7 @@ export class ApiThreadGateway implements ThreadGateway {
       throw new AuthorizationError(code);
     }
 
-    if (response.status !== 200) {
+    if (response.status !== 204) {
       throw new FetchError(response);
     }
   }

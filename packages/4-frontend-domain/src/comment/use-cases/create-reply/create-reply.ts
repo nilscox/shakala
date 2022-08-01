@@ -5,7 +5,7 @@ import { requireAuthentication } from '../../../authentication/use-cases/require
 import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
-import { addComments, updateComment } from '../../comments.actions';
+import { addComment, updateComment } from '../../comments.actions';
 import { selectComment, selectCommentReplies } from '../../comments.selectors';
 
 type Key = {
@@ -25,10 +25,6 @@ export const setIsReplying = (commentId: string, isReplying = true) => {
 
 export const setReplyFormText = (commentId: string, text: string) => {
   return updateComment(commentId, { replyForm: { text } });
-};
-
-export const setCommentEditionFormText = (commentId: string, text: string) => {
-  return updateComment(commentId, { editionForm: { text } });
 };
 
 export const selectReplyForm = (state: State, parentId: string) => {
@@ -83,7 +79,7 @@ export const createReply = (parentId: string): Thunk => {
         replies: [],
       };
 
-      dispatch(addComments([reply]));
+      dispatch(addComment(reply));
       dispatch(addCommentReply(parentId, reply));
 
       dispatch(setIsReplying(parentId, false));

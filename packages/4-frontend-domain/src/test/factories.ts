@@ -11,7 +11,6 @@ export const createThread = createFactory<Thread>(() => ({
   loadingComments: false,
   comments: [],
   createCommentForm: {
-    isSubmitting: false,
     text: '',
   },
 }));

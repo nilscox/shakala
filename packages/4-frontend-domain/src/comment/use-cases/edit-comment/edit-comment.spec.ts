@@ -3,12 +3,13 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError } from '../../../types';
-import { addComments } from '../../comments.actions';
+import { addComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
 import {
   editComment,
   selectEditCommentFormText,
+  selectIsEditingComment,
   selectIsSubmittingCommentEditionForm,
   setEditCommentFormText,
   setIsEditingComment,
@@ -31,7 +32,7 @@ describe('editComment', () => {
   beforeEach(() => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
-    store.dispatch(addComments([comment]));
+    store.dispatch(addComment(comment));
     store.dispatch(setIsEditingComment(commentId));
 
     store.dateGateway.setNow(now);
@@ -79,7 +80,7 @@ describe('editComment', () => {
   it('closes the edition form', async () => {
     await execute();
 
-    expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(false);
+    expect(store.select(selectIsEditingComment, commentId)).toBe(false);
   });
 
   it('shows a snack when the edition succeeded', async () => {
