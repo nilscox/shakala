@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { setThreadFilters, Sort } from 'frontend-domain';
 import { FormEventHandler, useCallback } from 'react';
 import { isSort } from 'shared';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '~/components/elements/input';
 import { RadioItem, RadiosGroup } from '~/components/elements/radio-group';
@@ -21,6 +22,10 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
   const search = useSearchParam('search');
   const sort = useSearchParam('sort');
 
+  const submitFilters = useDebouncedCallback((threadId: string, filters: { search: string; sort: Sort }) => {
+    dispatch(setThreadFilters(threadId, filters));
+  }, 220);
+
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
       const data = new FormData(event.currentTarget);
@@ -33,9 +38,9 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
         return;
       }
 
-      dispatch(setThreadFilters(threadId, { search, sort }));
+      submitFilters(threadId, { search, sort });
     },
-    [threadId, dispatch],
+    [threadId, submitFilters],
   );
 
   return (
