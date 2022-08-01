@@ -15,12 +15,9 @@ import {
   ReactionProps,
   ReactionType,
 } from 'backend-domain';
+import { createFactory, randomId, Replace } from 'shared';
 
 import { ReactionsCount } from '../interfaces/reaction.repository';
-
-type Replace<T, W> = Omit<T, keyof W> & W;
-
-const randomId = () => Math.random().toString(36).slice(-6);
 
 export const createTimestamp = (date?: string | Date) => {
   return new Timestamp(date ?? new Date('2000-01-01'));
@@ -92,15 +89,10 @@ export const createReaction = ({ ...props }: Partial<CreateReactionProps> = {}):
   });
 };
 
-type CreateReactionsCount = ReactionsCount;
-
-export const createReactionsCount = ({ ...props }: Partial<CreateReactionsCount> = {}): ReactionsCount => {
-  return {
-    [ReactionType.upvote]: 0,
-    [ReactionType.downvote]: 0,
-    ...props,
-  };
-};
+export const createReactionsCount = createFactory<ReactionsCount>(() => ({
+  [ReactionType.upvote]: 0,
+  [ReactionType.downvote]: 0,
+}));
 
 type CreateThreadProps = Replace<
   ThreadProps,

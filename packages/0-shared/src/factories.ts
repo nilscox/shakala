@@ -1,33 +1,30 @@
 import { AuthUserDto, CommentDto, ThreadDto, UserDto } from './dtos';
+import { createFactory } from './libs/create-factory';
+import { randomId } from './libs/random-id';
 
-const createId = () => Math.random().toString(36).slice(-6);
-
-export const createAuthUserDto = (overrides?: Partial<AuthUserDto>): AuthUserDto => ({
-  id: createId(),
+export const createAuthUserDto = createFactory<AuthUserDto>(() => ({
+  id: randomId(),
   nick: '',
   email: '',
   signupDate: '',
   profileImage: undefined,
-  ...overrides,
-});
+}));
 
-export const createUserDto = (overrides?: Partial<UserDto>): UserDto => ({
-  id: createId(),
+export const createUserDto = createFactory<UserDto>(() => ({
+  id: randomId(),
   nick: '',
   profileImage: undefined,
-  ...overrides,
-});
+}));
 
-export const createThreadDto = (overrides?: Partial<ThreadDto>): ThreadDto => ({
-  id: createId(),
+export const createThreadDto = createFactory<ThreadDto>(() => ({
+  id: randomId(),
   author: createUserDto(),
   date: '',
   text: '',
-  ...overrides,
-});
+}));
 
-export const createCommentDto = (overrides?: Partial<CommentDto>): CommentDto => ({
-  id: createId(),
+export const createCommentDto = createFactory<CommentDto>(() => ({
+  id: randomId(),
   author: createUserDto(),
   date: '',
   edited: false,
@@ -35,5 +32,4 @@ export const createCommentDto = (overrides?: Partial<CommentDto>): CommentDto =>
   downvotes: 0,
   upvotes: 0,
   replies: [],
-  ...overrides,
-});
+}));
