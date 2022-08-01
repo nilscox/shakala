@@ -1,9 +1,9 @@
 import { query, QueryState } from '@nilscox/redux-query';
 
-import { addCommentToThreadQuery } from '../..';
 import { selectUserOrFail } from '../../../authentication';
-import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { requireAuthentication } from '../../../authentication/use-cases';
 import { addComments } from '../../../comment/comments.actions';
+import { addCommentToThreadQuery } from '../../../comment/use-cases';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
 import { updateThread } from '../../thread.actions';

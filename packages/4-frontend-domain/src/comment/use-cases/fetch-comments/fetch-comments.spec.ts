@@ -1,13 +1,13 @@
 import { createCommentDto } from 'shared';
 
-import { addComments } from '../../../comment/comments.actions';
 import { createComment, createThread, TestStore } from '../../../test';
+import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Sort } from '../../../types';
-import { addThread, setThreadComments } from '../../thread.actions';
+import { addComments } from '../../comments.actions';
 
-import { fetchThreadComments, selectLoadingComments, selectThreadComments } from './fetch-thread-comments';
+import { fetchComments, selectLoadingComments, selectThreadComments } from './fetch-comments';
 
-describe('fetchThreadComments', () => {
+describe('fetchComments', () => {
   const store = new TestStore();
 
   const threadId = 'threadId';
@@ -22,7 +22,7 @@ describe('fetchThreadComments', () => {
   });
 
   const execute = () => {
-    return store.dispatch(fetchThreadComments(threadId));
+    return store.dispatch(fetchComments(threadId));
   };
 
   it("fetches a thread's comments", async () => {

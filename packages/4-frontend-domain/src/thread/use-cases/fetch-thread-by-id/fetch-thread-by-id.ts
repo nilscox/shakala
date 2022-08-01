@@ -1,9 +1,9 @@
 import { query, QueryState } from '@nilscox/redux-query';
 
+import { fetchComments } from '../../../comment/use-cases';
 import type { State, Thunk } from '../../../store';
 import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
 import { addThread } from '../../thread.actions';
-import { fetchThreadComments } from '../fetch-thread-comments/fetch-thread-comments';
 
 export const NotFound = 'NotFound';
 
@@ -54,7 +54,7 @@ export const fetchThreadById = (threadId: string): Thunk => {
       dispatch(addThread(thread));
       dispatch(actions.setSuccess(key, thread.id));
 
-      await dispatch(fetchThreadComments(threadId));
+      await dispatch(fetchComments(threadId));
     } catch (error) {
       dispatch(actions.setError(key, serializeError(error)));
     }

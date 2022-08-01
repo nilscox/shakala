@@ -1,12 +1,12 @@
 import { query, QueryState } from '@nilscox/redux-query';
 import { getIds, isDefined, isSort, Sort } from 'shared';
 
-import { selectComments } from '../../../comment';
-import { addComments } from '../../../comment/comments.actions';
-import { commentDtoToEntity } from '../../../comment/domain/comment-dto-to-entity';
+import { selectComments } from '../..';
 import { State, Thunk } from '../../../store';
-import { setThreadComments } from '../../thread.actions';
-import { GetCommentsOptions } from '../../thread.gateway';
+import { setThreadComments } from '../../../thread/thread.actions';
+import { GetCommentsOptions } from '../../../thread/thread.gateway';
+import { addComments } from '../../comments.actions';
+import { commentDtoToEntity } from '../../domain/comment-dto-to-entity';
 
 type Key = {
   threadId: string;
@@ -14,14 +14,14 @@ type Key = {
   sort: Sort | undefined;
 };
 
-const getThreadCommentsQuery = query<Key, string[]>('getThreadComments');
+const getCommentsQuery = query<Key, string[]>('getComments');
 
-const actions = getThreadCommentsQuery.actions();
-const selectors = getThreadCommentsQuery.selectors((state: State) => state.threads.queries.getThreadComments);
+const actions = getCommentsQuery.actions();
+const selectors = getCommentsQuery.selectors((state: State) => state.comments.queries.getComments);
 
-export const { reducer: getThreadCommentsQueryReducer } = getThreadCommentsQuery;
+export const { reducer: getCommentsQueryReducer } = getCommentsQuery;
 
-export const setGetThreadCommentsQueryResult = (
+export const setGetCommentsQueryResult = (
   threadId: string,
   commentIds: string[],
   search?: string,
@@ -48,7 +48,7 @@ export const selectThreadComments = (state: State, threadId: string, search?: st
   return selectComments(state, commentsIds);
 };
 
-export const fetchThreadComments = (threadId: string): Thunk => {
+export const fetchComments = (threadId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, routerGateway }) => {
     const search = routerGateway.getQueryParam('search');
     let sort = routerGateway.getQueryParam('sort');

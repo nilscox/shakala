@@ -5,4 +5,5 @@ export * from './handle-authentication-form-change/handle-authentication-form-ch
 export * from './initialize-authentication/initialize-authentication';
 export * from './login/login';
 export * from './logout/logout';
+export * from './require-authentication/require-authentication';
 export * from './signup/signup';

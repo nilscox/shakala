@@ -1,13 +1,8 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
-import { addComments } from '../../../comment';
+import { addComments, selectThreadComments, setGetCommentsQueryResult } from '../../../comment';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
-import {
-  selectCreateRootCommentFormText,
-  selectThreadComments,
-  setCreateRootCommentText,
-  setGetThreadCommentsQueryResult,
-} from '../../index';
+import { selectCreateRootCommentFormText, setCreateRootCommentText } from '../../index';
 import { addThread, setThreadComments } from '../../thread.actions';
 
 import { createRootComment, selectIsSubmittingRootCommentForm } from './create-root-comment';
@@ -30,7 +25,7 @@ describe('createRootComment', () => {
     store.dispatch(addThread(thread));
     store.dispatch(addComments([existingComment]));
     store.dispatch(setThreadComments(threadId, [existingComment]));
-    store.dispatch(setGetThreadCommentsQueryResult(threadId, [existingComment.id]));
+    store.dispatch(setGetCommentsQueryResult(threadId, [existingComment.id]));
     store.dispatch(setCreateRootCommentText(threadId, text));
 
     store.dateGateway.setNow(now);

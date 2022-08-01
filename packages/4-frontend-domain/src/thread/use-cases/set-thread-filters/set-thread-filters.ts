@@ -1,6 +1,6 @@
+import { fetchComments } from '../../../comment/use-cases';
 import { Thunk } from '../../../store';
 import { Sort } from '../../../types';
-import { fetchThreadComments } from '../fetch-thread-comments/fetch-thread-comments';
 
 type ThreadFilters = {
   search: string;
@@ -21,6 +21,6 @@ export const setThreadFilters = (threadId: string, { search, sort }: ThreadFilte
       routerGateway.setQueryParam('sort', sort);
     }
 
-    await dispatch(fetchThreadComments(threadId, search, sort));
+    await dispatch(fetchComments(threadId));
   };
 };
