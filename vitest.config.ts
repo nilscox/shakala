@@ -1,9 +1,15 @@
+import { PluginOption } from 'vite';
 import reactJsx from 'vite-react-jsx';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { InlineConfig } from 'vitest';
 import { defineConfig } from 'vitest/config';
 
-export default (overrides?: InlineConfig) => {
+type Options = {
+  test?: InlineConfig;
+  plugins?: PluginOption[];
+};
+
+export default (options?: Options) => {
   return defineConfig({
     test: {
       globals: true,
@@ -11,8 +17,8 @@ export default (overrides?: InlineConfig) => {
       mockReset: true,
       reporters: 'verbose',
       threads: false,
-      ...overrides,
+      ...options?.test,
     },
-    plugins: [tsconfigPaths(), reactJsx()],
+    plugins: [tsconfigPaths(), reactJsx(), ...(options?.plugins ?? [])],
   });
 };

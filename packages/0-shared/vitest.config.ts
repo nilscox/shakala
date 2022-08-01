@@ -1,5 +1,7 @@
 import config from '../../vitest.config';
 
 export default config({
-  setupFiles: ['./src/vitest.setup.ts'],
+  test: {
+    setupFiles: ['./src/vitest.setup.ts'],
+  },
 });
