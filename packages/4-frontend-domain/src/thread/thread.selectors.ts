@@ -7,10 +7,10 @@ import type { State } from '../store';
 import { Thread } from '../types';
 import { formatDate } from '../utils/format-date';
 
-export const { selectEntity: selectThreadUnsafe } = createNormalizedSelectors<State, Thread>(
-  selectNormalizedEntities,
-  schemas.thread,
-);
+export const { selectEntity: selectThreadUnsafe, selectEntities: selectThreads } = createNormalizedSelectors<
+  State,
+  Thread
+>(selectNormalizedEntities, schemas.thread);
 
 export const selectThread = (state: State, threadId: string) => {
   const thread = selectThreadUnsafe(state, threadId);

@@ -60,6 +60,10 @@ const LastThreads = () => {
     dispatch(fetchLastThreads());
   }, [dispatch]);
 
+  if (threads.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <Heading>Dernières discussions</Heading>

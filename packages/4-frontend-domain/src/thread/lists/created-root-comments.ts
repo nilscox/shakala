@@ -7,10 +7,8 @@ import { Comment } from '../../types';
 const createdRootCommentsList = list('createdRootComment');
 
 export const createdRootCommentsReducer = createdRootCommentsList.reducer();
-export const actions = createdRootCommentsList.actions();
-export const selectors = createdRootCommentsList.selectors(
-  (state: State) => state.threads.createdRootComments,
-);
+const actions = createdRootCommentsList.actions();
+const selectors = createdRootCommentsList.selectors((state: State) => state.threads.createdRootComments);
 
 export const clearCreatedRootComments = actions.clear;
 
