@@ -11,6 +11,12 @@ export interface RequestOptions<Body> {
   readonly body?: Body;
 }
 
+export class NetworkError extends Error {
+  constructor() {
+    super('Network error when attempting to fetch resource');
+  }
+}
+
 export interface HttpGateway {
   get<ResponseBody = unknown>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>>;
 

@@ -30,12 +30,29 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (error) {
       return (
         <Fallback>
-          <p className="my-4">Une erreur s'est produite...</p>
-          <pre className="p-2 w-full max-w-modal rounded border">{JSON.stringify(error, null, 2)}</pre>
+          {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+          <p className="my-[4rem] text-xl">Une erreur s'est produite...</p>
+          <pre className="overflow-x-auto p-2 w-full max-w-page bg-neutral rounded border">
+            {this.renderError(error)}
+          </pre>
         </Fallback>
       );
     }
 
     return children;
+  }
+
+  private renderError(error: unknown) {
+    const { message, stack } = error as Record<string, string>;
+
+    if (stack) {
+      return stack;
+    }
+
+    if (message) {
+      return message;
+    }
+
+    return JSON.stringify(error);
   }
 }

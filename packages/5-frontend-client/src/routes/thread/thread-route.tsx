@@ -40,7 +40,7 @@ export const ThreadRoute = () => {
           return <Fallback>Ce thread n'existe pas.</Fallback>;
         }
 
-        throw error;
+        throw Object.assign(new Error(), error);
       }}
       render={() => <Thread threadId={threadId} />}
     />

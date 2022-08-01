@@ -1,7 +1,7 @@
 import { ValidationError } from 'frontend-domain';
 import { get } from 'shared';
 
-import { HttpGateway, RequestOptions, Response } from './http.gateway';
+import { HttpGateway, NetworkError, RequestOptions, Response } from './http.gateway';
 
 class FetchResponse<Body> implements Response<Body> {
   constructor(private readonly response: globalThis.Response, public readonly body: Body) {}
@@ -71,7 +71,14 @@ export class FetchHttpGateway implements HttpGateway {
 
     const url = this.baseUrl + path + this.getQueryString(query);
 
-    const response = await this.fetch(url, init);
+    let response: globalThis.Response;
+
+    try {
+      response = await this.fetch(url, init);
+    } catch (error) {
+      throw this.detectNetworkError(error) ?? error;
+    }
+
     const responseBody = await this.getResponseBody(response);
 
     if (this.fakeLag) {
@@ -102,6 +109,17 @@ export class FetchHttpGateway implements HttpGateway {
 
     if (contentType?.startsWith('text/')) {
       return response.text();
+    }
+  }
+
+  private detectNetworkError(error: unknown) {
+    const message = get(error, 'message');
+
+    const chromeErrorMessage = 'Failed to fetch';
+    const firefoxErrorMessage = 'NetworkError when attempting to fetch resource.';
+
+    if ([chromeErrorMessage, firefoxErrorMessage].includes(message as string)) {
+      return new NetworkError();
     }
   }
 }
