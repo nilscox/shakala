@@ -1,5 +1,6 @@
 import { logout } from 'frontend-domain';
 
+import { AppTitle } from '~/components/layout/app-title';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useUser } from '~/hooks/use-user';
 
@@ -11,6 +12,7 @@ export const Profile = () => {
 
   return (
     <>
+      <AppTitle>{`${user?.nick} : page profile`}</AppTitle>
       <PageTitle>{user?.nick}</PageTitle>
       <button onClick={() => dispatch(logout())}>Déconnexion</button>
     </>

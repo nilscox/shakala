@@ -14,6 +14,7 @@ import { AsyncResource } from '~/components/elements/async-resource/async-resour
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
+import { AppTitle } from '~/components/layout/app-title';
 import { useSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
@@ -54,6 +55,8 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
   return (
     <>
+      <AppTitle>{`${thread.author.nick} : ${thread.text}`}</AppTitle>
+
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="my-5 md:my-[4rem]">
         <div className="flex-wrap gap-4 justify-between items-center mb-2 row">

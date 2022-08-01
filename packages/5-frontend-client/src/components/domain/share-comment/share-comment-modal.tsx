@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Button } from '~/components/elements/button';
 import { Modal } from '~/components/elements/modal';
 import { useSnackbar } from '~/components/elements/snackbar';
+import { AppTitle } from '~/components/layout/app-title';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import facebook from '~/images/logos/facebook-logo.png';
@@ -37,6 +38,8 @@ export const ShareCommentModal = () => {
       // eslint-disable-next-line tailwindcss/no-arbitrary-value
       className="flex flex-col gap-5 max-w-[36rem]"
     >
+      <AppTitle>{`Partager le commentaire de ${comment?.author.nick}`}</AppTitle>
+
       <h2 className="text-lg font-bold text-primary">
         Partager le commentaire de <strong className="text-inherit">{comment?.author.nick}</strong>
       </h2>

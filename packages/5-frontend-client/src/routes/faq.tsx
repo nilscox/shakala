@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/components/elements/link';
+import { AppTitle } from '~/components/layout/app-title';
 
 import { PageTitle } from './components/page-title';
 import { SectionHeading } from './components/section-heading';
@@ -172,6 +173,7 @@ const questions: Record<string, QuestionProps[]> = {
 
 export const FaqRoute = () => (
   <>
+    <AppTitle>Questions posées fréquemment</AppTitle>
     <PageTitle>Questions posées fréquemment</PageTitle>
 
     <SectionHeading>Compte utilisateur</SectionHeading>

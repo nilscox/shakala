@@ -4,6 +4,7 @@ import { get } from 'shared';
 import { AuthenticationModal } from '../domain/authentication/authentication-modal';
 import { Fallback } from '../elements/fallback';
 
+import { AppTitle } from './app-title';
 import { Footer } from './footer';
 import { Header } from './header';
 
@@ -13,6 +14,7 @@ type LayoutProps = {
 
 export const Layout = ({ children }: LayoutProps) => (
   <>
+    <AppTitle />
     <Header className="mx-auto max-w-page" />
     <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
       <ErrorBoundary>{children}</ErrorBoundary>

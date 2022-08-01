@@ -1,8 +1,11 @@
+import { AppTitle } from '~/components/layout/app-title';
+
 import { PageTitle } from './components/page-title';
 import { SectionHeading } from './components/section-heading';
 
 export const MotivationsRoute = () => (
   <>
+    <AppTitle>Motivations</AppTitle>
     <PageTitle>Motivations</PageTitle>
 
     <p className="text-warning">

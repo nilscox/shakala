@@ -1,10 +1,13 @@
 import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AppTitle } from '~/components/layout/app-title';
+
 import { PageTitle } from './components/page-title';
 
 export const CharterRoute = () => (
   <>
+    <AppTitle>La charte</AppTitle>
     <PageTitle>La charte de Shakala</PageTitle>
 
     <p>

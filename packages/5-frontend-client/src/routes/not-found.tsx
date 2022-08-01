@@ -1,9 +1,11 @@
+import { AppTitle } from '~/components/layout/app-title';
 import notFoundImage from '~/images/404.png';
 
 import { PageTitle } from './components/page-title';
 
 export const NotFoundRoute = () => (
   <>
+    <AppTitle>Cette page n'existe pas</AppTitle>
     <PageTitle className="text-center">Cette page n'existe pas</PageTitle>
 
     <img
