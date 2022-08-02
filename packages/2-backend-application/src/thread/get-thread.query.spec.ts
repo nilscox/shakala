@@ -1,12 +1,12 @@
 import { ReactionType } from 'backend-domain';
 
 import { Sort } from '../interfaces/comment.repository';
-import { InMemoryCommentRepository } from '../utils/comment.in-memory-repository';
 import { createComment, createReaction, createReactionsCount, createThread } from '../utils/factories';
-import { InMemoryReactionRepository } from '../utils/reaction.in-memory-repository';
-import { InMemoryThreadRepository } from '../utils/thread.in-memory-repository';
 
+import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { GetThreadHandler, GetThreadQuery } from './get-thread.query';
+import { InMemoryReactionRepository } from './reaction.in-memory-repository';
+import { InMemoryThreadRepository } from './thread.in-memory-repository';
 
 describe('GetThreadQuery', () => {
   const threadRepository = new InMemoryThreadRepository();

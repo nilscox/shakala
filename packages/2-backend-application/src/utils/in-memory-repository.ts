@@ -1,6 +1,8 @@
 import clone from 'lodash.clonedeep';
 
-export class InMemoryRepository<Item extends { id: string }> {
+import { Repository } from '../interfaces/repository';
+
+export class InMemoryRepository<Item extends { id: string }> implements Repository<Item> {
   private items: Map<string, Item>;
 
   constructor(private _items: Item[] = []) {

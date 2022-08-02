@@ -2,8 +2,8 @@ import { ReactionType } from 'backend-domain';
 
 import { StubGeneratorService } from '../test/generator.stub';
 import { createReaction } from '../utils/factories';
-import { InMemoryReactionRepository } from '../utils/reaction.in-memory-repository';
 
+import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 import { SetReactionCommand, SetReactionCommandHandler } from './set-reaction.command';
 
 describe('SetReactionCommand', () => {

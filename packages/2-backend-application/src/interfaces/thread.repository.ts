@@ -1,7 +1,7 @@
 import type { Thread } from 'backend-domain';
 
-export interface ThreadRepository {
+import { Repository } from './repository';
+
+export interface ThreadRepository extends Repository<Thread> {
   findLasts(count: number): Promise<Thread[]>;
-  findById(threadId: string): Promise<Thread | undefined>;
-  save(thread: Thread): Promise<void>;
 }

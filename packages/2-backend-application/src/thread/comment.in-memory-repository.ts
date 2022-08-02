@@ -3,8 +3,7 @@ import { getIds } from 'shared';
 
 import { CommentRepository, Sort } from '../interfaces/comment.repository';
 import { ReactionRepository } from '../interfaces/reaction.repository';
-
-import { InMemoryRepository } from './in-memory-repository';
+import { InMemoryRepository } from '../utils/in-memory-repository';
 
 export class InMemoryCommentRepository extends InMemoryRepository<Comment> implements CommentRepository {
   constructor(private readonly reactionRepository: ReactionRepository, items?: Comment[]) {

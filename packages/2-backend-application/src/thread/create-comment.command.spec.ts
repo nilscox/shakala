@@ -2,12 +2,12 @@ import { Markdown, Timestamp } from 'backend-domain';
 
 import { StubDateService } from '../test/date.stub';
 import { StubGeneratorService } from '../test/generator.stub';
-import { InMemoryCommentRepository } from '../utils/comment.in-memory-repository';
+import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 import { createUser } from '../utils/factories';
-import { InMemoryReactionRepository } from '../utils/reaction.in-memory-repository';
-import { InMemoryUserRepository } from '../utils/user.in-memory-repository';
 
+import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { CreateCommentCommandHandler } from './create-comment.command';
+import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 
 describe('CreateCommentCommand', () => {
   const generator = new StubGeneratorService();

@@ -3,8 +3,8 @@ import { Nick, ProfileImage, Timestamp } from 'backend-domain';
 import { StubCryptoService } from '../test/crypto.stub';
 import { StubDateService } from '../test/date.stub';
 import { StubGeneratorService } from '../test/generator.stub';
+import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 import { createUser } from '../utils/factories';
-import { InMemoryUserRepository } from '../utils/user.in-memory-repository';
 
 import {
   EmailAlreadyExistsError,
