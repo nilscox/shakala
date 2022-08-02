@@ -4,4 +4,6 @@ yarn-error.log
 /packages/*/tsconfig.tsbuildinfo
 /packages/*/dist
 
+/packages/3-backend-infrastructure/.env
+
 /packages/5-frontend-client/storybook-static

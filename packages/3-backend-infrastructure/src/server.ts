@@ -43,6 +43,7 @@ import {
   RealQueryBus,
   ValidationService,
 } from './infrastructure';
+import { EnvConfigService } from './infrastructure/services/env-config.service';
 
 const users = [
   createUser({
@@ -75,6 +76,7 @@ export class Server {
   protected reactionRepository = new InMemoryReactionRepository();
   protected commentRepository = new InMemoryCommentRepository(this.reactionRepository, comments);
 
+  protected configService = new EnvConfigService();
   protected generatorService = new MathRandomGeneratorService();
   protected dateService = new RealDateService();
   protected cryptoService = new BcryptService();
@@ -149,9 +151,29 @@ export class Server {
   }
 
   private configureDefaultMiddlewares() {
+    const corsConfig = this.configService.cors();
+    const sessionConfig = this.configService.session();
+
     this.app.use(json());
-    this.app.use(cors({ origin: true, credentials: true }));
-    this.app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
+
+    this.app.use(
+      cors({
+        origin: corsConfig.reflectOrigin,
+        credentials: true,
+      }),
+    );
+
+    this.app.use(
+      session({
+        secret: sessionConfig.secret,
+        cookie: {
+          secure: sessionConfig.secure,
+          httpOnly: true,
+        },
+        resave: false,
+        saveUninitialized: true,
+      }),
+    );
   }
 
   private registerHandlers() {
