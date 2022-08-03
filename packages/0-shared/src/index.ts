@@ -10,6 +10,7 @@ export * from './libs/is-type';
 export * from './libs/pick';
 export * from './libs/random-id';
 
+export * from './types/class-type';
 export * from './types/replace';
 
 export * from './schemas/authentication';

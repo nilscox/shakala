@@ -6,7 +6,7 @@ import { EntityNotFoundError } from '../utils/entity-not-found.error';
 
 import { EntityMapper } from './entity-mapper';
 
-export class SqlRepository<SqlEntity, Entity> implements Repository<Entity> {
+export class SqlRepository<SqlEntity, Entity extends { id: string }> implements Repository<Entity> {
   constructor(
     protected readonly repository: EntityRepository<SqlEntity>,
     private readonly entityMapper: EntityMapper<SqlEntity, Entity>,
@@ -49,7 +49,15 @@ export class SqlRepository<SqlEntity, Entity> implements Repository<Entity> {
   }
 
   async save(entity: Entity): Promise<void> {
-    await this.repository.persistAndFlush(this.toSql(entity));
+    const sqlEntity = this.toSql(entity);
+    const existingSqlEntity = await this.repository.findOne(entity.id as FilterQuery<SqlEntity>);
+
+    if (existingSqlEntity) {
+      Object.assign(existingSqlEntity, sqlEntity);
+      await this.repository.persistAndFlush(existingSqlEntity);
+    } else {
+      await this.repository.persistAndFlush(sqlEntity);
+    }
   }
 
   async delete(entity: Entity): Promise<void> {

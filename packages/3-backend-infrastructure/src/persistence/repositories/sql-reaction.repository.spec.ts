@@ -48,6 +48,7 @@ describe('SqlReactionRepository', () => {
   it('returns the number of reactions for a set of comments', async () => {
     const comment1 = await save(createComment({ threadId: thread.id, author }));
     const comment2 = await save(createComment({ threadId: thread.id, author }));
+    const comment3 = await save(createComment({ threadId: thread.id, author }));
 
     const reaction1 = createReaction({
       commentId: comment1.id,
@@ -64,10 +65,11 @@ describe('SqlReactionRepository', () => {
     await save(reaction1);
     await save(reaction2);
 
-    expect(await repository.countReactions([comment1.id, comment2.id])).toEqual(
+    expect(await repository.countReactions([comment1.id, comment2.id, comment3.id])).toEqual(
       new Map([
         [comment1.id, createReactionsCount({ upvote: 0, downvote: 1 })],
         [comment2.id, createReactionsCount({ upvote: 1, downvote: 0 })],
+        [comment3.id, createReactionsCount({ upvote: 0, downvote: 0 })],
       ]),
     );
   });

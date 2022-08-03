@@ -19,9 +19,12 @@ export class SqlReactionRepository
 
   async countReactions(commentIds: string[]): Promise<Map<string, ReactionsCount>> {
     const reactions = await this.findAllBy({ comment: { id: { $in: commentIds } } });
+    const mapByCommentId = groupBy(reactions, 'commentId');
     const result = new Map<string, ReactionsCount>();
 
-    for (const [commentId, commentReactions] of groupBy(reactions, 'commentId').entries()) {
+    for (const commentId of commentIds) {
+      const commentReactions = mapByCommentId.get(commentId) ?? [];
+
       result.set(commentId, {
         [ReactionType.upvote]: commentReactions.filter(({ type }) => type === ReactionType.upvote).length,
         [ReactionType.downvote]: commentReactions.filter(({ type }) => type === ReactionType.downvote).length,

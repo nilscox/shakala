@@ -16,6 +16,7 @@ export * from './test/date.stub';
 export * from './test/generator.stub';
 
 export * from './thread/create-comment.command';
+export * from './thread/create-thread.command';
 export * from './thread/get-comment.query';
 export * from './thread/get-last-threads.query';
 export * from './thread/get-thread.query';

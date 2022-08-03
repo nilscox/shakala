@@ -15,7 +15,12 @@ const config: Options<PostgreSqlDriver> = {
   metadataProvider: TsMorphMetadataProvider,
   dbName: process.env['DB_NAME'],
   entities: [User, Thread, Comment, Reaction],
+  debug: true,
   cache: { options: { cacheDir: 'node_modules/.cache/mikro-orm' } },
+  migrations: {
+    path: 'src/persistence/migrations',
+    snapshot: false,
+  },
 };
 
 export default config;

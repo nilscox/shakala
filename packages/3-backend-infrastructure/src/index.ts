@@ -1,7 +1,10 @@
 import { Server } from './server';
 
 const main = async () => {
-  await new Server().start();
+  const server = new Server();
+
+  await server.init();
+  await server.start();
 };
 
 main().catch(console.error);

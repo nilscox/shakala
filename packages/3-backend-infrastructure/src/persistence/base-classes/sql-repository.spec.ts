@@ -35,7 +35,7 @@ describe('SqlRepository', () => {
     repository = new SqlUserRepository(em);
   });
 
-  it('saves an entity to the database', async () => {
+  it('inserts a new entity to the database', async () => {
     const entity = createUser({
       id: 'userId',
       nick: 'nick',
@@ -49,6 +49,16 @@ describe('SqlRepository', () => {
       nick: 'nick',
       profileImage: '/path/to/image.png',
     });
+  });
+
+  it('updates an existing entity in the database', async () => {
+    const sqlEntity = await createSqlEntity(em);
+
+    const entity = createUser({ id: sqlEntity.id, nick: 'updated' });
+
+    await repository.save(entity);
+
+    expect(await em.findOne(SqlUser, entity.id)).toHaveProperty('nick', 'updated');
   });
 
   it('retrieves an entity from the database', async () => {

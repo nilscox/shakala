@@ -1,158 +1,81 @@
-import {
-  CreateCommentCommand,
-  CreateCommentCommandHandler,
-  createUser,
-  GetCommentQuery,
-  GetCommentQueryHandler,
-  GetLastThreadsHandler,
-  GetLastThreadsQuery,
-  GetThreadHandler,
-  GetThreadQuery,
-  GetUserByEmailHandler,
-  GetUserByEmailQuery,
-  GetUserByIdHandler,
-  GetUserByIdQuery,
-  InMemoryCommentRepository,
-  InMemoryReactionRepository,
-  InMemoryThreadRepository,
-  InMemoryUserRepository,
-  LoginCommand,
-  LoginCommandHandler,
-  SetReactionCommand,
-  SetReactionCommandHandler,
-  SignupCommand,
-  SignupCommandHandler,
-  UpdateCommentCommand,
-  UpdateCommentCommandHandler,
-} from 'backend-application';
+import { Server as HttpServer } from 'http';
+import { promisify } from 'util';
+
+import { MikroORM, RequestContext } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import cors from 'cors';
 import express, { json } from 'express';
 import session from 'express-session';
 
-import { AuthenticationController } from './controllers/authentication/authentication.controller';
-import { ThreadController } from './controllers/thread/thread.controller';
-import threadChoucroute from './fixtures/thread-choucroute';
-import threadFacebookZetetique from './fixtures/thread-facebook-zetetique';
-import threadFlatEarth from './fixtures/thread-flat-earth';
+import { RealCommandBus, RealQueryBus } from './infrastructure';
 import {
-  BcryptService,
-  ExpressSessionService,
-  MathRandomGeneratorService,
-  RealCommandBus,
-  RealDateService,
-  RealQueryBus,
-  ValidationService,
-} from './infrastructure';
-import { EnvConfigService } from './infrastructure/services/env-config.service';
-
-const users = [
-  createUser({
-    id: 'user1',
-    email: 'nils@nils.cx',
-    hashedPassword: '$2b$10$B0Bfw0ypnDMW1hM/x7L0COD9MoCENH5mSwgda1aAme49h9.du7exu',
-    nick: 'nilscox',
-  }),
-];
-
-const threads = [
-  //
-  threadFacebookZetetique.thread,
-  threadFlatEarth.thread,
-  threadChoucroute.thread,
-];
-
-const comments = [
-  //
-  ...threadFacebookZetetique.comments,
-  ...threadFlatEarth.comments,
-  ...threadChoucroute.comments,
-];
+  CommandHandlers,
+  Controllers,
+  instantiateCommandAndQueries,
+  instantiateControllers,
+  instantiateRepositories,
+  instantiateServices,
+  QueryHandlers,
+  Repositories,
+  Services,
+} from './instantiate-dependencies';
+import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 
 export class Server {
   protected app = express();
+  protected server!: HttpServer;
 
-  protected userRepository = new InMemoryUserRepository(users);
-  protected threadRepository = new InMemoryThreadRepository(threads);
-  protected reactionRepository = new InMemoryReactionRepository();
-  protected commentRepository = new InMemoryCommentRepository(this.reactionRepository, comments);
+  readonly queryBus = new RealQueryBus();
+  readonly commandBus = new RealCommandBus();
 
-  protected configService = new EnvConfigService();
-  protected generatorService = new MathRandomGeneratorService();
-  protected dateService = new RealDateService();
-  protected cryptoService = new BcryptService();
-  protected validationService = new ValidationService();
+  private orm!: MikroORM;
 
-  protected queryBus = new RealQueryBus();
-  protected commandBus = new RealCommandBus();
+  private repositories!: Repositories;
+  private services!: Services;
+  private commands!: CommandHandlers;
+  private queries!: QueryHandlers;
+  private controllers!: Controllers;
 
-  protected getUserByIdHandler = new GetUserByIdHandler(this.userRepository);
-  protected getUserByEmailHandler = new GetUserByEmailHandler(this.userRepository);
-  protected loginCommandHandler = new LoginCommandHandler(
-    this.userRepository,
-    this.cryptoService,
-    this.dateService,
-  );
-  protected signupCommandHandler = new SignupCommandHandler(
-    this.userRepository,
-    this.generatorService,
-    this.cryptoService,
-    this.dateService,
-  );
+  async init() {
+    this.orm = await createDatabaseConnection();
 
-  protected getLastThreadsHandler = new GetLastThreadsHandler(this.threadRepository);
-  protected getThreadHandler = new GetThreadHandler(
-    this.threadRepository,
-    this.commentRepository,
-    this.reactionRepository,
-  );
-  protected getCommentHandler = new GetCommentQueryHandler(this.commentRepository);
-  protected createCommentHandler = new CreateCommentCommandHandler(
-    this.generatorService,
-    this.dateService,
-    this.commentRepository,
-    this.userRepository,
-  );
-  protected updateCommentHandler = new UpdateCommentCommandHandler(
-    this.dateService,
-    this.commentRepository,
-    this.userRepository,
-  );
-  protected setReactionHandler = new SetReactionCommandHandler(
-    this.generatorService,
-    this.reactionRepository,
-  );
-
-  protected sessionService = new ExpressSessionService(this.queryBus);
-
-  protected authenticationController = new AuthenticationController(
-    this.validationService,
-    this.sessionService,
-    this.queryBus,
-    this.commandBus,
-  );
-
-  protected threadController = new ThreadController(
-    this.queryBus,
-    this.commandBus,
-    this.sessionService,
-    this.validationService,
-  );
-
-  constructor() {
+    this.instantiateDependencies();
     this.configureDefaultMiddlewares();
     this.registerHandlers();
     this.configureControllers();
   }
 
-  start() {
-    this.app.listen(3000, () => {
-      console.info('server listening on port 3000');
+  async close() {
+    await this.orm.close();
+
+    if (this.server) {
+      await promisify(this.server.close)();
+    }
+  }
+
+  async start() {
+    await new Promise<void>((resolve) => {
+      this.server = this.app.listen(3000, resolve);
     });
+
+    console.info('server listening on port 3000');
+  }
+
+  private instantiateDependencies() {
+    this.repositories = instantiateRepositories(this.orm.em as EntityManager);
+    this.services = instantiateServices(this.queryBus);
+
+    const commandsAndQueries = instantiateCommandAndQueries(this.repositories, this.services);
+    this.commands = commandsAndQueries.commands;
+    this.queries = commandsAndQueries.queries;
+
+    this.controllers = instantiateControllers(this.commandBus, this.queryBus, this.services);
   }
 
   private configureDefaultMiddlewares() {
-    const corsConfig = this.configService.cors();
-    const sessionConfig = this.configService.session();
+    const { configService } = this.services;
+    const corsConfig = configService.cors();
+    const sessionConfig = configService.session();
 
     this.app.use(json());
 
@@ -174,24 +97,25 @@ export class Server {
         saveUninitialized: true,
       }),
     );
+
+    this.app.use((_req, _res, next) => {
+      RequestContext.create(this.orm.em, next);
+    });
   }
 
   private registerHandlers() {
-    this.queryBus.register(GetUserByEmailQuery, this.getUserByEmailHandler);
-    this.queryBus.register(GetUserByIdQuery, this.getUserByIdHandler);
-    this.commandBus.register(LoginCommand, this.loginCommandHandler);
-    this.commandBus.register(SignupCommand, this.signupCommandHandler);
+    for (const [Query, handler] of this.queries.entries()) {
+      this.queryBus.register(Query, handler);
+    }
 
-    this.queryBus.register(GetLastThreadsQuery, this.getLastThreadsHandler);
-    this.queryBus.register(GetThreadQuery, this.getThreadHandler);
-    this.queryBus.register(GetCommentQuery, this.getCommentHandler);
-    this.commandBus.register(CreateCommentCommand, this.createCommentHandler);
-    this.commandBus.register(UpdateCommentCommand, this.updateCommentHandler);
-    this.commandBus.register(SetReactionCommand, this.setReactionHandler);
+    for (const [Command, handler] of this.commands.entries()) {
+      this.commandBus.register(Command, handler);
+    }
   }
 
   private configureControllers() {
-    this.authenticationController.configure(this.app);
-    this.threadController.configure(this.app);
+    for (const controller of this.controllers) {
+      controller.configure(this.app);
+    }
   }
 }

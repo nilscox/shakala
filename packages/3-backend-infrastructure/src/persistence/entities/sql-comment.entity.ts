@@ -16,7 +16,7 @@ export class Comment extends BaseEntity {
   @ManyToOne()
   parent?: Comment;
 
-  @Property()
+  @Property({ columnType: 'text' })
   text!: string;
 
   @Property()

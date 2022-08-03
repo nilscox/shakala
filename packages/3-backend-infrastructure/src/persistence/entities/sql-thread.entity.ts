@@ -9,7 +9,7 @@ export class Thread extends BaseEntity {
   @ManyToOne({ eager: true })
   author!: User;
 
-  @Property()
+  @Property({ columnType: 'text' })
   text!: string;
 
   @Property()

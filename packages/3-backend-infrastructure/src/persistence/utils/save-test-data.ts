@@ -28,7 +28,7 @@ export const sqlHelpers = (em: EntityManager) => {
     threadRepository,
     userRepository,
 
-    async save<T extends { new (): T }>(entity: T) {
+    async save<T>(entity: T) {
       const ctor = entity.constructor;
       const repository = repositoryMap.get(ctor);
 
