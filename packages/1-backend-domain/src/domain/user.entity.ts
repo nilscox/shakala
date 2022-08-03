@@ -43,6 +43,10 @@ export class User extends Entity<UserProps> {
     return this.props.email;
   }
 
+  get hashedPassword() {
+    return this.props.hashedPassword;
+  }
+
   get nick() {
     return this.props.nick;
   }

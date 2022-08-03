@@ -1,7 +1,7 @@
-export interface Repository<T> {
-  findAll(): Promise<T[]>;
-  findById(itemId: string): Promise<T | undefined>;
-  findByIdOrFail(itemId: string): Promise<T>;
-  save(item: T): Promise<void>;
-  delete(item: T): Promise<void>;
+export interface Repository<Entity> {
+  findAll(): Promise<Entity[]>;
+  findById(entityId: string): Promise<Entity | undefined>;
+  findByIdOrFail(entityId: string): Promise<Entity>;
+  save(entity: Entity): Promise<void>;
+  delete(entity: Entity): Promise<void>;
 }

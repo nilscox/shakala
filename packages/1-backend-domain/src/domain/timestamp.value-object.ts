@@ -24,8 +24,12 @@ export class Timestamp extends ValueObject<string> {
     return this.value;
   }
 
+  toDate() {
+    return new Date(this.value);
+  }
+
   get epoch() {
-    return new Date(this.value).getTime();
+    return this.toDate().getTime();
   }
 
   static now(dateService: DateService) {

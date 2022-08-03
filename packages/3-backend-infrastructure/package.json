@@ -6,9 +6,22 @@
     "build": "tsc -b",
     "lint": "eslint src",
     "test": "vitest",
-    "start": "nodemon"
+    "start": "nodemon",
+    "db:create": "mikro-orm database:create",
+    "db:drop": "mikro-orm schema:drop --drop-db -r",
+    "db:migrate": "mikro-orm migration:fresh",
+    "db:reset": "yarn db:drop && yarn db:create && yarn db:migrate"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/persistence/mikro-orm/mikro-orm.config.ts"
+    ]
   },
   "dependencies": {
+    "@mikro-orm/core": "^5.3.0",
+    "@mikro-orm/postgresql": "^5.3.0",
+    "@mikro-orm/reflection": "^5.3.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -17,12 +30,15 @@
     "module-alias": "^2.2.2"
   },
   "devDependencies": {
+    "@mikro-orm/cli": "^5.3.0",
+    "@mikro-orm/migrations": "^5.3.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.5",
     "@types/module-alias": "^2.0.1",
     "nodemon": "^2.0.19",
+    "sql-formatter": "^8.2.0",
     "ts-node": "^10.9.1"
   }
 }
