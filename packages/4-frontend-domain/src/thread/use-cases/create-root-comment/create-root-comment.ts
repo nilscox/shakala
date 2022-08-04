@@ -1,4 +1,4 @@
-import { query, QueryState } from '@nilscox/redux-query';
+import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases';
@@ -22,6 +22,13 @@ const actions = createRootCommentQuery.actions();
 const selectors = createRootCommentQuery.selectors(
   (state: State) => state.threads.mutations.createRootComment,
 );
+
+export const addRootCommentToThread = createAction(
+  'thread/add-root-comment',
+  (threadId: string, comment: Comment) => ({ threadId, commentId: comment.id }),
+);
+
+export type AddRootCommentToThreadAction = ReturnType<typeof addRootCommentToThread>;
 
 export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThread(threadId, { createCommentForm: { text } });
@@ -77,6 +84,7 @@ export const createRootComment = (threadId: string): Thunk => {
       dispatch(addComment(comment));
       dispatch(addCreatedRootComment(comment));
       dispatch(setCreateRootCommentText(threadId, ''));
+      dispatch(addRootCommentToThread(threadId, comment));
 
       dispatch(actions.setSuccess(key, undefined));
       snackbarGateway.success('Votre commentaire a bien été créé.');

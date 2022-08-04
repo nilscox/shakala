@@ -3,6 +3,7 @@ import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createThread, TestStore } from '../../../test';
 import { selectCreatedRootComments } from '../../lists/created-root-comments';
 import { addThread } from '../../thread.actions';
+import { selectCommentThreadId } from '../../thread.selectors';
 
 import {
   createRootComment,
@@ -47,7 +48,7 @@ describe('createRootComment', () => {
     expect(store.threadGateway.createComment).toHaveBeenCalledWith(threadId, text);
   });
 
-  it('adds the created comment to the thread', async () => {
+  it('adds the new comment to the list of created comments', async () => {
     await execute();
 
     const createdComments = store.select(selectCreatedRootComments);
@@ -67,6 +68,12 @@ describe('createRootComment', () => {
       downvotes: 0,
       replies: [],
     });
+  });
+
+  it('adds the created comment to the thread', async () => {
+    await execute();
+
+    expect(store.select(selectCommentThreadId, commentId)).toEqual(threadId);
   });
 
   it('requires user authentication', async () => {
