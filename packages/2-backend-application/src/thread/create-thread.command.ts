@@ -9,7 +9,7 @@ export class CreateThreadCommand implements Command {
   constructor(readonly authorId: string, readonly text: string) {}
 }
 
-export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> {
+export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, string> {
   constructor(
     private readonly generatorService: GeneratorService,
     private readonly dateService: DateService,
@@ -28,5 +28,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> 
     });
 
     await this.threadRepository.save(thread);
+
+    return thread.id;
   }
 }

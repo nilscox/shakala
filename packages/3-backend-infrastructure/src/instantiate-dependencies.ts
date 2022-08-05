@@ -172,7 +172,7 @@ export const instantiateCommandAndQueries = (
   // thread
   queries.set(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
   queries.set(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
-  queries.set(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
+  commands.set(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
 
   // comment
   queries.set(GetCommentQuery, new GetCommentQueryHandler(commentRepository));

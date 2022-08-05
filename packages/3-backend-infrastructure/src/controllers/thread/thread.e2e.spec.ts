@@ -1,4 +1,3 @@
-import { createComment, createThread } from 'backend-application';
 import { LoginDto, ReactionTypeDto } from 'shared';
 import { Request, SuperAgentTest } from 'supertest';
 
@@ -14,64 +13,66 @@ describe('Thread e2e', () => {
   const server = new TestServer();
   let agent: SuperAgentTest;
 
-  beforeEach(() => {
+  beforeAll(async () => {
+    await server.init();
+  });
+
+  beforeEach(async () => {
+    await server.reset();
     agent = server.agent();
   });
 
   test('create a comment', async () => {
-    const user: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
-    const threadId = 'threadId';
+    const loginDto: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
 
     const login = async () => {
-      await agent.post('/auth/login').send(user).expect(200);
+      await agent.post('/auth/login').send(loginDto).expect(200);
     };
 
-    const createComment = async () => {
+    const createComment = async (threadId: string) => {
       const body = { text: 'hello' };
 
       return agent.post(`/thread/${threadId}/comment`).send(body).expect(201);
     };
 
-    const updateComment = async (commentId: string) => {
+    const updateComment = async (threadId: string, commentId: string) => {
       const body = { text: 'updated' };
 
       await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(204);
     };
 
-    await server.saveUser(user.email, user.password);
-    await server.saveThread(createThread({ id: threadId }));
+    const userId = await server.createUser(loginDto.email, loginDto.password);
+    const threadId = await server.createThread(userId);
 
     await login();
 
-    const createResponse = await createComment();
+    const createResponse = await createComment(threadId);
     const createdId: string = createResponse.body;
 
-    await updateComment(createdId);
+    await updateComment(threadId, createdId);
   });
 
   test('set a reaction', async () => {
-    const user: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
-    const threadId = 'threadId';
-    const commentId = 'commentId';
+    const loginDto: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
 
     const login = async () => {
-      await agent.post('/auth/login').send(user).expect(200);
+      await agent.post('/auth/login').send(loginDto).expect(200);
     };
 
-    const setReaction = async (type: ReactionTypeDto | null) => {
+    const setReaction = async (threadId: string, commentId: string, type: ReactionTypeDto | null) => {
       const body: SetReactionDto = { type };
 
       await agent.put(`/thread/${threadId}/comment/${commentId}/reaction`).send(body).expect(204);
     };
 
-    await server.saveUser(user.email, user.password);
-    await server.saveThread(createThread({ id: threadId }));
-    await server.saveComment(createComment({ id: commentId }));
+    const userId = await server.createUser(loginDto.email, loginDto.password);
+    const threadId = await server.createThread(userId);
+    const commentId = await server.createComment(threadId, userId);
 
     await login();
 
-    await setReaction(ReactionTypeDto.upvote);
-    await setReaction(ReactionTypeDto.downvote);
-    await setReaction(null);
+    await setReaction(threadId, commentId, ReactionTypeDto.upvote);
+    await setReaction(threadId, commentId, ReactionTypeDto.downvote);
+    await setReaction(threadId, commentId, null);
   });
 });

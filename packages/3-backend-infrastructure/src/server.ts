@@ -1,52 +1,31 @@
 import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
-import { MikroORM, RequestContext } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { RequestContext } from '@mikro-orm/core';
 import cors from 'cors';
 import express, { json } from 'express';
 import session from 'express-session';
 
-import { RealCommandBus, RealQueryBus } from './infrastructure';
-import {
-  CommandHandlers,
-  Controllers,
-  instantiateCommandAndQueries,
-  instantiateControllers,
-  instantiateRepositories,
-  instantiateServices,
-  QueryHandlers,
-  Repositories,
-  Services,
-} from './instantiate-dependencies';
-import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
+import { Application } from './application';
+import { Controllers, instantiateControllers } from './instantiate-dependencies';
 
-export class Server {
+export class Server extends Application {
   protected app = express();
   protected server!: HttpServer;
 
-  readonly queryBus = new RealQueryBus();
-  readonly commandBus = new RealCommandBus();
-
-  private orm!: MikroORM;
-
-  private repositories!: Repositories;
-  private services!: Services;
-  private commands!: CommandHandlers;
-  private queries!: QueryHandlers;
   private controllers!: Controllers;
 
-  async init() {
-    this.orm = await createDatabaseConnection();
+  override async init() {
+    await super.init();
 
-    this.instantiateDependencies();
+    this.controllers = instantiateControllers(this.commandBus, this.queryBus, this.services);
+
     this.configureDefaultMiddlewares();
-    this.registerHandlers();
     this.configureControllers();
   }
 
-  async close() {
-    await this.orm.close();
+  override async close() {
+    await super.close();
 
     if (this.server) {
       await promisify(this.server.close)();
@@ -59,17 +38,6 @@ export class Server {
     });
 
     console.info('server listening on port 3000');
-  }
-
-  private instantiateDependencies() {
-    this.repositories = instantiateRepositories(this.orm.em as EntityManager);
-    this.services = instantiateServices(this.queryBus);
-
-    const commandsAndQueries = instantiateCommandAndQueries(this.repositories, this.services);
-    this.commands = commandsAndQueries.commands;
-    this.queries = commandsAndQueries.queries;
-
-    this.controllers = instantiateControllers(this.commandBus, this.queryBus, this.services);
   }
 
   private configureDefaultMiddlewares() {
@@ -101,16 +69,6 @@ export class Server {
     this.app.use((_req, _res, next) => {
       RequestContext.create(this.orm.em, next);
     });
-  }
-
-  private registerHandlers() {
-    for (const [Query, handler] of this.queries.entries()) {
-      this.queryBus.register(Query, handler);
-    }
-
-    for (const [Command, handler] of this.commands.entries()) {
-      this.commandBus.register(Command, handler);
-    }
   }
 
   private configureControllers() {

@@ -1,36 +1,38 @@
-import { RequestContext } from '@mikro-orm/core';
 import { CreateThreadCommand, GetUserByEmailQuery, SignupCommand } from 'backend-application';
 import { User } from 'backend-domain';
 
-import { Server } from '../../server';
+import { Application } from '../../application';
 
-const text = `Hello tout le monde
+const text = `Bonjour,
 
-Parmi la communauté zététique je n'apprends rien à personne en parlant du fait qu'une des bases des outils qu'on manie sont les biais cognitifs.
+Je me demande parfois à quel point les perceptions de différentes personnes... diffèrent.
 
-Et je vois souvent des personnes issues du joli monde des sciences humaines rappeler qu'il y a tout un état de l'art, des ressources etc et que connaître seul les biais cognitifs avec zéro connaissance du contexte autour, du fonctionnement du cerveau et toutes choses égales par ailleurs que je ne connais pas moi même, ignorante du sujet que je suis, ne permet pas une lecture complète des choses.
+Je veux dire, ce qui se passe dans notre tête ne peut pas être communiqué avec une exactitude parfaite. Rien que le fait de devoir employer des mots pour décrire nos expériences de *notre réalité* va nous faire perdre en précision. Et puis, la personne à qui on raconte notre vie va devoir se mettre à notre place du mieux qu'elle peut, mais est-ce que c'est toujours possible ?
 
-J'aurai aimé avoir des explications sur : dans quoi s'ancrent comme disciplines etc les biais cognitifs ? Quelles sont les évolutions, remises en questions et critiques s'il y a ?
+Un exemple que j'aime bien prendre pour illustrer cette idée, c'est ce qu'il se passe lorsqu'on ouvre les yeux le matin. Moi, je mets du temps à "émerger", quelque minutes pour être pleinement conscient (pour être avoir fini de me réveiller). Ma copine en revanche, est entièrement consciente en quelques secondes à peine.
 
-Je serais aussi preneuse de ressources, quelles soient sous forme de livre, articles podcast, vidéos etc
+Et ça peut poser des quiproquos : elle me dit "mais si, je t'en ai parlé ce matin après qu'on se soit réveillé !", et moi j'ai aucun souvenir de ce qu'on s'est dit à ce moment là...
 
-Merci d'avance de vos retours`;
+D'où ma réflexion : si on n'avait pas discuté de cette différence d'expérience du réveil, il serait naturel de penser que c'est pareil pour tout le monde, que c'est **comme on le vit sois-même**.
+
+Est-ce que vous avez déjà pensé à ce genre de chose ? D'autres situations dans lesquelles on pense que tout le monde vit la même chose, alors que pas du tout ?
+`;
 
 const seed = async () => {
-  const server = new Server();
+  const app = new Application();
 
   try {
-    await server.init();
+    await app.init();
 
-    await RequestContext.createAsync(server.orm.em, async () => {
-      await server.commandBus.execute(new SignupCommand('user', 'user@email.tld', 'p4ssword'));
+    await app.run(async ({ commandBus, queryBus }) => {
+      await commandBus.execute(new SignupCommand('user', 'user@email.tld', 'p4ssword'));
 
-      const user = await server.queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));
+      const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));
 
-      await server.queryBus.execute(new CreateThreadCommand(user.id, text));
+      await commandBus.execute(new CreateThreadCommand(user.id, text));
     });
   } finally {
-    await server.close();
+    await app.close();
   }
 };
 

@@ -28,7 +28,8 @@ export const sqlHelpers = (em: EntityManager) => {
     threadRepository,
     userRepository,
 
-    async save<T>(entity: T) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    async save<T extends { constructor: Function }>(entity: T) {
       const ctor = entity.constructor;
       const repository = repositoryMap.get(ctor);
 

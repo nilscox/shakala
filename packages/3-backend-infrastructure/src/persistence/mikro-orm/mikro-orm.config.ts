@@ -10,12 +10,22 @@ import { User } from '../entities/sql-user.entity';
 
 dotenv.config();
 
+const {
+  DATABASE_HOST: host,
+  DATABASE_USER: user,
+  DATABASE_PASSWORD: password,
+  DATABASE_NAME: dbName,
+} = process.env;
+
 const config: Options<PostgreSqlDriver> = {
   type: 'postgresql',
+  host,
+  user,
+  password,
+  dbName,
+  debug: false,
   metadataProvider: TsMorphMetadataProvider,
-  dbName: process.env['DB_NAME'],
   entities: [User, Thread, Comment, Reaction],
-  debug: true,
   cache: { options: { cacheDir: 'node_modules/.cache/mikro-orm' } },
   migrations: {
     path: 'src/persistence/migrations',

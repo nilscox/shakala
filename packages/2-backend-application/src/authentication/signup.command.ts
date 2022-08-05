@@ -20,7 +20,7 @@ export class SignupCommand implements Command {
   constructor(readonly nick: string, readonly email: string, readonly password: string) {}
 }
 
-export class SignupCommandHandler implements CommandHandler<SignupCommand> {
+export class SignupCommandHandler implements CommandHandler<SignupCommand, string> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly generatorService: GeneratorService,
@@ -28,7 +28,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand> {
     private readonly dateService: DateService,
   ) {}
 
-  async handle(command: SignupCommand): Promise<void> {
+  async handle(command: SignupCommand): Promise<string> {
     const { nick, email, password } = command;
 
     await this.assertEmailDontExist(email);
@@ -42,6 +42,8 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand> {
     });
 
     await this.userRepository.save(user);
+
+    return user.id;
   }
 
   private async assertEmailDontExist(email: string) {

@@ -28,6 +28,8 @@ describe('Authentication e2e', () => {
       await agent.post('/auth/login').send(loginBody).expect(200);
     };
 
+    await server.init();
+
     await signup();
     await logout();
     await login();

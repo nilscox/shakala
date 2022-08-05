@@ -27,7 +27,7 @@ describe('SignupCommand', () => {
   const now = new Date('2022-01-01');
 
   const signup = async () => {
-    await handler.handle(new SignupCommand(nick, email, password));
+    return handler.handle(new SignupCommand(nick, email, password));
   };
 
   beforeEach(() => {
@@ -46,6 +46,10 @@ describe('SignupCommand', () => {
     expect(createdUser?.profileImage.equals(new ProfileImage())).toBe(true);
     expect(createdUser?.signupDate.equals(new Timestamp(now))).toBe(true);
     expect(createdUser?.lastLoginDate).toBeNull();
+  });
+
+  it("returns the created user's id", async () => {
+    expect(await signup()).toEqual('userId');
   });
 
   it('fails to signup when the email already exists', async () => {
