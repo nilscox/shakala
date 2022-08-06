@@ -1,10 +1,8 @@
 import { logout } from 'frontend-domain';
 
-import { AppTitle } from '~/components/layout/app-title';
+import { PageTitle } from '~/components/layout/page-title';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useUser } from '~/hooks/use-user';
-
-import { PageTitle } from './components/page-title';
 
 export const Profile = () => {
   const user = useUser();
@@ -12,8 +10,8 @@ export const Profile = () => {
 
   return (
     <>
-      <AppTitle>{`${user?.nick} : page profile`}</AppTitle>
-      <PageTitle>{user?.nick}</PageTitle>
+      <PageTitle>{`${user?.nick} : page profile`}</PageTitle>
+      <h1>{user?.nick}</h1>
       <button onClick={() => dispatch(logout())}>Déconnexion</button>
     </>
   );

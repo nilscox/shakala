@@ -1,12 +1,11 @@
-import { AppTitle } from '~/components/layout/app-title';
+import { PageTitle } from '~/components/layout/page-title';
 
-import { PageTitle } from './components/page-title';
 import { SectionHeading } from './components/section-heading';
 
 export const MotivationsRoute = () => (
   <>
-    <AppTitle>Motivations</AppTitle>
     <PageTitle>Motivations</PageTitle>
+    <h1>Motivations</h1>
 
     <p className="text-warning">
       Attention : cette page n'est plus à jour avec les objectifs actuels du projet.

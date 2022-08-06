@@ -2,9 +2,8 @@ import clsx from 'clsx';
 import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/components/elements/link';
-import { AppTitle } from '~/components/layout/app-title';
+import { PageTitle } from '~/components/layout/page-title';
 
-import { PageTitle } from './components/page-title';
 import { SectionHeading } from './components/section-heading';
 
 type QuestionProps = {
@@ -75,8 +74,10 @@ const questions: Record<string, QuestionProps[]> = {
       answer: (
         <>
           Les messages supportent la syntaxe markdown, qui permet une mise en forme simple : utilisez par
-          exemple des étoiles pour mettre du texte en gras, <code>*comme ceci*</code>. Plus de détails ici :
-          https://learnxinyminutes.com/docs/fr-fr/markdown-fr/
+          exemple des étoiles pour mettre du texte en gras, <code>**comme ceci**</code>. Plus de détails sur{' '}
+          <ExternalLink href="https://learnxinyminutes.com/docs/fr-fr/markdown-fr/">
+            https://learnxinyminutes.com/docs/fr-fr/markdown-fr/
+          </ExternalLink>
         </>
       ),
     },
@@ -173,8 +174,8 @@ const questions: Record<string, QuestionProps[]> = {
 
 export const FaqRoute = () => (
   <>
-    <AppTitle>Questions posées fréquemment</AppTitle>
     <PageTitle>Questions posées fréquemment</PageTitle>
+    <h1>Questions posées fréquemment</h1>
 
     <SectionHeading>Compte utilisateur</SectionHeading>
 

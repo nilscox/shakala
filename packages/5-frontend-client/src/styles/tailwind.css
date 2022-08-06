@@ -25,7 +25,11 @@
   }
 
   h1 {
-    @apply text-xxl
+    @apply text-xxl pt-6 pb-4;
+  }
+
+  h2 {
+    @apply text-xl pt-5 pb-2;
   }
 
   svg {

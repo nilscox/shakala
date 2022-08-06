@@ -4,7 +4,7 @@ type PageTitleProps = {
   children?: string;
 };
 
-export const AppTitle = ({ children }: PageTitleProps) => (
+export const PageTitle = ({ children }: PageTitleProps) => (
   <Helmet>
     <title>{getTitle(children)}</title>
   </Helmet>

@@ -93,7 +93,10 @@ const Navigation = ({ className }: NavigationProps) => (
 const HeaderNavLink = (props: NavLinkProps) => (
   <NavLink
     className={({ isActive }) =>
-      clsx('hover:underline decoration-primary decoration-2 underline-offset-4', isActive && '!text-primary')
+      clsx(
+        'underline decoration-transparent hover:decoration-primary decoration-2 underline-offset-4 transition-colors',
+        isActive && '!text-primary',
+      )
     }
     {...props}
   />

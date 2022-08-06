@@ -28,7 +28,7 @@ export const ThreadsRoute = () => {
 
   return (
     <>
-      <h2 className="py-4 text-lg">Psst... ce projet n'existe pas vraiment !</h2>
+      <h2>Psst... ce projet n'existe pas vraiment !</h2>
 
       <p>
         Il s'agit d'un "proof of concept", un site permettant de se rendre compte de ce à quoi pourrait
@@ -47,7 +47,7 @@ export const ThreadsRoute = () => {
         du groupe zététique.
       </p>
 
-      <h2 className="py-6 text-xxl">Créer un nouveau fil de discussion</h2>
+      <h2>Créer un nouveau fil de discussion</h2>
 
       <ThreadForm errors={errors} onChange={handleChange} onSubmit={handleSubmit} />
     </>

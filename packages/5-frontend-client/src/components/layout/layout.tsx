@@ -4,9 +4,9 @@ import { get } from 'shared';
 import { AuthenticationModal } from '../domain/authentication/authentication-modal';
 import { Fallback } from '../elements/fallback';
 
-import { AppTitle } from './app-title';
 import { Footer } from './footer';
 import { Header } from './header';
+import { PageTitle } from './page-title';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ type LayoutProps = {
 
 export const Layout = ({ children }: LayoutProps) => (
   <>
-    <AppTitle />
+    <PageTitle />
     <Header className="mx-auto max-w-page" />
     <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
       <ErrorBoundary>{children}</ErrorBoundary>
