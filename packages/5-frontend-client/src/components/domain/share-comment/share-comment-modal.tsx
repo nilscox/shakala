@@ -74,7 +74,7 @@ export const ShareCommentModal = () => {
       </div>
 
       <div className="p-2 rounded border">
-        <strong className="text-text-light">Permalien</strong>
+        <strong className="text-muted">Permalien</strong>
         <a className="block break-all" href={permalink}>
           {permalink}
         </a>
