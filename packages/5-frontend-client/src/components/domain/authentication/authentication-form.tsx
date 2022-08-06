@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import {
-  AuthenticationForm as AuthenticationFormType,
+  AuthenticationType,
   closeAuthenticationForm,
   handleAuthenticate,
   handleAuthenticationFormChange,
@@ -20,16 +20,16 @@ import { FormInputs } from './inputs';
 import { AuthenticationMessage } from './message';
 import { AuthenticationNavigation } from './navigation';
 
-const heading: Record<AuthenticationFormType, string> = {
-  [AuthenticationFormType.login]: 'Connexion',
-  [AuthenticationFormType.signup]: 'Inscription',
-  [AuthenticationFormType.emailLogin]: 'Mot de passe oublié',
+const heading: Record<AuthenticationType, string> = {
+  [AuthenticationType.login]: 'Connexion',
+  [AuthenticationType.signup]: 'Inscription',
+  [AuthenticationType.emailLogin]: 'Mot de passe oublié',
 };
 
-const cta: Record<AuthenticationFormType, string> = {
-  [AuthenticationFormType.login]: 'Connexion',
-  [AuthenticationFormType.signup]: 'Inscription',
-  [AuthenticationFormType.emailLogin]: 'Envoyer',
+const cta: Record<AuthenticationType, string> = {
+  [AuthenticationType.login]: 'Connexion',
+  [AuthenticationType.signup]: 'Inscription',
+  [AuthenticationType.emailLogin]: 'Envoyer',
 };
 
 export const AuthenticationForm = () => {
@@ -52,7 +52,16 @@ export const AuthenticationForm = () => {
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
       event.preventDefault();
-      dispatch(handleAuthenticate(new FormData(event.currentTarget)));
+
+      const form = new FormData(event.currentTarget);
+
+      dispatch(
+        handleAuthenticate({
+          email: form.get('email') as string,
+          password: form.get('password') as string,
+          nick: form.get('nick') as string,
+        }),
+      );
     },
     [dispatch],
   );

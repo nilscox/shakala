@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { State } from '../../store';
-import { AuthenticationField, AuthenticationForm } from '../authentication.types';
+import { AuthenticationField, AuthenticationType } from '../authentication.types';
 
 const selectAuthenticationSlice = (state: State) => state.authentication;
 
@@ -39,10 +39,10 @@ export const selectIsAuthenticationFieldVisible = createSelector(
     }
 
     if (field === 'password') {
-      return form !== AuthenticationForm.emailLogin;
+      return form !== AuthenticationType.emailLogin;
     }
 
-    return form === AuthenticationForm.signup;
+    return form === AuthenticationType.signup;
   },
 );
 
@@ -84,7 +84,7 @@ export const selectCanSubmitAuthenticationForm = createSelector(selectAuthentica
     return false;
   }
 
-  if (slice.form === AuthenticationForm.signup && !slice.rulesAccepted) {
+  if (slice.form === AuthenticationType.signup && !slice.rulesAccepted) {
     return false;
   }
 

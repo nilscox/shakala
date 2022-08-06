@@ -1,8 +1,8 @@
 import { Thunk } from '../../../store';
 import { setIsAuthenticationModalOpen, setAuthenticationForm } from '../../actions/authentication.actions';
-import { AuthenticationForm } from '../../authentication.types';
+import { AuthenticationType } from '../../authentication.types';
 
-export const openAuthenticationModal = (form: AuthenticationForm): Thunk => {
+export const openAuthenticationModal = (form: AuthenticationType): Thunk => {
   return (dispatch) => {
     dispatch(setIsAuthenticationModalOpen(true));
     dispatch(setAuthenticationForm(form));

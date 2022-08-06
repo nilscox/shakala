@@ -1,6 +1,6 @@
 import { TestStore } from '../../../test';
 import { setAuthenticationForm, setIsAuthenticationModalOpen } from '../../actions/authentication.actions';
-import { AuthenticationForm } from '../../authentication.types';
+import { AuthenticationType } from '../../authentication.types';
 import {
   selectAuthenticationForm,
   selectAuthenticationFormUnsafe,
@@ -14,7 +14,7 @@ describe('closeAuthenticationForm', () => {
 
   beforeEach(() => {
     store.dispatch(setIsAuthenticationModalOpen(true));
-    store.dispatch(setAuthenticationForm(AuthenticationForm.login));
+    store.dispatch(setAuthenticationForm(AuthenticationType.login));
     store.routerGateway.setQueryParam('auth', 'login');
   });
 

@@ -1,4 +1,4 @@
-import { AuthenticationForm, selectAuthenticationForm } from 'frontend-domain';
+import { AuthenticationType, selectAuthenticationForm } from 'frontend-domain';
 import { Link } from 'react-router-dom';
 
 import { useSelector } from '~/hooks/use-selector';
@@ -6,11 +6,11 @@ import { useSelector } from '~/hooks/use-selector';
 export const AuthenticationMessage = () => {
   const form = useSelector(selectAuthenticationForm);
 
-  if (form === AuthenticationForm.login) {
+  if (form === AuthenticationType.login) {
     return <p>Connectez-vous sur Shakala pour interagir avec le reste de la communauté.</p>;
   }
 
-  if (form === AuthenticationForm.signup) {
+  if (form === AuthenticationType.signup) {
     return (
       <div>
         <p>
@@ -25,7 +25,7 @@ export const AuthenticationMessage = () => {
     );
   }
 
-  if (form === AuthenticationForm.emailLogin) {
+  if (form === AuthenticationType.emailLogin) {
     return <p>Identifiez-vous sur Shakala via un email contenant un lien de connexion sans mot de passe.</p>;
   }
 

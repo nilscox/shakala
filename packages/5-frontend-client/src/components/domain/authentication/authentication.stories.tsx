@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
 import {
   AuthenticationField,
-  AuthenticationForm as AuthenticationFormType,
+  AuthenticationType,
   Dispatch,
   selectAuthenticationFormUnsafe,
   setAuthenticationFieldError,
@@ -29,7 +29,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<{ form: AuthenticationFormType; setup?: (dispatch: Dispatch) => void }> = ({
+const Template: Story<{ form: AuthenticationType; setup?: (dispatch: Dispatch) => void }> = ({
   form,
   setup,
 }) => {
@@ -47,13 +47,13 @@ const Template: Story<{ form: AuthenticationFormType; setup?: (dispatch: Dispatc
   return <AuthenticationForm />;
 };
 
-export const login = () => <Template form={AuthenticationFormType.login} />;
-export const signup = () => <Template form={AuthenticationFormType.signup} />;
-export const emailLogin = () => <Template form={AuthenticationFormType.emailLogin} />;
+export const login = () => <Template form={AuthenticationType.login} />;
+export const signup = () => <Template form={AuthenticationType.signup} />;
+export const emailLogin = () => <Template form={AuthenticationType.emailLogin} />;
 
 export const withErrors = () => (
   <Template
-    form={AuthenticationFormType.signup}
+    form={AuthenticationType.signup}
     setup={(dispatch) => {
       dispatch(setAuthenticationFieldError(AuthenticationField.email, 'EmailAlreadyExists'));
 

@@ -66,7 +66,7 @@ describe('login', () => {
 
   it('handles validation errors', async () => {
     store.authenticationGateway.login.mockRejectedValue(
-      new ValidationError([{ field: 'email', error: 'required' }]),
+      new ValidationError([{ field: 'email', error: 'required', value: null }]),
     );
 
     await store.dispatch(login(email, password));

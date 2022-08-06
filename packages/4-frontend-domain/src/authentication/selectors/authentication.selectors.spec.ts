@@ -6,7 +6,7 @@ import {
   setIsAuthenticationFormValid,
   setRulesAccepted,
 } from '../actions/authentication.actions';
-import { AuthenticationField, AuthenticationForm } from '../authentication.types';
+import { AuthenticationField, AuthenticationType } from '../authentication.types';
 
 import {
   selectIsAuthenticationFieldVisible,
@@ -22,7 +22,7 @@ describe('authentication selectors', () => {
     };
 
     test('email-login form', () => {
-      store.dispatch(setAuthenticationForm(AuthenticationForm.emailLogin));
+      store.dispatch(setAuthenticationForm(AuthenticationType.emailLogin));
 
       expectFieldVisible(AuthenticationField.email).toBe(true);
       expectFieldVisible(AuthenticationField.password).toBe(false);
@@ -31,7 +31,7 @@ describe('authentication selectors', () => {
     });
 
     test('login form', () => {
-      store.dispatch(setAuthenticationForm(AuthenticationForm.login));
+      store.dispatch(setAuthenticationForm(AuthenticationType.login));
 
       expectFieldVisible(AuthenticationField.email).toBe(true);
       expectFieldVisible(AuthenticationField.password).toBe(true);
@@ -40,7 +40,7 @@ describe('authentication selectors', () => {
     });
 
     test('signup form', () => {
-      store.dispatch(setAuthenticationForm(AuthenticationForm.signup));
+      store.dispatch(setAuthenticationForm(AuthenticationType.signup));
 
       expectFieldVisible(AuthenticationField.email).toBe(true);
       expectFieldVisible(AuthenticationField.password).toBe(true);
@@ -80,13 +80,13 @@ describe('authentication selectors', () => {
     test('rules not accepted', () => {
       store.dispatch(setRulesAccepted(false));
 
-      store.dispatch(setAuthenticationForm(AuthenticationForm.emailLogin));
+      store.dispatch(setAuthenticationForm(AuthenticationType.emailLogin));
       expect(store.select(selectCanSubmitAuthenticationForm)).toEqual(true);
 
-      store.dispatch(setAuthenticationForm(AuthenticationForm.login));
+      store.dispatch(setAuthenticationForm(AuthenticationType.login));
       expect(store.select(selectCanSubmitAuthenticationForm)).toEqual(true);
 
-      store.dispatch(setAuthenticationForm(AuthenticationForm.signup));
+      store.dispatch(setAuthenticationForm(AuthenticationType.signup));
       expect(store.select(selectCanSubmitAuthenticationForm)).toEqual(false);
     });
   });

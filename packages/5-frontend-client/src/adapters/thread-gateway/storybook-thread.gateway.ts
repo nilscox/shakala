@@ -20,6 +20,10 @@ export class StorybookThreadGateway implements ThreadGateway {
     return this.action('getComments', [threadId, options], undefined);
   }
 
+  createThread(description: string, text: string, keywords: string[]): Promise<string> {
+    return this.action('createComments', [description, text, keywords], '');
+  }
+
   createComment(threadId: string, text: string): Promise<string> {
     return this.action('createComments', [threadId, text], '');
   }

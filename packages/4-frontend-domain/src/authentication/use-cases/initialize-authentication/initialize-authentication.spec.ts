@@ -4,7 +4,7 @@ import {
   setAuthenticationFieldError,
   setAuthenticationFormError,
 } from '../../actions/authentication.actions';
-import { AuthenticationField, AuthenticationForm } from '../../authentication.types';
+import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 import {
   selectAuthenticationFieldError,
   selectAuthenticationForm,
@@ -26,7 +26,7 @@ describe('initializeAuthentication', () => {
   it('stores the current authentication form', async () => {
     await store.dispatch(initializeAuthentication());
 
-    expect(store.select(selectAuthenticationForm)).toEqual(AuthenticationForm.login);
+    expect(store.select(selectAuthenticationForm)).toEqual(AuthenticationType.login);
   });
 
   it('opens the modal when current location has a query param "auth"', async () => {
@@ -40,7 +40,7 @@ describe('initializeAuthentication', () => {
 
     store.routerGateway.setQueryParam('auth', 'signup');
 
-    expect(store.select(selectAuthenticationForm)).toEqual(AuthenticationForm.signup);
+    expect(store.select(selectAuthenticationForm)).toEqual(AuthenticationType.signup);
 
     store.routerGateway.removeQueryParam('auth');
 

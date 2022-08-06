@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import {
   AuthenticationField,
   selectAuthenticationFieldError,
@@ -72,12 +71,9 @@ export const AuthenticationFormField = ({ field, ...props }: AuthenticationFormF
   const visible = useSelector(selectIsAuthenticationFieldVisible, field);
   const error = useSelector(selectAuthenticationFieldError, field);
 
-  return (
-    <FormField
-      consistentErrorHeight={false}
-      error={error}
-      className={clsx(!visible && 'hidden')}
-      {...props}
-    />
-  );
+  if (!visible) {
+    return null;
+  }
+
+  return <FormField name={field} consistentErrorHeight={false} error={error} {...props} />;
 };

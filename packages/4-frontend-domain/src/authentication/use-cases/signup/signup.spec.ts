@@ -66,7 +66,7 @@ describe('signup', () => {
 
   it('handles validation errors', async () => {
     store.authenticationGateway.signup.mockRejectedValue(
-      new ValidationError([{ field: 'nick', error: 'already-exists' }]),
+      new ValidationError([{ field: 'nick', error: 'already-exists', value: 'nick' }]),
     );
 
     await store.dispatch(signup(email, password, nick));

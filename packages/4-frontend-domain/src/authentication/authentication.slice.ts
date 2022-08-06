@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AuthenticationField, AuthenticationForm } from './authentication.types';
+import { AuthenticationField, AuthenticationType } from './authentication.types';
 
 type AuthenticationSlice = {
   isModalOpen: boolean;
-  form?: AuthenticationForm;
+  form?: AuthenticationType;
   rulesAccepted: boolean;
   acceptRulesWarningVisible: boolean;
   isValid: boolean;
@@ -29,7 +29,7 @@ export const authenticationSlice = createSlice({
     setIsModalOpen(state, { payload }: PayloadAction<{ open: boolean }>) {
       state.isModalOpen = payload.open;
     },
-    setAuthenticationForm(state, { payload }: PayloadAction<{ form?: AuthenticationForm }>) {
+    setAuthenticationForm(state, { payload }: PayloadAction<{ form?: AuthenticationType }>) {
       state.form = payload.form;
     },
     setAcceptRulesWarningVisible(state, { payload }: PayloadAction<{ visible: boolean }>) {
