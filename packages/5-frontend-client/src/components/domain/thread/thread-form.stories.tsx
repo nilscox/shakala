@@ -29,8 +29,8 @@ export const withErrors = Template.bind({});
 withErrors.args = {
   ...Template.args,
   errors: {
-    description: 'Une description est requise',
-    keywords: "L'un des mot clés est trop long (max : 20 caractères par mot clé)",
-    text: 'Le texte est trop court',
+    description: 'min',
+    keywords: 'max',
+    text: 'min',
   },
 };

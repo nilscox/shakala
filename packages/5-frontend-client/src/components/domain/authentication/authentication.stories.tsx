@@ -55,12 +55,10 @@ export const withErrors = () => (
   <Template
     form={AuthenticationFormType.signup}
     setup={(dispatch) => {
-      dispatch(
-        setAuthenticationFieldError(AuthenticationField.email, 'Cette adresse email est déjà utilisée'),
-      );
+      dispatch(setAuthenticationFieldError(AuthenticationField.email, 'EmailAlreadyExists'));
 
-      dispatch(setAuthenticationFieldError(AuthenticationField.nick, 'Ce pseudo est trop court'));
-      dispatch(setAuthenticationFormError('Combinaison email / mot de passe non valide'));
+      dispatch(setAuthenticationFieldError(AuthenticationField.nick, 'min'));
+      dispatch(setAuthenticationFormError('InvalidCredentials'));
     }}
   />
 );

@@ -1,11 +1,12 @@
+import clsx from 'clsx';
 import {
   AuthenticationField,
   selectAuthenticationFieldError,
   selectIsAuthenticationFieldVisible,
 } from 'frontend-domain';
-import { ReactNode } from 'react';
 
-import { Input, InputProps } from '~/components/elements/input';
+import { FormField, FormFieldProps } from '~/components/elements/form-field';
+import { Input } from '~/components/elements/input';
 import { SearchParamLink } from '~/components/elements/search-param-link';
 import { useSelector } from '~/hooks/use-selector';
 
@@ -13,13 +14,9 @@ import { AcceptRulesCheckbox } from './accept-rules-checkbox';
 
 export const FormInputs = () => (
   <>
-    <AuthenticationInput
-      required
+    <AuthenticationFormField
       field={AuthenticationField.email}
-      type="email"
-      placeholder="Email"
-      minLength={3}
-      errors={{
+      errorsMap={{
         email: "Format d'adresse email non valide",
         max: 'Adresse email trop longue',
         EmailAlreadyExists: (
@@ -32,49 +29,55 @@ export const FormInputs = () => (
           </>
         ),
       }}
-    />
+    >
+      <Input required type="email" placeholder="Email" minLength={3} className="w-full" />
+    </AuthenticationFormField>
 
-    <AuthenticationInput
-      required
+    <AuthenticationFormField
       field={AuthenticationField.password}
-      type="password"
-      placeholder="Mot de passe"
-      autoComplete=""
-      minLength={3}
-      errors={{
+      errorsMap={{
         min: 'Mot de passe trop court',
         max: 'Mot de passe trop long :o',
       }}
-    />
+    >
+      <Input
+        required
+        type="password"
+        placeholder="Mot de passe"
+        autoComplete=""
+        minLength={3}
+        className="w-full"
+      />
+    </AuthenticationFormField>
 
-    <AuthenticationInput
-      required
+    <AuthenticationFormField
       field={AuthenticationField.nick}
-      type="text"
-      placeholder="Pseudo"
-      minLength={3}
-      errors={{
+      errorsMap={{
         min: 'Pseudo trop court',
         max: 'Pseudo trop long',
       }}
-    />
+    >
+      <Input required type="text" placeholder="Pseudo" minLength={3} className="w-full" />
+    </AuthenticationFormField>
 
     <AcceptRulesCheckbox />
   </>
 );
 
-type AuthenticationInputProps = InputProps & {
+type AuthenticationFormFieldProps = FormFieldProps & {
   field: AuthenticationField;
-  errors: Record<string, ReactNode>;
 };
 
-const AuthenticationInput = ({ field, errors, ...props }: AuthenticationInputProps) => {
-  const error = useSelector(selectAuthenticationFieldError, field);
+export const AuthenticationFormField = ({ field, ...props }: AuthenticationFormFieldProps) => {
   const visible = useSelector(selectIsAuthenticationFieldVisible, field);
+  const error = useSelector(selectAuthenticationFieldError, field);
 
-  if (!visible) {
-    return null;
-  }
-
-  return <Input name={field} className="w-full" error={error ? errors[error] : undefined} {...props} />;
+  return (
+    <FormField
+      consistentErrorHeight={false}
+      error={error}
+      className={clsx(!visible && 'hidden')}
+      {...props}
+    />
+  );
 };

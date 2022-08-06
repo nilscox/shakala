@@ -1,17 +1,28 @@
 import clsx from 'clsx';
-import { ReactNode, ReactElement, cloneElement } from 'react';
+import { cloneElement, ReactElement, ReactNode } from 'react';
 
-type FormFieldProps = {
+export type FormFieldProps = {
+  className?: string;
   name?: string;
   label?: ReactNode;
   description?: ReactNode;
   error?: string;
   errorsMap?: Record<string, ReactNode>;
-  children: ReactElement;
+  consistentErrorHeight?: boolean;
+  children: ReactNode;
 };
 
-export const FormField = ({ name, label, description, error, errorsMap, children }: FormFieldProps) => (
-  <div>
+export const FormField = ({
+  className,
+  name,
+  label,
+  description,
+  error,
+  errorsMap,
+  consistentErrorHeight = true,
+  children,
+}: FormFieldProps) => (
+  <div className={className}>
     {label && (
       <div>
         <label htmlFor={name} className="font-semibold">
@@ -21,7 +32,7 @@ export const FormField = ({ name, label, description, error, errorsMap, children
       </div>
     )}
 
-    {cloneElement(children, {
+    {cloneElement(children as ReactElement, {
       name,
       id: name,
       'aria-invalid': Boolean(error),
@@ -29,7 +40,9 @@ export const FormField = ({ name, label, description, error, errorsMap, children
       'aria-errormessage': error ? `${name}-error` : undefined,
     })}
 
-    <FieldError id={`${name}-error`}>{getError(error, errorsMap) || <>&nbsp;</>}</FieldError>
+    {(error || consistentErrorHeight) && (
+      <FieldError id={`${name}-error`}>{getError(error, errorsMap) || <>&nbsp;</>}</FieldError>
+    )}
   </div>
 );
 
