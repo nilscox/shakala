@@ -8,6 +8,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/lodash.clonedeep": "^4.5.7",
     "@types/supertest": "^2.0.12",
     "supertest": "^6.2.4"
   },
