@@ -14,6 +14,7 @@
     "test": "yarn workspaces run test",
     "test:all": "yarn vitest",
     "lint": "yarn workspaces run lint",
+    "spellcheck": "cspell --locale en,fr 'packages/*/src/**'",
     "build:backend": "yarn workspace backend-infrastructure build",
     "build:frontend": "yarn workspace shared build && yarn workspace frontend-client build",
     "build": "yarn build:backend && yarn build:frontend",

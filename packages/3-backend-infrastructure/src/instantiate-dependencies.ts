@@ -69,6 +69,7 @@ const users = [
   createUser({
     id: 'user1',
     email: 'nils@nils.cx',
+    // cspell:disable
     hashedPassword: '$2b$10$B0Bfw0ypnDMW1hM/x7L0COD9MoCENH5mSwgda1aAme49h9.du7exu',
     nick: 'nilscox',
   }),

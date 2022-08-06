@@ -25,6 +25,7 @@ const seed = async () => {
     await app.init();
 
     await app.run(async ({ commandBus, queryBus }) => {
+      // cspell:word p4ssword
       await commandBus.execute(new SignupCommand('user', 'user@email.tld', 'p4ssword'));
 
       const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));

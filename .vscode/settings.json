@@ -1,6 +1,5 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["micromark", "nocolor", "Shakala", "zetetique", "Zetetique"],
   "eslint.workingDirectories": [
     "packages/0-shared",
     "packages/1-backend-domain",

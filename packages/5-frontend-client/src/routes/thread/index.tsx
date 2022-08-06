@@ -43,8 +43,8 @@ export const ThreadsRoute = () => {
 
       <p>
         En attendant, vous pouvez voir à quoi pourrait ressembler une discussion{' '}
-        <Link to="/discussions/38pvde">sur cette page</Link>, dont les messages viennent de la page facebook
-        du groupe zététique.
+        <Link to="/discussions/XXX">sur cette page</Link>, dont les messages viennent de la page facebook du
+        groupe zététique.
       </p>
 
       <h2>Créer un nouveau fil de discussion</h2>

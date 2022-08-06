@@ -18,6 +18,7 @@ const Template: Story<{ setup: SetupRedux; commentId: string }> = ({ commentId }
   return <Comment commentId={comment.id} />;
 };
 
+// cspell:word bopzor lemonde wikipedia
 const bopzor = createUser({ nick: 'Bopzor' });
 const nilscox = createUser({ nick: 'nilscox' });
 

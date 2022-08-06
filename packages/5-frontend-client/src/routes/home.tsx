@@ -87,6 +87,7 @@ const Motivations = () => (
   <>
     <Heading>Pourquoi ce site ?</Heading>
 
+    {/* cspell:word pfff */}
     <p className="m-[4rem] text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
 
     <div className="flex flex-col md:flex-row">

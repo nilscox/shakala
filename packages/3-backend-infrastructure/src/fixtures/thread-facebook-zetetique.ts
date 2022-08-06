@@ -1,3 +1,5 @@
+// cspell:disable
+
 import { createComment, createThread, createUser } from 'backend-application';
 import { CommentAuthor } from 'backend-domain';
 

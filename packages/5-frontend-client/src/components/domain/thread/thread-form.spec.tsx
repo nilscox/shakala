@@ -38,7 +38,7 @@ describe('ThreadForm', () => {
     });
   });
 
-  it('normalizes the fields (trim whitespaces)', async () => {
+  it('normalizes the fields (trim whitespace)', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 

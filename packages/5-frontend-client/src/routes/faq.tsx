@@ -24,6 +24,7 @@ const Question = ({ question, answer }: QuestionProps) => {
   );
 };
 
+// cspell:word RGPD, trello, devs, zetecom, développeu
 const questions: Record<string, QuestionProps[]> = {
   account: [
     {
@@ -142,8 +143,8 @@ const questions: Record<string, QuestionProps[]> = {
       question: <>Comment suivre l'évolution du projet ?</>,
       answer: (
         <>
-          Un <ExternalLink href="https://trello.com/b/CfC8aQ80/tasks">board tello</ExternalLink> est
-          accessible publiquement, n'hésitez pas à y jeter un œil ! Et si vous êtes développeu.r.se et que le
+          Un <ExternalLink href="https://trello.com/b/CfC8aQ80/tasks">board trello</ExternalLink> est
+          accessible publiquement, n'hésitez pas à y jeter un œil ! Et si vous êtes développeu·r·se et que le
           projet vous intéresse techniquement, les source sont disponibles{' '}
           <ExternalLink href="https://github.com/nilscox/shakala">sur GitHub</ExternalLink>.
         </>
@@ -212,8 +213,7 @@ export const FaqRoute = () => (
 
     <p>
       Tous les échanges de données entre votre navigateur et le serveur Shakala sont effectués de manière
-      sécurisée (HTTPS), et les mots de passes sont chiffrés avec la fonction de hashage <code>bcrypt</code>{' '}
-      (coût de 10).
+      sécurisée (HTTPS), et les mots de passes sont chiffrés avec <code>bcrypt</code> (coût de 10).
     </p>
 
     <p>

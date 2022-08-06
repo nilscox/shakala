@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { PageTitle } from '~/components/layout/page-title';
 
+// cspell:word languagetool
 export const CharterRoute = () => (
   <>
     <PageTitle>La charte</PageTitle>
@@ -52,7 +53,7 @@ export const CharterRoute = () => (
 
       <Rule rule="6. Rédiger en français correct.">
         Votre message sera toujours mieux perçu s'il est bien écrit et lisible. Évitez le registre familier,
-        les abréviations et le style "texto". Une extension comme{' '}
+        les abréviations et le style "texto". Une extension comme
         <a href="https://languagetool.org/fr/#plugins">languagetool</a> vous permettra même de corriger les
         fautes d'orthographe directement pendant la rédaction d'un message.
       </Rule>

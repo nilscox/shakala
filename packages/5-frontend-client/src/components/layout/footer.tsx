@@ -12,6 +12,7 @@ type FooterProps = {
   className?: string;
 };
 
+// cspell:word roadmap
 export const Footer = ({ className }: FooterProps): JSX.Element => {
   const user = useUser();
 
