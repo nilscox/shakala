@@ -28,7 +28,6 @@
     "eslint": "^8.20.0",
     "eslint-import-resolver-typescript": "^3.3.0",
     "eslint-plugin-import": "^2.26.0",
-    "lodash.clonedeep": "^4.5.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.2",
     "vite-tsconfig-paths": "^3.5.0",
