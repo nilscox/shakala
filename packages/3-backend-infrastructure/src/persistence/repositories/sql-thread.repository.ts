@@ -30,7 +30,9 @@ class ThreadEntityMapper implements EntityMapper<SqlThread, Thread> {
     const sqlThread = new SqlThread();
 
     sqlThread.id = entity.id;
+    sqlThread.description = entity.description;
     sqlThread.text = entity.text.toString();
+    sqlThread.keywords = entity.keywords;
     sqlThread.author = this.em.getReference(SqlUser, entity.author.id);
     sqlThread.created = entity.created.toDate();
 
@@ -40,7 +42,9 @@ class ThreadEntityMapper implements EntityMapper<SqlThread, Thread> {
   fromSql(sqlEntity: SqlThread): Thread {
     return new Thread({
       id: sqlEntity.id,
+      description: sqlEntity.description,
       text: new Markdown(sqlEntity.text),
+      keywords: sqlEntity.keywords,
       author: this.userMapper.fromSql(sqlEntity.author),
       created: new Timestamp(sqlEntity.created),
     });

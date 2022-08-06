@@ -22,6 +22,31 @@ describe('Thread e2e', () => {
     agent = server.agent();
   });
 
+  test('create a thread', async () => {
+    const loginDto: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
+    const createThreadDto = { description: 'description', text: 'text', keywords: ['key', 'words'] };
+
+    const login = async () => {
+      await agent.post('/auth/login').send(loginDto).expect(200);
+    };
+
+    const createThread = async (): Promise<string> => {
+      const { body } = await agent.post('/thread').send(createThreadDto).expect(201);
+      return body;
+    };
+
+    const getThread = async (threadId: string) => {
+      await agent.get(`/thread/${threadId}`).expect(200);
+    };
+
+    await server.createUser(loginDto.email, loginDto.password);
+
+    await login();
+
+    const threadId = await createThread();
+    await getThread(threadId);
+  });
+
   test('create a comment', async () => {
     const loginDto: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
 

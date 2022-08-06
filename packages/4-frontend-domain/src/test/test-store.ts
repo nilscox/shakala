@@ -6,7 +6,7 @@ import { LoggerGateway } from '../interfaces/logger.gateway';
 import { RemoveListener, RouterGateway } from '../interfaces/router.gateway';
 import { SnackbarGateway } from '../interfaces/snackbar.gateway';
 import { TimerGateway } from '../interfaces/timer.gateway';
-import { createStore, Dependencies, Dispatch, Selector } from '../store';
+import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 
 import { mockFn } from './mock-fn';
@@ -113,6 +113,7 @@ class MockAuthenticationGateway implements AuthenticationGateway {
 class MockThreadGateway implements ThreadGateway {
   getById = mockFn<ThreadGateway['getById']>();
   getLast = mockFn<ThreadGateway['getLast']>();
+  createThread = mockFn<ThreadGateway['createThread']>();
   getComments = mockFn<ThreadGateway['getComments']>();
   createComment = mockFn<ThreadGateway['createComment']>();
   createReply = mockFn<ThreadGateway['createReply']>();
@@ -143,11 +144,11 @@ export class TestStore implements Dependencies {
     return next(action);
   };
 
-  private reduxStore = createStore(this, [this.logActionsMiddleware]);
+  private reduxStore!: Store;
 
   constructor() {
     beforeEach(() => {
-      this.reduxStore = createStore(this);
+      this.reduxStore = createStore(this, [this.logActionsMiddleware]);
     });
   }
 

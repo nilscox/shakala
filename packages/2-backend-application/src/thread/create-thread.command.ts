@@ -6,7 +6,12 @@ import { ThreadRepository } from '../interfaces/thread.repository';
 import { UserRepository } from '../interfaces/user.repository';
 
 export class CreateThreadCommand implements Command {
-  constructor(readonly authorId: string, readonly text: string) {}
+  constructor(
+    readonly authorId: string,
+    readonly description: string,
+    readonly text: string,
+    readonly keywords: string[],
+  ) {}
 }
 
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, string> {
@@ -17,13 +22,15 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, 
     private readonly threadRepository: ThreadRepository,
   ) {}
 
-  async handle({ authorId, text }: CreateThreadCommand) {
+  async handle({ authorId, description, text, keywords }: CreateThreadCommand) {
     const author = await this.userRepository.findByIdOrFail(authorId);
 
     const thread = new Thread({
       id: await this.generatorService.generateId(),
       author: new ThreadAuthor(author),
+      description,
       text: new Markdown(text),
+      keywords,
       created: Timestamp.now(this.dateService),
     });
 

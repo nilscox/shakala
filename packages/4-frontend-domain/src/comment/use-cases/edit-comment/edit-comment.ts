@@ -16,19 +16,22 @@ const editCommentMutation = query<Key, undefined>('editComment');
 
 export const editCommentReducer = editCommentMutation.reducer();
 
-const actions = editCommentMutation.actions();
-const selectors = editCommentMutation.selectors((state: State) => state.comments.mutations.editComment);
+// actions
 
-export const setIsEditingComment = createAction(
+const actions = editCommentMutation.actions();
+
+export const [setIsEditingComment, isSetIsEditingCommentAction] = createAction(
   'comment/set-editing',
   (commentId: string, isEditing = true) => ({ commentId, isEditing }),
 );
 
-export type SetIsEditingCommentAction = ReturnType<typeof setIsEditingComment>;
-
 export const setEditCommentFormText = (commentId: string, text: string) => {
   return updateComment(commentId, { editionForm: { text } });
 };
+
+// selectors
+
+const selectors = editCommentMutation.selectors((state: State) => state.comments.mutations.editComment);
 
 export const selectEditCommentForm = (state: State, commentId: string) => {
   return selectComment(state, commentId).editionForm;
@@ -53,6 +56,8 @@ export const selectIsSubmittingCommentEditionForm = (state: State, commentId: st
 export const selectEditCommentError = (state: State, commentId: string) => {
   return selectors.selectError(state, { commentId });
 };
+
+// thunk
 
 export const editComment = (commentId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {

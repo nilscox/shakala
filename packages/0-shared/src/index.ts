@@ -1,6 +1,7 @@
 export * from './libs/array';
 export * from './libs/create-factory';
 export * from './libs/create-map';
+export * from './libs/payload-error';
 export * from './libs/get';
 export * from './libs/get-ids';
 export * from './libs/group-by';

@@ -8,7 +8,7 @@ import {
   createReplyReducer,
   editCommentReducer,
   fetchCommentsQueryReducer,
-  SetIsEditingCommentAction,
+  isSetIsEditingCommentAction,
 } from './use-cases';
 
 type NormalizedComment = Normalized<Comment, 'author' | 'replies'>;
@@ -21,8 +21,8 @@ const normalizedCommentsReducer = (
 ): Record<string, NormalizedComment> => {
   const updateComment = commentUpdater(comments);
 
-  if (action.type === 'comment/set-editing') {
-    const { commentId, isEditing } = action as SetIsEditingCommentAction;
+  if (isSetIsEditingCommentAction(action)) {
+    const { commentId, isEditing } = action;
 
     return updateComment(commentId, (comment) => {
       if (!isEditing) {

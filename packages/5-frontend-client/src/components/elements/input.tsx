@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 
-import { FormError } from './field-error';
+import { FieldError } from './form-field';
 
+// todo: remove error
 export type InputProps = React.ComponentProps<'input'> & {
   error?: React.ReactNode;
 };
@@ -9,6 +10,6 @@ export type InputProps = React.ComponentProps<'input'> & {
 export const Input = ({ className, error, ...props }: InputProps): JSX.Element => (
   <>
     <input className={clsx('py-0.5 px-1 rounded border', className)} {...props} />
-    {error && <FormError className="mt-0.5">{error}</FormError>}
+    {error && <FieldError className="mt-0.5">{error}</FieldError>}
   </>
 );

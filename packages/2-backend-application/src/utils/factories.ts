@@ -106,7 +106,9 @@ export const createThread = ({ text, created, ...props }: Partial<CreateThreadPr
   return new Thread({
     id: randomId(),
     author: new ThreadAuthor(createUser()),
+    description: '',
     text: new Markdown(text ?? ''),
+    keywords: [],
     created: createTimestamp(created),
     ...props,
   });

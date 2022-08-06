@@ -18,21 +18,24 @@ const createRootCommentQuery = query<Key, undefined>('createRootComment');
 
 export const createRootCommentQueryReducer = createRootCommentQuery.reducer();
 
-const actions = createRootCommentQuery.actions();
-const selectors = createRootCommentQuery.selectors(
-  (state: State) => state.threads.mutations.createRootComment,
-);
+// actions
 
-export const addRootCommentToThread = createAction(
+const actions = createRootCommentQuery.actions();
+
+export const [addRootCommentToThread, isAddRootCommentToThreadAction] = createAction(
   'thread/add-root-comment',
   (threadId: string, comment: Comment) => ({ threadId, commentId: comment.id }),
 );
 
-export type AddRootCommentToThreadAction = ReturnType<typeof addRootCommentToThread>;
-
 export const setCreateRootCommentText = (threadId: string, text: string) => {
   return updateThread(threadId, { createCommentForm: { text } });
 };
+
+// selectors
+
+const selectors = createRootCommentQuery.selectors(
+  (state: State) => state.threads.mutations.createRootComment,
+);
 
 export const selectCreateRootCommentFormText = (state: State, threadId: string) => {
   return selectThread(state, threadId).createCommentForm.text;
@@ -49,6 +52,8 @@ export const selectIsSubmittingRootCommentForm = (state: State, threadId: string
 export const selectCreateRootCommentError = (state: State, threadId: string) => {
   return selectors.selectError(state, { threadId });
 };
+
+// thunk
 
 export const createRootComment = (threadId: string): Thunk => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {

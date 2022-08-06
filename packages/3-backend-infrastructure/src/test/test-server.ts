@@ -23,7 +23,7 @@ export class TestServer extends Server {
   }
 
   async createThread(authorId: string) {
-    return this.commandBus.execute<string>(new CreateThreadCommand(authorId, 'text'));
+    return this.commandBus.execute<string>(new CreateThreadCommand(authorId, 'description', 'text', []));
   }
 
   async createComment(threadId: string, authorId: string) {

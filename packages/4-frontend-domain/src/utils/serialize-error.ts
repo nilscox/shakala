@@ -1,4 +1,12 @@
-export const serializeError = (error: unknown) => {
+import { PayloadError } from 'shared';
+
+type SerializedError = {
+  name: string;
+  message: string;
+  stack?: string;
+};
+
+export const serializeError = (error: unknown): SerializedError => {
   if (error instanceof Error) {
     return {
       name: error.constructor.name,
@@ -7,5 +15,5 @@ export const serializeError = (error: unknown) => {
     };
   }
 
-  return JSON.stringify(error);
+  throw new PayloadError('cannot serialize error', { error });
 };

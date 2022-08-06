@@ -29,7 +29,7 @@ const seed = async () => {
 
       const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));
 
-      await commandBus.execute(new CreateThreadCommand(user.id, text));
+      await commandBus.execute(new CreateThreadCommand(user.id, 'description', text, []));
     });
   } finally {
     await app.close();

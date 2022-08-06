@@ -24,6 +24,10 @@
     @apply my-1;
   }
 
+  h1 {
+    @apply text-xxl
+  }
+
   svg {
     fill: currentColor;
   }

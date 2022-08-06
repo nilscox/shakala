@@ -1,13 +1,26 @@
 import { AuthUserDto, CommentDto, ReactionTypeDto, ThreadDto, UserDto } from 'shared';
 export { Sort } from 'shared';
 
-export class ValidationError {
-  constructor(public readonly fields: Array<{ field: string; error: string }>) {}
+export type FieldError = {
+  field: string;
+  error: string;
+  value: unknown;
+};
+
+export class ValidationError extends Error {
+  constructor(public readonly fields: FieldError[]) {
+    super('ValidationError');
+  }
 }
 
-export class AuthorizationError {
-  constructor(public readonly code: string) {}
+export class AuthorizationError extends Error {
+  constructor(public readonly code: string) {
+    super('AuthorizationError');
+  }
 }
+
+export type FormField<Form> = keyof Form;
+export type FormErrors<Form> = Partial<Record<FormField<Form>, string>>;
 
 export type AuthUser = AuthUserDto;
 export type User = UserDto;

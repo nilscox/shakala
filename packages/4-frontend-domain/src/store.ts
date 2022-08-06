@@ -32,7 +32,7 @@ export const createStore = (dependencies: Dependencies, middlewares: Middleware[
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: { extraArgument: dependencies },
-      }).concat(...middlewares),
+      }).concat(middlewares),
   });
 };
 

@@ -2,6 +2,7 @@ import {
   createComment,
   CreateCommentCommand,
   createThread,
+  CreateThreadCommand,
   createUser,
   GetCommentQuery,
   GetLastThreadsQuery,
@@ -13,7 +14,7 @@ import {
 } from 'backend-application';
 import { ReactionType, UserMustBeAuthorError } from 'backend-domain';
 
-import { Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
@@ -103,6 +104,53 @@ describe('ThreadController', () => {
     });
   });
 
+  describe('createThread', () => {
+    const user = createUser();
+    const description = 'description';
+    const text = 'text';
+    const keywords = ['key', 'words'];
+
+    const threadId = 'threadId';
+
+    beforeEach(() => {
+      sessionService.user = user;
+      commandBus.execute.mockResolvedValue(threadId);
+    });
+
+    it('creates a thread', async () => {
+      const response = await controller.createThread(
+        new MockRequest().withBody({ description, text, keywords }),
+      );
+
+      expect(response).toHaveStatus(201);
+      expect(response).toHaveBody(threadId);
+
+      expect(commandBus.execute).toHaveBeenCalledWith(
+        new CreateThreadCommand(user.id, description, text, keywords),
+      );
+    });
+
+    it('fails to create a thread when the user is not authenticated', async () => {
+      sessionService.user = undefined;
+
+      await expect(
+        controller.createComment(new MockRequest().withBody({ description, text, keywords })),
+      ).rejects.toThrow(Forbidden);
+    });
+
+    it('fails to create a thread with an invalid body', async () => {
+      await expect(
+        controller.createThread(new MockRequest().withBody({ description: 'a', text, keywords: ['a'] })),
+      ).rejects.test((error) => {
+        expect(error).toBeInstanceOf(ValidationError);
+        expect(error).toHaveProperty('fields.0.field', 'description');
+        expect(error).toHaveProperty('fields.0.error', 'min');
+        expect(error).toHaveProperty('fields.1.field', 'keywords[0]');
+        expect(error).toHaveProperty('fields.1.error', 'min');
+      });
+    });
+  });
+
   describe('createComment', () => {
     const user = createUser();
     const thread = createThread();
@@ -139,6 +187,14 @@ describe('ThreadController', () => {
       );
     });
 
+    it('fails to create a comment when the user is not authenticated', async () => {
+      sessionService.user = undefined;
+
+      await expect(
+        controller.createComment(new MockRequest().withParam('id', thread.id).withBody({ text })),
+      ).rejects.toThrow(Forbidden);
+    });
+
     it('fails to create a comment with an invalid body', async () => {
       await expect(
         controller.createComment(new MockRequest().withParam('id', thread.id).withBody({})),
@@ -171,6 +227,16 @@ describe('ThreadController', () => {
       expect(response).toHaveBody(undefined);
 
       expect(commandBus.execute).toHaveBeenCalledWith(new UpdateCommentCommand(comment.id, user.id, text));
+    });
+
+    it('fails to update a comment when the user is not authenticated', async () => {
+      sessionService.user = undefined;
+
+      await expect(
+        controller.updateComment(
+          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+        ),
+      ).rejects.toThrow(Forbidden);
     });
 
     it('fails to create a comment with an invalid body', async () => {
@@ -220,6 +286,16 @@ describe('ThreadController', () => {
       expect(response).toHaveBody(undefined);
 
       expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(user.id, comment.id, type));
+    });
+
+    it('fails to set a reaction when the user is not authenticated', async () => {
+      sessionService.user = undefined;
+
+      await expect(
+        controller.setReaction(
+          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ type }),
+        ),
+      ).rejects.toThrow(Forbidden);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { ValidationError } from 'frontend-domain';
+import { FieldError, ValidationError } from 'frontend-domain';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 
@@ -117,9 +117,9 @@ describe('FetchHttpGateway', () => {
 
     headers.set('Content-Type', 'application/json');
 
-    const fields = [
-      { field: 'email', error: 'required' },
-      { field: 'nick', error: 'already-exists' },
+    const fields: FieldError[] = [
+      { field: 'email', error: 'required', value: 'some@email.tld' },
+      { field: 'nick', error: 'already-exists', value: 'nick' },
     ];
 
     const json = async () => ({ error: 'ValidationError', details: { fields } });

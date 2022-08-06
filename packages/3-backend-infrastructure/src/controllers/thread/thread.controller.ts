@@ -1,5 +1,6 @@
 import {
   CreateCommentCommand,
+  CreateThreadCommand,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
@@ -34,6 +35,16 @@ const getThreadQuerySchema = yup.object({
   sort: yup.string().oneOf(Object.values(Sort)).default(Sort.relevance),
   search: yup.string().trim().max(30),
 });
+
+const createThreadBodySchema = yup
+  .object({
+    description: yup.string().required().trim().min(4).max(60),
+    text: yup.string().required().trim().min(4).max(20000),
+    keywords: yup.array().of(yup.string().required().trim().min(3).max(20)).required(),
+  })
+  .required()
+  .noUnknown()
+  .strict();
 
 const createCommentBodySchema = yup
   .object({
@@ -80,6 +91,7 @@ export class ThreadController extends Controller {
     return {
       'GET  /last': this.getLastThreads,
       'GET  /:id': this.getThread,
+      'POST /': this.createThread,
       'POST /:id/comment': this.createComment,
       'PUT  /:id/comment/:commentId': this.updateComment,
       'PUT  /:id/comment/:commentId/reaction': this.setReaction,
@@ -107,6 +119,17 @@ export class ThreadController extends Controller {
     }
 
     return Response.ok(ThreadPresenter.transformThread(result));
+  }
+
+  async createThread(req: Request): Promise<Response<string>> {
+    const body = await this.validationService.body(req, createThreadBodySchema);
+    const user = await this.sessionService.requireUser(req);
+
+    const threadId = await this.commandBus.execute<string>(
+      new CreateThreadCommand(user.id, body.description, body.text, body.keywords),
+    );
+
+    return Response.created(threadId);
   }
 
   async createComment(req: Request): Promise<Response<string>> {

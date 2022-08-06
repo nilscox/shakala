@@ -12,7 +12,7 @@ import {
 import { FormEventHandler, useCallback } from 'react';
 import { get } from 'shared';
 
-import { FormError } from '~/components/elements/field-error';
+import { FieldError } from '~/components/elements/form-field';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 
@@ -69,9 +69,9 @@ export const AuthenticationForm = () => {
 
           <FormInputs />
 
-          <FormError className={clsx('my-1 text-center', !formError && 'hidden')}>
+          <FieldError className={clsx('my-1 text-center', !formError && 'hidden')}>
             {formError === 'InvalidCredentials' && 'Combinaison email / mot de passe non valide'}
-          </FormError>
+          </FieldError>
 
           <Buttons canSubmit={canSubmit} />
         </fieldset>

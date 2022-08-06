@@ -1,4 +1,4 @@
-import type { DateService } from 'backend-domain';
+import { DateService, Timestamp } from 'backend-domain';
 
 export class StubDateService implements DateService {
   date = new Date();
@@ -13,8 +13,12 @@ export class StubDateService implements DateService {
     this.date = new Date();
   }
 
-  setNow(now: Date) {
-    this.date = now;
+  setNow(now: Date | Timestamp) {
+    if (now instanceof Timestamp) {
+      this.date = now.toDate();
+    } else {
+      this.date = now;
+    }
   }
 
   now() {

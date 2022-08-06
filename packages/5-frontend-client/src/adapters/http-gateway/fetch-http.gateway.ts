@@ -1,5 +1,5 @@
-import { ValidationError } from 'frontend-domain';
-import { get } from 'shared';
+import { FieldError, ValidationError } from 'frontend-domain';
+import { get, isArray, isString, PayloadError } from 'shared';
 
 import { HttpGateway, NetworkError, RequestOptions, Response } from './http.gateway';
 
@@ -86,10 +86,10 @@ export class FetchHttpGateway implements HttpGateway {
     }
 
     if (get(responseBody, 'error') === 'ValidationError') {
-      throw new ValidationError(responseBody.details.fields);
+      throw new ValidationError(this.getInvalidFields(responseBody));
     }
 
-    return new FetchResponse(response, responseBody);
+    return new FetchResponse(response, responseBody as ResponseBody);
   }
 
   private getQueryString(query: Record<string, string | number> | undefined): string {
@@ -100,7 +100,7 @@ export class FetchHttpGateway implements HttpGateway {
     return '?' + new URLSearchParams(query as Record<string, string>).toString();
   }
 
-  private async getResponseBody(response: globalThis.Response) {
+  private async getResponseBody(response: globalThis.Response): Promise<unknown> {
     const contentType = response.headers.get('Content-Type');
 
     if (contentType?.startsWith('application/json')) {
@@ -121,5 +121,28 @@ export class FetchHttpGateway implements HttpGateway {
     if ([chromeErrorMessage, firefoxErrorMessage].includes(message as string)) {
       return new NetworkError();
     }
+  }
+
+  // validate with yup?
+  private getInvalidFields(body: unknown) {
+    const parseError = new PayloadError('FetchHttpGateway: cannot parse invalid fields', { body });
+
+    const fields = isArray(get(body, 'details', 'fields'))?.map((field): FieldError => {
+      const fieldName = isString(get(field, 'field'));
+      const error = isString(get(field, 'error'));
+      const value = get(field, 'value');
+
+      if (!fieldName || !error) {
+        throw parseError;
+      }
+
+      return { field: fieldName, error, value };
+    });
+
+    if (!fields) {
+      throw parseError;
+    }
+
+    return fields;
   }
 }
