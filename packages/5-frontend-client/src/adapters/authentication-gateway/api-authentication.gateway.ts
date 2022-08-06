@@ -1,5 +1,5 @@
 import { AuthenticationGateway, AuthUser } from 'frontend-domain';
-import { AuthUserDto, get, LoginDto, SignupDto } from 'shared';
+import { AuthUserDto, get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 
@@ -17,7 +17,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   }
 
   async login(email: string, password: string): Promise<AuthUser> {
-    const response = await this.http.post<LoginDto, AuthUserDto>('/auth/login', {
+    const response = await this.http.post<AuthUserDto, LoginBodyDto>('/auth/login', {
       body: { email, password },
     });
 
@@ -33,7 +33,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   }
 
   async signup(email: string, password: string, nick: string): Promise<AuthUser> {
-    const response = await this.http.post<SignupDto, AuthUserDto>('/auth/signup', {
+    const response = await this.http.post<AuthUserDto, SignupBodyDto>('/auth/signup', {
       body: { email, password, nick },
     });
 

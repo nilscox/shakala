@@ -9,8 +9,16 @@ import {
   UpdateCommentCommand,
 } from 'backend-application';
 import { ReactionType, Thread, UserMustBeAuthorError } from 'backend-domain';
-import { ThreadDto, ThreadWithCommentsDto } from 'shared';
-import * as yup from 'yup';
+import {
+  createCommentBodySchema,
+  createThreadBodySchema,
+  getLastThreadsQuerySchema,
+  getThreadQuerySchema,
+  setReactionBodySchema,
+  ThreadDto,
+  ThreadWithCommentsDto,
+  updateCommentBodySchema,
+} from 'shared';
 
 import {
   CommandBus,
@@ -26,56 +34,6 @@ import {
 import { tryCatch } from '../../utils';
 
 import { ThreadPresenter } from './thread.presenter';
-
-const getLastThreadQuerySchema = yup.object({
-  count: yup.number().min(1).max(50).default(10),
-});
-
-const getThreadQuerySchema = yup.object({
-  sort: yup.string().oneOf(Object.values(Sort)).default(Sort.relevance),
-  search: yup.string().trim().max(30),
-});
-
-const createThreadBodySchema = yup
-  .object({
-    description: yup.string().required().trim().min(4).max(60),
-    text: yup.string().required().trim().min(4).max(20000),
-    keywords: yup.array().of(yup.string().required().trim().min(3).max(20)).required(),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-const createCommentBodySchema = yup
-  .object({
-    parentId: yup.string(),
-    text: yup.string().required().trim().min(4).max(20000),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-const updateCommentBodySchema = yup
-  .object({
-    text: yup.string().required().trim().min(4).max(20000),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-const setReactionBodySchema = yup
-  .object({
-    type: yup
-      .string()
-      .nullable()
-      .defined()
-      .oneOf([...Object.values(ReactionType), null]),
-  })
-  .required()
-  .noUnknown()
-  .strict();
-
-export type SetReactionDto = yup.InferType<typeof setReactionBodySchema>;
 
 export class ThreadController extends Controller {
   constructor(
@@ -99,7 +57,7 @@ export class ThreadController extends Controller {
   }
 
   async getLastThreads(req: Request): Promise<Response<ThreadDto[]>> {
-    const query = await this.validationService.query(req, getLastThreadQuerySchema);
+    const query = await this.validationService.query(req, getLastThreadsQuerySchema);
     const lastThreads = await this.queryBus.execute<Thread[]>(new GetLastThreadsQuery(query.count));
 
     return Response.ok(lastThreads.map(ThreadPresenter.transformThreadSummary));

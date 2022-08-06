@@ -9,7 +9,7 @@ import { RealDateGateway } from './adapters/date-gateway/real-date-gateway';
 import { FetchHttpGateway } from './adapters/http-gateway/fetch-http.gateway';
 import { ConsoleLoggerGateway } from './adapters/logger-gateway/console-logger.gateway';
 import { ReactRouterGateway } from './adapters/router-gateway/react-router-gateway';
-import { ApiThreadGateway } from './adapters/thread-gateway/thread-gateway';
+import { ApiThreadGateway } from './adapters/thread-gateway/api-thread-gateway';
 import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
 import { SnackbarProvider, useSnackbar } from './components/elements/snackbar';
 import { useConfig } from './hooks/use-config';

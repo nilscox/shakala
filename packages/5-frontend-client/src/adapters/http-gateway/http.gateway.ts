@@ -6,8 +6,14 @@ export interface Response<Body> {
   readonly error: unknown;
 }
 
-export interface RequestOptions<Body> {
-  readonly query?: Record<string, string | number>;
+export type QueryParams = Record<string, string | number | undefined>;
+
+export interface ReadRequestOptions<Query extends QueryParams> {
+  readonly query?: Query;
+}
+
+export interface WriteRequestOptions<Body, Query extends QueryParams> {
+  readonly query?: Query;
   readonly body?: Body;
 }
 
@@ -18,15 +24,18 @@ export class NetworkError extends Error {
 }
 
 export interface HttpGateway {
-  get<ResponseBody = unknown>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>>;
-
-  post<RequestBody, ResponseBody = unknown>(
+  get<ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: RequestOptions<RequestBody>,
+    options?: ReadRequestOptions<Query>,
   ): Promise<Response<ResponseBody>>;
 
-  put<RequestBody, ResponseBody = unknown>(
+  post<ResponseBody, RequestBody, Query extends QueryParams = never>(
     path: string,
-    options?: RequestOptions<RequestBody>,
+    options?: WriteRequestOptions<RequestBody, Query>,
+  ): Promise<Response<ResponseBody>>;
+
+  put<ResponseBody, RequestBody, Query extends QueryParams = never>(
+    path: string,
+    options?: WriteRequestOptions<RequestBody, Query>,
   ): Promise<Response<ResponseBody>>;
 }

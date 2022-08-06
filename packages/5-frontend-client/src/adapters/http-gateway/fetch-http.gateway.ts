@@ -1,7 +1,14 @@
 import { FieldError, ValidationError } from 'frontend-domain';
 import { get, isArray, isString, PayloadError } from 'shared';
 
-import { HttpGateway, NetworkError, RequestOptions, Response } from './http.gateway';
+import {
+  HttpGateway,
+  NetworkError,
+  ReadRequestOptions,
+  WriteRequestOptions,
+  Response,
+  QueryParams,
+} from './http.gateway';
 
 class FetchResponse<Body> implements Response<Body> {
   constructor(private readonly response: globalThis.Response, public readonly body: Body) {}
@@ -32,28 +39,31 @@ export class FetchHttpGateway implements HttpGateway {
 
   constructor(private readonly baseUrl: string, private readonly fetch = window.fetch.bind(window)) {}
 
-  async get<ResponseBody>(path: string, options?: RequestOptions<never>): Promise<Response<ResponseBody>> {
+  async get<ResponseBody, Query extends QueryParams = never>(
+    path: string,
+    options?: ReadRequestOptions<Query>,
+  ): Promise<Response<ResponseBody>> {
     return this.request('GET', path, options);
   }
 
-  async post<RequestBody, ResponseBody>(
+  async post<RequestBody, ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: RequestOptions<RequestBody>,
+    options?: WriteRequestOptions<RequestBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('POST', path, options);
   }
 
-  async put<RequestBody, ResponseBody>(
+  async put<RequestBody, ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: RequestOptions<RequestBody>,
+    options?: WriteRequestOptions<RequestBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('PUT', path, options);
   }
 
-  private async request<RequestBody, ResponseBody>(
+  private async request<RequestBody, ResponseBody, Query extends QueryParams>(
     method: string,
     path: string,
-    options: RequestOptions<RequestBody> = {},
+    options: WriteRequestOptions<RequestBody, Query> = {},
   ): Promise<Response<ResponseBody>> {
     const { query, body } = options;
 
@@ -92,7 +102,7 @@ export class FetchHttpGateway implements HttpGateway {
     return new FetchResponse(response, responseBody as ResponseBody);
   }
 
-  private getQueryString(query: Record<string, string | number> | undefined): string {
+  private getQueryString(query: QueryParams | undefined): string {
     if (!query || Object.keys(query).length === 0) {
       return '';
     }

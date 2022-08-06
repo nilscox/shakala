@@ -1,4 +1,4 @@
-import { LoginDto, SignupDto } from 'shared';
+import { LoginBodyDto, SignupBodyDto } from 'shared';
 import { Request } from 'supertest';
 
 import { TestServer } from '../../test';
@@ -13,7 +13,7 @@ describe('Authentication e2e', () => {
 
   test('sign up, log out and and log back in', async () => {
     const signup = async () => {
-      const body: SignupDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
+      const body: SignupBodyDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
 
       await agent.post('/auth/signup').send(body).expect(201);
     };
@@ -23,7 +23,7 @@ describe('Authentication e2e', () => {
     };
 
     const login = async () => {
-      const loginBody: LoginDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
+      const loginBody: LoginBodyDto = { email: 'user@domain.tld', password: 'p4ssw0rd' };
 
       await agent.post('/auth/login').send(loginBody).expect(200);
     };

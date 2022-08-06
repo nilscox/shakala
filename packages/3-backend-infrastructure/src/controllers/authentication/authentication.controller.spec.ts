@@ -7,7 +7,7 @@ import {
   NickAlreadyExistsError,
   SignupCommand,
 } from 'backend-application';
-import { get, LoginDto, SignupDto } from 'shared';
+import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import {
   Forbidden,
@@ -34,7 +34,7 @@ describe('AuthenticationController', () => {
   );
 
   describe('login', () => {
-    const body: LoginDto = { email: 'user@email.tld', password: 'p4ssw0rd' };
+    const body: LoginBodyDto = { email: 'user@email.tld', password: 'p4ssw0rd' };
     const user = createUser();
 
     beforeEach(() => {
@@ -85,7 +85,7 @@ describe('AuthenticationController', () => {
   });
 
   describe('signup', () => {
-    const body: SignupDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
+    const body: SignupBodyDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
     const user = createUser();
 
     beforeEach(() => {

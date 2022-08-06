@@ -15,6 +15,7 @@ export * from './types/class-type';
 export * from './types/replace';
 
 export * from './schemas/authentication';
+export * from './schemas/thread';
 
 export * from './dtos';
 

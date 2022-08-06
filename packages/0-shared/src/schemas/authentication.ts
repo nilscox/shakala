@@ -9,7 +9,7 @@ export const loginBodySchema = yup
   .noUnknown()
   .strict();
 
-export type LoginDto = yup.InferType<typeof loginBodySchema>;
+export type LoginBodyDto = yup.InferType<typeof loginBodySchema>;
 
 export const signupBodySchema = yup
   .object({
@@ -21,4 +21,4 @@ export const signupBodySchema = yup
   .noUnknown()
   .strict();
 
-export type SignupDto = yup.InferType<typeof signupBodySchema>;
+export type SignupBodyDto = yup.InferType<typeof signupBodySchema>;

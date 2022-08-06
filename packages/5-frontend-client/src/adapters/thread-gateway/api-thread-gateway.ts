@@ -1,5 +1,16 @@
 import { AuthorizationError, GetCommentsOptions, ReactionType, ThreadGateway } from 'frontend-domain';
-import { CommentDto, get, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto } from 'shared';
+import {
+  CommentDto,
+  CreateCommentBodyDto,
+  CreateThreadBodyDto,
+  get,
+  GetLastThreadsQueryDto,
+  GetThreadQueryDto,
+  SetReactionBodyDto,
+  ThreadDto,
+  ThreadWithCommentsDto,
+  UpdateCommentBodyDto,
+} from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
@@ -13,7 +24,7 @@ export class ApiThreadGateway implements ThreadGateway {
   constructor(private readonly http: HttpGateway) {}
 
   async getLast(count: number): Promise<ThreadDto[]> {
-    const response = await this.http.get<ThreadDto[]>('/thread/last', {
+    const response = await this.http.get<ThreadDto[], GetLastThreadsQueryDto>('/thread/last', {
       query: { count },
     });
 
@@ -37,7 +48,9 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async getComments(threadId: string, options: GetCommentsOptions): Promise<CommentDto[] | undefined> {
-    const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`, { query: options });
+    const response = await this.http.get<ThreadWithCommentsDto, GetThreadQueryDto>(`/thread/${threadId}`, {
+      query: options as GetThreadQueryDto,
+    });
 
     if (response.status === 404) {
       return;
@@ -51,7 +64,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createThread(description: string, text: string, keywords: string[]): Promise<string> {
-    const response = await this.http.post<any, string>('/thread', {
+    const response = await this.http.post<string, CreateThreadBodyDto>('/thread', {
       body: { description, text, keywords },
     });
 
@@ -63,8 +76,8 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ text: string }, string>(`/thread/${threadId}/comment`, {
-      body: { text },
+    const response = await this.http.post<string, CreateCommentBodyDto>(`/thread/${threadId}/comment`, {
+      body: { text, parentId: undefined },
     });
 
     if (response.status !== 201) {
@@ -75,12 +88,9 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createReply(threadId: string, parentId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ parentId: string; text: string }, string>(
-      `/thread/${threadId}/comment`,
-      {
-        body: { parentId, text },
-      },
-    );
+    const response = await this.http.post<string, CreateCommentBodyDto>(`/thread/${threadId}/comment`, {
+      body: { parentId, text },
+    });
 
     if (response.status !== 201) {
       throw new FetchError(response);
@@ -90,9 +100,12 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async editComment(threadId: string, commentId: string, text: string): Promise<void> {
-    const response = await this.http.put<{ text: string }>(`/thread/${threadId}/comment/${commentId}`, {
-      body: { text },
-    });
+    const response = await this.http.put<void, UpdateCommentBodyDto>(
+      `/thread/${threadId}/comment/${commentId}`,
+      {
+        body: { text },
+      },
+    );
 
     const code = get(response.body, 'message');
 
@@ -106,7 +119,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async setReaction(threadId: string, commentId: string, reactionType: ReactionType | null): Promise<void> {
-    const response = await this.http.put<{ type: ReactionTypeDto | null }>(
+    const response = await this.http.put<void, SetReactionBodyDto>(
       `/thread/${threadId}/comment/${commentId}/reaction`,
       { body: { type: reactionType } },
     );
