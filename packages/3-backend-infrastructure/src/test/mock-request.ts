@@ -16,7 +16,7 @@ export class MockRequest implements Request {
     return this;
   }
 
-  withBody(body: unknown) {
+  withBody<Body>(body: Body) {
     this.body = body;
     return this;
   }

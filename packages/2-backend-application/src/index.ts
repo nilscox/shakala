@@ -18,7 +18,7 @@ export * from './thread/get-comment.query';
 export * from './thread/get-last-threads.query';
 export * from './thread/get-thread.query';
 export * from './thread/set-reaction.command';
-export * from './thread/update-comment.command';
+export * from './thread/edit-comment.command';
 
 export * from './user/get-user-by-email.query';
 export * from './user/get-user-by-id.query';

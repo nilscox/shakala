@@ -7,9 +7,10 @@ import {
   GetThreadQueryResult,
   SetReactionCommand,
   Sort,
-  UpdateCommentCommand,
+  EditCommentCommand,
 } from 'backend-application';
 import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
+import { EditCommentBodyDto } from 'shared';
 
 import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
@@ -205,7 +206,7 @@ describe('ThreadController', () => {
     });
   });
 
-  describe('updateComment', () => {
+  describe('editComment', () => {
     const user = create.user();
     const thread = create.thread();
     const text = 'updated!';
@@ -220,30 +221,36 @@ describe('ThreadController', () => {
       queryBus.for(GetCommentQuery).return(comment);
     });
 
-    it('updates an existing comment', async () => {
-      const response = await controller.updateComment(
-        new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+    it("edits an existing comment's message", async () => {
+      const response = await controller.editComment(
+        new MockRequest()
+          .withParam('id', thread.id)
+          .withParam('commentId', comment.id)
+          .withBody<EditCommentBodyDto>({ text }),
       );
 
       expect(response).toHaveStatus(204);
       expect(response).toHaveBody(undefined);
 
-      expect(commandBus.execute).toHaveBeenCalledWith(new UpdateCommentCommand(comment.id, user.id, text));
+      expect(commandBus.execute).toHaveBeenCalledWith(new EditCommentCommand(comment.id, user.id, text));
     });
 
-    it('fails to update a comment when the user is not authenticated', async () => {
+    it('fails to edit a comment when the user is not authenticated', async () => {
       sessionService.user = undefined;
 
       await expect(
-        controller.updateComment(
-          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+        controller.editComment(
+          new MockRequest()
+            .withParam('id', thread.id)
+            .withParam('commentId', comment.id)
+            .withBody<EditCommentBodyDto>({ text }),
         ),
       ).rejects.toThrow(Forbidden);
     });
 
     it('fails to create a comment with an invalid body', async () => {
       await expect(
-        controller.updateComment(
+        controller.editComment(
           new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({}),
         ),
       ).rejects.test((error) => {
@@ -257,8 +264,11 @@ describe('ThreadController', () => {
       commandBus.execute.mockRejectedValue(new UserMustBeAuthorError());
 
       await expect(
-        controller.updateComment(
-          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ text }),
+        controller.editComment(
+          new MockRequest()
+            .withParam('id', thread.id)
+            .withParam('commentId', comment.id)
+            .withBody<EditCommentBodyDto>({ text }),
         ),
       ).rejects.test((error) => {
         expect(error).toBeInstanceOf(Unauthorized);

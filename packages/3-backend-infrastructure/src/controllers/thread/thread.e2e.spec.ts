@@ -47,8 +47,8 @@ describe('Thread e2e', () => {
       return agent.post(`/thread/${threadId}/comment`).send(body).expect(201);
     };
 
-    const updateComment = async (threadId: string, commentId: string) => {
-      const body = { text: 'updated' };
+    const editComment = async (threadId: string, commentId: string) => {
+      const body = { text: 'new text' };
 
       await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(204);
     };
@@ -64,7 +64,7 @@ describe('Thread e2e', () => {
     const createResponse = await createComment(threadId);
     const createdId: string = createResponse.body;
 
-    await updateComment(threadId, createdId);
+    await editComment(threadId, createdId);
 
     const thread = await getThread(threadId);
 

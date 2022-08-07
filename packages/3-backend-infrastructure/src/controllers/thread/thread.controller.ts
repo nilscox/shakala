@@ -6,7 +6,7 @@ import {
   GetThreadQueryResult,
   SetReactionCommand,
   Sort,
-  UpdateCommentCommand,
+  EditCommentCommand,
 } from 'backend-application';
 import { ReactionType, Thread, UserMustBeAuthorError } from 'backend-domain';
 import {
@@ -17,7 +17,7 @@ import {
   setReactionBodySchema,
   ThreadDto,
   ThreadWithCommentsDto,
-  updateCommentBodySchema,
+  editCommentBodySchema,
 } from 'shared';
 
 import {
@@ -51,7 +51,7 @@ export class ThreadController extends Controller {
       'GET  /:id': this.getThread,
       'POST /': this.createThread,
       'POST /:id/comment': this.createComment,
-      'PUT  /:id/comment/:commentId': this.updateComment,
+      'PUT  /:id/comment/:commentId': this.editComment,
       'PUT  /:id/comment/:commentId/reaction': this.setReaction,
     };
   }
@@ -102,16 +102,16 @@ export class ThreadController extends Controller {
     return Response.created(commentId);
   }
 
-  async updateComment(req: Request): Promise<Response<void>> {
+  async editComment(req: Request): Promise<Response<void>> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore todo: check that commentId c threadId
     const _threadId = req.params.get('id') as string;
     const commentId = req.params.get('commentId') as string;
     const user = await this.sessionService.requireUser(req);
-    const body = await this.validationService.body(req, updateCommentBodySchema);
+    const body = await this.validationService.body(req, editCommentBodySchema);
 
     await tryCatch(async () => {
-      await this.commandBus.execute(new UpdateCommentCommand(commentId, user.id, body.text));
+      await this.commandBus.execute(new EditCommentCommand(commentId, user.id, body.text));
     })
       .catch(
         UserMustBeAuthorError,

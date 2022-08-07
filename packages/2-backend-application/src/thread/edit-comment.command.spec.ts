@@ -3,16 +3,16 @@ import { factories, StubDateService, StubGeneratorService } from 'backend-domain
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
+import { EditCommentCommand, EditCommentCommandHandler } from './edit-comment.command';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
-import { UpdateCommentCommand, UpdateCommentCommandHandler } from './update-comment.command';
 
-describe('UpdateCommentCommand', () => {
+describe('EditCommentCommand', () => {
   const generatorService = new StubGeneratorService();
   const dateService = new StubDateService();
   const userRepository = new InMemoryUserRepository();
   const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
 
-  const handler = new UpdateCommentCommandHandler(commentRepository, userRepository);
+  const handler = new EditCommentCommandHandler(commentRepository, userRepository);
 
   const create = factories({ generatorService, dateService });
 
@@ -31,10 +31,10 @@ describe('UpdateCommentCommand', () => {
   });
 
   const execute = async (text: string) => {
-    return handler.handle(new UpdateCommentCommand(comment.id, user.id, text));
+    return handler.handle(new EditCommentCommand(comment.id, user.id, text));
   };
 
-  it('updates an existing comment', async () => {
+  it("edits an existing comment's message", async () => {
     await execute('updated');
 
     const edited = commentRepository.get(comment.id);

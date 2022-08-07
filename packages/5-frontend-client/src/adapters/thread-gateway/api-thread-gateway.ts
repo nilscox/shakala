@@ -9,7 +9,7 @@ import {
   SetReactionBodyDto,
   ThreadDto,
   ThreadWithCommentsDto,
-  UpdateCommentBodyDto,
+  EditCommentBodyDto,
 } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
@@ -100,7 +100,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async editComment(threadId: string, commentId: string, text: string): Promise<void> {
-    const response = await this.http.put<void, UpdateCommentBodyDto>(
+    const response = await this.http.put<void, EditCommentBodyDto>(
       `/thread/${threadId}/comment/${commentId}`,
       {
         body: { text },

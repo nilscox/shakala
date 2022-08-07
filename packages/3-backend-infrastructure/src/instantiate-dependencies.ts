@@ -32,8 +32,8 @@ import {
   SignupCommand,
   SignupCommandHandler,
   ThreadRepository,
-  UpdateCommentCommand,
-  UpdateCommentCommandHandler,
+  EditCommentCommand,
+  EditCommentCommandHandler,
   UserRepository,
 } from 'backend-application';
 import { CryptoService, DateService, GeneratorService } from 'backend-domain';
@@ -152,7 +152,7 @@ export const instantiateCommandAndQueries = (
   // comment
   queries.set(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
   commands.set(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
-  commands.set(UpdateCommentCommand, new UpdateCommentCommandHandler(commentRepository, userRepository));
+  commands.set(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
 
   // reaction
   commands.set(SetReactionCommand, new SetReactionCommandHandler(generatorService, reactionRepository));

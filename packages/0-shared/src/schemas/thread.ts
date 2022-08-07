@@ -38,7 +38,7 @@ export const createCommentBodySchema = yup
 
 export type CreateCommentBodyDto = yup.InferType<typeof createCommentBodySchema>;
 
-export const updateCommentBodySchema = yup
+export const editCommentBodySchema = yup
   .object({
     text: yup.string().required().trim().min(4).max(20000),
   })
@@ -46,7 +46,7 @@ export const updateCommentBodySchema = yup
   .noUnknown()
   .strict();
 
-export type UpdateCommentBodyDto = yup.InferType<typeof updateCommentBodySchema>;
+export type EditCommentBodyDto = yup.InferType<typeof editCommentBodySchema>;
 
 export const setReactionBodySchema = yup
   .object({
