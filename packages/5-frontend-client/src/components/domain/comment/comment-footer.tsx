@@ -15,6 +15,7 @@ import { SearchParamLink } from '~/components/elements/search-param-link';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 import EditIcon from '~/icons/edit.svg';
+import HistoryIcon from '~/icons/history.svg';
 import HorizontalDotsIcon from '~/icons/horizontal-dots.svg';
 import ReplyIcon from '~/icons/reply.svg';
 import ReportIcon from '~/icons/report.svg';
@@ -56,6 +57,15 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
             {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
 
             <FooterButton icon={<ReportIcon />}>Signaler</FooterButton>
+
+            <SearchParamLink
+              param="historique"
+              value={commentId}
+              className="items-center p-0 text-sm hover:text-primary fill-muted hover:fill-primary row button-secondary button"
+            >
+              <HistoryIcon className="mr-0.5 w-4 h-4" />
+              Historique
+            </SearchParamLink>
 
             <SearchParamLink
               param="share"

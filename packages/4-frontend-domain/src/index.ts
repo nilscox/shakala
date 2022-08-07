@@ -12,3 +12,5 @@ export * from './types';
 
 export * from './test/factories';
 export * from './test/test-store';
+
+export * from './utils/format-date';
