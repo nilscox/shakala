@@ -26,7 +26,11 @@ export type CommentProps = EntityProps<{
 }>;
 
 export class Comment extends Entity<CommentProps> {
-  constructor(props: CommentProps, private readonly generatorService: GeneratorService) {
+  constructor(
+    props: CommentProps,
+    private readonly generatorService: GeneratorService,
+    private readonly dateService: DateService,
+  ) {
     super(props);
   }
 
@@ -62,7 +66,7 @@ export class Comment extends Entity<CommentProps> {
     return first(this.history)?.date ?? this.message.date;
   }
 
-  async edit(dateService: DateService, user: User, text: string) {
+  async edit(user: User, text: string) {
     if (!user.equals(this.author)) {
       throw new UserMustBeAuthorError();
     }
@@ -72,7 +76,7 @@ export class Comment extends Entity<CommentProps> {
     this.props.message = new Message({
       id: await this.generatorService.generateId(),
       author: this.author,
-      date: new Timestamp(dateService.now()),
+      date: new Timestamp(this.dateService.now()),
       text: new Markdown(text),
     });
   }

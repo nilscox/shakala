@@ -1,6 +1,6 @@
 import { Collection, Entity, ManyToOne, OneToMany } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Author, Comment, GeneratorService, Nick, ProfileImage } from 'backend-domain';
+import { Author, Comment, DateService, GeneratorService, Nick, ProfileImage } from 'backend-domain';
 import { last } from 'shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
@@ -47,7 +47,7 @@ export class SqlComment extends BaseSqlEntity<Comment> {
     this.history = new Collection<SqlMessage>(this, history);
   }
 
-  toDomain(generatorService: GeneratorService): Comment {
+  toDomain(generatorService: GeneratorService, dateService: DateService): Comment {
     const author = new Author({
       id: this.author.id,
       nick: new Nick(this.author.nick),
@@ -68,6 +68,7 @@ export class SqlComment extends BaseSqlEntity<Comment> {
         history: history.map((message) => message.toDomain(author)),
       },
       generatorService,
+      dateService,
     );
   }
 }

@@ -12,8 +12,10 @@ import { Reaction, ReactionsCount, ReactionType } from '../domain/reaction.entit
 import { Thread } from '../domain/thread.entity';
 import { Timestamp } from '../domain/timestamp.value-object';
 import { User } from '../domain/user.entity';
+import { DateService } from '../interfaces/date.interface';
 import { GeneratorService } from '../interfaces/generator-service.interface';
 
+import { StubDateService } from './stub-date.service';
 import { StubGeneratorService } from './stub-generator.service';
 
 type ValueObjectFactory<VO extends ValueObject<unknown>> = VO extends ValueObject<infer V>
@@ -44,9 +46,10 @@ type Factories = {
 
 type FactoriesDependencies = {
   generatorService: GeneratorService;
+  dateService: DateService;
 };
 
-export const factories: Factory<Factories, FactoriesDependencies> = (deps) => ({
+export const factories: Factory<Factories, Partial<FactoriesDependencies>> = (deps) => ({
   id: randomId,
 
   markdown(text) {
@@ -90,6 +93,7 @@ export const factories: Factory<Factories, FactoriesDependencies> = (deps) => ({
         ...props,
       },
       deps?.generatorService ?? new StubGeneratorService(),
+      deps?.dateService ?? new StubDateService(),
     );
   },
 

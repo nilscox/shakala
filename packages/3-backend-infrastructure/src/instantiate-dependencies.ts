@@ -83,11 +83,14 @@ const instantiateInMemoryRepositories = (): Repositories => {
 
 instantiateInMemoryRepositories;
 
-export const instantiateRepositories = (em: EntityManager, { generatorService }: Services): Repositories => {
+export const instantiateRepositories = (
+  em: EntityManager,
+  { generatorService, dateService }: Services,
+): Repositories => {
   const userRepository = new SqlUserRepository(em);
   const threadRepository = new SqlThreadRepository(em);
   const reactionRepository = new SqlReactionRepository(em);
-  const commentRepository = new SqlCommentRepository(em, generatorService);
+  const commentRepository = new SqlCommentRepository(em, generatorService, dateService);
 
   return {
     userRepository,
@@ -149,7 +152,7 @@ export const instantiateCommandAndQueries = (
   // comment
   queries.set(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
   commands.set(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
-  commands.set(UpdateCommentCommand, new UpdateCommentCommandHandler(dateService, commentRepository, userRepository));
+  commands.set(UpdateCommentCommand, new UpdateCommentCommandHandler(commentRepository, userRepository));
 
   // reaction
   commands.set(SetReactionCommand, new SetReactionCommandHandler(generatorService, reactionRepository));

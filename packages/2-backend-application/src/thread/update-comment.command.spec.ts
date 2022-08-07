@@ -1,6 +1,5 @@
-import { factories, StubGeneratorService } from 'backend-domain';
+import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
 
-import { StubDateService } from '../test/date.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
@@ -13,9 +12,9 @@ describe('UpdateCommentCommand', () => {
   const userRepository = new InMemoryUserRepository();
   const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
 
-  const handler = new UpdateCommentCommandHandler(dateService, commentRepository, userRepository);
+  const handler = new UpdateCommentCommandHandler(commentRepository, userRepository);
 
-  const create = factories({ generatorService });
+  const create = factories({ generatorService, dateService });
 
   const user = create.user();
   const author = create.author(user);

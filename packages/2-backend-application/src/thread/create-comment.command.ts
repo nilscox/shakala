@@ -43,6 +43,7 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
         }),
       },
       this.generatorService,
+      this.dateService,
     );
 
     await this.commentRepository.save(comment);

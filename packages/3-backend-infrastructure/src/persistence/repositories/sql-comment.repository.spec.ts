@@ -1,5 +1,5 @@
-import { Sort, StubDateService } from 'backend-application';
-import { factories } from 'backend-domain';
+import { Sort } from 'backend-application';
+import { factories, StubDateService } from 'backend-domain';
 
 import { MathRandomGeneratorService } from '../../infrastructure';
 import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
@@ -12,14 +12,15 @@ describe('SqlCommentRepository', () => {
   let repository: SqlCommentRepository;
 
   const generatorService = new MathRandomGeneratorService();
+  const dateService = new StubDateService();
 
-  const create = factories({ generatorService });
+  const create = factories({ generatorService, dateService });
 
   beforeEach(async () => {
     const { em } = await createTestDatabaseConnection();
 
     save = sqlHelpers(em.fork()).save;
-    repository = new SqlCommentRepository(em.fork(), generatorService);
+    repository = new SqlCommentRepository(em.fork(), generatorService, dateService);
   });
 
   it('saves and finds a comment', async () => {
@@ -49,7 +50,7 @@ describe('SqlCommentRepository', () => {
 
     await repository.save(comment);
 
-    await comment.edit(new StubDateService(), user, 'edited text');
+    await comment.edit(user, 'edited text');
     await repository.save(comment);
 
     expect(await repository.findById(comment.id)).toEqual(comment);

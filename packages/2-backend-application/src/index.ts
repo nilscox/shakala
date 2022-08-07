@@ -11,7 +11,6 @@ export * from './interfaces/thread.repository';
 export * from './interfaces/user.repository';
 
 export * from './test/crypto.stub';
-export * from './test/date.stub';
 
 export * from './thread/create-comment.command';
 export * from './thread/create-thread.command';

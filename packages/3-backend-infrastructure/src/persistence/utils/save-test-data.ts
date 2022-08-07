@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
 import { Comment, Reaction, Thread, User } from 'backend-domain';
 
-import { MathRandomGeneratorService } from '../../infrastructure';
+import { MathRandomGeneratorService, RealDateService } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
 import { SqlReactionRepository } from '../repositories/sql-reaction.repository';
 import { SqlThreadRepository } from '../repositories/sql-thread.repository';
@@ -11,7 +11,11 @@ import { SqlUserRepository } from '../repositories/sql-user.repository';
 export type SaveEntity = <T>(entity: T) => Promise<T>;
 
 export const sqlHelpers = (em: EntityManager) => {
-  const commentRepository = new SqlCommentRepository(em, new MathRandomGeneratorService());
+  const commentRepository = new SqlCommentRepository(
+    em,
+    new MathRandomGeneratorService(),
+    new RealDateService(),
+  );
   const reactionRepository = new SqlReactionRepository(em);
   const threadRepository = new SqlThreadRepository(em);
   const userRepository = new SqlUserRepository(em);

@@ -16,3 +16,4 @@ export * from './interfaces/generator-service.interface';
 
 export * from './utils/factories';
 export * from './utils/stub-generator.service';
+export * from './utils/stub-date.service';

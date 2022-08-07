@@ -1,5 +1,3 @@
-import { DateService } from 'backend-domain';
-
 import { CommandHandler } from '../cqs/command-handler';
 import { CommentRepository } from '../interfaces/comment.repository';
 import { UserRepository } from '../interfaces/user.repository';
@@ -10,7 +8,6 @@ export class UpdateCommentCommand {
 
 export class UpdateCommentCommandHandler implements CommandHandler<UpdateCommentCommand> {
   constructor(
-    private readonly dateService: DateService,
     private readonly commentRepository: CommentRepository,
     private readonly userRepository: UserRepository,
   ) {}
@@ -21,7 +18,7 @@ export class UpdateCommentCommandHandler implements CommandHandler<UpdateComment
     const comment = await this.commentRepository.findByIdOrFail(commentId);
     const author = await this.userRepository.findByIdOrFail(authorId);
 
-    await comment.edit(this.dateService, author, text);
+    await comment.edit(author, text);
 
     await this.commentRepository.save(comment);
   }

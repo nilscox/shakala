@@ -1,6 +1,5 @@
-import { factories, StubGeneratorService } from 'backend-domain';
+import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
 
-import { StubDateService } from '../test/date.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
