@@ -8,6 +8,8 @@ import {
   CreateCommentCommandHandler,
   CreateThreadCommand,
   CreateThreadHandler,
+  EditCommentCommand,
+  EditCommentCommandHandler,
   GetCommentQuery,
   GetCommentQueryHandler,
   GetLastThreadsHandler,
@@ -32,28 +34,23 @@ import {
   SignupCommand,
   SignupCommandHandler,
   ThreadRepository,
-  EditCommentCommand,
-  EditCommentCommandHandler,
   UserRepository,
 } from 'backend-application';
 import { CryptoService, DateService, GeneratorService } from 'backend-domain';
 import { ClassType } from 'shared';
 
-import { AuthenticationController } from './controllers/authentication/authentication.controller';
-import { CommentController } from './controllers/comment/comment.controller';
-import { ThreadController } from './controllers/thread/thread.controller';
 import {
   BcryptService,
-  CommandBus,
-  Controller,
   ExpressSessionService,
   MathRandomGeneratorService,
   QueryBus,
+  RealCommandBus,
   RealDateService,
+  RealQueryBus,
   SessionService,
   ValidationService,
 } from './infrastructure';
-import { ConfigService, EnvConfigService } from './infrastructure/services/env-config.service';
+import { ConfigService, EnvConfigService } from './infrastructure/services/config.service';
 import {
   SqlCommentRepository,
   SqlReactionRepository,
@@ -87,19 +84,12 @@ instantiateInMemoryRepositories;
 export const instantiateRepositories = (
   em: EntityManager,
   { generatorService, dateService }: Services,
-): Repositories => {
-  const userRepository = new SqlUserRepository(em);
-  const threadRepository = new SqlThreadRepository(em);
-  const reactionRepository = new SqlReactionRepository(em);
-  const commentRepository = new SqlCommentRepository(em, generatorService, dateService);
-
-  return {
-    userRepository,
-    threadRepository,
-    reactionRepository,
-    commentRepository,
-  };
-};
+): Repositories => ({
+  userRepository: new SqlUserRepository(em),
+  threadRepository: new SqlThreadRepository(em),
+  reactionRepository: new SqlReactionRepository(em),
+  commentRepository: new SqlCommentRepository(em, generatorService, dateService),
+});
 
 export type Services = {
   configService: ConfigService;
@@ -110,65 +100,39 @@ export type Services = {
   sessionService: SessionService;
 };
 
-export const instantiateServices = (queryBus: QueryBus): Services => {
-  const configService = new EnvConfigService();
-  const generatorService = new MathRandomGeneratorService();
-  const dateService = new RealDateService();
-  const cryptoService = new BcryptService();
-  const validationService = new ValidationService();
-  const sessionService = new ExpressSessionService(queryBus);
-
-  return {
-    configService,
-    generatorService,
-    dateService,
-    cryptoService,
-    validationService,
-    sessionService,
-  };
-};
+export const instantiateServices = (queryBus: QueryBus): Services => ({
+  configService: new EnvConfigService(),
+  generatorService: new MathRandomGeneratorService(),
+  dateService: new RealDateService(),
+  cryptoService: new BcryptService(),
+  validationService: new ValidationService(),
+  sessionService: new ExpressSessionService(queryBus),
+});
 
 export type CommandHandlers = Map<ClassType<Command>, CommandHandler<unknown, CommandResult>>;
 export type QueryHandlers = Map<ClassType<Query>, QueryHandler<unknown, unknown>>;
 
 // prettier-ignore
-export const instantiateCommandAndQueries = (
-  { userRepository, threadRepository, commentRepository, reactionRepository }: Repositories,
+export const registerHandlers = (
+  queryBus: RealQueryBus,
+  commandBus: RealCommandBus,
   { generatorService, cryptoService, dateService }: Services,
+  { userRepository, threadRepository, commentRepository, reactionRepository }: Repositories,
 ) => {
-  const commands: CommandHandlers = new Map();
-  const queries: QueryHandlers = new Map();
-
   // authentication
-  queries.set(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
-  queries.set(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
-  commands.set(LoginCommand, new LoginCommandHandler(userRepository, cryptoService, dateService));
-  commands.set(SignupCommand, new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService));
+  queryBus.register(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
+  queryBus.register(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
+  commandBus.register(LoginCommand, new LoginCommandHandler(userRepository, cryptoService, dateService));
+  commandBus.register(SignupCommand, new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService));
 
   // thread
-  queries.set(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
-  queries.set(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
-  commands.set(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
+  queryBus.register(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
+  queryBus.register(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
+  commandBus.register(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
 
   // comment
-  queries.set(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
-  commands.set(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
-  commands.set(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
-
-  // reaction
-  commands.set(SetReactionCommand, new SetReactionCommandHandler(generatorService, reactionRepository));
-
-  return { commands, queries };
+  queryBus.register(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
+  commandBus.register(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
+  commandBus.register(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
+  commandBus.register(SetReactionCommand, new SetReactionCommandHandler(generatorService, reactionRepository));
 };
-
-export type Controllers = Controller[];
-
-export const instantiateControllers = (
-  commandBus: CommandBus,
-  queryBus: QueryBus,
-  { validationService, sessionService }: Services,
-) => [
-  new AuthenticationController(validationService, sessionService, queryBus, commandBus),
-  new ThreadController(queryBus, commandBus, sessionService, validationService),
-  new CommentController(queryBus, commandBus, sessionService, validationService),
-];

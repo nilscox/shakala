@@ -1,11 +1,6 @@
 import { LoginBodyDto, SignupBodyDto } from 'shared';
-import { Request } from 'supertest';
 
 import { TestServer } from '../../test';
-
-export const logResponse = (req: Request) => {
-  req.on('response', (res) => console.log(res.body));
-};
 
 describe('Authentication e2e', () => {
   const server = new TestServer();

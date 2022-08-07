@@ -2,26 +2,38 @@ import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
 import { RequestContext } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import cors from 'cors';
 import express, { json } from 'express';
 import session from 'express-session';
 
 import { Application } from './application';
-import { Controllers, instantiateControllers } from './instantiate-dependencies';
+import { AuthenticationController } from './controllers/authentication/authentication.controller';
+import { CommentController } from './controllers/comment/comment.controller';
+import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
+import { ThreadController } from './controllers/thread/thread.controller';
 
 export class Server extends Application {
   protected app = express();
   protected server!: HttpServer;
 
-  private controllers!: Controllers;
-
   override async init() {
     await super.init();
 
-    this.controllers = instantiateControllers(this.commandBus, this.queryBus, this.services);
+    const configService = this.services.configService;
+    const appConfig = configService.app();
+
+    this.app.disable('x-powered-by');
+
+    if (appConfig.trustProxy) {
+      this.app.set('trust proxy', 1);
+    }
 
     this.configureDefaultMiddlewares();
     this.configureControllers();
+
+    console.info('server initialized');
+    console.dir(configService.dump(), { depth: null });
   }
 
   override async close() {
@@ -60,6 +72,7 @@ export class Server extends Application {
         cookie: {
           secure: sessionConfig.secure,
           httpOnly: true,
+          sameSite: 'strict',
         },
         resave: false,
         saveUninitialized: true,
@@ -72,7 +85,17 @@ export class Server extends Application {
   }
 
   private configureControllers() {
-    for (const controller of this.controllers) {
+    const { validationService, sessionService } = this.services;
+    const { queryBus, commandBus } = this;
+
+    const controllers = [
+      new HealthcheckController(this.orm.em as EntityManager),
+      new AuthenticationController(validationService, sessionService, queryBus, commandBus),
+      new ThreadController(queryBus, commandBus, sessionService, validationService),
+      new CommentController(queryBus, commandBus, sessionService, validationService),
+    ];
+
+    for (const controller of controllers) {
       controller.configure(this.app);
     }
   }

@@ -4,10 +4,10 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { CommandBus, QueryBus, RealCommandBus, RealQueryBus } from './infrastructure';
 import {
   CommandHandlers,
-  instantiateCommandAndQueries,
   instantiateRepositories,
   instantiateServices,
   QueryHandlers,
+  registerHandlers,
   Repositories,
   Services,
 } from './instantiate-dependencies';
@@ -18,17 +18,22 @@ export class Application {
   protected commandBus = new RealCommandBus();
 
   protected services!: Services;
+  protected serviceOverrides: Partial<Services> = {};
+
   protected repositories!: Repositories;
+
   protected commands!: CommandHandlers;
   protected queries!: QueryHandlers;
 
   protected orm!: MikroORM;
 
+  overrideServices(services: Partial<Services>) {
+    this.serviceOverrides = { ...this.serviceOverrides, ...services };
+  }
+
   async init() {
     this.orm = await this.createDatabaseConnection();
-
     this.instantiateDependencies();
-    this.registerHandlers();
   }
 
   async close() {
@@ -44,22 +49,13 @@ export class Application {
   protected createDatabaseConnection = createDatabaseConnection;
 
   private instantiateDependencies() {
-    this.services = instantiateServices(this.queryBus);
+    this.services = {
+      ...instantiateServices(this.queryBus),
+      ...this.serviceOverrides,
+    };
+
     this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager, this.services);
 
-    const commandsAndQueries = instantiateCommandAndQueries(this.repositories, this.services);
-
-    this.commands = commandsAndQueries.commands;
-    this.queries = commandsAndQueries.queries;
-  }
-
-  private registerHandlers() {
-    for (const [Query, handler] of this.queries.entries()) {
-      this.queryBus.register(Query, handler);
-    }
-
-    for (const [Command, handler] of this.commands.entries()) {
-      this.commandBus.register(Command, handler);
-    }
+    registerHandlers(this.queryBus, this.commandBus, this.services, this.repositories);
   }
 }

@@ -1,10 +1,6 @@
-import { Request, SuperAgentTest } from 'supertest';
+import { SuperAgentTest } from 'supertest';
 
 import { TestServer } from '../../test';
-
-export const logResponse = (req: Request) => {
-  req.on('response', (res) => console.dir(res.body, { depth: null }));
-};
 
 describe('Thread e2e', () => {
   const server = new TestServer();
