@@ -40,6 +40,7 @@ import { CryptoService, DateService, GeneratorService } from 'backend-domain';
 import { ClassType } from 'shared';
 
 import { AuthenticationController } from './controllers/authentication/authentication.controller';
+import { CommentController } from './controllers/comment/comment.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
 import {
   BcryptService,
@@ -169,4 +170,5 @@ export const instantiateControllers = (
 ) => [
   new AuthenticationController(validationService, sessionService, queryBus, commandBus),
   new ThreadController(queryBus, commandBus, sessionService, validationService),
+  new CommentController(queryBus, commandBus, sessionService, validationService),
 ];

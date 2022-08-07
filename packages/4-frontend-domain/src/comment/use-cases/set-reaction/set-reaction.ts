@@ -2,7 +2,6 @@ import { pick } from 'shared';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { Thunk } from '../../../store';
-import { selectCommentThreadId } from '../../../thread';
 import { ReactionType } from '../../../types';
 import { updateComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
@@ -28,7 +27,6 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
       return;
     }
 
-    const threadId = selectCommentThreadId(getState(), commentId);
     const comment = selectComment(getState(), commentId);
 
     const type = comment.userReaction === reactionType ? null : reactionType;
@@ -62,7 +60,7 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
     );
 
     try {
-      await threadGateway.setReaction(threadId, commentId, type);
+      await threadGateway.setReaction(commentId, type);
     } catch (error) {
       dispatch(setReactionCounts(commentId, initialReactionsCounts));
       snackbarGateway.error("Une erreur s'est produite, votre action n'a pas été comptabilisée.");

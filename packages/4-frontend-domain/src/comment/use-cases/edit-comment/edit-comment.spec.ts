@@ -56,7 +56,7 @@ describe('editComment', () => {
     await promise;
     expect(store.select(selectIsSubmittingCommentEditionForm, commentId)).toBe(false);
 
-    expect(store.threadGateway.editComment).toHaveBeenCalledWith(threadId, commentId, text);
+    expect(store.threadGateway.editComment).toHaveBeenCalledWith(commentId, text);
   });
 
   it('updates the comment text and edition date', async () => {

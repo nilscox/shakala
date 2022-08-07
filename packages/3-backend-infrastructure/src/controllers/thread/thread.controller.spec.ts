@@ -1,18 +1,13 @@
 import {
-  CreateCommentCommand,
   CreateThreadCommand,
-  GetCommentQuery,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
-  SetReactionCommand,
   Sort,
-  EditCommentCommand,
 } from 'backend-application';
-import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
-import { EditCommentBodyDto } from 'shared';
+import { factories } from 'backend-domain';
 
-import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { Forbidden, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
@@ -21,8 +16,9 @@ describe('ThreadController', () => {
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
   const sessionService = new StubSessionService();
+  const validationService = new ValidationService();
 
-  const controller = new ThreadController(queryBus, commandBus, sessionService, new ValidationService());
+  const controller = new ThreadController(queryBus, commandBus, sessionService, validationService);
 
   const create = factories();
 
@@ -134,7 +130,7 @@ describe('ThreadController', () => {
       sessionService.user = undefined;
 
       await expect(
-        controller.createComment(new MockRequest().withBody({ description, text, keywords })),
+        controller.createThread(new MockRequest().withBody({ description, text, keywords })),
       ).rejects.toThrow(Forbidden);
     });
 
@@ -148,166 +144,6 @@ describe('ThreadController', () => {
         expect(error).toHaveProperty('fields.1.field', 'keywords[0]');
         expect(error).toHaveProperty('fields.1.error', 'min');
       });
-    });
-  });
-
-  describe('createComment', () => {
-    const user = create.user();
-    const thread = create.thread();
-    const parent = create.comment();
-    const text = 'hello!';
-
-    const commentId = 'commentId';
-
-    beforeEach(() => {
-      sessionService.user = user;
-      commandBus.execute.mockResolvedValue(commentId);
-    });
-
-    it('creates a new root comment', async () => {
-      const response = await controller.createComment(
-        new MockRequest().withParam('id', thread.id).withBody({ text }),
-      );
-
-      expect(response).toHaveStatus(201);
-      expect(response).toHaveBody(commentId);
-
-      expect(commandBus.execute).toHaveBeenCalledWith(
-        new CreateCommentCommand(thread.id, user.id, null, text),
-      );
-    });
-
-    it('creates a new reply', async () => {
-      await controller.createComment(
-        new MockRequest().withParam('id', thread.id).withBody({ text, parentId: parent.id }),
-      );
-
-      expect(commandBus.execute).toHaveBeenCalledWith(
-        new CreateCommentCommand(thread.id, user.id, parent.id, text),
-      );
-    });
-
-    it('fails to create a comment when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(
-        controller.createComment(new MockRequest().withParam('id', thread.id).withBody({ text })),
-      ).rejects.toThrow(Forbidden);
-    });
-
-    it('fails to create a comment with an invalid body', async () => {
-      await expect(
-        controller.createComment(new MockRequest().withParam('id', thread.id).withBody({})),
-      ).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(error).toHaveProperty('fields.0.field', 'text');
-        expect(error).toHaveProperty('fields.0.error', 'required');
-      });
-    });
-  });
-
-  describe('editComment', () => {
-    const user = create.user();
-    const thread = create.thread();
-    const text = 'updated!';
-
-    const comment = create.comment({
-      author: user,
-      message: create.message({ text: create.markdown('text') }),
-    });
-
-    beforeEach(() => {
-      sessionService.user = user;
-      queryBus.for(GetCommentQuery).return(comment);
-    });
-
-    it("edits an existing comment's message", async () => {
-      const response = await controller.editComment(
-        new MockRequest()
-          .withParam('id', thread.id)
-          .withParam('commentId', comment.id)
-          .withBody<EditCommentBodyDto>({ text }),
-      );
-
-      expect(response).toHaveStatus(204);
-      expect(response).toHaveBody(undefined);
-
-      expect(commandBus.execute).toHaveBeenCalledWith(new EditCommentCommand(comment.id, user.id, text));
-    });
-
-    it('fails to edit a comment when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(
-        controller.editComment(
-          new MockRequest()
-            .withParam('id', thread.id)
-            .withParam('commentId', comment.id)
-            .withBody<EditCommentBodyDto>({ text }),
-        ),
-      ).rejects.toThrow(Forbidden);
-    });
-
-    it('fails to create a comment with an invalid body', async () => {
-      await expect(
-        controller.editComment(
-          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({}),
-        ),
-      ).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(error).toHaveProperty('fields.0.field', 'text');
-        expect(error).toHaveProperty('fields.0.error', 'required');
-      });
-    });
-
-    it('handles UserMustBeAuthor errors', async () => {
-      commandBus.execute.mockRejectedValue(new UserMustBeAuthorError());
-
-      await expect(
-        controller.editComment(
-          new MockRequest()
-            .withParam('id', thread.id)
-            .withParam('commentId', comment.id)
-            .withBody<EditCommentBodyDto>({ text }),
-        ),
-      ).rejects.test((error) => {
-        expect(error).toBeInstanceOf(Unauthorized);
-        expect(error).toHaveProperty('body.message', 'UserMustBeAuthor');
-      });
-    });
-  });
-
-  describe('setReaction', () => {
-    const user = create.user();
-    const thread = create.thread();
-    const type = ReactionType.upvote;
-
-    const comment = create.comment({ author: user });
-
-    beforeEach(() => {
-      sessionService.user = user;
-      queryBus.for(GetCommentQuery).return(comment);
-    });
-
-    it('sets a reaction on a comment', async () => {
-      const response = await controller.setReaction(
-        new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ type }),
-      );
-
-      expect(response).toHaveStatus(204);
-      expect(response).toHaveBody(undefined);
-
-      expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(user.id, comment.id, type));
-    });
-
-    it('fails to set a reaction when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(
-        controller.setReaction(
-          new MockRequest().withParam('id', thread.id).withParam('commentId', comment.id).withBody({ type }),
-        ),
-      ).rejects.toThrow(Forbidden);
     });
   });
 });

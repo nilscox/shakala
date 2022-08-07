@@ -29,6 +29,7 @@ export type CreateThreadBodyDto = yup.InferType<typeof createThreadBodySchema>;
 
 export const createCommentBodySchema = yup
   .object({
+    threadId: yup.string().required(),
     parentId: yup.string(),
     text: yup.string().required().trim().min(4).max(20000),
   })
@@ -36,7 +37,11 @@ export const createCommentBodySchema = yup
   .noUnknown()
   .strict();
 
-export type CreateCommentBodyDto = yup.InferType<typeof createCommentBodySchema>;
+export type CreateCommentBodyDto = {
+  threadId: string;
+  parentId?: string;
+  text: string;
+};
 
 export const editCommentBodySchema = yup
   .object({

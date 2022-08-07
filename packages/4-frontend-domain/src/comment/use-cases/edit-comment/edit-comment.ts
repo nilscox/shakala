@@ -1,8 +1,7 @@
-import { query, QueryState, createAction } from '@nilscox/redux-query';
+import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { State, Thunk } from '../../../store';
-import { selectCommentThreadId } from '../../../thread';
 import { AuthorizationError } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
 import { setCommentEdited, setCommentText, updateComment } from '../../comments.actions';
@@ -67,14 +66,13 @@ export const editComment = (commentId: string): Thunk => {
 
     const key: Key = { commentId };
 
-    const threadId = selectCommentThreadId(getState(), commentId);
     // todo: type cast
     const text = selectEditCommentFormText(getState(), commentId) as string;
 
     try {
       dispatch(actions.setPending(key));
 
-      await threadGateway.editComment(threadId, commentId, text);
+      await threadGateway.editComment(commentId, text);
 
       dispatch(setCommentText(commentId, text));
       dispatch(setCommentEdited(commentId, dateGateway.now().toISOString()));

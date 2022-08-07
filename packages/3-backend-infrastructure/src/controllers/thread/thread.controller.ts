@@ -1,23 +1,17 @@
 import {
-  CreateCommentCommand,
   CreateThreadCommand,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
-  SetReactionCommand,
   Sort,
-  EditCommentCommand,
 } from 'backend-application';
-import { ReactionType, Thread, UserMustBeAuthorError } from 'backend-domain';
+import { Thread } from 'backend-domain';
 import {
-  createCommentBodySchema,
   createThreadBodySchema,
   getLastThreadsQuerySchema,
   getThreadQuerySchema,
-  setReactionBodySchema,
   ThreadDto,
   ThreadWithCommentsDto,
-  editCommentBodySchema,
 } from 'shared';
 
 import {
@@ -28,10 +22,8 @@ import {
   Request,
   Response,
   SessionService,
-  Unauthorized,
   ValidationService,
 } from '../../infrastructure';
-import { tryCatch } from '../../utils';
 
 import { ThreadPresenter } from './thread.presenter';
 
@@ -50,9 +42,6 @@ export class ThreadController extends Controller {
       'GET  /last': this.getLastThreads,
       'GET  /:id': this.getThread,
       'POST /': this.createThread,
-      'POST /:id/comment': this.createComment,
-      'PUT  /:id/comment/:commentId': this.editComment,
-      'PUT  /:id/comment/:commentId/reaction': this.setReaction,
     };
   }
 
@@ -88,50 +77,5 @@ export class ThreadController extends Controller {
     );
 
     return Response.created(threadId);
-  }
-
-  async createComment(req: Request): Promise<Response<string>> {
-    const threadId = req.params.get('id') as string;
-    const user = await this.sessionService.requireUser(req);
-    const body = await this.validationService.body(req, createCommentBodySchema);
-
-    const commentId = await this.commandBus.execute<string>(
-      new CreateCommentCommand(threadId, user.id, body.parentId ?? null, body.text),
-    );
-
-    return Response.created(commentId);
-  }
-
-  async editComment(req: Request): Promise<Response<void>> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore todo: check that commentId c threadId
-    const _threadId = req.params.get('id') as string;
-    const commentId = req.params.get('commentId') as string;
-    const user = await this.sessionService.requireUser(req);
-    const body = await this.validationService.body(req, editCommentBodySchema);
-
-    await tryCatch(async () => {
-      await this.commandBus.execute(new EditCommentCommand(commentId, user.id, body.text));
-    })
-      .catch(
-        UserMustBeAuthorError,
-        (error) => new Unauthorized('UserMustBeAuthor', { message: error.message }),
-      )
-      .run();
-
-    return Response.noContent();
-  }
-
-  async setReaction(req: Request): Promise<Response<void>> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore todo: check that commentId c threadId
-    const _threadId = req.params.get('id') as string;
-    const commentId = req.params.get('commentId') as string;
-    const user = await this.sessionService.requireUser(req);
-    const body = await this.validationService.body(req, setReactionBodySchema);
-
-    await this.commandBus.execute(new SetReactionCommand(user.id, commentId, body.type as ReactionType));
-
-    return Response.noContent();
   }
 }

@@ -76,8 +76,8 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
-    const response = await this.http.post<string, CreateCommentBodyDto>(`/thread/${threadId}/comment`, {
-      body: { text, parentId: undefined },
+    const response = await this.http.post<string, CreateCommentBodyDto>('/comment', {
+      body: { threadId, text },
     });
 
     if (response.status !== 201) {
@@ -88,8 +88,8 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createReply(threadId: string, parentId: string, text: string): Promise<string> {
-    const response = await this.http.post<string, CreateCommentBodyDto>(`/thread/${threadId}/comment`, {
-      body: { parentId, text },
+    const response = await this.http.post<string, CreateCommentBodyDto>('/comment', {
+      body: { threadId, parentId, text },
     });
 
     if (response.status !== 201) {
@@ -99,13 +99,10 @@ export class ApiThreadGateway implements ThreadGateway {
     return response.body;
   }
 
-  async editComment(threadId: string, commentId: string, text: string): Promise<void> {
-    const response = await this.http.put<void, EditCommentBodyDto>(
-      `/thread/${threadId}/comment/${commentId}`,
-      {
-        body: { text },
-      },
-    );
+  async editComment(commentId: string, text: string): Promise<void> {
+    const response = await this.http.put<void, EditCommentBodyDto>(`/comment/${commentId}`, {
+      body: { text },
+    });
 
     const code = get(response.body, 'message');
 
@@ -118,11 +115,10 @@ export class ApiThreadGateway implements ThreadGateway {
     }
   }
 
-  async setReaction(threadId: string, commentId: string, reactionType: ReactionType | null): Promise<void> {
-    const response = await this.http.put<void, SetReactionBodyDto>(
-      `/thread/${threadId}/comment/${commentId}/reaction`,
-      { body: { type: reactionType } },
-    );
+  async setReaction(commentId: string, reactionType: ReactionType | null): Promise<void> {
+    const response = await this.http.put<void, SetReactionBodyDto>(`/comment/${commentId}/reaction`, {
+      body: { type: reactionType },
+    });
 
     if (response.status !== 204) {
       throw new FetchError(response);

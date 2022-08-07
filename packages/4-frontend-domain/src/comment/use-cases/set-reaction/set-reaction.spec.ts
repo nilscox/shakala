@@ -38,7 +38,7 @@ describe('setReaction', () => {
   it('sets a reaction on a comment', async () => {
     await execute(ReactionType.upvote);
 
-    expect(store.threadGateway.setReaction).toHaveBeenCalledWith(threadId, commentId, ReactionType.upvote);
+    expect(store.threadGateway.setReaction).toHaveBeenCalledWith(commentId, ReactionType.upvote);
   });
 
   describe('add reaction', () => {
