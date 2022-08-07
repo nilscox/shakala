@@ -21,7 +21,7 @@ export class UpdateCommentCommandHandler implements CommandHandler<UpdateComment
     const comment = await this.commentRepository.findByIdOrFail(commentId);
     const author = await this.userRepository.findByIdOrFail(authorId);
 
-    comment.edit(this.dateService, author, text);
+    await comment.edit(this.dateService, author, text);
 
     await this.commentRepository.save(comment);
   }

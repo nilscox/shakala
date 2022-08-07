@@ -17,8 +17,8 @@ export class Application {
   protected queryBus = new RealQueryBus();
   protected commandBus = new RealCommandBus();
 
-  protected repositories!: Repositories;
   protected services!: Services;
+  protected repositories!: Repositories;
   protected commands!: CommandHandlers;
   protected queries!: QueryHandlers;
 
@@ -44,8 +44,8 @@ export class Application {
   protected createDatabaseConnection = createDatabaseConnection;
 
   private instantiateDependencies() {
-    this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager);
     this.services = instantiateServices(this.queryBus);
+    this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager, this.services);
 
     const commandsAndQueries = instantiateCommandAndQueries(this.repositories, this.services);
 

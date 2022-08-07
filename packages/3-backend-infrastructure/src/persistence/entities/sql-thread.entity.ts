@@ -1,13 +1,15 @@
 import { ArrayType, Entity, ManyToOne, Property } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { Markdown, Thread, Timestamp } from 'backend-domain';
 
-import { BaseEntity } from '../base-classes/base-entity';
+import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 
-import { User } from './sql-user.entity';
+import { SqlUser } from './sql-user.entity';
 
 @Entity({ tableName: 'thread' })
-export class Thread extends BaseEntity {
+export class SqlThread extends BaseSqlEntity<Thread> {
   @ManyToOne({ eager: true })
-  author!: User;
+  author!: SqlUser;
 
   @Property()
   description!: string;
@@ -15,9 +17,26 @@ export class Thread extends BaseEntity {
   @Property({ columnType: 'text' })
   text!: string;
 
-  @Property()
-  created!: Date;
-
   @Property({ type: ArrayType, columnType: 'character varying(255) array' })
   keywords!: string[];
+
+  assignFromDomain(em: EntityManager, thread: Thread) {
+    this.id = thread.id;
+    this.description = thread.description;
+    this.text = thread.text.toString();
+    this.keywords = thread.keywords;
+    this.author = em.getReference(SqlUser, thread.author.id);
+    this.createdAt = thread.created.toDate();
+  }
+
+  toDomain() {
+    return new Thread({
+      id: this.id,
+      description: this.description,
+      text: new Markdown(this.text),
+      keywords: this.keywords,
+      author: this.author.toDomain(),
+      created: new Timestamp(this.createdAt),
+    });
+  }
 }

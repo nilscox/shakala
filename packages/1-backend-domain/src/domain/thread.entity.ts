@@ -1,36 +1,11 @@
-import { type EntityProps, Entity } from '../ddd/entity';
+import { Entity, type EntityProps } from '../ddd/entity';
 
+import { Author } from './author.entity';
 import type { Markdown } from './markdown.value-object';
-import type { Nick } from './nick.value-object';
-import type { ProfileImage } from './profile-image.value-object';
 import type { Timestamp } from './timestamp.value-object';
-import { User } from './user.entity';
-
-export type ThreadAuthorProps = EntityProps<{
-  nick: Nick;
-  profileImage: ProfileImage;
-}>;
-
-export class ThreadAuthor extends Entity<ThreadAuthorProps> {
-  constructor(user: User) {
-    super({
-      id: user.id,
-      nick: user.nick,
-      profileImage: user.profileImage,
-    });
-  }
-
-  get nick() {
-    return this.props.nick;
-  }
-
-  get profileImage() {
-    return this.props.profileImage;
-  }
-}
 
 export type ThreadProps = EntityProps<{
-  author: ThreadAuthor;
+  author: Author;
   description: string;
   text: Markdown;
   keywords: string[];

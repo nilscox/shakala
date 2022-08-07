@@ -18,8 +18,8 @@ export class InMemoryCommentRepository extends InMemoryRepository<Comment> imple
 
       const replies = (commentId: string) => comments.filter(({ parentId }) => parentId === commentId);
 
-      const match = ({ id, text }: Comment) => {
-        return text.match(search) || replies(id).some(match);
+      const match = ({ id, message }: Comment) => {
+        return message.text.match(search) || replies(id).some(match);
       };
 
       return comments.filter(match);

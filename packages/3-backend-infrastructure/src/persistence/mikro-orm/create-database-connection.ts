@@ -7,8 +7,8 @@ export const createDatabaseConnection = async (override: Options<PostgreSqlDrive
   return MikroORM.init<PostgreSqlDriver>({ ...config, ...override });
 };
 
-export const createTestDatabaseConnection = async () => {
-  const orm = await createDatabaseConnection({ dbName: 'test' });
+export const createTestDatabaseConnection = async (override: Options<PostgreSqlDriver> = {}) => {
+  const orm = await createDatabaseConnection({ dbName: 'test', ...override });
   const schemaGenerator = orm.getSchemaGenerator();
 
   await schemaGenerator.refreshDatabase();

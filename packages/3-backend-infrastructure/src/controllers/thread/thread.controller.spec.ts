@@ -1,6 +1,7 @@
 import {
   createComment,
   CreateCommentCommand,
+  createMessage,
   createThread,
   CreateThreadCommand,
   createUser,
@@ -12,7 +13,7 @@ import {
   Sort,
   UpdateCommentCommand,
 } from 'backend-application';
-import { ReactionType, UserMustBeAuthorError } from 'backend-domain';
+import { Markdown, ReactionType, UserMustBeAuthorError } from 'backend-domain';
 
 import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
@@ -211,7 +212,7 @@ describe('ThreadController', () => {
     const thread = createThread();
     const text = 'updated!';
 
-    const comment = createComment({ author: user, text: 'text' });
+    const comment = createComment({ author: user, message: createMessage({ text: new Markdown('text') }) });
 
     beforeEach(() => {
       sessionService.user = user;
@@ -270,7 +271,7 @@ describe('ThreadController', () => {
     const thread = createThread();
     const type = ReactionType.upvote;
 
-    const comment = createComment({ author: user, text: type });
+    const comment = createComment({ author: user });
 
     beforeEach(() => {
       sessionService.user = user;

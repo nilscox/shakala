@@ -1,12 +1,15 @@
-import { type EntityProps, Entity } from '../ddd/entity';
-import type { DateService } from '../interfaces/date.interface';
+import { first } from 'shared';
 
+import { Entity, EntityProps } from '../ddd/entity';
+import { DateService } from '../interfaces/date.interface';
+import { GeneratorService } from '../interfaces/generator-service.interface';
+
+import { Author } from './author.entity';
 import { DomainError } from './domain-error';
 import { Markdown } from './markdown.value-object';
-import type { Nick } from './nick.value-object';
-import type { ProfileImage } from './profile-image.value-object';
+import { Message } from './message.entity';
 import { Timestamp } from './timestamp.value-object';
-import type { User } from './user.entity';
+import { User } from './user.entity';
 
 export class UserMustBeAuthorError extends DomainError {
   constructor() {
@@ -14,35 +17,19 @@ export class UserMustBeAuthorError extends DomainError {
   }
 }
 
-export type CommentAuthorProps = EntityProps<{
-  nick: Nick;
-  profileImage: ProfileImage;
-}>;
-
-export class CommentAuthor extends Entity<CommentAuthorProps> {
-  get nick() {
-    return this.props.nick;
-  }
-
-  get profileImage() {
-    return this.props.profileImage;
-  }
-
-  static create(props: CommentAuthorProps): CommentAuthor {
-    return new CommentAuthor(props);
-  }
-}
-
 export type CommentProps = EntityProps<{
   threadId: string;
-  author: CommentAuthor;
+  author: Author;
   parentId: string | null;
-  text: Markdown;
-  creationDate: Timestamp;
-  lastEditionDate: Timestamp;
+  message: Message;
+  history: Message[];
 }>;
 
 export class Comment extends Entity<CommentProps> {
+  constructor(props: CommentProps, private readonly generatorService: GeneratorService) {
+    super(props);
+  }
+
   get threadId() {
     return this.props.threadId;
   }
@@ -55,24 +42,38 @@ export class Comment extends Entity<CommentProps> {
     return this.props.parentId;
   }
 
-  get text() {
-    return this.props.text;
+  get message() {
+    return this.props.message;
+  }
+
+  get history() {
+    return this.props.history;
+  }
+
+  get edited() {
+    if (this.history.length === 0) {
+      return false;
+    }
+
+    return this.message.date;
   }
 
   get creationDate() {
-    return this.props.creationDate;
+    return first(this.history)?.date ?? this.message.date;
   }
 
-  get lastEditionDate() {
-    return this.props.lastEditionDate;
-  }
-
-  edit(dateService: DateService, user: User, text: string) {
+  async edit(dateService: DateService, user: User, text: string) {
     if (!user.equals(this.author)) {
       throw new UserMustBeAuthorError();
     }
 
-    this.props.text = new Markdown(text);
-    this.props.lastEditionDate = new Timestamp(dateService.nowAsString());
+    this.props.history.push(this.message);
+
+    this.props.message = new Message({
+      id: await this.generatorService.generateId(),
+      author: this.author,
+      date: new Timestamp(dateService.now()),
+      text: new Markdown(text),
+    });
   }
 }

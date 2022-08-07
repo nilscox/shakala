@@ -1,7 +1,7 @@
 import { CryptoService, DateService, Nick, User, DomainError } from 'backend-domain';
+import { GeneratorService } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
-import { GeneratorService } from '../interfaces/generator.service';
 import { UserRepository } from '../interfaces/user.repository';
 
 export class EmailAlreadyExistsError extends DomainError<{ email: string }> {

@@ -4,8 +4,9 @@ import {
   createComment,
   GetThreadQueryResult,
   createReactionsCount,
+  createMessage,
 } from 'backend-application';
-import { ReactionType } from 'backend-domain';
+import { Author, ReactionType } from 'backend-domain';
 import { CommentDto, ThreadWithCommentsDto } from 'shared';
 
 import { ThreadPresenter } from './thread.presenter';
@@ -14,13 +15,14 @@ describe('ThreadPresenter', () => {
   const threadAuthor = createUser();
   const thread = createThread({ author: threadAuthor });
 
-  const commentAuthor = createUser();
+  const commentAuthor = new Author(createUser());
   const comment = createComment({
     author: commentAuthor,
+    history: [createMessage()],
   });
 
   const replyAuthor = createUser();
-  const reply = createComment({ author: replyAuthor, lastEditionDate: '2022-01-01' });
+  const reply = createComment({ author: replyAuthor });
 
   const getThreadQueryResult: GetThreadQueryResult = {
     thread,
@@ -40,9 +42,10 @@ describe('ThreadPresenter', () => {
       nick: replyAuthor.nick.toString(),
       profileImage: undefined,
     },
-    text: reply.text.toString(),
+    text: reply.message.toString(),
+    history: [],
     date: reply.creationDate.toString(),
-    edited: reply.lastEditionDate.toString(),
+    edited: false,
     upvotes: 1,
     downvotes: 0,
   };
@@ -54,9 +57,13 @@ describe('ThreadPresenter', () => {
       nick: commentAuthor.nick.toString(),
       profileImage: undefined,
     },
-    text: comment.text.toString(),
+    text: comment.message.toString(),
+    history: comment.history.map((message) => ({
+      text: message.toString(),
+      date: message.date.toString(),
+    })),
     date: comment.creationDate.toString(),
-    edited: false,
+    edited: comment.message.date.toString(),
     upvotes: 0,
     downvotes: 1,
     replies: [replyDto],

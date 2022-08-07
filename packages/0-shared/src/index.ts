@@ -1,13 +1,15 @@
 export * from './libs/array';
 export * from './libs/create-factory';
 export * from './libs/create-map';
-export * from './libs/payload-error';
+export * from './libs/first';
 export * from './libs/get';
 export * from './libs/get-ids';
 export * from './libs/group-by';
 export * from './libs/is-defined';
 export * from './libs/is-enum-value';
 export * from './libs/is-type';
+export * from './libs/last';
+export * from './libs/payload-error';
 export * from './libs/pick';
 export * from './libs/random-id';
 

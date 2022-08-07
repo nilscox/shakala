@@ -1,7 +1,6 @@
-import { DateService, Markdown, Thread, ThreadAuthor, Timestamp } from 'backend-domain';
+import { GeneratorService, DateService, Markdown, Thread, Author, Timestamp } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
-import { GeneratorService } from '../interfaces/generator.service';
 import { ThreadRepository } from '../interfaces/thread.repository';
 import { UserRepository } from '../interfaces/user.repository';
 
@@ -27,7 +26,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, 
 
     const thread = new Thread({
       id: await this.generatorService.generateId(),
-      author: new ThreadAuthor(author),
+      author: new Author(author),
       description,
       text: new Markdown(text),
       keywords,

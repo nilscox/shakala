@@ -1,6 +1,6 @@
 import { GetThreadQueryResult } from 'backend-application';
 import { ReactionsCount } from 'backend-application/src/interfaces/reaction.repository';
-import { Comment, CommentAuthor, ReactionType, Thread, ThreadAuthor } from 'backend-domain';
+import { Comment, Author, ReactionType, Thread } from 'backend-domain';
 import { CommentDto, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto, UserDto } from 'shared';
 
 export class ThreadPresenter {
@@ -29,7 +29,7 @@ export class ThreadPresenter {
     };
   }
 
-  private static transformAuthor(author: ThreadAuthor | CommentAuthor): UserDto {
+  private static transformAuthor(author: Author): UserDto {
     return {
       id: author.id,
       nick: author.nick.toString(),
@@ -48,11 +48,13 @@ export class ThreadPresenter {
     const dto: CommentDto = {
       id: comment.id,
       author: ThreadPresenter.transformAuthor(comment.author),
-      text: comment.text.toString(),
       date: comment.creationDate.toString(),
-      edited: !comment.lastEditionDate.equals(comment.creationDate)
-        ? comment.lastEditionDate.toString()
-        : false,
+      text: comment.message.toString(),
+      history: comment.history.map((message) => ({
+        date: message.date.toString(),
+        text: message.toString(),
+      })),
+      edited: comment.edited ? comment.edited.toString() : false,
       upvotes: reactionCounts[ReactionType.upvote],
       downvotes: reactionCounts[ReactionType.downvote],
     };

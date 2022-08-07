@@ -29,6 +29,7 @@ export const createCommentDto = createFactory<CommentDto>(() => ({
   date: '',
   edited: false,
   text: '',
+  history: [],
   downvotes: 0,
   upvotes: 0,
   replies: [],

@@ -1,4 +1,4 @@
-import { ReactionTypeDto, SetReactionBodyDto } from 'shared';
+import { ReactionTypeDto, SetReactionBodyDto, ThreadWithCommentsDto } from 'shared';
 import { Request, SuperAgentTest } from 'supertest';
 
 import { TestServer } from '../../test';
@@ -40,7 +40,7 @@ describe('Thread e2e', () => {
     await getThread(threadId);
   });
 
-  test('create a comment', async () => {
+  test('create and edit a comment', async () => {
     const createComment = async (threadId: string) => {
       const body = { text: 'hello' };
 
@@ -53,12 +53,22 @@ describe('Thread e2e', () => {
       await agent.put(`/thread/${threadId}/comment/${commentId}`).send(body).expect(204);
     };
 
+    const getThread = async (threadId: string): Promise<ThreadWithCommentsDto> => {
+      const { body } = await agent.get(`/thread/${threadId}`).expect(200);
+
+      return body;
+    };
+
     const threadId = await server.createThread(userId);
 
     const createResponse = await createComment(threadId);
     const createdId: string = createResponse.body;
 
     await updateComment(threadId, createdId);
+
+    const thread = await getThread(threadId);
+
+    expect(thread.comments).toHaveProperty('[0].edited', expect.any(String));
   });
 
   test('set a reaction', async () => {

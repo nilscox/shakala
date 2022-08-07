@@ -31,7 +31,7 @@ describe('CreateCommentCommand', () => {
 
   beforeEach(() => {
     userRepository.add(user);
-    generator.nextId = 'commentId';
+    generator.nextIds = ['commentId', 'messageId'];
     date.setNow(now);
   });
 
@@ -45,9 +45,12 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('threadId', 'threadId');
     expect(created).toHaveProperty('author.id', 'authorId');
     expect(created).toHaveProperty('parentId', null);
-    expect(created).toHaveProperty('text', new Markdown('hello!'));
+    expect(created).toHaveProperty('message.id', 'messageId');
+    expect(created).toHaveProperty('message.text', new Markdown('hello!'));
+    expect(created).toHaveProperty('message.date', now);
+    expect(created).toHaveProperty('history', []);
+    expect(created).toHaveProperty('edited', false);
     expect(created).toHaveProperty('creationDate', now);
-    expect(created).toHaveProperty('lastEditionDate', now);
   });
 
   it('creates a new reply', async () => {

@@ -1,23 +1,26 @@
 import {
   CommentProps,
   Comment,
-  CommentAuthor,
   Markdown,
   Nick,
   ProfileImage,
   ThreadProps,
   Thread,
-  ThreadAuthor,
   Timestamp,
   UserProps,
   User,
   Reaction,
   ReactionProps,
   ReactionType,
+  Author,
+  Message,
+  MessageProps,
+  GeneratorService,
 } from 'backend-domain';
 import { createFactory, randomId, Replace } from 'shared';
 
 import { ReactionsCount } from '../interfaces/reaction.repository';
+import { StubGeneratorService } from '../test/generator.stub';
 
 export const createTimestamp = (date?: string | Date) => {
   return new Timestamp(date ?? new Date('2000-01-01'));
@@ -50,31 +53,40 @@ export const createUser = ({
   });
 };
 
-type CreateCommentProps = Replace<
-  CommentProps,
-  {
-    text: string;
-    creationDate: string;
-    lastEditionDate: string;
-  }
->;
+type CreateMessageProps = Partial<MessageProps>;
 
-export const createComment = ({
-  text,
-  creationDate,
-  lastEditionDate,
-  ...props
-}: Partial<CreateCommentProps> = {}): Comment => {
-  return new Comment({
+export const createMessage = (props: CreateMessageProps = {}) => {
+  return new Message({
     id: randomId(),
-    threadId: '',
-    author: CommentAuthor.create(createUser()),
-    parentId: null,
-    text: new Markdown(text ?? ''),
-    creationDate: createTimestamp(creationDate),
-    lastEditionDate: createTimestamp(lastEditionDate ?? creationDate),
+    author: new Author(createUser()),
+    text: new Markdown(''),
+    date: createTimestamp(),
     ...props,
   });
+};
+
+type CreateCommentProps = Partial<CommentProps>;
+
+export const createComment = (
+  { author: author_, ...props }: CreateCommentProps = {},
+  generatorService: GeneratorService = new StubGeneratorService(),
+): Comment => {
+  const author = author_ ?? new Author(createUser());
+
+  return new Comment(
+    {
+      id: randomId(),
+      threadId: '',
+      author,
+      parentId: null,
+      message: createMessage({
+        author,
+      }),
+      history: [],
+      ...props,
+    },
+    generatorService,
+  );
 };
 
 type CreateReactionProps = ReactionProps;
@@ -105,7 +117,7 @@ type CreateThreadProps = Replace<
 export const createThread = ({ text, created, ...props }: Partial<CreateThreadProps> = {}): Thread => {
   return new Thread({
     id: randomId(),
-    author: new ThreadAuthor(createUser()),
+    author: new Author(createUser()),
     description: '',
     text: new Markdown(text ?? ''),
     keywords: [],

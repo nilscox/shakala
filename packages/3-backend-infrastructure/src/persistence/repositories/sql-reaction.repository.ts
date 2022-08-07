@@ -3,22 +3,23 @@ import { ReactionRepository, ReactionsCount } from 'backend-application';
 import { Reaction, ReactionType } from 'backend-domain';
 import { groupBy } from 'shared';
 
-import { EntityMapper } from '../base-classes/entity-mapper';
-import { SqlRepository } from '../base-classes/sql-repository';
-import { Comment as SqlComment } from '../entities/sql-comment.entity';
-import { Reaction as SqlReaction } from '../entities/sql-reaction.entity';
-import { User as SqlUser } from '../entities/sql-user.entity';
+import { BaseSqlRepository } from '../base-classes/base-sql-repository';
+import { SqlReaction } from '../entities/sql-reaction.entity';
 
 export class SqlReactionRepository
-  extends SqlRepository<SqlReaction, Reaction>
+  extends BaseSqlRepository<SqlReaction, Reaction>
   implements ReactionRepository
 {
   constructor(em: EntityManager) {
-    super(em.getRepository(SqlReaction), new ReactionEntityMapper(em));
+    super(em, SqlReaction);
+  }
+
+  protected get entityName(): string {
+    return 'Reaction';
   }
 
   async countReactions(commentIds: string[]): Promise<Map<string, ReactionsCount>> {
-    const reactions = await this.findAllBy({ comment: { id: { $in: commentIds } } });
+    const reactions = this.toDomain(await this.repository.find({ comment: { id: { $in: commentIds } } }));
     const mapByCommentId = groupBy(reactions, 'commentId');
     const result = new Map<string, ReactionsCount>();
 
@@ -38,7 +39,9 @@ export class SqlReactionRepository
     commentIds: string[],
     userId: string,
   ): Promise<Map<string, ReactionType | undefined>> {
-    const reactions = await this.findAllBy({ comment: { id: { $in: commentIds } }, user: { id: userId } });
+    const reactions = this.toDomain(
+      await this.repository.find({ comment: { id: { $in: commentIds } }, user: { id: userId } }),
+    );
     const result = new Map<string, ReactionType | undefined>();
 
     for (const commentId of commentIds) {
@@ -49,30 +52,6 @@ export class SqlReactionRepository
   }
 
   async getUserReaction(commentId: string, userId: string): Promise<Reaction | undefined> {
-    return this.findBy({ comment: { id: commentId }, user: { id: userId } });
-  }
-}
-
-class ReactionEntityMapper implements EntityMapper<SqlReaction, Reaction> {
-  constructor(private readonly em: EntityManager) {}
-
-  toSql(entity: Reaction): SqlReaction {
-    const sqlReaction = new SqlReaction();
-
-    sqlReaction.id = entity.id;
-    sqlReaction.comment = this.em.getReference(SqlComment, entity.commentId);
-    sqlReaction.user = this.em.getReference(SqlUser, entity.userId);
-    sqlReaction.type = entity.type;
-
-    return sqlReaction;
-  }
-
-  fromSql(sqlEntity: SqlReaction): Reaction {
-    return new Reaction({
-      id: sqlEntity.id,
-      commentId: sqlEntity.comment.id,
-      userId: sqlEntity.user.id,
-      type: sqlEntity.type,
-    });
+    return this.toDomain(await this.repository.findOne({ comment: { id: commentId }, user: { id: userId } }));
   }
 }

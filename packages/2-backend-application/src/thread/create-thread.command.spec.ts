@@ -1,4 +1,4 @@
-import { Markdown, ThreadAuthor, Timestamp } from 'backend-domain';
+import { Markdown, Author, Timestamp } from 'backend-domain';
 
 import { StubDateService } from '../test/date.stub';
 import { StubGeneratorService } from '../test/generator.stub';
@@ -39,7 +39,7 @@ describe('CreateThreadCommand', () => {
     const created = threadRepository.get('threadId');
 
     expect(created).toBeDefined();
-    expect(created).toHaveProperty('author', new ThreadAuthor(author));
+    expect(created).toHaveProperty('author', new Author(author));
     expect(created).toHaveProperty('description', description);
     expect(created).toHaveProperty('text', new Markdown(text));
     expect(created).toHaveProperty('keywords', keywords);

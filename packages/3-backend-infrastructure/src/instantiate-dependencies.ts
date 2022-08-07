@@ -1,93 +1,64 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import {
-  InMemoryUserRepository,
-  InMemoryThreadRepository,
-  InMemoryReactionRepository,
-  InMemoryCommentRepository,
-  GetUserByIdHandler,
-  GetUserByEmailHandler,
-  LoginCommandHandler,
-  SignupCommandHandler,
-  GetLastThreadsHandler,
-  GetThreadHandler,
-  GetCommentQueryHandler,
-  CreateCommentCommandHandler,
-  UpdateCommentCommandHandler,
-  SetReactionCommandHandler,
-  CommentRepository,
-  ReactionRepository,
-  ThreadRepository,
-  UserRepository,
-  createUser,
-  GeneratorService,
-  CommandHandler,
-  QueryHandler,
-  CommandResult,
   Command,
-  Query,
+  CommandHandler,
+  CommandResult,
+  CommentRepository,
   CreateCommentCommand,
-  GetCommentQuery,
-  LoginCommand,
-  SetReactionCommand,
-  SignupCommand,
-  UpdateCommentCommand,
-  GetUserByIdQuery,
-  GetUserByEmailQuery,
-  GetLastThreadsQuery,
-  GetThreadQuery,
+  CreateCommentCommandHandler,
   CreateThreadCommand,
   CreateThreadHandler,
+  GetCommentQuery,
+  GetCommentQueryHandler,
+  GetLastThreadsHandler,
+  GetLastThreadsQuery,
+  GetThreadHandler,
+  GetThreadQuery,
+  GetUserByEmailHandler,
+  GetUserByEmailQuery,
+  GetUserByIdHandler,
+  GetUserByIdQuery,
+  InMemoryCommentRepository,
+  InMemoryReactionRepository,
+  InMemoryThreadRepository,
+  InMemoryUserRepository,
+  LoginCommand,
+  LoginCommandHandler,
+  Query,
+  QueryHandler,
+  ReactionRepository,
+  SetReactionCommand,
+  SetReactionCommandHandler,
+  SignupCommand,
+  SignupCommandHandler,
+  ThreadRepository,
+  UpdateCommentCommand,
+  UpdateCommentCommandHandler,
+  UserRepository,
 } from 'backend-application';
-import { DateService, CryptoService } from 'backend-domain';
+import { CryptoService, DateService, GeneratorService } from 'backend-domain';
 import { ClassType } from 'shared';
 
 import { AuthenticationController } from './controllers/authentication/authentication.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
-import threadChoucroute from './fixtures/thread-choucroute';
-import threadFacebookZetetique from './fixtures/thread-facebook-zetetique';
-import threadFlatEarth from './fixtures/thread-flat-earth';
 import {
-  MathRandomGeneratorService,
-  RealDateService,
   BcryptService,
-  ValidationService,
-  ExpressSessionService,
-  QueryBus,
-  SessionService,
   CommandBus,
   Controller,
+  ExpressSessionService,
+  MathRandomGeneratorService,
+  QueryBus,
+  RealDateService,
+  SessionService,
+  ValidationService,
 } from './infrastructure';
 import { ConfigService, EnvConfigService } from './infrastructure/services/env-config.service';
 import {
-  SqlUserRepository,
-  SqlThreadRepository,
-  SqlReactionRepository,
   SqlCommentRepository,
+  SqlReactionRepository,
+  SqlThreadRepository,
+  SqlUserRepository,
 } from './persistence';
-
-const users = [
-  createUser({
-    id: 'user1',
-    email: 'nils@nils.cx',
-    // cspell:disable
-    hashedPassword: '$2b$10$B0Bfw0ypnDMW1hM/x7L0COD9MoCENH5mSwgda1aAme49h9.du7exu',
-    nick: 'nilscox',
-  }),
-];
-
-const threads = [
-  //
-  threadFacebookZetetique.thread,
-  threadFlatEarth.thread,
-  threadChoucroute.thread,
-];
-
-const comments = [
-  //
-  ...threadFacebookZetetique.comments,
-  ...threadFlatEarth.comments,
-  ...threadChoucroute.comments,
-];
 
 export type Repositories = {
   userRepository: UserRepository;
@@ -97,10 +68,10 @@ export type Repositories = {
 };
 
 const instantiateInMemoryRepositories = (): Repositories => {
-  const userRepository = new InMemoryUserRepository(users);
-  const threadRepository = new InMemoryThreadRepository(threads);
+  const userRepository = new InMemoryUserRepository([]);
+  const threadRepository = new InMemoryThreadRepository([]);
   const reactionRepository = new InMemoryReactionRepository();
-  const commentRepository = new InMemoryCommentRepository(reactionRepository, comments);
+  const commentRepository = new InMemoryCommentRepository(reactionRepository, []);
 
   return {
     userRepository,
@@ -112,11 +83,11 @@ const instantiateInMemoryRepositories = (): Repositories => {
 
 instantiateInMemoryRepositories;
 
-export const instantiateRepositories = (em: EntityManager): Repositories => {
+export const instantiateRepositories = (em: EntityManager, { generatorService }: Services): Repositories => {
   const userRepository = new SqlUserRepository(em);
   const threadRepository = new SqlThreadRepository(em);
   const reactionRepository = new SqlReactionRepository(em);
-  const commentRepository = new SqlCommentRepository(em);
+  const commentRepository = new SqlCommentRepository(em, generatorService);
 
   return {
     userRepository,

@@ -1,8 +1,8 @@
-import { Comment, CommentAuthor, Markdown, Timestamp, DateService } from 'backend-domain';
+import { GeneratorService, Comment, Author, Markdown, Timestamp, DateService } from 'backend-domain';
+import { Message } from 'backend-domain/src/domain/message.entity';
 
 import { CommandHandler } from '../cqs/command-handler';
 import { CommentRepository } from '../interfaces/comment.repository';
-import { GeneratorService } from '../interfaces/generator.service';
 import { UserRepository } from '../interfaces/user.repository';
 
 export class CreateCommentCommand {
@@ -28,15 +28,22 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
 
     const author = await this.userRepository.findByIdOrFail(authorId);
 
-    const comment = new Comment({
-      id: await this.generatorService.generateId(),
-      threadId,
-      author: CommentAuthor.create(author),
-      parentId,
-      text: new Markdown(text),
-      creationDate: Timestamp.now(this.dateService),
-      lastEditionDate: Timestamp.now(this.dateService),
-    });
+    const comment = new Comment(
+      {
+        id: await this.generatorService.generateId(),
+        threadId,
+        author: new Author(author),
+        parentId,
+        history: [],
+        message: new Message({
+          id: await this.generatorService.generateId(),
+          author: new Author(author),
+          date: Timestamp.now(this.dateService),
+          text: new Markdown(text),
+        }),
+      },
+      this.generatorService,
+    );
 
     await this.commentRepository.save(comment);
 

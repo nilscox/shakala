@@ -4,6 +4,7 @@
     "noEmit": true,
     "module": "commonjs",
     "target": "es2021",
+    "sourceMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,

@@ -1,7 +1,11 @@
-import type { GeneratorService } from '../interfaces/generator.service';
+import { GeneratorService } from 'backend-domain';
 
 export class StubGeneratorService implements GeneratorService {
-  public nextId = '';
+  public nextIds: string[] = [];
+
+  set nextId(id: string) {
+    this.nextIds = [id];
+  }
 
   constructor() {
     beforeEach(() => {
@@ -10,10 +14,16 @@ export class StubGeneratorService implements GeneratorService {
   }
 
   async generateId(): Promise<string> {
-    return this.nextId;
+    const nextId = this.nextIds.shift();
+
+    if (!nextId) {
+      throw new Error('StubGeneratorService: no next id');
+    }
+
+    return nextId;
   }
 
   reset() {
-    this.nextId = '';
+    this.nextIds = [];
   }
 }

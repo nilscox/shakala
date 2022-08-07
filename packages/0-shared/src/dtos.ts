@@ -19,12 +19,18 @@ export enum ReactionTypeDto {
   downvote = 'downvote',
 }
 
+export type MessageDto = {
+  date: string;
+  text: string;
+};
+
 export type CommentDto = {
   id: string;
   author: UserDto;
   text: string;
   date: string;
   edited: string | false;
+  history: MessageDto[];
   upvotes: number;
   downvotes: number;
   userReaction?: ReactionTypeDto;

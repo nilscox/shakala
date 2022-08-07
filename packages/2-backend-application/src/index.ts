@@ -5,7 +5,6 @@ export * from './cqs/command-handler';
 export * from './cqs/query-handler';
 
 export * from './interfaces/comment.repository';
-export * from './interfaces/generator.service';
 export * from './interfaces/repository';
 export * from './interfaces/reaction.repository';
 export * from './interfaces/thread.repository';

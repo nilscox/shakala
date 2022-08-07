@@ -1,4 +1,4 @@
-import { GeneratorService } from 'backend-application';
+import { GeneratorService } from 'backend-domain';
 
 export class MathRandomGeneratorService implements GeneratorService {
   async generateId(): Promise<string> {
