@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { cloneElement, ReactElement, ReactNode } from 'react';
 
 export type FormFieldProps = {

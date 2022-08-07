@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { HTMLProps } from 'react';
 
 type SectionHeadingProps = HTMLProps<HTMLHeadingElement>;

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { cloneElement } from 'react';
 
 import { Button, ButtonProps } from './button';

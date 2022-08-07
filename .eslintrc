@@ -26,9 +26,6 @@
       "error",
       { "ignoreRestSiblings": true, "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
     ],
-    "import/no-duplicates": "off",
-    "import/no-cycle": "off",
-    "import/no-named-as-default": "off",
     "import/order": [
       "warn",
       {

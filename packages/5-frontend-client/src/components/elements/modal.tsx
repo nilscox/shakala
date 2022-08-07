@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import noScroll from 'no-scroll';
 import { useEffect } from 'react';
 import ReactModal from 'react-modal';

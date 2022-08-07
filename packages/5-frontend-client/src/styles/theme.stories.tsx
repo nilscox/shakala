@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { CSSProperties } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

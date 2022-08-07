@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { selectComment } from 'frontend-domain';
 
 import { useSelector } from '~/hooks/use-selector';

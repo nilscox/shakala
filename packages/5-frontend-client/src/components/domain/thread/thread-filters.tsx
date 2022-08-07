@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { setThreadFilters, Sort } from 'frontend-domain';
 import { FormEventHandler, useCallback } from 'react';
 import { isSort } from 'shared';

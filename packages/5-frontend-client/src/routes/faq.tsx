@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/components/elements/link';

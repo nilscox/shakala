@@ -1,5 +1,4 @@
-import { CryptoService, DateService, Nick, User, DomainError } from 'backend-domain';
-import { GeneratorService } from 'backend-domain';
+import { CryptoService, DateService, Nick, User, DomainError, GeneratorService } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
 import { UserRepository } from '../interfaces/user.repository';

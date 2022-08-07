@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 import { Link, NavLink, NavLinkProps } from 'react-router-dom';
 

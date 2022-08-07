@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { ReactNode, SVGProps } from 'react';
 
 import CheckIcon from '~/icons/check.svg';

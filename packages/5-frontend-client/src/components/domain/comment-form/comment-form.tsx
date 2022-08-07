@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { FormEventHandler, useCallback, useState } from 'react';
 
 import { Button } from '~/components/elements/button';

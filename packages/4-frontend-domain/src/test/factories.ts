@@ -1,5 +1,4 @@
-import { createAuthUserDto, createCommentDto, createThreadDto, createUserDto } from 'shared';
-import { createFactory } from 'shared';
+import { createAuthUserDto, createCommentDto, createThreadDto, createUserDto, createFactory } from 'shared';
 
 import { Comment, Thread } from '../types';
 

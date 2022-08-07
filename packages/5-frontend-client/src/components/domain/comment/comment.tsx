@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { selectComment, selectIsEditingComment } from 'frontend-domain';
 import { useState } from 'react';
 
