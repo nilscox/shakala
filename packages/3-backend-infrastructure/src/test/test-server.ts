@@ -1,7 +1,4 @@
-import {
-  CreateCommentCommand,
-  CreateThreadCommand, SignupCommand
-} from 'backend-application';
+import { CreateCommentCommand, CreateThreadCommand, SignupCommand } from 'backend-application';
 import { LoginBodyDto } from 'shared';
 import { agent, SuperAgentTest } from 'supertest';
 

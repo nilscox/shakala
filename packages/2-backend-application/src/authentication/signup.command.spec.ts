@@ -1,10 +1,8 @@
-import { Nick, ProfileImage, Timestamp } from 'backend-domain';
+import { factories, StubGeneratorService } from 'backend-domain';
 
 import { StubCryptoService } from '../test/crypto.stub';
 import { StubDateService } from '../test/date.stub';
-import { StubGeneratorService } from '../test/generator.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { createUser } from '../utils/factories';
 
 import {
   EmailAlreadyExistsError,
@@ -21,10 +19,12 @@ describe('SignupCommand', () => {
 
   const handler = new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService);
 
+  const create = factories();
+
   const nick = 'nick';
   const email = 'user@domain.tld';
   const password = 'p4ssw0rd';
-  const now = new Date('2022-01-01');
+  const now = create.timestamp('2022-01-01');
 
   const signup = async () => {
     return handler.handle(new SignupCommand(nick, email, password));
@@ -42,9 +42,9 @@ describe('SignupCommand', () => {
 
     expect(createdUser).toBeDefined();
     expect(createdUser?.email).toEqual(email);
-    expect(createdUser?.nick.equals(new Nick(nick))).toBe(true);
-    expect(createdUser?.profileImage.equals(new ProfileImage())).toBe(true);
-    expect(createdUser?.signupDate.equals(new Timestamp(now))).toBe(true);
+    expect(createdUser?.nick.equals(create.nick(nick))).toBe(true);
+    expect(createdUser?.profileImage.equals(create.profileImage())).toBe(true);
+    expect(createdUser?.signupDate.equals(now)).toBe(true);
     expect(createdUser?.lastLoginDate).toBeNull();
   });
 
@@ -53,13 +53,13 @@ describe('SignupCommand', () => {
   });
 
   it('fails to signup when the email already exists', async () => {
-    userRepository.add(createUser({ email }));
+    userRepository.add(create.user({ email }));
 
     await expect(signup()).rejects.toThrow(EmailAlreadyExistsError);
   });
 
   it('fails to signup when the nick already exists', async () => {
-    userRepository.add(createUser({ nick }));
+    userRepository.add(create.user({ nick: create.nick(nick) }));
 
     await expect(signup()).rejects.toThrow(NickAlreadyExistsError);
   });

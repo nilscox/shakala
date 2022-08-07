@@ -1,9 +1,9 @@
-import { Comment, ReactionType, Thread } from 'backend-domain';
+import { Comment, ReactionsCount, ReactionType, Thread } from 'backend-domain';
 import { getIds } from 'shared';
 
 import { Query, QueryHandler } from '../cqs/query-handler';
 import { CommentRepository, Sort } from '../interfaces/comment.repository';
-import { ReactionRepository, ReactionsCount } from '../interfaces/reaction.repository';
+import { ReactionRepository } from '../interfaces/reaction.repository';
 import { ThreadRepository } from '../interfaces/thread.repository';
 
 export class GetThreadQuery implements Query {

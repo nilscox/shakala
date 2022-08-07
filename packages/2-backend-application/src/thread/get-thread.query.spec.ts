@@ -1,7 +1,6 @@
-import { ReactionType } from 'backend-domain';
+import { factories, ReactionType } from 'backend-domain';
 
 import { Sort } from '../interfaces/comment.repository';
-import { createComment, createReaction, createReactionsCount, createThread } from '../utils/factories';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { GetThreadHandler, GetThreadQuery } from './get-thread.query';
@@ -15,18 +14,14 @@ describe('GetThreadQuery', () => {
 
   const handler = new GetThreadHandler(threadRepository, commentRepository, reactionRepository);
 
-  const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
+  const create = factories();
 
-  const commentId = 'commentId';
-  const comment = createComment({ id: commentId, threadId });
-
-  const replyId = 'replyId';
-  const reply = createComment({ id: replyId, threadId, parentId: commentId });
+  const thread = create.thread();
+  const comment = create.comment({ threadId: thread.id });
+  const reply = create.comment({ threadId: thread.id, parentId: comment.id });
 
   const userId = 'userId';
-  const reactionId = 'reactionId';
-  const reaction = createReaction({ id: reactionId, commentId, userId, type: ReactionType.upvote });
+  const reaction = create.reaction({ commentId: comment.id, userId, type: ReactionType.upvote });
 
   beforeEach(() => {
     threadRepository.add(thread);
@@ -36,7 +31,7 @@ describe('GetThreadQuery', () => {
   });
 
   const execute = async (userId?: string) => {
-    return handler.handle(new GetThreadQuery(threadId, Sort.dateAsc, undefined, userId));
+    return handler.handle(new GetThreadQuery(thread.id, Sort.dateAsc, undefined, userId));
   };
 
   it('retrieves a thread and its comments', async () => {
@@ -45,10 +40,10 @@ describe('GetThreadQuery', () => {
     expect(result).toEqual({
       thread,
       comments: [comment],
-      replies: new Map([[commentId, [reply]]]),
+      replies: new Map([[comment.id, [reply]]]),
       reactionsCounts: new Map([
-        [commentId, createReactionsCount({ [ReactionType.upvote]: 1 })],
-        [replyId, createReactionsCount()],
+        [comment.id, create.reactionsCount({ [ReactionType.upvote]: 1 })],
+        [reply.id, create.reactionsCount()],
       ]),
       userReactions: undefined,
     });
@@ -62,8 +57,8 @@ describe('GetThreadQuery', () => {
     expect(result).toHaveProperty(
       'userReactions',
       new Map([
-        [commentId, ReactionType.upvote],
-        [replyId, undefined],
+        [comment.id, ReactionType.upvote],
+        [reply.id, undefined],
       ]),
     );
   });

@@ -5,6 +5,8 @@ export enum ReactionType {
   downvote = 'downvote',
 }
 
+export type ReactionsCount = Record<ReactionType, number>;
+
 export type ReactionProps = EntityProps<{
   userId: string;
   commentId: string;

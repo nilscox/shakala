@@ -1,9 +1,7 @@
-import { Author, Markdown, Timestamp } from 'backend-domain';
+import { factories, StubGeneratorService } from 'backend-domain';
 
 import { StubDateService } from '../test/date.stub';
-import { StubGeneratorService } from '../test/generator.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { createComment, createMessage, createUser } from '../utils/factories';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
@@ -17,11 +15,13 @@ describe('UpdateCommentCommand', () => {
 
   const handler = new UpdateCommentCommandHandler(dateService, commentRepository, userRepository);
 
-  const user = createUser();
-  const author = new Author(user);
-  const initialMessage = createMessage({ author });
-  const comment = createComment({ author, message: initialMessage }, generatorService);
-  const now = new Timestamp('2022-01-02');
+  const create = factories({ generatorService });
+
+  const user = create.user();
+  const author = create.author(user);
+  const initialMessage = create.message({ author });
+  const comment = create.comment({ author, message: initialMessage });
+  const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
     generatorService.nextId = 'messageId';
@@ -32,7 +32,7 @@ describe('UpdateCommentCommand', () => {
   });
 
   const execute = async (text: string) => {
-    return handler.handle(new UpdateCommentCommand(comment.id, author.id, text));
+    return handler.handle(new UpdateCommentCommand(comment.id, user.id, text));
   };
 
   it('updates an existing comment', async () => {
@@ -40,11 +40,11 @@ describe('UpdateCommentCommand', () => {
 
     const edited = commentRepository.get(comment.id);
 
-    const newMessage = createMessage({
+    const newMessage = create.message({
       id: 'messageId',
-      author: author,
+      author,
       date: now,
-      text: new Markdown('updated'),
+      text: create.markdown('updated'),
     });
 
     expect(edited).toHaveProperty('message', newMessage);

@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { ReactionRepository, ReactionsCount } from 'backend-application';
-import { Reaction, ReactionType } from 'backend-domain';
+import { ReactionRepository } from 'backend-application';
+import { Reaction, ReactionsCount, ReactionType } from 'backend-domain';
 import { groupBy } from 'shared';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';

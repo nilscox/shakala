@@ -1,5 +1,4 @@
-import { createUser } from 'backend-application';
-import { Nick, Timestamp } from 'backend-domain';
+import { factories } from 'backend-domain';
 
 import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
 
@@ -8,20 +7,22 @@ import { SqlUserRepository } from './sql-user.repository';
 describe('SqlUserRepository', () => {
   let repository: SqlUserRepository;
 
+  const create = factories();
+
   beforeEach(async () => {
     const { em } = await createTestDatabaseConnection();
     repository = new SqlUserRepository(em.fork());
   });
 
   it('saves and finds a user', async () => {
-    const user = createUser({
+    const user = create.user({
       id: 'userId',
-      nick: 'nick',
+      nick: create.nick('nick'),
       email: 'user@email.tld',
       hashedPassword: 'hashed-password',
-      profileImage: '/path/to/image.png',
-      signupDate: '2020-01-01',
-      lastLoginDate: new Timestamp('2020-01-02'),
+      profileImage: create.profileImage('/path/to/image.png'),
+      signupDate: create.timestamp('2020-01-01'),
+      lastLoginDate: create.timestamp('2020-01-02'),
     });
 
     await repository.save(user);
@@ -29,7 +30,7 @@ describe('SqlUserRepository', () => {
   });
 
   it('finds a user from its email', async () => {
-    const user = createUser({ email: 'user@email.tld' });
+    const user = create.user({ email: 'user@email.tld' });
 
     expect(await repository.findByEmail('nope')).toBeUndefined();
 
@@ -38,9 +39,9 @@ describe('SqlUserRepository', () => {
   });
 
   it('finds a user from its nick', async () => {
-    const user = createUser({ nick: 'mano' });
+    const user = create.user({ nick: create.nick('mano') });
 
-    expect(await repository.findByNick(new Nick('nope'))).toBeUndefined();
+    expect(await repository.findByNick(create.nick('nope'))).toBeUndefined();
 
     await repository.save(user);
     expect(await repository.findByNick(user.nick)).toEqual(user);

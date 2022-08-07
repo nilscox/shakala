@@ -1,12 +1,5 @@
-import {
-  createComment,
-  createMessage,
-  createThread,
-  createUser,
-  Sort,
-  StubDateService,
-} from 'backend-application';
-import { Author, Markdown, Timestamp } from 'backend-domain';
+import { Sort, StubDateService } from 'backend-application';
+import { factories } from 'backend-domain';
 
 import { MathRandomGeneratorService } from '../../infrastructure';
 import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
@@ -20,6 +13,8 @@ describe('SqlCommentRepository', () => {
 
   const generatorService = new MathRandomGeneratorService();
 
+  const create = factories({ generatorService });
+
   beforeEach(async () => {
     const { em } = await createTestDatabaseConnection();
 
@@ -28,32 +23,29 @@ describe('SqlCommentRepository', () => {
   });
 
   it('saves and finds a comment', async () => {
-    const author = new Author(await save(createUser()));
-    const thread = await save(createThread({ author }));
-    const comment = createComment({ threadId: thread.id, author }, generatorService);
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+    const comment = create.comment({ threadId: thread.id, author });
 
     await repository.save(comment);
     expect(await repository.findById(comment.id)).toEqual(comment);
   });
 
   it('saves and edited comment', async () => {
-    const user = await save(createUser());
-    const author = new Author(user);
-    const thread = await save(createThread({ author }));
+    const user = await save(create.user());
+    const author = create.author(user);
+    const thread = await save(create.thread({ author }));
 
-    const comment = createComment(
-      {
-        threadId: thread.id,
+    const comment = create.comment({
+      threadId: thread.id,
+      author,
+      message: create.message({
         author,
-        message: createMessage({
-          author,
-          text: new Markdown('initial text'),
-          date: new Timestamp('2022-01-02'),
-        }),
-        history: [],
-      },
-      generatorService,
-    );
+        text: create.markdown('initial text'),
+        date: create.timestamp('2022-01-02'),
+      }),
+      history: [],
+    });
 
     await repository.save(comment);
 
@@ -64,21 +56,19 @@ describe('SqlCommentRepository', () => {
   });
 
   it("finds a thread's root comments", async () => {
-    const author = new Author(await save(createUser()));
-    const thread = await save(createThread({ author }));
-    const parent = await save(createComment({ threadId: thread.id, author }, generatorService));
-    await save(createComment({ threadId: thread.id, author, parentId: parent.id }, generatorService));
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+    const parent = await save(create.comment({ threadId: thread.id, author }));
+    await save(create.comment({ threadId: thread.id, author, parentId: parent.id }));
 
     expect(await repository.findRoots(thread.id, Sort.relevance)).toEqual([parent]);
   });
 
   it("finds a comment's replies", async () => {
-    const author = new Author(await save(createUser()));
-    const thread = await save(createThread({ author }));
-    const parent = await save(createComment({ threadId: thread.id, author }, generatorService));
-    const reply = await save(
-      createComment({ threadId: thread.id, author, parentId: parent.id }, generatorService),
-    );
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+    const parent = await save(create.comment({ threadId: thread.id, author }));
+    const reply = await save(create.comment({ threadId: thread.id, author, parentId: parent.id }));
 
     expect(await repository.findReplies([parent.id])).toEqual(new Map([[parent.id, [reply]]]));
   });

@@ -9,6 +9,7 @@ export type AuthorProps = EntityProps<{
 }>;
 
 export class Author extends Entity<AuthorProps> {
+  // todo: remove the ctor?
   constructor(props: AuthorProps) {
     super({
       id: props.id,

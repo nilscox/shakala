@@ -1,8 +1,6 @@
-import { Reaction, ReactionType } from 'backend-domain';
+import { Reaction, ReactionsCount, ReactionType } from 'backend-domain';
 
 import { Repository } from './repository';
-
-export type ReactionsCount = Record<ReactionType, number>;
 
 export interface ReactionRepository extends Repository<Reaction> {
   countReactions(commentIds: string[]): Promise<Map<string, ReactionsCount>>;

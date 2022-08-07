@@ -1,7 +1,4 @@
-import { ReactionType } from 'backend-domain';
-
-import { StubGeneratorService } from '../test/generator.stub';
-import { createReaction } from '../utils/factories';
+import { factories, ReactionType, StubGeneratorService } from 'backend-domain';
 
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 import { SetReactionCommand, SetReactionCommandHandler } from './set-reaction.command';
@@ -11,6 +8,8 @@ describe('SetReactionCommand', () => {
   const reactionRepository = new InMemoryReactionRepository();
 
   const handler = new SetReactionCommandHandler(generatorService, reactionRepository);
+
+  const create = factories();
 
   const userId = 'userId';
   const commentId = 'commentId';
@@ -26,7 +25,7 @@ describe('SetReactionCommand', () => {
     await execute(ReactionType.upvote);
 
     expect(await reactionRepository.get(reactionId)).toEqual(
-      createReaction({
+      create.reaction({
         id: reactionId,
         userId,
         commentId,
@@ -37,7 +36,7 @@ describe('SetReactionCommand', () => {
 
   it('updates an existing reaction on a comment', async () => {
     await reactionRepository.save(
-      createReaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
+      create.reaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
     );
 
     await execute(ReactionType.downvote);
@@ -47,7 +46,7 @@ describe('SetReactionCommand', () => {
 
   it('removes a reaction on a comment', async () => {
     await reactionRepository.save(
-      createReaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
+      create.reaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
     );
 
     await execute(null);

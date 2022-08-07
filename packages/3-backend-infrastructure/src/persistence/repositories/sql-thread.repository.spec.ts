@@ -1,4 +1,4 @@
-import { createThread, createUser } from 'backend-application';
+import { factories } from 'backend-domain';
 import { array } from 'shared';
 
 import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
@@ -10,6 +10,8 @@ describe('SqlThreadRepository', () => {
   let save: SaveEntity;
   let repository: SqlThreadRepository;
 
+  const create = factories();
+
   beforeEach(async () => {
     const { em } = await createTestDatabaseConnection();
 
@@ -18,16 +20,16 @@ describe('SqlThreadRepository', () => {
   });
 
   it('saves and finds a thread', async () => {
-    const author = await save(createUser());
-    const thread = createThread({ author });
+    const author = await save(create.user());
+    const thread = create.thread({ author });
 
     await repository.save(thread);
     expect(await repository.findById(thread.id)).toEqual(thread);
   });
 
   it('finds the last threads', async () => {
-    const author = await save(createUser());
-    const threads = array(3, () => createThread({ author }));
+    const author = await save(create.user());
+    const threads = array(3, () => create.thread({ author }));
 
     for (const thread of threads) {
       await repository.save(thread);

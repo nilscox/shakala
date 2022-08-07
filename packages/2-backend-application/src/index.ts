@@ -12,7 +12,6 @@ export * from './interfaces/user.repository';
 
 export * from './test/crypto.stub';
 export * from './test/date.stub';
-export * from './test/generator.stub';
 
 export * from './thread/create-comment.command';
 export * from './thread/create-thread.command';
@@ -26,7 +25,6 @@ export * from './user/get-user-by-email.query';
 export * from './user/get-user-by-id.query';
 
 export * from './thread/comment.in-memory-repository';
-export * from './utils/factories';
 export * from './thread/reaction.in-memory-repository';
 export * from './thread/thread.in-memory-repository';
 export * from './user/user.in-memory-repository';

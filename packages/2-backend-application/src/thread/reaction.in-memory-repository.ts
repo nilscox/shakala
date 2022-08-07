@@ -1,7 +1,7 @@
-import { ReactionType, Reaction } from 'backend-domain';
+import { ReactionType, Reaction, ReactionsCount } from 'backend-domain';
 import { createMap } from 'shared';
 
-import { ReactionsCount, ReactionRepository } from '../interfaces/reaction.repository';
+import { ReactionRepository } from '../interfaces/reaction.repository';
 import { InMemoryRepository } from '../utils/in-memory-repository';
 
 export class InMemoryReactionRepository extends InMemoryRepository<Reaction> implements ReactionRepository {

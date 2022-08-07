@@ -1,4 +1,4 @@
-import { GeneratorService } from 'backend-domain';
+import { GeneratorService } from '../interfaces/generator-service.interface';
 
 export class StubGeneratorService implements GeneratorService {
   public nextIds: string[] = [];

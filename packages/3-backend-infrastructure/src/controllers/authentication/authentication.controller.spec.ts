@@ -1,5 +1,4 @@
 import {
-  createUser,
   EmailAlreadyExistsError,
   GetUserByEmailQuery,
   InvalidCredentialsError,
@@ -7,6 +6,7 @@ import {
   NickAlreadyExistsError,
   SignupCommand,
 } from 'backend-application';
+import { factories } from 'backend-domain';
 import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import {
@@ -33,9 +33,11 @@ describe('AuthenticationController', () => {
     commandBus,
   );
 
+  const create = factories();
+
   describe('login', () => {
     const body: LoginBodyDto = { email: 'user@email.tld', password: 'p4ssw0rd' };
-    const user = createUser();
+    const user = create.user();
 
     beforeEach(() => {
       queryBus.for(GetUserByEmailQuery).return(user);
@@ -66,7 +68,7 @@ describe('AuthenticationController', () => {
     });
 
     it('fails to log in when the user is already authenticated', async () => {
-      sessionService.user = createUser();
+      sessionService.user = create.user();
 
       await expect(login()).rejects.test((error: HttpError) => {
         expect(error).toBeInstanceOf(Forbidden);
@@ -86,7 +88,7 @@ describe('AuthenticationController', () => {
 
   describe('signup', () => {
     const body: SignupBodyDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
-    const user = createUser();
+    const user = create.user();
 
     beforeEach(() => {
       queryBus.for(GetUserByEmailQuery).return(user);
@@ -114,7 +116,7 @@ describe('AuthenticationController', () => {
     });
 
     it('fails to sign up when the user is already authenticated', async () => {
-      sessionService.user = createUser();
+      sessionService.user = create.user();
 
       await expect(signup()).rejects.test((error: HttpError) => {
         expect(error).toBeInstanceOf(Forbidden);
@@ -157,7 +159,7 @@ describe('AuthenticationController', () => {
 
   describe('logout', () => {
     beforeEach(() => {
-      sessionService.user = createUser();
+      sessionService.user = create.user();
     });
 
     const logout = async () => {
@@ -190,7 +192,7 @@ describe('AuthenticationController', () => {
     });
 
     it('returns the authenticated user', async () => {
-      const user = createUser();
+      const user = create.user();
 
       sessionService.user = user;
 

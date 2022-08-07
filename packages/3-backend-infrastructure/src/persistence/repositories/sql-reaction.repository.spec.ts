@@ -1,11 +1,4 @@
-import {
-  createComment,
-  createReaction,
-  createReactionsCount,
-  createThread,
-  createUser,
-} from 'backend-application';
-import { ReactionType } from 'backend-domain';
+import { ReactionType, factories } from 'backend-domain';
 
 import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
 import { SaveEntity, sqlHelpers } from '../utils/save-test-data';
@@ -16,9 +9,11 @@ describe('SqlReactionRepository', () => {
   let save: SaveEntity;
   let repository: SqlReactionRepository;
 
-  const author = createUser();
-  const user = createUser();
-  const thread = createThread({ author });
+  const create = factories();
+
+  const author = create.user();
+  const user = create.user();
+  const thread = create.thread({ author });
 
   beforeEach(async () => {
     const { em } = await createTestDatabaseConnection();
@@ -32,9 +27,9 @@ describe('SqlReactionRepository', () => {
   });
 
   it('saves and finds a reaction', async () => {
-    const comment = await save(createComment({ threadId: thread.id, author }));
+    const comment = await save(create.comment({ threadId: thread.id, author }));
 
-    const reaction = createReaction({
+    const reaction = create.reaction({
       commentId: comment.id,
       userId: user.id,
       type: ReactionType.downvote,
@@ -46,17 +41,17 @@ describe('SqlReactionRepository', () => {
   });
 
   it('returns the number of reactions for a set of comments', async () => {
-    const comment1 = await save(createComment({ threadId: thread.id, author }));
-    const comment2 = await save(createComment({ threadId: thread.id, author }));
-    const comment3 = await save(createComment({ threadId: thread.id, author }));
+    const comment1 = await save(create.comment({ threadId: thread.id, author }));
+    const comment2 = await save(create.comment({ threadId: thread.id, author }));
+    const comment3 = await save(create.comment({ threadId: thread.id, author }));
 
-    const reaction1 = createReaction({
+    const reaction1 = create.reaction({
       commentId: comment1.id,
       userId: user.id,
       type: ReactionType.downvote,
     });
 
-    const reaction2 = createReaction({
+    const reaction2 = create.reaction({
       commentId: comment2.id,
       userId: user.id,
       type: ReactionType.upvote,
@@ -67,24 +62,24 @@ describe('SqlReactionRepository', () => {
 
     expect(await repository.countReactions([comment1.id, comment2.id, comment3.id])).toEqual(
       new Map([
-        [comment1.id, createReactionsCount({ upvote: 0, downvote: 1 })],
-        [comment2.id, createReactionsCount({ upvote: 1, downvote: 0 })],
-        [comment3.id, createReactionsCount({ upvote: 0, downvote: 0 })],
+        [comment1.id, create.reactionsCount({ upvote: 0, downvote: 1 })],
+        [comment2.id, create.reactionsCount({ upvote: 1, downvote: 0 })],
+        [comment3.id, create.reactionsCount({ upvote: 0, downvote: 0 })],
       ]),
     );
   });
 
   it("returns the user's reactions for a set of comments", async () => {
-    const comment1 = await save(createComment({ threadId: thread.id, author }));
-    const comment2 = await save(createComment({ threadId: thread.id, author }));
+    const comment1 = await save(create.comment({ threadId: thread.id, author }));
+    const comment2 = await save(create.comment({ threadId: thread.id, author }));
 
-    const reaction1 = createReaction({
+    const reaction1 = create.reaction({
       commentId: comment1.id,
       userId: user.id,
       type: ReactionType.downvote,
     });
 
-    const reaction2 = createReaction({
+    const reaction2 = create.reaction({
       commentId: comment2.id,
       userId: author.id,
       type: ReactionType.upvote,
@@ -102,9 +97,9 @@ describe('SqlReactionRepository', () => {
   });
 
   it("returns the user's reactions for a set of comments", async () => {
-    const comment = await save(createComment({ threadId: thread.id, author }));
+    const comment = await save(create.comment({ threadId: thread.id, author }));
 
-    const reaction = createReaction({
+    const reaction = create.reaction({
       commentId: comment.id,
       userId: user.id,
       type: ReactionType.downvote,

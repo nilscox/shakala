@@ -1,6 +1,5 @@
 import { GetThreadQueryResult } from 'backend-application';
-import { ReactionsCount } from 'backend-application/src/interfaces/reaction.repository';
-import { Comment, Author, ReactionType, Thread } from 'backend-domain';
+import { Comment, Author, ReactionType, Thread, ReactionsCount } from 'backend-domain';
 import { CommentDto, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto, UserDto } from 'shared';
 
 export class ThreadPresenter {

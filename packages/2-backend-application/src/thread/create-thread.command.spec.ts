@@ -1,9 +1,7 @@
-import { Markdown, Author, Timestamp } from 'backend-domain';
+import { factories, StubGeneratorService } from 'backend-domain';
 
 import { StubDateService } from '../test/date.stub';
-import { StubGeneratorService } from '../test/generator.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { createUser } from '../utils/factories';
 
 import { CreateThreadCommand, CreateThreadHandler } from './create-thread.command';
 import { InMemoryThreadRepository } from './thread.in-memory-repository';
@@ -16,13 +14,15 @@ describe('CreateThreadCommand', () => {
 
   const handler = new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository);
 
-  const author = createUser();
-  const now = new Timestamp('2022-01-01');
+  const create = factories();
+
+  const author = create.user();
+  const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
-    userRepository.add(author);
     generatorService.nextId = 'threadId';
     dateService.setNow(now);
+    userRepository.add(author);
   });
 
   const execute = async (description: string, text: string, keywords: string[]) => {
@@ -39,9 +39,9 @@ describe('CreateThreadCommand', () => {
     const created = threadRepository.get('threadId');
 
     expect(created).toBeDefined();
-    expect(created).toHaveProperty('author', new Author(author));
+    expect(created).toHaveProperty('author', create.author(author));
     expect(created).toHaveProperty('description', description);
-    expect(created).toHaveProperty('text', new Markdown(text));
+    expect(created).toHaveProperty('text', create.markdown(text));
     expect(created).toHaveProperty('keywords', keywords);
     expect(created).toHaveProperty('created', now);
   });

@@ -1,36 +1,31 @@
-import {
-  createUser,
-  createThread,
-  createComment,
-  GetThreadQueryResult,
-  createReactionsCount,
-  createMessage,
-} from 'backend-application';
-import { Author, ReactionType } from 'backend-domain';
+import { GetThreadQueryResult } from 'backend-application';
+import { factories, ReactionType } from 'backend-domain';
 import { CommentDto, ThreadWithCommentsDto } from 'shared';
 
 import { ThreadPresenter } from './thread.presenter';
 
 describe('ThreadPresenter', () => {
-  const threadAuthor = createUser();
-  const thread = createThread({ author: threadAuthor });
+  const create = factories();
 
-  const commentAuthor = new Author(createUser());
-  const comment = createComment({
+  const threadAuthor = create.user();
+  const thread = create.thread({ author: threadAuthor });
+
+  const commentAuthor = create.author(create.user());
+  const comment = create.comment({
     author: commentAuthor,
-    history: [createMessage()],
+    history: [create.message()],
   });
 
-  const replyAuthor = createUser();
-  const reply = createComment({ author: replyAuthor });
+  const replyAuthor = create.user();
+  const reply = create.comment({ author: replyAuthor });
 
   const getThreadQueryResult: GetThreadQueryResult = {
     thread,
     comments: [comment],
     replies: new Map([[comment.id, [reply]]]),
     reactionsCounts: new Map([
-      [comment.id, createReactionsCount({ [ReactionType.downvote]: 1 })],
-      [reply.id, createReactionsCount({ [ReactionType.upvote]: 1 })],
+      [comment.id, create.reactionsCount({ [ReactionType.downvote]: 1 })],
+      [reply.id, create.reactionsCount({ [ReactionType.upvote]: 1 })],
     ]),
     userReactions: undefined,
   };

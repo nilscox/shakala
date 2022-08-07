@@ -1,24 +1,29 @@
-import { Markdown, Timestamp } from 'backend-domain';
+import { factories, StubGeneratorService } from 'backend-domain';
 
 import { StubDateService } from '../test/date.stub';
-import { StubGeneratorService } from '../test/generator.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { createUser } from '../utils/factories';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { CreateCommentCommandHandler } from './create-comment.command';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 
 describe('CreateCommentCommand', () => {
-  const generator = new StubGeneratorService();
-  const date = new StubDateService();
+  const generatorService = new StubGeneratorService();
+  const dateService = new StubDateService();
   const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
   const userRepository = new InMemoryUserRepository();
 
-  const handler = new CreateCommentCommandHandler(generator, date, commentRepository, userRepository);
+  const handler = new CreateCommentCommandHandler(
+    generatorService,
+    dateService,
+    commentRepository,
+    userRepository,
+  );
 
-  const user = createUser({ id: 'authorId' });
-  const now = new Timestamp('2022-01-01');
+  const create = factories();
+
+  const user = create.user({ id: 'authorId' });
+  const now = create.timestamp('2022-01-01');
 
   const execute = async (parentId: string | null = null) => {
     return handler.handle({
@@ -30,9 +35,9 @@ describe('CreateCommentCommand', () => {
   };
 
   beforeEach(() => {
+    generatorService.nextIds = ['commentId', 'messageId'];
+    dateService.setNow(now);
     userRepository.add(user);
-    generator.nextIds = ['commentId', 'messageId'];
-    date.setNow(now);
   });
 
   it('creates a new root comment', async () => {
@@ -46,7 +51,7 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('author.id', 'authorId');
     expect(created).toHaveProperty('parentId', null);
     expect(created).toHaveProperty('message.id', 'messageId');
-    expect(created).toHaveProperty('message.text', new Markdown('hello!'));
+    expect(created).toHaveProperty('message.text', create.markdown('hello!'));
     expect(created).toHaveProperty('message.date', now);
     expect(created).toHaveProperty('history', []);
     expect(created).toHaveProperty('edited', false);

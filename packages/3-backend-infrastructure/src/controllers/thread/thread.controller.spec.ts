@@ -1,10 +1,6 @@
 import {
-  createComment,
   CreateCommentCommand,
-  createMessage,
-  createThread,
   CreateThreadCommand,
-  createUser,
   GetCommentQuery,
   GetLastThreadsQuery,
   GetThreadQuery,
@@ -13,7 +9,7 @@ import {
   Sort,
   UpdateCommentCommand,
 } from 'backend-application';
-import { Markdown, ReactionType, UserMustBeAuthorError } from 'backend-domain';
+import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
 
 import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
@@ -27,8 +23,10 @@ describe('ThreadController', () => {
 
   const controller = new ThreadController(queryBus, commandBus, sessionService, new ValidationService());
 
+  const create = factories();
+
   describe('getLastThreads', () => {
-    const thread = createThread();
+    const thread = create.thread();
 
     beforeEach(() => {
       queryBus.for(GetLastThreadsQuery).return([thread]);
@@ -59,7 +57,7 @@ describe('ThreadController', () => {
 
   describe('getThread', () => {
     const threadId = 'threadId';
-    const thread = createThread({ id: threadId });
+    const thread = create.thread({ id: threadId });
 
     beforeEach(() => {
       queryBus.for(GetThreadQuery).return<GetThreadQueryResult>({
@@ -83,7 +81,7 @@ describe('ThreadController', () => {
     it('retrieves a thread as an authenticated user', async () => {
       const userId = 'userId';
 
-      sessionService.user = createUser({ id: userId });
+      sessionService.user = create.user({ id: userId });
 
       await controller.getThread(new MockRequest().withParam('id', thread.id));
 
@@ -106,7 +104,7 @@ describe('ThreadController', () => {
   });
 
   describe('createThread', () => {
-    const user = createUser();
+    const user = create.user();
     const description = 'description';
     const text = 'text';
     const keywords = ['key', 'words'];
@@ -153,9 +151,9 @@ describe('ThreadController', () => {
   });
 
   describe('createComment', () => {
-    const user = createUser();
-    const thread = createThread();
-    const parent = createComment();
+    const user = create.user();
+    const thread = create.thread();
+    const parent = create.comment();
     const text = 'hello!';
 
     const commentId = 'commentId';
@@ -208,11 +206,14 @@ describe('ThreadController', () => {
   });
 
   describe('updateComment', () => {
-    const user = createUser();
-    const thread = createThread();
+    const user = create.user();
+    const thread = create.thread();
     const text = 'updated!';
 
-    const comment = createComment({ author: user, message: createMessage({ text: new Markdown('text') }) });
+    const comment = create.comment({
+      author: user,
+      message: create.message({ text: create.markdown('text') }),
+    });
 
     beforeEach(() => {
       sessionService.user = user;
@@ -267,11 +268,11 @@ describe('ThreadController', () => {
   });
 
   describe('setReaction', () => {
-    const user = createUser();
-    const thread = createThread();
+    const user = create.user();
+    const thread = create.thread();
     const type = ReactionType.upvote;
 
-    const comment = createComment({ author: user });
+    const comment = create.comment({ author: user });
 
     beforeEach(() => {
       sessionService.user = user;

@@ -27,7 +27,7 @@ export class InMemoryRepository<Item extends { id: string }> implements Reposito
     const item = this.get(id);
 
     if (!item) {
-      throw new Error('Not found');
+      throw new Error(`${this.constructor.name}: Item not found, id = "${id}"`);
     }
 
     return item;

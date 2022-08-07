@@ -1,9 +1,8 @@
-import { Timestamp } from 'backend-domain';
+import { factories } from 'backend-domain';
 
 import { StubCryptoService } from '../test/crypto.stub';
 import { StubDateService } from '../test/date.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { createUser } from '../utils/factories';
 
 import { InvalidCredentialsError, LoginCommand, LoginCommandHandler } from './login.command';
 
@@ -14,13 +13,15 @@ describe('LoginCommand', () => {
 
   const handler = new LoginCommandHandler(userRepository, cryptoService, dateService);
 
+  const create = factories();
+
   const email = 'user@domain.tld';
   const password = 'p4ssw0rd';
 
   const userId = 'userId';
-  const user = createUser({ id: userId, email, hashedPassword: '#' + password });
+  const user = create.user({ id: userId, email, hashedPassword: '#' + password });
 
-  const now = new Date('2022-01-01');
+  const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
     dateService.setNow(now);
@@ -38,7 +39,7 @@ describe('LoginCommand', () => {
   it('updates the last login date', async () => {
     await login();
 
-    expect(userRepository.get(userId)).toHaveProperty('lastLoginDate', new Timestamp(now));
+    expect(userRepository.get(userId)).toHaveProperty('lastLoginDate', now);
   });
 
   it('fails to log in when the user does not exist', async () => {
