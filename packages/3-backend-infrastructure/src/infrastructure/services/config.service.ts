@@ -13,10 +13,18 @@ type SessionConfig = {
   secret: string;
 };
 
+type DatabaseConfig = {
+  host: string;
+  user: string;
+  password: string;
+  database: string;
+};
+
 export interface ConfigService {
   app(): AppConfig;
   cors(): CorsConfig;
   session(): SessionConfig;
+  database(): DatabaseConfig;
   dump(): unknown;
 }
 
@@ -26,6 +34,7 @@ export class StubConfigService implements ConfigService {
       app: Partial<AppConfig>;
       cors: Partial<CorsConfig>;
       session: Partial<SessionConfig>;
+      database: Partial<DatabaseConfig>;
     }>,
   ) {}
 
@@ -48,6 +57,16 @@ export class StubConfigService implements ConfigService {
       secret: 'secret',
       secure: false,
       ...this.config?.session,
+    };
+  }
+
+  database(): DatabaseConfig {
+    return {
+      host: 'localhost',
+      user: 'postgres',
+      password: '',
+      database: 'shakala',
+      ...this.config?.database,
     };
   }
 
@@ -99,6 +118,15 @@ export class EnvConfigService implements ConfigService {
     return {
       secure: this.isProd,
       secret: this.get('SESSION_SECRET'),
+    };
+  }
+
+  database(): DatabaseConfig {
+    return {
+      host: this.get('DATABASE_HOST'),
+      user: this.get('DATABASE_USER'),
+      password: this.get('DATABASE_PASSWORD'),
+      database: this.get('DATABASE_NAME'),
     };
   }
 

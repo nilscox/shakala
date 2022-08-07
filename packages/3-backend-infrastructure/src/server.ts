@@ -3,9 +3,11 @@ import { promisify } from 'util';
 
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
+import connectPgSimple, { PGStore } from 'connect-pg-simple';
 import cors from 'cors';
 import express, { json } from 'express';
 import session from 'express-session';
+import { pick } from 'shared';
 
 import { Application } from './application';
 import { AuthenticationController } from './controllers/authentication/authentication.controller';
@@ -13,9 +15,12 @@ import { CommentController } from './controllers/comment/comment.controller';
 import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
 
+const PgSession = connectPgSimple(session);
+
 export class Server extends Application {
   protected app = express();
-  protected server!: HttpServer;
+  protected server?: HttpServer;
+  protected sessionStore?: PGStore;
 
   override async init() {
     await super.init();
@@ -42,6 +47,8 @@ export class Server extends Application {
     if (this.server) {
       await promisify(this.server.close)();
     }
+
+    await this.sessionStore?.close();
   }
 
   async start() {
@@ -54,8 +61,10 @@ export class Server extends Application {
 
   private configureDefaultMiddlewares() {
     const { configService } = this.services;
+
     const corsConfig = configService.cors();
     const sessionConfig = configService.session();
+    const databaseConfig = configService.database();
 
     this.app.use(json());
 
@@ -66,13 +75,21 @@ export class Server extends Application {
       }),
     );
 
+    this.sessionStore = new PgSession({
+      conObject: pick(databaseConfig, 'host', 'user', 'password', 'database'),
+    });
+
+
     this.app.use(
       session({
+        store: this.sessionStore,
         secret: sessionConfig.secret,
         cookie: {
           secure: sessionConfig.secure,
           httpOnly: true,
           sameSite: 'strict',
+          // 60 days
+          maxAge: 1000 * 60 * 60 * 24 * 60,
         },
         resave: false,
         saveUninitialized: true,
