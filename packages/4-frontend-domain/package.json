@@ -12,9 +12,5 @@
     "@reduxjs/toolkit": "^1.8.3",
     "normalizr": "^3.6.2",
     "redux": "^4.2.0"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/user-event": "^14.4.2"
   }
 }
