@@ -1,5 +1,4 @@
-import { GeneratorService, Comment, Author, Markdown, Timestamp, DateService } from 'backend-domain';
-import { Message } from 'backend-domain/src/domain/message.entity';
+import { GeneratorService, Comment, Author, Markdown, Timestamp, DateService, Message } from 'backend-domain';
 
 import { CommandHandler } from '../cqs/command-handler';
 import { CommentRepository } from '../interfaces/comment.repository';
