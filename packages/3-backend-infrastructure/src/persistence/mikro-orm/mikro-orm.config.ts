@@ -27,6 +27,7 @@ const config: Options<PostgreSqlDriver> = {
   migrations: {
     path: 'src/persistence/migrations',
     snapshot: false,
+    disableForeignKeys: false,
   },
 };
 

@@ -70,7 +70,7 @@ describe('makeDiff', () => {
 
       const lines = makeDiff(a, b, { simplify: true, group: true });
 
-      expect(lines).toBeAnArrayOfLength(1);
+      expect(lines).toHaveLength(1);
 
       expect(lines[0]).toEqual([
         [{ value: 'this ' }, { value: 'is so', removed: true }, { value: ' nice' }],

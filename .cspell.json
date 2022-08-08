@@ -20,6 +20,7 @@
     "nocolor",
     "normalizr",
     "pkey",
+    "postgres",
     "postgresql",
     "reduxjs",
     "resave",

@@ -11,7 +11,8 @@ export default {
   decorators: [routerDecorator('?' + new URLSearchParams({ historique: 'commentId' })), reduxDecorator()],
 } as Meta;
 
-const bopzor = createUser({ nick: 'Bopzor' });
+// cspell:word bopzor
+const bopzor = createUser({ nick: 'bopzor' });
 
 const commentFixture = createComment({
   id: 'commentId',

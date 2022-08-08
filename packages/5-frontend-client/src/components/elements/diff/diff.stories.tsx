@@ -6,6 +6,8 @@ export default {
   title: 'Elements/Diff',
 } as Meta;
 
+// cspell:word tardis
+
 const before = `I'd call you a genius, expect I'm in the room. There are worlds out there where the sky is burning, and the sea's asleep, and the rivers dream; people made of smoke and cities made of song.
 Somewhere there's injustice, and somewhere else the tea's getting cold. Come on, Ace. We've got work to do.
 Your species has the most amazing capacity for self-deception?
