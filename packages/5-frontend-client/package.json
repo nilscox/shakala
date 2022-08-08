@@ -10,8 +10,8 @@
     "storybook": "start-storybook -p 6006 --ci"
   },
   "dependencies": {
-    "@fontsource/montserrat": "^4.5.11",
-    "@fontsource/open-sans": "^4.5.10",
+    "@fontsource/montserrat": "^4.5.12",
+    "@fontsource/open-sans": "^4.5.11",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.1",
     "diff": "^5.1.0",
@@ -42,7 +42,7 @@
     "@testing-library/user-event": "^14.4.2",
     "@types/diff": "^5.0.2",
     "@types/no-scroll": "^2.1.0",
-    "@types/react": "^18.0.15",
+    "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-helmet": "^6.1.5",
     "@types/react-modal": "^3.13.1",
