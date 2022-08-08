@@ -17,7 +17,7 @@ export class SqlThread extends BaseSqlEntity<Thread> {
   @Property({ columnType: 'text' })
   text!: string;
 
-  @Property({ type: ArrayType, columnType: 'character varying(255) array' })
+  @Property({ type: ArrayType })
   keywords!: string[];
 
   assignFromDomain(em: EntityManager, thread: Thread) {

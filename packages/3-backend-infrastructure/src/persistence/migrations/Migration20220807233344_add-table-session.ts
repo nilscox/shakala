@@ -16,5 +16,10 @@ ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFE
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
     `);
   }
+  
+  override async down(): Promise<void> {
+    this.addSql('drop table if exists "session" cascade;');
+    this.addSql('drop index if exists "IDX_session_expire" cascade;');
+  }
 
 }
