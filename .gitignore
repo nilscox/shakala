@@ -1,6 +1,8 @@
 node_modules
 yarn-error.log
 
+data
+
 /packages/*/tsconfig.tsbuildinfo
 /packages/*/dist
 
