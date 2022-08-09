@@ -10,41 +10,36 @@ import { SqlUserRepository } from '../repositories/sql-user.repository';
 
 export type SaveEntity = <T>(entity: T) => Promise<T>;
 
-export const sqlHelpers = (em: EntityManager) => {
-  const commentRepository = new SqlCommentRepository(
-    em,
-    new MathRandomGeneratorService(),
-    new RealDateService(),
-  );
-  const reactionRepository = new SqlReactionRepository(em);
-  const threadRepository = new SqlThreadRepository(em);
-  const userRepository = new SqlUserRepository(em);
+export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
+  return async <T>(entity: T) => {
+    const em = getEntityManager();
 
-  const repositoryMap = new Map<unknown, Repository<unknown>>([
-    [Comment, commentRepository],
-    [Reaction, reactionRepository],
-    [Thread, threadRepository],
-    [User, userRepository],
-  ]);
+    const commentRepository = new SqlCommentRepository(
+      em,
+      new MathRandomGeneratorService(),
+      new RealDateService(),
+    );
+    const reactionRepository = new SqlReactionRepository(em);
+    const threadRepository = new SqlThreadRepository(em);
+    const userRepository = new SqlUserRepository(em);
 
-  return {
-    commentRepository,
-    reactionRepository,
-    threadRepository,
-    userRepository,
+    const repositoryMap = new Map<unknown, Repository<unknown>>([
+      [Comment, commentRepository],
+      [Reaction, reactionRepository],
+      [Thread, threadRepository],
+      [User, userRepository],
+    ]);
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    async save<T extends { constructor: Function }>(entity: T) {
-      const ctor = entity.constructor;
-      const repository = repositoryMap.get(ctor);
+    const ctor = (entity as { constructor: Function }).constructor;
+    const repository = repositoryMap.get(ctor);
 
-      if (!repository) {
-        throw new Error(`No repository for entity ${ctor.name}`);
-      }
+    if (!repository) {
+      throw new Error(`No repository for entity ${ctor.name}`);
+    }
 
-      await repository.save(entity);
+    await repository.save(entity);
 
-      return entity;
-    },
+    return entity;
   };
 };

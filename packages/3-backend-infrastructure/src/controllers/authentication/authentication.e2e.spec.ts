@@ -6,7 +6,15 @@ describe('Authentication e2e', () => {
   const server = new TestServer();
   const agent = server.agent();
 
-  test('sign up, log out and and log back in', async () => {
+  beforeAll(async () => {
+    await server.init();
+  });
+
+  beforeEach(async () => {
+    await server.reset();
+  });
+
+  test('as a user, I can sign up, log out and and log back in', async () => {
     const signup = async () => {
       const body: SignupBodyDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
 

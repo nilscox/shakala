@@ -1,7 +1,7 @@
 import { Entity, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
+import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 import { EntityNotFoundError } from '../utils/entity-not-found.error';
 
 import { BaseSqlEntity } from './base-sql-entity';
@@ -61,13 +61,15 @@ class SqlTestRepository extends BaseSqlRepository<SqlTest, Test> {
 }
 
 describe('SqlRepository', () => {
+  const { getEntityManager, waitForDatabaseConnection } = setupTestDatabase({ entities: [SqlTest] });
+
   let em: EntityManager;
   let repository: SqlTestRepository;
 
   beforeEach(async () => {
-    const orm = await createTestDatabaseConnection({ entities: [SqlTest] });
+    await waitForDatabaseConnection();
 
-    em = orm.em.fork();
+    em = getEntityManager();
     repository = new SqlTestRepository(em);
   });
 

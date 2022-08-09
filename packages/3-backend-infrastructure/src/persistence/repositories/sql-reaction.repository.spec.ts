@@ -1,12 +1,10 @@
 import { ReactionType, factories } from 'backend-domain';
 
-import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
-import { SaveEntity, sqlHelpers } from '../utils/save-test-data';
+import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
 import { SqlReactionRepository } from './sql-reaction.repository';
 
 describe('SqlReactionRepository', () => {
-  let save: SaveEntity;
   let repository: SqlReactionRepository;
 
   const create = factories();
@@ -15,10 +13,13 @@ describe('SqlReactionRepository', () => {
   const user = create.user();
   const thread = create.thread({ author });
 
-  beforeEach(async () => {
-    const { em } = await createTestDatabaseConnection();
+  const { save, getEntityManager, waitForDatabaseConnection } = setupTestDatabase();
 
-    save = sqlHelpers(em.fork()).save;
+  beforeEach(async () => {
+    await waitForDatabaseConnection();
+
+    const em = getEntityManager();
+
     repository = new SqlReactionRepository(em.fork());
 
     await save(author);

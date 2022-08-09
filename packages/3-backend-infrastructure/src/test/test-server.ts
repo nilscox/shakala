@@ -2,17 +2,14 @@ import { CreateCommentCommand, CreateThreadCommand, SignupCommand } from 'backen
 import { LoginBodyDto } from 'shared';
 import { agent, SuperAgentTest } from 'supertest';
 
-import { createTestDatabaseConnection } from '../persistence/mikro-orm/create-database-connection';
+import { createTestDatabaseConnection, resetDatabase } from '../persistence/mikro-orm/create-database-connection';
 import { Server } from '../server';
 
 export class TestServer extends Server {
   protected override createDatabaseConnection = createTestDatabaseConnection;
 
   async reset() {
-    const generator = this.orm.getSchemaGenerator();
-
-    await generator.refreshDatabase();
-    await generator.clearDatabase();
+    await resetDatabase(this.orm);
   }
 
   agent() {

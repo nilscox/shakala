@@ -1,6 +1,8 @@
 import { MikroORM, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
+import { createDatabaseSaver } from '../utils/save-test-data';
+
 import config from './mikro-orm.config';
 
 export const createDatabaseConnection = async (override: Options<PostgreSqlDriver> = {}) => {
@@ -8,10 +10,41 @@ export const createDatabaseConnection = async (override: Options<PostgreSqlDrive
 };
 
 export const createTestDatabaseConnection = async (override: Options<PostgreSqlDriver> = {}) => {
-  const orm = await createDatabaseConnection({ dbName: 'test', ...override });
+  return createDatabaseConnection({ dbName: 'test', ...override });
+};
+
+export const resetDatabase = async (orm: MikroORM) => {
   const schemaGenerator = orm.getSchemaGenerator();
 
   await schemaGenerator.refreshDatabase();
+  await schemaGenerator.clearDatabase();
+};
 
-  return orm;
+export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
+  let orm: MikroORM<PostgreSqlDriver>;
+  let isReady = false;
+
+  beforeAll(async () => {
+    orm = await createTestDatabaseConnection(override);
+  });
+
+  beforeEach(async () => {
+    isReady = false;
+    await resetDatabase(orm);
+    isReady = true;
+  });
+
+  const getEntityManager = () => orm.em.fork();
+
+  const waitForDatabaseConnection = async () => {
+    while (!isReady) {
+      await new Promise((r) => setTimeout(r, 10));
+    }
+  };
+
+  return {
+    getEntityManager,
+    save: createDatabaseSaver(getEntityManager),
+    waitForDatabaseConnection,
+  };
 };

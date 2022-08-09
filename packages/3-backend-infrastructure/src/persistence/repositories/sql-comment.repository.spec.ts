@@ -2,13 +2,11 @@ import { Sort } from 'backend-application';
 import { factories, StubDateService } from 'backend-domain';
 
 import { MathRandomGeneratorService } from '../../infrastructure';
-import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
-import { SaveEntity, sqlHelpers } from '../utils/save-test-data';
+import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
 import { SqlCommentRepository } from './sql-comment.repository';
 
 describe('SqlCommentRepository', () => {
-  let save: SaveEntity;
   let repository: SqlCommentRepository;
 
   const generatorService = new MathRandomGeneratorService();
@@ -16,11 +14,12 @@ describe('SqlCommentRepository', () => {
 
   const create = factories({ generatorService, dateService });
 
-  beforeEach(async () => {
-    const { em } = await createTestDatabaseConnection();
+  const { save, getEntityManager } = setupTestDatabase();
 
-    save = sqlHelpers(em.fork()).save;
-    repository = new SqlCommentRepository(em.fork(), generatorService, dateService);
+  beforeEach(async () => {
+    const em = getEntityManager();
+
+    repository = new SqlCommentRepository(em, generatorService, dateService);
   });
 
   it('saves and finds a comment', async () => {

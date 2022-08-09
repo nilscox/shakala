@@ -1,21 +1,20 @@
 import { factories } from 'backend-domain';
 import { array } from 'shared';
 
-import { createTestDatabaseConnection } from '../mikro-orm/create-database-connection';
-import { SaveEntity, sqlHelpers } from '../utils/save-test-data';
+import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
 import { SqlThreadRepository } from './sql-thread.repository';
 
 describe('SqlThreadRepository', () => {
-  let save: SaveEntity;
   let repository: SqlThreadRepository;
 
   const create = factories();
 
-  beforeEach(async () => {
-    const { em } = await createTestDatabaseConnection();
+  const { save, getEntityManager } = setupTestDatabase();
 
-    save = sqlHelpers(em.fork()).save;
+  beforeEach(async () => {
+    const em = getEntityManager();
+
     repository = new SqlThreadRepository(em.fork());
   });
 
