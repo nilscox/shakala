@@ -10,13 +10,17 @@ export const createDatabaseConnection = async (override: Options<PostgreSqlDrive
 };
 
 export const createTestDatabaseConnection = async (override: Options<PostgreSqlDriver> = {}) => {
-  return createDatabaseConnection({ dbName: 'test', ...override });
+  const orm = await createDatabaseConnection({ dbName: 'test', ...override });
+  const schemaGenerator = orm.getSchemaGenerator();
+
+  await schemaGenerator.refreshDatabase();
+
+  return orm;
 };
 
 export const resetDatabase = async (orm: MikroORM) => {
   const schemaGenerator = orm.getSchemaGenerator();
 
-  await schemaGenerator.refreshDatabase();
   await schemaGenerator.clearDatabase();
 };
 
@@ -26,6 +30,10 @@ export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
 
   beforeAll(async () => {
     orm = await createTestDatabaseConnection(override);
+  });
+
+  afterAll(async () => {
+    await orm.close();
   });
 
   beforeEach(async () => {

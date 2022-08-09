@@ -3,6 +3,7 @@ import { Entity, Index, PrimaryKey, Property } from '@mikro-orm/core';
 // generate a migration for connect-pg-simple
 // cspell:disable
 
+@Index({ name: 'IDX_session_expire', properties: ['expire'] })
 @Entity({ tableName: 'session' })
 export class SqlSession {
   @PrimaryKey({ columnType: 'varchar' })
@@ -11,7 +12,6 @@ export class SqlSession {
   @Property({ columnType: 'json' })
   sess!: string;
 
-  @Index({ name: 'IDX_session_expire' })
   @Property({ columnType: 'timestamp(6)' })
   expire!: Date;
 }
