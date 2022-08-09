@@ -28,6 +28,26 @@ export interface ConfigService {
   dump(): unknown;
 }
 
+const dumpConfig = (service: ConfigService) => () => {
+  const app = service.app();
+  const cors = service.cors();
+  const session = service.session();
+  const database = service.database();
+
+  return {
+    app,
+    cors,
+    session: {
+      ...session,
+      secret: '[masked]',
+    },
+    database: {
+      ...database,
+      password: '[masked]',
+    },
+  };
+};
+
 export class StubConfigService implements ConfigService {
   constructor(
     public config?: Partial<{
@@ -70,13 +90,7 @@ export class StubConfigService implements ConfigService {
     };
   }
 
-  dump() {
-    return {
-      app: this.app(),
-      cors: this.cors(),
-      session: this.session(),
-    };
-  }
+  dump = dumpConfig(this);
 }
 
 export class EnvConfigService implements ConfigService {
@@ -130,11 +144,5 @@ export class EnvConfigService implements ConfigService {
     };
   }
 
-  dump() {
-    return {
-      app: this.app(),
-      cors: this.cors(),
-      session: this.session(),
-    };
-  }
+  dump = dumpConfig(this);
 }
