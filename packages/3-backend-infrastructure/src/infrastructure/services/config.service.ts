@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 
 type AppConfig = {
+  port: number;
   trustProxy: boolean;
 };
 
@@ -61,6 +62,7 @@ export class StubConfigService implements ConfigService {
 
   app(): AppConfig {
     return {
+      port: 3000,
       trustProxy: false,
       ...this.config?.app,
     };
@@ -129,7 +131,15 @@ export class EnvConfigService implements ConfigService {
   }
 
   app(): AppConfig {
+    const portStr = this.get('PORT');
+    const port = Number(portStr);
+
+    if (Number.isNaN(port)) {
+      throw new Error(`invalid environment variable PORT "${portStr}"`);
+    }
+
     return {
+      port,
       trustProxy: this.isProd,
     };
   }

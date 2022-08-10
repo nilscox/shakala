@@ -1,5 +1,4 @@
 import { Server as HttpServer } from 'http';
-import { promisify } from 'util';
 
 import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
@@ -46,25 +45,30 @@ export class Server extends Application {
   }
 
   override async close() {
-    await super.close();
-
     this.logger.log('closing server');
 
     if (this.server) {
-      await promisify(this.server.close)();
+      // throws TypeError: Cannot read properties of undefined (reading 'Symbol(http.server.connectionsCheckingInterval)')
+      // await promisify(this.server.close)();
+
+      this.server.close();
     }
 
     await this.sessionStore?.close();
+
+    await super.close();
 
     this.logger.info('server closed');
   }
 
   async start() {
+    const { port } = this.config.app()
+
     await new Promise<void>((resolve) => {
-      this.server = this.app.listen(3000, resolve);
+      this.server = this.app.listen(port, resolve);
     });
 
-    this.logger.info('server listening on port 3000');
+    this.logger.info(`server listening on port ${port}`);
   }
 
   private configureDefaultMiddlewares() {

@@ -35,13 +35,17 @@ export class Application {
     return this.services.loggerService;
   }
 
+  protected get config() {
+    return this.services.configService;
+  }
+
   async init() {
     this.services = {
       ...instantiateServices(this.queryBus),
       ...this.serviceOverrides,
     };
 
-    const databaseConfig = this.services.configService.database();
+    const databaseConfig = this.config.database();
 
     this.logger.log('connecting to the database');
 
