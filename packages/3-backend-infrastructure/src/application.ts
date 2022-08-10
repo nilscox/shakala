@@ -32,8 +32,23 @@ export class Application {
   }
 
   async init() {
-    this.orm = await this.createDatabaseConnection();
-    this.instantiateDependencies();
+    this.services = {
+      ...instantiateServices(this.queryBus),
+      ...this.serviceOverrides,
+    };
+
+    const databaseConfig = this.services.configService.database();
+
+    this.orm = await this.createDatabaseConnection({
+      host: databaseConfig.host,
+      user: databaseConfig.user,
+      password: databaseConfig.password,
+      dbName: databaseConfig.database,
+    });
+
+    this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager, this.services);
+
+    registerHandlers(this.queryBus, this.commandBus, this.services, this.repositories);
   }
 
   async close() {
@@ -47,15 +62,4 @@ export class Application {
   }
 
   protected createDatabaseConnection = createDatabaseConnection;
-
-  private instantiateDependencies() {
-    this.services = {
-      ...instantiateServices(this.queryBus),
-      ...this.serviceOverrides,
-    };
-
-    this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager, this.services);
-
-    registerHandlers(this.queryBus, this.commandBus, this.services, this.repositories);
-  }
 }

@@ -1,10 +1,15 @@
 import { SuperAgentTest } from 'supertest';
 
+import { TestConfigService } from '../../infrastructure/services/config.service';
 import { TestServer } from '../../test';
 
 describe('Thread e2e', () => {
   const server = new TestServer();
   let agent: SuperAgentTest;
+
+  server.overrideServices({
+    configService: new TestConfigService(),
+  });
 
   beforeAll(async () => {
     await server.init();

@@ -1,10 +1,15 @@
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
+import { TestConfigService } from '../../infrastructure/services/config.service';
 import { TestServer } from '../../test';
 
 describe('Authentication e2e', () => {
   const server = new TestServer();
   const agent = server.agent();
+
+  server.overrideServices({
+    configService: new TestConfigService(),
+  });
 
   beforeAll(async () => {
     await server.init();

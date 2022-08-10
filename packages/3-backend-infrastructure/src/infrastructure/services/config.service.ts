@@ -11,6 +11,7 @@ type CorsConfig = {
 type SessionConfig = {
   secure: boolean;
   secret: string;
+  pruneExpiredSessions: boolean;
 };
 
 type DatabaseConfig = {
@@ -76,6 +77,7 @@ export class StubConfigService implements ConfigService {
     return {
       secret: 'secret',
       secure: false,
+      pruneExpiredSessions: false,
       ...this.config?.session,
     };
   }
@@ -91,6 +93,16 @@ export class StubConfigService implements ConfigService {
   }
 
   dump = dumpConfig(this);
+}
+
+export class TestConfigService extends StubConfigService {
+  constructor() {
+    super({
+      database: {
+        database: 'test',
+      },
+    });
+  }
 }
 
 export class EnvConfigService implements ConfigService {
@@ -132,6 +144,7 @@ export class EnvConfigService implements ConfigService {
     return {
       secure: this.isProd,
       secret: this.get('SESSION_SECRET'),
+      pruneExpiredSessions: true,
     };
   }
 

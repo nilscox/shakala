@@ -77,6 +77,7 @@ export class Server extends Application {
 
     this.sessionStore = new PgSession({
       conObject: pick(databaseConfig, 'host', 'user', 'password', 'database'),
+      pruneSessionInterval: sessionConfig.pruneExpiredSessions ? false : undefined,
     });
 
 

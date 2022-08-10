@@ -7,6 +7,7 @@ import { SqlComment, SqlReaction, SqlSession, SqlThread, SqlUser } from '../enti
 
 dotenv.config();
 
+// used by the cli
 const {
   DATABASE_HOST: host,
   DATABASE_USER: user,
