@@ -1,5 +1,7 @@
 import { Application, Router } from 'express';
 
+import { LoggerService } from '../services/logger.service';
+
 import { HttpError } from './http-errors';
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';
@@ -11,7 +13,7 @@ type Method = 'get' | 'post';
 export abstract class Controller {
   private router = Router();
 
-  constructor(private readonly prefix: string) {}
+  constructor(private readonly logger: LoggerService, private readonly prefix: string) {}
 
   abstract endpoints(): Record<string, RequestHandler>;
 
@@ -24,11 +26,11 @@ export abstract class Controller {
         .map((str) => str.trim())
         .filter(Boolean);
 
-      console.log(verb, this.prefix + path, '->', this.constructor.name + '.' + handler.name + '()');
-
       if (!verb || !path) {
         throw new Error(`Controller: invalid endpoint "${endpoint}"`);
       }
+
+      this.logger.log(`registering endpoint ${[verb, this.prefix + path].join(' ').replace(/\/$/, '')}`);
 
       this.register(verb.toLowerCase() as Method, path, handler.bind(this));
     }

@@ -2,6 +2,7 @@ import { CreateCommentBodyDto, ReactionTypeDto, SetReactionBodyDto } from 'share
 import { SuperAgentTest } from 'supertest';
 
 import { TestConfigService } from '../../infrastructure/services/config.service';
+import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { TestServer } from '../../test';
 
 describe('Comment e2e', () => {
@@ -9,6 +10,7 @@ describe('Comment e2e', () => {
   let agent: SuperAgentTest;
 
   server.overrideServices({
+    loggerService: new MockLoggerService(),
     configService: new TestConfigService(),
   });
 

@@ -1,4 +1,5 @@
 import { StubConfigService } from './infrastructure/services/config.service';
+import { MockLoggerService } from './infrastructure/services/mock-logger.service';
 import { TestServer } from './test';
 
 describe('Server', () => {
@@ -7,6 +8,7 @@ describe('Server', () => {
     const agent = server.agent();
 
     server.overrideServices({
+      loggerService: new MockLoggerService(),
       configService: new StubConfigService({
         app: { trustProxy: true },
         session: { secure: true },

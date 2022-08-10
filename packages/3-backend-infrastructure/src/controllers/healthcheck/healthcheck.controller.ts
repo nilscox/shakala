@@ -1,10 +1,11 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Controller, Response } from '../../infrastructure';
+import { LoggerService } from '../../infrastructure/services/logger.service';
 
 export class HealthcheckController extends Controller {
-  constructor(private readonly em: EntityManager) {
-    super('/healthcheck');
+  constructor(logger: LoggerService, private readonly em: EntityManager) {
+    super(logger, '/healthcheck');
   }
 
   endpoints() {

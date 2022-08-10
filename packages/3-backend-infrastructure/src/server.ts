@@ -31,24 +31,32 @@ export class Server extends Application {
     this.app.disable('x-powered-by');
 
     if (appConfig.trustProxy) {
+      this.logger.log('trusting proxy');
       this.app.set('trust proxy', 1);
     }
 
+    this.logger.log('configuring request middlewares');
     this.configureDefaultMiddlewares();
+
+    this.logger.log('configuring controllers');
     this.configureControllers();
 
-    console.info('server initialized');
-    console.dir(configService.dump(), { depth: null });
+    this.logger.info('server initialized');
+    this.logger.log('configuration', JSON.stringify(configService.dump()));
   }
 
   override async close() {
     await super.close();
+
+    this.logger.log('closing server');
 
     if (this.server) {
       await promisify(this.server.close)();
     }
 
     await this.sessionStore?.close();
+
+    this.logger.info('server closed');
   }
 
   async start() {
@@ -56,7 +64,7 @@ export class Server extends Application {
       this.server = this.app.listen(3000, resolve);
     });
 
-    console.info('server listening on port 3000');
+    this.logger.info('server listening on port 3000');
   }
 
   private configureDefaultMiddlewares() {
@@ -107,10 +115,10 @@ export class Server extends Application {
     const { queryBus, commandBus } = this;
 
     const controllers = [
-      new HealthcheckController(this.orm.em as EntityManager),
-      new AuthenticationController(validationService, sessionService, queryBus, commandBus),
-      new ThreadController(queryBus, commandBus, sessionService, validationService),
-      new CommentController(queryBus, commandBus, sessionService, validationService),
+      new HealthcheckController(this.logger, this.orm.em as EntityManager),
+      new AuthenticationController(this.logger, validationService, sessionService, queryBus, commandBus),
+      new ThreadController(this.logger, queryBus, commandBus, sessionService, validationService),
+      new CommentController(this.logger, queryBus, commandBus, sessionService, validationService),
     ];
 
     for (const controller of controllers) {

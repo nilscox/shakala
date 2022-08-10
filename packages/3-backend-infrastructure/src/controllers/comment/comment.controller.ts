@@ -12,16 +12,18 @@ import {
   Unauthorized,
   ValidationService,
 } from '../../infrastructure';
+import { LoggerService } from '../../infrastructure/services/logger.service';
 import { tryCatch } from '../../utils';
 
 export class CommentController extends Controller {
   constructor(
+    logger: LoggerService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly sessionService: SessionService,
     private readonly validationService: ValidationService,
   ) {
-    super('/comment');
+    super(logger, '/comment');
     this.queryBus;
   }
 

@@ -8,6 +8,7 @@ import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
 import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
 
 import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { CommentController } from './comment.controller';
@@ -18,7 +19,13 @@ describe('CommentController', () => {
   const sessionService = new StubSessionService();
   const validationService = new ValidationService();
 
-  const controller = new CommentController(queryBus, commandBus, sessionService, validationService);
+  const controller = new CommentController(
+    new MockLoggerService(),
+    queryBus,
+    commandBus,
+    sessionService,
+    validationService,
+  );
 
   const create = factories();
 

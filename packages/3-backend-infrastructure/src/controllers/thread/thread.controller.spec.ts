@@ -8,6 +8,7 @@ import {
 import { factories } from 'backend-domain';
 
 import { Forbidden, ValidationError, ValidationService } from '../../infrastructure';
+import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
@@ -18,7 +19,13 @@ describe('ThreadController', () => {
   const sessionService = new StubSessionService();
   const validationService = new ValidationService();
 
-  const controller = new ThreadController(queryBus, commandBus, sessionService, validationService);
+  const controller = new ThreadController(
+    new MockLoggerService(),
+    queryBus,
+    commandBus,
+    sessionService,
+    validationService,
+  );
 
   const create = factories();
 

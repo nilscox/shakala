@@ -31,6 +31,10 @@ export class Application {
     this.serviceOverrides = { ...this.serviceOverrides, ...services };
   }
 
+  protected get logger() {
+    return this.services.loggerService;
+  }
+
   async init() {
     this.services = {
       ...instantiateServices(this.queryBus),
@@ -38,6 +42,8 @@ export class Application {
     };
 
     const databaseConfig = this.services.configService.database();
+
+    this.logger.log('connecting to the database');
 
     this.orm = await this.createDatabaseConnection({
       host: databaseConfig.host,
@@ -48,10 +54,15 @@ export class Application {
 
     this.repositories = instantiateRepositories(this.orm.em.fork() as EntityManager, this.services);
 
+    this.logger.log('registering queries and commands handlers');
+
     registerHandlers(this.queryBus, this.commandBus, this.services, this.repositories);
+
+    this.logger.info('application initialized');
   }
 
   async close() {
+    this.logger.info('closing application');
     await this.orm.close();
   }
 

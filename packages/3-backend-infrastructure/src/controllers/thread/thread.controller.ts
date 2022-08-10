@@ -24,17 +24,19 @@ import {
   SessionService,
   ValidationService,
 } from '../../infrastructure';
+import { LoggerService } from '../../infrastructure/services/logger.service';
 
 import { ThreadPresenter } from './thread.presenter';
 
 export class ThreadController extends Controller {
   constructor(
+    logger: LoggerService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly sessionService: SessionService,
     private readonly validationService: ValidationService,
   ) {
-    super('/thread');
+    super(logger, '/thread');
   }
 
   endpoints() {

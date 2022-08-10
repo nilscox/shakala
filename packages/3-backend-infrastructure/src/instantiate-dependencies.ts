@@ -51,6 +51,7 @@ import {
   ValidationService,
 } from './infrastructure';
 import { ConfigService, EnvConfigService } from './infrastructure/services/config.service';
+import { ConsoleLoggerService, LoggerService } from './infrastructure/services/logger.service';
 import {
   SqlCommentRepository,
   SqlReactionRepository,
@@ -93,6 +94,7 @@ export const instantiateRepositories = (
 
 export type Services = {
   configService: ConfigService;
+  loggerService: LoggerService;
   generatorService: GeneratorService;
   dateService: DateService;
   cryptoService: CryptoService;
@@ -102,6 +104,7 @@ export type Services = {
 
 export const instantiateServices = (queryBus: QueryBus): Services => ({
   configService: new EnvConfigService(),
+  loggerService: new ConsoleLoggerService(),
   generatorService: new MathRandomGeneratorService(),
   dateService: new RealDateService(),
   cryptoService: new BcryptService(),

@@ -21,18 +21,20 @@ import {
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
+import { LoggerService } from '../../infrastructure/services/logger.service';
 import { tryCatch } from '../../utils';
 
 import { userToDto } from './authentication.dtos';
 
 export class AuthenticationController extends Controller {
   constructor(
+    logger: LoggerService,
     private readonly validationService: ValidationService,
     private readonly sessionService: SessionService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {
-    super('/auth');
+    super(logger, '/auth');
   }
 
   endpoints() {

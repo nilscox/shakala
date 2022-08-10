@@ -1,6 +1,7 @@
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
 import { TestConfigService } from '../../infrastructure/services/config.service';
+import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { TestServer } from '../../test';
 
 describe('Authentication e2e', () => {
@@ -8,6 +9,7 @@ describe('Authentication e2e', () => {
   const agent = server.agent();
 
   server.overrideServices({
+    loggerService: new MockLoggerService(),
     configService: new TestConfigService(),
   });
 

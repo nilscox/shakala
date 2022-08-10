@@ -17,6 +17,7 @@ import {
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
+import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { StubSessionService, MockCommandBus, MockQueryBus, MockRequest } from '../../test';
 
 import { AuthenticationController } from './authentication.controller';
@@ -27,6 +28,7 @@ describe('AuthenticationController', () => {
   const commandBus = new MockCommandBus();
 
   const controller = new AuthenticationController(
+    new MockLoggerService(),
     new ValidationService(),
     sessionService,
     queryBus,
