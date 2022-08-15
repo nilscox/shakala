@@ -50,13 +50,17 @@ export const Snackbar = ({ className, type, transition, onRemove, children }: Sn
         className,
       )}
     >
-      <div className="gap-2 items-stretch rounded row">
+      <div className="gap-2 items-stretch rounded row notification">
         <div className={clsx('justify-center p-2 col', iconColorsMap[type])}>
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 p-2">{children}</div>
         <div className="py-4 px-2">
-          <IconButton icon={<CrossIcon className="w-4 h-4 text-muted" />} onClick={onRemove} />
+          <IconButton
+            icon={<CrossIcon className="w-4 h-4 text-muted" />}
+            onClick={onRemove}
+            aria-label="Fermer"
+          />
         </div>
       </div>
     </div>

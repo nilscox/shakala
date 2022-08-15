@@ -94,4 +94,8 @@
   .hide-scrollbars::-webkit-scrollbar {
     display: none;
   }
+
+  /* avoid eslint warnings */
+  .notification {}
+  .comment {}
 }

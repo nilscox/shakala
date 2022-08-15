@@ -24,7 +24,7 @@ export const Comment = ({ commentId }: CommentProps) => {
   const [showActions, setShowActions] = useState(false);
 
   return (
-    <div id={id} className="p-0 card">
+    <div id={id} className="comment card">
       <div className={clsx(highlight && 'animate-highlight')} onMouseLeave={() => setShowActions(false)}>
         <CommentHeader commentId={id} className="px-2 pt-2" />
 

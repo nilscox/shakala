@@ -1,0 +1,11 @@
+{
+  "name": "shakala-e2e",
+  "scripts": {
+    "test": "playwright test --headed",
+    "test:debug": "playwright test --headed --debug",
+    "test:headless": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.24.2"
+  }
+}
