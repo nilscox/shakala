@@ -1,49 +1,60 @@
-import { StubConfigService } from './infrastructure/services/config.service';
+import { StubConfigService, TestConfigService } from './infrastructure/services/config.service';
 import { MockLoggerService } from './infrastructure/services/mock-logger.service';
 import { TestServer } from './test';
 
 describe('Server', () => {
-  it('starts the server on a given port number', async () => {
-    const server = new TestServer();
+  it.only(
+    'starts the server on a given port number',
+    async () => {
+      const server = new TestServer();
 
-    server.overrideServices({
-      loggerService: new MockLoggerService(),
-      configService: new StubConfigService({
-        app: { port: 4242 },
-      }),
-    });
+      server.overrideServices({
+        loggerService: new MockLoggerService(),
+        configService: new TestConfigService({
+          app: { port: 4242 },
+        }),
+      });
 
-    await server.init();
-    await server.start();
+      await server.init();
+      await server.reset();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore fetch should be available in node@18
-    const response = await fetch('http://localhost:4242/healthcheck');
+      await server.start();
 
-    expect(response.ok).toBe(true);
-    expect(await response.json()).toEqual({ api: true, database: true });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore fetch should be available in node@18
+      const response = await fetch('http://localhost:4242/healthcheck');
 
-    await server.close();
-  });
+      expect(response.ok).toBe(true);
+      expect(await response.json()).toEqual({ api: true, database: true });
 
-  it('returns a set-cookie header', async () => {
-    const server = new TestServer();
-    const agent = server.agent();
+      await server.close();
+    },
+    10 * 1000,
+  );
 
-    server.overrideServices({
-      loggerService: new MockLoggerService(),
-      configService: new StubConfigService({
-        app: { trustProxy: true },
-        session: { secure: true },
-      }),
-    });
+  it.only(
+    'returns a set-cookie header',
+    async () => {
+      const server = new TestServer();
+      const agent = server.agent();
 
-    await server.init();
+      server.overrideServices({
+        loggerService: new MockLoggerService(),
+        configService: new StubConfigService({
+          app: { trustProxy: true },
+          session: { secure: true },
+        }),
+      });
 
-    const response = await agent.get('/auth/me').set('X-Forwarded-Proto', 'https');
+      await server.init();
+      await server.reset();
 
-    expect(response.headers).toHaveProperty('set-cookie');
+      const response = await agent.get('/auth/me').set('X-Forwarded-Proto', 'https');
 
-    await server.close();
-  });
+      expect(response.headers).toHaveProperty('set-cookie');
+
+      await server.close();
+    },
+    10 * 1000,
+  );
 });

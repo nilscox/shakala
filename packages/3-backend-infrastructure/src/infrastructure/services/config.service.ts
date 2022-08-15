@@ -100,10 +100,19 @@ export class StubConfigService implements ConfigService {
 }
 
 export class TestConfigService extends StubConfigService {
-  constructor() {
+  constructor(
+    config?: Partial<{
+      app: Partial<AppConfig>;
+      cors: Partial<CorsConfig>;
+      session: Partial<SessionConfig>;
+      database: Partial<DatabaseConfig>;
+    }>,
+  ) {
     super({
+      ...config,
       database: {
         database: 'test',
+        ...config?.database,
       },
     });
   }
