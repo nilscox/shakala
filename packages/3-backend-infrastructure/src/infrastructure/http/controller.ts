@@ -1,6 +1,5 @@
+import { LoggerService } from 'backend-application';
 import { Application, Router } from 'express';
-
-import { LoggerService } from '../services/logger.service';
 
 import { HttpError } from './http-errors';
 import { Request } from './request';

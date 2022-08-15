@@ -1,7 +1,7 @@
 import { GeneratorService, Reaction, ReactionType } from 'backend-domain';
 
 import { CommandHandler } from '../cqs/command-handler';
-import { ReactionRepository } from '../interfaces/reaction.repository';
+import { ReactionRepository } from '../interfaces/repositories';
 
 export class SetReactionCommand {
   constructor(

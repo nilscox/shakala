@@ -1,4 +1,9 @@
-import { CreateCommentCommand, EditCommentCommand, SetReactionCommand } from 'backend-application';
+import {
+  CreateCommentCommand,
+  EditCommentCommand,
+  LoggerService,
+  SetReactionCommand,
+} from 'backend-application';
 import { ReactionType, UserMustBeAuthorError } from 'backend-domain';
 import { createCommentBodySchema, editCommentBodySchema, setReactionBodySchema } from 'shared';
 
@@ -12,7 +17,6 @@ import {
   Unauthorized,
   ValidationService,
 } from '../../infrastructure';
-import { LoggerService } from '../../infrastructure/services/logger.service';
 import { tryCatch } from '../../utils';
 
 export class CommentController extends Controller {

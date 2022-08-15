@@ -1,3 +1,4 @@
+import { MikroORM } from '@mikro-orm/core';
 import { CreateCommentCommand, CreateThreadCommand, SignupCommand } from 'backend-application';
 import { LoginBodyDto } from 'shared';
 import { agent, SuperAgentTest } from 'supertest';
@@ -9,7 +10,7 @@ export class TestServer extends Server {
   protected override createDatabaseConnection = createTestDatabaseConnection;
 
   async reset() {
-    await resetDatabase(this.orm);
+    await resetDatabase(this.orm as MikroORM);
   }
 
   agent() {

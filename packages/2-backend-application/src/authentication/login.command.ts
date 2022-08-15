@@ -1,7 +1,7 @@
 import { CryptoService, DateService, DomainError } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
-import { UserRepository } from '../interfaces/user.repository';
+import { UserRepository } from '../interfaces/repositories';
 
 export class InvalidCredentialsError extends DomainError {
   constructor() {

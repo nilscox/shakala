@@ -1,8 +1,7 @@
 import { Comment } from 'backend-domain';
 import { getIds } from 'shared';
 
-import { CommentRepository, Sort } from '../interfaces/comment.repository';
-import { ReactionRepository } from '../interfaces/reaction.repository';
+import { CommentRepository, Sort, ReactionRepository } from '../interfaces/repositories';
 import { InMemoryRepository } from '../utils/in-memory-repository';
 
 export class InMemoryCommentRepository extends InMemoryRepository<Comment> implements CommentRepository {

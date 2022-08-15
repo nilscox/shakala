@@ -1,6 +1,5 @@
 import { CommandHandler } from '../cqs/command-handler';
-import { CommentRepository } from '../interfaces/comment.repository';
-import { UserRepository } from '../interfaces/user.repository';
+import { CommentRepository, UserRepository } from '../interfaces/repositories';
 
 export class EditCommentCommand {
   constructor(public commentId: string, public authorId: string, public text: string) {}

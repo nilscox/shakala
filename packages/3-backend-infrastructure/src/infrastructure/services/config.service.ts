@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 
 type AppConfig = {
+  host: string;
   port: number;
   trustProxy: boolean;
 };
@@ -62,6 +63,7 @@ export class StubConfigService implements ConfigService {
 
   app(): AppConfig {
     return {
+      host: 'localhost',
       port: 3000,
       trustProxy: false,
       ...this.config?.app,
@@ -139,6 +141,7 @@ export class EnvConfigService implements ConfigService {
     }
 
     return {
+      host: this.get('HOST'),
       port,
       trustProxy: this.isProd,
     };

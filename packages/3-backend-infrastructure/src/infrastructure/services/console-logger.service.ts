@@ -1,8 +1,4 @@
-export interface LoggerService {
-  log(...args: unknown[]): void;
-  info(...args: unknown[]): void;
-  error(...args: unknown[]): void;
-}
+import { LoggerService } from 'backend-application';
 
 export class ConsoleLoggerService implements LoggerService {
   log = this._log('log');

@@ -1,7 +1,7 @@
 import { Server as HttpServer } from 'http';
+import { promisify } from 'util';
 
 import { RequestContext } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
 import connectPgSimple, { PGStore } from 'connect-pg-simple';
 import cors from 'cors';
 import express, { json } from 'express';
@@ -13,6 +13,7 @@ import { AuthenticationController } from './controllers/authentication/authentic
 import { CommentController } from './controllers/comment/comment.controller';
 import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
+import { ValidationService, ExpressSessionService } from './infrastructure';
 
 const PgSession = connectPgSimple(session);
 
@@ -24,13 +25,11 @@ export class Server extends Application {
   override async init() {
     await super.init();
 
-    const configService = this.services.configService;
-    const appConfig = configService.app();
+    const appConfig = this.config.app();
 
     this.app.disable('x-powered-by');
 
     if (appConfig.trustProxy) {
-      this.logger.log('trusting proxy');
       this.app.set('trust proxy', 1);
     }
 
@@ -41,17 +40,14 @@ export class Server extends Application {
     this.configureControllers();
 
     this.logger.info('server initialized');
-    this.logger.log('configuration', JSON.stringify(configService.dump()));
+    this.logger.log('configuration', JSON.stringify(this.config.dump()));
   }
 
   override async close() {
     this.logger.log('closing server');
 
     if (this.server) {
-      // throws TypeError: Cannot read properties of undefined (reading 'Symbol(http.server.connectionsCheckingInterval)')
-      // await promisify(this.server.close)();
-
-      this.server.close();
+      await promisify<void>(cb => this.server?.close(cb))();
     }
 
     await this.sessionStore?.close();
@@ -62,7 +58,7 @@ export class Server extends Application {
   }
 
   async start() {
-    const { port } = this.config.app()
+    const { port } = this.config.app();
 
     await new Promise<void>((resolve) => {
       this.server = this.app.listen(port, resolve);
@@ -72,11 +68,9 @@ export class Server extends Application {
   }
 
   private configureDefaultMiddlewares() {
-    const { configService } = this.services;
-
-    const corsConfig = configService.cors();
-    const sessionConfig = configService.session();
-    const databaseConfig = configService.database();
+    const corsConfig = this.config.cors();
+    const sessionConfig = this.config.session();
+    const databaseConfig = this.config.database();
 
     this.app.use(json());
 
@@ -91,7 +85,6 @@ export class Server extends Application {
       conObject: pick(databaseConfig, 'host', 'user', 'password', 'database'),
       pruneSessionInterval: sessionConfig.pruneExpiredSessions ? false : undefined,
     });
-
 
     this.app.use(
       session({
@@ -110,19 +103,21 @@ export class Server extends Application {
     );
 
     this.app.use((_req, _res, next) => {
-      RequestContext.create(this.orm.em, next);
+      RequestContext.create(this.em, next);
     });
   }
 
   private configureControllers() {
-    const { validationService, sessionService } = this.services;
-    const { queryBus, commandBus } = this;
+    const { queryBus, commandBus, em, logger } = this;
+
+    const validationService = new ValidationService();
+    const sessionService = new ExpressSessionService(queryBus);
 
     const controllers = [
-      new HealthcheckController(this.logger, this.orm.em as EntityManager),
-      new AuthenticationController(this.logger, validationService, sessionService, queryBus, commandBus),
-      new ThreadController(this.logger, queryBus, commandBus, sessionService, validationService),
-      new CommentController(this.logger, queryBus, commandBus, sessionService, validationService),
+      new HealthcheckController(logger, em),
+      new AuthenticationController(logger, validationService, sessionService, queryBus, commandBus),
+      new ThreadController(logger, queryBus, commandBus, sessionService, validationService),
+      new CommentController(logger, queryBus, commandBus, sessionService, validationService),
     ];
 
     for (const controller of controllers) {

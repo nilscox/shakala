@@ -2,6 +2,7 @@ import {
   EmailAlreadyExistsError,
   GetUserByEmailQuery,
   InvalidCredentialsError,
+  LoggerService,
   LoginCommand,
   NickAlreadyExistsError,
   SignupCommand,
@@ -21,7 +22,6 @@ import {
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { LoggerService } from '../../infrastructure/services/logger.service';
 import { tryCatch } from '../../utils';
 
 import { userToDto } from './authentication.dtos';

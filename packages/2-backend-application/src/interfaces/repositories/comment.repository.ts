@@ -1,6 +1,6 @@
 import { Comment } from 'backend-domain';
 
-import { Repository } from './repository';
+import { Repository } from '../repository';
 
 export enum Sort {
   dateAsc = 'date-asc',

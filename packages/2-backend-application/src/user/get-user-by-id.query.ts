@@ -1,7 +1,7 @@
 import { User } from 'backend-domain';
 
 import { Query, QueryHandler } from '../cqs/query-handler';
-import { UserRepository } from '../interfaces/user.repository';
+import { UserRepository } from '../interfaces/repositories';
 
 export class GetUserByIdQuery implements Query {
   constructor(public readonly id: string) {}

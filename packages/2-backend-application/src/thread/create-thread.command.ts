@@ -1,8 +1,7 @@
 import { GeneratorService, DateService, Markdown, Thread, Author, Timestamp } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
-import { ThreadRepository } from '../interfaces/thread.repository';
-import { UserRepository } from '../interfaces/user.repository';
+import { ThreadRepository, UserRepository } from '../interfaces/repositories';
 
 export class CreateThreadCommand implements Command {
   constructor(

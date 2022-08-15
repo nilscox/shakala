@@ -2,6 +2,8 @@
   "name": "backend-infrastructure",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.js",
   "scripts": {
     "build": "tsc -b",
     "lint": "eslint src",

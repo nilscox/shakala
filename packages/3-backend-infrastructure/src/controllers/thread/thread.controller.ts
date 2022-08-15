@@ -3,6 +3,7 @@ import {
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
+  LoggerService,
   Sort,
 } from 'backend-application';
 import { Thread } from 'backend-domain';
@@ -24,7 +25,6 @@ import {
   SessionService,
   ValidationService,
 } from '../../infrastructure';
-import { LoggerService } from '../../infrastructure/services/logger.service';
 
 import { ThreadPresenter } from './thread.presenter';
 

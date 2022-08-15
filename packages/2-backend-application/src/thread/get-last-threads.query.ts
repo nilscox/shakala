@@ -1,7 +1,7 @@
 import { Thread } from 'backend-domain';
 
 import { Query, QueryHandler } from '../cqs/query-handler';
-import { ThreadRepository } from '../interfaces/thread.repository';
+import { ThreadRepository } from '../interfaces/repositories';
 
 export class GetLastThreadsQuery implements Query {
   constructor(public readonly count: number) {}

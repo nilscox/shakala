@@ -1,6 +1,6 @@
 import type { Nick, User } from 'backend-domain';
 
-import type { UserRepository } from '../interfaces/user.repository';
+import { UserRepository } from '../interfaces/repositories';
 import { InMemoryRepository } from '../utils/in-memory-repository';
 
 export class InMemoryUserRepository extends InMemoryRepository<User> implements UserRepository {

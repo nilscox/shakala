@@ -1,4 +1,4 @@
-import { LoggerService } from './logger.service';
+import { LoggerService } from 'backend-application';
 
 export class MockLoggerService implements LoggerService {
   log: LoggerService['log'] = vi.fn();

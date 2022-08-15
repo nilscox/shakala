@@ -1,4 +1,5 @@
 import { Command, CommandHandler, CommandResult } from 'backend-application';
+import { ClassType } from 'shared';
 
 export interface CommandBus {
   execute<Result extends CommandResult>(command: Command): Promise<Result>;
@@ -7,7 +8,7 @@ export interface CommandBus {
 export class RealCommandBus {
   private handlers = new Map<Command, CommandHandler<Command, CommandResult>>();
 
-  register(command: Command, handler: CommandHandler<Command, CommandResult>) {
+  register<C extends Command>(command: ClassType<C>, handler: CommandHandler<C, CommandResult>) {
     this.handlers.set(command, handler);
   }
 
