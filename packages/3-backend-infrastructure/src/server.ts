@@ -58,13 +58,13 @@ export class Server extends Application {
   }
 
   async start() {
-    const { port } = this.config.app();
+    const { host, port } = this.config.app();
 
     await new Promise<void>((resolve) => {
       this.server = this.app.listen(port, resolve);
     });
 
-    this.logger.info(`server listening on port ${port}`);
+    this.logger.info(`server listening on ${host}:${port}`);
   }
 
   private configureDefaultMiddlewares() {

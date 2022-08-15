@@ -1,6 +1,8 @@
 name: CI
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +35,7 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
-    container: node:16
+    container: node:18
 
     services:
       postgres:

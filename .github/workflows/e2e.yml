@@ -1,0 +1,78 @@
+name: E2E
+
+on:
+  # push:
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    container: node:18
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: shakala-e2e
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn playwright install-deps && yarn playwright install chromium
+        working-directory: packages/6-e2e
+
+      - run: |
+          cat << EOF > .env
+            NODE_ENV=development
+
+            HOST=0.0.0.0
+            PORT=3000
+
+            DATABASE_HOST=postgres
+            DATABASE_USER=user
+            DATABASE_PASSWORD=password
+            DATABASE_NAME=shakala-e2e
+
+            SESSION_SECRET=secret
+          EOF
+          yarn db:migrate
+          yarn build
+          node -r ./register-aliases.js ./dist/src/main.js &
+        working-directory: packages/3-backend-infrastructure
+
+      - run: yarn start &
+        working-directory: packages/5-frontend-client
+
+      - run: sleep 20
+      # - run: |
+      #     yarn global add wait-on
+      #     wait-on http://127.0.0.1:3000/healthcheck && echo "backend is up"
+      #     wait-on http://127.0.0.1:8000 && echo "frontend is up"
+
+      - run: yarn test:headless
+        working-directory: packages/6-e2e
+        env:
+          BASE_URL: https://localhost:8000
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ failure() || cancelled() }}
+        with:
+          name: playwright-traces
+          path: test-results

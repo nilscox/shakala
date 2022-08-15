@@ -38,8 +38,10 @@ export class AppContext extends AppAccessors {
       loggerService,
       configService: new StubConfigService({
         database: {
-          host: 'localhost',
-          database: 'e2e',
+          host: 'postgres',
+          user: 'user',
+          password: 'password',
+          database: 'shakala-e2e',
         },
       }),
     });
