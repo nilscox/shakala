@@ -1,6 +1,7 @@
 import type { PlaywrightTestConfig, ReporterDescription } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
+  testDir: 'specs',
   use: {
     baseURL: 'http://localhost:8000',
     browserName: 'chromium',
