@@ -14,6 +14,7 @@ if (process.env.CI === 'true') {
   config.forbidOnly = true;
 
   config.use = {
+    ...config.use,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   };
