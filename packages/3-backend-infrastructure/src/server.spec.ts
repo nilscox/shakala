@@ -3,7 +3,7 @@ import { MockLoggerService } from './infrastructure/services/mock-logger.service
 import { TestServer } from './test';
 
 describe('Server', () => {
-  it.only(
+  it(
     'starts the server on a given port number',
     async () => {
       const server = new TestServer();
@@ -32,7 +32,7 @@ describe('Server', () => {
     10 * 1000,
   );
 
-  it.only(
+  it(
     'returns a set-cookie header',
     async () => {
       const server = new TestServer();

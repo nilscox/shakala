@@ -108,11 +108,17 @@ export class TestConfigService extends StubConfigService {
       database: Partial<DatabaseConfig>;
     }>,
   ) {
+    const getEnv = (key: string, defaultValue: string) => {
+      return process.env[key] ?? defaultValue;
+    };
+
     super({
       ...config,
       database: {
-        database: 'test',
-        ...config?.database,
+        host: getEnv('DATABASE_HOST', 'localhost'),
+        user: getEnv('DATABASE_USER', ''),
+        password: getEnv('DATABASE_PASSWORD', ''),
+        database: getEnv('DATABASE_NAME', 'test'),
       },
     });
   }
