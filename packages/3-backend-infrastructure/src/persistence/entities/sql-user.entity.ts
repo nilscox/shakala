@@ -1,6 +1,6 @@
 import { Entity, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Nick, ProfileImage, Timestamp, User } from 'backend-domain';
+import { DomainDependencies, Nick, ProfileImage, Timestamp, User } from 'backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 
@@ -31,15 +31,19 @@ export class SqlUser extends BaseSqlEntity<User> {
     this.lastLoginDate = entity.lastLoginDate?.toDate();
   }
 
-  toDomain() {
-    return new User({
-      id: this.id,
-      email: this.email,
-      hashedPassword: this.hashedPassword,
-      nick: new Nick(this.nick),
-      profileImage: new ProfileImage(this.profileImage),
-      signupDate: new Timestamp(this.createdAt),
-      lastLoginDate: this.lastLoginDate ? new Timestamp(this.lastLoginDate) : null,
-    });
+  toDomain({ dateService, cryptoService }: DomainDependencies) {
+    return new User(
+      {
+        id: this.id,
+        email: this.email,
+        hashedPassword: this.hashedPassword,
+        nick: new Nick(this.nick),
+        profileImage: new ProfileImage(this.profileImage),
+        signupDate: new Timestamp(this.createdAt),
+        lastLoginDate: this.lastLoginDate ? new Timestamp(this.lastLoginDate) : null,
+      },
+      dateService,
+      cryptoService,
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { Sort } from 'backend-application';
-import { factories, StubDateService } from 'backend-domain';
+import { createDomainDependencies, factories, StubDateService } from 'backend-domain';
 
 import { MathRandomGeneratorService } from '../../infrastructure';
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
@@ -12,14 +12,15 @@ describe('SqlCommentRepository', () => {
   const generatorService = new MathRandomGeneratorService();
   const dateService = new StubDateService();
 
-  const create = factories({ generatorService, dateService });
+  const deps = createDomainDependencies({ generatorService, dateService });
+  const create = factories(deps);
 
   const { save, getEntityManager } = setupTestDatabase();
 
   beforeEach(async () => {
     const em = getEntityManager();
 
-    repository = new SqlCommentRepository(em, generatorService, dateService);
+    repository = new SqlCommentRepository(em, deps);
   });
 
   it('saves and finds a comment', async () => {

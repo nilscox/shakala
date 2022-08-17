@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { ReactionRepository } from 'backend-application';
-import { Reaction, ReactionsCount, ReactionType } from 'backend-domain';
+import { DomainDependencies, Reaction, ReactionsCount, ReactionType } from 'backend-domain';
 import { groupBy } from 'shared';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
@@ -10,8 +10,8 @@ export class SqlReactionRepository
   extends BaseSqlRepository<SqlReaction, Reaction>
   implements ReactionRepository
 {
-  constructor(em: EntityManager) {
-    super(em, SqlReaction);
+  constructor(em: EntityManager, deps: DomainDependencies) {
+    super(em, deps, SqlReaction);
   }
 
   protected get entityName(): string {

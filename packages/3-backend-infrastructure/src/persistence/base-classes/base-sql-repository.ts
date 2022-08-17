@@ -1,6 +1,7 @@
 import { FilterQuery, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
+import { DomainDependencies } from 'backend-domain';
 import { ClassType } from 'shared';
 
 import { EntityNotFoundError } from '../utils/entity-not-found.error';
@@ -14,25 +15,25 @@ export abstract class BaseSqlRepository<
 {
   protected repository: EntityRepository<SqlEntity>;
 
-  constructor(protected readonly em: EntityManager, protected readonly SqlEntity: ClassType<SqlEntity>) {
+  constructor(
+    protected readonly em: EntityManager,
+    protected readonly deps: DomainDependencies,
+    protected readonly SqlEntity: ClassType<SqlEntity>,
+  ) {
     this.repository = new EntityRepository(em, SqlEntity);
   }
 
   protected abstract get entityName(): string;
-
-  protected getToDomainArgs(): unknown[] {
-    return [];
-  }
 
   protected toDomain(entity: SqlEntity | null): DomainEntity | undefined;
   protected toDomain(entities: SqlEntity[]): DomainEntity[];
 
   protected toDomain(arg: null | SqlEntity | SqlEntity[]) {
     if (Array.isArray(arg)) {
-      return arg.map((entity) => entity.toDomain(...this.getToDomainArgs()));
+      return arg.map((entity) => entity.toDomain(this.deps));
     }
 
-    return arg?.toDomain(...this.getToDomainArgs());
+    return arg?.toDomain(this.deps);
   }
 
   protected getReference(entityId: string): SqlEntity {

@@ -14,6 +14,9 @@ export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
 export * from './interfaces/generator-service.interface';
 
+export * from './domain-dependencies';
+
 export * from './utils/factories';
-export * from './utils/stub-generator.service';
+export * from './utils/stub-crypto.service';
 export * from './utils/stub-date.service';
+export * from './utils/stub-generator.service';

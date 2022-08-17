@@ -1,5 +1,6 @@
 import { Entity, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
+import { createDomainDependencies, DomainDependencies } from 'backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 import { EntityNotFoundError } from '../utils/entity-not-found.error';
@@ -51,8 +52,8 @@ class SqlTest extends BaseSqlEntity<Test> {
 }
 
 class SqlTestRepository extends BaseSqlRepository<SqlTest, Test> {
-  constructor(em: EntityManager) {
-    super(em, SqlTest);
+  constructor(em: EntityManager, deps: DomainDependencies) {
+    super(em, deps, SqlTest);
   }
 
   protected get entityName(): string {
@@ -70,7 +71,7 @@ describe('SqlRepository', () => {
     await waitForDatabaseConnection();
 
     em = getEntityManager();
-    repository = new SqlTestRepository(em);
+    repository = new SqlTestRepository(em, createDomainDependencies());
   });
 
   it('inserts a new entity to the database', async () => {

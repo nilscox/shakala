@@ -81,13 +81,12 @@ export class Application {
       this.logger.log('instantiating repositories');
 
       const em = this.em;
-      const { generatorService, dateService } = this.services;
 
       this.repositories = {
-        userRepository: new SqlUserRepository(em),
-        threadRepository: new SqlThreadRepository(em),
-        reactionRepository: new SqlReactionRepository(em),
-        commentRepository: new SqlCommentRepository(em, generatorService, dateService),
+        userRepository: new SqlUserRepository(em, this.services),
+        threadRepository: new SqlThreadRepository(em, this.services),
+        reactionRepository: new SqlReactionRepository(em, this.services),
+        commentRepository: new SqlCommentRepository(em, this.services),
       };
     } else {
       this.logger.log('instantiating in-memory repositories');

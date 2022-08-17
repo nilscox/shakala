@@ -51,7 +51,7 @@ export const registerHandlers = (
   // authentication
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
   registerQuery(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
-  registerCommand(LoginCommand, new LoginCommandHandler(userRepository, cryptoService, dateService));
+  registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
   registerCommand(SignupCommand, new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService));
 
   // thread

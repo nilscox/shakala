@@ -1,6 +1,5 @@
-import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
+import { factories, StubCryptoService, StubDateService, StubGeneratorService } from 'backend-domain';
 
-import { StubCryptoService } from '../test/crypto.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
 import {

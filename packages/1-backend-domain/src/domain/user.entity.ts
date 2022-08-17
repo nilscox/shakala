@@ -2,6 +2,7 @@ import { type EntityProps, Entity } from '../ddd/entity';
 import type { CryptoService } from '../interfaces/crypto.interface';
 import { DateService } from '../interfaces/date.interface';
 
+import { DomainError } from './domain-error';
 import { Nick } from './nick.value-object';
 import { ProfileImage } from './profile-image.value-object';
 import { Timestamp } from './timestamp.value-object';
@@ -23,10 +24,14 @@ type CreateUserProps = {
 };
 
 export class User extends Entity<UserProps> {
-  static async createNew(
-    cryptoService: CryptoService,
-    dateService: DateService,
+  constructor(props: UserProps, private readonly dateService: DateService, private readonly cryptoService: CryptoService) {
+    super(props)
+  }
+
+  static async create(
     { id, nick, email, password }: CreateUserProps,
+    dateService: DateService,
+    cryptoService: CryptoService,
   ) {
     return new User({
       id,
@@ -36,7 +41,7 @@ export class User extends Entity<UserProps> {
       profileImage: new ProfileImage(),
       signupDate: new Timestamp(dateService.nowAsString()),
       lastLoginDate: null,
-    });
+    }, dateService, cryptoService);
   }
 
   get email() {
@@ -63,11 +68,20 @@ export class User extends Entity<UserProps> {
     return this.props.lastLoginDate;
   }
 
-  async checkPassword(cryptoService: CryptoService, password: string): Promise<boolean> {
-    return cryptoService.compare(password, this.props.hashedPassword);
+  async authenticate(password: string): Promise<void> {
+    const matchPassword = await this.cryptoService.compare(password, this.props.hashedPassword);
+
+    if (!matchPassword) {
+      throw new InvalidCredentialsError()
+    }
+
+    this.props.lastLoginDate = new Timestamp(this.dateService.now());
   }
 
-  login(dateService: DateService) {
-    this.props.lastLoginDate = new Timestamp(dateService.now());
+}
+
+export class InvalidCredentialsError extends DomainError {
+  constructor() {
+    super('InvalidCredentials', undefined);
   }
 }

@@ -33,12 +33,16 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
     await this.assertEmailDontExist(email);
     await this.assertNickDontExist(nick);
 
-    const user = await User.createNew(this.cryptoService, this.dateService, {
-      id: await this.generatorService.generateId(),
-      nick,
-      email,
-      password,
-    });
+    const user = await User.create(
+      {
+        id: await this.generatorService.generateId(),
+        nick,
+        email,
+        password,
+      },
+      this.dateService,
+      this.cryptoService,
+    );
 
     await this.userRepository.save(user);
 

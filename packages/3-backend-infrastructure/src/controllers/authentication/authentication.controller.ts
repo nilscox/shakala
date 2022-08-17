@@ -1,13 +1,12 @@
 import {
   EmailAlreadyExistsError,
   GetUserByEmailQuery,
-  InvalidCredentialsError,
   LoggerService,
   LoginCommand,
   NickAlreadyExistsError,
   SignupCommand,
 } from 'backend-application';
-import { User } from 'backend-domain';
+import { InvalidCredentialsError, User } from 'backend-domain';
 import { AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
 
 import {

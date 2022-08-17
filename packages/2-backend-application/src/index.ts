@@ -7,8 +7,6 @@ export * from './interfaces/repositories';
 export * from './interfaces/repository';
 export * from './interfaces/logger.service';
 
-export * from './test/crypto.stub';
-
 export * from './thread/thread.in-memory-repository';
 export * from './thread/comment.in-memory-repository';
 export * from './thread/reaction.in-memory-repository';

@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { CommentRepository, Sort } from 'backend-application';
-import { Comment, DateService, GeneratorService } from 'backend-domain';
+import { Comment, DomainDependencies } from 'backend-domain';
 import { groupBy } from 'shared';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
@@ -10,20 +10,12 @@ export class SqlCommentRepository
   extends BaseSqlRepository<SqlComment, Comment>
   implements CommentRepository
 {
-  constructor(
-    em: EntityManager,
-    private readonly generatorService: GeneratorService,
-    private readonly dateService: DateService,
-  ) {
-    super(em, SqlComment);
+  constructor(em: EntityManager, deps: DomainDependencies) {
+    super(em, deps, SqlComment);
   }
 
   protected get entityName(): string {
     return 'Comment';
-  }
-
-  protected override getToDomainArgs(): unknown[] {
-    return [this.generatorService, this.dateService];
   }
 
   async findRoots(threadId: string, sort: Sort, search?: string | undefined): Promise<Comment[]> {

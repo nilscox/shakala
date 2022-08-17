@@ -1,4 +1,4 @@
-import { factories } from 'backend-domain';
+import { createDomainDependencies, factories } from 'backend-domain';
 import { array } from 'shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
@@ -8,14 +8,15 @@ import { SqlThreadRepository } from './sql-thread.repository';
 describe('SqlThreadRepository', () => {
   let repository: SqlThreadRepository;
 
-  const create = factories();
+  const deps = createDomainDependencies();
+  const create = factories(deps);
 
   const { save, getEntityManager } = setupTestDatabase();
 
   beforeEach(async () => {
     const em = getEntityManager();
 
-    repository = new SqlThreadRepository(em.fork());
+    repository = new SqlThreadRepository(em.fork(), deps);
   });
 
   it('saves and finds a thread', async () => {

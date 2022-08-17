@@ -1,4 +1,4 @@
-import { factories } from 'backend-domain';
+import { createDomainDependencies, factories } from 'backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
@@ -7,14 +7,15 @@ import { SqlUserRepository } from './sql-user.repository';
 describe('SqlUserRepository', () => {
   let repository: SqlUserRepository;
 
-  const create = factories();
+  const deps = createDomainDependencies();
+  const create = factories(deps);
 
   const { getEntityManager } = setupTestDatabase();
 
   beforeEach(async () => {
     const em = getEntityManager();
 
-    repository = new SqlUserRepository(em.fork());
+    repository = new SqlUserRepository(em.fork(), deps);
   });
 
   it('saves and finds a user', async () => {

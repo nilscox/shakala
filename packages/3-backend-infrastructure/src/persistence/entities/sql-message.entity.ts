@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Author, Markdown, Message, Timestamp } from 'backend-domain';
+import { Author, DomainDependencies, Markdown, Message, Timestamp } from 'backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 
@@ -24,7 +24,7 @@ export class SqlMessage extends BaseSqlEntity<Message> {
     this.date = message.date.toDate();
   }
 
-  toDomain(author: Author): Message {
+  toDomain(_deps: DomainDependencies, author: Author): Message {
     return new Message({
       id: this.id,
       author,

@@ -1,6 +1,6 @@
 import { ArrayType, Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Markdown, Thread, Timestamp } from 'backend-domain';
+import { DomainDependencies, Markdown, Thread, Timestamp } from 'backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 
@@ -29,13 +29,13 @@ export class SqlThread extends BaseSqlEntity<Thread> {
     this.createdAt = thread.created.toDate();
   }
 
-  toDomain() {
+  toDomain(deps: DomainDependencies) {
     return new Thread({
       id: this.id,
       description: this.description,
       text: new Markdown(this.text),
       keywords: this.keywords,
-      author: this.author.toDomain(),
+      author: this.author.toDomain(deps),
       created: new Timestamp(this.createdAt),
     });
   }

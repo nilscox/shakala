@@ -1,4 +1,4 @@
-import { ReactionType, factories } from 'backend-domain';
+import { ReactionType, factories, createDomainDependencies } from 'backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
@@ -7,7 +7,8 @@ import { SqlReactionRepository } from './sql-reaction.repository';
 describe('SqlReactionRepository', () => {
   let repository: SqlReactionRepository;
 
-  const create = factories();
+  const deps = createDomainDependencies();
+  const create = factories(deps);
 
   const author = create.user();
   const user = create.user();
@@ -20,7 +21,7 @@ describe('SqlReactionRepository', () => {
 
     const em = getEntityManager();
 
-    repository = new SqlReactionRepository(em.fork());
+    repository = new SqlReactionRepository(em.fork(), deps);
 
     await save(author);
     await save(user);

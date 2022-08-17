@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
-import { Comment, Reaction, Thread, User } from 'backend-domain';
+import { Comment, createDomainDependencies, Reaction, Thread, User } from 'backend-domain';
 
 import { MathRandomGeneratorService, RealDateService } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
@@ -14,14 +14,15 @@ export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
   return async <T>(entity: T) => {
     const em = getEntityManager();
 
-    const commentRepository = new SqlCommentRepository(
-      em,
-      new MathRandomGeneratorService(),
-      new RealDateService(),
-    );
-    const reactionRepository = new SqlReactionRepository(em);
-    const threadRepository = new SqlThreadRepository(em);
-    const userRepository = new SqlUserRepository(em);
+    const deps = createDomainDependencies({
+      generatorService: new MathRandomGeneratorService(),
+      dateService: new RealDateService(),
+    });
+
+    const commentRepository = new SqlCommentRepository(em, deps);
+    const reactionRepository = new SqlReactionRepository(em, deps);
+    const threadRepository = new SqlThreadRepository(em, deps);
+    const userRepository = new SqlUserRepository(em, deps);
 
     const repositoryMap = new Map<unknown, Repository<unknown>>([
       [Comment, commentRepository],

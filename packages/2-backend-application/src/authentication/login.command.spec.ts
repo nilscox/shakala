@@ -1,18 +1,16 @@
-import { factories, StubDateService } from 'backend-domain';
+import { factories, InvalidCredentialsError, StubDateService } from 'backend-domain';
 
-import { StubCryptoService } from '../test/crypto.stub';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
-import { InvalidCredentialsError, LoginCommand, LoginCommandHandler } from './login.command';
+import { LoginCommand, LoginCommandHandler } from './login.command';
 
 describe('LoginCommand', () => {
   const userRepository = new InMemoryUserRepository();
-  const cryptoService = new StubCryptoService();
   const dateService = new StubDateService();
 
-  const handler = new LoginCommandHandler(userRepository, cryptoService, dateService);
+  const handler = new LoginCommandHandler(userRepository);
 
-  const create = factories();
+  const create = factories({ dateService });
 
   const email = 'user@domain.tld';
   const password = 'p4ssw0rd';
