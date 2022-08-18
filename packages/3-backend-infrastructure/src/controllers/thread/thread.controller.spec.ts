@@ -7,8 +7,7 @@ import {
 } from 'backend-application';
 import { factories } from 'backend-domain';
 
-import { Forbidden, ValidationError, ValidationService } from '../../infrastructure';
-import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
+import { Forbidden, MockLoggerService, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';

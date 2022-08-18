@@ -30,17 +30,23 @@ import {
 } from './persistence';
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 
+const instantiateServices = (): Services => {
+  const dateService = new RealDateService();
+
+  return {
+    configService: new EnvConfigService(),
+    loggerService: new ConsoleLoggerService(dateService),
+    generatorService: new MathRandomGeneratorService(),
+    dateService,
+    cryptoService: new BcryptService(),
+  };
+};
+
 export class Application {
   protected commandBus = new RealCommandBus();
   protected queryBus = new RealQueryBus();
 
-  private services: Services = {
-    configService: new EnvConfigService(),
-    loggerService: new ConsoleLoggerService(),
-    generatorService: new MathRandomGeneratorService(),
-    dateService: new RealDateService(),
-    cryptoService: new BcryptService(),
-  };
+  private services = instantiateServices();
 
   protected orm?: MikroORM;
   private repositories!: Repositories;

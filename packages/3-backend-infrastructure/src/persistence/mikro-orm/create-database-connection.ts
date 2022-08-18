@@ -13,7 +13,7 @@ export const createTestDatabaseConnection = async (options: Options<PostgreSqlDr
   const orm = await createDatabaseConnection(options);
   const schemaGenerator = orm.getSchemaGenerator();
 
-  await schemaGenerator.execute('drop index if exists "IDX_session_expire";');
+  await schemaGenerator.ensureDatabase();
   await schemaGenerator.refreshDatabase();
 
   return orm;

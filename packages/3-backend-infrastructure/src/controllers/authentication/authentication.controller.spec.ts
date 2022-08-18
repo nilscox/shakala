@@ -11,12 +11,12 @@ import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 import {
   Forbidden,
   HttpError,
+  MockLoggerService,
   NotImplemented,
   Request,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
 import { StubSessionService, MockCommandBus, MockQueryBus, MockRequest } from '../../test';
 
 import { AuthenticationController } from './authentication.controller';

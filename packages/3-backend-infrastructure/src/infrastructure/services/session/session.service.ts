@@ -1,9 +1,9 @@
 import { GetUserByIdQuery } from 'backend-application';
 import { User } from 'backend-domain';
 
-import { QueryBus } from '../cqs/query-bus';
-import { Forbidden } from '../http/http-errors';
-import { Request } from '../http/request';
+import { QueryBus } from '../../cqs/query-bus';
+import { Forbidden } from '../../http/http-errors';
+import { Request } from '../../http/request';
 
 export interface SessionService {
   getUser(request: Request): Promise<User | undefined>;

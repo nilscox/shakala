@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
-import { BadRequest } from '../http/http-errors';
-import { Request } from '../http/request';
+import { BadRequest } from '../../http/http-errors';
+import { Request } from '../../http/request';
 
 type FieldValidationError = {
   field: string;

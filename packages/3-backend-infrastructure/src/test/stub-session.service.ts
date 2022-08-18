@@ -1,8 +1,8 @@
 import { User } from 'backend-domain';
 
+import { SessionService } from '../infrastructure';
 import { Forbidden } from '../infrastructure/http/http-errors';
 import { Request } from '../infrastructure/http/request';
-import { SessionService } from '../infrastructure/services/session.service';
 
 export class StubSessionService implements SessionService {
   user?: User;

@@ -20,6 +20,11 @@ export class MockRequest implements Request {
     this.body = body;
     return this;
   }
+
+  withSession({ userId }: { userId: string }) {
+    this.session.userId = userId;
+    return this;
+  }
 }
 
 export class MockRequestSession implements RequestSession {

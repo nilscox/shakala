@@ -7,8 +7,13 @@ import {
 import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
 import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
 
-import { Forbidden, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
-import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
+import {
+  Forbidden,
+  MockLoggerService,
+  Unauthorized,
+  ValidationError,
+  ValidationService,
+} from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { CommentController } from './comment.controller';

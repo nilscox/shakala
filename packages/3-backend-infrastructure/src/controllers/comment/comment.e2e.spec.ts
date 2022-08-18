@@ -1,8 +1,7 @@
 import { CreateCommentBodyDto, ReactionTypeDto, SetReactionBodyDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
-import { TestConfigService } from '../../infrastructure/services/config.service';
-import { MockLoggerService } from '../../infrastructure/services/mock-logger.service';
+import { MockLoggerService, TestConfigService } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Comment e2e', () => {
