@@ -15,7 +15,7 @@ export const Routes = () => (
   <RRRoutes>
     <Route path="/" element={<RouteLayout />}>
       <Route index element={<Home />} />
-      <Route path="profile" element={<Profile />} />
+      <Route path="profil" element={<Profile />} />
       <Route path="charte" element={<CharterRoute />} />
       <Route path="faq" element={<FaqRoute />} />
       <Route path="motivations" element={<MotivationsRoute />} />

@@ -10,7 +10,7 @@ export const Profile = () => {
 
   return (
     <>
-      <PageTitle>{`${user?.nick} : page profile`}</PageTitle>
+      <PageTitle>{`${user?.nick} : page profil`}</PageTitle>
       <h1>{user?.nick}</h1>
       <button onClick={() => dispatch(logout())}>Déconnexion</button>
     </>

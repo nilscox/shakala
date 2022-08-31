@@ -28,7 +28,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
                 Connexion
               </SearchParamLink>
             )}
-            {user && <Link to="/profile">Profile</Link>}
+            {user && <Link to="/profil">Profil</Link>}
           </FooterColumn>
 
           <FooterColumn>

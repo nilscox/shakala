@@ -56,7 +56,7 @@ type AuthenticationLinkProps = {
 const AuthenticationLink = ({ authenticated, className, children }: AuthenticationLinkProps) => {
   if (authenticated) {
     return (
-      <Link to="/profile" className={className}>
+      <Link to="/profil" className={className}>
         {children}
       </Link>
     );
