@@ -31,7 +31,7 @@ export const CommentHistoryModal = () => {
     <Modal
       isOpen={!requestClose && Boolean(commentId)}
       // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className="max-w-[64rem]"
+      className="max-w-[64rem] max-h-full col"
       onRequestClose={handleClose}
     >
       {commentId && <CommentHistory commentId={commentId} onClose={handleClose} />}
@@ -67,13 +67,15 @@ const CommentHistory = ({ commentId, onClose }: CommentHistoryProps) => {
 
       <hr className="mt-1 mb-2" />
 
-      <div className="my-2 row">
-        {[before, after].map(({ date }, index) => (
-          <Date key={index} date={date} />
-        ))}
-      </div>
+      <div className="overflow-hidden flex-1 my-4 col">
+        <div className="my-2 row">
+          {[before, after].map(({ date }, index) => (
+            <Date key={index} date={date} />
+          ))}
+        </div>
 
-      <Diff before={before.text} after={after.text} />
+        <Diff before={before.text} after={after.text} className="overflow-y-auto" />
+      </div>
     </>
   );
 };
@@ -106,6 +108,7 @@ const VersionSelector = ({ version, onPrev, onNext }: VersionSelectorProps) => (
       disabled={!onPrev}
       icon={<ChevronLeft />}
       className="text-muted disabled:text-muted/50"
+      title="Version précédente"
       onClick={onPrev}
     />
 
@@ -115,6 +118,7 @@ const VersionSelector = ({ version, onPrev, onNext }: VersionSelectorProps) => (
       disabled={!onNext}
       icon={<ChevronRight />}
       className="text-muted disabled:text-muted/50"
+      title="Version suivante"
       onClick={onNext}
     />
   </div>

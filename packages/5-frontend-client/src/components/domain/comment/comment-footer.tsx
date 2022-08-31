@@ -32,7 +32,7 @@ type CommentFooterProps = {
 };
 
 export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
-  const { upvotes, downvotes } = useSelector(selectComment, commentId);
+  const { upvotes, downvotes, edited } = useSelector(selectComment, commentId);
   const isReply = useSelector(selectIsReply, commentId);
   const isEditing = useSelector(selectIsEditingComment, commentId);
 
@@ -61,7 +61,12 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
             <SearchParamLink
               param="historique"
               value={commentId}
-              className="items-center p-0 text-sm hover:text-primary fill-muted hover:fill-primary row button-secondary button"
+              disabled={edited === false}
+              title={edited === false ? "Ce commentaire n'a pas été édité" : undefined}
+              className={clsx(
+                'items-center p-0 text-sm hover:text-primary fill-muted hover:fill-primary row button-secondary button',
+                edited === false && 'text-muted/60 hover:text-muted/60 cursor-default',
+              )}
             >
               <HistoryIcon className="mr-0.5 w-4 h-4" />
               Historique

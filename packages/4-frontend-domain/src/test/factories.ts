@@ -2,6 +2,10 @@ import { createAuthUserDto, createCommentDto, createThreadDto, createUserDto, cr
 
 import { Comment, Thread } from '../types';
 
+export const createDate = (dateStr: string) => {
+  return new Date(dateStr).toISOString();
+};
+
 export const createAuthUser = createAuthUserDto;
 export const createUser = createUserDto;
 

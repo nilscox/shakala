@@ -10,7 +10,7 @@ import { CommentEditionForm } from '../comment-form';
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
 import { RepliesList } from './replies-list';
-import { useHighlightComment } from './useHighlightComment';
+import { useHighlightComment } from './use-highlight-comment';
 
 export type CommentProps = {
   commentId: string;

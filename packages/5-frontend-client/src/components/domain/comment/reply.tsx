@@ -9,7 +9,7 @@ import { CommentEditionForm } from '../comment-form';
 
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
-import { useHighlightComment } from './useHighlightComment';
+import { useHighlightComment } from './use-highlight-comment';
 
 type ReplyProps = {
   replyId: string;
