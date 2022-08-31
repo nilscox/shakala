@@ -30,7 +30,7 @@ export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
   let isReady = false;
 
   beforeAll(async () => {
-    orm = await createTestDatabaseConnection(override);
+    orm = await createTestDatabaseConnection({ dbName: 'intg', ...override });
   });
 
   afterAll(async () => {

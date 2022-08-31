@@ -29,9 +29,9 @@ export class SqlCommentRepository
     qb.andWhere({ parent: { id: null } });
 
     if (sort === Sort.dateAsc) {
-      qb.orderBy({ created: 'asc' });
+      qb.orderBy({ createdAt: 'asc' });
     } else if (sort === Sort.dateDesc) {
-      qb.orderBy({ created: 'desc' });
+      qb.orderBy({ createdAt: 'desc' });
     }
 
     if (search) {

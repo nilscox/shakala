@@ -65,6 +65,17 @@ describe('SqlCommentRepository', () => {
     expect(await repository.findRoots(thread.id, Sort.relevance)).toEqual([parent]);
   });
 
+  it("finds a thread's root comments, sorted by date", async () => {
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+
+    const comment1 = await save(create.comment({ threadId: thread.id, author }));
+    const comment2 = await save(create.comment({ threadId: thread.id, author }));
+
+    expect(await repository.findRoots(thread.id, Sort.dateAsc)).toEqual([comment1, comment2]);
+    expect(await repository.findRoots(thread.id, Sort.dateDesc)).toEqual([comment2, comment1]);
+  });
+
   it("finds a comment's replies", async () => {
     const author = create.author(await save(create.user()));
     const thread = await save(create.thread({ author }));
