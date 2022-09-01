@@ -21,6 +21,8 @@ export const createThreadDto = createFactory<ThreadDto>(() => ({
   author: createUserDto(),
   date: '',
   text: '',
+  description: '',
+  keywords: [],
 }));
 
 export const createCommentDto = createFactory<CommentDto>(() => ({

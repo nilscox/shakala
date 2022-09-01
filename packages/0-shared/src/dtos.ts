@@ -40,6 +40,8 @@ export type CommentDto = {
 export type ThreadDto = {
   id: string;
   author: UserDto;
+  description: string;
+  keywords: string[];
   text: string;
   date: string;
 };

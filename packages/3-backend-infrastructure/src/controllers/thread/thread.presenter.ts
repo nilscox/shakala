@@ -8,6 +8,8 @@ export class ThreadPresenter {
       id: thread.id,
       date: thread.created.toString(),
       author: ThreadPresenter.transformAuthor(thread.author),
+      description: thread.description,
+      keywords: thread.keywords,
       text: thread.text.toString(),
     };
   }

@@ -8,7 +8,11 @@ describe('ThreadPresenter', () => {
   const create = factories();
 
   const threadAuthor = create.user();
-  const thread = create.thread({ author: threadAuthor });
+  const thread = create.thread({
+    author: threadAuthor,
+    description: 'description',
+    keywords: ['keyword1', 'keyword2'],
+  });
 
   const commentAuthor = create.author(create.user());
   const comment = create.comment({
@@ -71,6 +75,8 @@ describe('ThreadPresenter', () => {
       nick: threadAuthor.nick.toString(),
       profileImage: undefined,
     },
+    description: thread.description,
+    keywords: thread.keywords,
     text: thread.text.toString(),
     comments: [commentDto],
     date: thread.created.toString(),

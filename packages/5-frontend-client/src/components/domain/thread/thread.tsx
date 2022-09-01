@@ -9,6 +9,7 @@ import {
   selectIsFetchingComments,
   selectCreatedRootComments,
 } from 'frontend-domain';
+import { Helmet } from 'react-helmet';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
@@ -57,6 +58,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
   return (
     <>
       <PageTitle>{`${thread.author.nick} : ${thread.text}`}</PageTitle>
+      <ThreadMeta {...thread} />
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="my-5 md:my-[4rem]">
@@ -84,6 +86,18 @@ export const Thread = ({ threadId }: ThreadProps) => {
     </>
   );
 };
+
+type ThreadMetaProps = {
+  description: string;
+  keywords: string[];
+};
+
+const ThreadMeta = ({ description, keywords }: ThreadMetaProps) => (
+  <Helmet>
+    <meta name="description" content={description}></meta>
+    <meta name="keywords" content={keywords.join(', ')}></meta>
+  </Helmet>
+);
 
 type CommentsListProps = {
   threadId: string;
