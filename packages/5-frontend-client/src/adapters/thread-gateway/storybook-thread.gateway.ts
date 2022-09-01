@@ -32,11 +32,11 @@ export class StorybookThreadGateway implements ThreadGateway {
     return this.action('createComments', [threadId, parentId, text], '');
   }
 
-  editComment(threadId: string, commentId: string, text: string): Promise<void> {
-    return this.action('editComment', [threadId, commentId, text], undefined);
+  editComment(commentId: string, text: string): Promise<void> {
+    return this.action('editComment', [commentId, text], undefined);
   }
 
-  setReaction(threadId: string, commentId: string, reactionType: ReactionTypeDto | null): Promise<void> {
-    return this.action('setReaction', [threadId, commentId, reactionType], undefined);
+  setReaction(commentId: string, reactionType: ReactionTypeDto | null): Promise<void> {
+    return this.action('setReaction', [commentId, reactionType], undefined);
   }
 }
