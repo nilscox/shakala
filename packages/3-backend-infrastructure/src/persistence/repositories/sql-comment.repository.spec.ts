@@ -76,6 +76,63 @@ describe('SqlCommentRepository', () => {
     expect(await repository.findRoots(thread.id, Sort.dateDesc)).toEqual([comment2, comment1]);
   });
 
+  it("find a thread's root comments matching a search query", async () => {
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+
+    const matchingComment1 = await save(
+      create.comment({
+        threadId: thread.id,
+        author,
+        message: create.message({ author, text: create.markdown('science') }),
+      }),
+    );
+
+    const matchingComment2 = await save(
+      create.comment({
+        threadId: thread.id,
+        author,
+        message: create.message({ author, text: create.markdown('this is science!') }),
+      }),
+    );
+
+    await save(
+      create.comment({
+        threadId: thread.id,
+        author,
+        message: create.message({ author, text: create.markdown('I like pie.') }),
+      }),
+    );
+
+    expect(await repository.findRoots(thread.id, Sort.dateAsc, 'science')).toEqual([
+      matchingComment1,
+      matchingComment2,
+    ]);
+  });
+
+  it.todo("find a thread's root comments having one of its reply matching a search query", async () => {
+    const author = create.author(await save(create.user()));
+    const thread = await save(create.thread({ author }));
+
+    const parent = await save(
+      create.comment({
+        threadId: thread.id,
+        author,
+      }),
+    );
+
+    await save(
+      create.comment({
+        threadId: thread.id,
+        author,
+        parentId: parent.id,
+        message: create.message({ author, text: create.markdown('science') }),
+      }),
+    );
+
+    expect(await repository.findRoots(thread.id, Sort.dateAsc, 'science')).toEqual([parent]);
+  });
+
   it("finds a comment's replies", async () => {
     const author = create.author(await save(create.user()));
     const thread = await save(create.thread({ author }));

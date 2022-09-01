@@ -35,7 +35,7 @@ export class SqlCommentRepository
     }
 
     if (search) {
-      qb.andWhere({ text: { $ilike: `%${search}%` } });
+      qb.andWhere({ history: { text: { $ilike: `%${search}%` } } });
     }
 
     return this.toDomain(await qb.getResult());
