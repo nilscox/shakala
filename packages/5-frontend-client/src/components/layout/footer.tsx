@@ -12,7 +12,6 @@ type FooterProps = {
   className?: string;
 };
 
-// cspell:word roadmap
 export const Footer = ({ className }: FooterProps): JSX.Element => {
   const user = useUser();
 
@@ -40,7 +39,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
           <FooterColumn>
             <a href="https://zetecom.featureupvote.com/">Proposer une idée</a>
             <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
-            <a href="https://github.com/nilscox/zetecom">Code source</a>
+            <a href="https://github.com/nilscox/shakala">Code source</a>
           </FooterColumn>
 
           <FooterColumn>

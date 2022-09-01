@@ -163,3 +163,11 @@ export const fontSizes = () => (
     <Text className="text-xxl" name="xxl" />
   </div>
 );
+
+export const typographies = () => (
+  <div className="flex flex-col gap-2">
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+    <div>Regular text</div>
+  </div>
+);

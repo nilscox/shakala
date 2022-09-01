@@ -83,6 +83,7 @@ export const createReply = (parentId: string): Thunk => {
         text,
         date: dateGateway.now().toISOString(),
         edited: false,
+        history: [],
         upvotes: 0,
         downvotes: 0,
         replies: [],

@@ -85,7 +85,7 @@ export const createNewThread = ({ description, text, keywords }: ThreadForm): Th
       const threadId = await threadGateway.createThread(description, text, keywords);
 
       routerGateway.navigate(`/discussions/${threadId}`);
-      snackbarGateway.success('Votre discussion a bien été créée.');
+      snackbarGateway.success('Votre fil de discussion a bien été créé.');
 
       dispatch(actions.setSuccess(undefined, undefined));
     } catch (error) {
@@ -103,7 +103,7 @@ export const createNewThread = ({ description, text, keywords }: ThreadForm): Th
         dispatch(actions.setError(undefined, serializeError(error)));
 
         loggerGateway.error(error);
-        snackbarGateway.error("Une erreur s'est produite, votre discussion n'a pas été créée.");
+        snackbarGateway.error("Une erreur s'est produite, votre fil de discussion n'a pas été créé.");
       }
     }
   };

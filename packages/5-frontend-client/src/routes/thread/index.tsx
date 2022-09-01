@@ -32,8 +32,8 @@ export const ThreadsRoute = () => {
 
       <p>
         Il s'agit d'un "proof of concept", un site permettant de se rendre compte de ce à quoi pourrait
-        ressembler une plateforme comme Shakala. Il n'est donc pas possible de s'inscrire ou de publier de
-        nouveaux messages... pour l'instant !
+        ressembler une plateforme comme Shakala. Il n'y a donc pas de communauté active qui fait vivre les
+        discussions... pour l'instant !
       </p>
 
       <p>
@@ -43,8 +43,7 @@ export const ThreadsRoute = () => {
 
       <p>
         En attendant, vous pouvez voir à quoi pourrait ressembler une discussion{' '}
-        <Link to="/discussions/XXX">sur cette page</Link>, dont les messages viennent de la page facebook du
-        groupe zététique.
+        <Link to="/discussions/XXX">sur cette page</Link>.
       </p>
 
       <h2>Créer un nouveau fil de discussion</h2>

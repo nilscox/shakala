@@ -71,6 +71,7 @@ describe('createReply', () => {
       text,
       date: now.toISOString(),
       edited: false,
+      history: [],
       upvotes: 0,
       downvotes: 0,
       replies: [],

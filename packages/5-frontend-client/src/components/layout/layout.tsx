@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { useLocation } from 'react-router-dom';
 import { get } from 'shared';
 
 import { AuthenticationModal } from '../domain/authentication/authentication-modal';
@@ -12,19 +13,24 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-export const Layout = ({ children }: LayoutProps) => (
-  <>
-    <PageTitle />
-    <Header className="mx-auto max-w-page" />
-    <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
-      <ErrorBoundary>{children}</ErrorBoundary>
-    </main>
-    <Footer className="mx-auto max-w-page" />
-    <AuthenticationModal />
-  </>
-);
+export const Layout = ({ children }: LayoutProps) => {
+  const { pathname } = useLocation();
+
+  return (
+    <>
+      <PageTitle />
+      <Header className="mx-auto max-w-page" />
+      <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
+        <ErrorBoundary pathname={pathname}>{children}</ErrorBoundary>
+      </main>
+      <Footer className="mx-auto max-w-page" />
+      <AuthenticationModal />
+    </>
+  );
+};
 
 type ErrorBoundaryProps = {
+  pathname: string;
   children: React.ReactNode;
 };
 
@@ -37,6 +43,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   static getDerivedStateFromError(error: Error) {
     return { error };
+  }
+
+  componentDidUpdate(prevProps: ErrorBoundaryProps) {
+    const { pathname } = this.props;
+    const { error } = this.state;
+
+    if (error && prevProps.pathname !== pathname) {
+      this.dismiss();
+    }
   }
 
   render() {
@@ -68,7 +83,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private renderNetworkError() {
     if (!navigator.onLine) {
-      return <>Il semblerait que vous n'avez plus internet...</>;
+      return <>Il semblerait que vous ne soyez plus connecté(e) à internet...</>;
     }
 
     return <>Il semblerait que le serveur soit indisponible...</>;

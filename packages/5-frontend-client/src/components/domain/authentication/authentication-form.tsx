@@ -68,7 +68,7 @@ export const AuthenticationForm = () => {
 
   return (
     <>
-      <h2 className="text-xl font-bold text-primary">{heading[form]}</h2>
+      <h2 className="py-0 text-primary">{heading[form]}</h2>
 
       <AuthenticationMessage />
 

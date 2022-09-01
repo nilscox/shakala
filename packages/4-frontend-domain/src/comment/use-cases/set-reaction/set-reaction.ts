@@ -62,7 +62,14 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
     try {
       await threadGateway.setReaction(commentId, type);
     } catch (error) {
+      if (comment.userReaction) {
+        dispatch(setUserReaction(commentId, comment.userReaction));
+      } else {
+        dispatch(unsetUserReaction(commentId));
+      }
+
       dispatch(setReactionCounts(commentId, initialReactionsCounts));
+
       snackbarGateway.error("Une erreur s'est produite, votre action n'a pas été comptabilisée.");
     }
   };

@@ -4,8 +4,6 @@ import { ReactNode, useState } from 'react';
 import { ExternalLink, Link } from '~/components/elements/link';
 import { PageTitle } from '~/components/layout/page-title';
 
-import { SectionHeading } from './components/section-heading';
-
 type QuestionProps = {
   question: ReactNode;
   answer: ReactNode;
@@ -178,25 +176,25 @@ export const FaqRoute = () => (
     <PageTitle>Questions posées fréquemment</PageTitle>
     <h1>Questions posées fréquemment</h1>
 
-    <SectionHeading>Compte utilisateur</SectionHeading>
+    <h2>Compte utilisateur</h2>
 
     {questions.account.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <SectionHeading>La plateforme</SectionHeading>
+    <h2>La plateforme</h2>
 
     {questions.product.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <SectionHeading>Le projet</SectionHeading>
+    <h2>Le projet</h2>
 
     {questions.project.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <SectionHeading>Utilisation des données personnelles</SectionHeading>
+    <h2>Utilisation des données personnelles</h2>
 
     <p>
       L'installation de l'extension et son utilisation sans créer de compte vous permet d'intégrer les zones
@@ -221,7 +219,7 @@ export const FaqRoute = () => (
       questions, et à ajouter ici des précisions si nécessaire.
     </p>
 
-    <SectionHeading id="contact">Une idée à proposer ? Un bug à signaler ?</SectionHeading>
+    <h2 id="contact">Une idée à proposer ? Un bug à signaler ?</h2>
 
     <p>
       Venez partager vos retours et idées d'améliorations ! Nous sommes à l'écoute via ces différents canaux

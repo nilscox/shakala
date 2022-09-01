@@ -56,7 +56,7 @@ describe('createThread', () => {
   it('shows a snack when the creation succeeded', async () => {
     await execute();
 
-    expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre discussion a bien été créée.');
+    expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre fil de discussion a bien été créé.');
   });
 
   describe('validation error handling', () => {
@@ -112,7 +112,7 @@ describe('createThread', () => {
       await execute();
 
       expect(store.snackbarGateway.error).toHaveBeenCalledWith(
-        "Une erreur s'est produite, votre discussion n'a pas été créée.",
+        "Une erreur s'est produite, votre fil de discussion n'a pas été créé.",
       );
     });
   });

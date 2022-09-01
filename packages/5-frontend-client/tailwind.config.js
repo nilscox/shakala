@@ -21,6 +21,7 @@ module.exports = {
       5:    '1.5rem',     // 24px
       6:    '2rem',       // 32px
       8:    '3rem',       // 48px
+      10:   '4rem',       // 64px
     },
     // prettier-ignore
     minWidth: {
@@ -82,10 +83,10 @@ module.exports = {
     // prettier-ignore
     fontSize: {
       'base-mobile': '14px',
-      base: '16px',
-      sm: '0.8125rem',  // 13px / 11px
-      lg: '1.125rem',   // 18px / 16px
-      xl: '1.5rem',     // 21px / 24px
+      base: '16px',     // base / mobile
+      sm: '0.8125rem',  // 13px / 11.375px
+      lg: '1.125rem',   // 18px / 15.75px
+      xl: '1.375rem',   // 22px / 19.25px
       xxl: '2rem',      // 32px / 28px
     },
     boxShadow: {

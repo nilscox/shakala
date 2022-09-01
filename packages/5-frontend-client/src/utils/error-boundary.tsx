@@ -30,8 +30,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (error) {
       return (
         <Fallback>
-          {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-          <p className="my-[4rem] text-xl">Une erreur s'est produite...</p>
+          <p className="my-10 text-xl">Une erreur s'est produite...</p>
           <pre className="overflow-x-auto p-2 w-full max-w-page bg-neutral rounded border">
             {this.renderError(error)}
           </pre>

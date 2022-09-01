@@ -47,7 +47,7 @@ const Outline = () => (
 
 const Heading = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-row gap-4 items-center mt-[4rem] mb-4">
-    <h2 className="text-xl font-bold text-primary">{children}</h2>
+    <h2 className="py-0 text-primary">{children}</h2>
     <hr className="flex-1" />
   </div>
 );
