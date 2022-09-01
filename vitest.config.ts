@@ -4,6 +4,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { InlineConfig } from 'vitest';
 import { defineConfig } from 'vitest/config';
 
+process.env.TZ = 'UTC';
+
 type Options = {
   test?: InlineConfig;
   plugins?: PluginOption[];
