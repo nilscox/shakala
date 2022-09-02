@@ -5,9 +5,9 @@ import {
   selectCreateThreadFieldErrors,
   ThreadForm as ThreadFormType,
 } from 'frontend-domain';
-import { Link } from 'react-router-dom';
 
 import { ThreadForm } from '~/components/domain/thread/thread-form';
+import { Link } from '~/components/elements/link';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 

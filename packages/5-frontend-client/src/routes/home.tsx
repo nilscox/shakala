@@ -2,8 +2,8 @@
 
 import { fetchLastThreads, selectLastThreads } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
+import { Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
@@ -26,6 +26,7 @@ export const Home = () => (
     <Motivations />
     <KeyFeatures />
     <CurrentStatus />
+    <TargetUsers />
   </>
 );
 
@@ -45,9 +46,16 @@ const Outline = () => (
   </div>
 );
 
-const Heading = ({ children }: { children: React.ReactNode }) => (
+type HeadingProps = {
+  id: string;
+  children: React.ReactNode;
+};
+
+const Heading = ({ id, children }: HeadingProps) => (
   <div className="flex flex-row gap-4 items-center mt-[4rem] mb-4">
-    <h2 className="py-0 text-primary">{children}</h2>
+    <h2 id={id} className="py-0 text-primary">
+      {children}
+    </h2>
     <hr className="flex-1" />
   </div>
 );
@@ -66,7 +74,7 @@ const LastThreads = () => {
 
   return (
     <>
-      <Heading>Dernières discussions</Heading>
+      <Heading id="dernières-discussions">Dernières discussions</Heading>
 
       <div className="flex flex-col gap-5 items-center my-5 md:flex-row md:items-stretch">
         {threads.map((thread) => (
@@ -85,7 +93,7 @@ const LastThreads = () => {
 
 const Motivations = () => (
   <>
-    <Heading>Pourquoi ce site ?</Heading>
+    <Heading id="pourquoi-ce-site">Pourquoi ce site ?</Heading>
 
     {/* cspell:word pfff */}
     <p className="m-[4rem] text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
@@ -153,7 +161,7 @@ const Feature = ({ Icon, children }: FeatureProps) => (
 
 const KeyFeatures = () => (
   <>
-    <Heading>Les points clés</Heading>
+    <Heading id="points-clés">Les points clés</Heading>
 
     <div className="flex flex-col gap-4 justify-center items-center my-6 sm:flex-row">
       <KeyFeature image={imageCharte} name="La charte">
@@ -221,7 +229,7 @@ const KeyFeatures = () => (
 
 const CurrentStatus = () => (
   <>
-    <Heading>A la recherche des premiers utilisateurs</Heading>
+    <Heading id="premiers-utilisateurs">A la recherche des premiers utilisateurs</Heading>
 
     <p>
       Ce projet n'est pour l'instant qu'une idée, présentée sur ce site pour voir à quoi ça pourrait
@@ -246,9 +254,9 @@ const CurrentStatus = () => (
   </>
 );
 
-const _TargetUsers = () => (
+const TargetUsers = () => (
   <>
-    <Heading>À qui s'adresse Shakala ?</Heading>
+    <Heading id="a-qui-s-adresse-shakala">À qui s'adresse Shakala ?</Heading>
 
     <p>
       Les zones de commentaires sont mises à disposition de tous, publiquement pour lire les messages, et
@@ -260,16 +268,16 @@ const _TargetUsers = () => (
 
     <p>
       Mais reconnaissons tout de même que cette initiative s'adresse en premier lieu à des personnes qui
-      veulent décortiquer l'information, qui se posent des questions et cherchent des réponses via des
-      échanges critiques. Si cette démarche vous correspond, si vous cherchez à renforcer votre autodéfense
-      intellectuelle tout en exerçant votre esprit critique, alors vous avez beaucoup à apporter à la
-      communauté. Vous pouvez montrer l'exemple, faire partie d'un groupe de personnes dans un but commun :
-      celui de mieux comprendre le monde.
+      veulent creuser les sujets qui leurs tiennent à cœur, qui se posent des questions et cherchent des
+      réponses via des échanges critiques. Si cette démarche vous correspond, si vous cherchez à renforcer
+      votre autodéfense intellectuelle tout en exerçant votre esprit critique, alors vous avez beaucoup à
+      apporter à la communauté ! Vous pouvez montrer l'exemple, faire partie d'un groupe de personnes dans un
+      but commun : celui de mieux comprendre le monde.
     </p>
 
     <p>
       Et si vous n'êtes pas familier avec les méthodes du scepticisme, ou ne cherchez pas spécialement à
-      creuser l'information, cet outil vous permet de communiquer dans des conditions favorables, d'être
+      creuser certains sujets, cet outil vous permet de communiquer dans des conditions favorables, d'être
       écouté.e et corrigé.e pour de bonnes raisons. À terme, l'objectif est qu'autour des zones de
       commentaires Shakala se développe une communauté dont l'intégrité ne peut être remise en question. Pour
       en faire partie, nous n'attendons rien de plus de votre part que le respect de la charte.

@@ -1,6 +1,8 @@
-import { Link, LinkProps, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
-type SearchParamLinkProps = Omit<LinkProps, 'to'> & {
+import { Link } from '~/components/elements/link';
+
+type SearchParamLinkProps = Omit<React.ComponentProps<typeof Link>, 'to'> & {
   param: string;
   value: string;
   disabled?: boolean;

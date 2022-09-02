@@ -1,6 +1,6 @@
 import { AuthenticationType, selectAuthenticationForm } from 'frontend-domain';
-import { Link } from 'react-router-dom';
 
+import { Link } from '~/components/elements/link';
 import { useSelector } from '~/hooks/use-selector';
 
 export const AuthenticationMessage = () => {

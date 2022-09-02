@@ -6,8 +6,8 @@ import {
   selectIsAcceptRulesWarningVisible,
   selectIsAuthenticationFieldVisible,
 } from 'frontend-domain';
-import { Link } from 'react-router-dom';
 
+import { Link } from '~/components/elements/link';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 

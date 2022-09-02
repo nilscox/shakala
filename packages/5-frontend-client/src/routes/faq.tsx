@@ -174,27 +174,28 @@ const questions: Record<string, QuestionProps[]> = {
 export const FaqRoute = () => (
   <>
     <PageTitle>Questions posées fréquemment</PageTitle>
+
     <h1>Questions posées fréquemment</h1>
 
-    <h2>Compte utilisateur</h2>
+    <h2 id="compte-utilisateur">Compte utilisateur</h2>
 
     {questions.account.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <h2>La plateforme</h2>
+    <h2 id="la-plateforme">La plateforme</h2>
 
     {questions.product.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <h2>Le projet</h2>
+    <h2 id="le-projet">Le projet</h2>
 
     {questions.project.map((props, index) => (
       <Question key={index} {...props} />
     ))}
 
-    <h2>Utilisation des données personnelles</h2>
+    <h2 id="données-personnelles">Utilisation des données personnelles</h2>
 
     <p>
       L'installation de l'extension et son utilisation sans créer de compte vous permet d'intégrer les zones

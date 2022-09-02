@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
-import { Link, NavLink, NavLinkProps } from 'react-router-dom';
 
+import { NavLink, Link } from '~/components/elements/link';
 import { useUser } from '~/hooks/use-user';
 
 import { Avatar } from '../elements/avatar/avatar';
@@ -90,7 +90,7 @@ const Navigation = ({ className }: NavigationProps) => (
   </nav>
 );
 
-const HeaderNavLink = (props: NavLinkProps) => (
+const HeaderNavLink = (props: React.ComponentProps<typeof NavLink>) => (
   <NavLink
     className={({ isActive }) =>
       clsx(

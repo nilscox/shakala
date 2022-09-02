@@ -9,7 +9,7 @@ export const MotivationsRoute = () => (
       Attention : cette page n'est plus à jour avec les objectifs actuels du projet.
     </p>
 
-    <h2>Le contexte</h2>
+    <h2 id="le-contexte">Le contexte</h2>
 
     <p>
       Sur internet, on peut lire toute sorte d'information. Entre les articles qui font l'éloge des dernières
@@ -62,7 +62,7 @@ export const MotivationsRoute = () => (
 
     <p>Ce contexte ne permet pas de construire de réflexions sérieuses.</p>
 
-    <h2>Les objectifs</h2>
+    <h2 id="les-objectifs">Les objectifs</h2>
 
     <p>
       L'idée qui a fait naître Shakala, c'est de proposer un espace d'échange permettant de décortiquer

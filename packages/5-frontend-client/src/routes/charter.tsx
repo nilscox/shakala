@@ -1,6 +1,4 @@
-import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link } from '~/components/elements/link';
 import { PageTitle } from '~/components/layout/page-title';
 
 // cspell:word languagetool
@@ -80,7 +78,7 @@ export const CharterRoute = () => (
   </>
 );
 
-const Rule = ({ rule, children }: { rule: ReactNode; children: React.ReactNode }) => (
+const Rule = ({ rule, children }: { rule: React.ReactNode; children: React.ReactNode }) => (
   <div>
     <em className="block mb-1 text-lg">{rule}</em>
     <div className="pl-2 ml-4 text-muted border-l-4">{children}</div>

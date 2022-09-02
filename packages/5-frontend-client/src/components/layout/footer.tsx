@@ -1,12 +1,11 @@
 import { clsx } from 'clsx';
-import { Link } from 'react-router-dom';
 
+import { Link } from '~/components/elements/link';
+import { SearchParamLink } from '~/components/elements/search-param-link';
 import { useUser } from '~/hooks/use-user';
 import discordLogo from '~/images/logos/discord-logo.png';
 import facebookLogo from '~/images/logos/facebook-logo.png';
 import twitterLogo from '~/images/logos/twitter-logo.png';
-
-import { SearchParamLink } from '../elements/search-param-link';
 
 type FooterProps = {
   className?: string;

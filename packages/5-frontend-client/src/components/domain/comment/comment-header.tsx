@@ -4,9 +4,9 @@ import {
   selectFormattedCommentDate,
   selectFormattedCommentDateDetailed,
 } from 'frontend-domain';
-import { Link } from 'react-router-dom';
 
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
+import { Link } from '~/components/elements/link';
 import { useSelector } from '~/hooks/use-selector';
 
 const bullet = '•';
