@@ -3,6 +3,7 @@ import { selectComment, selectIsEditingComment } from 'frontend-domain';
 import { useState } from 'react';
 
 import { Markdown } from '~/components/elements/markdown';
+import { useSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 
 import { CommentEditionForm } from '../comment-form';
@@ -23,6 +24,8 @@ export const Comment = ({ commentId }: CommentProps) => {
   const highlight = useHighlightComment(commentId);
   const [showActions, setShowActions] = useState(false);
 
+  const searchQuery = useSearchParam('search');
+
   return (
     <div id={id} className="comment card">
       <div className={clsx(highlight && 'animate-highlight')} onMouseLeave={() => setShowActions(false)}>
@@ -30,7 +33,7 @@ export const Comment = ({ commentId }: CommentProps) => {
 
         {isEditing && <CommentEditionForm commentId={id} />}
 
-        <Markdown markdown={text} className={clsx('m-2', isEditing && 'hidden')} />
+        <Markdown markdown={text} highlight={searchQuery} className={clsx('m-2', isEditing && 'hidden')} />
 
         <CommentFooter
           className={clsx('px-2 pb-1', isEditing && 'hidden')}

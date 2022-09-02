@@ -14,6 +14,7 @@
     "ilike",
     "linkedin",
     "mano",
+    "mdast",
     "micromark",
     "mikro",
     "nilscox",
@@ -23,6 +24,7 @@
     "postgres",
     "postgresql",
     "reduxjs",
+    "rehype",
     "resave",
     "roadmap",
     "scrollbars",
@@ -31,6 +33,7 @@
     "tailwindcss",
     "timestamptz",
     "unsets",
+    "unist",
     "upvote",
     "upvotes",
     "zetetique"
