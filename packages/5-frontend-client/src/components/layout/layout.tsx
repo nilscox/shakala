@@ -1,4 +1,7 @@
+import { clearReduxQuery } from '@nilscox/redux-query';
 import { Component } from 'react';
+// eslint-disable-next-line no-restricted-imports
+import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { get } from 'shared';
 
@@ -21,7 +24,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <PageTitle />
       <Header className="mx-auto max-w-page" />
       <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
-        <ErrorBoundary pathname={pathname}>{children}</ErrorBoundary>
+        <ConnectedErrorBoundary pathname={pathname}>{children}</ConnectedErrorBoundary>
       </main>
       <Footer className="mx-auto max-w-page" />
       <AuthenticationModal />
@@ -31,6 +34,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
 type ErrorBoundaryProps = {
   pathname: string;
+  clearReduxQuery: () => void;
   children: React.ReactNode;
 };
 
@@ -90,6 +94,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   private dismiss() {
+    this.props.clearReduxQuery();
     this.setState({ error: undefined });
   }
 }
+
+const ConnectedErrorBoundary = connect(null, (dispatch) => ({
+  clearReduxQuery: () => dispatch(clearReduxQuery()),
+}))(ErrorBoundary);

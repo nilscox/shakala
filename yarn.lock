@@ -2507,10 +2507,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nilscox/redux-query@^0.1.6":
-  version "0.1.6"
-  resolved "https://npm.pkg.github.com/download/@nilscox/redux-query/0.1.6/2d8773cc1dbc4c678b1e20ab66bbee9fdd6f0a68c922a305876223cb627b3534#c1f3f56c5494d6769385fe7d2100983f3d6af5b9"
-  integrity sha512-ktYGbf45R4ZniqY6ZpbmgmpLI+0+FrEixKV0NtJ31wlELefpX7a4Xdqy/R409cdLNBECvQBHEEp+9ArNqgpW1g==
+"@nilscox/redux-query@^0.1.7":
+  version "0.1.7"
+  resolved "https://npm.pkg.github.com/download/@nilscox/redux-query/0.1.7/b9f47a573e3fe54ff30e1bd0279c4fa5851e7d58#b9f47a573e3fe54ff30e1bd0279c4fa5851e7d58"
+  integrity sha512-ruUW+SJNfkai52+SwHjtLvrIv8roetmx0/veMQgXSGmh5tTE0NXYzGx4UzbKas7dJIkU5wCYRVqQ/YqJzJIgOA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
