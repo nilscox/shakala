@@ -2,6 +2,8 @@ import { Text } from 'mdast';
 import { Children, text } from 'mdast-builder';
 import { all, Handler } from 'mdast-util-to-hast';
 import rehypeStringify from 'rehype-stringify';
+import remarkGemoji from 'remark-gemoji';
+import remarkGmf from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { last } from 'shared';
@@ -130,6 +132,8 @@ const markRehypeHandler: Handler = (h, node) => {
 export const markdownToHtml = async (markdown: string, highlight?: string) => {
   const processor = unified()
     .use(remarkParse)
+    .use(remarkGmf)
+    .use(remarkGemoji)
     .use(remarkExponent)
     .use(remarkHighlight, highlight)
     .use(remarkRehype, { handlers: { sup: supRehypeHandler, mark: markRehypeHandler } })

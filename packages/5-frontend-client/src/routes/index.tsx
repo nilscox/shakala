@@ -5,6 +5,7 @@ import { Layout } from '~/components/layout/layout';
 import { CharterRoute } from './charter';
 import { FaqRoute } from './faq';
 import { Home } from './home';
+import { MarkdownCheatSheetRoute } from './markdown-cheatsheet';
 import { MotivationsRoute } from './motivations';
 import { NotFoundRoute } from './not-found';
 import { Profile } from './profile';
@@ -19,6 +20,7 @@ export const Routes = () => (
       <Route path="charte" element={<CharterRoute />} />
       <Route path="faq" element={<FaqRoute />} />
       <Route path="motivations" element={<MotivationsRoute />} />
+      <Route path="mise-en-forme" element={<MarkdownCheatSheetRoute />} />
       <Route path="discussions">
         <Route path=":threadId" element={<ThreadRoute />} />
         <Route index element={<ThreadsRoute />} />

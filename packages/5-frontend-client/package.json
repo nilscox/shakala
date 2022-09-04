@@ -25,6 +25,8 @@
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
     "rehype-stringify": "^9.0.3",
+    "remark-gemoji": "^7.0.1",
+    "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.1",
     "remark-rehype": "^10.1.0",
     "unified": "^10.1.2",

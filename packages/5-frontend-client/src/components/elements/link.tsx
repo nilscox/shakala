@@ -1,7 +1,11 @@
 import { ComponentProps, HTMLProps, MouseEventHandler } from 'react';
 import { Link as RRLink, NavLink as RRNavLink, To } from 'react-router-dom';
 
-export const Link = ({ to, onClick, ...props }: ComponentProps<typeof RRLink>) => {
+type LinkProps = ComponentProps<typeof RRLink> & {
+  openInNewTab?: boolean;
+};
+
+export const Link = ({ openInNewTab, to, onClick, ...props }: LinkProps) => {
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
     onClick?.(event);
 
@@ -24,7 +28,7 @@ export const Link = ({ to, onClick, ...props }: ComponentProps<typeof RRLink>) =
     setTimeout(scrollToElement, 0);
   };
 
-  return <RRLink to={to} onClick={handleClick} {...props} />;
+  return <RRLink to={to} onClick={handleClick} target={openInNewTab ? '_blank' : undefined} {...props} />;
 };
 
 const getHashFragment = (to: To) => {

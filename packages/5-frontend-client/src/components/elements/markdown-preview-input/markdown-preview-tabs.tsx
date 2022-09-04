@@ -1,5 +1,7 @@
 import { clsx } from 'clsx';
 
+import { Link } from '../link';
+
 export enum Tab {
   edit = 'edit',
   preview = 'preview',
@@ -20,7 +22,13 @@ export const MarkdownPreviewTabs = ({ tab, setTab }: MarkdownPreviewTabsProps) =
     <TabComponent selected={tab === Tab.preview} onClick={() => setTab(Tab.preview)}>
       Aperçu
     </TabComponent>
-    <div className="flex-1 w-2" />
+    <Link
+      openInNewTab
+      to="/mise-en-forme"
+      className="self-end mr-1 ml-auto text-sm text-muted hover:underline"
+    >
+      Aide de mise en forme
+    </Link>
   </div>
 );
 
