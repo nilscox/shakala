@@ -1,6 +1,7 @@
 import { createNormalizedSelectors } from '@nilscox/redux-query';
 import { getIds } from 'shared';
 
+import { selectUser } from '../authentication';
 import { schemas, selectNormalizedEntities } from '../normalization';
 import { Selector, State } from '../store';
 import { Comment } from '../types';
@@ -57,4 +58,11 @@ export const selectParentComment = (state: State, replyId: string) => {
 
 export const selectIsReply = (state: State, commentId: string) => {
   return selectParentComment(state, commentId) !== undefined;
+};
+
+export const selectIsAuthUserAuthor = (state: State, commentId: string) => {
+  const user = selectUser(state);
+  const { author } = selectComment(state, commentId);
+
+  return user?.id === author.id;
 };

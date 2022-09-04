@@ -1,4 +1,11 @@
-import { CommentService, factories, ReactionType, StubGeneratorService } from 'backend-domain';
+import {
+  CannotSetReactionOnOwnCommentError,
+  CommentService,
+  factories,
+  ReactionType,
+  StubGeneratorService,
+  User,
+} from 'backend-domain';
 
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
@@ -22,51 +29,59 @@ describe('SetReactionCommand', () => {
 
   const create = factories();
 
-  const userId = 'userId';
-  const commentId = 'commentId';
+  const user = create.user();
+  const author = create.user();
+  const comment = create.comment({ author });
   const reactionId = 'reactionId';
 
   beforeEach(() => {
-    userRepository.add(create.user({ id: userId }));
-    commentRepository.add(create.comment({ id: commentId }));
+    userRepository.add(user);
+    userRepository.add(author);
+    commentRepository.add(comment);
   });
 
-  const execute = async (reactionType: ReactionType | null) => {
-    await handler.handle(new SetReactionCommand(userId, commentId, reactionType));
+  const createReaction = (author: User, type: ReactionType) => {
+    return create.reaction({ id: reactionId, userId: author.id, commentId: comment.id, type });
+  };
+
+  const execute = async (author: User, reactionType: ReactionType | null) => {
+    await handler.handle(new SetReactionCommand(author.id, comment.id, reactionType));
   };
 
   it('creates a new reaction on a comment', async () => {
     generatorService.nextId = reactionId;
 
-    await execute(ReactionType.upvote);
+    await execute(user, ReactionType.upvote);
 
-    expect(await reactionRepository.get(reactionId)).toEqual(
+    expect(reactionRepository.get(reactionId)).toEqual(
       create.reaction({
         id: reactionId,
-        userId,
-        commentId,
+        userId: user.id,
+        commentId: comment.id,
         type: ReactionType.upvote,
       }),
     );
   });
 
   it('updates an existing reaction on a comment', async () => {
-    await reactionRepository.save(
-      create.reaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
-    );
+    reactionRepository.add(createReaction(user, ReactionType.upvote));
 
-    await execute(ReactionType.downvote);
+    await execute(user, ReactionType.downvote);
 
-    expect(await reactionRepository.get(reactionId)).toHaveProperty('type', ReactionType.downvote);
+    expect(reactionRepository.get(reactionId)).toHaveProperty('type', ReactionType.downvote);
   });
 
   it('removes a reaction on a comment', async () => {
-    await reactionRepository.save(
-      create.reaction({ id: reactionId, userId, commentId, type: ReactionType.upvote }),
-    );
+    reactionRepository.add(createReaction(user, ReactionType.upvote));
 
-    await execute(null);
+    await execute(user, null);
 
-    expect(await reactionRepository.get(reactionId)).toBeUndefined();
+    expect(reactionRepository.get(reactionId)).toBeUndefined();
+  });
+
+  it('prevents a user to set a reaction on his own comment', async () => {
+    generatorService.nextId = reactionId;
+
+    await expect(execute(author, ReactionType.upvote)).rejects.toThrow(CannotSetReactionOnOwnCommentError);
   });
 });

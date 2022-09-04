@@ -12,6 +12,7 @@ import {
 import { FormEventHandler, useCallback } from 'react';
 import { get } from 'shared';
 
+import { Button } from '~/components/elements/button';
 import { FieldError } from '~/components/elements/form-field';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
@@ -99,12 +100,12 @@ const Buttons = ({ canSubmit }: ButtonsProps) => {
 
   return (
     <div className="flex flex-row gap-2 justify-end">
-      <button type="reset" className="button-secondary" onClick={() => dispatch(closeAuthenticationForm())}>
+      <Button secondary type="reset" onClick={() => dispatch(closeAuthenticationForm())}>
         Annuler
-      </button>
-      <button type="submit" className="button-primary" disabled={!canSubmit}>
+      </Button>
+      <Button primary type="submit" disabled={!canSubmit}>
         {cta[form]}
-      </button>
+      </Button>
     </div>
   );
 };

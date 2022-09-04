@@ -4,10 +4,11 @@ import {
   LoggerService,
   SetReactionCommand,
 } from 'backend-application';
-import { ReactionType, UserMustBeAuthorError } from 'backend-domain';
+import { CannotSetReactionOnOwnCommentError, ReactionType, UserMustBeAuthorError } from 'backend-domain';
 import { createCommentBodySchema, editCommentBodySchema, setReactionBodySchema } from 'shared';
 
 import {
+  BadRequest,
   CommandBus,
   Controller,
   QueryBus,
@@ -72,7 +73,14 @@ export class CommentController extends Controller {
     const user = await this.sessionService.requireUser(req);
     const body = await this.validationService.body(req, setReactionBodySchema);
 
-    await this.commandBus.execute(new SetReactionCommand(user.id, commentId, body.type as ReactionType));
+    await tryCatch(async () => {
+      await this.commandBus.execute(new SetReactionCommand(user.id, commentId, body.type as ReactionType));
+    })
+      .catch(
+        CannotSetReactionOnOwnCommentError,
+        (error) => new BadRequest('CannotSetReactionOnOwnComment', { message: error.message }),
+      )
+      .run();
 
     return Response.noContent();
   }

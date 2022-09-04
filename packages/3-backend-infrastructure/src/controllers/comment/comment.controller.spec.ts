@@ -4,10 +4,16 @@ import {
   GetCommentQuery,
   SetReactionCommand,
 } from 'backend-application';
-import { factories, ReactionType, UserMustBeAuthorError } from 'backend-domain';
+import {
+  CannotSetReactionOnOwnCommentError,
+  factories,
+  ReactionType,
+  UserMustBeAuthorError,
+} from 'backend-domain';
 import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
 
 import {
+  BadRequest,
   Forbidden,
   MockLoggerService,
   Unauthorized,
@@ -161,6 +167,15 @@ describe('CommentController', () => {
       sessionService.user = undefined;
 
       await expect(controller.setReaction(request)).rejects.toThrow(Forbidden);
+    });
+
+    it('handles CannotSetReactionOnOwnCommentError', async () => {
+      commandBus.execute.mockRejectedValue(new CannotSetReactionOnOwnCommentError());
+
+      await expect(controller.setReaction(request)).rejects.test((error) => {
+        expect(error).toBeInstanceOf(BadRequest);
+        expect(error).toHaveProperty('body.message', 'CannotSetReactionOnOwnComment');
+      });
     });
   });
 });

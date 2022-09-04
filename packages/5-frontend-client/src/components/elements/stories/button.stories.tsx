@@ -29,10 +29,17 @@ small.args = {
   small: true,
 };
 
-export const disabled = Template.bind({});
-disabled.args = {
+export const primaryDisabled = Template.bind({});
+primaryDisabled.args = {
   ...Template.args,
   primary: true,
+  disabled: true,
+};
+
+export const secondaryDisabled = Template.bind({});
+secondaryDisabled.args = {
+  ...Template.args,
+  secondary: true,
   disabled: true,
 };
 

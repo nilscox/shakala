@@ -50,20 +50,19 @@
   .button {
     @apply font-semibold py-0.5 px-2 cursor-pointer transition-colors rounded;
     @apply outline-2 outline-offset-2;
-    @apply disabled:pointer-events-none;
+    @apply disabled:cursor-default;
   }
 
   .button-primary {
-    @apply button;
     @apply bg-primary text-white;
     @apply hover:bg-primary/95;
     @apply disabled:bg-primary/60;
   }
 
   .button-secondary {
-    @apply button;
-    @apply text-muted/90;
+    @apply text-muted;
     @apply disabled:text-muted/60;
+    @apply hover:text-primary hover:disabled:text-muted/60;
   }
 
   .card {

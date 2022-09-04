@@ -3,6 +3,7 @@ import {
   ReactionType,
   selectCanReply,
   selectComment,
+  selectIsAuthUserAuthor,
   selectIsEditingComment,
   selectIsReply,
   setIsEditingComment,
@@ -95,11 +96,7 @@ type FooterButtonProps = IconButtonProps & {
 };
 
 const FooterButton = ({ className, active, ...props }: FooterButtonProps) => (
-  <IconButton
-    small
-    className={clsx('text-muted hover:text-primary button-secondary', active && '!text-primary', className)}
-    {...props}
-  />
+  <IconButton secondary small className={clsx(active && '!text-primary', className)} {...props} />
 );
 
 type ReactionButtonProps = {
@@ -112,12 +109,15 @@ const ReactionButton = ({ commentId, reactionType, children }: ReactionButtonPro
   const dispatch = useDispatch();
 
   const { userReaction } = useSelector(selectComment, commentId);
+  const isAuthor = useSelector(selectIsAuthUserAuthor, commentId);
 
   return (
     <FooterButton
       icon={reactionIconMap[reactionType]}
       active={userReaction === reactionType}
       onClick={() => dispatch(setReaction(commentId, reactionType))}
+      disabled={isAuthor}
+      title={isAuthor ? "Vous ne pouvez pas voter pour un commentaire dont vous êtes l'auteur" : undefined}
     >
       {children}
     </FooterButton>

@@ -1,9 +1,11 @@
-import { createComment, TestStore } from '../test';
+import { setUser } from '../authentication';
+import { createAuthUser, createComment, createUser, TestStore } from '../test';
 
 import { addComment, addComments, setCommentEdited } from './comments.actions';
 import {
   selectFormattedCommentDate,
   selectFormattedCommentDateDetailed,
+  selectIsAuthUserAuthor,
   selectParentComment,
 } from './comments.selectors';
 
@@ -68,6 +70,29 @@ describe('comments selectors', () => {
 
     it("returns a reply's parent comment", () => {
       expect(store.select(selectParentComment, reply.id)).toEqual(parent);
+    });
+  });
+
+  describe('selectIsAuthUserAuthor', () => {
+    const author = createUser();
+    const comment = createComment({ author });
+
+    beforeEach(() => {
+      store.dispatch(addComment(comment));
+    });
+
+    it('returns true when the authenticated user is the author of the comment', () => {
+      store.dispatch(setUser(createAuthUser(author)));
+      expect(store.select(selectIsAuthUserAuthor, comment.id)).toBe(true);
+    });
+
+    it('returns false when the user is not authenticated', () => {
+      expect(store.select(selectIsAuthUserAuthor, comment.id)).toBe(false);
+    });
+
+    it('returns false when the authenticated user is not the author of the comment', () => {
+      store.dispatch(setUser(createAuthUser()));
+      expect(store.select(selectIsAuthUserAuthor, comment.id)).toBe(false);
     });
   });
 });
