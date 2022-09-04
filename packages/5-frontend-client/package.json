@@ -31,10 +31,10 @@
     "remark-rehype": "^10.1.0",
     "unified": "^10.1.2",
     "unist-util-visit-parents": "^5.1.1",
-    "use-debounce": "^8.0.3"
+    "use-debounce": "^8.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.10",
+    "@babel/core": "^7.18.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
@@ -44,7 +44,7 @@
     "@storybook/react": "^6.5.10",
     "@storybook/testing-library": "^0.0.13",
     "@svgr/webpack": "^6.3.1",
-    "@tailwindcss/typography": "^0.5.4",
+    "@tailwindcss/typography": "^0.5.7",
     "@testing-library/dom": "^8.17.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -52,7 +52,7 @@
     "@types/diff": "^5.0.2",
     "@types/mdast": "^3.0.10",
     "@types/no-scroll": "^2.1.0",
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/react-helmet": "^6.1.5",
     "@types/react-modal": "^3.13.1",
@@ -60,9 +60,9 @@
     "autoprefixer": "^10.4.8",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
-    "esbuild-loader": "^2.19.0",
+    "esbuild-loader": "^2.20.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react": "^7.31.5",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "3.5.1-beta.0",
     "events": "^3.3.0",
@@ -79,6 +79,6 @@
     "vite-react-jsx": "^1.1.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.10.0"
+    "webpack-dev-server": "^4.10.1"
   }
 }
