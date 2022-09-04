@@ -25,7 +25,7 @@ export const AuthenticationModal = () => {
     <Modal
       isOpen={isOpen}
       onRequestClose={() => dispatch(closeAuthenticationForm())}
-      className="flex flex-col gap-4 max-w-modal"
+      className="flex max-w-modal flex-col gap-4"
     >
       {form && <AuthenticationForm />}
     </Modal>

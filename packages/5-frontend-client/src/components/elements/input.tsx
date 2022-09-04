@@ -9,7 +9,7 @@ export type InputProps = React.ComponentProps<'input'> & {
 
 export const Input = ({ className, error, ...props }: InputProps): JSX.Element => (
   <>
-    <input className={clsx('py-0.5 px-1 rounded border', className)} {...props} />
+    <input className={clsx('rounded border py-0.5 px-1', className)} {...props} />
     {error && <FieldError className="mt-0.5">{error}</FieldError>}
   </>
 );

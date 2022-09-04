@@ -13,7 +13,7 @@ type MarkdownPreviewTabsProps = {
 };
 
 export const MarkdownPreviewTabs = ({ tab, setTab }: MarkdownPreviewTabsProps) => (
-  <div className="gap-2 row" role="tablist">
+  <div className="row gap-2" role="tablist">
     <div />
     <TabComponent selected={tab === Tab.edit} onClick={() => setTab(Tab.edit)}>
       Éditer
@@ -24,7 +24,7 @@ export const MarkdownPreviewTabs = ({ tab, setTab }: MarkdownPreviewTabsProps) =
     <Link
       openInNewTab
       to="/mise-en-forme"
-      className="self-end mr-1 ml-auto text-sm text-right text-muted hover:underline"
+      className="mr-1 ml-auto self-end text-right text-sm text-muted hover:underline"
     >
       Aide de mise en forme
     </Link>
@@ -44,9 +44,9 @@ const TabComponent = ({ selected, onClick, children }: TabComponentProps) => (
     onClick={onClick}
     // eslint-disable-next-line tailwindcss/no-arbitrary-value
     className={clsx(
-      'relative top-[1px] py-1 px-4 mt-1 font-bold rounded-t border',
-      selected && 'text-primary bg-neutral border-b-transparent',
-      !selected && 'text-muted border-none',
+      'relative top-[1px] mt-1 rounded-t border py-1 px-4 font-bold',
+      selected && 'border-b-transparent bg-neutral text-primary',
+      !selected && 'border-none text-muted',
     )}
   >
     {children}

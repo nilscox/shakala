@@ -6,7 +6,7 @@ type RadiosGroupProps = {
 };
 
 export const RadiosGroup = ({ className, children }: RadiosGroupProps) => (
-  <div className={clsx('text-clip bg-neutral rounded border row', className)}>{children}</div>
+  <div className={clsx('row text-clip rounded border bg-neutral', className)}>{children}</div>
 );
 
 type RadioItemProps = {
@@ -28,7 +28,7 @@ export const RadioItem = ({ id, name, title, defaultChecked, children }: RadioIt
       className="peer sr-only"
     />
     <label
-      className="items-center py-0.5 px-2 h-full peer-checked:bg-muted/10 peer-focus-visible:outline cursor-pointer row"
+      className="row h-full cursor-pointer items-center py-0.5 px-2 peer-checked:bg-muted/10 peer-focus-visible:outline"
       htmlFor={id}
       title={title}
     >

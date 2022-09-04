@@ -52,7 +52,7 @@ type HeadingProps = {
 };
 
 const Heading = ({ id, children }: HeadingProps) => (
-  <div className="flex flex-row gap-4 items-center mt-[4rem] mb-4">
+  <div className="mt-[4rem] mb-4 flex flex-row items-center gap-4">
     <h2 id={id} className="py-0 text-primary">
       {children}
     </h2>
@@ -76,12 +76,12 @@ const LastThreads = () => {
     <>
       <Heading id="dernières-discussions">Dernières discussions</Heading>
 
-      <div className="flex flex-col gap-5 items-center my-5 md:flex-row md:items-stretch">
+      <div className="my-5 flex flex-col items-center gap-5 md:flex-row md:items-stretch">
         {threads.map((thread) => (
           <Link
             key={thread.id}
             to={`/discussions/${thread.id}`}
-            className="overflow-hidden flex-1 p-4 max-w-[22rem] card"
+            className="card max-w-[22rem] flex-1 overflow-hidden p-4"
           >
             <Markdown markdown={thread.text.slice(0, 220) + '...'} />
           </Link>
@@ -99,7 +99,7 @@ const Motivations = () => (
     <p className="m-[4rem] text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
 
     <div className="flex flex-col md:flex-row">
-      <div className="flex-1 pb-2 mb-2 border-b md:pr-2 md:pb-0 md:mr-2 md:mb-0 md:border-r md:border-b-0">
+      <div className="mb-2 flex-1 border-b pb-2 md:mr-2 md:mb-0 md:border-r md:border-b-0 md:pr-2 md:pb-0">
         <p>
           Depuis quelques dizaines d'années, la digitalisation des modes de communication a enclenché une
           vraie <a href="https://fr.wikipedia.org/wiki/R%C3%A9volution_num%C3%A9rique">révolution</a>, qui a
@@ -138,9 +138,9 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
-  <div className="flex-1 max-w-[22rem]">
+  <div className="max-w-[22rem] flex-1">
     <img src={image} className="mx-auto max-h-[5.5rem] opacity-80 md:max-h-[8rem]" alt={name} />
-    <div className="text-lg font-bold text-center border-y">{name}</div>
+    <div className="border-y text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-sm">{children}</div>
   </div>
 );
@@ -151,8 +151,8 @@ type FeatureProps = {
 };
 
 const Feature = ({ Icon, children }: FeatureProps) => (
-  <li className="flex flex-row gap-4 items-center p-1">
-    <div className="w-4 h-4">
+  <li className="flex flex-row items-center gap-4 p-1">
+    <div className="h-4 w-4">
       <Icon className="fill-inverted" />
     </div>
     <div className="flex-1">{children}</div>
@@ -163,7 +163,7 @@ const KeyFeatures = () => (
   <>
     <Heading id="points-clés">Les points clés</Heading>
 
-    <div className="flex flex-col gap-4 justify-center items-center my-6 sm:flex-row">
+    <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
       <KeyFeature image={imageCharte} name="La charte">
         Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
         garantir des échanges pertinents

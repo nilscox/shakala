@@ -23,7 +23,7 @@ export const Layout = ({ children }: LayoutProps) => {
     <>
       <PageTitle />
       <Header className="mx-auto max-w-page" />
-      <main className="px-2 mx-auto max-w-page min-h-main sm:px-4">
+      <main className="mx-auto min-h-main max-w-page px-2 sm:px-4">
         <ConnectedErrorBoundary pathname={pathname}>{children}</ConnectedErrorBoundary>
       </main>
       <Footer className="mx-auto max-w-page" />

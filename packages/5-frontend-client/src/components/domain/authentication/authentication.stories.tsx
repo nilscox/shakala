@@ -20,7 +20,7 @@ export default {
   title: 'Domain/Authentication',
   decorators: [
     (Story) => (
-      <div className="p-4 max-w-modal bg-neutral rounded-lg border">
+      <div className="max-w-modal rounded-lg border bg-neutral p-4">
         <Story />
       </div>
     ),

@@ -31,7 +31,7 @@ export const CommentHistoryModal = () => {
     <Modal
       isOpen={!requestClose && Boolean(commentId)}
       // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className="max-w-[64rem] max-h-full col"
+      className="col max-h-full max-w-[64rem]"
       onRequestClose={handleClose}
     >
       {commentId && <CommentHistory commentId={commentId} onClose={handleClose} />}
@@ -67,8 +67,8 @@ const CommentHistory = ({ commentId, onClose }: CommentHistoryProps) => {
 
       <hr className="mt-1 mb-2" />
 
-      <div className="overflow-hidden flex-1 my-4 col">
-        <div className="my-2 row">
+      <div className="col my-4 flex-1 overflow-hidden">
+        <div className="row my-2">
           {[before, after].map(({ date }, index) => (
             <Date key={index} date={date} />
           ))}
@@ -89,10 +89,10 @@ type HeaderProps = {
 };
 
 const Header = ({ author, version, onPrev, onNext, onClose }: HeaderProps) => (
-  <div className="items-center row">
+  <div className="row items-center">
     <AvatarNick big nick={author.nick} image={author.profileImage} />
     <VersionSelector version={version} onPrev={onPrev} onNext={onNext} />
-    <IconButton className="self-start ml-auto" icon={<Cross />} onClick={onClose} />
+    <IconButton className="ml-auto self-start" icon={<Cross />} onClick={onClose} />
   </div>
 );
 
@@ -103,7 +103,7 @@ type VersionSelectorProps = {
 };
 
 const VersionSelector = ({ version, onPrev, onNext }: VersionSelectorProps) => (
-  <div className="gap-1 ml-4 row">
+  <div className="row ml-4 gap-1">
     <IconButton
       disabled={!onPrev}
       icon={<ChevronLeft />}

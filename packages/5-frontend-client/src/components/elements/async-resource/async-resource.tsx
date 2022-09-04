@@ -43,7 +43,7 @@ export const AsyncResource = <T,>({ data, loading, error, renderError, render }:
       return (
         <div className="relative">
           {render(d)}
-          {displayLoader && <div className="absolute inset-0 bg-neutral/50 animate-loading-surface" />}
+          {displayLoader && <div className="absolute inset-0 animate-loading-surface bg-neutral/50" />}
         </div>
       );
     }

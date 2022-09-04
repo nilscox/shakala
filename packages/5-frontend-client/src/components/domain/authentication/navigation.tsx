@@ -7,7 +7,7 @@ export const AuthenticationNavigation = () => {
   const form = useSelector(selectAuthenticationForm);
 
   return (
-    <nav className="flex flex-row gap-1 justify-between text-muted links-nocolor">
+    <nav className="links-nocolor flex flex-row justify-between gap-1 text-muted">
       {form !== AuthenticationType.signup && (
         <SearchParamLink param="auth" value="signup">
           Créer un compte

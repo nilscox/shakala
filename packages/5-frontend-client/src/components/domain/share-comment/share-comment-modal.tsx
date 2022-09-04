@@ -36,7 +36,7 @@ export const ShareCommentModal = () => {
       isOpen={commentId !== undefined}
       onRequestClose={closeModal}
       // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className="flex flex-col gap-5 max-w-[36rem]"
+      className="flex max-w-[36rem] flex-col gap-5"
     >
       <PageTitle>{`Partager le commentaire de ${comment?.author.nick}`}</PageTitle>
 
@@ -73,14 +73,14 @@ export const ShareCommentModal = () => {
         </ShareIcon>
       </div>
 
-      <div className="p-2 rounded border">
+      <div className="rounded border p-2">
         <strong className="text-muted">Permalien</strong>
         <a className="block break-all" href={permalink}>
           {permalink}
         </a>
       </div>
 
-      <Button className="self-end button-secondary" onClick={closeModal}>
+      <Button className="button-secondary self-end" onClick={closeModal}>
         Fermer
       </Button>
     </Modal>
@@ -108,7 +108,7 @@ type ShareIconProps = {
 
 const ShareIcon = ({ title, href = '#', onClick, children }: ShareIconProps) => (
   <a
-    className="flex justify-center items-center w-8 h-8 cursor-pointer"
+    className="flex h-8 w-8 cursor-pointer items-center justify-center"
     href={href}
     title={title}
     onClick={onClick}

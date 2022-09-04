@@ -20,7 +20,7 @@ export const Modal = ({ className, isOpen, ...props }: ReactModal.Props) => {
     <ReactModal
       isOpen={isOpen}
       overlayClassName="fixed top-0 bottom-0 left-0 right-0 bg-inverted/30 flex flex-col items-center justify-center p-2"
-      className={clsx('p-4 w-full bg-neutral rounded-lg border outline-none card', className)}
+      className={clsx('card w-full rounded-lg border bg-neutral p-4 outline-none', className)}
       closeTimeoutMS={200}
       preventScroll
       {...props}

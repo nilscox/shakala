@@ -49,8 +49,8 @@ type FakeFormProps = {
 };
 
 const FakeForm = ({ className, onFocus }: FakeFormProps) => (
-  <form className={clsx('gap-1 items-center p-2 row', className)}>
+  <form className={clsx('row items-center gap-1 p-2', className)}>
     <Avatar />
-    <input readOnly className="py-0.5 px-1 w-full rounded border" placeholder="Répondre" onFocus={onFocus} />
+    <input readOnly className="w-full rounded border py-0.5 px-1" placeholder="Répondre" onFocus={onFocus} />
   </form>
 );

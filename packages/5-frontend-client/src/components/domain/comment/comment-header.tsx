@@ -22,12 +22,12 @@ export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
   const formattedDateDetailed = useSelector(selectFormattedCommentDateDetailed, commentId);
 
   return (
-    <div className={clsx('gap-2 items-center row', className)}>
+    <div className={clsx('row items-center gap-2', className)}>
       <AvatarNick {...author} />
       <div>{bullet}</div>
       <Link
         to={`#${commentId}`}
-        className={clsx('text-sm leading-none text-muted hover:underline decoration-muted/40', {
+        className={clsx('text-sm leading-none text-muted decoration-muted/40 hover:underline', {
           italic: edited,
         })}
       >

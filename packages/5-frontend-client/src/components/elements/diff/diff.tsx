@@ -13,12 +13,12 @@ const DiffLine: React.FC<{ chunks: Diff.Change[] }> = ({ chunks }) => (
 const DiffChunk: React.FC<{ chunk: Diff.Change }> = ({ chunk: { value, added, removed } }) => {
   if (added) {
     // eslint-disable-next-line tailwindcss/no-arbitrary-value
-    return <ins className="no-underline bg-[#4ddf5933]">{value}</ins>;
+    return <ins className="bg-[#4ddf5933] no-underline">{value}</ins>;
   }
 
   if (removed) {
     // eslint-disable-next-line tailwindcss/no-arbitrary-value
-    return <del className="no-underline bg-[#df4d4d33]">{value}</del>;
+    return <del className="bg-[#df4d4d33] no-underline">{value}</del>;
   }
 
   return <Fragment>{value}</Fragment>;

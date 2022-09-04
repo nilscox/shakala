@@ -8,9 +8,9 @@ export type IconButtonProps = ButtonProps & {
 };
 
 export const IconButton = ({ icon, small, className, children, ...props }: IconButtonProps) => (
-  <Button small={small} className={clsx('items-center p-0 row', className)} {...props}>
+  <Button small={small} className={clsx('row items-center p-0', className)} {...props}>
     {cloneElement(icon, {
-      className: clsx('mr-0.5', small ? 'w-4 h-4' : 'w-4 h-4', icon.props.className),
+      className: clsx('mr-0.5', small ? 'h-4 w-4' : 'h-4 w-4', icon.props.className),
     })}
     {children}
   </Button>

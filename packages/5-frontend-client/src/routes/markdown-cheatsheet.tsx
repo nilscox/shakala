@@ -71,27 +71,27 @@ const SyntaxRule = ({ nowrap, name, example, children }: SyntaxRuleProps) => (
   <>
     <h2 className="mt-2">{name}</h2>
 
-    <div className="hidden text-sm font-medium text-muted uppercase sm:row">
+    <div className="sm:row hidden text-sm font-medium uppercase text-muted">
       <div className="flex-1">Markdown</div>
       <div className="flex-1">Résultat</div>
     </div>
 
-    <div className="hidden items-center p-1 bg-neutral rounded border sm:row">
+    <div className="sm:row hidden items-center rounded border bg-neutral p-1">
       <pre className={clsx('flex-1', nowrap ? 'overflow-x-auto' : 'whitespace-pre-wrap')}>
         <code>{example}</code>
       </pre>
-      <div className="self-stretch mx-4 border-l" />
+      <div className="mx-4 self-stretch border-l" />
       <div className="flex-1">
         <Markdown markdown={example} />
       </div>
     </div>
 
-    <div className="gap-2 sm:hidden col">
+    <div className="col gap-2 sm:hidden">
       <div>
         <div className="text-sm font-medium text-muted">Markdown</div>
         <pre
           className={clsx(
-            'flex-1 p-1 bg-neutral rounded border',
+            'flex-1 rounded border bg-neutral p-1',
             nowrap ? 'overflow-x-auto' : 'whitespace-pre-wrap',
           )}
         >
@@ -101,7 +101,7 @@ const SyntaxRule = ({ nowrap, name, example, children }: SyntaxRuleProps) => (
 
       <div>
         <div className="text-sm font-medium text-muted">Résultat</div>
-        <div className="p-1 bg-neutral rounded border">
+        <div className="rounded border bg-neutral p-1">
           <Markdown markdown={example} />
         </div>
       </div>

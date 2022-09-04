@@ -41,7 +41,7 @@ export const Snackbar = ({ className, type, transition, onRemove, children }: Sn
   return (
     <div
       className={clsx(
-        'overflow-hidden w-fit min-w-snackbar max-w-snackbar font-semibold bg-neutral rounded-lg border-2 shadow',
+        'w-fit min-w-snackbar max-w-snackbar overflow-hidden rounded-lg border-2 bg-neutral font-semibold shadow',
         colorsMap[type],
         {
           'animate-fade-in': transition === 'in',
@@ -50,14 +50,14 @@ export const Snackbar = ({ className, type, transition, onRemove, children }: Sn
         className,
       )}
     >
-      <div className="gap-2 items-stretch rounded row notification">
-        <div className={clsx('justify-center p-2 col', iconColorsMap[type])}>
-          <Icon className="w-5 h-5 text-white" />
+      <div className="row notification items-stretch gap-2 rounded">
+        <div className={clsx('col justify-center p-2', iconColorsMap[type])}>
+          <Icon className="h-5 w-5 text-white" />
         </div>
         <div className="flex-1 p-2">{children}</div>
         <div className="py-4 px-2">
           <IconButton
-            icon={<CrossIcon className="w-4 h-4 text-muted" />}
+            icon={<CrossIcon className="h-4 w-4 text-muted" />}
             onClick={onRemove}
             aria-label="Fermer"
           />

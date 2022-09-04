@@ -18,7 +18,7 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     className={clsx(
-      'relative button',
+      'button relative',
       primary && 'button-primary',
       secondary && 'button-secondary',
       small && 'text-sm',
@@ -32,5 +32,5 @@ export const Button = ({
 );
 
 const LoadingIndicator = () => {
-  return <div className="absolute inset-y-0 right-0 bg-neutral/20 animate-loading" />;
+  return <div className="absolute inset-y-0 right-0 animate-loading bg-neutral/20" />;
 };

@@ -30,7 +30,7 @@ export const AcceptRulesCheckbox = () => {
         checked={checked}
         onChange={(event) => dispatch(acceptRules(event.target.checked))}
       />
-      <label htmlFor="accept-rules" className="inline-block ml-2">
+      <label htmlFor="accept-rules" className="ml-2 inline-block">
         J'accepte{' '}
         <Link to="/charte" target="_blank">
           la charte

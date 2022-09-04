@@ -39,7 +39,7 @@ export const ThreadForm = ({ errors, onChange, onSubmit }: CreateThreadFormProps
   const [message, setMessage] = useState('');
 
   return (
-    <form className="gap-2 col" onSubmit={handleSubmit}>
+    <form className="col gap-2" onSubmit={handleSubmit}>
       <FormField
         name="description"
         label="Description"

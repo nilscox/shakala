@@ -20,7 +20,7 @@ const Label = ({ className, children }: { className?: string; children: string }
 );
 
 const Size = ({ name, className, style }: SpacingProps) => (
-  <div className="flex flex-row gap-2 items-center">
+  <div className="flex flex-row items-center gap-2">
     <Label className="w-6 text-right">{name}</Label>
     <div className={clsx('bg-primary', className)} style={style} />
   </div>
@@ -36,13 +36,13 @@ export const breakpoints = () => (
 
 export const spacings = () => (
   <>
-    <Size className="w-0 h-2" name="0" />
-    <Size className="w-0.5 h-2" name="0.5" />
-    <Size className="w-1 h-2" name="1" />
-    <Size className="w-2 h-2" name="2" />
-    <Size className="w-4 h-2" name="4" />
-    <Size className="w-5 h-2" name="5" />
-    <Size className="w-6 h-2" name="6" />
+    <Size className="h-2 w-0" name="0" />
+    <Size className="h-2 w-0.5" name="0.5" />
+    <Size className="h-2 w-1" name="1" />
+    <Size className="h-2 w-2" name="2" />
+    <Size className="h-2 w-4" name="4" />
+    <Size className="h-2 w-5" name="5" />
+    <Size className="h-2 w-6" name="6" />
   </>
 );
 
@@ -52,9 +52,9 @@ type BorderRadiusProps = {
 };
 
 const BorderRadius = ({ className, name }: BorderRadiusProps) => (
-  <div className="flex flex-row gap-2 items-center">
+  <div className="flex flex-row items-center gap-2">
     <div
-      className={clsx('w-6 h-6 border-t border-l', className)}
+      className={clsx('h-6 w-6 border-t border-l', className)}
       style={{ borderEndStartRadius: 0, borderEndEndRadius: 0, borderStartEndRadius: 0 }}
     />
     <Label>{name}</Label>
@@ -75,8 +75,8 @@ type ColorProps = {
 };
 
 const Color = ({ name, className }: ColorProps) => (
-  <div className="flex flex-row gap-2 items-center">
-    <div className={clsx('w-6 h-6 rounded', className)} />
+  <div className="flex flex-row items-center gap-2">
+    <div className={clsx('h-6 w-6 rounded', className)} />
     <Label>{name}</Label>
   </div>
 );
@@ -110,7 +110,7 @@ type TextProps = {
 };
 
 const Text = ({ name, className }: TextProps) => (
-  <div className="flex flex-row gap-2 items-center">
+  <div className="flex flex-row items-center gap-2">
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
     <Label className="w-[6rem]">{name}</Label>
     <div className={clsx('px-1', className)}>Two driven jocks help fax my big quiz.</div>
@@ -122,7 +122,7 @@ export const textColors = () => (
   <div className="flex flex-col gap-2">
     <Text className="text" name="default" />
     <Text className="text-muted" name="muted" />
-    <Text className="text-inverted bg-inverted" name="inverted" />
+    <Text className="bg-inverted text-inverted" name="inverted" />
     <Text className="text-link" name="link" />
     <Text className="text-success" name="success" />
     <Text className="text-warning" name="warning" />

@@ -74,7 +74,7 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
       {children}
 
       {createPortal(
-        <div className="flex fixed top-0 right-0 z-10 flex-col gap-2 m-4">
+        <div className="fixed top-0 right-0 z-10 m-4 flex flex-col gap-2">
           {snacks.map((snack) => (
             <Snackbar
               key={snack.id}

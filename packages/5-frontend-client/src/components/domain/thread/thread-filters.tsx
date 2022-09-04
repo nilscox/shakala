@@ -44,7 +44,7 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
   );
 
   return (
-    <form className={clsx('gap-4 items-start sm:items-center col sm:row', className)} onChange={handleChange}>
+    <form className={clsx('col sm:row items-start gap-4 sm:items-center', className)} onChange={handleChange}>
       <Input
         type="search"
         name="search"
@@ -60,7 +60,7 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
           title="Les plus anciens en premier"
           defaultChecked={sort === Sort.dateAsc}
         >
-          date <ArrowUpIcon className="p-0.5 fill-muted" />
+          date <ArrowUpIcon className="fill-muted p-0.5" />
         </RadioItem>
 
         <RadioItem
@@ -69,7 +69,7 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
           title="Les plus récents en premier"
           defaultChecked={sort === Sort.dateDesc}
         >
-          date <ArrowDownIcon className="p-0.5 fill-muted" />
+          date <ArrowDownIcon className="fill-muted p-0.5" />
         </RadioItem>
 
         <RadioItem

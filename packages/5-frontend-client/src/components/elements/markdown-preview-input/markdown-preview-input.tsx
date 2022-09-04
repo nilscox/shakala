@@ -23,7 +23,7 @@ export const MarkdownPreviewInput = ({ border, value, onChange, ...props }: Mark
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={clsx(
-          'block p-1 w-full border-y focus-visible:outline-none',
+          'block w-full border-y p-1 focus-visible:outline-none',
           border && 'rounded border',
           tab !== Tab.edit && 'hidden',
         )}
@@ -33,7 +33,7 @@ export const MarkdownPreviewInput = ({ border, value, onChange, ...props }: Mark
       <Markdown
         markdown={value}
         className={clsx(
-          'p-1 min-h-markdown-preview bg-neutral border-y',
+          'min-h-markdown-preview border-y bg-neutral p-1',
           border && 'rounded border',
           tab !== Tab.preview && 'hidden',
         )}

@@ -43,7 +43,7 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
 
   return (
     <div className={clsx('row', className)}>
-      <div className="overflow-x-auto gap-x-2 row hide-scrollbars">
+      <div className="row hide-scrollbars gap-x-2 overflow-x-auto">
         <ReactionButton commentId={commentId} reactionType={ReactionType.upvote}>
           {upvotes}
         </ReactionButton>
@@ -65,20 +65,20 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
               disabled={edited === false}
               title={edited === false ? "Ce commentaire n'a pas été édité" : undefined}
               className={clsx(
-                'items-center p-0 text-sm hover:text-primary fill-muted hover:fill-primary row button-secondary button',
-                edited === false && 'text-muted/60 hover:text-muted/60 cursor-default',
+                'row button-secondary button items-center fill-muted p-0 text-sm hover:fill-primary hover:text-primary',
+                edited === false && 'cursor-default text-muted/60 hover:text-muted/60',
               )}
             >
-              <HistoryIcon className="mr-0.5 w-4 h-4" />
+              <HistoryIcon className="mr-0.5 h-4 w-4" />
               Historique
             </SearchParamLink>
 
             <SearchParamLink
               param="share"
               value={commentId}
-              className="items-center p-0 text-sm hover:text-primary fill-muted hover:fill-primary row button-secondary button"
+              className="row button-secondary button items-center fill-muted p-0 text-sm hover:fill-primary hover:text-primary"
             >
-              <ShareIcon className="mr-0.5 w-4 h-4" /> Partager
+              <ShareIcon className="mr-0.5 h-4 w-4" /> Partager
             </SearchParamLink>
           </>
         )}
@@ -159,9 +159,9 @@ const ReplyButton = ({ commentId }: ReplyButtonProps) => {
     <FooterButton
       icon={<ReplyIcon />}
       onClick={() => dispatch(setIsReplying(commentId, true))}
-      className="pl-2 ml-auto"
+      className="ml-auto pl-2"
     >
-      <span className="hidden xxs:block">Répondre</span>
+      <span className="xxs:block hidden">Répondre</span>
     </FooterButton>
   );
 };

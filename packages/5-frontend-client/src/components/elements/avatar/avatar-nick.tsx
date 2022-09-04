@@ -9,7 +9,7 @@ type AvatarNickProps = {
 };
 
 export const AvatarNick = ({ big, image, nick }: AvatarNickProps): JSX.Element => (
-  <div className="flex flex-row gap-2 items-center">
+  <div className="flex flex-row items-center gap-2">
     <Avatar big={big} image={image} />
     <span className={clsx('font-medium text-muted', big && 'text-lg')}>{nick}</span>
   </div>

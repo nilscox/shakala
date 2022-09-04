@@ -12,14 +12,14 @@ type HeaderProps = {
 };
 
 export const Header = ({ className }: HeaderProps): JSX.Element => (
-  <header className="pt-6 pb-2 text-inverted bg-inverted links-nocolor">
+  <header className="links-nocolor bg-inverted pt-6 pb-2 text-inverted">
     <div className={clsx('px-4', className)}>
-      <div className="flex relative flex-row gap-4 justify-between">
+      <div className="relative flex flex-row justify-between gap-4">
         <Authentication />
         <Heading />
-        <Navigation className="hidden mt-auto md:flex" />
+        <Navigation className="mt-auto hidden md:flex" />
       </div>
-      <Navigation className="flex mt-2 md:hidden" />
+      <Navigation className="mt-2 flex md:hidden" />
     </div>
   </header>
 );
@@ -37,11 +37,11 @@ const Authentication = () => {
   return (
     <AuthenticationLink
       authenticated={Boolean(user)}
-      className="flex absolute top-0 right-0 flex-row gap-2 items-center"
+      className="absolute top-0 right-0 flex flex-row items-center gap-2"
     >
       <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
-      <div className="w-6 h-6">
-        <Avatar big image={user?.profileImage} className="w-6 h-6 border-none" />
+      <div className="h-6 w-6">
+        <Avatar big image={user?.profileImage} className="h-6 w-6 border-none" />
       </div>
     </AuthenticationLink>
   );
@@ -76,10 +76,10 @@ type NavigationProps = {
 const Navigation = ({ className }: NavigationProps) => (
   <nav
     className={clsx(
-      'font-semibold text-inverted/90 uppercase whitespace-nowrap',
-      'flex flex-row flex-nowrap gap-x-2 justify-between items-end',
-      'overflow-x-auto hide-scrollbars',
-      'sm:gap-x-4 sm:justify-end',
+      'whitespace-nowrap font-semibold uppercase text-inverted/90',
+      'flex flex-row flex-nowrap items-end justify-between gap-x-2',
+      'hide-scrollbars overflow-x-auto',
+      'sm:justify-end sm:gap-x-4',
       className,
     )}
   >
@@ -94,7 +94,7 @@ const HeaderNavLink = (props: React.ComponentProps<typeof NavLink>) => (
   <NavLink
     className={({ isActive }) =>
       clsx(
-        'underline decoration-transparent hover:decoration-primary decoration-2 underline-offset-4 transition-colors',
+        'underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-primary',
         isActive && '!text-primary',
       )
     }

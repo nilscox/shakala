@@ -44,7 +44,7 @@ export const CommentForm = ({
         onChange={setMessage}
       />
 
-      <div className="flex flex-row gap-2 justify-end py-1 px-2">
+      <div className="flex flex-row justify-end gap-2 py-1 px-2">
         {onCancel && (
           <Button secondary type="button" onClick={onCancel}>
             Annuler

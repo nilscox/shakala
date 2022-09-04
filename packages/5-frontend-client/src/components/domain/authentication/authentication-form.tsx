@@ -99,7 +99,7 @@ const Buttons = ({ canSubmit }: ButtonsProps) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex flex-row gap-2 justify-end">
+    <div className="flex flex-row justify-end gap-2">
       <Button secondary type="reset" onClick={() => dispatch(closeAuthenticationForm())}>
         Annuler
       </Button>

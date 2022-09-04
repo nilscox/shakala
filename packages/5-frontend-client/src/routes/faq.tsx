@@ -17,7 +17,7 @@ const Question = ({ question, answer }: QuestionProps) => {
       <button onClick={() => setOpen(!open)}>
         <div className={clsx('inline-block transition-transform', open && 'rotate-90')}>➜</div> {question}
       </button>
-      <p className={clsx('pl-2 ml-1 border-l-4', !open && 'hidden')}>{answer}</p>
+      <p className={clsx('ml-1 border-l-4 pl-2', !open && 'hidden')}>{answer}</p>
     </div>
   );
 };
@@ -227,7 +227,7 @@ export const FaqRoute = () => (
       de communication :
     </p>
 
-    <ul className="pl-6 list-disc links-nocolor links-underline">
+    <ul className="links-nocolor links-underline list-disc pl-6">
       <li>
         Sur discord :{' '}
         <ExternalLink href="https://discord.gg/huwfqra">https://discord.gg/huwfqra</ExternalLink>

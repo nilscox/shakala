@@ -14,7 +14,7 @@ export const CharterRoute = () => (
     </p>
 
     {/* apporter de la nuance */}
-    <div className="gap-4 py-4 col links-nocolor links-underline">
+    <div className="col links-nocolor links-underline gap-4 py-4">
       <Rule rule="1. Lire les messages en laissant de côté ses a priori.">
         Les zones de commentaires permettent à chacun d'exprimer publiquement ses opinions, certaines ne
         s'accorderont donc naturellement pas avec les vôtres. Cherchez à comprendre le chemin de pensée de
@@ -80,7 +80,7 @@ export const CharterRoute = () => (
 
 const Rule = ({ rule, children }: { rule: React.ReactNode; children: React.ReactNode }) => (
   <div>
-    <em className="block mb-1 text-lg">{rule}</em>
-    <div className="pl-2 ml-4 text-muted border-l-4">{children}</div>
+    <em className="mb-1 block text-lg">{rule}</em>
+    <div className="ml-4 border-l-4 pl-2 text-muted">{children}</div>
   </div>
 );

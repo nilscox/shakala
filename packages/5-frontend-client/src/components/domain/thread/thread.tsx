@@ -62,14 +62,14 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="my-5 md:my-[4rem]">
-        <div className="flex-wrap gap-4 justify-between items-center mb-2 row">
+        <div className="row mb-2 flex-wrap items-center justify-between gap-4">
           <AvatarNick big {...thread.author} />
           <div className="text-muted">
             <time dateTime={thread.date}>{dateFormatted}</time>, {comments?.length ?? '?'} commentaires
           </div>
         </div>
 
-        <Markdown markdown={thread.text} className="p-4 sm:p-5 card" />
+        <Markdown markdown={thread.text} className="card p-4 sm:p-5" />
       </div>
 
       <ThreadFilters threadId={threadId} className="my-4" />
@@ -115,7 +115,7 @@ const CommentsList = ({ threadId, threadAuthor, comments }: CommentsListProps) =
       ))}
 
       <div className="card">
-        <div className="flex flex-row gap-4 items-center p-2 pb-0">
+        <div className="flex flex-row items-center gap-4 p-2 pb-0">
           <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
         </div>
 

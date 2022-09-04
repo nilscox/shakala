@@ -17,7 +17,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
   return (
     <footer className="py-5">
       <div className={clsx('px-2 md:px-4', className)}>
-        <div className="grid grid-cols-2 gap-4 pt-5 border-t md:grid-cols-4 links-nocolor">
+        <div className="links-nocolor grid grid-cols-2 gap-4 border-t pt-5 md:grid-cols-4">
           <FooterColumn>
             <Link to="/">Accueil</Link>
             <Link to="/charte">La charte</Link>
@@ -68,7 +68,7 @@ type FooterColumnProps = {
 };
 
 const FooterColumn = ({ className, children }: FooterColumnProps) => (
-  <div className={clsx('leading-7 text-muted col', className)}>{children}</div>
+  <div className={clsx('col leading-7 text-muted', className)}>{children}</div>
 );
 
 type SocialLinkProps = {
@@ -79,8 +79,8 @@ type SocialLinkProps = {
 };
 
 const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => (
-  <a href={href} className="items-center whitespace-nowrap row">
-    <img className="mr-1 w-4 h-4 grayscale" src={image} alt={imageAlt} />
+  <a href={href} className="row items-center whitespace-nowrap">
+    <img className="mr-1 h-4 w-4 grayscale" src={image} alt={imageAlt} />
     {children}
   </a>
 );
