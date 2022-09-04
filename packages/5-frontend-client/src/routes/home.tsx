@@ -3,6 +3,7 @@
 import { fetchLastThreads, selectLastThreads } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
 
+import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';
 import { useDispatch } from '~/hooks/use-dispatch';
@@ -83,6 +84,8 @@ const LastThreads = () => {
             to={`/discussions/${thread.id}`}
             className="card max-w-[22rem] flex-1 overflow-hidden p-4"
           >
+            <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
+            <hr className="my-1" />
             <Markdown markdown={thread.text.slice(0, 220) + '...'} />
           </Link>
         ))}
