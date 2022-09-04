@@ -112,7 +112,7 @@ const VersionSelector = ({ version, onPrev, onNext }: VersionSelectorProps) => (
       onClick={onPrev}
     />
 
-    <>Version {version}</>
+    <>Édition {version}</>
 
     <IconButton
       disabled={!onNext}

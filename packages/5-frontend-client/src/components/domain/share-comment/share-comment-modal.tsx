@@ -40,7 +40,7 @@ export const ShareCommentModal = () => {
     >
       <PageTitle>{`Partager le commentaire de ${comment?.author.nick}`}</PageTitle>
 
-      <h2 className="text-lg font-bold text-primary">
+      <h2 className="py-0 text-primary">
         Partager le commentaire de <strong className="text-inherit">{comment?.author.nick}</strong>
       </h2>
 
