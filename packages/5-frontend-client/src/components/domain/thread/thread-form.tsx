@@ -1,10 +1,10 @@
 import { FormErrors, FormField as FormFieldType, ThreadForm as ThreadFormType } from 'frontend-domain';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 
 import { Button } from '~/components/elements/button';
 import { FormField } from '~/components/elements/form-field';
 import { Input } from '~/components/elements/input';
-import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
+import { MarkdownPreviewInput } from '~/components/elements/markdown-preview-input/markdown-preview-input';
 
 type CreateThreadFormProps = {
   errors: FormErrors<ThreadFormType>;
@@ -35,6 +35,8 @@ export const ThreadForm = ({ errors, onChange, onSubmit }: CreateThreadFormProps
   const createFieldChangeHandler = (field: FormFieldType<ThreadFormType>) => () => {
     onChange(field);
   };
+
+  const [message, setMessage] = useState('');
 
   return (
     <form className="gap-2 col" onSubmit={handleSubmit}>
@@ -73,12 +75,7 @@ export const ThreadForm = ({ errors, onChange, onSubmit }: CreateThreadFormProps
           max: 'Le texte est trop long',
         }}
       >
-        <TextAreaAutoResize
-          required
-          rows={6}
-          className="block py-0.5 px-1 w-full rounded border"
-          onChange={createFieldChangeHandler('text')}
-        />
+        <MarkdownPreviewInput border rows={8} value={message} onChange={setMessage} />
       </FormField>
 
       <Button primary className="self-end">

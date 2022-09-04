@@ -1,11 +1,7 @@
-import { clsx } from 'clsx';
-import { FormEventHandler, useCallback, useState } from 'react';
+import { FormEventHandler, useCallback } from 'react';
 
 import { Button } from '~/components/elements/button';
-import { Markdown } from '~/components/elements/markdown';
-import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
-
-import { Tab, CommentFormTabs } from './comment-form-tabs';
+import { MarkdownPreviewInput } from '~/components/elements/markdown-preview-input/markdown-preview-input';
 
 type CommentFormProps = {
   autofocus?: boolean;
@@ -28,9 +24,7 @@ export const CommentForm = ({
   onCancel,
   onSubmit,
 }: CommentFormProps) => {
-  const [tab, setTab] = useState(Tab.edit);
-
-  const handleSubmit = useCallback<FormEventHandler>(
+  const handleSubmit: FormEventHandler = useCallback(
     (event) => {
       event.preventDefault();
       onSubmit();
@@ -40,28 +34,17 @@ export const CommentForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <CommentFormTabs tab={tab} setTab={setTab} />
-
-      <TextAreaAutoResize
+      <MarkdownPreviewInput
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autofocus}
         rows={4}
         name="message"
         placeholder={placeholder ?? 'Rédigez votre message'}
         value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
-        className={clsx(
-          'block p-1 w-full rounded border-none focus-visible:outline-none',
-          tab !== Tab.edit && 'hidden',
-        )}
+        onChange={setMessage}
       />
 
-      <Markdown
-        markdown={message}
-        className={clsx('p-1 min-h-markdown-preview bg-neutral', tab !== Tab.preview && 'hidden')}
-      />
-
-      <div className="flex flex-row gap-2 justify-end py-1 px-2 border-t">
+      <div className="flex flex-row gap-2 justify-end py-1 px-2">
         {onCancel && (
           <Button secondary type="button" onClick={onCancel}>
             Annuler
