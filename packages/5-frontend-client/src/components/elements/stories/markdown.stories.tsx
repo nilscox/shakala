@@ -7,6 +7,8 @@ export default {
   title: 'Elements/Markdown',
 } as Meta;
 
+// cspell:disable
+
 const Template: Story<ComponentProps<typeof Markdown>> = (props) => <Markdown {...props} />;
 Template.args = {
   markdown: `This is an awesome example, which demonstrates how easy it is to display some formatted text using the  Markdown syntax.
@@ -23,6 +25,8 @@ Mozzarella cheese and biscuits pepper jack. Smelly cheese babybel manchego bocco
 > if you like it, please subscribe!
 `,
 };
+
+// cspell:enable
 
 export const markdown = Template.bind({});
 markdown.args = {

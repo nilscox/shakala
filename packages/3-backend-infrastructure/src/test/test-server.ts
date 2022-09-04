@@ -20,7 +20,7 @@ export class TestServer extends Server {
   async createUserAndLogin(agent: SuperAgentTest, loginDto: LoginBodyDto) {
     const { email, password } = loginDto;
 
-    const userId = await this.commandBus.execute<string>(new SignupCommand('nick', email, password));
+    const userId = await this.commandBus.execute<string>(new SignupCommand(email, email, password));
 
     await agent.post('/auth/login').send(loginDto).expect(200);
 

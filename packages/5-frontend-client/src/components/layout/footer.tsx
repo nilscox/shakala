@@ -17,7 +17,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
   return (
     <footer className="py-5">
       <div className={clsx('px-2 md:px-4', className)}>
-        <div className="grid grid-cols-1 gap-4 pt-5 border-t sm:grid-cols-2 md:grid-cols-4 links-nocolor">
+        <div className="grid grid-cols-2 gap-4 pt-5 border-t md:grid-cols-4 links-nocolor">
           <FooterColumn>
             <Link to="/">Accueil</Link>
             <Link to="/charte">La charte</Link>

@@ -27,6 +27,10 @@ describe('Comment e2e', () => {
   });
 
   test('as a user, I can create and edit a comment', async () => {
+    const getThread = async (threadId: string) => {
+      return agent.get(`/thread/${threadId}`).expect(200);
+    };
+
     const createComment = async (threadId: string) => {
       const body: CreateCommentBodyDto = { threadId, text: 'hello' };
 
@@ -46,12 +50,17 @@ describe('Comment e2e', () => {
 
     await editComment(createdId);
 
-    // const thread = await getThread(threadId);
+    const { body: thread } = await getThread(threadId);
 
-    // expect(thread.comments).toHaveProperty('[0].edited', expect.any(String));
+    expect(thread.comments).toHaveProperty('[0].edited', expect.any(String));
+    expect(thread.comments).toHaveProperty('[0].history.[0].text', 'hello');
   });
 
   test('as a user, I can set a reaction on a comment', async () => {
+    const agent = server.agent();
+
+    await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
+
     const setReaction = async (commentId: string, type: ReactionTypeDto | null) => {
       const body: SetReactionBodyDto = { type };
 

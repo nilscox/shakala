@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   addComment,
@@ -38,12 +38,17 @@ describe('CommentForm', () => {
   it('creates a new root comment', async () => {
     const user = userEvent.setup();
 
-    new TestRenderer().withRedux(store).render(<RootCommentForm threadId={threadId} author={author} />);
+    new TestRenderer()
+      .withMemoryRouter()
+      .withRedux(store)
+      .render(<RootCommentForm threadId={threadId} author={author} />);
 
     const input = screen.getByPlaceholderText('Répondre à author');
 
-    await user.type(input, 'comment');
-    user.click(screen.getByText('Envoyer'));
+    await act(async () => {
+      await user.type(input, 'comment');
+      await user.click(screen.getByText('Envoyer'));
+    });
 
     await waitFor(() => {
       expect(store.select(selectCreatedRootComments)).toHaveLength(1);
@@ -61,14 +66,19 @@ describe('CommentForm', () => {
     store.dispatch(addComment(parentComment));
     store.dispatch(setThreadComments(threadId, [parentComment]));
 
-    new TestRenderer().withRedux(store).render(<ReplyForm parentId={parentCommentId} />);
+    new TestRenderer()
+      .withMemoryRouter()
+      .withRedux(store)
+      .render(<ReplyForm parentId={parentCommentId} />);
 
     user.click(screen.getByPlaceholderText('Répondre'));
 
     const input = await screen.findByPlaceholderText('Rédigez votre message');
 
-    await user.type(input, 'reply');
-    user.click(screen.getByText('Envoyer'));
+    await act(async () => {
+      await user.type(input, 'reply');
+      await user.click(screen.getByText('Envoyer'));
+    });
 
     await waitFor(() => {
       expect(store.select(selectCommentReplies, parentCommentId)).toHaveLength(1);
@@ -87,15 +97,20 @@ describe('CommentForm', () => {
     store.dispatch(setThreadComments(threadId, [comment]));
     store.dispatch(setIsEditingComment(commentId));
 
-    new TestRenderer().withRedux(store).render(<CommentEditionForm commentId={commentId} />);
+    new TestRenderer()
+      .withMemoryRouter()
+      .withRedux(store)
+      .render(<CommentEditionForm commentId={commentId} />);
 
     const input = await screen.findByPlaceholderText('Rédigez votre message');
 
     expect(input).toHaveValue('initial text');
 
-    await user.clear(input);
-    await user.type(input, 'edited text');
-    user.click(screen.getByText('Envoyer'));
+    await act(async () => {
+      await user.clear(input);
+      await user.type(input, 'edited text');
+      await user.click(screen.getByText('Envoyer'));
+    });
 
     await waitFor(() => {
       expect(store.select(selectIsEditingComment, commentId)).toBe(false);

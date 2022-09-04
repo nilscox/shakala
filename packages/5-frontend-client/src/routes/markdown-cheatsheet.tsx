@@ -1,9 +1,9 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 import { ExternalLink, Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';
 
-export const MarkdownCheatSheetRoute = () => (
+export const MarkdownCheatsheetRoute = () => (
   <>
     <h1>Mise en forme</h1>
 

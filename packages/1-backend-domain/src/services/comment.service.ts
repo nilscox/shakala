@@ -21,8 +21,6 @@ export class CommentService {
     currentReaction: Reaction | null,
     targetReaction: ReactionType | null,
   ): Promise<Reaction | typeof del | undefined> {
-    console.log({ user, commentAuthor: comment.author });
-
     if (user.equals(comment.author)) {
       throw new CannotSetReactionOnOwnCommentError();
     }

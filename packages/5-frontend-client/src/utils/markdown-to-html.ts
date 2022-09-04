@@ -1,3 +1,5 @@
+// cspell:word gemoji
+
 import { Text } from 'mdast';
 import { Children, text } from 'mdast-builder';
 import { all, Handler } from 'mdast-util-to-hast';
@@ -129,7 +131,7 @@ const markRehypeHandler: Handler = (h, node) => {
   return h(node, 'mark', all(h, node));
 };
 
-export const markdownToHtml = async (markdown: string, highlight?: string) => {
+export const markdownToHtml = (markdown: string, highlight?: string) => {
   const processor = unified()
     .use(remarkParse)
     .use(remarkGmf)
@@ -139,5 +141,5 @@ export const markdownToHtml = async (markdown: string, highlight?: string) => {
     .use(remarkRehype, { handlers: { sup: supRehypeHandler, mark: markRehypeHandler } })
     .use(rehypeStringify);
 
-  return String(await processor.process(markdown)).replace(/\n/g, '');
+  return String(processor.processSync(markdown)).replace(/\n/g, '');
 };

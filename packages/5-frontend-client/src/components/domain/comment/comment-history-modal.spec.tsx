@@ -41,7 +41,7 @@ describe('CommentHistoryModal', () => {
 
     expect(screen.getByText('Nick')).toBeVisible();
 
-    expect(screen.getByText('Version 2')).toBeVisible();
+    expect(screen.getByText('Édition 2')).toBeVisible();
 
     expect(screen.getByText('Le 3 janvier 2022 à 00:00')).toBeVisible();
     expect(screen.getByText('last')).toBeVisible();
@@ -53,7 +53,7 @@ describe('CommentHistoryModal', () => {
 
     await act(() => user.click(screen.getByTitle('Version précédente')));
 
-    expect(screen.getByText('Version 1')).toBeVisible();
+    expect(screen.getByText('Édition 1')).toBeVisible();
 
     expect(screen.getByText('Le 2 janvier 2022 à 00:00')).toBeVisible();
     expect(screen.getByText('second')).toBeVisible();
@@ -65,6 +65,6 @@ describe('CommentHistoryModal', () => {
 
     await act(() => user.click(screen.getByTitle('Version suivante')));
 
-    expect(screen.getByText('Version 2')).toBeVisible();
+    expect(screen.getByText('Édition 2')).toBeVisible();
   });
 });

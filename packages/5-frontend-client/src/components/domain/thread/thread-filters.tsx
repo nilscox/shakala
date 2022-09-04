@@ -44,7 +44,7 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
   );
 
   return (
-    <form className={clsx('gap-4 items-center row', className)} onChange={handleChange}>
+    <form className={clsx('gap-4 items-start sm:items-center col sm:row', className)} onChange={handleChange}>
       <Input
         type="search"
         name="search"

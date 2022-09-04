@@ -13,19 +13,18 @@ type MarkdownPreviewTabsProps = {
 };
 
 export const MarkdownPreviewTabs = ({ tab, setTab }: MarkdownPreviewTabsProps) => (
-  <div className="row" role="tablist">
-    <div className="w-2" />
+  <div className="gap-2 row" role="tablist">
+    <div />
     <TabComponent selected={tab === Tab.edit} onClick={() => setTab(Tab.edit)}>
       Éditer
     </TabComponent>
-    <div className="w-2" />
     <TabComponent selected={tab === Tab.preview} onClick={() => setTab(Tab.preview)}>
       Aperçu
     </TabComponent>
     <Link
       openInNewTab
       to="/mise-en-forme"
-      className="self-end mr-1 ml-auto text-sm text-muted hover:underline"
+      className="self-end mr-1 ml-auto text-sm text-right text-muted hover:underline"
     >
       Aide de mise en forme
     </Link>
