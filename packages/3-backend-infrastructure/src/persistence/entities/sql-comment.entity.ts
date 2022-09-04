@@ -17,7 +17,7 @@ export class SqlComment extends BaseSqlEntity<Comment> {
   @ManyToOne({ eager: true })
   author!: SqlUser;
 
-  @ManyToOne()
+  @ManyToOne({ nullable: true })
   parent?: SqlComment;
 
   @OneToMany(() => SqlMessage, (message) => message.comment, { eager: true })

@@ -10,6 +10,8 @@ export * from './entities/thread.entity';
 export * from './entities/timestamp.value-object';
 export * from './entities/user.entity';
 
+export * from './services/comment.service';
+
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
 export * from './interfaces/generator-service.interface';

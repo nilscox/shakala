@@ -1,4 +1,4 @@
-import { CryptoService, DateService, GeneratorService } from 'backend-domain';
+import { CommentService, CryptoService, DateService, GeneratorService } from 'backend-domain';
 import { ClassType } from 'shared';
 
 import { LoginCommand, LoginCommandHandler } from './authentication/login.command';
@@ -59,9 +59,11 @@ export const registerHandlers = (
   registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
   registerCommand(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
 
+  const commentService = new CommentService(generatorService);
+
   // comment
   registerQuery(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
   registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
-  registerCommand(SetReactionCommand, new SetReactionCommandHandler(generatorService, reactionRepository));
+  registerCommand(SetReactionCommand, new SetReactionCommandHandler(userRepository, commentRepository, reactionRepository, commentService));
 }

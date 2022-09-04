@@ -1,7 +1,7 @@
-import { GeneratorService, Reaction, ReactionType } from 'backend-domain';
+import { CommentService, del, Reaction, ReactionType } from 'backend-domain';
 
 import { CommandHandler } from '../cqs/command-handler';
-import { ReactionRepository } from '../interfaces/repositories';
+import { CommentRepository, ReactionRepository, UserRepository } from '../interfaces/repositories';
 
 export class SetReactionCommand {
   constructor(
@@ -13,31 +13,25 @@ export class SetReactionCommand {
 
 export class SetReactionCommandHandler implements CommandHandler<SetReactionCommand> {
   constructor(
-    private readonly generatorService: GeneratorService,
+    private readonly userRepository: UserRepository,
+    private readonly commentRepository: CommentRepository,
     private readonly reactionRepository: ReactionRepository,
+    private readonly commentService: CommentService,
   ) {}
 
   async handle(command: SetReactionCommand): Promise<void> {
     const { commentId, userId, reactionType } = command;
 
+    const user = await this.userRepository.findByIdOrFail(userId);
+    const comment = await this.commentRepository.findByIdOrFail(commentId);
     const reaction = await this.reactionRepository.getUserReaction(commentId, userId);
 
-    if (!reaction && reactionType) {
-      const newReaction = new Reaction({
-        id: await this.generatorService.generateId(),
-        commentId,
-        userId,
-        type: reactionType,
-      });
+    const result = await this.commentService.setUserReaction(comment, user, reaction ?? null, reactionType);
 
-      await this.reactionRepository.save(newReaction);
-    } else if (reaction) {
-      if (!reactionType) {
-        await this.reactionRepository.delete(reaction);
-      } else {
-        reaction.setType(reactionType);
-        await this.reactionRepository.save(reaction);
-      }
+    if (result === del && reaction) {
+      await this.reactionRepository.delete(reaction);
+    } else if (result instanceof Reaction) {
+      await this.reactionRepository.save(result);
     }
   }
 }
