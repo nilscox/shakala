@@ -33,7 +33,7 @@ export const MarkdownPreviewInput = ({ border, value, onChange, ...props }: Mark
       <Markdown
         markdown={value}
         className={clsx(
-          'min-h-markdown-preview border-y bg-neutral p-1',
+          'min-h-1 border-y bg-neutral p-1',
           border && 'rounded border',
           tab !== Tab.preview && 'hidden',
         )}

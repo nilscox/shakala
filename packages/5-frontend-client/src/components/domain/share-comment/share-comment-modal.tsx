@@ -35,8 +35,7 @@ export const ShareCommentModal = () => {
     <Modal
       isOpen={commentId !== undefined}
       onRequestClose={closeModal}
-      // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className="flex max-w-[36rem] flex-col gap-5"
+      className="flex max-w-4 flex-col gap-5"
     >
       <PageTitle>{`Partager le commentaire de ${comment?.author.nick}`}</PageTitle>
 

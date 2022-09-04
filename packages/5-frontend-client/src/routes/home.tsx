@@ -1,5 +1,3 @@
-/* eslint-disable tailwindcss/no-arbitrary-value */
-
 import { fetchLastThreads, selectLastThreads } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
 
@@ -10,7 +8,7 @@ import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
-import MarkdownIcon from '~/icons/markdown.svg';
+import FormatIcon from '~/icons/format.svg';
 import SearchIcon from '~/icons/search.svg';
 import SortIcon from '~/icons/sort.svg';
 import SubscribeIcon from '~/icons/subscribe.svg';
@@ -32,7 +30,7 @@ export const Home = () => (
 );
 
 const Outline = () => (
-  <div className="my-[50px] mx-4 md:my-[80px] md:mx-[100px]">
+  <div className="my-8 mx-4 md:m-12">
     <div className="my-2 text-xl">
       Vous rêvez de pouvoir discuter des sujets qui vous tiennent à cœur dans de « bonnes conditions » ?
     </div>
@@ -53,7 +51,7 @@ type HeadingProps = {
 };
 
 const Heading = ({ id, children }: HeadingProps) => (
-  <div className="mt-[4rem] mb-4 flex flex-row items-center gap-4">
+  <div className="mt-10 mb-4 flex flex-row items-center gap-4">
     <h2 id={id} className="py-0 text-primary">
       {children}
     </h2>
@@ -82,7 +80,7 @@ const LastThreads = () => {
           <Link
             key={thread.id}
             to={`/discussions/${thread.id}`}
-            className="card max-w-[22rem] flex-1 overflow-hidden p-4"
+            className="card max-w-1 flex-1 overflow-hidden p-4"
           >
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
@@ -99,7 +97,7 @@ const Motivations = () => (
     <Heading id="pourquoi-ce-site">Pourquoi ce site ?</Heading>
 
     {/* cspell:word pfff */}
-    <p className="m-[4rem] text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
+    <p className="m-10 text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
 
     <div className="flex flex-col md:flex-row">
       <div className="mb-2 flex-1 border-b pb-2 md:mr-2 md:mb-0 md:border-r md:border-b-0 md:pr-2 md:pb-0">
@@ -141,8 +139,9 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
-  <div className="max-w-[22rem] flex-1">
-    <img src={image} className="mx-auto max-h-[5.5rem] opacity-80 md:max-h-[8rem]" alt={name} />
+  <div className="max-w-1 flex-1">
+    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+    <img src={image} className="mx-auto max-h-[5.5rem] py-2 opacity-80 md:max-h-1" alt={name} />
     <div className="border-y text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-sm">{children}</div>
   </div>
@@ -154,11 +153,9 @@ type FeatureProps = {
 };
 
 const Feature = ({ Icon, children }: FeatureProps) => (
-  <li className="flex flex-row items-center gap-4 p-1">
-    <div className="h-4 w-4">
-      <Icon className="fill-inverted" />
-    </div>
-    <div className="flex-1">{children}</div>
+  <li className="flex flex-row items-center p-1">
+    <Icon className="fill-inverted" />
+    <div className="ml-2 flex-1 border-l-2 pl-2">{children}</div>
   </li>
 );
 
@@ -183,9 +180,10 @@ const KeyFeatures = () => (
       </KeyFeature>
     </div>
 
-    <p>
-      Ces points sont les piliers fondateurs qui, on l'espère, feront le succès de la plateforme. Mais
-      d'autres fonctionnalités viennent y apporter de la valeur, par exemple :
+    <p className="my-6 max-w-4">
+      Ces trois points sont les piliers fondateurs qui, on l'espère, feront le succès de la plateforme. Mais
+      ce n'est pas tout ! D'autres fonctionnalités viennent rendre les fils de discussions pratiques et
+      pertinents :
     </p>
 
     <div className="flex flex-col md:flex-row md:gap-4">
@@ -194,7 +192,7 @@ const KeyFeatures = () => (
           Il est possible de <strong>rechercher par mots clés</strong> parmi tous les messages
         </Feature>
 
-        <Feature Icon={MarkdownIcon}>
+        <Feature Icon={FormatIcon}>
           Chaque message peut être <strong>mis en forme</strong> avec des liens, du texte en gras, des listes,
           des tableaux et bien plus
         </Feature>

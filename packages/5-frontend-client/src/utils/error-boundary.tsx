@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <Fallback>
           <p className="my-10 text-xl">Une erreur s'est produite...</p>
-          <pre className="w-full max-w-page overflow-x-auto rounded border bg-neutral p-2">
+          <pre className="w-full max-w-6 overflow-x-auto rounded border bg-neutral p-2">
             {this.renderError(error)}
           </pre>
         </Fallback>

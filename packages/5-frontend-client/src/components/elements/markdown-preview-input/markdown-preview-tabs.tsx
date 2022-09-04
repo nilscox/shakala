@@ -42,9 +42,8 @@ const TabComponent = ({ selected, onClick, children }: TabComponentProps) => (
     type="button"
     role="tab"
     onClick={onClick}
-    // eslint-disable-next-line tailwindcss/no-arbitrary-value
     className={clsx(
-      'relative top-[1px] mt-1 rounded-t border py-1 px-4 font-bold',
+      'relative top-px mt-1 rounded-t border py-1 px-4 font-bold',
       selected && 'border-b-transparent bg-neutral text-primary',
       !selected && 'border-none text-muted',
     )}

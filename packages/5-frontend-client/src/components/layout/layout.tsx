@@ -22,11 +22,11 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <PageTitle />
-      <Header className="mx-auto max-w-page" />
-      <main className="mx-auto min-h-main max-w-page px-2 sm:px-4">
+      <Header className="mx-auto max-w-6" />
+      <main className="mx-auto min-h-3 max-w-6 px-2 sm:px-4">
         <ConnectedErrorBoundary pathname={pathname}>{children}</ConnectedErrorBoundary>
       </main>
-      <Footer className="mx-auto max-w-page" />
+      <Footer className="mx-auto max-w-6" />
       <AuthenticationModal />
     </>
   );

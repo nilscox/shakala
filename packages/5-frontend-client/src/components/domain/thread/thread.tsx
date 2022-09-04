@@ -60,8 +60,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
       <PageTitle>{`${thread.author.nick} : ${thread.text}`}</PageTitle>
       <ThreadMeta {...thread} />
 
-      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-      <div className="my-5 md:my-[4rem]">
+      <div className="my-5 md:my-10">
         <div className="row mb-2 flex-wrap items-center justify-between gap-4">
           <AvatarNick big {...thread.author} />
           <div className="text-muted">

@@ -41,7 +41,7 @@ export const Snackbar = ({ className, type, transition, onRemove, children }: Sn
   return (
     <div
       className={clsx(
-        'w-fit min-w-snackbar max-w-snackbar overflow-hidden rounded-lg border-2 bg-neutral font-semibold shadow',
+        'w-fit min-w-1 max-w-4 overflow-hidden rounded-lg border-2 bg-neutral font-semibold shadow',
         colorsMap[type],
         {
           'animate-fade-in': transition === 'in',

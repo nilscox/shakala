@@ -3,7 +3,27 @@
 
 const colors = require('tailwindcss/colors');
 
-/** @type {import("@types/tailwindcss/tailwind-config").TailwindConfig} */
+// prettier-ignore
+const widths = {
+  none: 'none',
+  1: '22rem', //  352px
+  2: '26rem', //  512px
+  3: '32rem', //  512px
+  4: '40rem', //  640px
+  5: '52rem', //  640px
+  6: '68rem', // 1088px
+};
+
+// prettier-ignore
+const heights = {
+  none: 'none',
+  full: '100%',
+  1: '8rem',  // 128px
+  2: '16rem', // 256px
+  3: '32rem', // 512px
+};
+
+/** @type {import("tailwindcss").Config} */
 module.exports = {
   content: ['./src/**/*.tsx'],
   theme: {
@@ -13,37 +33,26 @@ module.exports = {
     },
     // prettier-ignore
     spacing: {
-      0:    '0px',        //  0px
-      0.5:  '0.25rem',    //  4px
-      1:    '0.5rem',     //  8px
-      2:    '0.75rem',    // 12px
-      4:    '1rem',       // 16px
-      5:    '1.5rem',     // 24px
-      6:    '2rem',       // 32px
-      8:    '3rem',       // 48px
-      10:   '4rem',       // 64px
+      0:    '0px',      //  0px
+      px:   '1px',      //  1px
+      0.5:  '0.25rem',  //  4px
+      1:    '0.5rem',   //  8px
+      2:    '0.75rem',  // 12px
+      4:    '1rem',     // 16px
+      5:    '1.5rem',   // 24px
+      6:    '2rem',     // 32px
+      8:    '3rem',     // 48px
+      10:   '4rem',     // 64px
+      12:   '6rem',     // 96px
+      16:   '8rem',     // 128px
     },
-    // prettier-ignore
-    minWidth: {
-      snackbar: '22rem',  // 352px
-    },
-    // prettier-ignore
-    maxWidth: {
-      none: 'none',
-      snackbar: '40rem',  //  640px
-      modal: '32rem',     //  512px
-      page: '68rem',      // 1088px
-    },
-    // prettier-ignore
-    minHeight: {
-      main: '32rem',      // 512px
-      fallback: '16rem',  // 256px
-      'markdown-preview': '8rem',  // 128px
-    },
-    // prettier-ignore
+    minWidth: widths,
+    maxWidth: widths,
+    minHeight: heights,
+    maxHeight: heights,
     borderRadius: {
-      DEFAULT: '0.25rem', //  4px
-      lg: '0.75rem',      // 12px
+      DEFAULT: '0.25rem',
+      lg: '0.75rem',
       full: '100%',
     },
     colors: {

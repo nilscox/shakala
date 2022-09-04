@@ -32,7 +32,7 @@ export const CommentHistoryModal = () => {
   return (
     <Modal
       isOpen={!requestClose && Boolean(comment)}
-      className="col max-h-full max-w-page"
+      className="col max-h-full max-w-6"
       onRequestClose={handleClose}
     >
       {comment && <CommentHistory commentId={comment.id} onClose={handleClose} />}
@@ -75,7 +75,7 @@ const CommentHistory = ({ commentId, onClose }: CommentHistoryProps) => {
           ))}
         </div>
 
-        <Diff before={before.text} after={after.text} className="min-h-markdown-preview overflow-y-auto" />
+        <Diff before={before.text} after={after.text} className="min-h-1 overflow-y-auto" />
       </div>
     </>
   );

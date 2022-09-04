@@ -7,8 +7,9 @@ export default {
   title: 'Elements/Button',
 } as Meta;
 
-// eslint-disable-next-line react/no-children-prop
-const Template: Story<ComponentProps<typeof Button>> = (props) => <Button children="Click me!" {...props} />;
+const Template: Story<ComponentProps<typeof Button>> = (props) => {
+  return <Button {...props}>Click me!</Button>;
+};
 
 export const primary = Template.bind({});
 primary.args = {

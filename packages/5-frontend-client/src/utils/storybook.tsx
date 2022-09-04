@@ -22,7 +22,7 @@ import { useSnackbar, SnackbarProvider } from '~/components/elements/snackbar';
 
 export const maxWidthDecorator = () => {
   const MaxWidthDecorator: DecoratorFn = (Story) => (
-    <div className="max-w-page">
+    <div className="max-w-6">
       <Story />
     </div>
   );

@@ -37,13 +37,37 @@ export const breakpoints = () => (
 export const spacings = () => (
   <>
     <Size className="h-2 w-0" name="0" />
+    <Size className="h-2 w-px" name="px" />
     <Size className="h-2 w-0.5" name="0.5" />
     <Size className="h-2 w-1" name="1" />
     <Size className="h-2 w-2" name="2" />
     <Size className="h-2 w-4" name="4" />
     <Size className="h-2 w-5" name="5" />
     <Size className="h-2 w-6" name="6" />
+    <Size className="h-2 w-8" name="8" />
+    <Size className="h-2 w-10" name="10" />
+    <Size className="h-2 w-12" name="12" />
+    <Size className="h-2 w-16" name="16" />
   </>
+);
+
+export const widths = () => (
+  <>
+    <Size className="h-2 min-w-1" name="1" />
+    <Size className="h-2 min-w-2" name="2" />
+    <Size className="h-2 min-w-3" name="3" />
+    <Size className="h-2 min-w-4" name="4" />
+    <Size className="h-2 min-w-5" name="5" />
+    <Size className="h-2 min-w-6" name="6" />
+  </>
+);
+
+export const heights = () => (
+  <div className="row items-end gap-4">
+    <Size className="min-h-1 w-2" name="1" />
+    <Size className="min-h-2 w-2" name="2" />
+    <Size className="min-h-3 w-2" name="3" />
+  </div>
 );
 
 type BorderRadiusProps = {
@@ -111,8 +135,7 @@ type TextProps = {
 
 const Text = ({ name, className }: TextProps) => (
   <div className="flex flex-row items-center gap-2">
-    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-    <Label className="w-[6rem]">{name}</Label>
+    <Label className="w-12">{name}</Label>
     <div className={clsx('px-1', className)}>Two driven jocks help fax my big quiz.</div>
     <div className={clsx('px-1 font-bold', className)}>Two driven jocks help fax my big quiz.</div>
   </div>

@@ -8,7 +8,7 @@ export default {
   title: 'Domain/Thread/ThreadForm',
   decorators: [
     (Story) => (
-      <div className="max-w-page">
+      <div className="max-w-6">
         <Story />
       </div>
     ),
