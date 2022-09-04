@@ -39,7 +39,7 @@ const Outline = () => (
     <div className="text-lg">
       <p>Et bien c'est le but de ce site 😄</p>
       <p>
-        Ici, vous pouvez ouvrir des espaces de discussions où chacun s'engage à respecter{' '}
+        Ici, vous pouvez ouvrir des fils de discussions où chacun s'engage à respecter{' '}
         <Link to="/charte">une charte</Link>, un ensemble de règles pensées pour favoriser{' '}
         <strong>des échanges critiques et bienveillants</strong>.
       </p>

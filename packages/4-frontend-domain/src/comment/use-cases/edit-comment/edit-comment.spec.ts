@@ -1,6 +1,6 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
-import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
+import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError } from '../../../types';
 import { addComment } from '../../comments.actions';
@@ -22,13 +22,14 @@ describe('editComment', () => {
   const user = createAuthUser();
 
   const commentId = 'commentId';
-  const comment = createComment({ id: commentId, text: 'text' });
+  const created = createDate('2022-01-01');
+  const comment = createComment({ id: commentId, text: 'text', date: created });
 
   const threadId = 'threadId';
   const thread = createThread({ id: threadId, comments: [comment] });
 
   const text = 'updated';
-  const now = new Date('2022-01-01');
+  const now = new Date('2022-01-02');
 
   beforeEach(() => {
     store.dispatch(setUser({ user }));
@@ -68,6 +69,16 @@ describe('editComment', () => {
 
     expect(comment).toHaveProperty('text', text);
     expect(comment).toHaveProperty('edited', now.toISOString());
+  });
+
+  it("adds the old text to the comment's history", async () => {
+    store.dispatch(setEditCommentFormText(commentId, text));
+
+    await execute();
+
+    expect(store.select(selectComment, commentId)).toHaveProperty('history', [
+      { date: created, text: comment.text },
+    ]);
   });
 
   it('requires user authentication', async () => {

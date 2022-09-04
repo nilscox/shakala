@@ -4,7 +4,12 @@ import { requireAuthentication } from '../../../authentication/use-cases/require
 import { State, Thunk } from '../../../store';
 import { AuthorizationError } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
-import { setCommentEdited, setCommentText, updateComment } from '../../comments.actions';
+import {
+  addCommentHistoryMessage,
+  setCommentEdited,
+  setCommentText,
+  updateComment,
+} from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
 type Key = {
@@ -64,6 +69,7 @@ export const editComment = (commentId: string): Thunk => {
       return;
     }
 
+    const comment = selectComment(getState(), commentId);
     const key: Key = { commentId };
 
     // todo: type cast
@@ -74,6 +80,7 @@ export const editComment = (commentId: string): Thunk => {
 
       await threadGateway.editComment(commentId, text);
 
+      dispatch(addCommentHistoryMessage(commentId, comment.text, comment.date));
       dispatch(setCommentText(commentId, text));
       dispatch(setCommentEdited(commentId, dateGateway.now().toISOString()));
       dispatch(setIsEditingComment(commentId, false));

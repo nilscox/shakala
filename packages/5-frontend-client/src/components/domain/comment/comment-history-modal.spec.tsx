@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/dom';
 import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { addComment, Comment, createComment, createDate, createUser, TestStore } from 'frontend-domain';
+import { addComment, createComment, createDate, createUser, TestStore } from 'frontend-domain';
 import { createMemoryHistory } from 'history';
 
 import { TestRenderer } from '~/test/render';
@@ -10,19 +10,6 @@ import { CommentHistoryModal } from './comment-history-modal';
 
 describe('CommentHistoryModal', () => {
   const store = new TestStore();
-
-  const setup = (comment: Comment) => {
-    const history = createMemoryHistory({
-      initialEntries: ['?' + new URLSearchParams({ historique: comment.id })],
-    });
-
-    store.dispatch(addComment(comment));
-
-    new TestRenderer()
-      .withMemoryRouter(history)
-      .withRedux(store)
-      .render(<CommentHistoryModal />);
-  };
 
   it("navigates through a comment's edition history", async () => {
     const user = userEvent.setup();
@@ -37,7 +24,16 @@ describe('CommentHistoryModal', () => {
       ],
     });
 
-    setup(comment);
+    const history = createMemoryHistory({
+      initialEntries: ['?' + new URLSearchParams({ historique: comment.id })],
+    });
+
+    store.dispatch(addComment(comment));
+
+    new TestRenderer()
+      .withMemoryRouter(history)
+      .withRedux(store)
+      .render(<CommentHistoryModal />);
 
     expect(screen.getByText('Nick')).toBeVisible();
 
@@ -66,5 +62,16 @@ describe('CommentHistoryModal', () => {
     await act(() => user.click(screen.getByTitle('Version suivante')));
 
     expect(screen.getByText('Édition 2')).toBeVisible();
+  });
+
+  it('does not crash when the comment is being fetched', () => {
+    const history = createMemoryHistory({
+      initialEntries: ['?' + new URLSearchParams({ historique: 'commentId' })],
+    });
+
+    new TestRenderer()
+      .withMemoryRouter(history)
+      .withRedux(store)
+      .render(<CommentHistoryModal />);
   });
 });

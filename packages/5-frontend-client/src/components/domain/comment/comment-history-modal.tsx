@@ -1,4 +1,4 @@
-import { formatDate, selectComment, User } from 'frontend-domain';
+import { formatDate, selectComment, selectCommentUnsafe, User } from 'frontend-domain';
 import { useState } from 'react';
 import { MessageDto } from 'shared';
 
@@ -15,6 +15,8 @@ import Cross from '~/icons/cross.svg';
 
 export const CommentHistoryModal = () => {
   const commentId = useSearchParam('historique');
+  const comment = useSelector(selectCommentUnsafe, commentId);
+
   const [requestClose, setRequestClose] = useState(false);
   const setSearchParam = useSetSearchParam();
 
@@ -29,12 +31,11 @@ export const CommentHistoryModal = () => {
 
   return (
     <Modal
-      isOpen={!requestClose && Boolean(commentId)}
-      // eslint-disable-next-line tailwindcss/no-arbitrary-value
-      className="col max-h-full max-w-[64rem]"
+      isOpen={!requestClose && Boolean(comment)}
+      className="col max-h-full max-w-page"
       onRequestClose={handleClose}
     >
-      {commentId && <CommentHistory commentId={commentId} onClose={handleClose} />}
+      {comment && <CommentHistory commentId={comment.id} onClose={handleClose} />}
     </Modal>
   );
 };
@@ -65,16 +66,16 @@ const CommentHistory = ({ commentId, onClose }: CommentHistoryProps) => {
         onClose={onClose}
       />
 
-      <hr className="mt-1 mb-2" />
+      <hr className="mt-1" />
 
-      <div className="col my-4 flex-1 overflow-hidden">
+      <div className="col flex-1 overflow-hidden">
         <div className="row my-2">
           {[before, after].map(({ date }, index) => (
             <Date key={index} date={date} />
           ))}
         </div>
 
-        <Diff before={before.text} after={after.text} className="overflow-y-auto" />
+        <Diff before={before.text} after={after.text} className="min-h-markdown-preview overflow-y-auto" />
       </div>
     </>
   );

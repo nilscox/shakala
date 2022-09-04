@@ -1,9 +1,10 @@
-import { Normalized, normalized, createNormalizedUpdater } from '@nilscox/redux-query';
+import { createNormalizedUpdater, Normalized, normalized } from '@nilscox/redux-query';
 import { AnyAction, combineReducers } from '@reduxjs/toolkit';
 
 import { schemas } from '../normalization';
 import { Comment } from '../types';
 
+import { isAddCommentHistoryMessageAction } from './comments.actions';
 import {
   createReplyReducer,
   editCommentReducer,
@@ -30,6 +31,14 @@ const normalizedCommentsReducer = (
       }
 
       return { editionForm: { text: comment.text } };
+    });
+  }
+
+  if (isAddCommentHistoryMessageAction(action)) {
+    const { commentId, text, date } = action;
+
+    return updateComment(commentId, (comment) => {
+      return { history: [...comment.history, { text, date }] };
     });
   }
 
