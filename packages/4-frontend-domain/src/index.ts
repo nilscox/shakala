@@ -6,6 +6,7 @@ export * from './interfaces/logger.gateway';
 export * from './interfaces/router.gateway';
 export * from './interfaces/snackbar.gateway';
 export * from './interfaces/timer.gateway';
+export * from './interfaces/storage.gateway';
 
 export * from './store';
 export * from './types';

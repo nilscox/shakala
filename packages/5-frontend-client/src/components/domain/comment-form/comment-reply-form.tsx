@@ -7,6 +7,7 @@ import {
   setIsReplying,
   setReplyFormText,
   createReply,
+  clearReplyFormText,
 } from 'frontend-domain';
 
 import { Avatar } from '~/components/elements/avatar/avatar';
@@ -37,7 +38,7 @@ export const ReplyForm = ({ parentId }: ReplyFormPros) => {
       setMessage={(text) => dispatch(setReplyFormText(parentId, text))}
       canSubmit={canSubmit}
       isSubmitting={isSubmitting as boolean}
-      onCancel={() => dispatch(setIsReplying(parentId, false))}
+      onCancel={() => dispatch(clearReplyFormText(parentId))}
       onSubmit={() => dispatch(createReply(parentId))}
     />
   );

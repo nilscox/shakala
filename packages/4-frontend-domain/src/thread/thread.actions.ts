@@ -7,6 +7,7 @@ export const {
   setEntity: addThread,
   setEntities: addThreads,
   updateEntity: updateThread,
+  // todo: type this
 } = createNormalizedActions('thread');
 
 export const setThreadComments = (threadId: string, comments: Comment[]) => {

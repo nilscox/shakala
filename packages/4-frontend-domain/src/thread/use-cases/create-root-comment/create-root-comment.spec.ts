@@ -25,10 +25,10 @@ describe('createRootComment', () => {
   const now = new Date('2022-01-01');
   const commentId = 'commentId';
 
-  beforeEach(() => {
+  beforeEach(async () => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
-    store.dispatch(setCreateRootCommentText(threadId, text));
+    await store.dispatch(setCreateRootCommentText(threadId, text));
 
     store.dateGateway.setNow(now);
     store.threadGateway.createComment.mockResolvedValue(commentId);
@@ -99,6 +99,14 @@ describe('createRootComment', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre commentaire a bien été créé.');
   });
 
+  it('clears the persisted draft comment text', async () => {
+    store.storageGateway.set('rootComment', threadId, text);
+
+    await execute();
+
+    expect(store.storageGateway.get('rootComment', threadId)).toBeUndefined();
+  });
+
   describe('error handling', () => {
     const error = new Error('nope.');
 
@@ -126,5 +134,32 @@ describe('createRootComment', () => {
         "Une erreur s'est produite, votre commentaire n'a pas été créé.",
       );
     });
+  });
+});
+
+describe('setCreateRootCommentText', () => {
+  const store = new TestStore();
+
+  const user = createAuthUser();
+
+  const threadId = 'threadId';
+  const thread = createThread({ id: threadId });
+  const text = 'text';
+
+  beforeEach(() => {
+    store.dispatch(setUser({ user }));
+    store.dispatch(addThread(thread));
+  });
+
+  it('stores the draft comment text', async () => {
+    await store.dispatch(setCreateRootCommentText(threadId, text));
+
+    expect(store.select(selectCreateRootCommentFormText, threadId)).toEqual(text);
+  });
+
+  it('persists the draft comment text', async () => {
+    await store.dispatch(setCreateRootCommentText(threadId, text));
+
+    expect(store.storageGateway.get('rootComment', threadId)).toEqual(text);
   });
 });

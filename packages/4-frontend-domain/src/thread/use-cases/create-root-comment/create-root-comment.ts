@@ -27,8 +27,18 @@ export const [addRootCommentToThread, isAddRootCommentToThreadAction] = createAc
   (threadId: string, comment: Comment) => ({ threadId, commentId: comment.id }),
 );
 
-export const setCreateRootCommentText = (threadId: string, text: string) => {
-  return updateThread(threadId, { createCommentForm: { text } });
+export const setCreateRootCommentText = (threadId: string, text: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(updateThread(threadId, { createCommentForm: { text } }));
+    await storageGateway.setDraftCommentText('rootComment', threadId, text);
+  };
+};
+
+const clearCreateRootCommentText = (threadId: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(setCreateRootCommentText(threadId, ''));
+    await storageGateway.removeDraftCommentText('rootComment', threadId);
+  };
 };
 
 // selectors
@@ -89,8 +99,9 @@ export const createRootComment = (threadId: string): Thunk => {
 
       dispatch(addComment(comment));
       dispatch(addCreatedRootComment(comment));
-      dispatch(setCreateRootCommentText(threadId, ''));
       dispatch(addRootCommentToThread(threadId, comment));
+
+      await dispatch(clearCreateRootCommentText(threadId));
 
       dispatch(actions.setSuccess(key, undefined));
       snackbarGateway.success('Votre commentaire a bien été créé.');

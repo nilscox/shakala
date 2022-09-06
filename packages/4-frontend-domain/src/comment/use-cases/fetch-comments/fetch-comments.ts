@@ -1,7 +1,7 @@
 import { query, QueryState } from '@nilscox/redux-query';
 import { getIds, isDefined, Sort } from 'shared';
 
-import { selectComments } from '../..';
+import { selectComments, setEditCommentFormText, setReplyFormText } from '../..';
 import { State, Thunk } from '../../../store';
 import { clearCreatedRootComments } from '../../../thread/lists/created-root-comments';
 import { setThreadComments } from '../../../thread/thread.actions';
@@ -51,7 +51,7 @@ export const selectThreadComments = (state: State, threadId: string, search?: st
 };
 
 export const fetchComments = (threadId: string): Thunk => {
-  return async (dispatch, getState, { threadGateway, routerGateway }) => {
+  return async (dispatch, getState, { threadGateway, routerGateway, storageGateway }) => {
     const search = routerGateway.getQueryParam('search');
     const sort = routerGateway.getQueryParam('sort') as Sort;
 
@@ -76,6 +76,20 @@ export const fetchComments = (threadId: string): Thunk => {
       dispatch(clearCreatedRootComments());
       dispatch(addComments([...comments, ...replies]));
       dispatch(setThreadComments(threadId, comments));
+
+      for (const comment of comments) {
+        const draftReply = await storageGateway.getDraftCommentText('reply', comment.id);
+
+        if (draftReply) {
+          dispatch(setReplyFormText(comment.id, draftReply));
+        }
+
+        const draftEdition = await storageGateway.getDraftCommentText('edition', comment.id);
+
+        if (draftEdition) {
+          dispatch(setEditCommentFormText(comment.id, draftEdition));
+        }
+      }
 
       dispatch(actions.setSuccess(key, getIds(comments)));
     } catch (error) {

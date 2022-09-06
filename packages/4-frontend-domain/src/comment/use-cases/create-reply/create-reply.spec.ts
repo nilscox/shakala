@@ -1,6 +1,7 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
+import { addRootCommentToThread } from '../../../thread';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Comment } from '../../../types';
 import { addComment } from '../../comments.actions';
@@ -11,6 +12,7 @@ import {
   selectCreateReplyError,
   selectIsReplying,
   selectIsSubmittingReply,
+  selectReplyFormText,
   setIsReplying,
   setReplyFormText,
 } from './create-reply';
@@ -100,6 +102,14 @@ describe('createReply', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre réponse a bien été créée.');
   });
 
+  it('clears the persisted draft reply text', async () => {
+    store.storageGateway.set('reply', parentId, text);
+
+    await execute();
+
+    expect(store.storageGateway.get('reply', parentId)).toBeUndefined();
+  });
+
   describe('error handling', () => {
     const error = new Error('nope.');
 
@@ -127,5 +137,38 @@ describe('createReply', () => {
         "Une erreur s'est produite, votre réponse n'a pas été créée.",
       );
     });
+  });
+});
+
+describe('setReplyFormText', () => {
+  const store = new TestStore();
+
+  const user = createAuthUser();
+
+  const threadId = 'threadId';
+  const thread = createThread({ id: threadId });
+
+  const parentId = 'parentId';
+  const parent = createComment({ id: parentId });
+
+  const text = 'text';
+
+  beforeEach(() => {
+    store.dispatch(setUser({ user }));
+    store.dispatch(addThread(thread));
+    store.dispatch(addComment(parent));
+    store.dispatch(addRootCommentToThread(threadId, parent));
+  });
+
+  it('stores the draft comment text', async () => {
+    await store.dispatch(setReplyFormText(parentId, text));
+
+    expect(store.select(selectReplyFormText, parentId)).toEqual(text);
+  });
+
+  it('persists the draft comment text', async () => {
+    await store.dispatch(setReplyFormText(parentId, text));
+
+    expect(store.storageGateway.get('reply', parentId)).toEqual(text);
   });
 });

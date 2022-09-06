@@ -17,16 +17,31 @@ const createReplyMutation = query<Key, undefined>('createReply');
 
 export const createReplyReducer = createReplyMutation.reducer();
 
+// actions
+
 const actions = createReplyMutation.actions();
-const selectors = createReplyMutation.selectors((state: State) => state.comments.mutations.createReply);
 
 export const setIsReplying = (commentId: string, isReplying = true) => {
   return updateComment(commentId, { replyForm: isReplying ? { text: '' } : undefined });
 };
 
-export const setReplyFormText = (commentId: string, text: string) => {
-  return updateComment(commentId, { replyForm: { text } });
+export const setReplyFormText = (commentId: string, text: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(updateComment(commentId, { replyForm: { text } }));
+    await storageGateway.setDraftCommentText('reply', commentId, text);
+  };
 };
+
+export const clearReplyFormText = (commentId: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(setIsReplying(commentId, false));
+    await storageGateway.removeDraftCommentText('reply', commentId);
+  };
+};
+
+// selectors
+
+const selectors = createReplyMutation.selectors((state: State) => state.comments.mutations.createReply);
 
 export const selectCanReply = (state: State, commentId: string) => {
   return !selectIsReply(state, commentId);
@@ -92,7 +107,7 @@ export const createReply = (parentId: string): Thunk => {
       dispatch(addComment(reply));
       dispatch(addCommentReply(parentId, reply));
 
-      dispatch(setIsReplying(parentId, false));
+      await dispatch(clearReplyFormText(parentId));
 
       dispatch(actions.setSuccess(key, undefined));
 

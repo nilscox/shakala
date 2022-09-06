@@ -5,6 +5,7 @@ import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
 import { RemoveListener, RouterGateway } from '../interfaces/router.gateway';
 import { SnackbarGateway } from '../interfaces/snackbar.gateway';
+import { DraftCommentKind, StorageGateway } from '../interfaces/storage.gateway';
 import { TimerGateway } from '../interfaces/timer.gateway';
 import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
@@ -121,6 +122,49 @@ class MockThreadGateway implements ThreadGateway {
   setReaction = mockFn<ThreadGateway['setReaction']>();
 }
 
+class InMemoryStorageGateway implements StorageGateway {
+  private drafts = new Map<string, string>();
+
+  constructor() {
+    beforeEach(() => {
+      this.drafts.clear();
+    });
+  }
+
+  private getKey(kind: DraftCommentKind, id: string) {
+    return [kind, id].join(':');
+  }
+
+  async getDraftCommentText(kind: DraftCommentKind, id: string): Promise<string | undefined> {
+    return this.get(kind, id);
+  }
+
+  async setDraftCommentText(kind: DraftCommentKind, id: string, text: string): Promise<void> {
+    if (text === '') {
+      this.removeDraftCommentText(kind, id);
+      return;
+    }
+
+    this.drafts.set(this.getKey(kind, id), text);
+  }
+
+  async removeDraftCommentText(kind: DraftCommentKind, id: string): Promise<void> {
+    this.drafts.delete(this.getKey(kind, id));
+  }
+
+  has(kind: DraftCommentKind, id: string) {
+    return this.drafts.has(this.getKey(kind, id));
+  }
+
+  get(kind: DraftCommentKind, id: string) {
+    return this.drafts.get(this.getKey(kind, id));
+  }
+
+  set(kind: DraftCommentKind, id: string, text: string) {
+    this.drafts.set(this.getKey(kind, id), text);
+  }
+}
+
 export class TestStore implements Dependencies {
   readonly dateGateway = new StubDateGateway();
   readonly snackbarGateway = new MockSnackbarGateway();
@@ -129,6 +173,7 @@ export class TestStore implements Dependencies {
   readonly timerGateway = new FakeTimerGateway();
   readonly authenticationGateway = new MockAuthenticationGateway();
   readonly threadGateway = new MockThreadGateway();
+  readonly storageGateway = new InMemoryStorageGateway();
 
   private _logActions = false;
 
