@@ -2,6 +2,7 @@ import { createCommentDto, createThreadDto } from 'shared';
 
 import { TestStore } from '../../../test';
 import { selectThread } from '../../thread.selectors';
+import { selectCreateRootCommentFormText } from '../create-root-comment/create-root-comment';
 
 import {
   fetchThreadById,
@@ -17,10 +18,12 @@ describe('fetchThreadById', () => {
   const threadDto = createThreadDto({ id: threadId });
   const commentsDto = [createCommentDto()];
 
-  it('fetches a thread from its id', async () => {
+  beforeEach(() => {
     store.threadGateway.getById.mockResolvedValue([threadDto, commentsDto]);
     store.threadGateway.getComments.mockResolvedValue(commentsDto);
+  });
 
+  it('fetches a thread from its id', async () => {
     const promise = store.dispatch(fetchThreadById(threadId));
 
     expect(store.select(selectIsLoadingThread, threadId)).toBe(true);
@@ -39,6 +42,14 @@ describe('fetchThreadById', () => {
         text: '',
       },
     });
+  });
+
+  it('restores the draft root comment text', async () => {
+    store.storageGateway.set('rootComment', threadId, 'draft');
+
+    await store.dispatch(fetchThreadById(threadId));
+
+    expect(store.select(selectCreateRootCommentFormText, threadId)).toEqual('draft');
   });
 
   it('stores the error and re-throws it when the gateway throws', async () => {

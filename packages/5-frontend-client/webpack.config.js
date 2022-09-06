@@ -78,6 +78,12 @@ if (NODE_ENV === 'development') {
     host: HOST,
     port: Number(PORT),
     historyApiFallback: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' },
+      },
+    },
   };
 }
 

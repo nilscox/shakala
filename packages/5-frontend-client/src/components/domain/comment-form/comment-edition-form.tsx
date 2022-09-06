@@ -1,11 +1,11 @@
 import {
+  clearEditCommentFormText,
   editComment,
   selectCanSubmitEditCommentForm,
   selectEditCommentFormText,
   selectIsEditingComment,
   selectIsSubmittingCommentEditionForm,
   setEditCommentFormText,
-  setIsEditingComment,
 } from 'frontend-domain';
 
 import { useDispatch } from '~/hooks/use-dispatch';
@@ -35,7 +35,7 @@ export const CommentEditionForm = ({ commentId }: CommentEditionFormProps) => {
       setMessage={(message) => dispatch(setEditCommentFormText(commentId, message))}
       canSubmit={canSubmit}
       isSubmitting={isSubmitting as boolean}
-      onCancel={() => dispatch(setIsEditingComment(commentId, false))}
+      onCancel={() => dispatch(clearEditCommentFormText(commentId))}
       onSubmit={() => dispatch(editComment(commentId))}
     />
   );

@@ -1,6 +1,7 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';
+import { addRootCommentToThread } from '../../../thread';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError } from '../../../types';
 import { addComment } from '../../comments.actions';
@@ -101,6 +102,14 @@ describe('editComment', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre commentaire a bien été mis à jour.');
   });
 
+  it('clears the persisted draft comment edition text', async () => {
+    store.storageGateway.set('edition', commentId, text);
+
+    await execute();
+
+    expect(store.storageGateway.get('edition', commentId)).toBeUndefined();
+  });
+
   describe('error handling', () => {
     const error = new Error('nope.');
 
@@ -138,5 +147,38 @@ describe('editComment', () => {
         "Vous devez être l'auteur du message pour pouvoir l'éditer.",
       );
     });
+  });
+});
+
+describe('setEditCommentFormText', () => {
+  const store = new TestStore();
+
+  const user = createAuthUser();
+
+  const threadId = 'threadId';
+  const thread = createThread({ id: threadId });
+
+  const commentId = 'commentId';
+  const comment = createComment({ id: commentId, text: 'text' });
+
+  const text = 'edit';
+
+  beforeEach(() => {
+    store.dispatch(setUser({ user }));
+    store.dispatch(addThread(thread));
+    store.dispatch(addComment(comment));
+    store.dispatch(addRootCommentToThread(threadId, comment));
+  });
+
+  it('stores the draft edited text', async () => {
+    await store.dispatch(setEditCommentFormText(commentId, text));
+
+    expect(store.select(selectEditCommentFormText, commentId)).toEqual(text);
+  });
+
+  it('persists the draft edited text', async () => {
+    await store.dispatch(setEditCommentFormText(commentId, text));
+
+    expect(store.storageGateway.get('edition', commentId)).toEqual(text);
   });
 });

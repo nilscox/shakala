@@ -29,8 +29,18 @@ export const [setIsEditingComment, isSetIsEditingCommentAction] = createAction(
   (commentId: string, isEditing = true) => ({ commentId, isEditing }),
 );
 
-export const setEditCommentFormText = (commentId: string, text: string) => {
-  return updateComment(commentId, { editionForm: { text } });
+export const setEditCommentFormText = (commentId: string, text: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(updateComment(commentId, { editionForm: { text } }));
+    await storageGateway.setDraftCommentText('edition', commentId, text);
+  };
+};
+
+export const clearEditCommentFormText = (commentId: string): Thunk => {
+  return async (dispatch, getState, { storageGateway }) => {
+    dispatch(setIsEditingComment(commentId, false));
+    await storageGateway.removeDraftCommentText('edition', commentId);
+  };
 };
 
 // selectors
@@ -83,7 +93,8 @@ export const editComment = (commentId: string): Thunk => {
       dispatch(addCommentHistoryMessage(commentId, comment.text, comment.date));
       dispatch(setCommentText(commentId, text));
       dispatch(setCommentEdited(commentId, dateGateway.now().toISOString()));
-      dispatch(setIsEditingComment(commentId, false));
+
+      await dispatch(clearEditCommentFormText(commentId));
 
       dispatch(actions.setSuccess(key, undefined));
 

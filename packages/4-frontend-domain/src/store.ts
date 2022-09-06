@@ -15,6 +15,7 @@ import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
 import { RouterGateway } from './interfaces/router.gateway';
 import { SnackbarGateway } from './interfaces/snackbar.gateway';
+import { StorageGateway } from './interfaces/storage.gateway';
 import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
 import { threadsReducer } from './thread/thread.slice';
@@ -44,6 +45,7 @@ export type Dependencies = {
   timerGateway: TimerGateway;
   authenticationGateway: AuthenticationGateway;
   threadGateway: ThreadGateway;
+  storageGateway: StorageGateway;
 };
 
 export type Store = ReturnType<typeof createStore>;

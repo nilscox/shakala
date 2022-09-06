@@ -5,6 +5,7 @@ import type { State, Thunk } from '../../../store';
 import { serializeError } from '../../../utils/serialize-error';
 import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
 import { addThread } from '../../thread.actions';
+import { setCreateRootCommentText } from '../create-root-comment/create-root-comment';
 
 export const NotFound = 'NotFound';
 
@@ -26,7 +27,7 @@ export const selectLoadingThreadError = (state: State, threadId: string) => {
 };
 
 export const fetchThreadById = (threadId: string): Thunk => {
-  return async (dispatch, getState, { threadGateway }) => {
+  return async (dispatch, getState, { threadGateway, storageGateway }) => {
     const key = { threadId };
 
     try {
@@ -44,6 +45,12 @@ export const fetchThreadById = (threadId: string): Thunk => {
 
       dispatch(addThread(thread));
       dispatch(actions.setSuccess(key, thread.id));
+
+      const draftRootCommentText = await storageGateway.getDraftCommentText('rootComment', threadId);
+
+      if (draftRootCommentText) {
+        dispatch(setCreateRootCommentText(threadId, draftRootCommentText));
+      }
 
       await dispatch(fetchComments(threadId));
     } catch (error) {

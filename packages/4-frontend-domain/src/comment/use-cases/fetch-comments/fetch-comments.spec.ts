@@ -8,6 +8,8 @@ import {
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
 import { Sort } from '../../../types';
 import { addComment, addComments } from '../../comments.actions';
+import { selectReplyFormText } from '../create-reply/create-reply';
+import { selectEditCommentFormText } from '../edit-comment/edit-comment';
 
 import {
   fetchComments,
@@ -89,6 +91,22 @@ describe('fetchComments', () => {
     await execute();
 
     expect(store.select(selectCreatedRootComments), 'created comments were not cleared').toHaveLength(0);
+  });
+
+  it('restores the draft replies texts', async () => {
+    store.storageGateway.set('reply', commentDto.id, 'draft');
+
+    await execute();
+
+    expect(store.select(selectReplyFormText, commentDto.id)).toEqual('draft');
+  });
+
+  it('restores the draft editions texts', async () => {
+    store.storageGateway.set('edition', commentDto.id, 'draft');
+
+    await execute();
+
+    expect(store.select(selectEditCommentFormText, commentDto.id)).toEqual('draft');
   });
 
   it('stores and re-throws the error when the call to the gateway fails', async () => {

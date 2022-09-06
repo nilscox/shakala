@@ -7,6 +7,7 @@ import { RealDateGateway } from './adapters/date-gateway/real-date-gateway';
 import { FetchHttpGateway } from './adapters/http-gateway/fetch-http.gateway';
 import { ConsoleLoggerGateway } from './adapters/logger-gateway/console-logger.gateway';
 import { ReactRouterGateway } from './adapters/router-gateway/react-router-gateway';
+import { LocalStorageGateway } from './adapters/storage-gateway/local-storage-gateway';
 import { ApiThreadGateway } from './adapters/thread-gateway/api-thread-gateway';
 import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
 import { useSnackbar } from './components/elements/snackbar';
@@ -51,6 +52,7 @@ const useDependencies = () => {
       timerGateway: new RealTimerGateway(),
       authenticationGateway: new ApiAuthenticationGateway(http.current),
       threadGateway: new ApiThreadGateway(http.current),
+      storageGateway: new LocalStorageGateway(),
     }),
     [routerGateway, snackbarGateway],
   );
