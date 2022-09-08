@@ -1,3 +1,4 @@
+import { DraftCommentKind } from 'frontend-domain';
 import { MockedObject } from 'vitest';
 
 import { LocalStorageGateway } from './local-storage-gateway';
@@ -14,41 +15,36 @@ describe('LocalStorageGateway', () => {
   const gateway = new LocalStorageGateway(storage);
   const storageKey = LocalStorageGateway.storageKey;
 
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+  beforeAll(() => void vi.useFakeTimers());
+  afterAll(() => void vi.useRealTimers());
+
+  const createStorageItem = (kind: DraftCommentKind, value: Record<string, string>) => {
+    return JSON.stringify({
+      [DraftCommentKind.root]: {},
+      [DraftCommentKind.reply]: {},
+      [DraftCommentKind.edition]: {},
+      [kind]: value,
+    });
+  };
 
   const mockDraftRootComments = (drafts: Record<string, string>) => {
-    getItem.mockReturnValue(
-      JSON.stringify({
-        rootComment: drafts,
-        reply: {},
-        edition: {},
-      }),
-    );
+    getItem.mockReturnValue(createStorageItem(DraftCommentKind.root, drafts));
   };
 
   const expectDraftRootComments = (drafts: Record<string, string>) => {
-    expect(setItem).toHaveBeenCalledWith(
-      storageKey,
-      JSON.stringify({
-        rootComment: drafts,
-        reply: {},
-        edition: {},
-      }),
-    );
+    expect(setItem).toHaveBeenCalledWith(storageKey, createStorageItem(DraftCommentKind.root, drafts));
   };
 
   it('reads a draft root comment text', async () => {
-    expect(await gateway.getDraftCommentText('rootComment', 'threadId')).toBeUndefined();
+    expect(await gateway.getDraftCommentText(DraftCommentKind.root, 'threadId')).toBeUndefined();
 
     mockDraftRootComments({ threadId: 'text' });
 
-    expect(await gateway.getDraftCommentText('rootComment', 'threadId')).toEqual('text');
+    expect(await gateway.getDraftCommentText(DraftCommentKind.root, 'threadId')).toEqual('text');
   });
 
   it('adds a draft root comment text', async () => {
-    await gateway.setDraftCommentText('rootComment', 'threadId', 'text');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'threadId', 'text');
     vi.runAllTimers();
 
     expectDraftRootComments({
@@ -59,7 +55,7 @@ describe('LocalStorageGateway', () => {
   it('updates a draft root comment text', async () => {
     mockDraftRootComments({ threadId: 'text' });
 
-    await gateway.setDraftCommentText('rootComment', 'threadId', 'updated');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'threadId', 'updated');
     vi.runAllTimers();
 
     expectDraftRootComments({
@@ -70,7 +66,7 @@ describe('LocalStorageGateway', () => {
   it('adds another draft root comment text', async () => {
     mockDraftRootComments({ threadId: 'text' });
 
-    await gateway.setDraftCommentText('rootComment', 'otherThreadId', 'other text');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'otherThreadId', 'other text');
     vi.runAllTimers();
 
     expectDraftRootComments({
@@ -80,18 +76,14 @@ describe('LocalStorageGateway', () => {
   });
 
   it("debounces the call to the storage's setItem", async () => {
-    await gateway.setDraftCommentText('rootComment', 'threadId', 'te');
-    await gateway.setDraftCommentText('rootComment', 'threadId', 'text');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'threadId', 'te');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'threadId', 'text');
 
     vi.runAllTimers();
 
     expect(setItem).not.toHaveBeenCalledWith(
       storageKey,
-      JSON.stringify({
-        rootComment: { threadId: 'te' },
-        reply: {},
-        edition: {},
-      }),
+      createStorageItem(DraftCommentKind.root, { threadId: 'te' }),
     );
 
     expectDraftRootComments({
@@ -102,7 +94,7 @@ describe('LocalStorageGateway', () => {
   it('removes a draft root comment text when providing an empty string', async () => {
     mockDraftRootComments({ threadId1: 'text1', threadId2: 'text2' });
 
-    await gateway.setDraftCommentText('rootComment', 'threadId1', '');
+    await gateway.setDraftCommentText(DraftCommentKind.root, 'threadId1', '');
 
     expectDraftRootComments({
       threadId2: 'text2',
@@ -110,28 +102,20 @@ describe('LocalStorageGateway', () => {
   });
 
   it('adds draft replies and editions', async () => {
-    await gateway.setDraftCommentText('reply', 'parentId', 'reply');
+    await gateway.setDraftCommentText(DraftCommentKind.reply, 'parentId', 'reply');
     vi.runAllTimers();
 
     expect(setItem).toHaveBeenCalledWith(
       storageKey,
-      JSON.stringify({
-        rootComment: {},
-        reply: { parentId: 'reply' },
-        edition: {},
-      }),
+      createStorageItem(DraftCommentKind.reply, { parentId: 'reply' }),
     );
 
-    await gateway.setDraftCommentText('edition', 'commentId', 'edition');
+    await gateway.setDraftCommentText(DraftCommentKind.edition, 'commentId', 'edition');
     vi.runAllTimers();
 
     expect(setItem).toHaveBeenCalledWith(
       storageKey,
-      JSON.stringify({
-        rootComment: {},
-        reply: {},
-        edition: { commentId: 'edition' },
-      }),
+      createStorageItem(DraftCommentKind.edition, { commentId: 'edition' }),
     );
   });
 });

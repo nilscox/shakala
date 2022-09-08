@@ -1,8 +1,8 @@
 import { createAction, query, QueryState } from '@nilscox/redux-query';
 
-import { selectUserOrFail } from '../../../authentication';
-import { requireAuthentication } from '../../../authentication/use-cases';
+import { selectUserOrFail, requireAuthentication } from '../../../authentication';
 import { addComment } from '../../../comment/comments.actions';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
@@ -30,14 +30,14 @@ export const [addRootCommentToThread, isAddRootCommentToThreadAction] = createAc
 export const setCreateRootCommentText = (threadId: string, text: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(updateThread(threadId, { createCommentForm: { text } }));
-    await storageGateway.setDraftCommentText('rootComment', threadId, text);
+    await storageGateway.setDraftCommentText(DraftCommentKind.root, threadId, text);
   };
 };
 
 const clearCreateRootCommentText = (threadId: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(setCreateRootCommentText(threadId, ''));
-    await storageGateway.removeDraftCommentText('rootComment', threadId);
+    await storageGateway.removeDraftCommentText(DraftCommentKind.root, threadId);
   };
 };
 

@@ -27,9 +27,15 @@ export class LocalStorageGateway implements StorageGateway {
     const doSetItem = () => {
       const json = this.storage.getItem(LocalStorageGateway.storageKey);
 
-      const drafts: StoredDraftModel = json
-        ? (JSON.parse(json) as StoredDraftModel)
-        : { rootComment: {}, reply: {}, edition: {} };
+      let drafts: StoredDraftModel = {
+        [DraftCommentKind.root]: {},
+        [DraftCommentKind.reply]: {},
+        [DraftCommentKind.edition]: {},
+      };
+
+      if (json) {
+        drafts = JSON.parse(json) as StoredDraftModel;
+      }
 
       updater(drafts[kind]);
 

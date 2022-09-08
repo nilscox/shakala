@@ -1,6 +1,7 @@
 import { query, QueryState } from '@nilscox/redux-query';
 
 import { fetchComments } from '../../../comment/use-cases';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { serializeError } from '../../../utils/serialize-error';
 import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
@@ -46,7 +47,7 @@ export const fetchThreadById = (threadId: string): Thunk => {
       dispatch(addThread(thread));
       dispatch(actions.setSuccess(key, thread.id));
 
-      const draftRootCommentText = await storageGateway.getDraftCommentText('rootComment', threadId);
+      const draftRootCommentText = await storageGateway.getDraftCommentText(DraftCommentKind.root, threadId);
 
       if (draftRootCommentText) {
         dispatch(setCreateRootCommentText(threadId, draftRootCommentText));

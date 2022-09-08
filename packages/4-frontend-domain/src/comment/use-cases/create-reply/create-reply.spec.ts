@@ -1,5 +1,6 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
@@ -21,14 +22,10 @@ describe('createReply', () => {
   const store = new TestStore();
 
   const user = createAuthUser();
+  const thread = createThread();
+  const parent = createComment();
 
-  const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
-
-  const parentId = 'parentId';
-  const parent = createComment({ id: parentId });
   const text = 'text';
-
   const now = new Date('2022-01-01');
   const createdCommentId = 'replyId';
 
@@ -37,27 +34,27 @@ describe('createReply', () => {
 
     store.dispatch(addThread(thread));
     store.dispatch(addComment(parent));
-    store.dispatch(setThreadComments(threadId, [parent]));
+    store.dispatch(setThreadComments(thread.id, [parent]));
 
-    store.dispatch(setIsReplying(parentId));
-    store.dispatch(setReplyFormText(parentId, text));
+    store.dispatch(setIsReplying(parent.id));
+    store.dispatch(setReplyFormText(parent.id, text));
 
     store.dateGateway.setNow(now);
     store.threadGateway.createReply.mockResolvedValue(createdCommentId);
   });
 
   const execute = () => {
-    return store.dispatch(createReply(parentId));
+    return store.dispatch(createReply(parent.id));
   };
 
   it('creates a new reply', async () => {
     const promise = execute();
 
-    expect(store.select(selectIsSubmittingReply, parentId)).toBe(true);
+    expect(store.select(selectIsSubmittingReply, parent.id)).toBe(true);
     await promise;
-    expect(store.select(selectIsSubmittingReply, parentId)).toBe(false);
+    expect(store.select(selectIsSubmittingReply, parent.id)).toBe(false);
 
-    expect(store.threadGateway.createReply).toHaveBeenCalledWith(threadId, parentId, text);
+    expect(store.threadGateway.createReply).toHaveBeenCalledWith(thread.id, parent.id, text);
   });
 
   it('adds the created comment to list of replies', async () => {
@@ -79,7 +76,7 @@ describe('createReply', () => {
       replies: [],
     };
 
-    expect(store.select(selectCommentReplies, parentId)).toContainEqual(created);
+    expect(store.select(selectCommentReplies, parent.id)).toContainEqual(created);
   });
 
   it('requires user authentication', async () => {
@@ -93,7 +90,7 @@ describe('createReply', () => {
   it('closes the reply form', async () => {
     await execute();
 
-    expect(store.select(selectIsReplying, parentId)).toBe(false);
+    expect(store.select(selectIsReplying, parent.id)).toBe(false);
   });
 
   it('shows a snack when the creation succeeded', async () => {
@@ -103,11 +100,11 @@ describe('createReply', () => {
   });
 
   it('clears the persisted draft reply text', async () => {
-    store.storageGateway.set('reply', parentId, text);
+    store.storageGateway.set(DraftCommentKind.reply, parent.id, text);
 
     await execute();
 
-    expect(store.storageGateway.get('reply', parentId)).toBeUndefined();
+    expect(store.storageGateway.get(DraftCommentKind.reply, parent.id)).toBeUndefined();
   });
 
   describe('error handling', () => {
@@ -120,8 +117,8 @@ describe('createReply', () => {
     it('stores the error', async () => {
       await execute();
 
-      expect(store.select(selectIsSubmittingReply, parentId)).toBe(false);
-      expect(store.select(selectCreateReplyError, parentId)).toHaveProperty('message', error.message);
+      expect(store.select(selectIsSubmittingReply, parent.id)).toBe(false);
+      expect(store.select(selectCreateReplyError, parent.id)).toHaveProperty('message', error.message);
     });
 
     it('logs the error', async () => {
@@ -144,12 +141,8 @@ describe('setReplyFormText', () => {
   const store = new TestStore();
 
   const user = createAuthUser();
-
-  const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
-
-  const parentId = 'parentId';
-  const parent = createComment({ id: parentId });
+  const thread = createThread();
+  const parent = createComment();
 
   const text = 'text';
 
@@ -157,18 +150,18 @@ describe('setReplyFormText', () => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
     store.dispatch(addComment(parent));
-    store.dispatch(addRootCommentToThread(threadId, parent));
+    store.dispatch(addRootCommentToThread(thread.id, parent));
   });
 
   it('stores the draft comment text', async () => {
-    await store.dispatch(setReplyFormText(parentId, text));
+    await store.dispatch(setReplyFormText(parent.id, text));
 
-    expect(store.select(selectReplyFormText, parentId)).toEqual(text);
+    expect(store.select(selectReplyFormText, parent.id)).toEqual(text);
   });
 
   it('persists the draft comment text', async () => {
-    await store.dispatch(setReplyFormText(parentId, text));
+    await store.dispatch(setReplyFormText(parent.id, text));
 
-    expect(store.storageGateway.get('reply', parentId)).toEqual(text);
+    expect(store.storageGateway.get(DraftCommentKind.reply, parent.id)).toEqual(text);
   });
 });

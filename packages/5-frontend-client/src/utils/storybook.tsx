@@ -4,9 +4,11 @@ import {
   createStore,
   Dependencies,
   Dispatch,
+  DraftCommentKind,
   RemoveListener,
   RouterGateway,
   SnackbarGateway,
+  StorageGateway,
 } from 'frontend-domain';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
@@ -73,6 +75,21 @@ class StorybookRouterGateway implements RouterGateway {
   }
 }
 
+class StorybookStorageGateway implements StorageGateway {
+  async getDraftCommentText(kind: DraftCommentKind, id: string): Promise<string | undefined> {
+    action('StorybookStorageGateway.getDraftCommentText')(kind, id);
+    return;
+  }
+
+  async setDraftCommentText(kind: DraftCommentKind, id: string, text: string): Promise<void> {
+    action('StorybookStorageGateway.setDraftCommentText')(kind, id, text);
+  }
+
+  async removeDraftCommentText(kind: DraftCommentKind, id: string): Promise<void> {
+    action('StorybookStorageGateway.removeDraftCommentText')(kind, id, id);
+  }
+}
+
 interface StorybookDependencies extends Dependencies {
   dateGateway: RealDateGateway;
   snackbarGateway: SnackbarGateway;
@@ -81,6 +98,7 @@ interface StorybookDependencies extends Dependencies {
   timerGateway: RealTimerGateway;
   authenticationGateway: StorybookAuthenticationGateway;
   threadGateway: StorybookThreadGateway;
+  storageGateway: StorybookStorageGateway;
 }
 
 export type SetupRedux = (dispatch: Dispatch, deps: StorybookDependencies) => void;
@@ -98,6 +116,7 @@ export const reduxDecorator = () => {
         timerGateway: new RealTimerGateway(),
         authenticationGateway: new StorybookAuthenticationGateway(),
         threadGateway: new StorybookThreadGateway(),
+        storageGateway: new StorybookStorageGateway(),
       }),
       [snackbar],
     );

@@ -1,5 +1,6 @@
 import { createCommentDto } from 'shared';
 
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createComment, createThread, TestStore } from '../../../test';
 import {
   addCreatedRootComment,
@@ -94,7 +95,7 @@ describe('fetchComments', () => {
   });
 
   it('restores the draft replies texts', async () => {
-    store.storageGateway.set('reply', commentDto.id, 'draft');
+    store.storageGateway.set(DraftCommentKind.reply, commentDto.id, 'draft');
 
     await execute();
 
@@ -102,7 +103,7 @@ describe('fetchComments', () => {
   });
 
   it('restores the draft editions texts', async () => {
-    store.storageGateway.set('edition', commentDto.id, 'draft');
+    store.storageGateway.set(DraftCommentKind.edition, commentDto.id, 'draft');
 
     await execute();
 
