@@ -1,5 +1,6 @@
 import { createCommentDto, createThreadDto } from 'shared';
 
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { TestStore } from '../../../test';
 import { selectThread } from '../../thread.selectors';
 import { selectCreateRootCommentFormText } from '../create-root-comment/create-root-comment';
@@ -45,7 +46,7 @@ describe('fetchThreadById', () => {
   });
 
   it('restores the draft root comment text', async () => {
-    store.storageGateway.set('rootComment', threadId, 'draft');
+    store.storageGateway.set(DraftCommentKind.root, threadId, 'draft');
 
     await store.dispatch(fetchThreadById(threadId));
 

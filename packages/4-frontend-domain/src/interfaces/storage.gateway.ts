@@ -1,4 +1,8 @@
-export type DraftCommentKind = 'rootComment' | 'reply' | 'edition';
+export enum DraftCommentKind {
+  root = 'root',
+  reply = 'reply',
+  edition = 'edition',
+}
 
 export interface StorageGateway {
   getDraftCommentText(kind: DraftCommentKind, id: string): Promise<string | undefined>;

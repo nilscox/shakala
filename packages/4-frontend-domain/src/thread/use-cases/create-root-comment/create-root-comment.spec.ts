@@ -1,5 +1,6 @@
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createThread, TestStore } from '../../../test';
 import { selectCreatedRootComments } from '../../lists/created-root-comments';
 import { addThread } from '../../thread.actions';
@@ -17,35 +18,33 @@ describe('createRootComment', () => {
   const store = new TestStore();
 
   const user = createAuthUser();
+  const thread = createThread();
 
-  const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
   const text = 'text';
-
   const now = new Date('2022-01-01');
   const commentId = 'commentId';
 
   beforeEach(async () => {
     store.dispatch(setUser({ user }));
     store.dispatch(addThread(thread));
-    await store.dispatch(setCreateRootCommentText(threadId, text));
+    await store.dispatch(setCreateRootCommentText(thread.id, text));
 
     store.dateGateway.setNow(now);
     store.threadGateway.createComment.mockResolvedValue(commentId);
   });
 
   const execute = () => {
-    return store.dispatch(createRootComment(threadId));
+    return store.dispatch(createRootComment(thread.id));
   };
 
   it('creates a new comment', async () => {
     const promise = execute();
 
-    expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(true);
+    expect(store.select(selectIsSubmittingRootCommentForm, thread.id)).toBe(true);
     await promise;
-    expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(false);
+    expect(store.select(selectIsSubmittingRootCommentForm, thread.id)).toBe(false);
 
-    expect(store.threadGateway.createComment).toHaveBeenCalledWith(threadId, text);
+    expect(store.threadGateway.createComment).toHaveBeenCalledWith(thread.id, text);
   });
 
   it('adds the new comment to the list of created comments', async () => {
@@ -74,7 +73,7 @@ describe('createRootComment', () => {
   it('adds the created comment to the thread', async () => {
     await execute();
 
-    expect(store.select(selectCommentThreadId, commentId)).toEqual(threadId);
+    expect(store.select(selectCommentThreadId, commentId)).toEqual(thread.id);
   });
 
   it('requires user authentication', async () => {
@@ -86,11 +85,11 @@ describe('createRootComment', () => {
   });
 
   it('clears the message input text', async () => {
-    store.dispatch(setCreateRootCommentText(threadId, 'hello'));
+    store.dispatch(setCreateRootCommentText(thread.id, 'hello'));
 
     await execute();
 
-    expect(store.select(selectCreateRootCommentFormText, threadId)).toEqual('');
+    expect(store.select(selectCreateRootCommentFormText, thread.id)).toEqual('');
   });
 
   it('shows a snack when the creation succeeded', async () => {
@@ -100,11 +99,11 @@ describe('createRootComment', () => {
   });
 
   it('clears the persisted draft comment text', async () => {
-    store.storageGateway.set('rootComment', threadId, text);
+    store.storageGateway.set(DraftCommentKind.root, thread.id, text);
 
     await execute();
 
-    expect(store.storageGateway.get('rootComment', threadId)).toBeUndefined();
+    expect(store.storageGateway.get(DraftCommentKind.root, thread.id)).toBeUndefined();
   });
 
   describe('error handling', () => {
@@ -117,8 +116,8 @@ describe('createRootComment', () => {
     it('stores the error', async () => {
       await execute();
 
-      expect(store.select(selectIsSubmittingRootCommentForm, threadId)).toBe(false);
-      expect(store.select(selectCreateRootCommentError, threadId)).toHaveProperty('message', error.message);
+      expect(store.select(selectIsSubmittingRootCommentForm, thread.id)).toBe(false);
+      expect(store.select(selectCreateRootCommentError, thread.id)).toHaveProperty('message', error.message);
     });
 
     it('logs the error', async () => {
@@ -141,9 +140,8 @@ describe('setCreateRootCommentText', () => {
   const store = new TestStore();
 
   const user = createAuthUser();
+  const thread = createThread();
 
-  const threadId = 'threadId';
-  const thread = createThread({ id: threadId });
   const text = 'text';
 
   beforeEach(() => {
@@ -152,14 +150,14 @@ describe('setCreateRootCommentText', () => {
   });
 
   it('stores the draft comment text', async () => {
-    await store.dispatch(setCreateRootCommentText(threadId, text));
+    await store.dispatch(setCreateRootCommentText(thread.id, text));
 
-    expect(store.select(selectCreateRootCommentFormText, threadId)).toEqual(text);
+    expect(store.select(selectCreateRootCommentFormText, thread.id)).toEqual(text);
   });
 
   it('persists the draft comment text', async () => {
-    await store.dispatch(setCreateRootCommentText(threadId, text));
+    await store.dispatch(setCreateRootCommentText(thread.id, text));
 
-    expect(store.storageGateway.get('rootComment', threadId)).toEqual(text);
+    expect(store.storageGateway.get(DraftCommentKind.root, thread.id)).toEqual(text);
   });
 });

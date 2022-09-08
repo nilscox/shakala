@@ -1,6 +1,7 @@
 import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { State, Thunk } from '../../../store';
 import { AuthorizationError } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
@@ -32,14 +33,14 @@ export const [setIsEditingComment, isSetIsEditingCommentAction] = createAction(
 export const setEditCommentFormText = (commentId: string, text: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(updateComment(commentId, { editionForm: { text } }));
-    await storageGateway.setDraftCommentText('edition', commentId, text);
+    await storageGateway.setDraftCommentText(DraftCommentKind.edition, commentId, text);
   };
 };
 
 export const clearEditCommentFormText = (commentId: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(setIsEditingComment(commentId, false));
-    await storageGateway.removeDraftCommentText('edition', commentId);
+    await storageGateway.removeDraftCommentText(DraftCommentKind.edition, commentId);
   };
 };
 

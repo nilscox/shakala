@@ -140,11 +140,6 @@ class InMemoryStorageGateway implements StorageGateway {
   }
 
   async setDraftCommentText(kind: DraftCommentKind, id: string, text: string): Promise<void> {
-    if (text === '') {
-      this.removeDraftCommentText(kind, id);
-      return;
-    }
-
     this.drafts.set(this.getKey(kind, id), text);
   }
 

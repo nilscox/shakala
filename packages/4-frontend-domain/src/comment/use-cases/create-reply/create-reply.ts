@@ -2,6 +2,7 @@ import { query, QueryState } from '@nilscox/redux-query';
 
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
@@ -28,14 +29,14 @@ export const setIsReplying = (commentId: string, isReplying = true) => {
 export const setReplyFormText = (commentId: string, text: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(updateComment(commentId, { replyForm: { text } }));
-    await storageGateway.setDraftCommentText('reply', commentId, text);
+    await storageGateway.setDraftCommentText(DraftCommentKind.reply, commentId, text);
   };
 };
 
 export const clearReplyFormText = (commentId: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
     dispatch(setIsReplying(commentId, false));
-    await storageGateway.removeDraftCommentText('reply', commentId);
+    await storageGateway.removeDraftCommentText(DraftCommentKind.reply, commentId);
   };
 };
 
