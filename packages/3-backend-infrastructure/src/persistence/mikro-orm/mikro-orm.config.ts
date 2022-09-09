@@ -30,6 +30,7 @@ const config: Options<PostgreSqlDriver> = {
     snapshot: false,
     disableForeignKeys: false,
   },
+  pool: { min: 0, max: 3, idleTimeoutMillis: 5000 },
 };
 
 export default config;
