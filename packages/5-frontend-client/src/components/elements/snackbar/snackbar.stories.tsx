@@ -23,6 +23,8 @@ const Template: Story<Partial<SnackbarProps> & { children: string }> = (props) =
 
 export const success = () => <Template type={SnackType.success}>Bien joué !</Template>;
 
+export const info = () => <Template type={SnackType.info}>Bin dis donc...</Template>;
+
 export const warning = () => <Template type={SnackType.warning}>Hmm... t'es sûr ?</Template>;
 
 export const error = () => <Template type={SnackType.error}>Pas vraiment, non.</Template>;

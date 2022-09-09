@@ -229,21 +229,20 @@ export const FaqRoute = () => (
 
     <ul className="links-nocolor links-underline list-disc pl-6">
       <li>
-        Sur discord :{' '}
-        <ExternalLink href="https://discord.gg/huwfqra">https://discord.gg/huwfqra</ExternalLink>
+        Sur canny, pour proposer des idées d'amélioration :{' '}
+        <ExternalLink href="https://ameliorer.shakala.nils.cx/retours">
+          https://ameliorer.shakala.nils.cx/retours
+        </ExternalLink>
       </li>
 
       <li>
-        Sur twitter : <ExternalLink href="https://twitter.com/zetecom1">twitter.com/zetecom1</ExternalLink>
+        Sur discord, pour chatter en direct :{' '}
+        <ExternalLink href="https://discord.gg/Np8yJ43V">https://discord.gg/huwfqra</ExternalLink>
       </li>
 
       <li>
-        Sur facebook :{' '}
-        <ExternalLink href="https://facebook.com/zetecom42">facebook.com/zetecom42</ExternalLink>
-      </li>
-
-      <li>
-        Par e-mail : <ExternalLink href="mailto:contact@zetecom.fr">contact@zetecom.fr</ExternalLink>
+        Par e-mail, parce que c'est pratique :{' '}
+        <ExternalLink href="mailto:nils@nils.cx">nils@nils.cx</ExternalLink>
       </li>
     </ul>
   </>

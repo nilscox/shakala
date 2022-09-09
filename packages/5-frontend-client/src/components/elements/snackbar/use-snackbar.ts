@@ -25,6 +25,7 @@ export const useSnackbar = () => {
   return useMemo(
     () => ({
       success: register(SnackType.success),
+      info: register(SnackType.info),
       warning: register(SnackType.warning),
       error: register(SnackType.error),
     }),

@@ -7,6 +7,8 @@ import discordLogo from '~/images/logos/discord-logo.png';
 import facebookLogo from '~/images/logos/facebook-logo.png';
 import twitterLogo from '~/images/logos/twitter-logo.png';
 
+import { useSnackbar } from '../elements/snackbar';
+
 type FooterProps = {
   className?: string;
 };
@@ -36,23 +38,19 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
           </FooterColumn>
 
           <FooterColumn>
-            <a href="https://zetecom.featureupvote.com/">Proposer une idée</a>
+            <a href="https://ameliorer.shakala.nils.cx/retours">Proposer une idée</a>
             <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
             <a href="https://github.com/nilscox/shakala">Code source</a>
           </FooterColumn>
 
           <FooterColumn>
-            <SocialLink
-              href="https://www.facebook.com/zetecom42"
-              image={facebookLogo}
-              imageAlt="facebook-logo"
-            >
+            <SocialLink image={facebookLogo} imageAlt="facebook-logo">
               Facebook
             </SocialLink>
-            <SocialLink href="https://twitter.com/zetecom1" image={twitterLogo} imageAlt="twitter-logo">
+            <SocialLink image={twitterLogo} imageAlt="twitter-logo">
               Twitter
             </SocialLink>
-            <SocialLink href="https://discord.com/invite/huwfqra" image={discordLogo} imageAlt="twitter-logo">
+            <SocialLink href="https://discord.gg/Np8yJ43V" image={discordLogo} imageAlt="twitter-logo">
               Discord
             </SocialLink>
           </FooterColumn>
@@ -72,15 +70,23 @@ const FooterColumn = ({ className, children }: FooterColumnProps) => (
 );
 
 type SocialLinkProps = {
-  href: string;
+  href?: string;
   image: string;
   imageAlt: string;
   children: string;
 };
 
-const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => (
-  <a href={href} className="row items-center whitespace-nowrap">
-    <img className="mr-1 h-4 w-4 grayscale" src={image} alt={imageAlt} />
-    {children}
-  </a>
-);
+const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => {
+  const { info } = useSnackbar();
+
+  return (
+    <a
+      href={href}
+      className="row cursor-pointer items-center whitespace-nowrap"
+      onClick={!href ? () => info('Coming soon! 😉') : undefined}
+    >
+      <img className="mr-1 h-4 w-4 grayscale" src={image} alt={imageAlt} />
+      {children}
+    </a>
+  );
+};

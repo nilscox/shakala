@@ -11,18 +11,21 @@ import { Snack, SnackType } from './snackbar.types';
 
 const colorsMap: Record<SnackType, string> = {
   [SnackType.success]: 'text-success border-success',
+  [SnackType.info]: 'text-info border-info',
   [SnackType.warning]: 'text-warning border-warning',
   [SnackType.error]: 'text-error border-error',
 };
 
 const iconColorsMap: Record<SnackType, string> = {
   [SnackType.success]: 'bg-success',
+  [SnackType.info]: 'bg-info',
   [SnackType.warning]: 'bg-warning',
   [SnackType.error]: 'bg-error',
 };
 
 const iconsMap: Record<SnackType, React.ComponentType<SVGProps<SVGSVGElement>>> = {
   [SnackType.success]: CheckIcon,
+  [SnackType.info]: CheckIcon,
   [SnackType.warning]: ExplanationMarkIcon,
   [SnackType.error]: CrossIcon,
 };
