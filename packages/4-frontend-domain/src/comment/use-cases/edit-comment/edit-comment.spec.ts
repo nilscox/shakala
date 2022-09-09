@@ -10,6 +10,7 @@ import { selectComment } from '../../comments.selectors';
 
 import {
   editComment,
+  selectCanSubmitEditCommentForm,
   selectEditCommentError,
   selectEditCommentFormText,
   selectIsEditingComment,
@@ -105,6 +106,26 @@ describe('editComment', () => {
     await execute();
 
     expect(store.storageGateway.get(DraftCommentKind.edition, comment.id)).toBeUndefined();
+  });
+
+  describe('selectCanSubmitEditCommentForm', () => {
+    it('allows to submit the edition form', () => {
+      store.dispatch(setEditCommentFormText(comment.id, 'hello!'));
+
+      expect(store.select(selectCanSubmitEditCommentForm, comment.id)).toBe(true);
+    });
+
+    it('prevents submitting the edition form when the text is empty', () => {
+      store.dispatch(setEditCommentFormText(comment.id, ''));
+
+      expect(store.select(selectCanSubmitEditCommentForm, comment.id)).toBe(false);
+    });
+
+    it('prevents submitting the edition form when the text was not edited', () => {
+      store.dispatch(setEditCommentFormText(comment.id, comment.text));
+
+      expect(store.select(selectCanSubmitEditCommentForm, comment.id)).toBe(false);
+    });
   });
 
   describe('error handling', () => {

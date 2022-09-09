@@ -61,7 +61,10 @@ export const selectEditCommentFormText = (state: State, commentId: string) => {
 };
 
 export const selectCanSubmitEditCommentForm = (state: State, commentId: string) => {
-  return selectEditCommentFormText(state, commentId) !== '';
+  const { text } = selectComment(state, commentId);
+  const formText = selectEditCommentFormText(state, commentId);
+
+  return formText !== '' && formText !== text;
 };
 
 export const selectIsSubmittingCommentEditionForm = (state: State, commentId: string) => {
