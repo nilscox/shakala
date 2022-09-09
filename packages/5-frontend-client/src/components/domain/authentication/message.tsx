@@ -12,16 +12,10 @@ export const AuthenticationMessage = () => {
 
   if (form === AuthenticationType.signup) {
     return (
-      <div>
-        <p>
-          Créez votre compte sur Shakala. Vos <Link to="/faq#donnes-personnelles">données personnelles</Link>{' '}
-          ne seront pas communiquées en dehors de la plateforme.
-        </p>
-        <p className="text-sm">
-          Attention : les données sont pour l'instant éphémères. Lorsque le serveur sera redémarré (quelques
-          semaines max), votre compte et les message que vous aurez créé n'existeront plus.
-        </p>
-      </div>
+      <p>
+        Créez votre compte sur Shakala. Vos <Link to="/faq#donnes-personnelles">données personnelles</Link> ne
+        seront pas communiquées en dehors de la plateforme.
+      </p>
     );
   }
 
