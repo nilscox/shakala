@@ -9,11 +9,11 @@ import session from 'express-session';
 import { pick } from 'shared';
 
 import { Application } from './application';
-import { AuthenticationController } from './controllers/authentication/authentication.controller';
-import { CommentController } from './controllers/comment/comment.controller';
-import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
-import { ThreadController } from './controllers/thread/thread.controller';
 import { ExpressSessionService, ValidationService } from './infrastructure';
+import { AuthenticationController } from './modules/authentication/authentication.controller';
+import { CommentController } from './modules/comment/comment.controller';
+import { HealthcheckController } from './modules/healthcheck/healthcheck.controller';
+import { ThreadController } from './modules/thread/thread.controller';
 
 const PgSession = connectPgSimple(session);
 

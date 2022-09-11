@@ -11,7 +11,6 @@ import {
 } from 'backend-application';
 import { UserCreatedEvent } from 'backend-domain/src/events/user-created.event';
 
-import { UserCreatedHandler } from './controllers/authentication/user-created.handler';
 import {
   BcryptService,
   CommandBus,
@@ -25,6 +24,7 @@ import {
 import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
+import { UserCreatedHandler } from './modules/authentication/user-created.handler';
 import {
   SqlCommentRepository,
   SqlReactionRepository,
