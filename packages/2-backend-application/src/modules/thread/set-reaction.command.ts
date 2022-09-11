@@ -1,7 +1,7 @@
 import { CommentService, del, Reaction, ReactionType } from 'backend-domain';
 
-import { CommandHandler } from '../cqs/command-handler';
-import { CommentRepository, ReactionRepository, UserRepository } from '../interfaces/repositories';
+import { CommandHandler } from '../../cqs/command-handler';
+import { CommentRepository, ReactionRepository, UserRepository } from '../../interfaces/repositories';
 
 export class SetReactionCommand {
   constructor(

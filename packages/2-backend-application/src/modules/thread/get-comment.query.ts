@@ -1,7 +1,7 @@
 import { Comment } from 'backend-domain';
 
-import { Query, QueryHandler } from '../cqs/query-handler';
-import { CommentRepository } from '../interfaces/repositories';
+import { Query, QueryHandler } from '../../cqs/query-handler';
+import { CommentRepository } from '../../interfaces/repositories';
 
 export class GetCommentQuery implements Query {
   constructor(public readonly commentId: string, public readonly userId?: string) {}

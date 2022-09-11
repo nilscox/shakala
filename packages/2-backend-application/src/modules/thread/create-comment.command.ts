@@ -1,7 +1,7 @@
 import { GeneratorService, Comment, Author, Markdown, Timestamp, DateService, Message } from 'backend-domain';
 
-import { CommandHandler } from '../cqs/command-handler';
-import { CommentRepository, UserRepository } from '../interfaces/repositories';
+import { CommandHandler } from '../../cqs/command-handler';
+import { CommentRepository, UserRepository } from '../../interfaces/repositories';
 
 export class CreateCommentCommand {
   constructor(

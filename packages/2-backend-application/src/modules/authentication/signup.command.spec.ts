@@ -6,8 +6,8 @@ import {
   UserCreatedEvent,
 } from 'backend-domain';
 
+import { StubEventBus } from '../../utils/stub-event-bus';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
-import { StubEventBus } from '../utils/stub-event-bus';
 
 import {
   EmailAlreadyExistsError,

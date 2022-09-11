@@ -1,7 +1,7 @@
 import { InvalidCredentialsError } from 'backend-domain';
 
-import { Command, CommandHandler } from '../cqs/command-handler';
-import { UserRepository } from '../interfaces/repositories';
+import { Command, CommandHandler } from '../../cqs/command-handler';
+import { UserRepository } from '../../interfaces/repositories';
 
 export class LoginCommand implements Command {
   constructor(readonly email: string, readonly password: string) {}

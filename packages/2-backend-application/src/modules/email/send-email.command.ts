@@ -1,4 +1,4 @@
-import { Command, CommandHandler } from '../cqs/command-handler';
+import { Command, CommandHandler } from '../../cqs/command-handler';
 
 export enum EmailKind {
   welcome = 'welcome',

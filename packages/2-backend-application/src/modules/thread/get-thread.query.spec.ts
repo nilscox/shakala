@@ -1,6 +1,6 @@
 import { factories, ReactionType } from 'backend-domain';
 
-import { Sort } from '../interfaces/repositories';
+import { Sort } from '../../interfaces/repositories';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { GetThreadHandler, GetThreadQuery } from './get-thread.query';

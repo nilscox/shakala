@@ -1,12 +1,9 @@
 import { CommentService, CryptoService, DateService, GeneratorService } from 'backend-domain';
 import { ClassType } from 'shared';
 
-import { LoginCommand, LoginCommandHandler } from './authentication/login.command';
-import { SignupCommand, SignupCommandHandler } from './authentication/signup.command';
 import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
 import { IEventBus } from './cqs/event-bus';
 import { Query, QueryHandler } from './cqs/query-handler';
-import { SendEmailCommand, SendEmailHandler } from './email/send-email.command';
 import { ConfigService } from './interfaces/config.service';
 import { LoggerService } from './interfaces/logger.service';
 import {
@@ -15,15 +12,18 @@ import {
   ThreadRepository,
   UserRepository,
 } from './interfaces/repositories';
-import { CreateCommentCommand, CreateCommentCommandHandler } from './thread/create-comment.command';
-import { CreateThreadCommand, CreateThreadHandler } from './thread/create-thread.command';
-import { EditCommentCommand, EditCommentCommandHandler } from './thread/edit-comment.command';
-import { GetCommentQuery, GetCommentQueryHandler } from './thread/get-comment.query';
-import { GetLastThreadsHandler, GetLastThreadsQuery } from './thread/get-last-threads.query';
-import { GetThreadHandler, GetThreadQuery } from './thread/get-thread.query';
-import { SetReactionCommand, SetReactionCommandHandler } from './thread/set-reaction.command';
-import { GetUserByEmailHandler, GetUserByEmailQuery } from './user/get-user-by-email.query';
-import { GetUserByIdHandler, GetUserByIdQuery } from './user/get-user-by-id.query';
+import { LoginCommand, LoginCommandHandler } from './modules/authentication/login.command';
+import { SignupCommand, SignupCommandHandler } from './modules/authentication/signup.command';
+import { SendEmailCommand, SendEmailHandler } from './modules/email/send-email.command';
+import { CreateCommentCommand, CreateCommentCommandHandler } from './modules/thread/create-comment.command';
+import { CreateThreadCommand, CreateThreadHandler } from './modules/thread/create-thread.command';
+import { EditCommentCommand, EditCommentCommandHandler } from './modules/thread/edit-comment.command';
+import { GetCommentQuery, GetCommentQueryHandler } from './modules/thread/get-comment.query';
+import { GetLastThreadsHandler, GetLastThreadsQuery } from './modules/thread/get-last-threads.query';
+import { GetThreadHandler, GetThreadQuery } from './modules/thread/get-thread.query';
+import { SetReactionCommand, SetReactionCommandHandler } from './modules/thread/set-reaction.command';
+import { GetUserByEmailQuery, GetUserByEmailHandler } from './modules/user/get-user-by-email.query';
+import { GetUserByIdQuery, GetUserByIdHandler } from './modules/user/get-user-by-id.query';
 
 export type Services = {
   configService: ConfigService;

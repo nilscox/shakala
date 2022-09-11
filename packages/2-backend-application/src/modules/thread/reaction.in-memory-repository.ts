@@ -1,8 +1,8 @@
 import { ReactionType, Reaction, ReactionsCount } from 'backend-domain';
 import { createMap } from 'shared';
 
-import { ReactionRepository } from '../interfaces/repositories';
-import { InMemoryRepository } from '../utils/in-memory-repository';
+import { ReactionRepository } from '../../interfaces/repositories';
+import { InMemoryRepository } from '../../utils/in-memory-repository';
 
 export class InMemoryReactionRepository extends InMemoryRepository<Reaction> implements ReactionRepository {
   async countReactions(commentIds: string[]): Promise<Map<string, ReactionsCount>> {

@@ -1,9 +1,9 @@
 import { CryptoService, DateService, DomainError, GeneratorService, Nick, User } from 'backend-domain';
 
-import { Command, CommandHandler } from '../cqs/command-handler';
-import { IEventBus } from '../cqs/event-bus';
-import { UserRepository } from '../interfaces/repositories';
-import { EventPublisher } from '../utils/event-publisher';
+import { Command, CommandHandler } from '../../cqs/command-handler';
+import { IEventBus } from '../../cqs/event-bus';
+import { UserRepository } from '../../interfaces/repositories';
+import { EventPublisher } from '../../utils/event-publisher';
 
 export class EmailAlreadyExistsError extends DomainError<{ email: string }> {
   constructor(email: string) {
