@@ -30,6 +30,7 @@ const config: Options<PostgreSqlDriver> = {
     snapshot: false,
     disableForeignKeys: false,
   },
+  // cspell:word millis
   pool: { min: 0, max: 3, idleTimeoutMillis: 5000 },
 };
 
