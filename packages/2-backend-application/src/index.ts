@@ -1,7 +1,11 @@
 export * from './register-handlers';
 
-export * from './cqs/query-handler';
 export * from './cqs/command-handler';
+export * from './cqs/event-bus';
+export * from './cqs/event-handler';
+export * from './cqs/query-handler';
+
+export * from './email/send-email.command';
 
 export * from './interfaces/repositories';
 export * from './interfaces/repository';

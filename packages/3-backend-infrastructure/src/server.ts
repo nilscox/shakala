@@ -13,7 +13,7 @@ import { AuthenticationController } from './controllers/authentication/authentic
 import { CommentController } from './controllers/comment/comment.controller';
 import { HealthcheckController } from './controllers/healthcheck/healthcheck.controller';
 import { ThreadController } from './controllers/thread/thread.controller';
-import { ValidationService, ExpressSessionService } from './infrastructure';
+import { ExpressSessionService, ValidationService } from './infrastructure';
 
 const PgSession = connectPgSimple(session);
 

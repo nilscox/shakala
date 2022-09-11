@@ -1,6 +1,13 @@
-import { factories, StubCryptoService, StubDateService, StubGeneratorService } from 'backend-domain';
+import {
+  factories,
+  StubCryptoService,
+  StubDateService,
+  StubGeneratorService,
+  UserCreatedEvent,
+} from 'backend-domain';
 
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
+import { StubEventBus } from '../utils/stub-event-bus';
 
 import {
   EmailAlreadyExistsError,
@@ -10,12 +17,19 @@ import {
 } from './signup.command';
 
 describe('SignupCommand', () => {
+  const eventBus = new StubEventBus();
   const userRepository = new InMemoryUserRepository();
   const generatorService = new StubGeneratorService();
   const cryptoService = new StubCryptoService();
   const dateService = new StubDateService();
 
-  const handler = new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService);
+  const handler = new SignupCommandHandler(
+    eventBus,
+    userRepository,
+    generatorService,
+    cryptoService,
+    dateService,
+  );
 
   const create = factories();
 
@@ -48,6 +62,12 @@ describe('SignupCommand', () => {
 
   it("returns the created user's id", async () => {
     expect(await signup()).toEqual('userId');
+  });
+
+  it('emits a UserCreatedEvent', async () => {
+    await signup();
+
+    expect(eventBus.lastEvent).toEqual(new UserCreatedEvent('userId'));
   });
 
   it('fails to signup when the email already exists', async () => {

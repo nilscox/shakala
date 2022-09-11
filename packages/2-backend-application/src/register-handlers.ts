@@ -4,7 +4,9 @@ import { ClassType } from 'shared';
 import { LoginCommand, LoginCommandHandler } from './authentication/login.command';
 import { SignupCommand, SignupCommandHandler } from './authentication/signup.command';
 import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
+import { IEventBus } from './cqs/event-bus';
 import { Query, QueryHandler } from './cqs/query-handler';
+import { SendEmailCommand, SendEmailHandler } from './email/send-email.command';
 import { ConfigService } from './interfaces/config.service';
 import { LoggerService } from './interfaces/logger.service';
 import {
@@ -44,15 +46,19 @@ export const registerHandlers = (
   registerQuery: <Q extends Query>(query: ClassType<Q>, handler: QueryHandler<Q, unknown>) => void,
   services: Services,
   repositories: Repositories,
+  eventBus: IEventBus,
 ) => {
   const { generatorService, cryptoService, dateService } = services;
   const { userRepository, threadRepository, commentRepository, reactionRepository } = repositories;
+
+  // email
+  registerCommand(SendEmailCommand, new SendEmailHandler());
 
   // authentication
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
   registerQuery(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
   registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
-  registerCommand(SignupCommand, new SignupCommandHandler(userRepository, generatorService, cryptoService, dateService));
+  registerCommand(SignupCommand, new SignupCommandHandler(eventBus, userRepository, generatorService, cryptoService, dateService));
 
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));

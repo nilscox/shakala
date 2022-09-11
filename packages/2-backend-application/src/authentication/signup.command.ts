@@ -1,7 +1,9 @@
-import { CryptoService, DateService, Nick, User, DomainError, GeneratorService } from 'backend-domain';
+import { CryptoService, DateService, DomainError, GeneratorService, Nick, User } from 'backend-domain';
 
 import { Command, CommandHandler } from '../cqs/command-handler';
+import { IEventBus } from '../cqs/event-bus';
 import { UserRepository } from '../interfaces/repositories';
+import { EventPublisher } from '../utils/event-publisher';
 
 export class EmailAlreadyExistsError extends DomainError<{ email: string }> {
   constructor(email: string) {
@@ -21,6 +23,7 @@ export class SignupCommand implements Command {
 
 export class SignupCommandHandler implements CommandHandler<SignupCommand, string> {
   constructor(
+    private readonly eventBus: IEventBus,
     private readonly userRepository: UserRepository,
     private readonly generatorService: GeneratorService,
     private readonly cryptoService: CryptoService,
@@ -44,7 +47,10 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
       this.cryptoService,
     );
 
+    const publisher = new EventPublisher(user);
+
     await this.userRepository.save(user);
+    publisher.publish(this.eventBus);
 
     return user.id;
   }

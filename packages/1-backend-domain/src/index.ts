@@ -12,6 +12,9 @@ export * from './entities/user.entity';
 
 export * from './services/comment.service';
 
+export * from './ddd/domain-event';
+export * from './events/user-created.event';
+
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
 export * from './interfaces/generator-service.interface';

@@ -1,4 +1,6 @@
-import { type EntityProps, Entity } from '../ddd/entity';
+import { AggregateRoot } from '../ddd/aggregate-root';
+import { type EntityProps } from '../ddd/entity';
+import { UserCreatedEvent } from '../events/user-created.event';
 import type { CryptoService } from '../interfaces/crypto.interface';
 import { DateService } from '../interfaces/date.interface';
 
@@ -23,7 +25,7 @@ type CreateUserProps = {
   password: string;
 };
 
-export class User extends Entity<UserProps> {
+export class User extends AggregateRoot<UserProps> {
   constructor(props: UserProps, private readonly dateService: DateService, private readonly cryptoService: CryptoService) {
     super(props)
   }
@@ -33,7 +35,7 @@ export class User extends Entity<UserProps> {
     dateService: DateService,
     cryptoService: CryptoService,
   ) {
-    return new User({
+    const user = new User({
       id,
       nick: new Nick(nick),
       email,
@@ -42,6 +44,10 @@ export class User extends Entity<UserProps> {
       signupDate: new Timestamp(dateService.nowAsString()),
       lastLoginDate: null,
     }, dateService, cryptoService);
+
+    user.addEvent(new UserCreatedEvent(user.id));
+
+    return user;
   }
 
   get email() {

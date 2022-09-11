@@ -9,7 +9,9 @@ import {
   Repositories,
   Services,
 } from 'backend-application';
+import { UserCreatedEvent } from 'backend-domain/src/events/user-created.event';
 
+import { UserCreatedHandler } from './controllers/authentication/user-created.handler';
 import {
   BcryptService,
   CommandBus,
@@ -20,6 +22,7 @@ import {
   EnvConfigService,
   ConsoleLoggerService,
 } from './infrastructure';
+import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
 import {
@@ -47,6 +50,7 @@ export class Application {
   protected queryBus = new RealQueryBus();
 
   private services = instantiateServices();
+  private eventBus = new EventBus(this.logger);
 
   protected orm?: MikroORM;
   private repositories!: Repositories;
@@ -114,11 +118,16 @@ export class Application {
       this.queryBus.register.bind(this.queryBus),
       this.services,
       this.repositories,
+      this.eventBus,
     );
 
     if (this.orm) {
       this.commandBus.register(ClearDatabaseCommand, new ClearDatabaseHandler(this.orm));
     }
+
+    this.logger.log('registering domain event handlers');
+
+    this.eventBus.registerHandler(UserCreatedEvent, new UserCreatedHandler(this.commandBus));
 
     this.logger.info('application initialized');
   }
