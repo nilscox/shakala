@@ -1,5 +1,4 @@
 import { PluginOption } from 'vite';
-import reactJsx from 'vite-react-jsx';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { InlineConfig } from 'vitest';
 import { defineConfig } from 'vitest/config';
@@ -21,6 +20,6 @@ export default (options?: Options) => {
       threads: false,
       ...options?.test,
     },
-    plugins: [tsconfigPaths(), reactJsx(), ...(options?.plugins ?? [])],
+    plugins: [tsconfigPaths(), ...(options?.plugins ?? [])],
   });
 };
