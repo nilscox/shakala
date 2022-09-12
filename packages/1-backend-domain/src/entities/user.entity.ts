@@ -81,20 +81,46 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.emailValidationToken;
   }
 
+  get isEmailValidated() {
+    return this.emailValidationToken === null;
+  }
+
   async authenticate(password: string): Promise<void> {
     const matchPassword = await this.cryptoService.compare(password, this.props.hashedPassword);
 
     if (!matchPassword) {
-      throw new InvalidCredentialsError()
+      throw new InvalidCredentials()
     }
 
     this.props.lastLoginDate = new Timestamp(this.dateService.now());
   }
 
+  validateEmailAddress(token: string) {
+    if (this.isEmailValidated) {
+      throw new EmailValidationFailed(EmailValidationFailedReason.alreadyValidated);
+    }
+
+    if (this.emailValidationToken !== token) {
+      throw new EmailValidationFailed(EmailValidationFailedReason.invalidToken);
+    }
+
+    this.props.emailValidationToken = null;
+  }
 }
 
-export class InvalidCredentialsError extends DomainError {
+export class InvalidCredentials extends DomainError {
   constructor() {
     super('InvalidCredentials', undefined);
+  }
+}
+
+export enum EmailValidationFailedReason {
+  alreadyValidated = 'EmailAlreadyValidated',
+  invalidToken = 'InvalidToken'
+}
+
+export class EmailValidationFailed extends DomainError<{ reason: EmailValidationFailedReason }> {
+  constructor(reason: EmailValidationFailedReason) {
+    super('EmailValidationFailed', { reason });
   }
 }

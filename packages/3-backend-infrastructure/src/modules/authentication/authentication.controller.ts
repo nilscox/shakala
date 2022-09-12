@@ -5,8 +5,9 @@ import {
   LoginCommand,
   NickAlreadyExistsError,
   SignupCommand,
+  ValidateEmailAddressCommand,
 } from 'backend-application';
-import { InvalidCredentialsError, User } from 'backend-domain';
+import { EmailValidationFailed, EmailValidationFailedReason, InvalidCredentials, User } from 'backend-domain';
 import { AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
 
 import {
@@ -40,6 +41,7 @@ export class AuthenticationController extends Controller {
     return {
       'POST /login': this.login,
       'POST /signup': this.signup,
+      'GET  /signup/:userId/validate/:token': this.validateEmailAddress,
       'POST /request-login-email': this.requestLoginEmail,
       'POST /logout': this.logout,
       'GET  /me': this.getAuthenticatedUser,
@@ -54,7 +56,7 @@ export class AuthenticationController extends Controller {
     await tryCatch(async () => {
       await this.commandBus.execute(new LoginCommand(body.email, body.password));
     })
-      .catch(InvalidCredentialsError, (error) => new Forbidden(error.message))
+      .catch(InvalidCredentials, (error) => new Forbidden(error.message))
       .run();
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
@@ -85,6 +87,26 @@ export class AuthenticationController extends Controller {
     this.sessionService.setUser(req, user);
 
     return Response.created(userToDto(user));
+  }
+
+  async validateEmailAddress(request: Request): Promise<Response> {
+    const userId = request.params.get('userId') as string;
+    const token = request.params.get('token') as string;
+
+    const response = (status: string) => {
+      return Response.redirect('/?' + new URLSearchParams({ 'validate-email': status }));
+    };
+
+    const mapEmailValidationFailedReason: Record<EmailValidationFailedReason, string> = {
+      [EmailValidationFailedReason.alreadyValidated]: 'already-validated',
+      [EmailValidationFailedReason.invalidToken]: 'invalid-token',
+    };
+
+    await tryCatch(() => this.commandBus.execute(new ValidateEmailAddressCommand(userId, token)))
+      .catch(EmailValidationFailed, (error) => response(mapEmailValidationFailedReason[error.details.reason]))
+      .run();
+
+    return response('success');
   }
 
   async requestLoginEmail(): Promise<Response> {

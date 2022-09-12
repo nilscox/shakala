@@ -4,8 +4,14 @@ import {
   LoginCommand,
   NickAlreadyExistsError,
   SignupCommand,
+  ValidateEmailAddressCommand,
 } from 'backend-application';
-import { factories, InvalidCredentialsError } from 'backend-domain';
+import {
+  EmailValidationFailed,
+  EmailValidationFailedReason,
+  factories,
+  InvalidCredentials,
+} from 'backend-domain';
 import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import {
@@ -17,7 +23,7 @@ import {
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { StubSessionService, MockCommandBus, MockQueryBus, MockRequest } from '../../test';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { AuthenticationController } from './authentication.controller';
 
@@ -78,7 +84,7 @@ describe('AuthenticationController', () => {
     });
 
     it('handles InvalidCredentials errors', async () => {
-      commandBus.execute.mockRejectedValueOnce(new InvalidCredentialsError());
+      commandBus.execute.mockRejectedValueOnce(new InvalidCredentials());
 
       await expect(login()).rejects.test((error) => {
         expect(error).toBeInstanceOf(Forbidden);
@@ -148,6 +154,41 @@ describe('AuthenticationController', () => {
           error: 'NickAlreadyExists',
           value: body.nick,
         });
+      });
+    });
+  });
+
+  describe('validateEmailAddress', () => {
+    const params = { userId: 'userId', token: 'token' };
+    const user = create.user();
+
+    beforeEach(() => {
+      queryBus.for(GetUserByEmailQuery).return(user);
+    });
+
+    const validateEmailAddress = async () => {
+      return controller.validateEmailAddress(new MockRequest().withParams(params));
+    };
+
+    it("validates the user's email address", async () => {
+      const response = await validateEmailAddress();
+
+      expect(response).toHaveStatus(301);
+      expect(response).toHaveHeader('Location', '/?validate-email=success');
+
+      expect(commandBus.execute).toHaveBeenCalledWith(
+        new ValidateEmailAddressCommand(params.userId, params.token),
+      );
+    });
+
+    it('handles EmailValidationFailed errors', async () => {
+      commandBus.execute.mockRejectedValue(
+        new EmailValidationFailed(EmailValidationFailedReason.alreadyValidated),
+      );
+
+      await expect(validateEmailAddress()).rejects.test((response) => {
+        expect(response).toHaveStatus(301);
+        expect(response).toHaveHeader('Location', '/?validate-email=already-validated');
       });
     });
   });

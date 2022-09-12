@@ -1,5 +1,6 @@
-import { Email } from '../../interfaces/email.service';
-import { InMemoryEmailService } from '../../utils/in-memory-email.service';
+import { Email } from '../../interfaces/email-sender.service';
+import { InMemoryEmailCompilerService } from '../../utils/in-memory-email-compiler.service';
+import { InMemoryEmailSenderService } from '../../utils/in-memory-email-sender.service';
 import { FilesystemObject, InMemoryFilesystemService } from '../../utils/in-memory-filesystem.service';
 
 import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
@@ -12,9 +13,10 @@ describe('SendEmailCommand', () => {
     };
 
     const filesystemService = new InMemoryFilesystemService(fs);
-    const emailService = new InMemoryEmailService();
+    const emailCompilerService = new InMemoryEmailCompilerService();
+    const emailSenderService = new InMemoryEmailSenderService();
 
-    const handler = new SendEmailHandler(filesystemService, emailService);
+    const handler = new SendEmailHandler(filesystemService, emailCompilerService, emailSenderService);
 
     await handler.init();
 
@@ -35,6 +37,6 @@ describe('SendEmailCommand', () => {
       },
     };
 
-    expect(emailService.lastSentEmail).toEqual(expected);
+    expect(emailSenderService.lastSentEmail).toEqual(expected);
   });
 });

@@ -1,4 +1,4 @@
-import { InMemoryEmailService } from 'backend-application';
+import { InMemoryEmailSenderService } from 'backend-application';
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
 import { MockLoggerService, TestConfigService } from '../../infrastructure';
@@ -8,10 +8,13 @@ describe('Authentication e2e', () => {
   const server = new TestServer();
   const agent = server.agent();
 
+  const apiBaseUrl = 'https://api.url';
+  const emailSenderService = new InMemoryEmailSenderService();
+
   server.overrideServices({
     loggerService: new MockLoggerService(),
-    configService: new TestConfigService(),
-    emailService: new InMemoryEmailService(),
+    configService: new TestConfigService({ app: { apiBaseUrl } }),
+    emailSenderService,
   });
 
   beforeAll(async () => {
@@ -29,6 +32,13 @@ describe('Authentication e2e', () => {
       await agent.post('/auth/signup').send(body).expect(201);
     };
 
+    const validateEmail = async () => {
+      const match = emailSenderService.lastSentEmail?.body.text.match(/(http.+)\n/);
+      const endpoint = match?.at(1)?.replace(apiBaseUrl, '') as string;
+
+      await agent.get(endpoint).expect(301);
+    };
+
     const logout = async () => {
       await agent.post('/auth/logout').expect(204);
     };
@@ -42,6 +52,7 @@ describe('Authentication e2e', () => {
     await server.init();
 
     await signup();
+    await validateEmail();
     await logout();
     await login();
   });

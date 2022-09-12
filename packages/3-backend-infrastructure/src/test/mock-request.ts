@@ -11,6 +11,11 @@ export class MockRequest implements Request {
     return this;
   }
 
+  withParams(params: Record<string, string>) {
+    Object.entries(params).forEach(([key, value]) => this.withParam(key, value));
+    return this;
+  }
+
   withQuery(key: string, value: string) {
     this.query.set(key, value);
     return this;

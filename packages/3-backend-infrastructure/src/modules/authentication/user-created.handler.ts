@@ -17,7 +17,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
     await this.commandBus.execute(
       new SendEmailCommand(user.email, EmailKind.welcome, {
         nick: user.nick.toString(),
-        emailValidationLink: `${apiBaseUrl}/auth/signup/confirm/${user.emailValidationToken}`,
+        emailValidationLink: `${apiBaseUrl}/auth/signup/${user.id}/validate/${user.emailValidationToken}`,
       }),
     );
   }

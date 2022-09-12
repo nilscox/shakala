@@ -26,10 +26,12 @@ describe('UserCreatedHandler', () => {
 
     await handler.handle(new UserCreatedEvent(user.id));
 
+    const emailValidationLink = `https://api.url/auth/signup/${user.id}/validate/${user.emailValidationToken}`;
+
     expect(commandBus.execute).toHaveBeenCalledWith(
       new SendEmailCommand(user.email, EmailKind.welcome, {
         nick: user.nick.toString(),
-        emailValidationLink: `https://api.url/auth/signup/confirm/${user.emailValidationToken}`,
+        emailValidationLink,
       }),
     );
   });

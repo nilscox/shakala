@@ -1,7 +1,8 @@
 import path from 'path';
 
 import { Command, CommandHandler } from '../../cqs/command-handler';
-import { EmailRenderer, EmailService } from '../../interfaces/email.service';
+import { EmailCompilerService, EmailRenderer } from '../../interfaces/email-compiler.service';
+import { EmailSenderService } from '../../interfaces/email-sender.service';
 import { FilesystemService } from '../../interfaces/filesystem.service';
 
 export enum EmailKind {
@@ -28,7 +29,8 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
 
   constructor(
     private readonly filesystemService: FilesystemService,
-    private readonly emailService: EmailService,
+    private readonly emailCompilerService: EmailCompilerService,
+    private readonly emailSenderService: EmailSenderService,
   ) {}
 
   async init(): Promise<void> {
@@ -45,7 +47,7 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
       throw new Error(`no renderer found for email kind ${kind}`);
     }
 
-    await this.emailService.send({
+    await this.emailSenderService.send({
       from: 'hello@shakala.fr',
       to,
       subject: 'Bienvenue sur Shakala !',
@@ -59,6 +61,6 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
     const templateHtml = await this.filesystemService.readFile(filePath('mjml'));
     const templateText = await this.filesystemService.readFile(filePath('txt'));
 
-    return this.emailService.compile(templateText, templateHtml);
+    return this.emailCompilerService.compile(templateText, templateHtml);
   }
 }

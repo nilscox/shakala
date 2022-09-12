@@ -1,4 +1,4 @@
-import { factories, InvalidCredentialsError, StubDateService } from 'backend-domain';
+import { factories, InvalidCredentials, StubDateService } from 'backend-domain';
 
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
@@ -40,10 +40,10 @@ describe('LoginCommand', () => {
   });
 
   it('fails to log in when the user does not exist', async () => {
-    await expect(login(new LoginCommand('nope@domain.tld', ''))).rejects.toThrow(InvalidCredentialsError);
+    await expect(login(new LoginCommand('nope@domain.tld', ''))).rejects.toThrow(InvalidCredentials);
   });
 
   it('fails to log in when the password does not match', async () => {
-    await expect(login(new LoginCommand(email, 'nope'))).rejects.toThrow(InvalidCredentialsError);
+    await expect(login(new LoginCommand(email, 'nope'))).rejects.toThrow(InvalidCredentials);
   });
 });

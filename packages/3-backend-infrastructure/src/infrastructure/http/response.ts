@@ -15,6 +15,14 @@ export class Response<Body = unknown> {
     return new Response(201, body);
   }
 
+  static redirect(location: string, status = 301): Response<undefined> {
+    const response = new Response(status, undefined);
+
+    response.headers.set('Location', location);
+
+    return response;
+  }
+
   static noContent(): Response<undefined> {
     return new Response(204, undefined);
   }

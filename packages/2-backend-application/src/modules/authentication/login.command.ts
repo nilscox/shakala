@@ -1,4 +1,4 @@
-import { InvalidCredentialsError } from 'backend-domain';
+import { InvalidCredentials } from 'backend-domain';
 
 import { Command, CommandHandler } from '../../cqs/command-handler';
 import { UserRepository } from '../../interfaces/repositories';
@@ -14,7 +14,7 @@ export class LoginCommandHandler implements CommandHandler<LoginCommand> {
     const user = await this.userRepository.findByEmail(command.email);
 
     if (!user) {
-      throw new InvalidCredentialsError();
+      throw new InvalidCredentials();
     }
 
     await user.authenticate(command.password);

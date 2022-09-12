@@ -5,7 +5,8 @@ import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
 import { IEventBus } from './cqs/event-bus';
 import { Query, QueryHandler } from './cqs/query-handler';
 import { ConfigService } from './interfaces/config.service';
-import { EmailService } from './interfaces/email.service';
+import { EmailCompilerService } from './interfaces/email-compiler.service';
+import { EmailSenderService } from './interfaces/email-sender.service';
 import { FilesystemService } from './interfaces/filesystem.service';
 import { LoggerService } from './interfaces/logger.service';
 import {
@@ -24,8 +25,12 @@ import { GetCommentQuery, GetCommentQueryHandler } from './modules/thread/get-co
 import { GetLastThreadsHandler, GetLastThreadsQuery } from './modules/thread/get-last-threads.query';
 import { GetThreadHandler, GetThreadQuery } from './modules/thread/get-thread.query';
 import { SetReactionCommand, SetReactionCommandHandler } from './modules/thread/set-reaction.command';
-import { GetUserByEmailQuery, GetUserByEmailHandler } from './modules/user/get-user-by-email.query';
-import { GetUserByIdQuery, GetUserByIdHandler } from './modules/user/get-user-by-id.query';
+import { GetUserByEmailHandler, GetUserByEmailQuery } from './modules/user/get-user-by-email.query';
+import { GetUserByIdHandler, GetUserByIdQuery } from './modules/user/get-user-by-id.query';
+import {
+  ValidateEmailAddressCommand,
+  ValidateEmailAddressHandler,
+} from './modules/user/validate-email-address.command';
 
 export type Services = {
   configService: ConfigService;
@@ -34,7 +39,8 @@ export type Services = {
   dateService: DateService;
   cryptoService: CryptoService;
   filesystemService: FilesystemService;
-  emailService: EmailService;
+  emailCompilerService: EmailCompilerService;
+  emailSenderService: EmailSenderService;
 };
 
 export type Repositories = {
@@ -52,17 +58,18 @@ export const registerHandlers = (
   repositories: Repositories,
   eventBus: IEventBus,
 ) => {
-  const { generatorService, cryptoService, dateService, filesystemService, emailService } = services;
+  const { generatorService, cryptoService, dateService, filesystemService, emailCompilerService, emailSenderService } = services;
   const { userRepository, threadRepository, commentRepository, reactionRepository } = repositories;
 
   // email
-  registerCommand(SendEmailCommand, new SendEmailHandler(filesystemService, emailService));
+  registerCommand(SendEmailCommand, new SendEmailHandler(filesystemService, emailCompilerService, emailSenderService));
 
   // authentication
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
   registerQuery(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
   registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
   registerCommand(SignupCommand, new SignupCommandHandler(eventBus, userRepository, generatorService, cryptoService, dateService));
+  registerCommand(ValidateEmailAddressCommand, new ValidateEmailAddressHandler(userRepository));
 
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
