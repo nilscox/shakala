@@ -1,13 +1,19 @@
-export class FileNotFoundError {
-  constructor(public readonly path: string) {}
+export class FileNotFoundError extends Error {
+  constructor(public readonly path: string) {
+    super('File not found');
+  }
 }
 
-export class IsDirectoryError {
-  constructor(public readonly path: string) {}
+export class IsDirectoryError extends Error {
+  constructor(public readonly path: string) {
+    super('Path is a directory');
+  }
 }
 
-export class FilesystemAccessError {
-  constructor(public readonly path: string) {}
+export class FilesystemAccessError extends Error {
+  constructor(public readonly path: string) {
+    super('Missing file permissions');
+  }
 }
 
 export interface FilesystemService {
