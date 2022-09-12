@@ -33,41 +33,45 @@ describe('SignupCommand', () => {
 
   const create = factories();
 
+  const userId = 'userId;';
   const nick = 'nick';
   const email = 'user@domain.tld';
   const password = 'p4ssw0rd';
   const now = create.timestamp('2022-01-01');
+  const token = 'token;';
 
   const signup = async () => {
     return handler.handle(new SignupCommand(nick, email, password));
   };
 
   beforeEach(() => {
-    generatorService.nextId = 'userId';
+    generatorService.nextId = userId;
+    generatorService.nextToken = token;
     dateService.setNow(now);
   });
 
   it('signs up as a new user', async () => {
     await signup();
 
-    const createdUser = userRepository.get('userId');
+    const createdUser = userRepository.get(userId);
 
     expect(createdUser).toBeDefined();
-    expect(createdUser?.email).toEqual(email);
-    expect(createdUser?.nick.equals(create.nick(nick))).toBe(true);
-    expect(createdUser?.profileImage.equals(create.profileImage())).toBe(true);
-    expect(createdUser?.signupDate.equals(now)).toBe(true);
-    expect(createdUser?.lastLoginDate).toBeNull();
+    expect(createdUser).toHaveProperty('email', email);
+    expect(createdUser).toHaveProperty('nick', create.nick(nick));
+    expect(createdUser).toHaveProperty('profileImage', create.profileImage());
+    expect(createdUser).toHaveProperty('signupDate', now);
+    expect(createdUser).toHaveProperty('lastLoginDate', null);
+    expect(createdUser).toHaveProperty('emailValidationToken', token);
   });
 
   it("returns the created user's id", async () => {
-    expect(await signup()).toEqual('userId');
+    expect(await signup()).toEqual(userId);
   });
 
   it('emits a UserCreatedEvent', async () => {
     await signup();
 
-    expect(eventBus.lastEvent).toEqual(new UserCreatedEvent('userId'));
+    expect(eventBus.lastEvent).toEqual(new UserCreatedEvent(userId));
   });
 
   it('fails to signup when the email already exists', async () => {

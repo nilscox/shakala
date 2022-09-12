@@ -12,7 +12,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
     await this.commandBus.execute(
       new SendEmailCommand(user.email, EmailKind.welcome, {
         nick: user.nick.toString(),
-        emailValidationLink: 'https://some.link',
+        emailValidationLink: `/auth/signup/confirm/${user.emailValidationToken}`,
       }),
     );
   }

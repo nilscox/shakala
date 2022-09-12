@@ -21,6 +21,9 @@ export class SqlUser extends BaseSqlEntity<User> {
   @Property()
   lastLoginDate?: Date;
 
+  @Property()
+  emailValidationToken?: string;
+
   assignFromDomain(_em: EntityManager, entity: User) {
     this.id = entity.id;
     this.email = entity.email;
@@ -29,6 +32,7 @@ export class SqlUser extends BaseSqlEntity<User> {
     this.profileImage = entity.profileImage.toString() ?? undefined;
     this.createdAt = entity.signupDate.toDate();
     this.lastLoginDate = entity.lastLoginDate?.toDate();
+    this.emailValidationToken = entity.emailValidationToken ?? undefined;
   }
 
   toDomain({ dateService, cryptoService }: DomainDependencies) {
@@ -41,6 +45,7 @@ export class SqlUser extends BaseSqlEntity<User> {
         profileImage: new ProfileImage(this.profileImage),
         signupDate: new Timestamp(this.createdAt),
         lastLoginDate: this.lastLoginDate ? new Timestamp(this.lastLoginDate) : null,
+        emailValidationToken: this.emailValidationToken ?? null,
       },
       dateService,
       cryptoService,

@@ -144,6 +144,7 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
           profileImage: this.profileImage(),
           signupDate: this.timestamp(),
           lastLoginDate: null,
+          emailValidationToken: null,
           ...props,
         },
         deps.dateService,

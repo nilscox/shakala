@@ -23,6 +23,22 @@ export class StubGeneratorService implements GeneratorService {
     return nextId;
   }
 
+  public nextTokens: string[] = [];
+
+  set nextToken(token: string) {
+    this.nextTokens = [token];
+  }
+
+  async generateToken(): Promise<string> {
+    const nextToken = this.nextTokens.shift();
+
+    if (!nextToken) {
+      throw new Error('StubGeneratorService: no next id');
+    }
+
+    return nextToken;
+  }
+
   reset() {
     this.nextIds = [];
   }

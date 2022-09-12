@@ -38,11 +38,11 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
 
     const user = await User.create(
       {
-        id: await this.generatorService.generateId(),
         nick,
         email,
         password,
       },
+      this.generatorService,
       this.dateService,
       this.cryptoService,
     );

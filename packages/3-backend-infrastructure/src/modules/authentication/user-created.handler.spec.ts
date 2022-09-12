@@ -11,7 +11,12 @@ describe('UserCreatedHandler', () => {
   const handler = new UserCreatedHandler(userRepository, commandBus);
 
   const create = factories();
-  const user = create.user({ email: 'user@domain.tld', nick: new Nick('nick') });
+
+  const user = create.user({
+    email: 'user@domain.tld',
+    nick: new Nick('nick'),
+    emailValidationToken: 'token',
+  });
 
   it('sends a welcome email to the user', async () => {
     userRepository.add(user);
@@ -21,7 +26,7 @@ describe('UserCreatedHandler', () => {
     expect(commandBus.execute).toHaveBeenCalledWith(
       new SendEmailCommand(user.email, EmailKind.welcome, {
         nick: user.nick.toString(),
-        emailValidationLink: 'https://some.link',
+        emailValidationLink: `/auth/signup/confirm/${user.emailValidationToken}`,
       }),
     );
   });

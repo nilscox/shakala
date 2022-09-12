@@ -3,6 +3,7 @@ import { type EntityProps } from '../ddd/entity';
 import { UserCreatedEvent } from '../events/user-created.event';
 import type { CryptoService } from '../interfaces/crypto.interface';
 import { DateService } from '../interfaces/date.interface';
+import { GeneratorService } from '../interfaces/generator-service.interface';
 
 import { DomainError } from './domain-error';
 import { Nick } from './nick.value-object';
@@ -16,10 +17,10 @@ export type UserProps = EntityProps<{
   profileImage: ProfileImage;
   signupDate: Timestamp;
   lastLoginDate: Timestamp | null;
+  emailValidationToken: string | null
 }>;
 
 type CreateUserProps = {
-  id: string;
   nick: string;
   email: string;
   password: string;
@@ -31,18 +32,20 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   static async create(
-    { id, nick, email, password }: CreateUserProps,
+    { nick, email, password }: CreateUserProps,
+    generatorService: GeneratorService,
     dateService: DateService,
     cryptoService: CryptoService,
   ) {
     const user = new User({
-      id,
+      id: await generatorService.generateId(),
       nick: new Nick(nick),
       email,
       hashedPassword: await cryptoService.hash(password),
       profileImage: new ProfileImage(),
       signupDate: new Timestamp(dateService.nowAsString()),
       lastLoginDate: null,
+      emailValidationToken: await generatorService.generateToken(),
     }, dateService, cryptoService);
 
     user.addEvent(new UserCreatedEvent(user.id));
@@ -72,6 +75,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get lastLoginDate() {
     return this.props.lastLoginDate;
+  }
+
+  get emailValidationToken() {
+    return this.props.emailValidationToken;
   }
 
   async authenticate(password: string): Promise<void> {
