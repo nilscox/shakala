@@ -1,5 +1,5 @@
 import { MikroORM } from '@mikro-orm/core';
-import { Command, CommandHandler } from 'backend-application/src/cqs/command-handler';
+import { Command, CommandHandler } from 'backend-application';
 
 export class ClearDatabaseCommand implements Command {}
 

@@ -13,6 +13,9 @@ export * from './entities/user.entity';
 export * from './services/comment.service';
 
 export * from './ddd/domain-event';
+export * from './ddd/entity';
+export * from './ddd/aggregate-root';
+
 export * from './events/user-created.event';
 
 export * from './interfaces/crypto.interface';

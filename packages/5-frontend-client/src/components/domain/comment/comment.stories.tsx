@@ -1,6 +1,12 @@
 import { Meta, Story } from '@storybook/react';
-import { addComments, createComment, createThread, createUser, selectComment } from 'frontend-domain';
-import { addThread } from 'frontend-domain/src/thread/thread.actions';
+import {
+  addComments,
+  createComment,
+  createThread,
+  createUser,
+  selectComment,
+  addThread,
+} from 'frontend-domain';
 
 import { useSelector } from '~/hooks/use-selector';
 import { maxWidthDecorator, reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';

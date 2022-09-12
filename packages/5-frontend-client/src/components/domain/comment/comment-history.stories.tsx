@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { addComment, createComment, createThread, createUser } from 'frontend-domain';
-import { addThread } from 'frontend-domain/src/thread/thread.actions';
+import { addComment, createComment, createThread, createUser, addThread } from 'frontend-domain';
 
 import { reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
 

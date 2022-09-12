@@ -9,7 +9,7 @@ import {
   Repositories,
   Services,
 } from 'backend-application';
-import { UserCreatedEvent } from 'backend-domain/src/events/user-created.event';
+import { UserCreatedEvent } from 'backend-domain';
 
 import {
   BcryptService,

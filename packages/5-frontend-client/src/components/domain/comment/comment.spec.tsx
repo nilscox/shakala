@@ -1,6 +1,13 @@
 import { screen } from '@testing-library/react';
-import { addComment, createComment, createThread, createUser, TestStore } from 'frontend-domain';
-import { addThread, setThreadComments } from 'frontend-domain/src/thread/thread.actions';
+import {
+  addComment,
+  createComment,
+  createThread,
+  createUser,
+  TestStore,
+  addThread,
+  setThreadComments,
+} from 'frontend-domain';
 
 import { TestRenderer } from '~/test/render';
 
