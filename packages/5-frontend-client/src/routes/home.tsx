@@ -145,10 +145,10 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
-  <div className="max-w-1 flex-1">
+  <div className="max-w-1 flex-1 border-b-2 pb-1">
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
     <img src={image} className="mx-auto max-h-[5.5rem] py-2 opacity-80 md:max-h-1" alt={name} />
-    <div className="border-y text-center text-lg font-bold">{name}</div>
+    <div className="text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-sm">{children}</div>
   </div>
 );
@@ -169,7 +169,7 @@ const KeyFeatures = () => (
   <>
     <Heading id="points-clés">Les points clés</Heading>
 
-    <div className="my-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <div className="my-6 flex flex-col items-center justify-center gap-6 sm:flex-row">
       <KeyFeature image={imageCharte} name="La charte">
         Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
         garantir des échanges pertinents
