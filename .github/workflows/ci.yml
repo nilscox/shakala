@@ -11,8 +11,8 @@ permissions:
   packages: read
 
 jobs:
-  build-backend:
-    name: Build backend
+  typecheck:
+    name: Types check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
           node-version: 16
           cache: yarn
       - run: yarn install --frozen-lockfile
-      - run: yarn build:backend
+      - run: yarn typecheck
 
   build-frontend:
     name: Build frontend

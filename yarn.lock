@@ -15637,7 +15637,7 @@ vite-tsconfig-paths@^3.5.0:
     recrawl-sync "^2.0.3"
     tsconfig-paths "^4.0.0"
 
-"vite@^2.9.12 || ^3.0.0-0":
+vite@3.0.8, "vite@^2.9.12 || ^3.0.0-0", vite@^3.1.0:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/vite/-/vite-3.0.8.tgz#aa095ad8e3e5da46d9ec7e878f262678965d6531"
   integrity sha512-AOZ4eN7mrkJiOLuw8IA7piS4IdOQyQCA81GxGsAQvAZzMRi9ZwGB3TOaYsj4uLAWK46T5L4AfQ6InNGlxX30IQ==
@@ -15646,18 +15646,6 @@ vite-tsconfig-paths@^3.5.0:
     postcss "^8.4.16"
     resolve "^1.22.1"
     rollup ">=2.75.6 <2.77.0 || ~2.77.0"
-  optionalDependencies:
-    fsevents "~2.3.2"
-
-vite@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-3.1.0.tgz#3138b279072941d57e76bcf7f66f272fc6a17fe2"
-  integrity sha512-YBg3dUicDpDWFCGttmvMbVyS9ydjntwEjwXRj2KBFwSB8SxmGcudo1yb8FW5+M/G86aS8x828ujnzUVdsLjs9g==
-  dependencies:
-    esbuild "^0.15.6"
-    postcss "^8.4.16"
-    resolve "^1.22.1"
-    rollup "~2.78.0"
   optionalDependencies:
     fsevents "~2.3.2"
 
