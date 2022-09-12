@@ -45,6 +45,7 @@ export class EnvConfigService implements ConfigService {
       port,
       trustProxy: this.isProd,
       apiBaseUrl: this.get('API_BASE_URL'),
+      appBaseUrl: this.get('APP_BASE_URL'),
     };
   }
 

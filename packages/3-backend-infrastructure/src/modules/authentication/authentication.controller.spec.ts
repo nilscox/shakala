@@ -20,6 +20,7 @@ import {
   MockLoggerService,
   NotImplemented,
   Request,
+  StubConfigService,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
@@ -28,12 +29,14 @@ import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '.
 import { AuthenticationController } from './authentication.controller';
 
 describe('AuthenticationController', () => {
+  const configService = new StubConfigService({ app: { appBaseUrl: 'http://app.url' } });
   const sessionService = new StubSessionService();
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
 
   const controller = new AuthenticationController(
     new MockLoggerService(),
+    configService,
     new ValidationService(),
     sessionService,
     queryBus,
@@ -174,7 +177,7 @@ describe('AuthenticationController', () => {
       const response = await validateEmailAddress();
 
       expect(response).toHaveStatus(301);
-      expect(response).toHaveHeader('Location', '/?validate-email=success');
+      expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=success');
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new ValidateEmailAddressCommand(params.userId, params.token),
@@ -188,7 +191,7 @@ describe('AuthenticationController', () => {
 
       await expect(validateEmailAddress()).rejects.test((response) => {
         expect(response).toHaveStatus(301);
-        expect(response).toHaveHeader('Location', '/?validate-email=already-validated');
+        expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=already-validated');
       });
     });
   });

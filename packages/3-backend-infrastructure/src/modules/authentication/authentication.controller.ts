@@ -12,6 +12,7 @@ import { AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
 
 import {
   CommandBus,
+  ConfigService,
   Controller,
   Forbidden,
   NotImplemented,
@@ -29,6 +30,7 @@ import { userToDto } from './authentication.dtos';
 export class AuthenticationController extends Controller {
   constructor(
     logger: LoggerService,
+    private readonly configService: ConfigService,
     private readonly validationService: ValidationService,
     private readonly sessionService: SessionService,
     private readonly queryBus: QueryBus,
@@ -92,9 +94,10 @@ export class AuthenticationController extends Controller {
   async validateEmailAddress(request: Request): Promise<Response> {
     const userId = request.params.get('userId') as string;
     const token = request.params.get('token') as string;
+    const { appBaseUrl } = this.configService.app();
 
     const response = (status: string) => {
-      return Response.redirect('/?' + new URLSearchParams({ 'validate-email': status }));
+      return Response.redirect(`${appBaseUrl}/?${new URLSearchParams({ 'validate-email': status })}`);
     };
 
     const mapEmailValidationFailedReason: Record<EmailValidationFailedReason, string> = {

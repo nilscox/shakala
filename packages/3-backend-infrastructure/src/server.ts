@@ -108,14 +108,14 @@ export class Server extends Application {
   }
 
   private configureControllers() {
-    const { queryBus, commandBus, em, logger } = this;
+    const { queryBus, commandBus, em, logger, config } = this;
 
     const validationService = new ValidationService();
     const sessionService = new ExpressSessionService(queryBus);
 
     const controllers = [
       new HealthcheckController(logger, em),
-      new AuthenticationController(logger, validationService, sessionService, queryBus, commandBus),
+      new AuthenticationController(logger, config, validationService, sessionService, queryBus, commandBus),
       new ThreadController(logger, queryBus, commandBus, sessionService, validationService),
       new CommentController(logger, queryBus, commandBus, sessionService, validationService),
     ];
