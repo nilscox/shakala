@@ -11,5 +11,6 @@ export class FilesystemAccessError {
 }
 
 export interface FilesystemService {
-  readFile(path: string): Promise<string>;
+  readonly emailTemplatesPath?: string;
+  readEmailTemplate(path: string): Promise<string>;
 }

@@ -3,9 +3,9 @@ import { FileNotFoundError, FilesystemService } from '../interfaces/filesystem.s
 export type FilesystemObject = Record<string, string>;
 
 export class InMemoryFilesystemService implements FilesystemService {
-  constructor(private readonly fs: FilesystemObject) {}
+  constructor(private readonly fs: FilesystemObject = {}) {}
 
-  async readFile(path: string): Promise<string> {
+  async readEmailTemplate(path: string): Promise<string> {
     const file = this.fs[path];
 
     if (!file) {

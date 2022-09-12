@@ -8,8 +8,8 @@ import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.comm
 describe('SendEmailCommand', () => {
   it('sends a welcome email to a user', async () => {
     const fs: FilesystemObject = {
-      [`${__dirname}/templates/welcome.txt`]: 'Welcome {nick}',
-      [`${__dirname}/templates/welcome.mjml`]: '<p>Welcome {nick}</p>',
+      '/templates/welcome.txt': 'Welcome {nick}',
+      '/templates/welcome.mjml': '<p>Welcome {nick}</p>',
     };
 
     const filesystemService = new InMemoryFilesystemService(fs);

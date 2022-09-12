@@ -1,7 +1,9 @@
+import { InMemoryFilesystemService } from 'backend-application';
+
 import { MjmlEmailCompilerService } from './mjml-email-compiler.service';
 
 describe('MjmlEmailCompilerService', () => {
-  const service = new MjmlEmailCompilerService();
+  const service = new MjmlEmailCompilerService(new InMemoryFilesystemService());
 
   it('compiles an email template with MJML', () => {
     const render = service.compile(

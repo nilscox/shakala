@@ -1,10 +1,10 @@
-import path from 'path';
-
-import { EmailCompilerService, EmailPayload, EmailRenderer } from 'backend-application';
+import { EmailCompilerService, EmailPayload, EmailRenderer, FilesystemService } from 'backend-application';
 import Handlebars from 'handlebars';
 import mjml2html from 'mjml';
 
 export class MjmlEmailCompilerService implements EmailCompilerService {
+  constructor(private readonly filesystemService: FilesystemService) {}
+
   compile(templateText: string, templateHtml: string): EmailRenderer {
     const { html, errors } = mjml2html(templateHtml, {
       fonts: {
@@ -12,20 +12,7 @@ export class MjmlEmailCompilerService implements EmailCompilerService {
       },
       minify: false,
       validationLevel: 'strict',
-      filePath:
-        '/' +
-        path.join(
-          'home',
-          'nils',
-          'dev',
-          'shakala',
-          'packages',
-          '2-backend-application',
-          'src',
-          'modules',
-          'email',
-          'templates',
-        ),
+      filePath: this.filesystemService.emailTemplatesPath,
     });
 
     if (errors.length) {

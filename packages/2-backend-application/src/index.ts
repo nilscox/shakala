@@ -21,6 +21,7 @@ export * from './modules/user/user.in-memory-repository';
 
 export * from './utils/in-memory-email-compiler.service';
 export * from './utils/in-memory-email-sender.service';
+export * from './utils/in-memory-filesystem.service';
 
 export * from './modules/authentication/login.command';
 export * from './modules/authentication/signup.command';

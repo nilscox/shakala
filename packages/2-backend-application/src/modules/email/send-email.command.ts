@@ -1,5 +1,3 @@
-import path from 'path';
-
 import { Command, CommandHandler } from '../../cqs/command-handler';
 import { EmailCompilerService, EmailRenderer } from '../../interfaces/email-compiler.service';
 import { EmailSenderService } from '../../interfaces/email-sender.service';
@@ -55,10 +53,8 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
   }
 
   private async loadTemplate(kind: EmailKind) {
-    const filePath = (ext: string) => path.join(__dirname, 'templates', `${kind}.${ext}`);
-
-    const templateHtml = await this.filesystemService.readFile(filePath('mjml'));
-    const templateText = await this.filesystemService.readFile(filePath('txt'));
+    const templateHtml = await this.filesystemService.readEmailTemplate(`${kind}.mjml`);
+    const templateText = await this.filesystemService.readEmailTemplate(`${kind}.txt`);
 
     return this.emailCompilerService.compile(templateText, templateHtml);
   }

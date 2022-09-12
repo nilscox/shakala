@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import {
@@ -39,6 +41,7 @@ import { createDatabaseConnection } from './persistence/mikro-orm/create-databas
 const instantiateServices = (): Services => {
   const configService = new EnvConfigService();
   const dateService = new RealDateService();
+  const filesystemService = new RealFilesystemService(path.resolve(__dirname, '..'));
 
   return {
     configService,
@@ -46,8 +49,8 @@ const instantiateServices = (): Services => {
     generatorService: new MathRandomGeneratorService(),
     dateService,
     cryptoService: new BcryptService(),
-    filesystemService: new RealFilesystemService(),
-    emailCompilerService: new MjmlEmailCompilerService(),
+    filesystemService,
+    emailCompilerService: new MjmlEmailCompilerService(filesystemService),
     emailSenderService: new NodeMailerEmailSenderService(configService),
   };
 };
