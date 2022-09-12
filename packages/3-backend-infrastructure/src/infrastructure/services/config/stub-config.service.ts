@@ -5,6 +5,7 @@ import {
   SessionConfig,
   DatabaseConfig,
   dumpConfig,
+  EmailConfig,
 } from './config.service';
 
 export class StubConfigService implements ConfigService {
@@ -14,6 +15,7 @@ export class StubConfigService implements ConfigService {
       cors: Partial<CorsConfig>;
       session: Partial<SessionConfig>;
       database: Partial<DatabaseConfig>;
+      email: Partial<EmailConfig>;
     }>,
   ) {}
 
@@ -51,6 +53,18 @@ export class StubConfigService implements ConfigService {
       password: '',
       database: 'shakala',
       ...this.config?.database,
+    };
+  }
+
+  email(): EmailConfig {
+    return {
+      host: '',
+      port: 0,
+      secure: false,
+      user: '',
+      password: '',
+      from: '',
+      ...this.config?.email,
     };
   }
 

@@ -1,7 +1,6 @@
 import { EmailBody } from './email-compiler.service';
 
 export type Email = {
-  from: string;
   to: string;
   subject: string;
   body: EmailBody;

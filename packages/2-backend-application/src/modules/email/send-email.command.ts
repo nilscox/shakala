@@ -48,7 +48,6 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
     }
 
     await this.emailSenderService.send({
-      from: 'hello@shakala.fr',
       to,
       subject: 'Bienvenue sur Shakala !',
       body: renderer(payload),

@@ -1,12 +1,25 @@
 import { createTransport, Transporter } from 'nodemailer';
 
+import { EmailConfig } from '../config/config.service';
+import { StubConfigService } from '../config/stub-config.service';
+
 import { NodeMailerEmailSenderService } from './node-mailer-email-sender.service';
 
 vi.mock('nodemailer');
 const mockCreateTransport = vi.mocked(createTransport);
 
 describe('NodeMailerEmailSenderService', () => {
-  const service = new NodeMailerEmailSenderService();
+  const emailConfig: EmailConfig = {
+    host: 'host',
+    port: 2525,
+    secure: true,
+    user: 'hello@domain.fr',
+    password: 'password',
+    from: 'Someone',
+  };
+
+  const config = new StubConfigService({ email: emailConfig });
+  const service = new NodeMailerEmailSenderService(config);
 
   it('sends an email', async () => {
     const sendMail = vi.fn();
@@ -16,7 +29,6 @@ describe('NodeMailerEmailSenderService', () => {
     } as unknown as Transporter<unknown>);
 
     await service.send({
-      from: 'me',
       to: 'you',
       subject: 'hello',
       body: {
@@ -26,7 +38,7 @@ describe('NodeMailerEmailSenderService', () => {
     });
 
     expect(sendMail).toHaveBeenCalledWith({
-      from: 'me',
+      from: 'Someone <hello@domain.fr>',
       to: 'you',
       subject: 'hello',
       text: 'how are you?',

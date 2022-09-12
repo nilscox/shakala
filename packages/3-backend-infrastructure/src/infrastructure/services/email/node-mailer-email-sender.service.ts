@@ -2,21 +2,28 @@ import { Email, EmailSenderService } from 'backend-application';
 import { createTransport } from 'nodemailer';
 import { pick } from 'shared';
 
+import { ConfigService } from '../config/config.service';
+
 export class NodeMailerEmailSenderService implements EmailSenderService {
+  constructor(private readonly configService: ConfigService) {}
+
   async send(email: Email): Promise<void> {
+    const { host, port, secure, user, password, from } = this.configService.email();
+
     const transport = createTransport({
-      host: 'localhost',
-      port: 1025,
-      secure: false,
+      host,
+      port,
+      secure,
       auth: {
-        user: 'hello@shakala.fr',
-        pass: '',
+        user,
+        pass: password,
       },
-      ignoreTLS: true,
+      ignoreTLS: !secure,
     });
 
     await transport.sendMail({
-      ...pick(email, 'from', 'to', 'subject'),
+      from: `${from} <${user}>`,
+      ...pick(email, 'to', 'subject'),
       ...email.body,
     });
   }

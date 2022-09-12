@@ -1,7 +1,7 @@
 <mj-attributes>
   <mj-all padding="0" />
   <mj-body width="680px" background-color="#F6F6F6" />
-  <mj-text font-family="'Montserrat', sans-serif" font-size="16px" line-height="20px" color="#333" />
+  <mj-text font-family="'Montserrat', sans-serif" font-size="16px" line-height="26px" color="#333" />
   <mj-button
     background-color="#EEF"
     border="1px solid #CCF"

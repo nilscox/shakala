@@ -23,11 +23,21 @@ export type DatabaseConfig = {
   database: string;
 };
 
+export type EmailConfig = {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  password: string;
+  from: string;
+};
+
 export interface ConfigService {
   app(): AppConfig;
   cors(): CorsConfig;
   session(): SessionConfig;
   database(): DatabaseConfig;
+  email(): EmailConfig;
   dump(): unknown;
 }
 
@@ -36,17 +46,24 @@ export const dumpConfig = (service: ConfigService) => () => {
   const cors = service.cors();
   const session = service.session();
   const database = service.database();
+  const email = service.email();
+
+  const masked = '[masked]';
 
   return {
     app,
     cors,
     session: {
       ...session,
-      secret: '[masked]',
+      secret: masked,
     },
     database: {
       ...database,
-      password: '[masked]',
+      password: masked,
+    },
+    email: {
+      ...email,
+      password: masked,
     },
   };
 };

@@ -37,17 +37,18 @@ import {
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 
 const instantiateServices = (): Services => {
+  const configService = new EnvConfigService();
   const dateService = new RealDateService();
 
   return {
-    configService: new EnvConfigService(),
+    configService,
     loggerService: new ConsoleLoggerService(dateService),
     generatorService: new MathRandomGeneratorService(),
     dateService,
     cryptoService: new BcryptService(),
     filesystemService: new RealFilesystemService(),
     emailCompilerService: new MjmlEmailCompilerService(),
-    emailSenderService: new NodeMailerEmailSenderService(),
+    emailSenderService: new NodeMailerEmailSenderService(configService),
   };
 };
 

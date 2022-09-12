@@ -28,7 +28,6 @@ describe('SendEmailCommand', () => {
     );
 
     const expected: Email = {
-      from: 'hello@shakala.fr',
       to: 'user@domain.tld',
       subject: 'Bienvenue sur Shakala !',
       body: {
