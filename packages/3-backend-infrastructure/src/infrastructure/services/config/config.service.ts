@@ -2,6 +2,7 @@ export type AppConfig = {
   host: string;
   port: number;
   trustProxy: boolean;
+  apiBaseUrl: string;
 };
 
 export type CorsConfig = {

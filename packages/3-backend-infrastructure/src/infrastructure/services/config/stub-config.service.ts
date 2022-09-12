@@ -22,6 +22,7 @@ export class StubConfigService implements ConfigService {
       host: 'localhost',
       port: 3000,
       trustProxy: false,
+      apiBaseUrl: 'http://localhost:3000',
       ...this.config?.app,
     };
   }

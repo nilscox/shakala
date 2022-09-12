@@ -1,6 +1,7 @@
 import { EmailKind, InMemoryUserRepository, SendEmailCommand } from 'backend-application';
 import { factories, Nick, UserCreatedEvent } from 'backend-domain';
 
+import { TestConfigService } from '../../infrastructure';
 import { MockCommandBus } from '../../test';
 
 import { UserCreatedHandler } from './user-created.handler';
@@ -8,7 +9,9 @@ import { UserCreatedHandler } from './user-created.handler';
 describe('UserCreatedHandler', () => {
   const userRepository = new InMemoryUserRepository();
   const commandBus = new MockCommandBus();
-  const handler = new UserCreatedHandler(userRepository, commandBus);
+  const configService = new TestConfigService({ app: { apiBaseUrl: 'https://api.url' } });
+
+  const handler = new UserCreatedHandler(configService, userRepository, commandBus);
 
   const create = factories();
 
@@ -26,7 +29,7 @@ describe('UserCreatedHandler', () => {
     expect(commandBus.execute).toHaveBeenCalledWith(
       new SendEmailCommand(user.email, EmailKind.welcome, {
         nick: user.nick.toString(),
-        emailValidationLink: `/auth/signup/confirm/${user.emailValidationToken}`,
+        emailValidationLink: `https://api.url/auth/signup/confirm/${user.emailValidationToken}`,
       }),
     );
   });

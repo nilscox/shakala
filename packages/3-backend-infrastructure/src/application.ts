@@ -138,7 +138,7 @@ export class Application {
 
     this.eventBus.registerHandler(
       UserCreatedEvent,
-      new UserCreatedHandler(this.repositories.userRepository, this.commandBus),
+      new UserCreatedHandler(this.config, this.repositories.userRepository, this.commandBus),
     );
 
     this.logger.info('application initialized');
