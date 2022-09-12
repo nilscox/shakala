@@ -176,7 +176,7 @@ describe('AuthenticationController', () => {
     it("validates the user's email address", async () => {
       const response = await validateEmailAddress();
 
-      expect(response).toHaveStatus(301);
+      expect(response).toHaveStatus(307);
       expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=success');
 
       expect(commandBus.execute).toHaveBeenCalledWith(
@@ -190,7 +190,7 @@ describe('AuthenticationController', () => {
       );
 
       await expect(validateEmailAddress()).rejects.test((response) => {
-        expect(response).toHaveStatus(301);
+        expect(response).toHaveStatus(307);
         expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=already-validated');
       });
     });

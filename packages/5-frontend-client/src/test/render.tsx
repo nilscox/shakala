@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
 import { TestStore } from 'frontend-domain';
 import { History, createMemoryHistory } from 'history';
 import { ReactNode } from 'react';
@@ -15,9 +15,13 @@ export class TestRenderer {
     ReactModal.setAppElement('body');
   }
 
-  render(ui: React.ReactElement) {
+  render = (ui: React.ReactElement) => {
     return render(ui, { wrapper: this.wrapper });
-  }
+  };
+
+  renderHook = (param: Parameters<typeof renderHook>[0]) => {
+    return renderHook(param, { wrapper: this.wrapper });
+  };
 
   withMemoryRouter(history = createMemoryHistory()) {
     this.history = history;

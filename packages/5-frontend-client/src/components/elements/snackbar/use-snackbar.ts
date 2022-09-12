@@ -3,6 +3,15 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbarContext } from './snackbar-provider';
 import { SnackType } from './snackbar.types';
 
+type ShowSnackbar = (message: string) => void;
+
+export type UseSnackbarResult = {
+  success: ShowSnackbar;
+  info: ShowSnackbar;
+  warning: ShowSnackbar;
+  error: ShowSnackbar;
+};
+
 export const useSnackbar = () => {
   const { addSnack } = useSnackbarContext();
 
@@ -22,7 +31,7 @@ export const useSnackbar = () => {
     [addSnack],
   );
 
-  return useMemo(
+  return useMemo<UseSnackbarResult>(
     () => ({
       success: register(SnackType.success),
       info: register(SnackType.info),

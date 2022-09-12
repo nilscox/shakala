@@ -97,12 +97,12 @@ export class AuthenticationController extends Controller {
     const { appBaseUrl } = this.configService.app();
 
     const response = (status: string) => {
-      return Response.redirect(`${appBaseUrl}/?${new URLSearchParams({ 'validate-email': status })}`);
+      return Response.redirect(`${appBaseUrl}/?${new URLSearchParams({ 'validate-email': status })}`, 307);
     };
 
     const mapEmailValidationFailedReason: Record<EmailValidationFailedReason, string> = {
-      [EmailValidationFailedReason.alreadyValidated]: 'already-validated',
       [EmailValidationFailedReason.invalidToken]: 'invalid-token',
+      [EmailValidationFailedReason.alreadyValidated]: 'already-validated',
     };
 
     await tryCatch(() => this.commandBus.execute(new ValidateEmailAddressCommand(userId, token)))

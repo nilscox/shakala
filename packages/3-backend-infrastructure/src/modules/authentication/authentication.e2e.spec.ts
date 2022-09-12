@@ -36,7 +36,7 @@ describe('Authentication e2e', () => {
       const match = emailSenderService.lastSentEmail?.body.text.match(/(http.+)\n/);
       const endpoint = match?.at(1)?.replace(apiBaseUrl, '') as string;
 
-      await agent.get(endpoint).expect(301);
+      await agent.get(endpoint).expect(307);
     };
 
     const logout = async () => {

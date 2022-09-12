@@ -18,16 +18,22 @@ import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';
 import imageModeration from '../images/moderation.png';
 
-export const Home = () => (
-  <>
-    <Outline />
-    <LastThreads />
-    <Motivations />
-    <KeyFeatures />
-    <CurrentStatus />
-    <TargetUsers />
-  </>
-);
+import { useEmailValidationNotification } from './hooks/use-email-validation-snackbar';
+
+export const Home = () => {
+  useEmailValidationNotification();
+
+  return (
+    <>
+      <Outline />
+      <LastThreads />
+      <Motivations />
+      <KeyFeatures />
+      <CurrentStatus />
+      <TargetUsers />
+    </>
+  );
+};
 
 const Outline = () => (
   <div className="my-8 mx-4 md:m-12">
