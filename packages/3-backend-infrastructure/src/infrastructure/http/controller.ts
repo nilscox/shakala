@@ -40,6 +40,10 @@ export abstract class Controller {
       const handleResponse = (response: Response) => {
         res.status(response.status);
 
+        for (const [key, value] of response.headers) {
+          res.set(key, value);
+        }
+
         if (response.body !== undefined) {
           res.json(response.body);
         } else {
