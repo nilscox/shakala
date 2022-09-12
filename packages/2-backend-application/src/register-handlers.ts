@@ -5,6 +5,8 @@ import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
 import { IEventBus } from './cqs/event-bus';
 import { Query, QueryHandler } from './cqs/query-handler';
 import { ConfigService } from './interfaces/config.service';
+import { EmailService } from './interfaces/email.service';
+import { FilesystemService } from './interfaces/filesystem.service';
 import { LoggerService } from './interfaces/logger.service';
 import {
   CommentRepository,
@@ -31,6 +33,8 @@ export type Services = {
   generatorService: GeneratorService;
   dateService: DateService;
   cryptoService: CryptoService;
+  filesystemService: FilesystemService;
+  emailService: EmailService;
 };
 
 export type Repositories = {
@@ -48,11 +52,11 @@ export const registerHandlers = (
   repositories: Repositories,
   eventBus: IEventBus,
 ) => {
-  const { generatorService, cryptoService, dateService } = services;
+  const { generatorService, cryptoService, dateService, filesystemService, emailService } = services;
   const { userRepository, threadRepository, commentRepository, reactionRepository } = repositories;
 
   // email
-  registerCommand(SendEmailCommand, new SendEmailHandler());
+  registerCommand(SendEmailCommand, new SendEmailHandler(filesystemService, emailService));
 
   // authentication
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));

@@ -4,5 +4,6 @@ export type CommandResult = void | string;
 export interface Command {}
 
 export interface CommandHandler<Command, Result extends CommandResult = void> {
+  init?(): void | Promise<void>;
   handle(command: Command): Result | Promise<Result>;
 }

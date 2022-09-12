@@ -24,6 +24,8 @@ import {
 import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
+import { MjmlEmailService } from './infrastructure/services/email/mjml-email.service';
+import { RealFilesystemService } from './infrastructure/services/filesystem/real-filesystem.service';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
 import {
   SqlCommentRepository,
@@ -42,6 +44,8 @@ const instantiateServices = (): Services => {
     generatorService: new MathRandomGeneratorService(),
     dateService,
     cryptoService: new BcryptService(),
+    filesystemService: new RealFilesystemService(),
+    emailService: new MjmlEmailService(),
   };
 };
 
@@ -125,9 +129,17 @@ export class Application {
       this.commandBus.register(ClearDatabaseCommand, new ClearDatabaseHandler(this.orm));
     }
 
+    this.logger.log('initializing query and command handlers');
+
+    await this.queryBus.init();
+    await this.commandBus.init();
+
     this.logger.log('registering domain event handlers');
 
-    this.eventBus.registerHandler(UserCreatedEvent, new UserCreatedHandler(this.commandBus));
+    this.eventBus.registerHandler(
+      UserCreatedEvent,
+      new UserCreatedHandler(this.repositories.userRepository, this.commandBus),
+    );
 
     this.logger.info('application initialized');
   }

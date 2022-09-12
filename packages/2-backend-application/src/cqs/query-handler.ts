@@ -2,5 +2,6 @@
 export interface Query {}
 
 export interface QueryHandler<Query, Result> {
+  init?(): void | Promise<void>;
   handle(query: Query): Result | Promise<Result>;
 }

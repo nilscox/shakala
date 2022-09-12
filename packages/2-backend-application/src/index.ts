@@ -7,14 +7,18 @@ export * from './cqs/query-handler';
 
 export * from './modules/email/send-email.command';
 
+export * from './interfaces/email.service';
+export * from './interfaces/filesystem.service';
+export * from './interfaces/logger.service';
 export * from './interfaces/repositories';
 export * from './interfaces/repository';
-export * from './interfaces/logger.service';
 
 export * from './modules/thread/thread.in-memory-repository';
 export * from './modules/thread/comment.in-memory-repository';
 export * from './modules/thread/reaction.in-memory-repository';
 export * from './modules/user/user.in-memory-repository';
+
+export * from './utils/in-memory-email.service';
 
 export * from './modules/authentication/login.command';
 export * from './modules/authentication/signup.command';

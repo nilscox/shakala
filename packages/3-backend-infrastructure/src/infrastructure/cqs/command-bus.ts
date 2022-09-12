@@ -12,6 +12,12 @@ export class RealCommandBus {
     this.handlers.set(command, handler);
   }
 
+  async init(): Promise<void> {
+    for (const handler of this.handlers.values()) {
+      await handler.init?.();
+    }
+  }
+
   async execute<Result extends CommandResult>(command: Command): Promise<Result> {
     const ctor = command.constructor;
     const handler = this.handlers.get(ctor);

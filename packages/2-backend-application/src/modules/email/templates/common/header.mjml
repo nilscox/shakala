@@ -1,0 +1,24 @@
+<mj-section padding="25px 0 10px 0" border-bottom="1px solid #CCC">
+  <mj-column vertical-align="bottom" width="10%">
+    <mj-image css-class="logo" src="https://github.com/nilscox/zetecom/raw/dev/website/static/logo.png" />
+  </mj-column>
+
+  <mj-column vertical-align="bottom" width="50%">
+    <mj-text
+      padding-left="25px"
+      font-size="32px"
+      line-height="32px"
+      font-family="'Noticia Text', serif"
+      font-weight="bold"
+      color="#446"
+      >Shakala</mj-text
+    >
+  </mj-column>
+
+  <mj-column vertical-align="bottom" width="40%" css-class="subtitle">
+    <mj-text align="right" font-size="18px" line-height="18px" color="#666">Échanges critiques</mj-text>
+    <mj-text align="right" font-size="18px" line-height="18px" color="#666">et bienveillants</mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section padding-top="25px" />

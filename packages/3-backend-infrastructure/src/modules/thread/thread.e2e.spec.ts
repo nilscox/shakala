@@ -1,3 +1,4 @@
+import { InMemoryEmailService } from 'backend-application';
 import { SuperAgentTest } from 'supertest';
 
 import { MockLoggerService, TestConfigService } from '../../infrastructure';
@@ -10,6 +11,7 @@ describe('Thread e2e', () => {
   server.overrideServices({
     loggerService: new MockLoggerService(),
     configService: new TestConfigService(),
+    emailService: new InMemoryEmailService(),
   });
 
   beforeAll(async () => {

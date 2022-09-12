@@ -12,6 +12,12 @@ export class RealQueryBus {
     this.handlers.set(query, handler);
   }
 
+  async init(): Promise<void> {
+    for (const handler of this.handlers.values()) {
+      await handler.init?.();
+    }
+  }
+
   execute<T>(query: Query): T | Promise<T> {
     const ctor = query.constructor;
     const handler = this.handlers.get(ctor);

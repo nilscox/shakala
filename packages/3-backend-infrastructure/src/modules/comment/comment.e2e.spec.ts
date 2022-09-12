@@ -1,3 +1,4 @@
+import { InMemoryEmailService } from 'backend-application';
 import { CreateCommentBodyDto, ReactionTypeDto, SetReactionBodyDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
@@ -11,6 +12,7 @@ describe('Comment e2e', () => {
   server.overrideServices({
     loggerService: new MockLoggerService(),
     configService: new TestConfigService(),
+    emailService: new InMemoryEmailService(),
   });
 
   beforeAll(async () => {
