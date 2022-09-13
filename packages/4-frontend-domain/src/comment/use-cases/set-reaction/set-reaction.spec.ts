@@ -2,7 +2,7 @@ import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
-import { ReactionType } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, ReactionType } from '../../../types';
 import { addComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
@@ -102,14 +102,28 @@ describe('setReaction', () => {
     expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
   });
 
-  describe('error handling', () => {
+  describe('authorization error handling', () => {
+    it('shows a snack when the user is not authorized to create a root comment', async () => {
+      store.threadGateway.setReaction.mockRejectedValue(
+        new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
+      );
+
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        expect.stringMatching(/annoter un commentaire.$/),
+      );
+    });
+  });
+
+  describe('fallback error handling', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
       store.threadGateway.setReaction.mockRejectedValue(error);
     });
 
-    it('shows a snack', async () => {
+    it('shows a snack with a fallback message', async () => {
       await execute();
 
       expect(store.snackbarGateway.error).toHaveBeenCalledWith(

@@ -1,4 +1,4 @@
-import { FieldError, ValidationError } from 'frontend-domain';
+import { AuthorizationError, AuthorizationErrorReason, FieldError, ValidationError } from 'frontend-domain';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 
@@ -109,6 +109,21 @@ describe('FetchHttpGateway', () => {
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body: '{"bo":"dy"}',
       credentials: 'include',
+    });
+  });
+
+  it('handles authorization errors', async () => {
+    const headers = new Headers();
+
+    headers.set('Content-Type', 'application/json');
+
+    const json = async () => ({ error: 'Forbidden', details: { message: 'EmailNotValidated' } });
+    const fetch = mockFetch({ ok: false, status: 403, headers, json });
+    const http = new FetchHttpGateway(baseUrl, fetch);
+
+    await expect(http.post('/')).rejects.test((error: AuthorizationError) => {
+      expect(error).toBeInstanceOf(AuthorizationError);
+      expect(error).toHaveProperty('reason', AuthorizationErrorReason.emailValidationRequired);
     });
   });
 

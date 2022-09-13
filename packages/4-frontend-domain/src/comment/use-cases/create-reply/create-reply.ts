@@ -2,6 +2,7 @@ import { query, QueryState } from '@nilscox/redux-query';
 
 import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
@@ -116,8 +117,10 @@ export const createReply = (parentId: string): Thunk => {
     } catch (error) {
       dispatch(actions.setError(key, serializeError(error)));
 
-      loggerGateway.error(error);
-      snackbarGateway.error("Une erreur s'est produite, votre réponse n'a pas été créée.");
+      if (!dispatch(handleAuthorizationError(error, 'répondre à un commentaire'))) {
+        loggerGateway.error(error);
+        snackbarGateway.error("Une erreur s'est produite, votre réponse n'a pas été créée.");
+      }
     }
   };
 };

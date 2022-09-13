@@ -1,6 +1,7 @@
 import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { selectUserOrFail, requireAuthentication } from '../../../authentication';
+import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { addComment } from '../../../comment/comments.actions';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
@@ -108,8 +109,10 @@ export const createRootComment = (threadId: string): Thunk => {
     } catch (error) {
       dispatch(actions.setError(key, serializeError(error)));
 
-      loggerGateway.error(error);
-      snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été créé.");
+      if (!dispatch(handleAuthorizationError(error, 'créer un commentaire'))) {
+        loggerGateway.error(error);
+        snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été créé.");
+      }
     }
   };
 };

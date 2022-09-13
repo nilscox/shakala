@@ -1,4 +1,4 @@
-import { FieldError, ValidationError } from 'frontend-domain';
+import { AuthorizationError, AuthorizationErrorReason, FieldError, ValidationError } from 'frontend-domain';
 import { get, isArray, isString, PayloadError } from 'shared';
 
 import {
@@ -86,7 +86,8 @@ export class FetchHttpGateway implements HttpGateway {
     try {
       response = await this.fetch(url, init);
     } catch (error) {
-      throw this.detectNetworkError(error) ?? error;
+      this.detectNetworkError(error);
+      throw error;
     }
 
     const responseBody = await this.getResponseBody(response);
@@ -97,6 +98,10 @@ export class FetchHttpGateway implements HttpGateway {
 
     if (get(responseBody, 'error') === 'ValidationError') {
       throw new ValidationError(this.getInvalidFields(responseBody));
+    }
+
+    if (get(responseBody, 'error') === 'Forbidden') {
+      throw new AuthorizationError(this.getAuthorizationErrorReason(responseBody));
     }
 
     return new FetchResponse(response, responseBody as ResponseBody);
@@ -129,7 +134,7 @@ export class FetchHttpGateway implements HttpGateway {
     const firefoxErrorMessage = 'NetworkError when attempting to fetch resource.';
 
     if ([chromeErrorMessage, firefoxErrorMessage].includes(message as string)) {
-      return new NetworkError();
+      throw new NetworkError();
     }
   }
 
@@ -154,5 +159,27 @@ export class FetchHttpGateway implements HttpGateway {
     }
 
     return fields;
+  }
+
+  private getAuthorizationErrorReason(error: unknown) {
+    const message = get(error, 'details', 'message');
+
+    if (message === 'authenticated') {
+      return AuthorizationErrorReason.authenticated;
+    }
+
+    if (message === 'unauthenticated') {
+      return AuthorizationErrorReason.unauthenticated;
+    }
+
+    if (message === 'EmailNotValidated') {
+      return AuthorizationErrorReason.emailValidationRequired;
+    }
+
+    if (typeof message === 'string') {
+      return message;
+    }
+
+    return 'unknown';
   }
 }

@@ -4,7 +4,7 @@ import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
 import { addThread } from '../../../thread/thread.actions';
-import { AuthorizationError } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason } from '../../../types';
 import { addComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 
@@ -128,7 +128,21 @@ describe('editComment', () => {
     });
   });
 
-  describe('error handling', () => {
+  describe('authorization error handling', () => {
+    it('shows a snack when the user is not authorized to edit a comment', async () => {
+      store.threadGateway.editComment.mockRejectedValue(
+        new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
+      );
+
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        expect.stringMatching(/éditer un commentaire.$/),
+      );
+    });
+  });
+
+  describe('fallback error handling', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
@@ -148,7 +162,7 @@ describe('editComment', () => {
       expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
     });
 
-    it('shows a snack', async () => {
+    it('shows a snack with a fallback message', async () => {
       await execute();
 
       expect(store.snackbarGateway.error).toHaveBeenCalledWith(

@@ -4,7 +4,6 @@ import {
   Middleware,
   Selector as RTKSelector,
   ThunkAction,
-  ThunkDispatch,
 } from '@reduxjs/toolkit';
 
 import { AuthenticationGateway } from './authentication/authentication.gateway';
@@ -51,12 +50,12 @@ export type Dependencies = {
 export type Store = ReturnType<typeof createStore>;
 
 export type State = ReturnType<Store['getState']>;
-export type Dispatch = ThunkDispatch<State, Dependencies, AnyAction>;
+export type Dispatch = Store['dispatch'];
+
+export type Selector<Params extends unknown[], Result> = RTKSelector<State, Result, Params>;
 
 export type Thunk<Result = void | Promise<void>> = ThunkAction<Result, State, Dependencies, AnyAction>;
 export type ThunkConfig = {
   state: State;
   extra: Dependencies;
 };
-
-export type Selector<Params extends unknown[], Result> = RTKSelector<State, Result, Params>;

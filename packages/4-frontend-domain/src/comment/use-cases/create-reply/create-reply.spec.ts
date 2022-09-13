@@ -4,7 +4,7 @@ import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
-import { Comment } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, Comment } from '../../../types';
 import { addComment } from '../../comments.actions';
 import { selectCommentReplies } from '../../comments.selectors';
 
@@ -107,7 +107,21 @@ describe('createReply', () => {
     expect(store.storageGateway.get(DraftCommentKind.reply, parent.id)).toBeUndefined();
   });
 
-  describe('error handling', () => {
+  describe('authorization error handling', () => {
+    it('shows a snack when the user is not authorized to reply to a comment', async () => {
+      store.threadGateway.createReply.mockRejectedValue(
+        new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
+      );
+
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        expect.stringMatching(/répondre à un commentaire.$/),
+      );
+    });
+  });
+
+  describe('fallback error handling', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {

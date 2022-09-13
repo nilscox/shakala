@@ -1,6 +1,7 @@
 import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { State, Thunk } from '../../../store';
 import { AuthorizationError } from '../../../types';
@@ -108,9 +109,9 @@ export const editComment = (commentId: string): Thunk => {
 
       dispatch(actions.setError(key, serializeError(error)));
 
-      if (error instanceof AuthorizationError && error.code === 'UserMustBeAuthor') {
+      if (error instanceof AuthorizationError && error.reason === 'UserMustBeAuthor') {
         snackbarGateway.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");
-      } else {
+      } else if (!dispatch(handleAuthorizationError(error, 'éditer un commentaire'))) {
         snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été mis à jour.");
       }
     }

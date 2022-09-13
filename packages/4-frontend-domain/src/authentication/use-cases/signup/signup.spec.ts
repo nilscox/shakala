@@ -1,14 +1,14 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { ValidationError } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
 import {
   setAuthenticationFieldError,
   setIsAuthenticationModalOpen,
 } from '../../actions/authentication.actions';
 import { AuthenticationField } from '../../authentication.types';
 import {
-  selectIsAuthenticating,
   selectAuthenticationFieldError,
+  selectIsAuthenticating,
   selectIsAuthenticationModalOpen,
 } from '../../selectors/authentication.selectors';
 import { selectUser } from '../../selectors/user.selectors';
@@ -72,6 +72,16 @@ describe('signup', () => {
     await store.dispatch(signup(email, password, nick));
 
     expect(store.select(selectAuthenticationFieldError, AuthenticationField.nick)).toEqual('already-exists');
+  });
+
+  it('shows a snack when the user is already authenticated', async () => {
+    store.authenticationGateway.signup.mockRejectedValue(
+      new AuthorizationError(AuthorizationErrorReason.authenticated),
+    );
+
+    await store.dispatch(signup(email, password, nick));
+
+    expect(store.snackbarGateway.warning).toHaveBeenCalledWith('Vous êtes déjà connecté(e)');
   });
 
   it('clears existing validation errors', async () => {

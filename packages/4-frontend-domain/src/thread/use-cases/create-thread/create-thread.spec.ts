@@ -1,7 +1,7 @@
 import { selectIsAuthenticationModalOpen, setUser } from '../../../authentication';
 import { unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, TestStore } from '../../../test';
-import { ValidationError } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
 
 import {
   clearThreadFormFieldError,
@@ -88,6 +88,20 @@ describe('createThread', () => {
     });
   });
 
+  describe('authorization error handling', () => {
+    it('shows a snack when the user is not authorized to create a thread', async () => {
+      store.threadGateway.createThread.mockRejectedValue(
+        new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
+      );
+
+      await execute();
+
+      expect(store.snackbarGateway.error).toHaveBeenCalledWith(
+        expect.stringMatching(/créer un nouveau fil de discussion.$/),
+      );
+    });
+  });
+
   describe('fallback error handling', () => {
     const error = new Error('nope.');
 
@@ -108,7 +122,7 @@ describe('createThread', () => {
       expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
     });
 
-    it('shows a snack', async () => {
+    it('shows a snack with a fallback message', async () => {
       await execute();
 
       expect(store.snackbarGateway.error).toHaveBeenCalledWith(

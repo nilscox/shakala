@@ -13,8 +13,14 @@ export class ValidationError extends Error {
   }
 }
 
+export enum AuthorizationErrorReason {
+  unauthenticated = 'unauthenticated',
+  authenticated = 'authenticated',
+  emailValidationRequired = 'emailValidationRequired',
+}
+
 export class AuthorizationError extends Error {
-  constructor(public readonly code: string) {
+  constructor(public readonly reason: AuthorizationErrorReason | string) {
     super('AuthorizationError');
   }
 }

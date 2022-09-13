@@ -1,7 +1,7 @@
 import { get } from 'shared';
 
 import { Thunk } from '../../../store';
-import { ValidationError } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
 import {
   setAuthenticationFieldError,
   setAuthenticationFormError,
@@ -18,7 +18,10 @@ export const handleAuthenticationError = (error: unknown): Thunk<void> => {
       }
     } else if (message === 'InvalidCredentials') {
       dispatch(setAuthenticationFormError(message));
-    } else if (message === 'AlreadyAuthenticated') {
+    } else if (
+      error instanceof AuthorizationError &&
+      error.reason === AuthorizationErrorReason.authenticated
+    ) {
       snackbarGateway.warning('Vous êtes déjà connecté(e)');
     } else {
       snackbarGateway.error("Une erreur s'est produite");

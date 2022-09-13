@@ -1,4 +1,4 @@
-import { Middleware } from '@reduxjs/toolkit';
+import { Middleware } from 'redux';
 
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
 import { DateGateway } from '../interfaces/date.gateway';

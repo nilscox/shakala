@@ -1,6 +1,7 @@
 import { pick } from 'shared';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
+import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { Thunk } from '../../../store';
 import { ReactionType } from '../../../types';
 import { updateComment } from '../../comments.actions';
@@ -70,7 +71,9 @@ export const setReaction = (commentId: string, reactionType: ReactionType): Thun
 
       dispatch(setReactionCounts(commentId, initialReactionsCounts));
 
-      snackbarGateway.error("Une erreur s'est produite, votre action n'a pas été comptabilisée.");
+      if (!dispatch(handleAuthorizationError(error, 'annoter un commentaire'))) {
+        snackbarGateway.error("Une erreur s'est produite, votre action n'a pas été comptabilisée.");
+      }
     }
   };
 };

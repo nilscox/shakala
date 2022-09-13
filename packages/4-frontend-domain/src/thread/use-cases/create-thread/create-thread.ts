@@ -3,6 +3,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { get } from 'shared';
 
 import { requireAuthentication } from '../../../authentication';
+import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import type { State, Thunk } from '../../../store';
 import { FormErrors, FormField, ValidationError } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
@@ -102,8 +103,10 @@ export const createNewThread = ({ description, text, keywords }: ThreadForm): Th
       } else {
         dispatch(actions.setError(undefined, serializeError(error)));
 
-        loggerGateway.error(error);
-        snackbarGateway.error("Une erreur s'est produite, votre fil de discussion n'a pas été créé.");
+        if (!dispatch(handleAuthorizationError(error, 'créer un nouveau fil de discussion'))) {
+          loggerGateway.error(error);
+          snackbarGateway.error("Une erreur s'est produite, votre fil de discussion n'a pas été créé.");
+        }
       }
     }
   };

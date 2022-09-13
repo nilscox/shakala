@@ -1,6 +1,6 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { ValidationError } from '../../../types';
+import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
 import {
   setAuthenticationFieldError,
   setIsAuthenticationModalOpen,
@@ -82,8 +82,10 @@ describe('login', () => {
     expect(store.select(selectAuthenticationFormError)).toEqual('InvalidCredentials');
   });
 
-  it('handles already authenticated error', async () => {
-    store.authenticationGateway.login.mockRejectedValue(new Error('AlreadyAuthenticated'));
+  it('shows a snack when the user is already authenticated', async () => {
+    store.authenticationGateway.login.mockRejectedValue(
+      new AuthorizationError(AuthorizationErrorReason.authenticated),
+    );
 
     await store.dispatch(login(email, password));
 
