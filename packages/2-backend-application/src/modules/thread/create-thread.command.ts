@@ -1,27 +1,25 @@
-import { GeneratorService, DateService, Markdown, Thread, Author, Timestamp } from 'backend-domain';
+import { Author, DateService, GeneratorService, Markdown, Thread, Timestamp } from 'backend-domain';
 
+import { Authorize, HasWriteAccess, IsAuthenticated } from '../../authorization';
 import { Command, CommandHandler } from '../../cqs/command-handler';
-import { ThreadRepository, UserRepository } from '../../interfaces/repositories';
+import { ThreadRepository } from '../../interfaces/repositories';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 export class CreateThreadCommand implements Command {
-  constructor(
-    readonly authorId: string,
-    readonly description: string,
-    readonly text: string,
-    readonly keywords: string[],
-  ) {}
+  constructor(readonly description: string, readonly text: string, readonly keywords: string[]) {}
 }
 
+@Authorize(IsAuthenticated, HasWriteAccess)
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, string> {
   constructor(
     private readonly generatorService: GeneratorService,
     private readonly dateService: DateService,
-    private readonly userRepository: UserRepository,
     private readonly threadRepository: ThreadRepository,
   ) {}
 
-  async handle({ authorId, description, text, keywords }: CreateThreadCommand) {
-    const author = await this.userRepository.findByIdOrFail(authorId);
+  async handle(command: CreateThreadCommand, ctx: AuthenticatedExecutionContext) {
+    const { description, text, keywords } = command;
+    const { user: author } = ctx;
 
     const thread = new Thread({
       id: await this.generatorService.generateId(),

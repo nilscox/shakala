@@ -1,5 +1,6 @@
 import {
   EmailAlreadyExistsError,
+  ExecutionContext,
   GetUserByEmailQuery,
   LoggerService,
   LoginCommand,
@@ -51,12 +52,13 @@ export class AuthenticationController extends Controller {
   }
 
   async login(req: Request): Promise<Response<AuthUserDto>> {
-    await this.assertUnauthenticated(req);
-
     const body = await this.validationService.body(req, loginBodySchema);
 
     await tryCatch(async () => {
-      await this.commandBus.execute(new LoginCommand(body.email, body.password));
+      await this.commandBus.execute(
+        new LoginCommand(body.email, body.password),
+        new ExecutionContext(undefined),
+      );
     })
       .catch(InvalidCredentials, (error) => new Forbidden(error.message))
       .run();
@@ -69,12 +71,13 @@ export class AuthenticationController extends Controller {
   }
 
   async signup(req: Request): Promise<Response<AuthUserDto>> {
-    await this.assertUnauthenticated(req);
-
     const body = await this.validationService.body(req, signupBodySchema);
 
     await tryCatch(async () => {
-      await this.commandBus.execute(new SignupCommand(body.nick, body.email, body.password));
+      await this.commandBus.execute(
+        new SignupCommand(body.nick, body.email, body.password),
+        new ExecutionContext(undefined),
+      );
     })
       .catch(EmailAlreadyExistsError, (error) =>
         ValidationError.from({ email: [error.message, error.details.email] }),
@@ -105,7 +108,12 @@ export class AuthenticationController extends Controller {
       [EmailValidationFailedReason.alreadyValidated]: 'already-validated',
     };
 
-    await tryCatch(() => this.commandBus.execute(new ValidateEmailAddressCommand(userId, token)))
+    await tryCatch(() =>
+      this.commandBus.execute(
+        new ValidateEmailAddressCommand(userId, token),
+        new ExecutionContext(undefined),
+      ),
+    )
       .catch(EmailValidationFailed, (error) => response(mapEmailValidationFailedReason[error.details.reason]))
       .run();
 
@@ -131,11 +139,5 @@ export class AuthenticationController extends Controller {
     }
 
     return Response.ok(userToDto(user));
-  }
-
-  private async assertUnauthenticated(req: Request) {
-    if (await this.sessionService.getUser(req)) {
-      throw new Forbidden('AlreadyAuthenticated');
-    }
   }
 }

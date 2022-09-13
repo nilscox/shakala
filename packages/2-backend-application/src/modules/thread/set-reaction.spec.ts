@@ -7,7 +7,7 @@ import {
   User,
 } from 'backend-domain';
 
-import { InMemoryUserRepository } from '../user/user.in-memory-repository';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
@@ -15,17 +15,11 @@ import { SetReactionCommand, SetReactionCommandHandler } from './set-reaction.co
 
 describe('SetReactionCommand', () => {
   const generatorService = new StubGeneratorService();
-  const userRepository = new InMemoryUserRepository();
   const reactionRepository = new InMemoryReactionRepository();
   const commentRepository = new InMemoryCommentRepository(reactionRepository);
   const commentService = new CommentService(generatorService);
 
-  const handler = new SetReactionCommandHandler(
-    userRepository,
-    commentRepository,
-    reactionRepository,
-    commentService,
-  );
+  const handler = new SetReactionCommandHandler(commentRepository, reactionRepository, commentService);
 
   const create = factories();
 
@@ -35,8 +29,6 @@ describe('SetReactionCommand', () => {
   const reactionId = 'reactionId';
 
   beforeEach(() => {
-    userRepository.add(user);
-    userRepository.add(author);
     commentRepository.add(comment);
   });
 
@@ -45,7 +37,10 @@ describe('SetReactionCommand', () => {
   };
 
   const execute = async (author: User, reactionType: ReactionType | null) => {
-    await handler.handle(new SetReactionCommand(author.id, comment.id, reactionType));
+    const command = new SetReactionCommand(comment.id, reactionType);
+    const ctx = new AuthenticatedExecutionContext(author);
+
+    await handler.handle(command, ctx);
   };
 
   it('creates a new reaction on a comment', async () => {
@@ -80,8 +75,6 @@ describe('SetReactionCommand', () => {
   });
 
   it('prevents a user to set a reaction on his own comment', async () => {
-    generatorService.nextId = reactionId;
-
     await expect(execute(author, ReactionType.upvote)).rejects.toThrow(CannotSetReactionOnOwnCommentError);
   });
 });

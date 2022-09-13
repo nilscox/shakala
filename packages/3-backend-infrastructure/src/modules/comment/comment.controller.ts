@@ -55,11 +55,11 @@ export class CommentController extends Controller {
 
   async editComment(req: Request): Promise<Response<void>> {
     const commentId = req.params.get('id') as string;
-    const user = await this.sessionService.requireUser(req);
+    const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, editCommentBodySchema);
 
     await tryCatch(async () => {
-      await this.commandBus.execute(new EditCommentCommand(commentId, user.id, body.text));
+      await this.commandBus.execute(new EditCommentCommand(commentId, body.text), new ExecutionContext(user));
     })
       .catch(
         UserMustBeAuthorError,
@@ -72,11 +72,14 @@ export class CommentController extends Controller {
 
   async setReaction(req: Request): Promise<Response<void>> {
     const commentId = req.params.get('id') as string;
-    const user = await this.sessionService.requireUser(req);
+    const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, setReactionBodySchema);
 
     await tryCatch(async () => {
-      await this.commandBus.execute(new SetReactionCommand(user.id, commentId, body.type as ReactionType));
+      await this.commandBus.execute(
+        new SetReactionCommand(commentId, body.type as ReactionType),
+        new ExecutionContext(user),
+      );
     })
       .catch(
         CannotSetReactionOnOwnCommentError,

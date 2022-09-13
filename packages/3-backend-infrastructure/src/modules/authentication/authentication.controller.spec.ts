@@ -1,5 +1,6 @@
 import {
   EmailAlreadyExistsError,
+  ExecutionContext,
   GetUserByEmailQuery,
   LoginCommand,
   NickAlreadyExistsError,
@@ -16,7 +17,6 @@ import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import {
   Forbidden,
-  HttpError,
   MockLoggerService,
   NotImplemented,
   Request,
@@ -45,6 +45,8 @@ describe('AuthenticationController', () => {
 
   const create = factories();
 
+  const ctx = new ExecutionContext(undefined);
+
   describe('login', () => {
     const body: LoginBodyDto = { email: 'user@email.tld', password: 'p4ssw0rd' };
     const user = create.user();
@@ -69,21 +71,12 @@ describe('AuthenticationController', () => {
         signupDate: user.signupDate.toString(),
       });
 
-      expect(commandBus.execute).toHaveBeenCalledWith(new LoginCommand(body.email, body.password));
+      expect(commandBus.execute).toHaveBeenCalledWith(new LoginCommand(body.email, body.password), ctx);
       expect(sessionService.user).toEqual(user);
     });
 
     it('fails to log in when the body is invalid', async () => {
       await expect(login(new MockRequest().withBody({}))).rejects.toThrow(ValidationError);
-    });
-
-    it('fails to log in when the user is already authenticated', async () => {
-      sessionService.user = create.user();
-
-      await expect(login()).rejects.test((error: HttpError) => {
-        expect(error).toBeInstanceOf(Forbidden);
-        expect(error).toHaveProperty('body.message', 'AlreadyAuthenticated');
-      });
     });
 
     it('handles InvalidCredentials errors', async () => {
@@ -116,6 +109,7 @@ describe('AuthenticationController', () => {
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new SignupCommand(body.nick, body.email, body.password),
+        ctx,
       );
 
       expect(sessionService.user).toEqual(user);
@@ -123,15 +117,6 @@ describe('AuthenticationController', () => {
 
     it('fails to sign up when the body is invalid', async () => {
       await expect(signup(new MockRequest().withBody({}))).rejects.toThrow(ValidationError);
-    });
-
-    it('fails to sign up when the user is already authenticated', async () => {
-      sessionService.user = create.user();
-
-      await expect(signup()).rejects.test((error: HttpError) => {
-        expect(error).toBeInstanceOf(Forbidden);
-        expect(error).toHaveProperty('body.message', 'AlreadyAuthenticated');
-      });
     });
 
     it('handles EmailAlreadyExists errors', async () => {
@@ -181,6 +166,7 @@ describe('AuthenticationController', () => {
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new ValidateEmailAddressCommand(params.userId, params.token),
+        ctx,
       );
     });
 

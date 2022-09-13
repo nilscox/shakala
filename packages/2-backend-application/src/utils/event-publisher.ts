@@ -2,8 +2,10 @@ import { AggregateRoot, DomainEvent, EntityProps } from 'backend-domain';
 
 import { IEventBus, IEventPublisher } from '../cqs/event-bus';
 
+import { ExecutionContext } from './execution-context';
+
 export class EventPublisher implements IEventPublisher {
-  constructor(aggregate: AggregateRoot<EntityProps>) {
+  constructor(private readonly ctx: ExecutionContext, aggregate: AggregateRoot<EntityProps>) {
     this.addAggregate(aggregate);
   }
 
@@ -20,7 +22,7 @@ export class EventPublisher implements IEventPublisher {
 
   publish(eventBus: IEventBus) {
     for (const event of this.events) {
-      eventBus.publish(event);
+      eventBus.publish(event, this.ctx);
     }
   }
 }

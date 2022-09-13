@@ -1,30 +1,28 @@
 import { CommentService, del, Reaction, ReactionType } from 'backend-domain';
 
+import { Authorize, IsAuthenticated, HasWriteAccess } from '../../authorization';
 import { CommandHandler } from '../../cqs/command-handler';
-import { CommentRepository, ReactionRepository, UserRepository } from '../../interfaces/repositories';
+import { CommentRepository, ReactionRepository } from '../../interfaces/repositories';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 export class SetReactionCommand {
-  constructor(
-    public readonly userId: string,
-    public readonly commentId: string,
-    public readonly reactionType: ReactionType | null,
-  ) {}
+  constructor(public readonly commentId: string, public readonly reactionType: ReactionType | null) {}
 }
 
+@Authorize(IsAuthenticated, HasWriteAccess)
 export class SetReactionCommandHandler implements CommandHandler<SetReactionCommand> {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly commentRepository: CommentRepository,
     private readonly reactionRepository: ReactionRepository,
     private readonly commentService: CommentService,
   ) {}
 
-  async handle(command: SetReactionCommand): Promise<void> {
-    const { commentId, userId, reactionType } = command;
+  async handle(command: SetReactionCommand, ctx: AuthenticatedExecutionContext): Promise<void> {
+    const { commentId, reactionType } = command;
+    const { user } = ctx;
 
-    const user = await this.userRepository.findByIdOrFail(userId);
     const comment = await this.commentRepository.findByIdOrFail(commentId);
-    const reaction = await this.reactionRepository.getUserReaction(commentId, userId);
+    const reaction = await this.reactionRepository.getUserReaction(commentId, user.id);
 
     const result = await this.commentService.setUserReaction(comment, user, reaction ?? null, reactionType);
 

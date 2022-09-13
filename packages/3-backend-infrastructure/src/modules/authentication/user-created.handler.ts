@@ -1,4 +1,10 @@
-import { EmailKind, EventHandler, SendEmailCommand, UserRepository } from 'backend-application';
+import {
+  EmailKind,
+  EventHandler,
+  ExecutionContext,
+  SendEmailCommand,
+  UserRepository,
+} from 'backend-application';
 import { UserCreatedEvent } from 'backend-domain';
 
 import { CommandBus, ConfigService } from '../../infrastructure';
@@ -10,7 +16,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async handle(event: UserCreatedEvent): Promise<void> {
+  async handle(event: UserCreatedEvent, ctx: ExecutionContext): Promise<void> {
     const user = await this.userRepository.findByIdOrFail(event.userId);
     const { apiBaseUrl } = this.configService.app();
 
@@ -19,6 +25,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
         nick: user.nick.toString(),
         emailValidationLink: `${apiBaseUrl}/auth/signup/${user.id}/validate/${user.emailValidationToken}`,
       }),
+      ctx,
     );
   }
 }

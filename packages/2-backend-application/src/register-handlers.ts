@@ -74,13 +74,13 @@ export const registerHandlers = (
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
   registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
-  registerCommand(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository));
+  registerCommand(CreateThreadCommand, new CreateThreadHandler(generatorService, dateService, threadRepository));
 
   const commentService = new CommentService(generatorService);
 
   // comment
   registerQuery(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
   registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository));
-  registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
-  registerCommand(SetReactionCommand, new SetReactionCommandHandler(userRepository, commentRepository, reactionRepository, commentService));
+  registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository));
+  registerCommand(SetReactionCommand, new SetReactionCommandHandler(commentRepository, reactionRepository, commentService));
 }

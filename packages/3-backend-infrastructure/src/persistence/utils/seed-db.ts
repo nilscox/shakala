@@ -1,4 +1,9 @@
-import { CreateThreadCommand, GetUserByEmailQuery, SignupCommand } from 'backend-application';
+import {
+  CreateThreadCommand,
+  ExecutionContext,
+  GetUserByEmailQuery,
+  SignupCommand,
+} from 'backend-application';
 import { User } from 'backend-domain';
 
 import { Application } from '../../application';
@@ -26,11 +31,14 @@ const seed = async () => {
 
     await app.run(async ({ commandBus, queryBus }) => {
       // cspell:word p4ssword
-      await commandBus.execute(new SignupCommand('user', 'user@email.tld', 'p4ssword'));
+      await commandBus.execute(
+        new SignupCommand('user', 'user@email.tld', 'p4ssword'),
+        new ExecutionContext(undefined),
+      );
 
       const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));
 
-      await commandBus.execute(new CreateThreadCommand(user.id, 'description', text, []));
+      await commandBus.execute(new CreateThreadCommand('description', text, []), new ExecutionContext(user));
     });
   } finally {
     await app.close();

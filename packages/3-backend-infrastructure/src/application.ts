@@ -56,11 +56,11 @@ const instantiateServices = (): Services => {
 };
 
 export class Application {
+  private services = instantiateServices();
+
   protected commandBus = new RealCommandBus();
   protected queryBus = new RealQueryBus();
-
-  private services = instantiateServices();
-  private eventBus = new EventBus(this.logger);
+  protected eventBus = new EventBus(this.logger);
 
   protected orm?: MikroORM;
   private repositories!: Repositories;

@@ -1,5 +1,6 @@
 import {
   CreateThreadCommand,
+  ExecutionContext,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
@@ -7,7 +8,7 @@ import {
 } from 'backend-application';
 import { factories } from 'backend-domain';
 
-import { Forbidden, MockLoggerService, ValidationError, ValidationService } from '../../infrastructure';
+import { MockLoggerService, ValidationError, ValidationService } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
 
 import { ThreadController } from './thread.controller';
@@ -112,6 +113,8 @@ describe('ThreadController', () => {
     const text = 'text';
     const keywords = ['key', 'words'];
 
+    const ctx = new ExecutionContext(user);
+
     const threadId = 'threadId';
 
     beforeEach(() => {
@@ -128,16 +131,9 @@ describe('ThreadController', () => {
       expect(response).toHaveBody(threadId);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
-        new CreateThreadCommand(user.id, description, text, keywords),
+        new CreateThreadCommand(description, text, keywords),
+        ctx,
       );
-    });
-
-    it('fails to create a thread when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(
-        controller.createThread(new MockRequest().withBody({ description, text, keywords })),
-      ).rejects.toThrow(Forbidden);
     });
 
     it('fails to create a thread with an invalid body', async () => {

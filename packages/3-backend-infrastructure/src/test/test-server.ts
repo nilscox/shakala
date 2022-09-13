@@ -1,9 +1,20 @@
 import { MikroORM } from '@mikro-orm/core';
-import { CreateCommentCommand, CreateThreadCommand, SignupCommand } from 'backend-application';
+import {
+  CreateCommentCommand,
+  CreateThreadCommand,
+  ExecutionContext,
+  GetUserByIdQuery,
+  SignupCommand,
+  ValidateEmailAddressCommand,
+} from 'backend-application';
+import { User } from 'backend-domain';
 import { LoginBodyDto } from 'shared';
 import { agent, SuperAgentTest } from 'supertest';
 
-import { createTestDatabaseConnection, resetDatabase } from '../persistence/mikro-orm/create-database-connection';
+import {
+  createTestDatabaseConnection,
+  resetDatabase,
+} from '../persistence/mikro-orm/create-database-connection';
 import { Server } from '../server';
 
 export class TestServer extends Server {
@@ -20,7 +31,17 @@ export class TestServer extends Server {
   async createUserAndLogin(agent: SuperAgentTest, loginDto: LoginBodyDto) {
     const { email, password } = loginDto;
 
-    const userId = await this.commandBus.execute<string>(new SignupCommand(email, email, password));
+    const userId = await this.commandBus.execute<string>(
+      new SignupCommand(email, email, password),
+      new ExecutionContext(undefined),
+    );
+
+    const user = await this.queryBus.execute<User>(new GetUserByIdQuery(userId));
+
+    await this.commandBus.execute(
+      new ValidateEmailAddressCommand(user.id, user.emailValidationToken as string),
+      new ExecutionContext(undefined),
+    );
 
     await agent.post('/auth/login').send(loginDto).expect(200);
 
@@ -28,12 +49,20 @@ export class TestServer extends Server {
   }
 
   async createThread(authorId: string) {
-    return this.commandBus.execute<string>(new CreateThreadCommand(authorId, 'description', 'text', []));
+    const user = await this.queryBus.execute<User>(new GetUserByIdQuery(authorId));
+
+    return this.commandBus.execute<string>(
+      new CreateThreadCommand('description', 'text', []),
+      new ExecutionContext(user),
+    );
   }
 
   async createComment(threadId: string, authorId: string) {
+    const user = await this.queryBus.execute<User>(new GetUserByIdQuery(authorId));
+
     return this.commandBus.execute<string>(
-      new CreateCommentCommand(threadId, authorId, null, 'text'),
+      new CreateCommentCommand(threadId, null, 'text'),
+      new ExecutionContext(user),
     );
   }
 }

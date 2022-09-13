@@ -1,5 +1,6 @@
 import {
   CreateThreadCommand,
+  ExecutionContext,
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
@@ -72,10 +73,11 @@ export class ThreadController extends Controller {
 
   async createThread(req: Request): Promise<Response<string>> {
     const body = await this.validationService.body(req, createThreadBodySchema);
-    const user = await this.sessionService.requireUser(req);
+    const user = await this.sessionService.getUser(req);
 
     const threadId = await this.commandBus.execute<string>(
-      new CreateThreadCommand(user.id, body.description, body.text, body.keywords),
+      new CreateThreadCommand(body.description, body.text, body.keywords),
+      new ExecutionContext(user),
     );
 
     return Response.created(threadId);

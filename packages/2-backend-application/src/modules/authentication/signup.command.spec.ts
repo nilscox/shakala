@@ -6,6 +6,7 @@ import {
   UserCreatedEvent,
 } from 'backend-domain';
 
+import { ExecutionContext } from '../../utils/execution-context';
 import { StubEventBus } from '../../utils/stub-event-bus';
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
@@ -41,7 +42,7 @@ describe('SignupCommand', () => {
   const token = 'token;';
 
   const signup = async () => {
-    return handler.handle(new SignupCommand(nick, email, password));
+    return handler.handle(new SignupCommand(nick, email, password), new ExecutionContext(undefined));
   };
 
   beforeEach(() => {

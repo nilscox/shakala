@@ -1,6 +1,6 @@
 import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
 
-import { InMemoryUserRepository } from '../user/user.in-memory-repository';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 import { CreateThreadCommand, CreateThreadHandler } from './create-thread.command';
 import { InMemoryThreadRepository } from './thread.in-memory-repository';
@@ -8,10 +8,9 @@ import { InMemoryThreadRepository } from './thread.in-memory-repository';
 describe('CreateThreadCommand', () => {
   const generatorService = new StubGeneratorService();
   const dateService = new StubDateService();
-  const userRepository = new InMemoryUserRepository();
   const threadRepository = new InMemoryThreadRepository();
 
-  const handler = new CreateThreadHandler(generatorService, dateService, userRepository, threadRepository);
+  const handler = new CreateThreadHandler(generatorService, dateService, threadRepository);
 
   const create = factories();
 
@@ -21,11 +20,13 @@ describe('CreateThreadCommand', () => {
   beforeEach(() => {
     generatorService.nextId = 'threadId';
     dateService.setNow(now);
-    userRepository.add(author);
   });
 
   const execute = async (description: string, text: string, keywords: string[]) => {
-    return handler.handle(new CreateThreadCommand(author.id, description, text, keywords));
+    const command = new CreateThreadCommand(description, text, keywords);
+    const ctx = new AuthenticatedExecutionContext(author);
+
+    return handler.handle(command, ctx);
   };
 
   const description = 'description';

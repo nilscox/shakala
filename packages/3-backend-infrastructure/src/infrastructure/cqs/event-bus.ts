@@ -1,4 +1,4 @@
-import { EventHandler, IEventBus, LoggerService } from 'backend-application';
+import { EventHandler, ExecutionContext, IEventBus, LoggerService } from 'backend-application';
 import { DomainEvent } from 'backend-domain';
 import { ClassType } from 'shared';
 
@@ -14,11 +14,11 @@ export class EventBus implements IEventBus {
     this.handlers.set(name, [...handlers, handler]);
   }
 
-  publish(event: DomainEvent) {
+  publish(event: DomainEvent, ctx: ExecutionContext) {
     const handlers = this.handlers.get(event.constructor.name);
 
     if (handlers) {
-      handlers.forEach((handler) => handler.handle(event));
+      handlers.forEach((handler) => handler.handle(event, ctx));
     } else {
       this.logger.log('warning: no handler found for event ' + event.constructor.name);
     }

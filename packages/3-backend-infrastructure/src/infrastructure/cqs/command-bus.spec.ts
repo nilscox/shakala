@@ -5,7 +5,7 @@ import { RealCommandBus } from './command-bus';
 
 describe('RealCommandBus', () => {
   class TestCommand implements Command {}
-  const ctx = new ExecutionContext(null);
+  const ctx = new ExecutionContext(undefined);
 
   it('executes a command', async () => {
     const handle = vi.fn();

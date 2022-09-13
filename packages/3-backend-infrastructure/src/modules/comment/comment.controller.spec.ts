@@ -15,7 +15,6 @@ import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
 
 import {
   BadRequest,
-  Forbidden,
   MockLoggerService,
   Unauthorized,
   ValidationError,
@@ -41,20 +40,23 @@ describe('CommentController', () => {
 
   const create = factories();
 
+  const user = create.user();
+  const ctx = new ExecutionContext(user);
+
+  beforeEach(() => {
+    sessionService.user = user;
+  });
+
   describe('createComment', () => {
-    const user = create.user();
     const threadId = 'threadId';
     const parentId = 'parentId';
     const text = 'hello!';
 
     const commentId = 'commentId';
 
-    const ctx = new ExecutionContext(user);
-
     let request: MockRequest;
 
     beforeEach(() => {
-      sessionService.user = user;
       commandBus.execute.mockResolvedValue(commentId);
       request = new MockRequest().withBody<CreateCommentBodyDto>({ threadId, text });
     });
@@ -87,7 +89,6 @@ describe('CommentController', () => {
   });
 
   describe('editComment', () => {
-    const user = create.user();
     const text = 'updated!';
 
     const comment = create.comment({
@@ -98,7 +99,6 @@ describe('CommentController', () => {
     let request: MockRequest;
 
     beforeEach(() => {
-      sessionService.user = user;
       queryBus.for(GetCommentQuery).return(comment);
       request = new MockRequest().withParam('id', comment.id).withBody<EditCommentBodyDto>({ text });
     });
@@ -109,16 +109,10 @@ describe('CommentController', () => {
       expect(response).toHaveStatus(204);
       expect(response).toHaveBody(undefined);
 
-      expect(commandBus.execute).toHaveBeenCalledWith(new EditCommentCommand(comment.id, user.id, text));
+      expect(commandBus.execute).toHaveBeenCalledWith(new EditCommentCommand(comment.id, text), ctx);
     });
 
-    it('fails to edit a comment when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(controller.editComment(request)).rejects.toThrow(Forbidden);
-    });
-
-    it('fails to create a comment with an invalid body', async () => {
+    it('fails to edit a comment with an invalid body', async () => {
       await expect(controller.editComment(request.withBody({}))).rejects.test((error) => {
         expect(error).toBeInstanceOf(ValidationError);
         expect(error).toHaveProperty('fields.0.field', 'text');
@@ -137,7 +131,6 @@ describe('CommentController', () => {
   });
 
   describe('setReaction', () => {
-    const user = create.user();
     const type = ReactionType.upvote;
 
     const comment = create.comment({ author: user });
@@ -145,7 +138,6 @@ describe('CommentController', () => {
     let request: MockRequest;
 
     beforeEach(() => {
-      sessionService.user = user;
       queryBus.for(GetCommentQuery).return(comment);
       request = new MockRequest().withParam('id', comment.id).withBody({ type });
     });
@@ -156,13 +148,7 @@ describe('CommentController', () => {
       expect(response).toHaveStatus(204);
       expect(response).toHaveBody(undefined);
 
-      expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(user.id, comment.id, type));
-    });
-
-    it('fails to set a reaction when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(controller.setReaction(request)).rejects.toThrow(Forbidden);
+      expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(comment.id, type), ctx);
     });
 
     it('handles CannotSetReactionOnOwnCommentError', async () => {

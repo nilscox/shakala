@@ -1,4 +1,4 @@
-import { EmailKind, InMemoryUserRepository, SendEmailCommand } from 'backend-application';
+import { EmailKind, ExecutionContext, InMemoryUserRepository, SendEmailCommand } from 'backend-application';
 import { factories, Nick, UserCreatedEvent } from 'backend-domain';
 
 import { TestConfigService } from '../../infrastructure';
@@ -22,9 +22,11 @@ describe('UserCreatedHandler', () => {
   });
 
   it('sends a welcome email to the user', async () => {
+    const ctx = new ExecutionContext(user);
+
     userRepository.add(user);
 
-    await handler.handle(new UserCreatedEvent(user.id));
+    await handler.handle(new UserCreatedEvent(user.id), ctx);
 
     const emailValidationLink = `https://api.url/auth/signup/${user.id}/validate/${user.emailValidationToken}`;
 
@@ -33,6 +35,7 @@ describe('UserCreatedHandler', () => {
         nick: user.nick.toString(),
         emailValidationLink,
       }),
+      ctx,
     );
   });
 });

@@ -1,21 +1,21 @@
+import { Authorize, IsAuthenticated, HasWriteAccess } from '../../authorization';
 import { CommandHandler } from '../../cqs/command-handler';
-import { CommentRepository, UserRepository } from '../../interfaces/repositories';
+import { CommentRepository } from '../../interfaces/repositories';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 export class EditCommentCommand {
-  constructor(public commentId: string, public authorId: string, public text: string) {}
+  constructor(public commentId: string, public text: string) {}
 }
 
+@Authorize(IsAuthenticated, HasWriteAccess)
 export class EditCommentCommandHandler implements CommandHandler<EditCommentCommand> {
-  constructor(
-    private readonly commentRepository: CommentRepository,
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly commentRepository: CommentRepository) {}
 
-  async handle(command: EditCommentCommand): Promise<void> {
-    const { commentId, authorId, text } = command;
+  async handle(command: EditCommentCommand, ctx: AuthenticatedExecutionContext): Promise<void> {
+    const { commentId, text } = command;
+    const { user: author } = ctx;
 
     const comment = await this.commentRepository.findByIdOrFail(commentId);
-    const author = await this.userRepository.findByIdOrFail(authorId);
 
     await comment.edit(author, text);
 

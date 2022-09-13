@@ -1,9 +1,11 @@
 import { CryptoService, DateService, DomainError, GeneratorService, Nick, User } from 'backend-domain';
 
+import { Authorize, IsNotAuthenticated } from '../../authorization';
 import { Command, CommandHandler } from '../../cqs/command-handler';
 import { IEventBus } from '../../cqs/event-bus';
 import { UserRepository } from '../../interfaces/repositories';
 import { EventPublisher } from '../../utils/event-publisher';
+import { ExecutionContext } from '../../utils/execution-context';
 
 export class EmailAlreadyExistsError extends DomainError<{ email: string }> {
   constructor(email: string) {
@@ -21,6 +23,7 @@ export class SignupCommand implements Command {
   constructor(readonly nick: string, readonly email: string, readonly password: string) {}
 }
 
+@Authorize(IsNotAuthenticated)
 export class SignupCommandHandler implements CommandHandler<SignupCommand, string> {
   constructor(
     private readonly eventBus: IEventBus,
@@ -30,7 +33,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
     private readonly dateService: DateService,
   ) {}
 
-  async handle(command: SignupCommand): Promise<string> {
+  async handle(command: SignupCommand, ctx: ExecutionContext): Promise<string> {
     const { nick, email, password } = command;
 
     await this.assertEmailDontExist(email);
@@ -47,7 +50,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
       this.cryptoService,
     );
 
-    const publisher = new EventPublisher(user);
+    const publisher = new EventPublisher(ctx, user);
 
     await this.userRepository.save(user);
     publisher.publish(this.eventBus);
