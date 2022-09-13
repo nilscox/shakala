@@ -33,7 +33,7 @@ const seed = async () => {
       // cspell:word p4ssword
       await commandBus.execute(
         new SignupCommand('user', 'user@email.tld', 'p4ssword'),
-        new ExecutionContext(undefined),
+        ExecutionContext.unauthenticated,
       );
 
       const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));

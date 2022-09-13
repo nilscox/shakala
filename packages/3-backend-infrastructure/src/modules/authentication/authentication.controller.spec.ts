@@ -45,7 +45,7 @@ describe('AuthenticationController', () => {
 
   const create = factories();
 
-  const ctx = new ExecutionContext(undefined);
+  const ctx = ExecutionContext.unauthenticated;
 
   describe('login', () => {
     const body: LoginBodyDto = { email: 'user@email.tld', password: 'p4ssw0rd' };

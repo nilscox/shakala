@@ -42,7 +42,7 @@ describe('SignupCommand', () => {
   const token = 'token;';
 
   const signup = async () => {
-    return handler.handle(new SignupCommand(nick, email, password), new ExecutionContext(undefined));
+    return handler.handle(new SignupCommand(nick, email, password), ExecutionContext.unauthenticated);
   };
 
   beforeEach(() => {

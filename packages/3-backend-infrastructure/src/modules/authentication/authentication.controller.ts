@@ -57,7 +57,7 @@ export class AuthenticationController extends Controller {
     await tryCatch(async () => {
       await this.commandBus.execute(
         new LoginCommand(body.email, body.password),
-        new ExecutionContext(undefined),
+        ExecutionContext.unauthenticated,
       );
     })
       .catch(InvalidCredentials, (error) => new Forbidden(error.message))
@@ -76,7 +76,7 @@ export class AuthenticationController extends Controller {
     await tryCatch(async () => {
       await this.commandBus.execute(
         new SignupCommand(body.nick, body.email, body.password),
-        new ExecutionContext(undefined),
+        ExecutionContext.unauthenticated,
       );
     })
       .catch(EmailAlreadyExistsError, (error) =>
@@ -111,7 +111,7 @@ export class AuthenticationController extends Controller {
     await tryCatch(() =>
       this.commandBus.execute(
         new ValidateEmailAddressCommand(userId, token),
-        new ExecutionContext(undefined),
+        ExecutionContext.unauthenticated,
       ),
     )
       .catch(EmailValidationFailed, (error) => response(mapEmailValidationFailedReason[error.details.reason]))

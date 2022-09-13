@@ -33,14 +33,14 @@ export class TestServer extends Server {
 
     const userId = await this.commandBus.execute<string>(
       new SignupCommand(email, email, password),
-      new ExecutionContext(undefined),
+      ExecutionContext.unauthenticated,
     );
 
     const user = await this.queryBus.execute<User>(new GetUserByIdQuery(userId));
 
     await this.commandBus.execute(
       new ValidateEmailAddressCommand(user.id, user.emailValidationToken as string),
-      new ExecutionContext(undefined),
+      ExecutionContext.unauthenticated,
     );
 
     await agent.post('/auth/login').send(loginDto).expect(200);
