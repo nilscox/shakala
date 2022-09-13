@@ -1,23 +1,17 @@
 import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
 
-import { InMemoryUserRepository } from '../user/user.in-memory-repository';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
-import { CreateCommentCommandHandler } from './create-comment.command';
+import { CreateCommentCommand, CreateCommentCommandHandler } from './create-comment.command';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 
 describe('CreateCommentCommand', () => {
   const generatorService = new StubGeneratorService();
   const dateService = new StubDateService();
   const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
-  const userRepository = new InMemoryUserRepository();
 
-  const handler = new CreateCommentCommandHandler(
-    generatorService,
-    dateService,
-    commentRepository,
-    userRepository,
-  );
+  const handler = new CreateCommentCommandHandler(generatorService, dateService, commentRepository);
 
   const create = factories();
 
@@ -25,18 +19,15 @@ describe('CreateCommentCommand', () => {
   const now = create.timestamp('2022-01-01');
 
   const execute = async (parentId: string | null = null) => {
-    return handler.handle({
-      threadId: 'threadId',
-      authorId: 'authorId',
-      parentId,
-      text: 'hello!',
-    });
+    const command = new CreateCommentCommand('threadId', parentId, 'hello!');
+    const ctx = new AuthenticatedExecutionContext(user);
+
+    return handler.handle(command, ctx);
   };
 
   beforeEach(() => {
     generatorService.nextIds = ['commentId', 'messageId'];
     dateService.setNow(now);
-    userRepository.add(user);
   });
 
   it('creates a new root comment', async () => {

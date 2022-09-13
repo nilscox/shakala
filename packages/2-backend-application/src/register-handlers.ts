@@ -80,7 +80,7 @@ export const registerHandlers = (
 
   // comment
   registerQuery(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
-  registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository, userRepository));
+  registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository));
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository, userRepository));
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(userRepository, commentRepository, reactionRepository, commentService));
 }

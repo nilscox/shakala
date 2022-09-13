@@ -1,6 +1,7 @@
 import {
   CreateCommentCommand,
   EditCommentCommand,
+  ExecutionContext,
   GetCommentQuery,
   SetReactionCommand,
 } from 'backend-application';
@@ -48,6 +49,8 @@ describe('CommentController', () => {
 
     const commentId = 'commentId';
 
+    const ctx = new ExecutionContext(user);
+
     let request: MockRequest;
 
     beforeEach(() => {
@@ -62,23 +65,16 @@ describe('CommentController', () => {
       expect(response).toHaveStatus(201);
       expect(response).toHaveBody(commentId);
 
-      expect(commandBus.execute).toHaveBeenCalledWith(
-        new CreateCommentCommand(threadId, user.id, null, text),
-      );
+      expect(commandBus.execute).toHaveBeenCalledWith(new CreateCommentCommand(threadId, null, text), ctx);
     });
 
     it('creates a new reply', async () => {
       await controller.createComment(request.withBody<CreateCommentBodyDto>({ threadId, text, parentId }));
 
       expect(commandBus.execute).toHaveBeenCalledWith(
-        new CreateCommentCommand(threadId, user.id, parentId, text),
+        new CreateCommentCommand(threadId, parentId, text),
+        ctx,
       );
-    });
-
-    it('fails to create a comment when the user is not authenticated', async () => {
-      sessionService.user = undefined;
-
-      await expect(controller.createComment(request)).rejects.toThrow(Forbidden);
     });
 
     it('fails to create a comment with an invalid body', async () => {

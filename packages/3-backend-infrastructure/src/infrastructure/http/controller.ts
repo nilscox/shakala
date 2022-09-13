@@ -1,7 +1,7 @@
-import { LoggerService } from 'backend-application';
-import { Application, Router } from 'express';
+import { LoggerService, AuthorizationError } from 'backend-application';
+import { Application, Router, Response as ExpressResponse } from 'express';
 
-import { HttpError } from './http-errors';
+import { Forbidden, HttpError } from './http-errors';
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';
 import { Response } from './response';
@@ -37,35 +37,53 @@ export abstract class Controller {
 
   register(method: Method, path: string, handler: RequestHandler) {
     this.router[method](path, async (req, res) => {
-      const handleResponse = (response: Response) => {
-        res.status(response.status);
-
-        for (const [key, value] of response.headers) {
-          res.set(key, value);
-        }
-
-        if (response.body !== undefined) {
-          res.json(response.body);
-        } else {
-          res.end();
-        }
-      };
+      const handleResponse = this.createResponseHandler(res);
+      const handleError = this.createdErrorHandler(res);
 
       try {
         handleResponse(await handler(new RequestAdapter(req)));
       } catch (error) {
-        if (error instanceof HttpError || error instanceof Response) {
-          return handleResponse(error);
-        }
-
-        console.error(error);
-
-        if (error instanceof Error) {
-          res.status(500).set('Content-Type', 'text/plain').send(error?.stack);
-        } else {
-          res.status(500).json(error);
-        }
+        handleError(error);
       }
     });
+  }
+
+  private createResponseHandler(res: ExpressResponse) {
+    return (response: Response) => {
+      res.status(response.status);
+
+      for (const [key, value] of response.headers) {
+        res.set(key, value);
+      }
+
+      if (response.body !== undefined) {
+        res.json(response.body);
+      } else {
+        res.end();
+      }
+    };
+  }
+
+  private createdErrorHandler(res: ExpressResponse) {
+    const handleResponse = this.createResponseHandler(res);
+
+    return (error: unknown) => {
+      if (error instanceof HttpError || error instanceof Response) {
+        return handleResponse(error);
+      }
+
+      if (error instanceof AuthorizationError) {
+        return handleResponse(new Forbidden(undefined, { message: error.reason }));
+      }
+
+      this.logger.error('error handling request', error);
+      res.status(500);
+
+      if (error instanceof Error) {
+        res.set('Content-Type', 'text/plain').send(error?.stack);
+      } else {
+        res.json(error);
+      }
+    };
   }
 }

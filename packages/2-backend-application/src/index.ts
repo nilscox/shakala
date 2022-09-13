@@ -1,4 +1,5 @@
 export * from './register-handlers';
+export * from './authorization';
 
 export * from './cqs/command-handler';
 export * from './cqs/event-bus';
@@ -19,6 +20,7 @@ export * from './modules/thread/comment.in-memory-repository';
 export * from './modules/thread/reaction.in-memory-repository';
 export * from './modules/user/user.in-memory-repository';
 
+export * from './utils/execution-context';
 export * from './utils/in-memory-email-compiler.service';
 export * from './utils/in-memory-email-sender.service';
 export * from './utils/in-memory-filesystem.service';

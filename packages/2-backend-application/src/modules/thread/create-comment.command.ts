@@ -1,30 +1,30 @@
-import { GeneratorService, Comment, Author, Markdown, Timestamp, DateService, Message } from 'backend-domain';
+import { Author, Comment, DateService, GeneratorService, Markdown, Message, Timestamp } from 'backend-domain';
 
+import { Authorize, HasWriteAccess, IsAuthenticated } from '../../authorization';
 import { CommandHandler } from '../../cqs/command-handler';
-import { CommentRepository, UserRepository } from '../../interfaces/repositories';
+import { CommentRepository } from '../../interfaces/repositories';
+import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 export class CreateCommentCommand {
   constructor(
     public readonly threadId: string,
-    public readonly authorId: string,
     public readonly parentId: string | null,
     public readonly text: string,
   ) {}
 }
 
+@Authorize(IsAuthenticated, HasWriteAccess)
 export class CreateCommentCommandHandler implements CommandHandler<CreateCommentCommand, string> {
   constructor(
     private readonly generatorService: GeneratorService,
     private readonly dateService: DateService,
     private readonly commentRepository: CommentRepository,
-    private readonly userRepository: UserRepository,
   ) {}
 
   // todo: assert that parentId c threadId
-  async handle(command: CreateCommentCommand): Promise<string> {
-    const { threadId, authorId, parentId, text } = command;
-
-    const author = await this.userRepository.findByIdOrFail(authorId);
+  async handle(command: CreateCommentCommand, ctx: AuthenticatedExecutionContext): Promise<string> {
+    const { threadId, parentId, text } = command;
+    const { user: author } = ctx;
 
     const comment = new Comment(
       {

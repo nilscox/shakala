@@ -1,6 +1,7 @@
 import {
   CreateCommentCommand,
   EditCommentCommand,
+  ExecutionContext,
   LoggerService,
   SetReactionCommand,
 } from 'backend-application';
@@ -41,11 +42,12 @@ export class CommentController extends Controller {
   }
 
   async createComment(req: Request): Promise<Response<string>> {
-    const user = await this.sessionService.requireUser(req);
+    const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, createCommentBodySchema);
 
     const commentId = await this.commandBus.execute<string>(
-      new CreateCommentCommand(body.threadId, user.id, body.parentId ?? null, body.text),
+      new CreateCommentCommand(body.threadId, body.parentId ?? null, body.text),
+      new ExecutionContext(user),
     );
 
     return Response.created(commentId);
