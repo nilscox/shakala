@@ -98,7 +98,7 @@ describe('ThreadController', () => {
       await expect(controller.getThread(new MockRequest().withParam('id', thread.id))).rejects.test(
         (response) => {
           expect(response).toHaveProperty('body', {
-            error: 'NotFound',
+            code: 'NotFound',
             message: 'thread not found',
             details: { threadId: thread.id },
           });

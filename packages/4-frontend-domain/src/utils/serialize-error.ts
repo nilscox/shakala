@@ -1,4 +1,6 @@
-import { PayloadError } from 'shared';
+import { BaseError } from 'shared';
+
+export const SerializeErrorError = BaseError.extend('cannot serialize error', (error) => ({ error }));
 
 type SerializedError = {
   name: string;
@@ -15,5 +17,5 @@ export const serializeError = (error: unknown): SerializedError => {
     };
   }
 
-  throw new PayloadError('cannot serialize error', { error });
+  throw new SerializeErrorError(error);
 };

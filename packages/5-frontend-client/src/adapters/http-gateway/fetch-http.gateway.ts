@@ -1,14 +1,23 @@
-import { AuthorizationError, AuthorizationErrorReason, FieldError, ValidationError } from 'frontend-domain';
-import { get, isArray, isString, PayloadError } from 'shared';
+import { AuthorizationError, ValidationError } from 'frontend-domain';
+import { get, HttpErrorBody, wait } from 'shared';
+import * as yup from 'yup';
 
 import {
+  HttpError,
   HttpGateway,
   NetworkError,
-  ReadRequestOptions,
-  WriteRequestOptions,
-  Response,
   QueryParams,
+  ReadRequestOptions,
+  Response,
+  UnknownHttpError,
+  WriteRequestOptions,
 } from './http.gateway';
+
+const httpErrorSchema = yup.object({
+  code: yup.string().required(),
+  message: yup.string().required(),
+  details: yup.object().optional(),
+});
 
 class FetchResponse<Body> implements Response<Body> {
   constructor(private readonly response: globalThis.Response, public readonly body: Body) {}
@@ -93,18 +102,34 @@ export class FetchHttpGateway implements HttpGateway {
     const responseBody = await this.getResponseBody(response);
 
     if (this.fakeLag) {
-      await new Promise((r) => setTimeout(r, this.fakeLag));
+      await wait(this.fakeLag);
     }
 
-    if (get(responseBody, 'error') === 'ValidationError') {
-      throw new ValidationError(this.getInvalidFields(responseBody));
+    if (response.ok) {
+      return new FetchResponse(response, responseBody as ResponseBody);
     }
 
-    if (get(responseBody, 'error') === 'Forbidden') {
-      throw new AuthorizationError(this.getAuthorizationErrorReason(responseBody));
+    const errorBody = this.parseErrorBody(responseBody);
+
+    if (!errorBody) {
+      throw new UnknownHttpError(response, responseBody);
     }
 
-    return new FetchResponse(response, responseBody as ResponseBody);
+    if (errorBody?.code === 'Unauthorized') {
+      throw AuthorizationError.from(errorBody);
+    }
+
+    if (errorBody?.code === 'ValidationError') {
+      throw ValidationError.from(errorBody);
+    }
+
+    const httpError = new HttpError(new FetchResponse<HttpErrorBody>(response, errorBody));
+
+    if (options.onError) {
+      options.onError(httpError);
+    }
+
+    throw httpError;
   }
 
   private getQueryString(query: QueryParams | undefined): string {
@@ -138,48 +163,11 @@ export class FetchHttpGateway implements HttpGateway {
     }
   }
 
-  // validate with yup?
-  private getInvalidFields(body: unknown) {
-    const parseError = new PayloadError('FetchHttpGateway: cannot parse invalid fields', { body });
-
-    const fields = isArray(get(body, 'details', 'fields'))?.map((field): FieldError => {
-      const fieldName = isString(get(field, 'field'));
-      const error = isString(get(field, 'error'));
-      const value = get(field, 'value');
-
-      if (!fieldName || !error) {
-        throw parseError;
-      }
-
-      return { field: fieldName, error, value };
-    });
-
-    if (!fields) {
-      throw parseError;
+  private parseErrorBody(body: unknown): HttpErrorBody | undefined {
+    try {
+      return httpErrorSchema.validateSync(body);
+    } catch (error) {
+      return undefined;
     }
-
-    return fields;
-  }
-
-  private getAuthorizationErrorReason(error: unknown) {
-    const message = get(error, 'details', 'message');
-
-    if (message === 'authenticated') {
-      return AuthorizationErrorReason.authenticated;
-    }
-
-    if (message === 'unauthenticated') {
-      return AuthorizationErrorReason.unauthenticated;
-    }
-
-    if (message === 'EmailNotValidated') {
-      return AuthorizationErrorReason.emailValidationRequired;
-    }
-
-    if (typeof message === 'string') {
-      return message;
-    }
-
-    return 'unknown';
   }
 }

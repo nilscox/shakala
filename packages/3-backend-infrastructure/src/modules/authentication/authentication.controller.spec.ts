@@ -1,4 +1,5 @@
 import {
+  AuthorizationError,
   EmailAlreadyExistsError,
   ExecutionContext,
   GetUserByEmailQuery,
@@ -84,7 +85,7 @@ describe('AuthenticationController', () => {
 
       await expect(login()).rejects.test((error) => {
         expect(error).toBeInstanceOf(Forbidden);
-        expect(error).toHaveProperty('body.message', 'InvalidCredentials');
+        expect(error).toHaveProperty('body.code', 'InvalidCredentials');
       });
     });
   });
@@ -126,7 +127,7 @@ describe('AuthenticationController', () => {
         expect(error).toBeInstanceOf(ValidationError);
         expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
           field: 'email',
-          error: 'EmailAlreadyExists',
+          error: 'alreadyExists',
           value: body.email,
         });
       });
@@ -139,7 +140,7 @@ describe('AuthenticationController', () => {
         expect(error).toBeInstanceOf(ValidationError);
         expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
           field: 'nick',
-          error: 'NickAlreadyExists',
+          error: 'alreadyExists',
           value: body.nick,
         });
       });
@@ -207,7 +208,7 @@ describe('AuthenticationController', () => {
     it('fails to log out when the user is not authenticated', async () => {
       sessionService.reset();
 
-      await expect(logout()).rejects.toThrow(Forbidden);
+      await expect(logout()).rejects.toThrow(AuthorizationError);
     });
   });
 

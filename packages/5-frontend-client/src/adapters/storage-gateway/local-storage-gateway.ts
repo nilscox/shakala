@@ -2,6 +2,8 @@ import { DraftCommentKind, StorageGateway } from 'frontend-domain';
 
 type StoredDraftModel = Record<DraftCommentKind, Record<string, string>>;
 
+const DEBOUNCE_TIMEOUT = 1000;
+
 export class LocalStorageGateway implements StorageGateway {
   public static readonly storageKey = 'draft-comments';
 
@@ -48,7 +50,7 @@ export class LocalStorageGateway implements StorageGateway {
     }
 
     if (debounce) {
-      this.timeoutId = window.setTimeout(doSetItem, 1000);
+      this.timeoutId = window.setTimeout(doSetItem, DEBOUNCE_TIMEOUT);
     } else {
       doSetItem();
     }

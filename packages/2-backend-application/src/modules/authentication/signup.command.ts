@@ -7,17 +7,11 @@ import { UserRepository } from '../../interfaces/repositories';
 import { EventPublisher } from '../../utils/event-publisher';
 import { ExecutionContext } from '../../utils/execution-context';
 
-export class EmailAlreadyExistsError extends DomainError<{ email: string }> {
-  constructor(email: string) {
-    super('EmailAlreadyExists', { email });
-  }
-}
+const emailAlreadyExistsDetails = (email: string) => ({ email });
+export const EmailAlreadyExistsError = DomainError.extend('email already exists', emailAlreadyExistsDetails);
 
-export class NickAlreadyExistsError extends DomainError<{ nick: string }> {
-  constructor(nick: string) {
-    super('NickAlreadyExists', { nick });
-  }
-}
+const nickAlreadyExistsDetails = (nick: string) => ({ nick });
+export const NickAlreadyExistsError = DomainError.extend('nick already exists', nickAlreadyExistsDetails);
 
 export class SignupCommand implements Command {
   constructor(readonly nick: string, readonly email: string, readonly password: string) {}

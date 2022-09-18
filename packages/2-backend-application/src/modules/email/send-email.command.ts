@@ -42,7 +42,7 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
     const renderer = this.renderers.get(kind);
 
     if (!renderer) {
-      throw new Error(`no renderer found for email kind ${kind}`);
+      throw new Error(`no renderer found for email kind "${kind}"`);
     }
 
     await this.emailSenderService.send({

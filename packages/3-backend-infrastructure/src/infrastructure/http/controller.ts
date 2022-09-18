@@ -73,7 +73,11 @@ export abstract class Controller {
       }
 
       if (error instanceof AuthorizationError) {
-        return handleResponse(new Forbidden(undefined, { message: error.reason }));
+        return handleResponse(
+          new Forbidden('Unauthorized', 'user does not have the required permission to perform this action', {
+            reason: error.details.reason,
+          }),
+        );
       }
 
       this.logger.error('error handling request', error);

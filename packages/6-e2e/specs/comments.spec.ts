@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { wait } from 'shared';
 
 import { AppContext } from '../utils/app-context';
 
@@ -14,6 +15,7 @@ test.describe('Comments', () => {
     charlie = await AppContext.create(browser);
 
     await alice.clearDatabase();
+    await alice.clearEmails();
   });
 
   const login = async (app: AppContext, nick: string) => {
@@ -24,8 +26,7 @@ test.describe('Comments', () => {
   const texts = {
     thread: "J'ai entendu dire que la terre serait plate, est-ce que c'est sérieux ?",
     comment: "C'est vrai, j'en ai entendu parlé sur Twitter !",
-    reply:
-      "C'est faux.\n\nPour être exacte, la forme de la terre est un ellipsoïde, une sphère légèrement aplatie aux pôles.",
+    reply: "C'est faux.\n\nPour être exacte, la forme de la terre est un ellipsoïde.",
   };
 
   test('As a user, I can create a thread and engage with other users', async () => {
@@ -49,7 +50,7 @@ test.describe('Comments', () => {
     await bob.findButton('Envoyer').click();
 
     await charlie.reload();
-    expect(charlie.findByText(/sur Twitter !$/)).toBeVisible();
+    await expect(charlie.findByText(/sur Twitter !$/)).toBeVisible();
   });
 
   test('As an unauthenticated user, I can signup to reply to a comment', async () => {
@@ -65,13 +66,18 @@ test.describe('Comments', () => {
     await charlie.findByPlaceholder('Pseudo').fill('user');
     await charlie.findByText(/J'accepte la charte/).click();
     await charlie.findByText(/J'accepte la charte/).click();
-    await charlie.findButton('Inscription').click();
 
-    await charlie.findByPlaceholder('Répondre').focus();
-    await charlie.findByPlaceholder('Rédigez votre message').fill(texts.reply);
+    const waitDebounceTime = 1000 + 100;
+    await wait(waitDebounceTime);
+
+    await charlie.findButton('Inscription').click();
+    await expect.poll(() => charlie.searchParams.get('auth')).toBeNull();
+
+    await charlie.validateEmailAddress('user@domain.tld');
+
     await charlie.within(comment).findButton('Envoyer').click();
 
     await alice.reload();
-    await expect(alice.findByText(/aplatie aux pôles.$/)).toBeVisible();
+    await expect(alice.findByText(/la terre est un ellipsoïde.$/)).toBeVisible();
   });
 });

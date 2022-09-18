@@ -1,6 +1,8 @@
+import { AuthorizationErrorReason } from 'shared';
+
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
+import { AuthorizationError, ValidationError } from '../../../types';
 import {
   setAuthenticationFieldError,
   setIsAuthenticationModalOpen,
@@ -61,7 +63,9 @@ describe('signup', () => {
   it('shows a snackbar', async () => {
     await store.dispatch(signup(email, password, nick));
 
-    expect(store.snackbarGateway.success).toHaveBeenCalledWith('Votre compte a bien été créé. Bienvenue !');
+    expect(store.snackbarGateway.success).toHaveBeenCalledWith(
+      `Votre compte a bien été créé ! Un email de validation a été envoyé à l'adresse ${email}.`,
+    );
   });
 
   it('handles validation errors', async () => {

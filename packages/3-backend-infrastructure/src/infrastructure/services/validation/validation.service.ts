@@ -4,17 +4,22 @@ import { BadRequest } from '../../http/http-errors';
 import { Request } from '../../http/request';
 
 type FieldValidationError = {
+  /** invalid field name */
   field: string;
-  error: string;
+
+  /** invalid field value */
   value?: unknown;
+
+  /** unique identifier of the error (e.g. minLength) */
+  error: string;
+
+  /** error description */
   messages?: string[];
 };
 
 export class ValidationError extends BadRequest {
   constructor(public readonly fields: FieldValidationError[]) {
-    super('invalid input', { fields });
-
-    this.body.error = 'ValidationError';
+    super('ValidationError', 'invalid input', { fields });
   }
 
   static from(fields: Record<string, string | [string, string]>) {
@@ -59,7 +64,7 @@ export class ValidationService {
   async body<Schema extends yup.AnySchema>(req: Request, schema: Schema) {
     try {
       if (req.body === undefined) {
-        throw new BadRequest('missing body');
+        throw new BadRequest('MissingBody', 'the request body is required');
       }
 
       return await schema.validate(req.body, { abortEarly: false });

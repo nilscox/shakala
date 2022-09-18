@@ -3,11 +3,7 @@ import type { DateService } from '../interfaces/date.interface';
 
 import { DomainError } from './domain-error';
 
-export class InvalidDateError extends DomainError<{ date: string | Date }> {
-  constructor(date: string | Date) {
-    super('Date is not valid', { date });
-  }
-}
+export const InvalidDateError = DomainError.extend('date is not valid', (date: string | Date) => ({ date }));
 
 export class Timestamp extends ValueObject<string> {
   constructor(value: string | Date) {

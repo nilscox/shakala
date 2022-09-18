@@ -1,17 +1,9 @@
+import { AuthorizationErrorReason } from 'shared';
+
 import { ExecutionContext } from '../utils/execution-context';
 
 import { AuthorizationError } from './authorization-error';
 import { Authorizer } from './authorizer';
-
-enum WriteAccessErrorReason {
-  emailNotValidated = 'EmailNotValidated',
-}
-
-class WriteAccessError extends AuthorizationError {
-  constructor(reason: WriteAccessErrorReason) {
-    super(reason);
-  }
-}
 
 export class HasWriteAccess implements Authorizer {
   async authorize({ user }: ExecutionContext): Promise<void> {
@@ -20,7 +12,7 @@ export class HasWriteAccess implements Authorizer {
     }
 
     if (!user.isEmailValidated) {
-      throw new WriteAccessError(WriteAccessErrorReason.emailNotValidated);
+      throw new AuthorizationError(AuthorizationErrorReason.emailValidationRequired);
     }
   }
 }

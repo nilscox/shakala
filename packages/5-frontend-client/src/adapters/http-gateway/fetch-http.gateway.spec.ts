@@ -1,4 +1,5 @@
-import { AuthorizationError, AuthorizationErrorReason, FieldError, ValidationError } from 'frontend-domain';
+import { AuthorizationError, FieldError, ValidationError } from 'frontend-domain';
+import { AuthorizationErrorReason } from 'shared';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 
@@ -114,16 +115,17 @@ describe('FetchHttpGateway', () => {
 
   it('handles authorization errors', async () => {
     const headers = new Headers();
+    const reason = AuthorizationErrorReason.emailValidationRequired;
 
     headers.set('Content-Type', 'application/json');
 
-    const json = async () => ({ error: 'Forbidden', details: { message: 'EmailNotValidated' } });
+    const json = async () => ({ code: 'Unauthorized', message: "can't touch this", details: { reason } });
     const fetch = mockFetch({ ok: false, status: 403, headers, json });
     const http = new FetchHttpGateway(baseUrl, fetch);
 
     await expect(http.post('/')).rejects.test((error: AuthorizationError) => {
       expect(error).toBeInstanceOf(AuthorizationError);
-      expect(error).toHaveProperty('reason', AuthorizationErrorReason.emailValidationRequired);
+      expect(error).toHaveProperty('reason', reason);
     });
   });
 
@@ -137,7 +139,7 @@ describe('FetchHttpGateway', () => {
       { field: 'nick', error: 'already-exists', value: 'nick' },
     ];
 
-    const json = async () => ({ error: 'ValidationError', details: { fields } });
+    const json = async () => ({ code: 'ValidationError', message: 'validation error', details: { fields } });
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new FetchHttpGateway(baseUrl, fetch);
 

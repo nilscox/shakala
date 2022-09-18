@@ -1,8 +1,10 @@
+import { AuthorizationErrorReason } from 'shared';
+
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
-import { AuthorizationError, AuthorizationErrorReason, ReactionType } from '../../../types';
+import { AuthorizationError, ReactionType } from '../../../types';
 import { addComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
 

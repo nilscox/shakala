@@ -1,8 +1,17 @@
-import { Browser, BrowserContext, Page } from '@playwright/test';
-import { LoggerService, SignupCommand } from 'backend-application';
-import { Application, StubConfigService, ClearDatabaseCommand } from 'backend-infrastructure';
+import fs from 'fs/promises';
+
+import { Browser, BrowserContext, expect, Page } from '@playwright/test';
+import {
+  ExecutionContext,
+  GetUserByEmailQuery,
+  LoggerService,
+  SignupCommand,
+  ValidateEmailAddressCommand,
+} from 'backend-application';
+import { User } from 'backend-domain';
+import { Application, ClearDatabaseCommand, EnvConfigService } from 'backend-infrastructure';
 import { Dependencies } from 'frontend-domain';
-import { AuthUserDto } from 'shared';
+import { AuthUserDto, wait } from 'shared';
 
 import { AppAccessors } from './app-accessors';
 
@@ -36,14 +45,7 @@ export class AppContext extends AppAccessors {
 
     app.backend.overrideServices({
       loggerService,
-      configService: new StubConfigService({
-        database: {
-          host: 'postgres',
-          user: 'user',
-          password: 'password',
-          database: 'shakala-e2e',
-        },
-      }),
+      configService: new EnvConfigService(),
     });
 
     await app.backend.init();
@@ -57,11 +59,18 @@ export class AppContext extends AppAccessors {
 
   async clearDatabase() {
     await this.backend.run(async ({ commandBus }) => {
-      await commandBus.execute(new ClearDatabaseCommand());
+      await commandBus.execute(new ClearDatabaseCommand(), ExecutionContext.unauthenticated);
     });
   }
 
-  private credentials(nick: string) {
+  async clearEmails() {
+    const response = await fetch('http://localhost:1080/email/all', { method: 'DELETE' });
+    const body = await response.json();
+
+    expect(response.ok, JSON.stringify(body)).toBe(true);
+  }
+
+  credentials(nick: string) {
     return {
       email: `${nick.toLowerCase()}@localhost.tld`,
       password: 'password',
@@ -72,7 +81,43 @@ export class AppContext extends AppAccessors {
     const { email, password } = this.credentials(nick);
 
     await this.backend.run(async ({ commandBus }) => {
-      await commandBus.execute(new SignupCommand(nick, email, password));
+      await commandBus.execute(new SignupCommand(nick, email, password), ExecutionContext.unauthenticated);
+    });
+
+    // wait for the email to be sent
+    await wait(100);
+  }
+
+  async getEmailValidationLink(email: string): Promise<string> {
+    type Email = {
+      to: Array<{ address: string }>;
+      text: string;
+    };
+
+    const response = await fetch('http://localhost:1080/email');
+    const body = (await response.json()) as Email[];
+
+    expect(response.ok, JSON.stringify(body)).toBe(true);
+
+    const { text } = body.find(({ to }) => to[0].address === email) as Email;
+    const match = text.match(/http.*\n/);
+
+    expect(match).toBeDefined();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return match![0].trimEnd();
+  }
+
+  async validateEmailAddress(email: string) {
+    const user = await this.backend.run<User>(async ({ queryBus }) => {
+      return queryBus.execute(new GetUserByEmailQuery(email));
+    });
+
+    await this.backend.run(async ({ commandBus }) => {
+      await commandBus.execute(
+        new ValidateEmailAddressCommand(user.id, user.emailValidationToken as string),
+        ExecutionContext.unauthenticated,
+      );
     });
   }
 
@@ -80,6 +125,7 @@ export class AppContext extends AppAccessors {
     const { email, password } = this.credentials(nick);
 
     await this.createUser(nick);
+    await this.validateEmailAddress(email);
 
     const user = await this.page.evaluate(
       async ([email, password]) => {
@@ -91,8 +137,21 @@ export class AppContext extends AppAccessors {
     return user;
   }
 
+  async snapshot(file: string) {
+    const html = await this.page.evaluate(() => {
+      const html = document.body.parentElement as HTMLElement;
+      return html.innerHTML;
+    });
+
+    await fs.writeFile(file, html);
+  }
+
   async reload() {
     await this.page.reload();
+  }
+
+  async newPage() {
+    return new AppContext(this.ctx, await this.ctx.newPage());
   }
 
   async navigate(url: string | URL) {

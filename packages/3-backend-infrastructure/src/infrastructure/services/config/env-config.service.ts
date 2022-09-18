@@ -32,7 +32,7 @@ export class EnvConfigService implements ConfigService {
       if (Number.isNaN(valueAsNumber)) {
         throw new Error(`invalid environment variable ${key} "${value}"`);
       } else {
-        return value;
+        return valueAsNumber;
       }
     }
 

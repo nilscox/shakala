@@ -16,7 +16,9 @@ export const signup = (email: string, password: string, nick: string): Thunk => 
       dispatch(setUser({ user }));
       dispatch(closeAuthenticationForm());
 
-      snackbarGateway.success('Votre compte a bien été créé. Bienvenue !');
+      snackbarGateway.success(
+        `Votre compte a bien été créé ! Un email de validation a été envoyé à l'adresse ${email}.`,
+      );
     } catch (error) {
       dispatch(handleAuthenticationError(error));
     } finally {

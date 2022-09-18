@@ -1,36 +1,40 @@
+import { HttpErrorBody } from 'shared';
+
 import { Response } from './response';
 
-type ErrorBody = {
-  error: string;
-  message?: string;
-  [key: string]: unknown;
-};
-
-export class HttpError extends Error implements Response<ErrorBody> {
+export class HttpError extends Error implements Response<HttpErrorBody> {
   public readonly headers = new Map<string, string>();
-  public readonly body: ErrorBody;
+  public readonly body: HttpErrorBody;
 
   protected constructor(
     public readonly status: number,
-    error: string,
-    message?: string,
+    code: string,
+    message: string,
     details?: Record<string, unknown>,
   ) {
-    super(`${error}${message ? ` (${message})` : ''}\n${JSON.stringify(details, null, 2)}`);
-    this.body = { error, message, details };
+    super(message);
+    this.body = { code, message, details };
   }
 }
 
-const createHttpError = (status: number, error: string) => {
+const createHttpError = (status: number) => {
   return class extends HttpError {
-    constructor(message?: string, details?: Record<string, unknown>) {
-      super(status, error, message, details);
+    constructor(code: string, message: string, details?: Record<string, unknown>) {
+      super(status, code, message, details);
     }
   };
 };
 
-export const BadRequest = createHttpError(400, 'BadRequest');
-export const Unauthorized = createHttpError(401, 'Unauthorized');
-export const Forbidden = createHttpError(403, 'Forbidden');
-export const NotFound = createHttpError(404, 'NotFound');
-export const NotImplemented = createHttpError(501, 'NotImplemented');
+const createHttpErrorWithCode = (status: number, code: string) => {
+  return class extends HttpError {
+    constructor(message: string, details?: Record<string, unknown>) {
+      super(status, code, message, details);
+    }
+  };
+};
+
+export const BadRequest = createHttpError(400);
+export const Unauthorized = createHttpError(401);
+export const Forbidden = createHttpError(403);
+export const NotFound = createHttpErrorWithCode(404, 'NotFound');
+export const NotImplemented = createHttpErrorWithCode(501, 'NotImplemented');

@@ -1,5 +1,3 @@
-export class DomainError<Details = undefined> extends Error {
-  constructor(message: string, public readonly details: Details) {
-    super(message);
-  }
-}
+import { BaseError } from 'shared';
+
+export const DomainError = BaseError;

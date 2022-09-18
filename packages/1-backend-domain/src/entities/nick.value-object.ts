@@ -2,11 +2,10 @@ import { ValueObject } from '../ddd/value-object';
 
 import { DomainError } from './domain-error';
 
-export class NickTooShortError extends DomainError<{ nick: string; minLength: number }> {
-  constructor(nick: string, minLength: number) {
-    super('Nick is too short', { nick, minLength });
-  }
-}
+export const NickTooShortError = DomainError.extend(
+  'nick is too short',
+  (nick: string, minLength: number) => ({ nick, minLength }),
+);
 
 export class Nick extends ValueObject<string> {
   constructor(value: string) {
@@ -20,5 +19,4 @@ export class Nick extends ValueObject<string> {
   override toString() {
     return this.value;
   }
-
 }

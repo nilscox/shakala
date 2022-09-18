@@ -1,10 +1,13 @@
+import { AuthorizationErrorReason } from 'shared';
+
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
+import { AuthorizationError, ValidationError } from '../../../types';
 import {
   setAuthenticationFieldError,
   setIsAuthenticationModalOpen,
 } from '../../actions/authentication.actions';
+import { InvalidCredentialsError } from '../../authentication.gateway';
 import { AuthenticationField } from '../../authentication.types';
 import {
   selectAuthenticationFieldError,
@@ -75,7 +78,7 @@ describe('login', () => {
   });
 
   it('handles invalid credentials error', async () => {
-    store.authenticationGateway.login.mockRejectedValue(new Error('InvalidCredentials'));
+    store.authenticationGateway.login.mockRejectedValue(new InvalidCredentialsError());
 
     await store.dispatch(login(email, password));
 

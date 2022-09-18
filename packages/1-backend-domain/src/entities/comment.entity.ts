@@ -11,11 +11,7 @@ import { Message } from './message.entity';
 import { Timestamp } from './timestamp.value-object';
 import { User } from './user.entity';
 
-export class UserMustBeAuthorError extends DomainError {
-  constructor() {
-    super('User is not the author of the comment', undefined);
-  }
-}
+export const UserMustBeAuthorError = DomainError.extend('user is not the author of the comment');
 
 export type CommentProps = EntityProps<{
   threadId: string;

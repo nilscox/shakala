@@ -11,6 +11,7 @@ test.describe('Authentication', () => {
 
   test.beforeEach(async () => {
     await app.clearDatabase();
+    await app.clearEmails();
   });
 
   test('As a user, I can signup, logout and log back in', async () => {
@@ -29,12 +30,20 @@ test.describe('Authentication', () => {
     await app.findByText(/J'accepte la charte/).click();
     await app.findButton('Inscription').click();
 
-    const notification = app.closest(app.findByText(/Bienvenue !/), '.notification');
+    const notification = app.closest(
+      app.findByText(/^Votre compte a bien été créé ! .* à l'adresse user@domain.tld.$/),
+      '.notification',
+    );
 
     await expect(notification).toBeVisible();
     await expect.poll(() => app.searchParams.get('auth')).toBeNull();
 
     app.within(notification).findByLabel('Fermer').click();
+
+    const page = await app.newPage();
+    await page.navigate(await app.getEmailValidationLink('user@domain.tld'));
+
+    expect(page.findByText('Votre adresse email a bien été validée. Bienvenue ! 🎉')).toBeVisible();
 
     await app.findLink('user').click();
     await app.findButton('Déconnexion').click();
@@ -47,5 +56,23 @@ test.describe('Authentication', () => {
     await app.findButton('Connexion').click();
 
     await expect(app.findByText('Vous êtes maintenant connecté(e)')).toBeVisible();
+  });
+
+  test('As a user, I see a clear error message when my password is invalid', async () => {
+    const nick = 'user';
+    const { email } = await app.credentials(nick);
+
+    await app.createUser(nick);
+    await app.validateEmailAddress(email);
+    await app.navigate('/');
+
+    await app.within(app.locator('header')).findByText('Connexion').click();
+    await expect(app.searchParams.get('auth')).toEqual('login');
+
+    await app.findByPlaceholder('Email').fill(email);
+    await app.findByPlaceholder('Mot de passe').fill('nope');
+    await app.findButton('Connexion').click();
+
+    await app.findByText('Combinaison email / mot de passe non valide').click();
   });
 });

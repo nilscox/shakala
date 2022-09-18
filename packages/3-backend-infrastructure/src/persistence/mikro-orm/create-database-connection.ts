@@ -1,5 +1,6 @@
 import { MikroORM, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { wait } from 'shared';
 
 import { createDatabaseSaver } from '../utils/save-test-data';
 
@@ -48,7 +49,7 @@ export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
 
   const waitForDatabaseConnection = async () => {
     while (!isReady) {
-      await new Promise((r) => setTimeout(r, 10));
+      await wait(10);
     }
   };
 

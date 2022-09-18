@@ -1,3 +1,5 @@
+import { BaseError } from 'shared';
+
 import { AuthUser } from '../types';
 
 export interface AuthenticationGateway {
@@ -6,3 +8,5 @@ export interface AuthenticationGateway {
   signup(email: string, password: string, nick: string): Promise<AuthUser>;
   logout(): Promise<void>;
 }
+
+export const InvalidCredentialsError = BaseError.extend('invalid credentials');

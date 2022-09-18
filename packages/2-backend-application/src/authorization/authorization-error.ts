@@ -1,5 +1,6 @@
-export class AuthorizationError extends Error {
-  constructor(public readonly reason: string) {
-    super('AuthorizationError');
-  }
-}
+import { AuthorizationErrorReason, BaseError } from 'shared';
+
+export const AuthorizationError = BaseError.extend(
+  'authorization error',
+  (reason: AuthorizationErrorReason) => ({ reason }),
+);

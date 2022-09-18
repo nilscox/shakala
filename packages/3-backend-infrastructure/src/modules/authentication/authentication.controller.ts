@@ -1,4 +1,5 @@
 import {
+  AuthorizationError,
   EmailAlreadyExistsError,
   ExecutionContext,
   GetUserByEmailQuery,
@@ -9,7 +10,7 @@ import {
   ValidateEmailAddressCommand,
 } from 'backend-application';
 import { EmailValidationFailed, EmailValidationFailedReason, InvalidCredentials, User } from 'backend-domain';
-import { AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
+import { AuthorizationErrorReason, AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
 
 import {
   CommandBus,
@@ -60,7 +61,7 @@ export class AuthenticationController extends Controller {
         ExecutionContext.unauthenticated,
       );
     })
-      .catch(InvalidCredentials, (error) => new Forbidden(error.message))
+      .catch(InvalidCredentials, (error) => new Forbidden('InvalidCredentials', error.message))
       .run();
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
@@ -80,10 +81,12 @@ export class AuthenticationController extends Controller {
       );
     })
       .catch(EmailAlreadyExistsError, (error) =>
-        ValidationError.from({ email: [error.message, error.details.email] }),
+        // description: error.message
+        ValidationError.from({ email: ['alreadyExists', error.details.email] }),
       )
       .catch(NickAlreadyExistsError, (error) =>
-        ValidationError.from({ nick: [error.message, error.details.nick] }),
+        // description: error.message
+        ValidationError.from({ nick: ['alreadyExists', error.details.nick] }),
       )
       .run();
 
@@ -121,11 +124,16 @@ export class AuthenticationController extends Controller {
   }
 
   async requestLoginEmail(): Promise<Response> {
-    throw new NotImplemented();
+    throw new NotImplemented('email login request is not implemented yet');
   }
 
   async logout(req: Request): Promise<Response> {
-    await this.sessionService.requireUser(req);
+    const user = await this.sessionService.getUser(req);
+
+    if (!user) {
+      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
+    }
+
     this.sessionService.unsetUser(req);
 
     return Response.noContent();

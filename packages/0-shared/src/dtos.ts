@@ -57,3 +57,20 @@ export enum Sort {
 }
 
 export const isSort = isEnumValue(Sort);
+
+export enum AuthorizationErrorReason {
+  unauthenticated = 'unauthenticated',
+  authenticated = 'authenticated',
+  emailValidationRequired = 'emailValidationRequired',
+}
+
+export type HttpErrorBody = {
+  /** unique error identifier */
+  code: string;
+
+  /** plain english error description */
+  message: string;
+
+  /** custom payload */
+  details?: Record<string, unknown>;
+};

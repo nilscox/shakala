@@ -108,19 +108,11 @@ export class User extends AggregateRoot<UserProps> {
   }
 }
 
-export class InvalidCredentials extends DomainError {
-  constructor() {
-    super('InvalidCredentials', undefined);
-  }
-}
+export const InvalidCredentials = DomainError.extend('invalid credentials');
 
 export enum EmailValidationFailedReason {
   alreadyValidated = 'EmailAlreadyValidated',
   invalidToken = 'InvalidToken'
 }
 
-export class EmailValidationFailed extends DomainError<{ reason: EmailValidationFailedReason }> {
-  constructor(reason: EmailValidationFailedReason) {
-    super('EmailValidationFailed', { reason });
-  }
-}
+export const EmailValidationFailed = DomainError.extend('email validation failed', (reason: EmailValidationFailedReason) => ({ reason }))

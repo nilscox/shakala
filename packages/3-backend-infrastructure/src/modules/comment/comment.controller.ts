@@ -61,10 +61,7 @@ export class CommentController extends Controller {
     await tryCatch(async () => {
       await this.commandBus.execute(new EditCommentCommand(commentId, body.text), new ExecutionContext(user));
     })
-      .catch(
-        UserMustBeAuthorError,
-        (error) => new Unauthorized('UserMustBeAuthor', { message: error.message }),
-      )
+      .catch(UserMustBeAuthorError, (error) => new Unauthorized('UserMustBeAuthor', error.message))
       .run();
 
     return Response.noContent();
@@ -83,7 +80,7 @@ export class CommentController extends Controller {
     })
       .catch(
         CannotSetReactionOnOwnCommentError,
-        (error) => new BadRequest('CannotSetReactionOnOwnComment', { message: error.message }),
+        (error) => new BadRequest('CannotSetReactionOnOwnComment', error.message),
       )
       .run();
 

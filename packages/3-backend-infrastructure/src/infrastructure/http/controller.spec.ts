@@ -1,5 +1,6 @@
-import { UnauthenticatedError } from 'backend-application';
+import { AuthorizationError } from 'backend-application';
 import express from 'express';
+import { AuthorizationErrorReason } from 'shared';
 import supertest from 'supertest';
 
 import { MockLoggerService } from '../services';
@@ -50,7 +51,7 @@ describe('Controller', () => {
 
   it('fails with a 403 Forbidden error when the endpoint throws an AuthorizationError', async () => {
     const controller = TestController.create(() => {
-      throw new UnauthenticatedError();
+      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
     });
 
     const app = express();
@@ -60,7 +61,7 @@ describe('Controller', () => {
     const response = await supertest(app).get('/');
 
     expect(response.statusCode).toEqual(403);
-    expect(response.body).toHaveProperty('details.message', 'unauthenticated');
+    expect(response.body).toHaveProperty('details.reason', AuthorizationErrorReason.unauthenticated);
   });
 
   it('logs an error when the error could not be handled', async () => {

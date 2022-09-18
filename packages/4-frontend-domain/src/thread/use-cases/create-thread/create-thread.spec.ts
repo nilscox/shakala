@@ -1,7 +1,9 @@
+import { AuthorizationErrorReason } from 'shared';
+
 import { selectIsAuthenticationModalOpen, setUser } from '../../../authentication';
 import { unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, TestStore } from '../../../test';
-import { AuthorizationError, AuthorizationErrorReason, ValidationError } from '../../../types';
+import { AuthorizationError, ValidationError } from '../../../types';
 
 import {
   clearThreadFormFieldError,

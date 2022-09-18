@@ -125,7 +125,7 @@ describe('CommentController', () => {
 
       await expect(controller.editComment(request)).rejects.test((error) => {
         expect(error).toBeInstanceOf(Unauthorized);
-        expect(error).toHaveProperty('body.message', 'UserMustBeAuthor');
+        expect(error).toHaveProperty('body.code', 'UserMustBeAuthor');
       });
     });
   });
@@ -156,7 +156,7 @@ describe('CommentController', () => {
 
       await expect(controller.setReaction(request)).rejects.test((error) => {
         expect(error).toBeInstanceOf(BadRequest);
-        expect(error).toHaveProperty('body.message', 'CannotSetReactionOnOwnComment');
+        expect(error).toHaveProperty('body.code', 'CannotSetReactionOnOwnComment');
       });
     });
   });

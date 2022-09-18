@@ -1,4 +1,5 @@
 import { action } from '@storybook/addon-actions';
+import { wait } from 'shared';
 
 export const gatewayAction = async <T>(
   gateway: { constructor: { name: string } },
@@ -8,7 +9,7 @@ export const gatewayAction = async <T>(
 ) => {
   action([gateway.constructor.name, method].join('.'))(args);
 
-  await new Promise((r) => setTimeout(r, 650));
+  await wait(650);
 
   return result;
 };

@@ -2,7 +2,6 @@ import { GetUserByIdQuery } from 'backend-application';
 import { factories } from 'backend-domain';
 
 import { MockQueryBus, MockRequest } from '../../../test';
-import { Forbidden } from '../../http/http-errors';
 
 import { ExpressSessionService } from './session.service';
 
@@ -28,16 +27,6 @@ describe('ExpressSessionService', () => {
 
     it('returns nothing when the request is not authenticated', async () => {
       expect(await service.getUser(new MockRequest())).toBeUndefined();
-    });
-  });
-
-  describe('requireUser', () => {
-    it('returns the authenticated user', async () => {
-      expect(await service.requireUser(new MockRequest().withSession({ userId: user.id }))).toEqual(user);
-    });
-
-    it('throws when the request is not authenticated', async () => {
-      await expect(service.requireUser(new MockRequest())).rejects.toThrow(Forbidden);
     });
   });
 

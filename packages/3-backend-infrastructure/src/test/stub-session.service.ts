@@ -1,7 +1,6 @@
 import { User } from 'backend-domain';
 
 import { SessionService } from '../infrastructure';
-import { Forbidden } from '../infrastructure/http/http-errors';
 import { Request } from '../infrastructure/http/request';
 
 export class StubSessionService implements SessionService {
@@ -16,14 +15,6 @@ export class StubSessionService implements SessionService {
   }
 
   async getUser(): Promise<User | undefined> {
-    return this.user;
-  }
-
-  async requireUser(): Promise<User> {
-    if (!this.user) {
-      throw new Forbidden();
-    }
-
     return this.user;
   }
 

@@ -1,27 +1,67 @@
-import { AuthUserDto, CommentDto, ReactionTypeDto, ThreadDto, UserDto } from 'shared';
+import {
+  AuthorizationErrorReason,
+  AuthUserDto,
+  BaseError,
+  CommentDto,
+  get,
+  HttpErrorBody,
+  ReactionTypeDto,
+  ThreadDto,
+  UserDto,
+} from 'shared';
+import * as yup from 'yup';
 export { Sort } from 'shared';
+
+export class AuthorizationError extends Error {
+  constructor(public readonly reason: AuthorizationErrorReason | string) {
+    super('AuthorizationError');
+  }
+
+  static from(error: HttpErrorBody) {
+    const reason = get(error, 'details', 'reason');
+
+    if (typeof reason === 'string') {
+      return new AuthorizationError(reason);
+    }
+
+    return new AuthorizationError('unknown');
+  }
+}
 
 export type FieldError = {
   field: string;
   error: string;
-  value: unknown;
+  value?: unknown;
 };
+
+const validationErrorDetailsSchema = yup.object({
+  fields: yup
+    .array(
+      yup.object({
+        field: yup.string().required(),
+        error: yup.string().required(),
+        value: yup.string().optional(),
+      }),
+    )
+    .required(),
+});
+
+// prettier-ignore
+const ValidationParseError = BaseError.extend('failed to parse validation error', (error: HttpErrorBody) => ({ error }));
 
 export class ValidationError extends Error {
   constructor(public readonly fields: FieldError[]) {
     super('ValidationError');
   }
-}
 
-export enum AuthorizationErrorReason {
-  unauthenticated = 'unauthenticated',
-  authenticated = 'authenticated',
-  emailValidationRequired = 'emailValidationRequired',
-}
+  static from(error: HttpErrorBody) {
+    try {
+      const details = validationErrorDetailsSchema.validateSync(error.details);
 
-export class AuthorizationError extends Error {
-  constructor(public readonly reason: AuthorizationErrorReason | string) {
-    super('AuthorizationError');
+      return new ValidationError(details.fields);
+    } catch {
+      throw new ValidationParseError(error);
+    }
   }
 }
 

@@ -33,7 +33,9 @@ describe('ValidationService', () => {
       age: 29,
     });
 
-    await expect(service.body(new MockRequest(), schema)).rejects.toEqual(new BadRequest('missing body'));
+    await expect(service.body(new MockRequest(), schema)).rejects.toEqual(
+      new BadRequest('MissingBody', 'the request body is required'),
+    );
 
     await expect(service.body(new MockRequest().withBody({}), schema)).rejects.toEqual(
       missingFieldError('age'),
