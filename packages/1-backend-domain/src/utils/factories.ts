@@ -8,7 +8,7 @@ import { Comment } from '../entities/comment.entity';
 import { Markdown } from '../entities/markdown.value-object';
 import { Message } from '../entities/message.entity';
 import { Nick } from '../entities/nick.value-object';
-import { ProfileImage } from '../entities/profile-image.value-object';
+import { ProfileImage, ProfileImageData, ProfileImageType } from '../entities/profile-image.value-object';
 import { Reaction, ReactionsCount, ReactionType } from '../entities/reaction.entity';
 import { Thread } from '../entities/thread.entity';
 import { Timestamp } from '../entities/timestamp.value-object';
@@ -17,9 +17,10 @@ import { User } from '../entities/user.entity';
 import { StubCryptoService } from './stub-crypto.service';
 import { StubDateService } from './stub-date.service';
 import { StubGeneratorService } from './stub-generator.service';
+import { StubProfileImageStoreService } from './stub-profile-image-store.service';
 
 type ValueObjectFactory<VO extends ValueObject<unknown>> = VO extends ValueObject<infer V>
-  ? Factory<VO, V>
+  ? Factory<VO, Partial<V>>
   : never;
 
 type EntityFactory<E extends Entity<EntityProps>> = E extends Entity<infer P>
@@ -32,6 +33,7 @@ type Factories = {
   markdown: ValueObjectFactory<Markdown>;
   nick: ValueObjectFactory<Nick>;
   profileImage: ValueObjectFactory<ProfileImage>;
+  profileImageData: ValueObjectFactory<ProfileImageData>;
   timestamp: ValueObjectFactory<Timestamp>;
 
   author: EntityFactory<Author>;
@@ -48,6 +50,7 @@ export const createDomainDependencies: Factory<DomainDependencies> = (overrides)
   generatorService: new StubGeneratorService(),
   dateService: new StubDateService(),
   cryptoService: new StubCryptoService(),
+  profileImageStoreService: new StubProfileImageStoreService(),
   ...overrides,
 });
 
@@ -57,20 +60,28 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
   return {
     id: randomId,
 
-    markdown(text) {
-      return new Markdown(text ?? '');
+    markdown(text = '') {
+      return new Markdown(text);
     },
 
-    nick(nick) {
-      return new Nick(nick ?? 'nick');
+    nick(nick = 'nick') {
+      return new Nick(nick);
     },
 
-    profileImage(url) {
-      return new ProfileImage(url);
+    profileImage(path = '') {
+      return new ProfileImage(path);
     },
 
-    timestamp(date) {
-      return new Timestamp(date ?? '2000-01-01');
+    profileImageData(overrides) {
+      return new ProfileImageData({
+        type: ProfileImageType.png,
+        data: Buffer.from(''),
+        ...overrides,
+      });
+    },
+
+    timestamp(date = '2000-01-01') {
+      return new Timestamp(date);
     },
 
     author(props) {
@@ -141,14 +152,16 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
           email: '',
           hashedPassword: '',
           nick: this.nick(),
-          profileImage: this.profileImage(),
+          profileImage: null,
           signupDate: this.timestamp(),
           lastLoginDate: null,
           emailValidationToken: null,
           ...props,
         },
+        deps.generatorService,
         deps.dateService,
         deps.cryptoService,
+        deps.profileImageStoreService,
       );
     },
 

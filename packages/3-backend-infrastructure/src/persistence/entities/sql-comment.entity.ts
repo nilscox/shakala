@@ -51,7 +51,7 @@ export class SqlComment extends BaseSqlEntity<Comment> {
     const author = new Author({
       id: this.author.id,
       nick: new Nick(this.author.nick),
-      profileImage: new ProfileImage(this.author.profileImage),
+      profileImage: this.author.profileImage ? new ProfileImage(this.author.profileImage) : null,
     });
 
     const messages = this.history.getItems();

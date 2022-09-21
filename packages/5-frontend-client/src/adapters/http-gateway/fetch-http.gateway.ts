@@ -84,8 +84,12 @@ export class FetchHttpGateway implements HttpGateway {
     };
 
     if (body) {
-      requestHeaders.set('Content-Type', 'application/json');
-      init.body = JSON.stringify(body);
+      if (body instanceof FormData) {
+        init.body = body;
+      } else {
+        requestHeaders.set('Content-Type', 'application/json');
+        init.body = JSON.stringify(body);
+      }
     }
 
     const url = this.baseUrl + path + this.getQueryString(query);

@@ -1,5 +1,10 @@
-import { LoggerService, AuthorizationError } from 'backend-application';
-import { Application, Router, Response as ExpressResponse } from 'express';
+import { AuthorizationError, LoggerService } from 'backend-application';
+import {
+  Application,
+  RequestHandler as ExpressRequestHandler,
+  Response as ExpressResponse,
+  Router,
+} from 'express';
 
 import { Forbidden, HttpError } from './http-errors';
 import { Request } from './request';
@@ -8,6 +13,18 @@ import { Response } from './response';
 
 export type RequestHandler = (req: Request) => Response | Promise<Response>;
 type Method = 'get' | 'post';
+
+interface Endpoint<T> extends TypedPropertyDescriptor<T> {
+  middlewares?: ExpressRequestHandler[];
+}
+
+export const Middlewares = (...middlewares: ExpressRequestHandler[]): MethodDecorator => {
+  return <T>(_target: object, _propertyKey: string | symbol, descriptor: Endpoint<T>) => {
+    if (descriptor.value) {
+      Reflect.set(descriptor.value, 'middlewares', middlewares);
+    }
+  };
+};
 
 export abstract class Controller {
   private router = Router();
@@ -31,12 +48,14 @@ export abstract class Controller {
 
       this.logger.log(`registering endpoint ${[verb, this.prefix + path].join(' ').replace(/\/$/, '')}`);
 
-      this.register(verb.toLowerCase() as Method, path, handler.bind(this));
+      const middlewares: ExpressRequestHandler[] = Reflect.get(handler, 'middlewares') ?? [];
+
+      this.register(verb.toLowerCase() as Method, path, middlewares, handler.bind(this));
     }
   }
 
-  register(method: Method, path: string, handler: RequestHandler) {
-    this.router[method](path, async (req, res) => {
+  register(method: Method, path: string, middlewares: ExpressRequestHandler[], handler: RequestHandler) {
+    const expressHandler: ExpressRequestHandler = async (req, res) => {
       const handleResponse = this.createResponseHandler(res);
       const handleError = this.createdErrorHandler(res);
 
@@ -45,7 +64,9 @@ export abstract class Controller {
       } catch (error) {
         handleError(error);
       }
-    });
+    };
+
+    this.router[method](path, ...middlewares.concat(expressHandler));
   }
 
   private createResponseHandler(res: ExpressResponse) {
@@ -57,7 +78,11 @@ export abstract class Controller {
       }
 
       if (response.body !== undefined) {
-        res.json(response.body);
+        if (Buffer.isBuffer(response.body)) {
+          res.send(response.body);
+        } else {
+          res.json(response.body);
+        }
       } else {
         res.end();
       }
@@ -80,7 +105,7 @@ export abstract class Controller {
         );
       }
 
-      this.logger.error('error handling request', error);
+      this.logger.error(error);
       res.status(500);
 
       if (error instanceof Error) {

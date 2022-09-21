@@ -1,23 +1,26 @@
+import { UnexpectedError } from 'shared';
+
 import { AggregateRoot } from '../ddd/aggregate-root';
-import { type EntityProps } from '../ddd/entity';
+import { EntityProps } from '../ddd/entity';
 import { UserCreatedEvent } from '../events/user-created.event';
-import type { CryptoService } from '../interfaces/crypto.interface';
+import { CryptoService } from '../interfaces/crypto.interface';
 import { DateService } from '../interfaces/date.interface';
 import { GeneratorService } from '../interfaces/generator-service.interface';
+import { ProfileImageStoreService } from '../interfaces/profile-image-store-service.interface';
 
 import { DomainError } from './domain-error';
 import { Nick } from './nick.value-object';
-import { ProfileImage } from './profile-image.value-object';
+import { ProfileImage, ProfileImageData } from './profile-image.value-object';
 import { Timestamp } from './timestamp.value-object';
 
 export type UserProps = EntityProps<{
   email: string;
   hashedPassword: string;
   nick: Nick;
-  profileImage: ProfileImage;
+  profileImage: ProfileImage | null;
   signupDate: Timestamp;
   lastLoginDate: Timestamp | null;
-  emailValidationToken: string | null
+  emailValidationToken: string | null;
 }>;
 
 type CreateUserProps = {
@@ -27,8 +30,14 @@ type CreateUserProps = {
 };
 
 export class User extends AggregateRoot<UserProps> {
-  constructor(props: UserProps, private readonly dateService: DateService, private readonly cryptoService: CryptoService) {
-    super(props)
+  constructor(
+    props: UserProps,
+    private readonly generatorService: GeneratorService,
+    private readonly dateService: DateService,
+    private readonly cryptoService: CryptoService,
+    private readonly profileImageStoreService: ProfileImageStoreService,
+  ) {
+    super(props);
   }
 
   static async create(
@@ -36,17 +45,24 @@ export class User extends AggregateRoot<UserProps> {
     generatorService: GeneratorService,
     dateService: DateService,
     cryptoService: CryptoService,
+    profileImageStoreService: ProfileImageStoreService,
   ) {
-    const user = new User({
-      id: await generatorService.generateId(),
-      nick: new Nick(nick),
-      email,
-      hashedPassword: await cryptoService.hash(password),
-      profileImage: new ProfileImage(),
-      signupDate: new Timestamp(dateService.nowAsString()),
-      lastLoginDate: null,
-      emailValidationToken: await generatorService.generateToken(),
-    }, dateService, cryptoService);
+    const user = new User(
+      {
+        id: await generatorService.generateId(),
+        nick: new Nick(nick),
+        email,
+        hashedPassword: await cryptoService.hash(password),
+        profileImage: null,
+        signupDate: new Timestamp(dateService.nowAsString()),
+        lastLoginDate: null,
+        emailValidationToken: await generatorService.generateToken(),
+      },
+      generatorService,
+      dateService,
+      cryptoService,
+      profileImageStoreService,
+    );
 
     user.addEvent(new UserCreatedEvent(user.id));
 
@@ -89,7 +105,7 @@ export class User extends AggregateRoot<UserProps> {
     const matchPassword = await this.cryptoService.compare(password, this.props.hashedPassword);
 
     if (!matchPassword) {
-      throw new InvalidCredentials()
+      throw new InvalidCredentials();
     }
 
     this.props.lastLoginDate = new Timestamp(this.dateService.now());
@@ -106,13 +122,45 @@ export class User extends AggregateRoot<UserProps> {
 
     this.props.emailValidationToken = null;
   }
+
+  async getProfileImageData(): Promise<ProfileImageData | null> {
+    if (!this.profileImage) {
+      return null;
+    }
+
+    const data = await this.profileImageStoreService.readProfileImage(this.profileImage);
+
+    if (!data) {
+      throw new UnexpectedError('User: expected profile image data to exist', {
+        userId: this.id,
+        profileImage: this.profileImage,
+      });
+    }
+
+    return data;
+  }
+
+  async setProfileImage(data: ProfileImageData | null): Promise<void> {
+    if (data) {
+      const imageId = await this.generatorService.generateId();
+      const profileImage = new ProfileImage([imageId, data.type].join('.'));
+
+      await this.profileImageStoreService.writeProfileImage(this.id, profileImage, data);
+      this.props.profileImage = profileImage;
+    } else {
+      this.props.profileImage = null;
+    }
+  }
 }
 
 export const InvalidCredentials = DomainError.extend('invalid credentials');
 
 export enum EmailValidationFailedReason {
   alreadyValidated = 'EmailAlreadyValidated',
-  invalidToken = 'InvalidToken'
+  invalidToken = 'InvalidToken',
 }
 
-export const EmailValidationFailed = DomainError.extend('email validation failed', (reason: EmailValidationFailedReason) => ({ reason }))
+export const EmailValidationFailed = DomainError.extend(
+  'email validation failed',
+  (reason: EmailValidationFailedReason) => ({ reason }),
+);

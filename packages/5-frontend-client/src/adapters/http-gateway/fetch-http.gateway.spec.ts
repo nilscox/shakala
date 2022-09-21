@@ -113,6 +113,24 @@ describe('FetchHttpGateway', () => {
     });
   });
 
+  it('sends a body of type FormData', async () => {
+    const fetch = mockFetch();
+    const http = new FetchHttpGateway(baseUrl, fetch);
+
+    const body = new FormData();
+
+    await http.post('/', {
+      body,
+    });
+
+    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
+      method: 'POST',
+      headers: new Headers(),
+      body,
+      credentials: 'include',
+    });
+  });
+
   it('handles authorization errors', async () => {
     const headers = new Headers();
     const reason = AuthorizationErrorReason.emailValidationRequired;

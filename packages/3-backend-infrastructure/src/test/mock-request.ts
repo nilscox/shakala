@@ -1,10 +1,11 @@
-import { RequestSession, Request } from '../infrastructure';
+import { RequestSession, Request, RequestFile } from '../infrastructure';
 
 export class MockRequest implements Request {
   params = new Map<string, string>();
   query = new URLSearchParams();
   body: unknown;
   session = new MockRequestSession();
+  file?: RequestFile;
 
   withParam(key: string, value: string) {
     this.params.set(key, value);
@@ -28,6 +29,11 @@ export class MockRequest implements Request {
 
   withSession({ userId }: { userId: string }) {
     this.session.userId = userId;
+    return this;
+  }
+
+  withFile(file: RequestFile) {
+    this.file = file;
     return this;
   }
 }

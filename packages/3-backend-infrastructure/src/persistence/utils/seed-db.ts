@@ -1,27 +1,25 @@
 import {
+  CreateCommentCommand,
   CreateThreadCommand,
   ExecutionContext,
-  GetUserByEmailQuery,
+  GetUserByIdQuery,
+  SetReactionCommand,
   SignupCommand,
+  ValidateEmailAddressCommand,
 } from 'backend-application';
-import { User } from 'backend-domain';
+import { ReactionType, User } from 'backend-domain';
 
 import { Application } from '../../application';
 
-const text = `Bonjour,
+// cspell:disable
 
-Je me demande parfois à quel point les perceptions de différentes personnes... diffèrent.
+const thread = `Bonjour,
 
-Je veux dire, ce qui se passe dans notre tête ne peut pas être communiqué avec une exactitude parfaite. Rien que le fait de devoir employer des mots pour décrire nos expériences de *notre réalité* va nous faire perdre en précision. Et puis, la personne à qui on raconte notre vie va devoir se mettre à notre place du mieux qu'elle peut, mais est-ce que c'est toujours possible ?
+Dans [cette vidéo](https://www.youtube.com/watch?v=3MJJvXGuDag) sur la chaîne YouTube Science Étonnantes, David Louapre explique qu'il existe une longueur minimale dans l'espace, la longueur de Planck.
 
-Un exemple que j'aime bien prendre pour illustrer cette idée, c'est ce qu'il se passe lorsqu'on ouvre les yeux le matin. Moi, je mets du temps à "émerger", quelque minutes pour être pleinement conscient (pour être avoir fini de me réveiller). Ma copine en revanche, est entièrement consciente en quelques secondes à peine.
+Est-ce qu'on pourrait en dire de même pour le temps (est-ce qu'il existe une "durée minimale") ?`;
 
-Et ça peut poser des quiproquos : elle me dit "mais si, je t'en ai parlé ce matin après qu'on se soit réveillé !", et moi j'ai aucun souvenir de ce qu'on s'est dit à ce moment là...
-
-D'où ma réflexion : si on n'avait pas discuté de cette différence d'expérience du réveil, il serait naturel de penser que c'est pareil pour tout le monde, que c'est **comme on le vit sois-même**.
-
-Est-ce que vous avez déjà pensé à ce genre de chose ? D'autres situations dans lesquelles on pense que tout le monde vit la même chose, alors que pas du tout ?
-`;
+const comment = `Il existe bien une durée minimale qu'on appelle [le temps de Planck](https://fr.wikipedia.org/wiki/Temps_de_Planck), et qui vaut environ 10^-43 seconde.`;
 
 const seed = async () => {
   const app = new Application();
@@ -30,15 +28,47 @@ const seed = async () => {
     await app.init();
 
     await app.run(async ({ commandBus, queryBus }) => {
-      // cspell:word p4ssword
-      await commandBus.execute(
-        new SignupCommand('user', 'user@email.tld', 'p4ssword'),
-        ExecutionContext.unauthenticated,
+      const createUser = async (nick: string) => {
+        const userId = await commandBus.execute<string>(
+          new SignupCommand(nick, nick.toLowerCase() + '@email.tld', 'p4ssword'),
+          ExecutionContext.unauthenticated,
+        );
+
+        const user = await queryBus.execute<User>(new GetUserByIdQuery(userId));
+
+        await commandBus.execute(
+          new ValidateEmailAddressCommand(userId, user.emailValidationToken as string),
+          ExecutionContext.unauthenticated,
+        );
+
+        // re-query to return the user without email validation token
+        return queryBus.execute<User>(new GetUserByIdQuery(userId));
+      };
+
+      const joe = await createUser('Joe');
+      const jack = await createUser('Jack');
+      const william = await createUser('William');
+      const avrell = await createUser('Avrell');
+
+      await createUser('nilscox');
+      await createUser('bopzor');
+
+      const threadId = await commandBus.execute<string>(
+        new CreateThreadCommand('description', thread, []),
+        new ExecutionContext(jack),
       );
 
-      const user = await queryBus.execute<User>(new GetUserByEmailQuery('user@email.tld'));
+      const commentId = await commandBus.execute<string>(
+        new CreateCommentCommand(threadId, null, comment),
+        new ExecutionContext(william),
+      );
 
-      await commandBus.execute(new CreateThreadCommand('description', text, []), new ExecutionContext(user));
+      for (const user of [joe, jack, avrell]) {
+        await commandBus.execute<string>(
+          new SetReactionCommand(commentId, ReactionType.upvote),
+          new ExecutionContext(user),
+        );
+      }
     });
   } finally {
     await app.close();

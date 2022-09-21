@@ -10,6 +10,7 @@ import { ReactRouterGateway } from './adapters/router-gateway/react-router-gatew
 import { LocalStorageGateway } from './adapters/storage-gateway/local-storage-gateway';
 import { ApiThreadGateway } from './adapters/thread-gateway/api-thread-gateway';
 import { RealTimerGateway } from './adapters/timer-gateway/timer-gateway';
+import { ApiUserGateway } from './adapters/user-gateway/api-user-gateway';
 import { useSnackbar } from './components/elements/snackbar';
 import { useConfig } from './hooks/use-config';
 import { Routes } from './routes';
@@ -50,9 +51,10 @@ const useDependencies = () => {
       routerGateway,
       snackbarGateway,
       timerGateway: new RealTimerGateway(),
+      storageGateway: new LocalStorageGateway(),
       authenticationGateway: new ApiAuthenticationGateway(http.current),
       threadGateway: new ApiThreadGateway(http.current),
-      storageGateway: new LocalStorageGateway(),
+      userGateway: new ApiUserGateway(http.current),
     }),
     [routerGateway, snackbarGateway],
   );

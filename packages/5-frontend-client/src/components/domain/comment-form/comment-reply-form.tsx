@@ -1,13 +1,14 @@
 import { clsx } from 'clsx';
 import {
-  selectReplyFormText,
-  selectIsReplying,
+  clearReplyFormText,
+  createReply,
   selectCanSubmitReply,
+  selectIsReplying,
   selectIsSubmittingReply,
+  selectReplyFormText,
+  selectUser,
   setIsReplying,
   setReplyFormText,
-  createReply,
-  clearReplyFormText,
 } from 'frontend-domain';
 
 import { Avatar } from '~/components/elements/avatar/avatar';
@@ -49,9 +50,18 @@ type FakeFormProps = {
   onFocus: () => void;
 };
 
-const FakeForm = ({ className, onFocus }: FakeFormProps) => (
-  <form className={clsx('row items-center gap-1 p-2', className)}>
-    <Avatar />
-    <input readOnly className="w-full rounded border py-0.5 px-1" placeholder="Répondre" onFocus={onFocus} />
-  </form>
-);
+const FakeForm = ({ className, onFocus }: FakeFormProps) => {
+  const user = useSelector(selectUser);
+
+  return (
+    <form className={clsx('row items-center gap-1 p-2', className)}>
+      <Avatar image={user?.profileImage} />
+      <input
+        readOnly
+        className="w-full rounded border py-0.5 px-1"
+        placeholder="Répondre"
+        onFocus={onFocus}
+      />
+    </form>
+  );
+};

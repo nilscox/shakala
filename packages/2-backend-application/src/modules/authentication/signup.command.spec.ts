@@ -5,6 +5,7 @@ import {
   StubGeneratorService,
   UserCreatedEvent,
 } from 'backend-domain';
+import { StubProfileImageStoreService } from 'backend-domain/src/utils/stub-profile-image-store.service';
 
 import { ExecutionContext } from '../../utils/execution-context';
 import { StubEventBus } from '../../utils/stub-event-bus';
@@ -30,6 +31,7 @@ describe('SignupCommand', () => {
     generatorService,
     cryptoService,
     dateService,
+    new StubProfileImageStoreService(),
   );
 
   const create = factories();
@@ -59,7 +61,7 @@ describe('SignupCommand', () => {
     expect(createdUser).toBeDefined();
     expect(createdUser).toHaveProperty('email', email);
     expect(createdUser).toHaveProperty('nick', create.nick(nick));
-    expect(createdUser).toHaveProperty('profileImage', create.profileImage());
+    expect(createdUser).toHaveProperty('profileImage', null);
     expect(createdUser).toHaveProperty('signupDate', now);
     expect(createdUser).toHaveProperty('lastLoginDate', null);
     expect(createdUser).toHaveProperty('emailValidationToken', token);

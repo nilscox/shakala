@@ -9,6 +9,7 @@ import { DraftCommentKind, StorageGateway } from '../interfaces/storage.gateway'
 import { TimerGateway } from '../interfaces/timer.gateway';
 import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
+import { UserGateway } from '../user/user.gateway';
 
 import { mockFn } from './mock-fn';
 
@@ -104,24 +105,6 @@ class FakeTimerGateway implements TimerGateway {
   }
 }
 
-class MockAuthenticationGateway implements AuthenticationGateway {
-  fetchUser = mockFn<AuthenticationGateway['fetchUser']>();
-  login = mockFn<AuthenticationGateway['login']>();
-  signup = mockFn<AuthenticationGateway['signup']>();
-  logout = mockFn<AuthenticationGateway['logout']>();
-}
-
-class MockThreadGateway implements ThreadGateway {
-  getById = mockFn<ThreadGateway['getById']>();
-  getLast = mockFn<ThreadGateway['getLast']>();
-  createThread = mockFn<ThreadGateway['createThread']>();
-  getComments = mockFn<ThreadGateway['getComments']>();
-  createComment = mockFn<ThreadGateway['createComment']>();
-  createReply = mockFn<ThreadGateway['createReply']>();
-  editComment = mockFn<ThreadGateway['editComment']>();
-  setReaction = mockFn<ThreadGateway['setReaction']>();
-}
-
 class InMemoryStorageGateway implements StorageGateway {
   private drafts = new Map<string, string>();
 
@@ -160,15 +143,38 @@ class InMemoryStorageGateway implements StorageGateway {
   }
 }
 
+class MockAuthenticationGateway implements AuthenticationGateway {
+  fetchUser = mockFn<AuthenticationGateway['fetchUser']>();
+  login = mockFn<AuthenticationGateway['login']>();
+  signup = mockFn<AuthenticationGateway['signup']>();
+  logout = mockFn<AuthenticationGateway['logout']>();
+}
+
+class MockThreadGateway implements ThreadGateway {
+  getById = mockFn<ThreadGateway['getById']>();
+  getLast = mockFn<ThreadGateway['getLast']>();
+  createThread = mockFn<ThreadGateway['createThread']>();
+  getComments = mockFn<ThreadGateway['getComments']>();
+  createComment = mockFn<ThreadGateway['createComment']>();
+  createReply = mockFn<ThreadGateway['createReply']>();
+  editComment = mockFn<ThreadGateway['editComment']>();
+  setReaction = mockFn<ThreadGateway['setReaction']>();
+}
+
+class MockUserGateway implements UserGateway {
+  changeProfileImage = mockFn<UserGateway['changeProfileImage']>();
+}
+
 export class TestStore implements Dependencies {
   readonly dateGateway = new StubDateGateway();
   readonly snackbarGateway = new MockSnackbarGateway();
   readonly loggerGateway = new MockLoggerGateway();
   readonly routerGateway = new StubRouterGateway();
   readonly timerGateway = new FakeTimerGateway();
+  readonly storageGateway = new InMemoryStorageGateway();
   readonly authenticationGateway = new MockAuthenticationGateway();
   readonly threadGateway = new MockThreadGateway();
-  readonly storageGateway = new InMemoryStorageGateway();
+  readonly userGateway = new MockUserGateway();
 
   private _logActions = false;
 

@@ -6,6 +6,10 @@ export class ExecutionContext {
   static get unauthenticated() {
     return new ExecutionContext(undefined);
   }
+
+  static as(user: User) {
+    return new ExecutionContext(user) as AuthenticatedExecutionContext;
+  }
 }
 
 export class AuthenticatedExecutionContext extends ExecutionContext {

@@ -5,7 +5,7 @@ import { ProfileImage } from './profile-image.value-object';
 
 export type AuthorProps = EntityProps<{
   nick: Nick;
-  profileImage: ProfileImage;
+  profileImage: ProfileImage | null;
 }>;
 
 export class Author extends Entity<AuthorProps> {

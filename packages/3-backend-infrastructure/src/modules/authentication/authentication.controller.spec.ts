@@ -26,6 +26,7 @@ import {
   ValidationService,
 } from '../../infrastructure';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { UserPresenter } from '../user/user.presenter';
 
 import { AuthenticationController } from './authentication.controller';
 
@@ -42,6 +43,7 @@ describe('AuthenticationController', () => {
     sessionService,
     queryBus,
     commandBus,
+    new UserPresenter(configService),
   );
 
   const create = factories();

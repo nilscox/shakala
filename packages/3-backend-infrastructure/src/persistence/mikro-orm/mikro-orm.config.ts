@@ -3,7 +3,7 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import dotenv from 'dotenv';
 
-import { SqlComment, SqlReaction, SqlSession, SqlThread, SqlUser } from '../entities';
+import { SqlComment, SqlProfileImage, SqlReaction, SqlSession, SqlThread, SqlUser } from '../entities';
 
 dotenv.config();
 
@@ -23,7 +23,7 @@ const config: Options<PostgreSqlDriver> = {
   dbName,
   debug: false,
   metadataProvider: TsMorphMetadataProvider,
-  entities: [SqlComment, SqlReaction, SqlSession, SqlThread, SqlUser],
+  entities: [SqlComment, SqlProfileImage, SqlReaction, SqlSession, SqlThread, SqlUser],
   cache: { options: { cacheDir: 'node_modules/.cache/mikro-orm' } },
   migrations: {
     path: 'src/persistence/migrations',

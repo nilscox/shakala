@@ -10,10 +10,14 @@ import { pick } from 'shared';
 
 import { Application } from './application';
 import { ExpressSessionService, ValidationService } from './infrastructure';
+import { AccountController } from './modules/account/account.controller';
 import { AuthenticationController } from './modules/authentication/authentication.controller';
 import { CommentController } from './modules/comment/comment.controller';
 import { HealthcheckController } from './modules/healthcheck/healthcheck.controller';
 import { ThreadController } from './modules/thread/thread.controller';
+import { ThreadPresenter } from './modules/thread/thread.presenter';
+import { UserController } from './modules/user/user.controller';
+import { UserPresenter } from './modules/user/user.presenter';
 
 const PgSession = connectPgSimple(session);
 
@@ -113,10 +117,15 @@ export class Server extends Application {
     const validationService = new ValidationService();
     const sessionService = new ExpressSessionService(queryBus);
 
+    const userPresenter = new UserPresenter(config);
+    const threadPresenter = new ThreadPresenter(userPresenter);
+
     const controllers = [
       new HealthcheckController(logger, em),
-      new AuthenticationController(logger, config, validationService, sessionService, queryBus, commandBus),
-      new ThreadController(logger, queryBus, commandBus, sessionService, validationService),
+      new AuthenticationController(logger, config, validationService, sessionService, queryBus, commandBus, userPresenter),
+      new AccountController(logger, commandBus, queryBus, sessionService, userPresenter),
+      new UserController(logger, queryBus, userPresenter),
+      new ThreadController(logger, queryBus, commandBus, sessionService, validationService, threadPresenter),
       new CommentController(logger, queryBus, commandBus, sessionService, validationService),
     ];
 

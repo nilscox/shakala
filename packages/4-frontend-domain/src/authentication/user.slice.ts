@@ -16,7 +16,12 @@ export const userSlice = createSlice({
     unsetUser() {
       return null;
     },
+    updateUser(user, { payload }: PayloadAction<Partial<AuthUser>>) {
+      if (user) {
+        Object.assign(user, payload);
+      }
+    },
   },
 });
 
-export const { setUser, unsetUser } = userSlice.actions;
+export const { setUser, unsetUser, updateUser } = userSlice.actions;

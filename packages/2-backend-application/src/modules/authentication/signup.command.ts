@@ -1,4 +1,12 @@
-import { CryptoService, DateService, DomainError, GeneratorService, Nick, User } from 'backend-domain';
+import {
+  CryptoService,
+  DateService,
+  DomainError,
+  GeneratorService,
+  Nick,
+  ProfileImageStoreService,
+  User,
+} from 'backend-domain';
 
 import { Authorize, IsNotAuthenticated } from '../../authorization';
 import { Command, CommandHandler } from '../../cqs/command-handler';
@@ -25,6 +33,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
     private readonly generatorService: GeneratorService,
     private readonly cryptoService: CryptoService,
     private readonly dateService: DateService,
+    private readonly profileImageStoreService: ProfileImageStoreService,
   ) {}
 
   async handle(command: SignupCommand, ctx: ExecutionContext): Promise<string> {
@@ -42,6 +51,7 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
       this.generatorService,
       this.dateService,
       this.cryptoService,
+      this.profileImageStoreService,
     );
 
     const publisher = new EventPublisher(ctx, user);

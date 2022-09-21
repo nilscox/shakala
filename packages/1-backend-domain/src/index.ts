@@ -21,6 +21,7 @@ export * from './events/user-created.event';
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
 export * from './interfaces/generator-service.interface';
+export * from './interfaces/profile-image-store-service.interface';
 
 export * from './domain-dependencies';
 

@@ -36,6 +36,7 @@ export class ThreadController extends Controller {
     private readonly commandBus: CommandBus,
     private readonly sessionService: SessionService,
     private readonly validationService: ValidationService,
+    private readonly threadPresenter: ThreadPresenter,
   ) {
     super(logger, '/thread');
   }
@@ -52,7 +53,7 @@ export class ThreadController extends Controller {
     const query = await this.validationService.query(req, getLastThreadsQuerySchema);
     const lastThreads = await this.queryBus.execute<Thread[]>(new GetLastThreadsQuery(query.count));
 
-    return Response.ok(lastThreads.map(ThreadPresenter.transformThreadSummary));
+    return Response.ok(lastThreads.map(this.threadPresenter.transformThreadSummary));
   }
 
   async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
@@ -68,7 +69,7 @@ export class ThreadController extends Controller {
       throw new NotFound('thread not found', { threadId });
     }
 
-    return Response.ok(ThreadPresenter.transformThread(result));
+    return Response.ok(this.threadPresenter.transformThread(result));
   }
 
   async createThread(req: Request): Promise<Response<string>> {

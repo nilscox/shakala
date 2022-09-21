@@ -18,6 +18,7 @@ import { StorageGateway } from './interfaces/storage.gateway';
 import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
 import { threadsReducer } from './thread/thread.slice';
+import { UserGateway } from './user/user.gateway';
 import { usersReducer } from './user/user.slice';
 
 export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
@@ -42,9 +43,10 @@ export type Dependencies = {
   loggerGateway: LoggerGateway;
   routerGateway: RouterGateway;
   timerGateway: TimerGateway;
+  storageGateway: StorageGateway;
   authenticationGateway: AuthenticationGateway;
   threadGateway: ThreadGateway;
-  storageGateway: StorageGateway;
+  userGateway: UserGateway;
 };
 
 export type Store = ReturnType<typeof createStore>;

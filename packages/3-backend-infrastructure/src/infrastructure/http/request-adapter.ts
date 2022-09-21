@@ -2,7 +2,7 @@ import { promisify } from 'util';
 
 import { Request as ExpressRequest } from 'express';
 
-import { Request, RequestSession } from './request';
+import { Request, RequestFile, RequestSession } from './request';
 
 declare module 'express-session' {
   interface SessionData {
@@ -15,6 +15,7 @@ export class RequestAdapter implements Request {
   query = new URLSearchParams();
   body: unknown;
   session: RequestSession;
+  file?: RequestFile;
 
   constructor(req: ExpressRequest) {
     for (const [key, value] of Object.entries(req.params)) {
@@ -27,6 +28,15 @@ export class RequestAdapter implements Request {
 
     this.body = req.body;
     this.session = new RequestSessionAdapter(req.session);
+
+    if (req.file) {
+      this.file = {
+        // cspell:word originalname
+        name: req.file.originalname,
+        data: req.file.buffer,
+        type: req.file.mimetype,
+      };
+    }
   }
 }
 

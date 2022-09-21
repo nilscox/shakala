@@ -1,26 +1,30 @@
 import { GetThreadQueryResult } from 'backend-application';
-import { Comment, Author, ReactionType, Thread, ReactionsCount } from 'backend-domain';
+import { Author, Comment, ReactionsCount, ReactionType, Thread } from 'backend-domain';
 import { CommentDto, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto, UserDto } from 'shared';
 
+import { UserPresenter } from '../user/user.presenter';
+
 export class ThreadPresenter {
-  static transformThreadSummary(thread: Thread): ThreadDto {
+  constructor(private readonly userPresenter: UserPresenter) {}
+
+  transformThreadSummary = (thread: Thread): ThreadDto => {
     return {
       id: thread.id,
       date: thread.created.toString(),
-      author: ThreadPresenter.transformAuthor(thread.author),
+      author: this.transformAuthor(thread.author),
       description: thread.description,
       keywords: thread.keywords,
       text: thread.text.toString(),
     };
-  }
+  };
 
-  static transformThread(result: GetThreadQueryResult): ThreadWithCommentsDto {
+  transformThread = (result: GetThreadQueryResult): ThreadWithCommentsDto => {
     const { thread, comments } = result;
 
     return {
-      ...ThreadPresenter.transformThreadSummary(thread),
+      ...this.transformThreadSummary(thread),
       comments: comments.map((comment) =>
-        ThreadPresenter.transformComment(
+        this.transformComment(
           comment,
           result.replies.get(comment.id),
           result.reactionsCounts,
@@ -28,27 +32,23 @@ export class ThreadPresenter {
         ),
       ),
     };
-  }
+  };
 
-  private static transformAuthor(author: Author): UserDto {
-    return {
-      id: author.id,
-      nick: author.nick.toString(),
-      profileImage: author.profileImage.toString() ?? undefined,
-    };
-  }
+  private transformAuthor = (author: Author): UserDto => {
+    return this.userPresenter.transformUser(author);
+  };
 
-  static transformComment(
+  transformComment = (
     comment: Comment,
     replies: Comment[] | undefined,
     reactionsCounts: Map<string, ReactionsCount>,
     userReactions: Map<string, ReactionType | undefined> | undefined,
-  ): CommentDto {
+  ): CommentDto => {
     const reactionCounts = reactionsCounts.get(comment.id) as ReactionsCount;
 
     const dto: CommentDto = {
       id: comment.id,
-      author: ThreadPresenter.transformAuthor(comment.author),
+      author: this.transformAuthor(comment.author),
       date: comment.creationDate.toString(),
       text: comment.message.toString(),
       history: comment.history.map((message) => ({
@@ -61,19 +61,19 @@ export class ThreadPresenter {
     };
 
     if (userReactions) {
-      dto.userReaction = ThreadPresenter.transformReactionType(userReactions.get(comment.id));
+      dto.userReaction = this.transformReactionType(userReactions.get(comment.id));
     }
 
     if (replies) {
       dto.replies = replies.map((reply) =>
-        ThreadPresenter.transformComment(reply, undefined, reactionsCounts, userReactions),
+        this.transformComment(reply, undefined, reactionsCounts, userReactions),
       );
     }
 
     return dto;
-  }
+  };
 
-  static transformReactionType(type?: ReactionType): ReactionTypeDto | undefined {
+  transformReactionType = (type?: ReactionType): ReactionTypeDto | undefined => {
     if (!type) {
       return;
     }
@@ -82,5 +82,5 @@ export class ThreadPresenter {
       [ReactionType.upvote]: ReactionTypeDto.upvote,
       [ReactionType.downvote]: ReactionTypeDto.downvote,
     }[type];
-  }
+  };
 }

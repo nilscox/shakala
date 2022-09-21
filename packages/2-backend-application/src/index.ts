@@ -15,9 +15,9 @@ export * from './interfaces/logger.service';
 export * from './interfaces/repositories';
 export * from './interfaces/repository';
 
-export * from './modules/thread/thread.in-memory-repository';
 export * from './modules/thread/comment.in-memory-repository';
 export * from './modules/thread/reaction.in-memory-repository';
+export * from './modules/thread/thread.in-memory-repository';
 export * from './modules/user/user.in-memory-repository';
 
 export * from './utils/execution-context';
@@ -38,4 +38,6 @@ export * from './modules/thread/edit-comment.command';
 
 export * from './modules/user/get-user-by-email.query';
 export * from './modules/user/get-user-by-id.query';
+export * from './modules/user/get-profile-image.query';
 export * from './modules/user/validate-email-address.command';
+export * from './modules/user/update-user.command';

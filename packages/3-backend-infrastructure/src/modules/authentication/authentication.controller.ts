@@ -26,8 +26,7 @@ import {
   ValidationService,
 } from '../../infrastructure';
 import { tryCatch } from '../../utils';
-
-import { userToDto } from './authentication.dtos';
+import { UserPresenter } from '../user/user.presenter';
 
 export class AuthenticationController extends Controller {
   constructor(
@@ -37,6 +36,7 @@ export class AuthenticationController extends Controller {
     private readonly sessionService: SessionService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
+    private readonly userPresenter: UserPresenter,
   ) {
     super(logger, '/auth');
   }
@@ -68,7 +68,7 @@ export class AuthenticationController extends Controller {
 
     this.sessionService.setUser(req, user);
 
-    return Response.ok(userToDto(user));
+    return Response.ok(this.userPresenter.transformAuthenticatedUser(user));
   }
 
   async signup(req: Request): Promise<Response<AuthUserDto>> {
@@ -94,7 +94,7 @@ export class AuthenticationController extends Controller {
 
     this.sessionService.setUser(req, user);
 
-    return Response.created(userToDto(user));
+    return Response.created(this.userPresenter.transformAuthenticatedUser(user));
   }
 
   async validateEmailAddress(request: Request): Promise<Response> {
@@ -146,6 +146,6 @@ export class AuthenticationController extends Controller {
       return Response.noContent();
     }
 
-    return Response.ok(userToDto(user));
+    return Response.ok(this.userPresenter.transformAuthenticatedUser(user));
   }
 }

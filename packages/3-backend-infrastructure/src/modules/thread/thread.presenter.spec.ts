@@ -2,6 +2,9 @@ import { GetThreadQueryResult } from 'backend-application';
 import { factories, ReactionType } from 'backend-domain';
 import { CommentDto, ThreadWithCommentsDto } from 'shared';
 
+import { StubConfigService } from '../../infrastructure';
+import { UserPresenter } from '../user/user.presenter';
+
 import { ThreadPresenter } from './thread.presenter';
 
 describe('ThreadPresenter', () => {
@@ -82,8 +85,10 @@ describe('ThreadPresenter', () => {
     date: thread.created.toString(),
   };
 
+  const presenter = new ThreadPresenter(new UserPresenter(new StubConfigService()));
+
   it('transforms a thread', () => {
-    expect(ThreadPresenter.transformThread(getThreadQueryResult)).toEqual(threadDto);
+    expect(presenter.transformThread(getThreadQueryResult)).toEqual(threadDto);
   });
 
   it("transforms the user's reactions", () => {
@@ -93,7 +98,7 @@ describe('ThreadPresenter', () => {
     ]);
 
     expect(
-      ThreadPresenter.transformComment(comment, [reply], getThreadQueryResult.reactionsCounts, userReactions),
+      presenter.transformComment(comment, [reply], getThreadQueryResult.reactionsCounts, userReactions),
     ).toEqual({
       ...commentDto,
       userReaction: ReactionType.downvote,

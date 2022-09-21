@@ -1,4 +1,4 @@
-import { CommentService, CryptoService, DateService, GeneratorService } from 'backend-domain';
+import { CommentService, DomainDependencies } from 'backend-domain';
 import { ClassType } from 'shared';
 
 import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
@@ -25,19 +25,18 @@ import { GetCommentQuery, GetCommentQueryHandler } from './modules/thread/get-co
 import { GetLastThreadsHandler, GetLastThreadsQuery } from './modules/thread/get-last-threads.query';
 import { GetThreadHandler, GetThreadQuery } from './modules/thread/get-thread.query';
 import { SetReactionCommand, SetReactionCommandHandler } from './modules/thread/set-reaction.command';
+import { GetProfileImageHandler, GetProfileImageQuery } from './modules/user/get-profile-image.query';
 import { GetUserByEmailHandler, GetUserByEmailQuery } from './modules/user/get-user-by-email.query';
 import { GetUserByIdHandler, GetUserByIdQuery } from './modules/user/get-user-by-id.query';
+import { UpdateUserCommand, UpdateUserHandler } from './modules/user/update-user.command';
 import {
   ValidateEmailAddressCommand,
   ValidateEmailAddressHandler,
 } from './modules/user/validate-email-address.command';
 
-export type Services = {
+export type Services = DomainDependencies & {
   configService: ConfigService;
   loggerService: LoggerService;
-  generatorService: GeneratorService;
-  dateService: DateService;
-  cryptoService: CryptoService;
   filesystemService: FilesystemService;
   emailCompilerService: EmailCompilerService;
   emailSenderService: EmailSenderService;
@@ -58,18 +57,24 @@ export const registerHandlers = (
   repositories: Repositories,
   eventBus: IEventBus,
 ) => {
-  const { generatorService, cryptoService, dateService, filesystemService, emailCompilerService, emailSenderService } = services;
+  const { generatorService, cryptoService, dateService, filesystemService, emailCompilerService, emailSenderService, profileImageStoreService } = services;
   const { userRepository, threadRepository, commentRepository, reactionRepository } = repositories;
 
   // email
   registerCommand(SendEmailCommand, new SendEmailHandler(filesystemService, emailCompilerService, emailSenderService));
 
   // authentication
+  registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
+  registerCommand(SignupCommand, new SignupCommandHandler(eventBus, userRepository, generatorService, cryptoService, dateService, profileImageStoreService));
+
+  // account
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
   registerQuery(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
-  registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
-  registerCommand(SignupCommand, new SignupCommandHandler(eventBus, userRepository, generatorService, cryptoService, dateService));
   registerCommand(ValidateEmailAddressCommand, new ValidateEmailAddressHandler(userRepository));
+  registerCommand(UpdateUserCommand, new UpdateUserHandler(userRepository));
+
+  // user
+  registerQuery(GetProfileImageQuery, new GetProfileImageHandler(profileImageStoreService));
 
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));

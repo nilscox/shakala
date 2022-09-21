@@ -29,6 +29,7 @@ import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e
 import { MjmlEmailCompilerService } from './infrastructure/services/email/mjml-email-compiler.service';
 import { NodeMailerEmailSenderService } from './infrastructure/services/email/node-mailer-email-sender.service';
 import { RealFilesystemService } from './infrastructure/services/filesystem/real-filesystem.service';
+import { SqlProfileImageStoreService } from './infrastructure/services/profile-image-store/sql-profile-image-store.service';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
 import {
   SqlCommentRepository,
@@ -52,6 +53,7 @@ const instantiateServices = (): Services => {
     filesystemService,
     emailCompilerService: new MjmlEmailCompilerService(filesystemService),
     emailSenderService: new NodeMailerEmailSenderService(configService),
+    profileImageStoreService: new SqlProfileImageStoreService(),
   };
 };
 
@@ -108,6 +110,9 @@ export class Application {
         reactionRepository: new SqlReactionRepository(em, this.services),
         commentRepository: new SqlCommentRepository(em, this.services),
       };
+
+      // todo: instantiate repositories before services
+      (this.services.profileImageStoreService as SqlProfileImageStoreService).entityManager = em;
     } else {
       this.logger.log('instantiating in-memory repositories');
 
