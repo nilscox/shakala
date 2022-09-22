@@ -14,5 +14,9 @@ export class HasWriteAccess implements Authorizer {
     if (!user.isEmailValidated) {
       throw new AuthorizationError(AuthorizationErrorReason.emailValidationRequired);
     }
+
+    if (!user.hasWriteAccess) {
+      throw new AuthorizationError(AuthorizationErrorReason.isReadOnly);
+    }
   }
 }

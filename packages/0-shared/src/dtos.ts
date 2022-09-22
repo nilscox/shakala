@@ -62,6 +62,7 @@ export enum AuthorizationErrorReason {
   unauthenticated = 'unauthenticated',
   authenticated = 'authenticated',
   emailValidationRequired = 'emailValidationRequired',
+  isReadOnly = 'isReadOnly',
 }
 
 export type HttpErrorBody = {

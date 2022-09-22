@@ -156,6 +156,7 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
           signupDate: this.timestamp(),
           lastLoginDate: null,
           emailValidationToken: null,
+          hasWriteAccess: true,
           ...props,
         },
         deps.generatorService,

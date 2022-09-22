@@ -21,6 +21,7 @@ export type UserProps = EntityProps<{
   signupDate: Timestamp;
   lastLoginDate: Timestamp | null;
   emailValidationToken: string | null;
+  hasWriteAccess: boolean;
 }>;
 
 type CreateUserProps = {
@@ -57,6 +58,7 @@ export class User extends AggregateRoot<UserProps> {
         signupDate: new Timestamp(dateService.nowAsString()),
         lastLoginDate: null,
         emailValidationToken: await generatorService.generateToken(),
+        hasWriteAccess: true,
       },
       generatorService,
       dateService,
@@ -99,6 +101,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get isEmailValidated() {
     return this.emailValidationToken === null;
+  }
+
+  get hasWriteAccess() {
+    return this.props.hasWriteAccess;
   }
 
   async authenticate(password: string): Promise<void> {
