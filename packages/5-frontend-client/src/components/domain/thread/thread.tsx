@@ -21,9 +21,9 @@ import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
 import { RootCommentForm } from '../comment-form';
+import { CommentHistoryModal } from '../comment-history-modal';
 import { Comment } from '../comment/comment';
-import { CommentHistoryModal } from '../comment/comment-history-modal';
-import { ShareCommentModal } from '../share-comment/share-comment-modal';
+import { ShareCommentModal } from '../share-comment';
 
 import { ThreadFilters } from './thread-filters';
 
