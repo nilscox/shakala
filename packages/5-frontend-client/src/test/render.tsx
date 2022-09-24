@@ -7,6 +7,8 @@ import { Router } from 'react-router-dom';
 
 import { ReduxProvider } from '~/utils/redux-provider';
 
+export { screen } from '@testing-library/dom';
+
 export class TestRenderer {
   private history: History | undefined;
   private store: TestStore | undefined;

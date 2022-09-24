@@ -20,6 +20,7 @@ import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';
 import { StorybookThreadGateway } from '~/adapters/thread-gateway/storybook-thread.gateway';
 import { RealTimerGateway } from '~/adapters/timer-gateway/timer-gateway';
+import { StorybookUserGateway } from '~/adapters/user-gateway/storybook-user.gateway';
 import { useSnackbar, SnackbarProvider } from '~/components/elements/snackbar';
 
 export const maxWidthDecorator = () => {
@@ -99,6 +100,7 @@ interface StorybookDependencies extends Dependencies {
   authenticationGateway: StorybookAuthenticationGateway;
   threadGateway: StorybookThreadGateway;
   storageGateway: StorybookStorageGateway;
+  userGateway: StorybookUserGateway;
 }
 
 export type SetupRedux = (dispatch: Dispatch, deps: StorybookDependencies) => void;
@@ -117,6 +119,7 @@ export const reduxDecorator = () => {
         authenticationGateway: new StorybookAuthenticationGateway(),
         threadGateway: new StorybookThreadGateway(),
         storageGateway: new StorybookStorageGateway(),
+        userGateway: new StorybookUserGateway(),
       }),
       [snackbar],
     );

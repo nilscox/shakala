@@ -3,10 +3,22 @@ import {
   EditCommentCommand,
   ExecutionContext,
   LoggerService,
+  ReportCommentCommand,
   SetReactionCommand,
 } from 'backend-application';
-import { CannotSetReactionOnOwnCommentError, ReactionType, UserMustBeAuthorError } from 'backend-domain';
-import { createCommentBodySchema, editCommentBodySchema, setReactionBodySchema } from 'shared';
+import {
+  CannotReportOwnCommentError,
+  CannotSetReactionOnOwnCommentError,
+  CommentAlreadyReportedError,
+  ReactionType,
+  UserMustBeAuthorError,
+} from 'backend-domain';
+import {
+  createCommentBodySchema,
+  editCommentBodySchema,
+  reportCommentBodySchema,
+  setReactionBodySchema,
+} from 'shared';
 
 import {
   BadRequest,
@@ -38,6 +50,7 @@ export class CommentController extends Controller {
       'POST /': this.createComment,
       'PUT  /:id': this.editComment,
       'PUT  /:id/reaction': this.setReaction,
+      'POST /:id/report': this.reportComment,
     };
   }
 
@@ -82,6 +95,21 @@ export class CommentController extends Controller {
         CannotSetReactionOnOwnCommentError,
         (error) => new BadRequest('CannotSetReactionOnOwnComment', error.message),
       )
+      .run();
+
+    return Response.noContent();
+  }
+
+  async reportComment(req: Request): Promise<Response<void>> {
+    const commentId = req.params.get('id') as string;
+    const user = await this.sessionService.getUser(req);
+    const body = await this.validationService.body(req, reportCommentBodySchema);
+
+    await tryCatch(() =>
+      this.commandBus.execute(new ReportCommentCommand(commentId, body.reason), new ExecutionContext(user)),
+    )
+      .catch(CannotReportOwnCommentError, (error) => new BadRequest('CannotReportOwnComment', error.message))
+      .catch(CommentAlreadyReportedError, (error) => new BadRequest('CommentAlreadyReported', error.message))
       .run();
 
     return Response.noContent();

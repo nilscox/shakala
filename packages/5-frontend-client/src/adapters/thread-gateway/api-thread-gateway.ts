@@ -3,13 +3,14 @@ import {
   CommentDto,
   CreateCommentBodyDto,
   CreateThreadBodyDto,
+  EditCommentBodyDto,
   get,
   GetLastThreadsQueryDto,
   GetThreadQueryDto,
+  ReportCommentBodyDto,
   SetReactionBodyDto,
   ThreadDto,
   ThreadWithCommentsDto,
-  EditCommentBodyDto,
 } from 'shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
@@ -104,7 +105,7 @@ export class ApiThreadGateway implements ThreadGateway {
       body: { text },
     });
 
-    const code = get(response.body, 'message');
+    const code = get(response.body, 'code');
 
     if (response.status === 401 && code === 'UserMustBeAuthor') {
       throw new AuthorizationError(code);
@@ -123,5 +124,16 @@ export class ApiThreadGateway implements ThreadGateway {
     if (response.status !== 204) {
       throw new FetchError(response);
     }
+  }
+
+  async reportComment(commentId: string, reason?: string | undefined): Promise<void> {
+    await this.http.post<void, ReportCommentBodyDto>(`/comment/${commentId}/report`, {
+      body: { reason },
+      onError: ({ response }) => {
+        if (response.status === 400 && response.body.code === 'CommentAlreadyReported') {
+          throw new AuthorizationError('CommentAlreadyReported');
+        }
+      },
+    });
   }
 }

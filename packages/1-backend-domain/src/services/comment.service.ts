@@ -1,12 +1,8 @@
+import { CannotReportOwnCommentError, CommentReport } from '../entities/comment-report.entity';
 import { Comment } from '../entities/comment.entity';
-import { DomainError } from '../entities/domain-error';
-import { Reaction, ReactionType } from '../entities/reaction.entity';
+import { CannotSetReactionOnOwnCommentError, Reaction, ReactionType } from '../entities/reaction.entity';
 import { User } from '../entities/user.entity';
 import { GeneratorService } from '../interfaces/generator-service.interface';
-
-export const CannotSetReactionOnOwnCommentError = DomainError.extend(
-  'User cannot set a reaction on his own comment',
-);
 
 export const del = Symbol('delete');
 
@@ -42,5 +38,18 @@ export class CommentService {
     }
 
     return;
+  }
+
+  async report(comment: Comment, user: User, reason?: string): Promise<CommentReport> {
+    if (comment.author.equals(user)) {
+      throw new CannotReportOwnCommentError(comment.id);
+    }
+
+    return new CommentReport({
+      id: await this.generatorService.generateId(),
+      commentId: comment.id,
+      reportedBy: user,
+      reason: reason ?? null,
+    });
   }
 }

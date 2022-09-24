@@ -179,7 +179,7 @@ export const fontFamilies = () => (
 
 export const fontSizes = () => (
   <div className="flex flex-col gap-2">
-    <Text className="text-sm" name="sm" />
+    <Text className="text-xs" name="sm" />
     <Text name="base" />
     <Text className="text-lg" name="lg" />
     <Text className="text-xl" name="xl" />

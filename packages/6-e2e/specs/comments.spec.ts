@@ -80,4 +80,21 @@ test.describe('Comments', () => {
     await alice.reload();
     await expect(alice.findByText(/la terre est un ellipsoïde.$/)).toBeVisible();
   });
+
+  test('As a user, I can report a comment', async () => {
+    const comment = alice.closest(alice.findByText(/sur Twitter !$/), '.comment > *');
+
+    await alice.within(comment).findByTitle('Voir plus...').click();
+    await alice.within(comment).findLink('Signaler').click();
+
+    await alice
+      .findByPlaceholder('Précisez le motif du signalement si nécessaire')
+      .fill("Il dit n'importe quoi.");
+
+    await alice.findButton('Signaler').click();
+
+    await expect(
+      alice.findNotification('Votre signalement a bien été remonté. Merci pour votre contribution !'),
+    ).toBeVisible();
+  });
 });

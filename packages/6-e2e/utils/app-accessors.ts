@@ -29,11 +29,19 @@ export class AppAccessors {
     return this.locator(`[aria-label="${text}"]`);
   }
 
+  findByTitle(text: string) {
+    return this.locator(`[title="${text}"]`);
+  }
+
   findButton(text: string) {
     return this.locator('button', { hasText: text });
   }
 
   findLink(text: string) {
     return this.locator('a', { hasText: text });
+  }
+
+  findNotification(text: string | RegExp) {
+    return this.closest(this.findByText(text), '.notification');
   }
 }

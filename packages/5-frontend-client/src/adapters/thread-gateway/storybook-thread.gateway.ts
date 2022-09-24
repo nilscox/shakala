@@ -39,4 +39,8 @@ export class StorybookThreadGateway implements ThreadGateway {
   setReaction(commentId: string, reactionType: ReactionTypeDto | null): Promise<void> {
     return this.action('setReaction', [commentId, reactionType], undefined);
   }
+
+  reportComment(commentId: string, reason?: string | undefined): Promise<void> {
+    return this.action('reportComment', [commentId, reason], undefined);
+  }
 }

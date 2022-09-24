@@ -21,7 +21,8 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
-    "tailwindcss/no-arbitrary-value": "warn"
+    "tailwindcss/no-arbitrary-value": "warn",
+    "jsx-a11y/click-events-have-key-events": "off"
   },
   "overrides": [
     {

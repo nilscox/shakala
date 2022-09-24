@@ -16,6 +16,7 @@ export * from './interfaces/repositories';
 export * from './interfaces/repository';
 
 export * from './modules/thread/comment.in-memory-repository';
+export * from './modules/thread/comment-report.in-memory-repository';
 export * from './modules/thread/reaction.in-memory-repository';
 export * from './modules/thread/thread.in-memory-repository';
 export * from './modules/user/user.in-memory-repository';
@@ -34,6 +35,7 @@ export * from './modules/thread/get-comment.query';
 export * from './modules/thread/get-last-threads.query';
 export * from './modules/thread/get-thread.query';
 export * from './modules/thread/set-reaction.command';
+export * from './modules/thread/report-comment.command';
 export * from './modules/thread/edit-comment.command';
 
 export * from './modules/user/get-user-by-email.query';

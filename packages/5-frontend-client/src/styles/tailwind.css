@@ -29,7 +29,7 @@
   }
 
   h2 {
-    @apply pt-5 pb-2 text-xl font-bold text-muted;
+    @apply pt-5 pb-2 text-xl font-semibold text-muted;
   }
 
   svg {
@@ -80,7 +80,7 @@
   }
 
   .strong {
-    @apply text-DEFAULT/75;
+    @apply text-DEFAULT/75 font-bold;
   }
 
   .links-nocolor a {

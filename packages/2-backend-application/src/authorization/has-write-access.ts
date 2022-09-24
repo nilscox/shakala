@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, UnexpectedError } from 'shared';
 
 import { ExecutionContext } from '../utils/execution-context';
 
@@ -8,7 +8,7 @@ import { Authorizer } from './authorizer';
 export class HasWriteAccess implements Authorizer {
   async authorize({ user }: ExecutionContext): Promise<void> {
     if (user === undefined) {
-      throw new Error('HasWriteAccess: user is not defined');
+      throw new UnexpectedError('HasWriteAccess: user is not defined');
     }
 
     if (!user.isEmailValidated) {

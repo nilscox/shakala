@@ -96,7 +96,8 @@ module.exports = {
     fontSize: {
       'base-mobile': '14px',
       base: '16px',     // base / mobile
-      sm: '0.8125rem',  // 13px / 11.375px
+      xs: '0.8125rem',  // 13px / 11.375px
+      sm: '0.875rem',   // 14px / 12.25px
       lg: '1.125rem',   // 18px / 15.75px
       xl: '1.375rem',   // 22px / 19.25px
       xxl: '2rem',      // 32px / 28px

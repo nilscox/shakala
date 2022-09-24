@@ -78,7 +78,7 @@ export const ThreadForm = ({ errors, onChange, onSubmit }: CreateThreadFormProps
         <MarkdownPreviewInput border rows={8} value={message} onChange={setMessage} />
       </FormField>
 
-      <Button primary className="self-end">
+      <Button primary type="submit" className="self-end">
         Créer
       </Button>
     </form>

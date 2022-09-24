@@ -28,7 +28,7 @@ export const FormField = ({
         <label htmlFor={name} className="font-semibold">
           {label}
         </label>
-        {description && <span className="text-sm text-muted"> - {description}</span>}
+        {description && <span className="text-xs text-muted"> - {description}</span>}
       </div>
     )}
 
@@ -65,7 +65,7 @@ type FieldErrorProps = {
 };
 
 export const FieldError = ({ id, className, children }: FieldErrorProps) => (
-  <div id={id} className={clsx('text-sm font-bold text-error', className)}>
+  <div id={id} className={clsx('text-xs font-bold text-error', className)}>
     {children}
   </div>
 );

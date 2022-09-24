@@ -30,9 +30,8 @@ test.describe('Authentication', () => {
     await app.findByText(/J'accepte la charte/).click();
     await app.findButton('Inscription').click();
 
-    const notification = app.closest(
-      app.findByText(/^Votre compte a bien été créé ! .* à l'adresse user@domain.tld.$/),
-      '.notification',
+    const notification = app.findNotification(
+      /^Votre compte a bien été créé ! .* à l'adresse user@domain.tld.$/,
     );
 
     await expect(notification).toBeVisible();
@@ -43,19 +42,19 @@ test.describe('Authentication', () => {
     const page = await app.newPage();
     await page.navigate(await app.getEmailValidationLink('user@domain.tld'));
 
-    expect(page.findByText('Votre adresse email a bien été validée. Bienvenue ! 🎉')).toBeVisible();
+    expect(page.findNotification('Votre adresse email a bien été validée. Bienvenue ! 🎉')).toBeVisible();
 
     await app.findLink('user').click();
     await app.findButton('Déconnexion').click();
 
-    await expect(app.findByText("Vous n'êtes maintenant plus connecté(e)")).toBeVisible();
+    await expect(app.findNotification("Vous n'êtes maintenant plus connecté(e)")).toBeVisible();
 
     await app.within(app.locator('header')).findByText('Connexion').click();
     await app.findByPlaceholder('Email').fill('user@domain.tld');
     await app.findByPlaceholder('Mot de passe').fill('password');
     await app.findButton('Connexion').click();
 
-    await expect(app.findByText('Vous êtes maintenant connecté(e)')).toBeVisible();
+    await expect(app.findNotification('Vous êtes maintenant connecté(e)')).toBeVisible();
   });
 
   test('As a user, I see a clear error message when my password is invalid', async () => {

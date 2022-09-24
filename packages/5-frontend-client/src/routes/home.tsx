@@ -149,7 +149,7 @@ const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
     <img src={image} className="mx-auto max-h-[5.5rem] py-2 opacity-80 md:max-h-1" alt={name} />
     <div className="text-center text-lg font-bold">{name}</div>
-    <div className="mt-1 text-sm">{children}</div>
+    <div className="mt-1 text-xs">{children}</div>
   </div>
 );
 

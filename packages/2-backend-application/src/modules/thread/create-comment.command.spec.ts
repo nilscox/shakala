@@ -4,12 +4,11 @@ import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
 import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { CreateCommentCommand, CreateCommentCommandHandler } from './create-comment.command';
-import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 
 describe('CreateCommentCommand', () => {
   const generatorService = new StubGeneratorService();
   const dateService = new StubDateService();
-  const commentRepository = new InMemoryCommentRepository(new InMemoryReactionRepository());
+  const commentRepository = new InMemoryCommentRepository();
 
   const handler = new CreateCommentCommandHandler(generatorService, dateService, commentRepository);
 

@@ -6,7 +6,7 @@ import { reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
 import { CommentHistoryModal } from '../comment-history-modal/comment-history-modal';
 
 export default {
-  title: 'Domain/Comment',
+  title: 'Domain/CommentHistoryModal',
   decorators: [routerDecorator('?' + new URLSearchParams({ historique: 'commentId' })), reduxDecorator()],
 } as Meta;
 

@@ -3,10 +3,13 @@ import {
   EditCommentCommand,
   ExecutionContext,
   GetCommentQuery,
+  ReportCommentCommand,
   SetReactionCommand,
 } from 'backend-application';
 import {
+  CannotReportOwnCommentError,
   CannotSetReactionOnOwnCommentError,
+  CommentAlreadyReportedError,
   factories,
   ReactionType,
   UserMustBeAuthorError,
@@ -157,6 +160,50 @@ describe('CommentController', () => {
       await expect(controller.setReaction(request)).rejects.test((error) => {
         expect(error).toBeInstanceOf(BadRequest);
         expect(error).toHaveProperty('body.code', 'CannotSetReactionOnOwnComment');
+      });
+    });
+  });
+
+  describe('reportComment', () => {
+    const comment = create.comment({ author: user });
+
+    let request: MockRequest;
+
+    beforeEach(() => {
+      queryBus.for(GetCommentQuery).return(comment);
+      request = new MockRequest().withParam('id', comment.id).withBody({});
+    });
+
+    it('reports a comment', async () => {
+      const response = await controller.reportComment(request);
+
+      expect(response).toHaveStatus(204);
+      expect(response).toHaveBody(undefined);
+
+      expect(commandBus.execute).toHaveBeenCalledWith(new ReportCommentCommand(comment.id, undefined), ctx);
+    });
+
+    it('throws a BadRequest when the body is not valid', async () => {
+      request.withBody({ reason: 42 });
+
+      await expect(controller.reportComment(request)).rejects.toThrow(BadRequest);
+    });
+
+    it('handles CommentAlreadyReportedError', async () => {
+      commandBus.execute.mockRejectedValue(new CommentAlreadyReportedError(comment.id));
+
+      await expect(controller.reportComment(request)).rejects.test((error) => {
+        expect(error).toBeInstanceOf(BadRequest);
+        expect(error).toHaveProperty('body.code', 'CommentAlreadyReported');
+      });
+    });
+
+    it('handles CannotReportOwnCommentError', async () => {
+      commandBus.execute.mockRejectedValue(new CannotReportOwnCommentError(comment.id));
+
+      await expect(controller.reportComment(request)).rejects.test((error) => {
+        expect(error).toBeInstanceOf(BadRequest);
+        expect(error).toHaveProperty('body.code', 'CannotReportOwnComment');
       });
     });
   });

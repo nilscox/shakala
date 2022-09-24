@@ -15,6 +15,7 @@ import {
   ThreadRepository,
   UserRepository,
 } from './interfaces/repositories';
+import { CommentReportRepository } from './interfaces/repositories/comment-report.repository';
 import { LoginCommand, LoginCommandHandler } from './modules/authentication/login.command';
 import { SignupCommand, SignupCommandHandler } from './modules/authentication/signup.command';
 import { SendEmailCommand, SendEmailHandler } from './modules/email/send-email.command';
@@ -24,6 +25,7 @@ import { EditCommentCommand, EditCommentCommandHandler } from './modules/thread/
 import { GetCommentQuery, GetCommentQueryHandler } from './modules/thread/get-comment.query';
 import { GetLastThreadsHandler, GetLastThreadsQuery } from './modules/thread/get-last-threads.query';
 import { GetThreadHandler, GetThreadQuery } from './modules/thread/get-thread.query';
+import { ReportCommentCommand, ReportCommentHandler } from './modules/thread/report-comment.command';
 import { SetReactionCommand, SetReactionCommandHandler } from './modules/thread/set-reaction.command';
 import { GetProfileImageHandler, GetProfileImageQuery } from './modules/user/get-profile-image.query';
 import { GetUserByEmailHandler, GetUserByEmailQuery } from './modules/user/get-user-by-email.query';
@@ -47,6 +49,7 @@ export type Repositories = {
   threadRepository: ThreadRepository;
   commentRepository: CommentRepository;
   reactionRepository: ReactionRepository;
+  commentReportRepository: CommentReportRepository;
 };
 
 // prettier-ignore
@@ -58,7 +61,7 @@ export const registerHandlers = (
   eventBus: IEventBus,
 ) => {
   const { generatorService, cryptoService, dateService, filesystemService, emailCompilerService, emailSenderService, profileImageStoreService } = services;
-  const { userRepository, threadRepository, commentRepository, reactionRepository } = repositories;
+  const { userRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
 
   // email
   registerCommand(SendEmailCommand, new SendEmailHandler(filesystemService, emailCompilerService, emailSenderService));
@@ -88,4 +91,5 @@ export const registerHandlers = (
   registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generatorService, dateService, commentRepository));
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository));
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(commentRepository, reactionRepository, commentService));
+  registerCommand(ReportCommentCommand, new ReportCommentHandler(commentRepository, commentReportRepository, commentService));
 }

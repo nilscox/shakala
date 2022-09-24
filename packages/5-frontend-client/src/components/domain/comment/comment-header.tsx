@@ -27,7 +27,7 @@ export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
       <div>{bullet}</div>
       <Link
         to={`#${commentId}`}
-        className={clsx('text-sm leading-none text-muted decoration-muted/40 hover:underline', {
+        className={clsx('text-xs leading-none text-muted decoration-muted/40 hover:underline', {
           italic: edited,
         })}
       >

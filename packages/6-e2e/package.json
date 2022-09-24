@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "exit 0",
     "test": "exit 0",
-    "start": "playwright test"
+    "e2e": "node -r ../3-backend-infrastructure/register-aliases.js ./node_modules/.bin/playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.25.2"

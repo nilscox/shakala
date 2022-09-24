@@ -23,6 +23,7 @@ import { useUser } from '~/hooks/use-user';
 import { RootCommentForm } from '../comment-form';
 import { CommentHistoryModal } from '../comment-history-modal';
 import { Comment } from '../comment/comment';
+import { ReportCommentModal } from '../report-comment-modal/report-comment-modal';
 import { ShareCommentModal } from '../share-comment';
 
 import { ThreadFilters } from './thread-filters';
@@ -80,6 +81,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
         render={renderComments}
       />
 
+      <ReportCommentModal />
       <CommentHistoryModal />
       <ShareCommentModal />
     </>

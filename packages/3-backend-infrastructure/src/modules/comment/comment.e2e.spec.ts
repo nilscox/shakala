@@ -1,5 +1,5 @@
 import { InMemoryEmailSenderService } from 'backend-application';
-import { CreateCommentBodyDto, ReactionTypeDto, SetReactionBodyDto } from 'shared';
+import { CreateCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto, SetReactionBodyDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
 import { MockLoggerService, TestConfigService } from '../../infrastructure';
@@ -75,5 +75,22 @@ describe('Comment e2e', () => {
     await setReaction(commentId, ReactionTypeDto.upvote);
     await setReaction(commentId, ReactionTypeDto.downvote);
     await setReaction(commentId, null);
+  });
+
+  test('as a user, I can report a comment', async () => {
+    const agent = server.agent();
+
+    await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
+
+    const reportComment = async (commentId: string) => {
+      const body: ReportCommentBodyDto = { reason: 'reason' };
+
+      await agent.post(`/comment/${commentId}/report`).send(body).expect(204);
+    };
+
+    const threadId = await server.createThread(userId);
+    const commentId = await server.createComment(threadId, userId);
+
+    await reportComment(commentId);
   });
 });

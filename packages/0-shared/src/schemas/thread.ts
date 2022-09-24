@@ -66,3 +66,13 @@ export const setReactionBodySchema = yup
   .strict();
 
 export type SetReactionBodyDto = yup.InferType<typeof setReactionBodySchema>;
+
+export const reportCommentBodySchema = yup
+  .object({
+    reason: yup.string().optional(),
+  })
+  .required()
+  .noUnknown()
+  .strict();
+
+export type ReportCommentBodyDto = yup.InferType<typeof reportCommentBodySchema>;

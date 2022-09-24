@@ -3,6 +3,7 @@ import path from 'path';
 import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import {
+  InMemoryCommentReportRepository,
   InMemoryCommentRepository,
   InMemoryReactionRepository,
   InMemoryThreadRepository,
@@ -38,6 +39,7 @@ import {
   SqlUserRepository,
 } from './persistence';
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
+import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
 
 const instantiateServices = (): Services => {
   const configService = new EnvConfigService();
@@ -109,6 +111,7 @@ export class Application {
         threadRepository: new SqlThreadRepository(em, this.services),
         reactionRepository: new SqlReactionRepository(em, this.services),
         commentRepository: new SqlCommentRepository(em, this.services),
+        commentReportRepository: new SqlCommentReportRepository(em, this.services),
       };
 
       // todo: instantiate repositories before services
@@ -123,6 +126,7 @@ export class Application {
         threadRepository: new InMemoryThreadRepository(),
         reactionRepository,
         commentRepository: new InMemoryCommentRepository(reactionRepository),
+        commentReportRepository: new InMemoryCommentReportRepository(),
       };
     }
 

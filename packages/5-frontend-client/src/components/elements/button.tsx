@@ -17,11 +17,12 @@ export const Button = ({
   ...props
 }: ButtonProps) => (
   <button
+    type="button"
     className={clsx(
       'button relative',
       primary && 'button-primary',
       secondary && 'button-secondary',
-      small && 'text-sm',
+      small && 'text-xs',
       className,
     )}
     {...props}

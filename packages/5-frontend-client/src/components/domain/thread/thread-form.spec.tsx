@@ -1,13 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
+
+import { TestRenderer } from '~/test/render';
 
 import { ThreadForm } from './thread-form';
 
 type UserEvent = ReturnType<typeof userEvent.setup>;
 
-// todo: FormData constructor: Argument 1 could not be converted to: null
-describe.skip('ThreadForm', () => {
+describe('ThreadForm', () => {
   const props: ComponentProps<typeof ThreadForm> = {
     errors: {},
     onSubmit: vi.fn(),
@@ -25,12 +26,14 @@ describe.skip('ThreadForm', () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
-    render(<ThreadForm {...props} onSubmit={onSubmit} />);
+    new TestRenderer().withMemoryRouter().render(<ThreadForm {...props} onSubmit={onSubmit} />);
 
-    await user.type(fields.description(), 'description');
-    await user.type(fields.keywords(), 'key words');
-    await user.type(fields.text(), 'text');
-    await user.click(fields.submit());
+    await act(async () => {
+      await user.type(fields.description(), 'description');
+      await user.type(fields.keywords(), 'key words');
+      await user.type(fields.text(), 'text');
+      await user.click(fields.submit());
+    });
 
     expect(onSubmit).toHaveBeenCalledWith({
       description: 'description',
@@ -43,12 +46,14 @@ describe.skip('ThreadForm', () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
-    render(<ThreadForm {...props} onSubmit={onSubmit} />);
+    new TestRenderer().withMemoryRouter().render(<ThreadForm {...props} onSubmit={onSubmit} />);
 
-    await user.type(fields.description(), ' description ');
-    await user.type(fields.keywords(), ' key   words ');
-    await user.type(fields.text(), ' text ');
-    await user.click(fields.submit());
+    await act(async () => {
+      await user.type(fields.description(), ' description ');
+      await user.type(fields.keywords(), ' key   words ');
+      await user.type(fields.text(), ' text ');
+      await user.click(fields.submit());
+    });
 
     expect(onSubmit).toHaveBeenCalledWith({
       description: 'description',
@@ -64,7 +69,7 @@ describe.skip('ThreadForm', () => {
     beforeEach(() => {
       user = userEvent.setup();
 
-      render(
+      new TestRenderer().withMemoryRouter().render(
         <ThreadForm
           {...props}
           errors={{
@@ -84,14 +89,11 @@ describe.skip('ThreadForm', () => {
     });
 
     it('clears the field errors', async () => {
-      await user.type(fields.description(), 'a');
+      await act(() => user.type(fields.description(), 'a'));
       expect(clearFieldError).toHaveBeenCalledWith('description');
 
-      await user.type(fields.keywords(), 'a');
+      await act(() => user.type(fields.keywords(), 'a'));
       expect(clearFieldError).toHaveBeenCalledWith('keywords');
-
-      await user.type(fields.text(), 'a');
-      expect(clearFieldError).toHaveBeenCalledWith('text');
     });
   });
 });

@@ -46,12 +46,12 @@ export const CommentForm = ({
 
       <div className="flex flex-row justify-end gap-2 py-1 px-2">
         {onCancel && (
-          <Button secondary type="button" onClick={onCancel}>
+          <Button secondary onClick={onCancel}>
             Annuler
           </Button>
         )}
 
-        <Button primary loading={isSubmitting} disabled={!canSubmit}>
+        <Button primary type="submit" loading={isSubmitting} disabled={!canSubmit}>
           Envoyer
         </Button>
       </div>

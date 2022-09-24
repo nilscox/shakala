@@ -19,10 +19,11 @@ export const handleAuthorizationError = (
   };
 };
 
+const fallback = "Vous n'avez pas les autorisations nécessaires pour";
+
 const messages: Record<AuthorizationErrorReason, string> = {
   unauthenticated: 'Vous devez être connecté.e avant de pouvoir',
   authenticated: 'Vous ne devez pas être connecté.e pour pouvoir',
   emailValidationRequired: 'Vous devez valider votre adresse email avant de pouvoir',
+  isReadOnly: fallback,
 };
-
-const fallback = "Vous n'avez pas les autorisations nécessaires pour";

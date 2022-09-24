@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import {
+  openReportModal,
   ReactionType,
   selectCanReply,
   selectComment,
@@ -33,6 +34,8 @@ type CommentFooterProps = {
 };
 
 export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
+  const dispatch = useDispatch();
+
   const { upvotes, downvotes, edited } = useSelector(selectComment, commentId);
   const isReply = useSelector(selectIsReply, commentId);
   const isEditing = useSelector(selectIsEditingComment, commentId);
@@ -57,7 +60,9 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
 
             {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
 
-            <FooterButton icon={<ReportIcon />}>Signaler</FooterButton>
+            <FooterButton icon={<ReportIcon />} onClick={() => dispatch(openReportModal(commentId))}>
+              Signaler
+            </FooterButton>
 
             <SearchParamLink
               param="historique"
@@ -65,7 +70,7 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
               disabled={edited === false}
               title={edited === false ? "Ce commentaire n'a pas été édité" : undefined}
               className={clsx(
-                'row button-secondary button items-center fill-muted p-0 text-sm hover:fill-primary hover:text-primary',
+                'row button-secondary button items-center fill-muted p-0 text-xs hover:fill-primary hover:text-primary',
                 edited === false && 'cursor-default text-muted/60 hover:text-muted/60',
               )}
             >
@@ -76,14 +81,16 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
             <SearchParamLink
               param="share"
               value={commentId}
-              className="row button-secondary button items-center fill-muted p-0 text-sm hover:fill-primary hover:text-primary"
+              className="row button-secondary button items-center fill-muted p-0 text-xs hover:fill-primary hover:text-primary"
             >
               <ShareIcon className="mr-0.5 h-4 w-4" /> Partager
             </SearchParamLink>
           </>
         )}
 
-        {!showActions && <FooterButton icon={<HorizontalDotsIcon />} onClick={onShowActions} />}
+        {!showActions && (
+          <FooterButton title="Voir plus..." icon={<HorizontalDotsIcon />} onClick={onShowActions} />
+        )}
       </div>
 
       <ReplyButton commentId={commentId} />

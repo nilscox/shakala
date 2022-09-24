@@ -159,6 +159,7 @@ class MockThreadGateway implements ThreadGateway {
   createReply = mockFn<ThreadGateway['createReply']>();
   editComment = mockFn<ThreadGateway['editComment']>();
   setReaction = mockFn<ThreadGateway['setReaction']>();
+  reportComment = mockFn<ThreadGateway['reportComment']>();
 }
 
 class MockUserGateway implements UserGateway {

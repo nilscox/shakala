@@ -1,9 +1,12 @@
 import { BaseError } from './base-error';
 
-export const UnexpectedError = BaseError.extend(
-  'unexpected error',
-  (error: string, details?: Record<string, unknown>) => ({
-    error,
-    ...details,
-  }),
-);
+type Details = Record<string, unknown> | undefined;
+
+export class UnexpectedError extends BaseError<Details> {
+  public readonly details: Record<string, unknown> | undefined;
+
+  constructor(message = 'unexpected error', details?: Details) {
+    super(message);
+    this.details = details;
+  }
+}

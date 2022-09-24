@@ -71,7 +71,7 @@ const SyntaxRule = ({ nowrap, name, example, children }: SyntaxRuleProps) => (
   <>
     <h2 className="mt-2">{name}</h2>
 
-    <div className="sm:row hidden text-sm font-medium uppercase text-muted">
+    <div className="sm:row hidden text-xs font-medium uppercase text-muted">
       <div className="flex-1">Markdown</div>
       <div className="flex-1">Résultat</div>
     </div>
@@ -88,7 +88,7 @@ const SyntaxRule = ({ nowrap, name, example, children }: SyntaxRuleProps) => (
 
     <div className="col gap-2 sm:hidden">
       <div>
-        <div className="text-sm font-medium text-muted">Markdown</div>
+        <div className="text-xs font-medium text-muted">Markdown</div>
         <pre
           className={clsx(
             'flex-1 rounded border bg-neutral p-1',
@@ -100,7 +100,7 @@ const SyntaxRule = ({ nowrap, name, example, children }: SyntaxRuleProps) => (
       </div>
 
       <div>
-        <div className="text-sm font-medium text-muted">Résultat</div>
+        <div className="text-xs font-medium text-muted">Résultat</div>
         <div className="rounded border bg-neutral p-1">
           <Markdown markdown={example} />
         </div>

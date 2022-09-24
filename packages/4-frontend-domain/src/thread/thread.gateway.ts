@@ -14,4 +14,5 @@ export interface ThreadGateway {
   createReply(threadId: string, parentId: string, text: string): Promise<string>;
   editComment(commentId: string, text: string): Promise<void>;
   setReaction(commentId: string, reactionType: ReactionTypeDto | null): Promise<void>;
+  reportComment(commentId: string, reason?: string): Promise<void>;
 }

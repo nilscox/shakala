@@ -96,7 +96,7 @@ export const MotivationsRoute = () => (
       politique ou idéologique.
     </p>
 
-    <p className="text-sm">
+    <p className="text-xs">
       Cette page est en constante évolution : certains points seront détaillés / reformulés. N'hésitez pas à
       nous faire part de vos impressions !
     </p>
