@@ -1,7 +1,6 @@
 import {
   AuthorizationError,
   EmailAlreadyExistsError,
-  ExecutionContext,
   GetUserByEmailQuery,
   LoggerService,
   LoginCommand,
@@ -25,7 +24,7 @@ import {
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { tryCatch } from '../../utils';
+import { execute } from '../../utils/execute';
 import { UserPresenter } from '../user/user.presenter';
 
 export class AuthenticationController extends Controller {
@@ -55,13 +54,9 @@ export class AuthenticationController extends Controller {
   async login(req: Request): Promise<Response<AuthUserDto>> {
     const body = await this.validationService.body(req, loginBodySchema);
 
-    await tryCatch(async () => {
-      await this.commandBus.execute(
-        new LoginCommand(body.email, body.password),
-        ExecutionContext.unauthenticated,
-      );
-    })
-      .catch(InvalidCredentials, (error) => new Forbidden('InvalidCredentials', error.message))
+    await execute(this.commandBus)
+      .command(new LoginCommand(body.email, body.password))
+      .handle(InvalidCredentials, (error) => new Forbidden('InvalidCredentials', error.message))
       .run();
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
@@ -74,17 +69,13 @@ export class AuthenticationController extends Controller {
   async signup(req: Request): Promise<Response<AuthUserDto>> {
     const body = await this.validationService.body(req, signupBodySchema);
 
-    await tryCatch(async () => {
-      await this.commandBus.execute(
-        new SignupCommand(body.nick, body.email, body.password),
-        ExecutionContext.unauthenticated,
-      );
-    })
-      .catch(EmailAlreadyExistsError, (error) =>
+    await execute(this.commandBus)
+      .command(new SignupCommand(body.nick, body.email, body.password))
+      .handle(EmailAlreadyExistsError, (error) =>
         // description: error.message
         ValidationError.from({ email: ['alreadyExists', error.details.email] }),
       )
-      .catch(NickAlreadyExistsError, (error) =>
+      .handle(NickAlreadyExistsError, (error) =>
         // description: error.message
         ValidationError.from({ nick: ['alreadyExists', error.details.nick] }),
       )
@@ -111,13 +102,11 @@ export class AuthenticationController extends Controller {
       [EmailValidationFailedReason.alreadyValidated]: 'already-validated',
     };
 
-    await tryCatch(() =>
-      this.commandBus.execute(
-        new ValidateEmailAddressCommand(userId, token),
-        ExecutionContext.unauthenticated,
-      ),
-    )
-      .catch(EmailValidationFailed, (error) => response(mapEmailValidationFailedReason[error.details.reason]))
+    await execute(this.commandBus)
+      .command(new ValidateEmailAddressCommand(userId, token))
+      .handle(EmailValidationFailed, (error) =>
+        response(mapEmailValidationFailedReason[error.details.reason]),
+      )
       .run();
 
     return response('success');

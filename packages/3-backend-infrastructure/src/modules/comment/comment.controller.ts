@@ -1,7 +1,6 @@
 import {
   CreateCommentCommand,
   EditCommentCommand,
-  ExecutionContext,
   LoggerService,
   ReportCommentCommand,
   SetReactionCommand,
@@ -31,7 +30,7 @@ import {
   Unauthorized,
   ValidationService,
 } from '../../infrastructure';
-import { tryCatch } from '../../utils';
+import { execute } from '../../utils';
 
 export class CommentController extends Controller {
   constructor(
@@ -58,10 +57,10 @@ export class CommentController extends Controller {
     const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, createCommentBodySchema);
 
-    const commentId = await this.commandBus.execute<string>(
-      new CreateCommentCommand(body.threadId, body.parentId ?? null, body.text),
-      new ExecutionContext(user),
-    );
+    const commentId = await execute<string>(this.commandBus)
+      .command(new CreateCommentCommand(body.threadId, body.parentId ?? null, body.text))
+      .asUser(user)
+      .run();
 
     return Response.created(commentId);
   }
@@ -71,10 +70,10 @@ export class CommentController extends Controller {
     const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, editCommentBodySchema);
 
-    await tryCatch(async () => {
-      await this.commandBus.execute(new EditCommentCommand(commentId, body.text), new ExecutionContext(user));
-    })
-      .catch(UserMustBeAuthorError, (error) => new Unauthorized('UserMustBeAuthor', error.message))
+    await execute(this.commandBus)
+      .command(new EditCommentCommand(commentId, body.text))
+      .asUser(user)
+      .handle(UserMustBeAuthorError, (error) => new Unauthorized('UserMustBeAuthor', error.message))
       .run();
 
     return Response.noContent();
@@ -85,13 +84,10 @@ export class CommentController extends Controller {
     const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, setReactionBodySchema);
 
-    await tryCatch(async () => {
-      await this.commandBus.execute(
-        new SetReactionCommand(commentId, body.type as ReactionType),
-        new ExecutionContext(user),
-      );
-    })
-      .catch(
+    await execute(this.commandBus)
+      .command(new SetReactionCommand(commentId, body.type as ReactionType))
+      .asUser(user)
+      .handle(
         CannotSetReactionOnOwnCommentError,
         (error) => new BadRequest('CannotSetReactionOnOwnComment', error.message),
       )
@@ -105,11 +101,17 @@ export class CommentController extends Controller {
     const user = await this.sessionService.getUser(req);
     const body = await this.validationService.body(req, reportCommentBodySchema);
 
-    await tryCatch(() =>
-      this.commandBus.execute(new ReportCommentCommand(commentId, body.reason), new ExecutionContext(user)),
-    )
-      .catch(CannotReportOwnCommentError, (error) => new BadRequest('CannotReportOwnComment', error.message))
-      .catch(CommentAlreadyReportedError, (error) => new BadRequest('CommentAlreadyReported', error.message))
+    await execute(this.commandBus)
+      .command(new ReportCommentCommand(commentId, body.reason))
+      .asUser(user)
+      .handle(
+        CannotReportOwnCommentError,
+        (error) => new BadRequest('CannotReportOwnComment', error.message, error.details),
+      )
+      .handle(
+        CommentAlreadyReportedError,
+        (error) => new BadRequest('CommentAlreadyReported', error.message, error.details),
+      )
       .run();
 
     return Response.noContent();
