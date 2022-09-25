@@ -1,6 +1,5 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { selectUser } from '../../../user/user.selectors';
 
 import { fetchAuthenticatedUser } from './fetch-authenticated-user';
 
@@ -21,7 +20,7 @@ describe('fetchAuthenticatedUser', () => {
     await store.dispatch(fetchAuthenticatedUser());
 
     expect(store.authenticationGateway.fetchUser).toHaveBeenCalled();
-    expect(store.select(selectUser)).toEqual(user);
+    expect(store.user).toEqual(user);
   });
 
   it('fetches no one when the user is not authenticated', async () => {
@@ -30,6 +29,6 @@ describe('fetchAuthenticatedUser', () => {
     await store.dispatch(fetchAuthenticatedUser());
 
     expect(store.authenticationGateway.fetchUser).toHaveBeenCalled();
-    expect(store.select(selectUser)).toBeNull();
+    expect(store.user).toBeUndefined();
   });
 });

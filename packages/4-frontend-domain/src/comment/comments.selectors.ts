@@ -1,10 +1,10 @@
 import { createNormalizedSelectors } from '@nilscox/redux-query';
 import { getIds } from 'shared';
 
-import { selectUser } from '../authentication';
 import { schemas, selectNormalizedEntities } from '../normalization';
 import { Selector, State } from '../store';
 import { Comment } from '../types';
+import { selectUser } from '../user';
 import { formatDate } from '../utils/format-date';
 
 export const { selectEntity: selectCommentUnsafe, selectEntities: selectComments } =

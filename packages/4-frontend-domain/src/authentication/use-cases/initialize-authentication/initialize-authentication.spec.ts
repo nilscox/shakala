@@ -1,6 +1,5 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { selectUser } from '../../../user/user.selectors';
 import { setAuthenticationFieldError, setAuthenticationFormError } from '../../authentication.actions';
 import {
   selectAuthenticationFieldError,
@@ -37,6 +36,6 @@ describe('initializeAuthentication', () => {
 
     await store.dispatch(initializeAuthentication());
 
-    expect(store.select(selectUser)).toEqual(user);
+    expect(store.user).toEqual(user);
   });
 });

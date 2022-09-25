@@ -13,7 +13,6 @@ import {
   selectIsEditingComment,
   setIsEditingComment,
   setThreadComments,
-  setUser,
   TestStore,
 } from 'frontend-domain';
 
@@ -31,7 +30,7 @@ describe('CommentForm', () => {
   const thread = createThread({ id: threadId, author });
 
   beforeEach(() => {
-    store.dispatch(setUser(createAuthUser()));
+    store.user = createAuthUser();
     store.dispatch(addThread(thread));
   });
 

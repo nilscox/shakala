@@ -1,4 +1,3 @@
-import { selectUser } from '../../../authentication';
 import { createAuthUser, TestStore } from '../../../test';
 
 import { changeProfileImage, InvalidImageFormat } from './change-profile-image';
@@ -24,7 +23,7 @@ describe('changeProfileImage', () => {
     await store.dispatch(changeProfileImage(file));
 
     expect(store.userGateway.changeProfileImage).toHaveBeenCalledWith(file);
-    expect(store.select(selectUser)).toHaveProperty('profileImage', 'image.url');
+    expect(store.user).toHaveProperty('profileImage', 'image.url');
   });
 
   it('handles invalid image format errors', async () => {

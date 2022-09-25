@@ -1,6 +1,5 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { selectUser } from '../../../user/user.selectors';
 
 import { logout } from './logout';
 
@@ -16,7 +15,7 @@ describe('logout', () => {
     await store.dispatch(logout());
 
     expect(store.authenticationGateway.logout).toHaveBeenCalledWith();
-    expect(store.select(selectUser)).toBeNull();
+    expect(store.user).toBeUndefined();
   });
 
   it('redirects to the home page', async () => {

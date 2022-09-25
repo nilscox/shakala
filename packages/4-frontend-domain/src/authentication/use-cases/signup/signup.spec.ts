@@ -3,7 +3,6 @@ import { AuthorizationErrorReason } from 'shared';
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
-import { selectUser } from '../../../user/user.selectors';
 import { setAuthenticationFieldError } from '../../authentication.actions';
 import { selectAuthenticationFieldError, selectIsAuthenticating } from '../../authentication.selectors';
 import { AuthenticationField, AuthenticationType } from '../../authentication.types';
@@ -34,7 +33,7 @@ describe('signup', () => {
     await store.dispatch(signup(email, password, nick));
 
     expect(store.authenticationGateway.signup).toHaveBeenCalledWith(email, password, nick);
-    expect(store.select(selectUser)).toEqual(user);
+    expect(store.user).toEqual(user);
   });
 
   it('sets the authenticating flag', async () => {

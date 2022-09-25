@@ -1,4 +1,3 @@
-import { setUser } from '../../../authentication';
 import { createAuthUser, createComment, createUser, TestStore } from '../../../test';
 import { addComment } from '../../comments.actions';
 
@@ -15,7 +14,7 @@ describe('openReportModal', () => {
   });
 
   it('opens the report modal', () => {
-    store.dispatch(setUser(createAuthUser()));
+    store.user = createAuthUser();
 
     store.dispatch(openReportModal(comment.id));
 
@@ -38,7 +37,7 @@ describe('openReportModal', () => {
   });
 
   it('shows a notification when the user tries to report his own comment', () => {
-    store.dispatch(setUser(createAuthUser(author)));
+    store.user = createAuthUser(author);
 
     store.dispatch(openReportModal(comment.id));
 

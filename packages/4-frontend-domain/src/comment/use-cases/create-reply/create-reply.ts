@@ -1,12 +1,12 @@
 import { query, QueryState } from '@nilscox/redux-query';
 
-import { selectUserOrFail } from '../../../authentication';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { selectCommentThreadId } from '../../../thread';
 import { Comment } from '../../../types';
+import { selectUserOrFail } from '../../../user';
 import { serializeError } from '../../../utils/serialize-error';
 import { addComment, updateComment } from '../../comments.actions';
 import { selectComment, selectCommentReplies, selectIsReply } from '../../comments.selectors';

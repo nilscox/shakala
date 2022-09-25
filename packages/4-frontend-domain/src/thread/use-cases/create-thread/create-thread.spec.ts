@@ -1,6 +1,5 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { setUser } from '../../../authentication';
 import { createAuthUser, TestStore } from '../../../test';
 import { AuthorizationError, ValidationError } from '../../../types';
 
@@ -18,7 +17,7 @@ describe('createThread', () => {
   const threadId = 'threadId';
 
   beforeEach(() => {
-    store.dispatch(setUser(createAuthUser()));
+    store.user = createAuthUser();
     store.threadGateway.createThread.mockResolvedValue(threadId);
   });
 

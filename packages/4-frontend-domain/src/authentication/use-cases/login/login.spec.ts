@@ -3,7 +3,6 @@ import { AuthorizationErrorReason } from 'shared';
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
-import { selectUser } from '../../../user/user.selectors';
 import { setAuthenticationFieldError } from '../../authentication.actions';
 import { InvalidCredentialsError } from '../../authentication.gateway';
 import {
@@ -38,7 +37,7 @@ describe('login', () => {
     await store.dispatch(login(email, password));
 
     expect(store.authenticationGateway.login).toHaveBeenCalledWith(email, password);
-    expect(store.select(selectUser)).toEqual(user);
+    expect(store.user).toEqual(user);
   });
 
   it('sets the authenticating flag', async () => {

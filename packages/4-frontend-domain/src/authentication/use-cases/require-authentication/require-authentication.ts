@@ -1,5 +1,5 @@
 import { Thunk } from '../../../store';
-import { selectUser } from '../../../user/user.selectors';
+import { selectUser } from '../../../user';
 import { AuthenticationType } from '../../authentication.types';
 
 export const requireAuthentication = (): Thunk<boolean> => {

@@ -1,11 +1,7 @@
-import { setUser as setUserAction } from '../user/user.slice';
-
 import { authenticationSlice } from './authentication.slice';
 import { AuthenticationField } from './authentication.types';
 
 const actions = authenticationSlice.actions;
-
-export const setUser = setUserAction;
 
 export const setAcceptRulesWarningVisible = (visible: boolean) => {
   return actions.setAcceptRulesWarningVisible({ visible });

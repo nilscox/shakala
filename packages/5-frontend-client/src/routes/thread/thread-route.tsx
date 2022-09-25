@@ -4,7 +4,6 @@ import {
   selectIsLoadingThread,
   selectLoadingThreadError,
   selectThreadUnsafe,
-  selectUser,
 } from 'frontend-domain';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,6 +13,7 @@ import { AsyncResource } from '~/components/elements/async-resource/async-resour
 import { Fallback } from '~/components/elements/fallback';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
+import { useUser } from '~/hooks/use-user';
 
 export const ThreadRoute = () => {
   const params = useParams<{ threadId: string }>();
@@ -21,10 +21,11 @@ export const ThreadRoute = () => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUser);
   const thread = useSelector(selectThreadUnsafe, threadId);
   const loading = useSelector(selectIsLoadingThread, threadId);
   const error = useSelector(selectLoadingThreadError, threadId);
+
+  const user = useUser();
 
   useEffect(() => {
     dispatch(fetchThreadById(threadId));

@@ -1,4 +1,3 @@
-import { setUser } from '../authentication';
 import { createAuthUser, createComment, createUser, TestStore } from '../test';
 
 import { addComment, addComments, setCommentEdited } from './comments.actions';
@@ -82,7 +81,7 @@ describe('comments selectors', () => {
     });
 
     it('returns true when the authenticated user is the author of the comment', () => {
-      store.dispatch(setUser(createAuthUser(author)));
+      store.user = createAuthUser(author);
       expect(store.select(selectIsAuthUserAuthor, comment.id)).toBe(true);
     });
 
@@ -91,7 +90,7 @@ describe('comments selectors', () => {
     });
 
     it('returns false when the authenticated user is not the author of the comment', () => {
-      store.dispatch(setUser(createAuthUser()));
+      store.user = createAuthUser();
       expect(store.select(selectIsAuthUserAuthor, comment.id)).toBe(false);
     });
   });

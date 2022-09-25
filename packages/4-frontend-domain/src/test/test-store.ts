@@ -1,6 +1,6 @@
 import { Middleware } from 'redux';
 
-import { AuthenticationType, setUser } from '../authentication';
+import { AuthenticationType } from '../authentication';
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
 import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
@@ -11,8 +11,9 @@ import { TimerGateway } from '../interfaces/timer.gateway';
 import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 import { AuthUser } from '../types';
+import { selectUser } from '../user';
 import { UserGateway } from '../user/user.gateway';
-import { unsetUser } from '../user/user.slice';
+import { setUser, unsetUser } from '../user/user.slice';
 
 import { mockFn } from './mock-fn';
 
@@ -222,6 +223,10 @@ export class TestStore implements Dependencies {
 
   getReduxStore() {
     return this.reduxStore;
+  }
+
+  get user(): AuthUser | undefined {
+    return this.select(selectUser) ?? undefined;
   }
 
   set user(user: AuthUser | undefined) {
