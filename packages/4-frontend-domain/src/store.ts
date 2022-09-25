@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { AuthenticationGateway } from './authentication/authentication.gateway';
-import { authenticationSlice } from './authentication/authentication.slice';
+import { authenticationReducer } from './authentication/authentication.slice';
 import { commentsReducer } from './comment/comments.slice';
 import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
@@ -24,7 +24,7 @@ import { usersReducer } from './user/users.slice';
 export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
   return configureStore({
     reducer: {
-      [authenticationSlice.name]: authenticationSlice.reducer,
+      authentication: authenticationReducer,
       user: userReducer,
       users: usersReducer,
       threads: threadsReducer,

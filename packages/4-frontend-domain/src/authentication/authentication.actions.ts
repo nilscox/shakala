@@ -1,40 +1,46 @@
-import { authenticationSlice } from './authentication.slice';
+import { createAction } from '@nilscox/redux-query';
+
 import { AuthenticationField } from './authentication.types';
 
-const actions = authenticationSlice.actions;
+export const [setAcceptRulesWarningVisible, isSetAcceptRulesWarningVisible] = createAction(
+  'authentication/setAcceptRulesWarningVisible',
+  (visible: boolean) => ({ visible }),
+);
 
-export const setAcceptRulesWarningVisible = (visible: boolean) => {
-  return actions.setAcceptRulesWarningVisible({ visible });
-};
+export const [setRulesAccepted, isSetRulesAccepted] = createAction(
+  'authentication/setRulesAccepted',
+  (accepted: boolean) => ({ accepted }),
+);
 
-export const setRulesAccepted = (accepted: boolean) => {
-  return actions.setRulesAccepted({ accepted });
-};
+export const [setIsAuthenticationFormValid, isSetIsAuthenticationFormValid] = createAction(
+  'authentication/setIsAuthenticationFormValid',
+  (valid: boolean) => ({ valid }),
+);
 
-export const setIsAuthenticationFormValid = (valid: boolean) => {
-  return actions.setIsAuthenticationFormValid({ valid });
-};
+export const [setAuthenticating, isSetAuthenticating] = createAction(
+  'authentication/setAuthenticating',
+  (authenticating: boolean) => ({ authenticating }),
+);
 
-export const setAuthenticating = (authenticating: boolean) => {
-  return actions.setAuthenticating({ authenticating });
-};
+export const [setAuthenticationFieldError, isSetAuthenticationFieldError] = createAction(
+  'authentication/setAuthenticationFieldError',
+  (field: AuthenticationField, error: string) => ({ field, error }),
+);
 
-export const setAuthenticationFieldError = (field: AuthenticationField, error: string) => {
-  return actions.setAuthenticationFieldError({ field, error });
-};
+export const [clearAuthenticationFieldError, isClearAuthenticationFieldError] = createAction(
+  'authentication/clearAuthenticationFieldError',
+  (field: AuthenticationField) => ({ field }),
+);
 
-export const clearAuthenticationFieldError = (field: AuthenticationField) => {
-  return actions.clearAuthenticationFieldError({ field });
-};
+export const [setAuthenticationFormError, isSetAuthenticationFormError] = createAction(
+  'authentication/setAuthenticationFormError',
+  (error: string) => ({ error }),
+);
 
-export const setAuthenticationFormError = (error: string) => {
-  return actions.setAuthenticationFormError({ error });
-};
+export const [clearAuthenticationFormError, isClearAuthenticationFormError] = createAction(
+  'authentication/clearAuthenticationFormError',
+);
 
-export const clearAuthenticationFormError = () => {
-  return actions.clearAuthenticationFormError();
-};
-
-export const clearAllAuthenticationErrors = () => {
-  return actions.clearAllAuthenticationErrors();
-};
+export const [clearAllAuthenticationErrors, isClearAllAuthenticationErrors] = createAction(
+  'authentication/clearAllAuthenticationErrors',
+);

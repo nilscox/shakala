@@ -1,8 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AnyAction } from 'redux';
 
+import {
+  isSetAcceptRulesWarningVisible,
+  isSetRulesAccepted,
+  isSetIsAuthenticationFormValid,
+  isSetAuthenticating,
+  isSetAuthenticationFieldError,
+  isClearAuthenticationFieldError,
+  isSetAuthenticationFormError,
+  isClearAuthenticationFormError,
+  isClearAllAuthenticationErrors,
+} from './authentication.actions';
 import { AuthenticationField } from './authentication.types';
 
-type AuthenticationSlice = {
+type AuthenticationState = {
   isModalOpen: boolean;
   rulesAccepted: boolean;
   acceptRulesWarningVisible: boolean;
@@ -12,7 +23,7 @@ type AuthenticationSlice = {
   formError?: string;
 };
 
-const initialState: AuthenticationSlice = {
+const initialState: AuthenticationState = {
   isModalOpen: false,
   rulesAccepted: false,
   acceptRulesWarningVisible: false,
@@ -21,40 +32,42 @@ const initialState: AuthenticationSlice = {
   fieldErrors: {},
 };
 
-export const authenticationSlice = createSlice({
-  name: 'authentication',
-  initialState,
-  reducers: {
-    setAcceptRulesWarningVisible(state, { payload }: PayloadAction<{ visible: boolean }>) {
-      state.acceptRulesWarningVisible = payload.visible;
-    },
-    setRulesAccepted(state, { payload }: PayloadAction<{ accepted: boolean }>) {
-      state.rulesAccepted = payload.accepted;
-    },
-    setIsAuthenticationFormValid(state, { payload }: PayloadAction<{ valid: boolean }>) {
-      state.isValid = payload.valid;
-    },
-    setAuthenticating(state, { payload }: PayloadAction<{ authenticating: boolean }>) {
-      state.authenticating = payload.authenticating;
-    },
-    setAuthenticationFieldError(
-      state,
-      { payload }: PayloadAction<{ field: AuthenticationField; error: string }>,
-    ) {
-      state.fieldErrors[payload.field] = payload.error;
-    },
-    clearAuthenticationFieldError(state, { payload }: PayloadAction<{ field: AuthenticationField }>) {
-      delete state.fieldErrors[payload.field];
-    },
-    setAuthenticationFormError(state, { payload }: PayloadAction<{ error: string }>) {
-      state.formError = payload.error;
-    },
-    clearAuthenticationFormError(state) {
-      delete state.formError;
-    },
-    clearAllAuthenticationErrors(state) {
-      delete state.formError;
-      state.fieldErrors = {};
-    },
-  },
-});
+export const authenticationReducer = (state = initialState, action: AnyAction): AuthenticationState => {
+  if (isSetAcceptRulesWarningVisible(action)) {
+    return { ...state, acceptRulesWarningVisible: action.visible };
+  }
+
+  if (isSetRulesAccepted(action)) {
+    return { ...state, rulesAccepted: action.accepted };
+  }
+
+  if (isSetIsAuthenticationFormValid(action)) {
+    return { ...state, isValid: action.valid };
+  }
+
+  if (isSetAuthenticating(action)) {
+    return { ...state, authenticating: action.authenticating };
+  }
+
+  if (isSetAuthenticationFieldError(action)) {
+    return { ...state, fieldErrors: { ...state.fieldErrors, [action.field]: action.error } };
+  }
+
+  if (isClearAuthenticationFieldError(action)) {
+    return { ...state, fieldErrors: {} };
+  }
+
+  if (isSetAuthenticationFormError(action)) {
+    return { ...state, formError: action.error };
+  }
+
+  if (isClearAuthenticationFormError(action)) {
+    return { ...state, formError: undefined };
+  }
+
+  if (isClearAllAuthenticationErrors(action)) {
+    return { ...state, fieldErrors: {}, formError: undefined };
+  }
+
+  return state;
+};
