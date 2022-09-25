@@ -23,18 +23,6 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn typecheck
 
-  build-frontend:
-    name: Build frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: yarn build:frontend
-
   test:
     name: Tests
     runs-on: ubuntu-latest
