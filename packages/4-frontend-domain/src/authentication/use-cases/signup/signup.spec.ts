@@ -3,6 +3,7 @@ import { AuthorizationErrorReason } from 'shared';
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
+import { selectUser } from '../../../user/user.selectors';
 import {
   setAuthenticationFieldError,
   setIsAuthenticationModalOpen,
@@ -13,7 +14,6 @@ import {
   selectIsAuthenticating,
   selectIsAuthenticationModalOpen,
 } from '../../selectors/authentication.selectors';
-import { selectUser } from '../../selectors/user.selectors';
 
 import { signup } from './signup';
 

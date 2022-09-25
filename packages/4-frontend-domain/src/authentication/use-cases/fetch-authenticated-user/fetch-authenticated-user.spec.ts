@@ -1,6 +1,6 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
-import { selectUser } from '../../selectors/user.selectors';
+import { selectUser } from '../../../user/user.selectors';
 
 import { fetchAuthenticatedUser } from './fetch-authenticated-user';
 

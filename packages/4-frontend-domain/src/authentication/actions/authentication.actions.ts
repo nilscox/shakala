@@ -1,6 +1,6 @@
+import { setUser as setUserAction } from '../../user/user.slice';
 import { authenticationSlice } from '../authentication.slice';
 import { AuthenticationField, AuthenticationType } from '../authentication.types';
-import { setUser as setUserAction } from '../user.slice';
 
 const actions = authenticationSlice.actions;
 

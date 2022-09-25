@@ -1,6 +1,6 @@
 import { Thunk } from '../../../store';
+import { selectUser } from '../../../user/user.selectors';
 import { AuthenticationType } from '../../authentication.types';
-import { selectUser } from '../../selectors/user.selectors';
 import { openAuthenticationModal } from '../open-authentication-modal/open-authentication-modal';
 
 export const requireAuthentication = (): Thunk<boolean> => {

@@ -1,5 +1,6 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
+import { selectUser } from '../../../user/user.selectors';
 import {
   setAuthenticationFieldError,
   setAuthenticationFormError,
@@ -12,7 +13,6 @@ import {
   selectAuthenticationFormUnsafe,
   selectIsAuthenticationModalOpen,
 } from '../../selectors/authentication.selectors';
-import { selectUser } from '../../selectors/user.selectors';
 
 import { initializeAuthentication } from './initialize-authentication';
 

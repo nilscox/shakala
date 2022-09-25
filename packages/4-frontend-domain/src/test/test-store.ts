@@ -2,7 +2,6 @@ import { Middleware } from 'redux';
 
 import { setUser } from '../authentication';
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
-import { unsetUser } from '../authentication/user.slice';
 import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
 import { RemoveListener, RouterGateway } from '../interfaces/router.gateway';
@@ -13,6 +12,7 @@ import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 import { AuthUser } from '../types';
 import { UserGateway } from '../user/user.gateway';
+import { unsetUser } from '../user/user.slice';
 
 import { mockFn } from './mock-fn';
 

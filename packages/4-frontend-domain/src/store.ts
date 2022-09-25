@@ -8,7 +8,6 @@ import {
 
 import { AuthenticationGateway } from './authentication/authentication.gateway';
 import { authenticationSlice } from './authentication/authentication.slice';
-import { userReducer } from './authentication/user.slice';
 import { commentsReducer } from './comment/comments.slice';
 import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
@@ -19,6 +18,7 @@ import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
 import { threadsReducer } from './thread/thread.slice';
 import { UserGateway } from './user/user.gateway';
+import { userReducer } from './user/user.slice';
 import { usersReducer } from './user/users.slice';
 
 export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
