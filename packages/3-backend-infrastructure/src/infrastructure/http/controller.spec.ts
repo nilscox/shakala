@@ -80,6 +80,21 @@ describe('Controller', () => {
     expect(logger.error).toHaveBeenCalledWith(error);
   });
 
+  it('returns a response body of type string', async () => {
+    const controller = TestController.create(() => {
+      return Response.ok('test');
+    });
+
+    const app = express();
+
+    controller.configure(app);
+
+    const response = await supertest(app).get('/');
+
+    expect(response.get('Content-Type')).toEqual('text/plain; charset=utf-8');
+    expect(response.text).toEqual('test');
+  });
+
   it('returns a response body of type Buffer', async () => {
     const controller = TestController.create(() => {
       return Response.ok(Buffer.from('test'));
@@ -91,6 +106,7 @@ describe('Controller', () => {
 
     const response = await supertest(app).get('/');
 
+    expect(response.get('Content-Type')).toEqual('application/octet-stream');
     expect(response.body).toEqual(Buffer.from('test'));
   });
 

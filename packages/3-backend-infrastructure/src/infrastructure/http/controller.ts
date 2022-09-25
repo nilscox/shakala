@@ -29,7 +29,7 @@ export const Middlewares = (...middlewares: ExpressRequestHandler[]): MethodDeco
 export abstract class Controller {
   private router = Router();
 
-  constructor(private readonly logger: LoggerService, private readonly prefix: string) {}
+  constructor(private readonly logger: LoggerService, private readonly prefix = '') {}
 
   abstract endpoints(): Record<string, RequestHandler>;
 
@@ -77,14 +77,18 @@ export abstract class Controller {
         res.set(key, value);
       }
 
-      if (response.body !== undefined) {
-        if (Buffer.isBuffer(response.body)) {
-          res.send(response.body);
-        } else {
-          res.json(response.body);
-        }
-      } else {
+      if (response.body === undefined) {
         res.end();
+        return;
+      }
+
+      if (typeof response.body === 'string') {
+        res.set('Content-Type', 'text/plain');
+        res.send(response.body);
+      } else if (Buffer.isBuffer(response.body)) {
+        res.send(response.body);
+      } else {
+        res.json(response.body);
       }
     };
   }

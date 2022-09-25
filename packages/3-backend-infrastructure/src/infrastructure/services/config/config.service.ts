@@ -1,4 +1,5 @@
 export type AppConfig = {
+  version: string;
   host: string;
   port: number;
   trustProxy: boolean;

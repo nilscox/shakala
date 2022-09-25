@@ -32,6 +32,7 @@ const merge = <T extends object>(left: T, right: DeepPartial<T>): T => {
 export class StubConfigService implements ConfigService {
   static defaultConfig: Config = {
     app: {
+      version: '',
       host: '',
       port: NaN,
       trustProxy: false,

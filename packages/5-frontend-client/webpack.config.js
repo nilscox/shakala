@@ -5,7 +5,7 @@ const { EnvironmentPlugin, ProvidePlugin } = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const { NODE_ENV = 'development', HOST = '0.0.0.0', PORT = '8000' } = process.env;
+const { NODE_ENV = 'development', VERSION = 'development', HOST = '0.0.0.0', PORT = '8000' } = process.env;
 
 /** @type {import('webpack').Configuration} */
 const config = (module.exports = {
@@ -69,6 +69,11 @@ const config = (module.exports = {
     new ProvidePlugin({ React: 'react' }),
     new HtmlWebpackPlugin({
       title: 'Shakala',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'version.txt',
+      inject: false,
+      templateContent: VERSION,
     }),
   ],
 });

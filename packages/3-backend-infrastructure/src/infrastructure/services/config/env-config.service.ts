@@ -53,6 +53,7 @@ export class EnvConfigService implements ConfigService {
 
   app(): AppConfig {
     return {
+      version: this.get('VERSION'),
       host: this.get('HOST'),
       port: this.get('PORT', 'number'),
       trustProxy: this.isProd,

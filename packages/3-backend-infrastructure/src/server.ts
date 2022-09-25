@@ -121,7 +121,7 @@ export class Server extends Application {
     const threadPresenter = new ThreadPresenter(userPresenter);
 
     const controllers = [
-      new HealthcheckController(logger, em),
+      new HealthcheckController(logger, config, em),
       new AuthenticationController(logger, config, validationService, sessionService, queryBus, commandBus, userPresenter),
       new AccountController(logger, commandBus, queryBus, sessionService, userPresenter),
       new UserController(logger, queryBus, userPresenter),
