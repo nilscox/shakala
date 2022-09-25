@@ -38,7 +38,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
           </FooterColumn>
 
           <FooterColumn>
-            <a href="https://ameliorer.shakala.nils.cx/retours">Proposer une idée</a>
+            <a href="https://improve.shakala.nilscox.dev/feedback">Proposer une idée</a>
             <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
             <a href="https://github.com/nilscox/shakala">Code source</a>
           </FooterColumn>
