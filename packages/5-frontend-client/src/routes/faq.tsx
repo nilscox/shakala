@@ -153,7 +153,7 @@ const questions: Record<string, QuestionProps[]> = {
       question: <>Qui développe Shakala ?</>,
       answer: (
         <>
-          Le projet est développé par une <ExternalLink href="https://nils.cx">petite</ExternalLink>{' '}
+          Le projet est développé par une <ExternalLink href="https://nilscox.dev">petite</ExternalLink>{' '}
           <ExternalLink href="https://bopzor.me">équipe</ExternalLink> de devs passionnés par l'esprit
           critique et la zététique.
         </>
@@ -230,8 +230,8 @@ export const FaqRoute = () => (
     <ul className="links-nocolor links-underline list-disc pl-6">
       <li>
         Sur canny, pour proposer des idées d'amélioration :{' '}
-        <ExternalLink href="https://ameliorer.shakala.nils.cx/retours">
-          https://ameliorer.shakala.nils.cx/retours
+        <ExternalLink href="https://improve.shakala.nilscox.dev/feedback">
+          https://improve.shakala.nilscox.dev/feedback
         </ExternalLink>
       </li>
 
@@ -242,7 +242,7 @@ export const FaqRoute = () => (
 
       <li>
         Par e-mail, parce que c'est pratique :{' '}
-        <ExternalLink href="mailto:nils@nils.cx">nils@nils.cx</ExternalLink>
+        <ExternalLink href="mailto:hello@nilscox.dev">hello@nilscox.dev</ExternalLink>
       </li>
     </ul>
   </>
