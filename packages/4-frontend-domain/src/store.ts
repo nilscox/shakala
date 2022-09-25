@@ -19,7 +19,7 @@ import { TimerGateway } from './interfaces/timer.gateway';
 import { ThreadGateway } from './thread/thread.gateway';
 import { threadsReducer } from './thread/thread.slice';
 import { UserGateway } from './user/user.gateway';
-import { usersReducer } from './user/user.slice';
+import { usersReducer } from './user/users.slice';
 
 export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
   return configureStore({
