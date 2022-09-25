@@ -1,7 +1,7 @@
 import { InMemoryEmailSenderService } from 'backend-application';
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
-import { MockLoggerService, TestConfigService } from '../../infrastructure';
+import { MockLoggerService, StubConfigService } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Authentication e2e', () => {
@@ -13,7 +13,7 @@ describe('Authentication e2e', () => {
 
   server.overrideServices({
     loggerService: new MockLoggerService(),
-    configService: new TestConfigService({ app: { apiBaseUrl } }),
+    configService: new StubConfigService({ app: { apiBaseUrl } }).withEnvDatabase(),
     emailSenderService,
   });
 

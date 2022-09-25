@@ -1,7 +1,7 @@
 import { InMemoryEmailSenderService } from 'backend-application';
 import { SuperAgentTest } from 'supertest';
 
-import { MockLoggerService, TestConfigService } from '../../infrastructure';
+import { MockLoggerService, StubConfigService } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Thread e2e', () => {
@@ -10,7 +10,7 @@ describe('Thread e2e', () => {
 
   server.overrideServices({
     loggerService: new MockLoggerService(),
-    configService: new TestConfigService(),
+    configService: new StubConfigService().withEnvDatabase(),
     emailSenderService: new InMemoryEmailSenderService(),
   });
 

@@ -10,7 +10,7 @@ describe('Account e2e', () => {
 
   server.overrideServices({
     loggerService: new MockLoggerService(),
-    configService: new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } }),
+    configService: new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } }).withEnvDatabase(),
   });
 
   beforeAll(async () => {

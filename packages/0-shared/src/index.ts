@@ -16,6 +16,7 @@ export * from './libs/unexpected-error';
 export * from './libs/wait';
 
 export * from './types/class-type';
+export * from './types/deep-partial';
 export * from './types/replace';
 
 export * from './schemas/authentication';

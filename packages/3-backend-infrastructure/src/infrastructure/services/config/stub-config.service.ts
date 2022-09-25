@@ -1,3 +1,5 @@
+import { DeepPartial, get } from 'shared';
+
 import {
   ConfigService,
   AppConfig,
@@ -8,65 +10,98 @@ import {
   EmailConfig,
 } from './config.service';
 
+type Config = {
+  app: AppConfig;
+  cors: CorsConfig;
+  session: SessionConfig;
+  database: DatabaseConfig;
+  email: EmailConfig;
+};
+
+const merge = <T extends object>(left: T, right: DeepPartial<T>): T => {
+  if (typeof left !== 'object') {
+    return (right as T) ?? left;
+  }
+
+  return Object.entries(left).reduce(
+    (obj, [key, value]) => ({ ...obj, [key]: merge(value, get(right, key)) }),
+    {} as T,
+  );
+};
+
 export class StubConfigService implements ConfigService {
-  constructor(
-    public config?: Partial<{
-      app: Partial<AppConfig>;
-      cors: Partial<CorsConfig>;
-      session: Partial<SessionConfig>;
-      database: Partial<DatabaseConfig>;
-      email: Partial<EmailConfig>;
-    }>,
-  ) {}
-
-  app(): AppConfig {
-    return {
-      host: 'localhost',
-      port: 3000,
+  static defaultConfig: Config = {
+    app: {
+      host: '',
+      port: NaN,
       trustProxy: false,
-      apiBaseUrl: 'http://localhost:3000',
-      appBaseUrl: 'http://localhost:8000',
-      ...this.config?.app,
-    };
-  }
-
-  cors(): CorsConfig {
-    return {
+      apiBaseUrl: '',
+      appBaseUrl: '',
+    },
+    cors: {
       reflectOrigin: true,
-      ...this.config?.cors,
-    };
-  }
-
-  session(): SessionConfig {
-    return {
+    },
+    session: {
       secret: 'secret',
       secure: false,
       pruneExpiredSessions: false,
-      ...this.config?.session,
-    };
-  }
-
-  database(): DatabaseConfig {
-    return {
-      host: 'localhost',
-      user: 'postgres',
-      password: '',
-      database: 'shakala',
-      ...this.config?.database,
-    };
-  }
-
-  email(): EmailConfig {
-    return {
+    },
+    database: {
       host: '',
-      port: 0,
+      user: '',
+      password: '',
+      database: '',
+    },
+    email: {
+      host: '',
+      port: NaN,
       secure: false,
       user: '',
       password: '',
       from: '',
-      ...this.config?.email,
-    };
+    },
+  };
+
+  private config: Config;
+
+  constructor(config: DeepPartial<Config> = {}) {
+    this.config = merge(StubConfigService.defaultConfig, config);
+  }
+
+  app(): AppConfig {
+    return this.config.app;
+  }
+
+  cors(): CorsConfig {
+    return this.config.cors;
+  }
+
+  session(): SessionConfig {
+    return this.config.session;
+  }
+
+  database(): DatabaseConfig {
+    return this.config.database;
+  }
+
+  email(): EmailConfig {
+    return this.config.email;
   }
 
   dump = dumpConfig(this);
+
+  withEnvDatabase(): StubConfigService {
+    const getEnv = (key: string, defaultValue: string) => {
+      return process.env[key] ?? defaultValue;
+    };
+
+    Object.assign(this.config.database, {
+      host: getEnv('DATABASE_HOST', 'localhost'),
+      user: getEnv('DATABASE_USER', 'postgres'),
+      password: getEnv('DATABASE_PASSWORD', ''),
+      database: getEnv('DATABASE_NAME', 'test'),
+    });
+
+    return this;
+  }
 }

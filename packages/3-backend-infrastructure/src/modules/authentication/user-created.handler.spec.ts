@@ -1,7 +1,7 @@
 import { EmailKind, ExecutionContext, InMemoryUserRepository, SendEmailCommand } from 'backend-application';
 import { factories, Nick, UserCreatedEvent } from 'backend-domain';
 
-import { TestConfigService } from '../../infrastructure';
+import { StubConfigService } from '../../infrastructure';
 import { MockCommandBus } from '../../test';
 
 import { UserCreatedHandler } from './user-created.handler';
@@ -9,7 +9,7 @@ import { UserCreatedHandler } from './user-created.handler';
 describe('UserCreatedHandler', () => {
   const userRepository = new InMemoryUserRepository();
   const commandBus = new MockCommandBus();
-  const configService = new TestConfigService({ app: { apiBaseUrl: 'https://api.url' } });
+  const configService = new StubConfigService({ app: { apiBaseUrl: 'https://api.url' } });
 
   const handler = new UserCreatedHandler(configService, userRepository, commandBus);
 

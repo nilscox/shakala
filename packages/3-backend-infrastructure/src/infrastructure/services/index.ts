@@ -3,7 +3,6 @@ export * from './crypto/bcrypt.service';
 export * from './config/config.service';
 export * from './config/env-config.service';
 export * from './config/stub-config.service';
-export * from './config/test-config.service';
 
 export * from './logger/console-logger.service';
 export * from './logger/mock-logger.service';

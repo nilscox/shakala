@@ -60,7 +60,7 @@ jobs:
           DATABASE_HOST: postgres
           DATABASE_USER: postgres
           DATABASE_PASSWORD: postgres
-          DATABASE_NAME: postgres
+          DATABASE_NAME: test
 
   lint:
     name: Lint
