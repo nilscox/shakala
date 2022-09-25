@@ -85,7 +85,7 @@ test.describe('Comments', () => {
     const comment = alice.closest(alice.findByText(/sur Twitter !$/), '.comment > *');
 
     await alice.within(comment).findByTitle('Voir plus...').click();
-    await alice.within(comment).findLink('Signaler').click();
+    await alice.within(comment).findButton('Signaler').click();
 
     await alice
       .findByPlaceholder('Précisez le motif du signalement si nécessaire')

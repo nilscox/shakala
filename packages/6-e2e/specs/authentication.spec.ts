@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { wait } from 'shared';
 
 import { AppContext } from '../utils/app-context';
 
@@ -21,7 +22,7 @@ test.describe('Authentication', () => {
     await expect(app.searchParams.get('auth')).toEqual('login');
 
     await app.findByText('Créer un compte').click();
-    await expect(app.searchParams.get('auth')).toEqual('signup');
+    await expect(app.searchParams.get('auth')).toEqual('register');
 
     await app.findByPlaceholder('Email').fill('user@domain.tld');
     await app.findByPlaceholder('Mot de passe').fill('password');
@@ -38,6 +39,9 @@ test.describe('Authentication', () => {
     await expect.poll(() => app.searchParams.get('auth')).toBeNull();
 
     app.within(notification).findByLabel('Fermer').click();
+
+    // wait for the email to be sent
+    await wait(100);
 
     const page = await app.newPage();
     await page.navigate(await app.getEmailValidationLink('user@domain.tld'));

@@ -88,7 +88,7 @@ export class AppContext extends AppAccessors {
     await wait(100);
   }
 
-  async getEmailValidationLink(email: string): Promise<string> {
+  async getEmailValidationLink(emailAddress: string): Promise<string> {
     type Email = {
       to: Array<{ address: string }>;
       text: string;
@@ -97,9 +97,13 @@ export class AppContext extends AppAccessors {
     const response = await fetch('http://localhost:1080/email');
     const body = (await response.json()) as Email[];
 
-    expect(response.ok, JSON.stringify(body)).toBe(true);
+    expect(response.ok).toBe(true);
 
-    const { text } = body.find(({ to }) => to[0].address === email) as Email;
+    const email = body.find(({ to }) => to[0].address === emailAddress);
+
+    expect(email).toBeDefined();
+
+    const { text } = email as Email;
     const match = text.match(/http.*\n/);
 
     expect(match).toBeDefined();
