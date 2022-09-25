@@ -1,13 +1,18 @@
 import { Meta, Story } from '@storybook/react';
 import { addComment, createComment, createThread, createUser, addThread } from 'frontend-domain';
+import { createMemoryHistory } from 'history';
 
 import { reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
 
 import { CommentHistoryModal } from '../comment-history-modal/comment-history-modal';
 
+const history = createMemoryHistory({
+  initialEntries: ['?' + new URLSearchParams({ historique: 'commentId' })],
+});
+
 export default {
   title: 'Domain/CommentHistoryModal',
-  decorators: [routerDecorator('?' + new URLSearchParams({ historique: 'commentId' })), reduxDecorator()],
+  decorators: [reduxDecorator(), routerDecorator(history)],
 } as Meta;
 
 // cspell:word bopzor

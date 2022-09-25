@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-import { RouterGateway, LocationChange, RemoveListener } from 'frontend-domain';
+import { RouterGateway, LocationChange, RemoveListener, AuthenticationType } from 'frontend-domain';
 import { Location, NavigateFunction } from 'react-router-dom';
 
 export class ReactRouterGateway extends EventEmitter implements RouterGateway {
@@ -59,5 +59,26 @@ export class ReactRouterGateway extends EventEmitter implements RouterGateway {
     this.addListener(LocationChange, listener);
 
     return () => this.removeListener(LocationChange, listener);
+  }
+
+  get currentAuthenticationForm(): AuthenticationType | undefined {
+    switch (this.getQueryParam('auth')) {
+      case 'login':
+        return AuthenticationType.login;
+      case 'register':
+        return AuthenticationType.signup;
+      case 'email-login':
+        return AuthenticationType.emailLogin;
+      default:
+        return undefined;
+    }
+  }
+
+  set currentAuthenticationForm(form: AuthenticationType | undefined) {
+    if (form) {
+      this.setQueryParam('auth', form === AuthenticationType.signup ? 'register' : form);
+    } else {
+      this.removeQueryParam('auth');
+    }
   }
 }

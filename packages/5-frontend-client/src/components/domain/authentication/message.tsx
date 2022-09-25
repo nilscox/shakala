@@ -1,10 +1,11 @@
-import { AuthenticationType, selectAuthenticationForm } from 'frontend-domain';
+import { AuthenticationType } from 'frontend-domain';
 
 import { Link } from '~/components/elements/link';
-import { useSelector } from '~/hooks/use-selector';
+
+import { useAuthenticationForm } from './use-authentication-form';
 
 export const AuthenticationMessage = () => {
-  const form = useSelector(selectAuthenticationForm);
+  const form = useAuthenticationForm();
 
   if (form === AuthenticationType.login) {
     return <p>Connectez-vous sur Shakala pour interagir avec le reste de la communauté.</p>;

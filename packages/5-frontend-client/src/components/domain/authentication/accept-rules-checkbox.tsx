@@ -2,18 +2,21 @@ import { clsx } from 'clsx';
 import {
   acceptRules,
   AuthenticationField,
+  isAuthenticationFieldVisible,
   selectAreRulesAccepted,
   selectIsAcceptRulesWarningVisible,
-  selectIsAuthenticationFieldVisible,
 } from 'frontend-domain';
 
 import { Link } from '~/components/elements/link';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 
+import { useAuthenticationForm } from './use-authentication-form';
+
 export const AcceptRulesCheckbox = () => {
   const warningVisible = useSelector(selectIsAcceptRulesWarningVisible);
-  const visible = useSelector(selectIsAuthenticationFieldVisible, AuthenticationField.acceptRulesCheckbox);
+  const form = useAuthenticationForm();
+  const visible = isAuthenticationFieldVisible(form, AuthenticationField.acceptRulesCheckbox);
   const checked = useSelector(selectAreRulesAccepted);
   const dispatch = useDispatch();
 

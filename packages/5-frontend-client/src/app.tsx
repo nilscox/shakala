@@ -21,7 +21,7 @@ import '@fontsource/montserrat/latin.css';
 import './styles/react-modal.css';
 import './styles/tailwind.css';
 
-const useReactRouterGateway = () => {
+export const useReactRouterGateway = () => {
   const navigate = useNavigate();
   const location = useLocation();
 

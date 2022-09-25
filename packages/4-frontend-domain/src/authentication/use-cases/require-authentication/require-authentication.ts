@@ -1,15 +1,14 @@
 import { Thunk } from '../../../store';
 import { selectUser } from '../../../user/user.selectors';
 import { AuthenticationType } from '../../authentication.types';
-import { openAuthenticationModal } from '../open-authentication-modal/open-authentication-modal';
 
 export const requireAuthentication = (): Thunk<boolean> => {
-  return (dispatch, getState) => {
+  return (_dispatch, getState, { routerGateway }) => {
     if (selectUser(getState())) {
       return true;
     }
 
-    dispatch(openAuthenticationModal(AuthenticationType.login));
+    routerGateway.currentAuthenticationForm = AuthenticationType.login;
 
     return false;
   };

@@ -1,6 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { selectIsAuthenticationModalOpen, setUser } from '../../../authentication';
+import { setUser } from '../../../authentication';
 import { createAuthUser, TestStore } from '../../../test';
 import { AuthorizationError, ValidationError } from '../../../types';
 
@@ -45,7 +45,7 @@ describe('createThread', () => {
 
     await execute();
 
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
+    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
   });
 
   it('redirects to the new thread page', async () => {

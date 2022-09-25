@@ -1,18 +1,10 @@
 import { setUser as setUserAction } from '../../user/user.slice';
 import { authenticationSlice } from '../authentication.slice';
-import { AuthenticationField, AuthenticationType } from '../authentication.types';
+import { AuthenticationField } from '../authentication.types';
 
 const actions = authenticationSlice.actions;
 
 export const setUser = setUserAction;
-
-export const setIsAuthenticationModalOpen = (open: boolean) => {
-  return actions.setIsModalOpen({ open });
-};
-
-export const setAuthenticationForm = (form?: AuthenticationType) => {
-  return actions.setAuthenticationForm({ form });
-};
 
 export const setAcceptRulesWarningVisible = (visible: boolean) => {
   return actions.setAcceptRulesWarningVisible({ visible });

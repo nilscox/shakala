@@ -4,17 +4,13 @@ import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
 import { selectUser } from '../../../user/user.selectors';
-import {
-  setAuthenticationFieldError,
-  setIsAuthenticationModalOpen,
-} from '../../actions/authentication.actions';
+import { setAuthenticationFieldError } from '../../actions/authentication.actions';
 import { InvalidCredentialsError } from '../../authentication.gateway';
-import { AuthenticationField } from '../../authentication.types';
+import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 import {
   selectAuthenticationFieldError,
   selectAuthenticationFormError,
   selectIsAuthenticating,
-  selectIsAuthenticationModalOpen,
 } from '../../selectors/authentication.selectors';
 
 import { login } from './login';
@@ -34,7 +30,7 @@ describe('login', () => {
   const password = 'password';
 
   beforeEach(() => {
-    store.dispatch(setIsAuthenticationModalOpen(true));
+    store.routerGateway.currentAuthenticationForm = AuthenticationType.login;
     store.authenticationGateway.login.mockResolvedValue(user);
   });
 
@@ -58,7 +54,7 @@ describe('login', () => {
   it('closes the authentication modal', async () => {
     await store.dispatch(login(email, password));
 
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(false);
+    expect(store.routerGateway.currentAuthenticationForm).toBeUndefined();
   });
 
   it('shows a snackbar', async () => {

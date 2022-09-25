@@ -15,7 +15,7 @@ import { Comment } from './comment';
 
 export default {
   title: 'Domain/Comment',
-  decorators: [routerDecorator(), reduxDecorator(), maxWidthDecorator()],
+  decorators: [reduxDecorator(), routerDecorator(), maxWidthDecorator()],
 } as Meta;
 
 const Template: Story<{ setup: SetupRedux; commentId: string }> = ({ commentId }) => {

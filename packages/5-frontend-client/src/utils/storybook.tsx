@@ -5,23 +5,24 @@ import {
   Dependencies,
   Dispatch,
   DraftCommentKind,
-  RemoveListener,
-  RouterGateway,
   SnackbarGateway,
   StorageGateway,
 } from 'frontend-domain';
+import { createMemoryHistory } from 'history';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 
 import { StorybookAuthenticationGateway } from '~/adapters/authentication-gateway/storybook-authentication.gateway';
 import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';
+import { ReactRouterGateway } from '~/adapters/router-gateway/react-router-gateway';
 import { StorybookThreadGateway } from '~/adapters/thread-gateway/storybook-thread.gateway';
 import { RealTimerGateway } from '~/adapters/timer-gateway/timer-gateway';
 import { StorybookUserGateway } from '~/adapters/user-gateway/storybook-user.gateway';
-import { useSnackbar, SnackbarProvider } from '~/components/elements/snackbar';
+import { useReactRouterGateway } from '~/app';
+import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar';
 
 export const maxWidthDecorator = () => {
   const MaxWidthDecorator: DecoratorFn = (Story) => (
@@ -33,11 +34,11 @@ export const maxWidthDecorator = () => {
   return MaxWidthDecorator;
 };
 
-export const routerDecorator = (initialEntry?: string) => {
+export const routerDecorator = (history = createMemoryHistory()) => {
   const StorybookRouterDecorator: DecoratorFn = (Story) => (
-    <MemoryRouter initialEntries={initialEntry ? [initialEntry] : undefined}>
+    <Router location={history.location} navigator={history}>
       <Story />
-    </MemoryRouter>
+    </Router>
   );
 
   return StorybookRouterDecorator;
@@ -52,29 +53,6 @@ export const snackbarDecorator = () => {
 
   return SnackbarDecorator;
 };
-
-class StorybookRouterGateway implements RouterGateway {
-  navigate(to: string): void {
-    action('StorybookRouterGateway.navigate')(to);
-  }
-
-  getQueryParam(key: string): string | undefined {
-    action('StorybookRouterGateway.getQueryParam')(key);
-    return;
-  }
-
-  setQueryParam(key: string, value: string): void {
-    action('StorybookRouterGateway.setQueryParam')(key, value);
-  }
-
-  removeQueryParam(key: string): void {
-    action('StorybookRouterGateway.removeQueryParam')(key);
-  }
-
-  onLocationChange(): RemoveListener {
-    return () => {};
-  }
-}
 
 class StorybookStorageGateway implements StorageGateway {
   async getDraftCommentText(kind: DraftCommentKind, id: string): Promise<string | undefined> {
@@ -95,7 +73,7 @@ interface StorybookDependencies extends Dependencies {
   dateGateway: RealDateGateway;
   snackbarGateway: SnackbarGateway;
   loggerGateway: ConsoleLoggerGateway;
-  routerGateway: StorybookRouterGateway;
+  routerGateway: ReactRouterGateway;
   timerGateway: RealTimerGateway;
   authenticationGateway: StorybookAuthenticationGateway;
   threadGateway: StorybookThreadGateway;
@@ -108,20 +86,21 @@ export type SetupRedux = (dispatch: Dispatch, deps: StorybookDependencies) => vo
 export const reduxDecorator = () => {
   const StorybookReduxProvider: DecoratorFn = (Story, context: { args: { setup?: SetupRedux } }) => {
     const snackbar = useSnackbar();
+    const routerGateway = useReactRouterGateway();
 
     const dependencies = useMemo<StorybookDependencies>(
       () => ({
         dateGateway: new RealDateGateway(),
         snackbarGateway: snackbar,
         loggerGateway: new ConsoleLoggerGateway(),
-        routerGateway: new StorybookRouterGateway(),
+        routerGateway,
         timerGateway: new RealTimerGateway(),
         authenticationGateway: new StorybookAuthenticationGateway(),
         threadGateway: new StorybookThreadGateway(),
         storageGateway: new StorybookStorageGateway(),
         userGateway: new StorybookUserGateway(),
       }),
-      [snackbar],
+      [snackbar, routerGateway],
     );
 
     const store = useMemo(() => createStore(dependencies), [dependencies]);

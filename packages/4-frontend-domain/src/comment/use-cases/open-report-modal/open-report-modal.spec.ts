@@ -1,4 +1,4 @@
-import { selectIsAuthenticationModalOpen, setUser } from '../../../authentication';
+import { setUser } from '../../../authentication';
 import { createAuthUser, createComment, createUser, TestStore } from '../../../test';
 import { addComment } from '../../comments.actions';
 
@@ -26,7 +26,7 @@ describe('openReportModal', () => {
     store.dispatch(openReportModal(comment.id));
 
     expect(store.routerGateway.getQueryParam('report')).toBeUndefined();
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
+    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
   });
 
   it('shows a notification when the user is not authenticated', () => {

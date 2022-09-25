@@ -2,6 +2,8 @@ import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
 
+import { routerDecorator } from '~/utils/storybook';
+
 import { ThreadForm } from './thread-form';
 
 export default {
@@ -12,6 +14,7 @@ export default {
         <Story />
       </div>
     ),
+    routerDecorator(),
   ],
 } as Meta;
 

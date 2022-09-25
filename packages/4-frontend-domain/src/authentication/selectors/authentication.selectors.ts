@@ -5,46 +5,22 @@ import { AuthenticationField, AuthenticationType } from '../authentication.types
 
 const selectAuthenticationSlice = (state: State) => state.authentication;
 
-export const selectIsAuthenticationModalOpen = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.isModalOpen,
-);
-
 export const selectIsAuthenticating = createSelector(
   selectAuthenticationSlice,
   (slice) => slice.authenticating,
 );
 
-export const selectAuthenticationFormUnsafe = createSelector(selectAuthenticationSlice, (slice) => {
-  return slice.form;
-});
-
-export const selectHasAuthenticationForm = createSelector(selectAuthenticationFormUnsafe, (form) => {
-  return Boolean(form);
-});
-
-export const selectAuthenticationForm = createSelector(selectAuthenticationFormUnsafe, (form) => {
-  if (!form) {
-    throw new Error(`selectAuthenticationForm: form is not defined`);
+export const isAuthenticationFieldVisible = (form: AuthenticationType, field: AuthenticationField) => {
+  if (field === 'email') {
+    return true;
   }
 
-  return form;
-});
+  if (field === 'password') {
+    return form !== AuthenticationType.emailLogin;
+  }
 
-export const selectIsAuthenticationFieldVisible = createSelector(
-  [selectAuthenticationForm, (_, field: AuthenticationField) => field],
-  (form, field) => {
-    if (field === 'email') {
-      return true;
-    }
-
-    if (field === 'password') {
-      return form !== AuthenticationType.emailLogin;
-    }
-
-    return form === AuthenticationType.signup;
-  },
-);
+  return form === AuthenticationType.signup;
+};
 
 export const selectAreRulesAccepted = createSelector(
   selectAuthenticationSlice,
@@ -71,22 +47,24 @@ export const selectIsAuthenticationFormValid = createSelector(
   (slice) => slice.isValid,
 );
 
-export const selectCanSubmitAuthenticationForm = createSelector(selectAuthenticationSlice, (slice) => {
-  if (!slice.isValid) {
+export const selectCanSubmitAuthenticationForm = (state: State, form: AuthenticationType) => {
+  const { isValid, fieldErrors, formError, rulesAccepted } = selectAuthenticationSlice(state);
+
+  if (!isValid) {
     return false;
   }
 
-  if (Object.values(slice.fieldErrors).length > 0) {
+  if (Object.values(fieldErrors).length > 0) {
     return false;
   }
 
-  if (slice.formError !== undefined) {
+  if (formError !== undefined) {
     return false;
   }
 
-  if (slice.form === AuthenticationType.signup && !slice.rulesAccepted) {
+  if (form === AuthenticationType.signup && !rulesAccepted) {
     return false;
   }
 
   return true;
-});
+};

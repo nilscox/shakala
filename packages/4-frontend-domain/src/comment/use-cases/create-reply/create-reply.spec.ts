@@ -1,6 +1,5 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
@@ -85,7 +84,7 @@ describe('createReply', () => {
 
     await execute();
 
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
+    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
   });
 
   it('closes the reply form', async () => {

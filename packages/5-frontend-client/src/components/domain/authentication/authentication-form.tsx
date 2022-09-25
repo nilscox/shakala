@@ -1,10 +1,8 @@
 import { clsx } from 'clsx';
 import {
   AuthenticationType,
-  closeAuthenticationForm,
   handleAuthenticate,
   handleAuthenticationFormChange,
-  selectAuthenticationForm,
   selectAuthenticationFormError,
   selectCanSubmitAuthenticationForm,
   selectIsAuthenticating,
@@ -20,6 +18,7 @@ import { useSelector } from '~/hooks/use-selector';
 import { FormInputs } from './inputs';
 import { AuthenticationMessage } from './message';
 import { AuthenticationNavigation } from './navigation';
+import { useAuthenticationForm } from './use-authentication-form';
 
 const heading: Record<AuthenticationType, string> = {
   [AuthenticationType.login]: 'Connexion',
@@ -33,12 +32,18 @@ const cta: Record<AuthenticationType, string> = {
   [AuthenticationType.emailLogin]: 'Envoyer',
 };
 
-export const AuthenticationForm = () => {
-  const form = useSelector(selectAuthenticationForm);
-  const isAuthenticating = useSelector(selectIsAuthenticating);
-  const canSubmit = useSelector(selectCanSubmitAuthenticationForm);
-  const formError = useSelector(selectAuthenticationFormError);
+type AuthenticationFormProps = {
+  onClose: () => void;
+};
+
+export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
   const dispatch = useDispatch();
+
+  const form = useAuthenticationForm();
+
+  const isAuthenticating = useSelector(selectIsAuthenticating);
+  const canSubmit = useSelector(selectCanSubmitAuthenticationForm, form);
+  const formError = useSelector(selectAuthenticationFormError);
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
@@ -83,7 +88,7 @@ export const AuthenticationForm = () => {
             {formError === 'InvalidCredentials' && 'Combinaison email / mot de passe non valide'}
           </FieldError>
 
-          <Buttons canSubmit={canSubmit} />
+          <Buttons canSubmit={canSubmit} onClose={onClose} />
         </fieldset>
       </form>
     </>
@@ -92,15 +97,15 @@ export const AuthenticationForm = () => {
 
 type ButtonsProps = {
   canSubmit: boolean;
+  onClose: () => void;
 };
 
-const Buttons = ({ canSubmit }: ButtonsProps) => {
-  const form = useSelector(selectAuthenticationForm);
-  const dispatch = useDispatch();
+const Buttons = ({ canSubmit, onClose }: ButtonsProps) => {
+  const form = useAuthenticationForm();
 
   return (
     <div className="flex flex-row justify-end gap-2">
-      <Button secondary type="reset" onClick={() => dispatch(closeAuthenticationForm())}>
+      <Button secondary type="reset" onClick={onClose}>
         Annuler
       </Button>
       <Button primary type="submit" disabled={!canSubmit}>

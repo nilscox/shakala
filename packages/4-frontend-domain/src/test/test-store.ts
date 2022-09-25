@@ -1,6 +1,6 @@
 import { Middleware } from 'redux';
 
-import { setUser } from '../authentication';
+import { AuthenticationType, setUser } from '../authentication';
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
 import { DateGateway } from '../interfaces/date.gateway';
 import { LoggerGateway } from '../interfaces/logger.gateway';
@@ -89,6 +89,8 @@ class StubRouterGateway implements RouterGateway {
   triggerLocationChange() {
     this.locationChangeListener?.();
   }
+
+  currentAuthenticationForm: AuthenticationType | undefined;
 }
 
 class FakeTimerGateway implements TimerGateway {

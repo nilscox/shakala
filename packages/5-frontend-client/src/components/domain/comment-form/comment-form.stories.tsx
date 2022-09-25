@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { maxWidthDecorator } from '~/utils/storybook';
+import { maxWidthDecorator, routerDecorator } from '~/utils/storybook';
 
 import { CommentForm } from './comment-form';
 
@@ -15,6 +15,7 @@ export default {
       </div>
     ),
     maxWidthDecorator(),
+    routerDecorator(),
   ],
 } as Meta;
 

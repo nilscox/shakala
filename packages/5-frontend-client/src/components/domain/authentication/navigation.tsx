@@ -1,15 +1,16 @@
-import { AuthenticationType, selectAuthenticationForm } from 'frontend-domain';
+import { AuthenticationType } from 'frontend-domain';
 
 import { SearchParamLink } from '~/components/elements/search-param-link';
-import { useSelector } from '~/hooks/use-selector';
+
+import { useAuthenticationForm } from './use-authentication-form';
 
 export const AuthenticationNavigation = () => {
-  const form = useSelector(selectAuthenticationForm);
+  const form = useAuthenticationForm();
 
   return (
     <nav className="links-nocolor flex flex-row justify-between gap-1 text-muted">
       {form !== AuthenticationType.signup && (
-        <SearchParamLink param="auth" value="signup">
+        <SearchParamLink param="auth" value="register">
           Créer un compte
         </SearchParamLink>
       )}

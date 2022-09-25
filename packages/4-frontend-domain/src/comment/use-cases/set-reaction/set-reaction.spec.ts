@@ -1,6 +1,5 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { selectIsAuthenticationModalOpen } from '../../../authentication';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError, ReactionType } from '../../../types';
@@ -100,7 +99,7 @@ describe('setReaction', () => {
 
     await execute();
 
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(true);
+    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
   });
 
   describe('authorization error handling', () => {

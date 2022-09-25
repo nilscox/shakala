@@ -4,15 +4,11 @@ import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
 import { selectUser } from '../../../user/user.selectors';
-import {
-  setAuthenticationFieldError,
-  setIsAuthenticationModalOpen,
-} from '../../actions/authentication.actions';
-import { AuthenticationField } from '../../authentication.types';
+import { setAuthenticationFieldError } from '../../actions/authentication.actions';
+import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 import {
   selectAuthenticationFieldError,
   selectIsAuthenticating,
-  selectIsAuthenticationModalOpen,
 } from '../../selectors/authentication.selectors';
 
 import { signup } from './signup';
@@ -33,7 +29,7 @@ describe('signup', () => {
   const nick = 'nick';
 
   beforeEach(() => {
-    store.dispatch(setIsAuthenticationModalOpen(true));
+    store.routerGateway.currentAuthenticationForm = AuthenticationType.signup;
     store.authenticationGateway.signup.mockResolvedValue(user);
   });
 
@@ -57,7 +53,7 @@ describe('signup', () => {
   it('closes the authentication modal', async () => {
     await store.dispatch(signup(email, password, nick));
 
-    expect(store.select(selectIsAuthenticationModalOpen)).toBe(false);
+    expect(store.routerGateway.currentAuthenticationForm).toBeUndefined();
   });
 
   it('shows a snackbar', async () => {

@@ -1,14 +1,13 @@
 import { Thunk } from '../../../store';
 import { AuthenticationForm, AuthenticationType, LoginForm, SignupForm } from '../../authentication.types';
-import { selectAuthenticationForm } from '../../selectors/authentication.selectors';
 import { login } from '../login/login';
 import { signup } from '../signup/signup';
 
 export const handleAuthenticate = (form: AuthenticationForm): Thunk => {
-  return (dispatch, getState) => {
-    const authForm = selectAuthenticationForm(getState());
+  return (dispatch, getState, { routerGateway }) => {
+    const { currentAuthenticationForm } = routerGateway;
 
-    switch (authForm) {
+    switch (currentAuthenticationForm) {
       case AuthenticationType.login: {
         const { email, password } = form as LoginForm;
         return dispatch(login(email, password));

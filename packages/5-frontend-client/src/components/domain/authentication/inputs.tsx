@@ -1,7 +1,7 @@
 import {
   AuthenticationField,
+  isAuthenticationFieldVisible,
   selectAuthenticationFieldError,
-  selectIsAuthenticationFieldVisible,
 } from 'frontend-domain';
 
 import { FormField, FormFieldProps } from '~/components/elements/form-field';
@@ -10,6 +10,7 @@ import { SearchParamLink } from '~/components/elements/search-param-link';
 import { useSelector } from '~/hooks/use-selector';
 
 import { AcceptRulesCheckbox } from './accept-rules-checkbox';
+import { useAuthenticationForm } from './use-authentication-form';
 
 export const FormInputs = () => (
   <>
@@ -18,7 +19,7 @@ export const FormInputs = () => (
       errorsMap={{
         email: "Format d'adresse email non valide",
         max: 'Adresse email trop longue',
-        EmailAlreadyExists: (
+        alreadyExists: (
           <>
             Cette adresse email est déjà utilisée. Voulez-vous vous{' '}
             <SearchParamLink param="auth" value="login">
@@ -54,6 +55,7 @@ export const FormInputs = () => (
       errorsMap={{
         min: 'Pseudo trop court',
         max: 'Pseudo trop long',
+        alreadyExists: 'Ce pseudo est déjà utilisé',
       }}
     >
       <Input required type="text" placeholder="Pseudo" minLength={3} className="w-full" />
@@ -68,7 +70,8 @@ type AuthenticationFormFieldProps = FormFieldProps & {
 };
 
 export const AuthenticationFormField = ({ field, ...props }: AuthenticationFormFieldProps) => {
-  const visible = useSelector(selectIsAuthenticationFieldVisible, field);
+  const form = useAuthenticationForm();
+  const visible = isAuthenticationFieldVisible(form, field);
   const error = useSelector(selectAuthenticationFieldError, field);
 
   if (!visible) {
