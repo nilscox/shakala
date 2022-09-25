@@ -19,16 +19,21 @@ const MatomoProviderWithChildren = MatomoProvider as React.ComponentType<{
 export const AnalyticsProvider = ({ children }: AnalyticsProviderProps) => {
   const { analyticsUrl, analyticsSiteId } = useConfig();
 
-  const instance = useMemo(
-    () =>
-      createInstance({
-        urlBase: analyticsUrl ?? 'not-empty-string',
-        siteId: analyticsSiteId ?? NaN,
-        disabled: analyticsUrl === undefined,
-        linkTracking: false,
-      }),
-    [analyticsUrl, analyticsSiteId],
-  );
+  const instance = useMemo(() => {
+    if (!analyticsUrl || !analyticsSiteId) {
+      return;
+    }
+
+    return createInstance({
+      urlBase: analyticsUrl,
+      siteId: analyticsSiteId,
+      linkTracking: false,
+    });
+  }, [analyticsUrl, analyticsSiteId]);
+
+  if (!instance) {
+    return <>{children}</>;
+  }
 
   return (
     <MatomoProviderWithChildren value={instance}>
