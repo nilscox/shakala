@@ -1,7 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
-import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
@@ -32,7 +31,7 @@ describe('createReply', () => {
   const createdCommentId = 'replyId';
 
   beforeEach(() => {
-    store.dispatch(setUser({ user }));
+    store.user = user;
 
     store.dispatch(addThread(thread));
     store.dispatch(addComment(parent));
@@ -82,7 +81,7 @@ describe('createReply', () => {
   });
 
   it('requires user authentication', async () => {
-    store.dispatch(unsetUser());
+    store.user = undefined;
 
     await execute();
 
@@ -163,7 +162,7 @@ describe('setReplyFormText', () => {
   const text = 'text';
 
   beforeEach(() => {
-    store.dispatch(setUser({ user }));
+    store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(parent));
     store.dispatch(addRootCommentToThread(thread.id, parent));

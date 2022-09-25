@@ -1,7 +1,6 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { selectUser } from '../../selectors/user.selectors';
-import { setUser } from '../../user.slice';
 
 import { logout } from './logout';
 
@@ -9,7 +8,7 @@ describe('logout', () => {
   const store = new TestStore();
 
   beforeEach(() => {
-    store.dispatch(setUser({ user: createAuthUser() }));
+    store.user = createAuthUser();
     store.routerGateway.pathname = '/profile';
   });
 

@@ -8,7 +8,7 @@ import {
 
 import { AuthenticationGateway } from './authentication/authentication.gateway';
 import { authenticationSlice } from './authentication/authentication.slice';
-import { userSlice } from './authentication/user.slice';
+import { userReducer } from './authentication/user.slice';
 import { commentsReducer } from './comment/comments.slice';
 import { DateGateway } from './interfaces/date.gateway';
 import { LoggerGateway } from './interfaces/logger.gateway';
@@ -25,7 +25,7 @@ export const createStore = (dependencies: Dependencies, middlewares: Middleware[
   return configureStore({
     reducer: {
       [authenticationSlice.name]: authenticationSlice.reducer,
-      [userSlice.name]: userSlice.reducer,
+      user: userReducer,
       users: usersReducer,
       threads: threadsReducer,
       comments: commentsReducer,

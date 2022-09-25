@@ -1,7 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
-import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
 import { AuthorizationError, ReactionType } from '../../../types';
@@ -28,7 +27,7 @@ describe('setReaction', () => {
   const thread = createThread({ id: threadId, comments: [comment] });
 
   beforeEach(() => {
-    store.dispatch(setUser({ user }));
+    store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(comment));
   });
@@ -97,7 +96,7 @@ describe('setReaction', () => {
   });
 
   it('requires user authentication', async () => {
-    store.dispatch(unsetUser());
+    store.user = undefined;
 
     await execute();
 

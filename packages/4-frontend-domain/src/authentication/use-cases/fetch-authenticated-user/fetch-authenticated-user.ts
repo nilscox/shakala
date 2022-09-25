@@ -6,7 +6,7 @@ export const fetchAuthenticatedUser = (): Thunk => {
     const user = await authenticationGateway.fetchUser();
 
     if (user) {
-      dispatch(setUser({ user }));
+      dispatch(setUser(user));
     }
   };
 };

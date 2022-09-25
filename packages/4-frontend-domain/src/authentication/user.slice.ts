@@ -1,27 +1,38 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction } from '@nilscox/redux-query';
+import { AnyAction } from 'redux';
 
 import { AuthUser } from '../types';
 
-type UserSlice = AuthUser | null;
+const [setUser, isSetUserAction] = createAction('user/set', (user: AuthUser) => ({
+  user,
+}));
 
-const initialState = null as UserSlice;
+const [unsetUser, isUnsetUserAction] = createAction('user/unset');
 
-export const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setUser(_, { payload }: PayloadAction<{ user: AuthUser }>) {
-      return payload.user;
-    },
-    unsetUser() {
-      return null;
-    },
-    updateUser(user, { payload }: PayloadAction<Partial<AuthUser>>) {
-      if (user) {
-        Object.assign(user, payload);
-      }
-    },
-  },
-});
+const [updateUser, isUpdateUserAction] = createAction('user/update', (changes: Partial<AuthUser>) => ({
+  changes,
+}));
 
-export const { setUser, unsetUser, updateUser } = userSlice.actions;
+export { setUser, unsetUser, updateUser };
+
+type UserState = AuthUser | null;
+
+export const userReducer = (user: UserState = null, action: AnyAction): UserState => {
+  if (isSetUserAction(action)) {
+    return action.user;
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  if (isUnsetUserAction(action)) {
+    return null;
+  }
+
+  if (isUpdateUserAction(action)) {
+    return { ...user, ...action.changes };
+  }
+
+  return user;
+};

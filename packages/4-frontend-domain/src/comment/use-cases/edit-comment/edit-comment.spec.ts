@@ -1,7 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
 import { selectIsAuthenticationModalOpen } from '../../../authentication';
-import { setUser, unsetUser } from '../../../authentication/user.slice';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';
 import { addRootCommentToThread } from '../../../thread';
@@ -33,7 +32,7 @@ describe('editComment', () => {
   const now = new Date('2022-01-02');
 
   beforeEach(() => {
-    store.dispatch(setUser({ user }));
+    store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(comment));
     store.dispatch(setIsEditingComment(comment.id));
@@ -83,7 +82,7 @@ describe('editComment', () => {
   });
 
   it('requires user authentication', async () => {
-    store.dispatch(unsetUser());
+    store.user = undefined;
 
     await execute();
 
@@ -194,7 +193,7 @@ describe('setEditCommentFormText', () => {
   const text = 'edit';
 
   beforeEach(() => {
-    store.dispatch(setUser({ user }));
+    store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(comment));
     store.dispatch(addRootCommentToThread(thread.id, comment));

@@ -1,7 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
 import { selectIsAuthenticationModalOpen, setUser } from '../../../authentication';
-import { unsetUser } from '../../../authentication/user.slice';
 import { createAuthUser, TestStore } from '../../../test';
 import { AuthorizationError, ValidationError } from '../../../types';
 
@@ -42,7 +41,7 @@ describe('createThread', () => {
   });
 
   it('requires user authentication', async () => {
-    store.dispatch(unsetUser());
+    store.user = undefined;
 
     await execute();
 

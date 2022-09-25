@@ -1,5 +1,4 @@
 import { selectUser } from '../../../authentication';
-import { setUser } from '../../../authentication/user.slice';
 import { createAuthUser, TestStore } from '../../../test';
 
 import { changeProfileImage, InvalidImageFormat } from './change-profile-image';
@@ -14,7 +13,7 @@ describe('changeProfileImage', () => {
   };
 
   beforeEach(() => {
-    store.dispatch(setUser({ user: createAuthUser() }));
+    store.user = createAuthUser();
   });
 
   it("change the user's profile image", async () => {

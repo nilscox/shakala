@@ -13,7 +13,7 @@ export const login = (email: string, password: string): Thunk => {
 
       const user = await authenticationGateway.login(email, password);
 
-      dispatch(setUser({ user }));
+      dispatch(setUser(user));
       dispatch(closeAuthenticationForm());
 
       snackbarGateway.success('Vous êtes maintenant connecté(e)');

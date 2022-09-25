@@ -13,7 +13,7 @@ export const signup = (email: string, password: string, nick: string): Thunk => 
 
       const user = await authenticationGateway.signup(email, password, nick);
 
-      dispatch(setUser({ user }));
+      dispatch(setUser(user));
       dispatch(closeAuthenticationForm());
 
       snackbarGateway.success(
