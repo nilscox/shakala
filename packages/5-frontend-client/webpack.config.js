@@ -63,6 +63,8 @@ const config = (module.exports = {
   plugins: [
     new EnvironmentPlugin({
       API_URL: 'http://localhost:3000',
+      ANALYTICS_URL: false,
+      ANALYTICS_SITE_ID: false,
     }),
     new ProvidePlugin({ React: 'react' }),
     new HtmlWebpackPlugin({
