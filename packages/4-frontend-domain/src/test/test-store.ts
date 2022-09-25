@@ -11,9 +11,7 @@ import { TimerGateway } from '../interfaces/timer.gateway';
 import { createStore, Dependencies, Dispatch, Selector, Store } from '../store';
 import { ThreadGateway } from '../thread/thread.gateway';
 import { AuthUser } from '../types';
-import { selectUser } from '../user';
-import { UserGateway } from '../user/user.gateway';
-import { setUser, unsetUser } from '../user/user.slice';
+import { selectUser, setUser, unsetUser, UserGateway } from '../user';
 
 import { mockFn } from './mock-fn';
 

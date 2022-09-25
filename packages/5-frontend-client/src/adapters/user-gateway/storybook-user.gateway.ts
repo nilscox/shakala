@@ -1,4 +1,4 @@
-import { UserGateway } from 'frontend-domain/src/user/user.gateway';
+import { UserGateway } from 'frontend-domain';
 
 import { gatewayAction } from '~/utils/gateway-action';
 

@@ -1,5 +1,4 @@
-import { InvalidImageFormat } from 'frontend-domain';
-import { UserGateway } from 'frontend-domain/src/user/user.gateway';
+import { InvalidImageFormat, UserGateway } from 'frontend-domain';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 

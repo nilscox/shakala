@@ -6,7 +6,7 @@ import { addComment } from '../../../comment/comments.actions';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import type { State, Thunk } from '../../../store';
 import { Comment } from '../../../types';
-import { selectUserOrFail } from '../../../user/user.selectors';
+import { selectUserOrFail } from '../../../user';
 import { serializeError } from '../../../utils/serialize-error';
 import { addCreatedRootComment } from '../../lists/created-root-comments';
 import { updateThread } from '../../thread.actions';
