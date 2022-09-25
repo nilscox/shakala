@@ -166,6 +166,7 @@ const ReplyButton = ({ commentId }: ReplyButtonProps) => {
     <FooterButton
       icon={<ReplyIcon />}
       onClick={() => dispatch(setIsReplying(commentId, true))}
+      title="Répondre"
       className="ml-auto pl-2"
     >
       <span className="xxs:block hidden">Répondre</span>
