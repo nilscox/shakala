@@ -20,7 +20,7 @@ import {
   MathRandomGeneratorService,
   RealCommandBus,
   RealDateService,
-  ConfigService as InfraConfigService,
+  ConfigService,
   EnvConfigService,
   ConsoleLoggerService,
 } from './infrastructure';
@@ -41,30 +41,12 @@ import {
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
 
-const instantiateServices = (): Services => {
-  const configService = new EnvConfigService();
-  const dateService = new RealDateService();
-  const filesystemService = new RealFilesystemService(path.resolve(__dirname, '..'));
-
-  return {
-    configService,
-    loggerService: new ConsoleLoggerService(dateService),
-    generatorService: new MathRandomGeneratorService(),
-    dateService,
-    cryptoService: new BcryptService(),
-    filesystemService,
-    emailCompilerService: new MjmlEmailCompilerService(filesystemService),
-    emailSenderService: new NodeMailerEmailSenderService(configService),
-    profileImageStoreService: new SqlProfileImageStoreService(),
-  };
-};
-
 export class Application {
-  private services = instantiateServices();
+  private services = {} as Services & { configService: ConfigService };
 
-  protected commandBus = new RealCommandBus();
-  protected queryBus = new RealQueryBus();
-  protected eventBus = new EventBus(this.logger);
+  protected commandBus!: RealCommandBus;
+  protected queryBus!: RealQueryBus;
+  protected eventBus!: EventBus;
 
   protected orm?: MikroORM;
   private repositories!: Repositories;
@@ -73,8 +55,8 @@ export class Application {
     return this.services.loggerService;
   }
 
-  protected get config(): InfraConfigService {
-    return this.services.configService as InfraConfigService;
+  protected get config() {
+    return this.services.configService;
   }
 
   protected get em() {
@@ -85,11 +67,15 @@ export class Application {
     return this.orm.em.fork() as EntityManager;
   }
 
-  overrideServices(services: Partial<Services>) {
+  overrideServices(services: Partial<Services & { configService: ConfigService }>) {
     Object.assign(this.services, services);
   }
 
   async init() {
+    this.services.dateService ??= new RealDateService();
+    this.services.loggerService ??= new ConsoleLoggerService(this.services.dateService);
+    this.services.configService ??= new EnvConfigService();
+
     if (true as boolean) {
       this.logger.log('connecting to the database');
 
@@ -113,9 +99,6 @@ export class Application {
         commentRepository: new SqlCommentRepository(em, this.services),
         commentReportRepository: new SqlCommentReportRepository(em, this.services),
       };
-
-      // todo: instantiate repositories before services
-      (this.services.profileImageStoreService as SqlProfileImageStoreService).entityManager = em;
     } else {
       this.logger.log('instantiating in-memory repositories');
 
@@ -129,6 +112,22 @@ export class Application {
         commentReportRepository: new InMemoryCommentReportRepository(),
       };
     }
+
+    this.logger.log('instantiating services');
+
+    this.services.filesystemService ??= new RealFilesystemService(path.resolve(__dirname, '..'));
+    this.services.generatorService ??= new MathRandomGeneratorService();
+    this.services.cryptoService ??= new BcryptService();
+
+    this.services.emailCompilerService ??= new MjmlEmailCompilerService(this.services.filesystemService);
+    this.services.emailSenderService ??= new NodeMailerEmailSenderService(this.services.configService);
+    this.services.profileImageStoreService ??= new SqlProfileImageStoreService(this.em);
+
+    this.logger.log('instantiating CQS dependencies');
+
+    this.commandBus = new RealCommandBus();
+    this.queryBus = new RealQueryBus();
+    this.eventBus = new EventBus(this.services.loggerService);
 
     this.logger.log('registering query and command handlers');
 

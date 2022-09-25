@@ -4,11 +4,7 @@ import { ProfileImage, ProfileImageData, ProfileImageStoreService } from 'backen
 import { SqlProfileImage, SqlUser } from '../../../persistence/entities';
 
 export class SqlProfileImageStoreService implements ProfileImageStoreService {
-  private em!: EntityManager;
-
-  set entityManager(em: EntityManager) {
-    this.em = em;
-  }
+  constructor(private readonly em: EntityManager) {}
 
   get repository() {
     return this.em.getRepository(SqlProfileImage);

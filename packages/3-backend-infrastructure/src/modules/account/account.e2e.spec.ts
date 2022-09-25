@@ -1,3 +1,4 @@
+import { InMemoryEmailSenderService } from 'backend-application';
 import { UserDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
@@ -11,6 +12,7 @@ describe('Account e2e', () => {
   server.overrideServices({
     loggerService: new MockLoggerService(),
     configService: new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } }).withEnvDatabase(),
+    emailSenderService: new InMemoryEmailSenderService(),
   });
 
   beforeAll(async () => {

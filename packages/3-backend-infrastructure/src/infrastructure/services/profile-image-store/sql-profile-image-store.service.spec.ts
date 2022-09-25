@@ -36,8 +36,7 @@ describe('SqlProfileImageStoreService', () => {
       }),
     );
 
-    const profileImageStoreService = new SqlProfileImageStoreService();
-    profileImageStoreService.entityManager = em;
+    const profileImageStoreService = new SqlProfileImageStoreService(em);
 
     const result = await profileImageStoreService.readProfileImage(create.profileImage('image.jpg'));
 
@@ -48,8 +47,7 @@ describe('SqlProfileImageStoreService', () => {
     const em = getEntityManager();
     const repository = await em.getRepository(SqlProfileImage);
 
-    const profileImageStoreService = new SqlProfileImageStoreService();
-    profileImageStoreService.entityManager = em;
+    const profileImageStoreService = new SqlProfileImageStoreService(em);
 
     const data = Buffer.from('image');
 
@@ -82,8 +80,7 @@ describe('SqlProfileImageStoreService', () => {
       }),
     );
 
-    const profileImageStoreService = new SqlProfileImageStoreService();
-    profileImageStoreService.entityManager = em;
+    const profileImageStoreService = new SqlProfileImageStoreService(em);
 
     await profileImageStoreService.writeProfileImage(
       user.id,

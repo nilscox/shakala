@@ -4,7 +4,6 @@ import { ClassType } from 'shared';
 import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
 import { IEventBus } from './cqs/event-bus';
 import { Query, QueryHandler } from './cqs/query-handler';
-import { ConfigService } from './interfaces/config.service';
 import { EmailCompilerService } from './interfaces/email-compiler.service';
 import { EmailSenderService } from './interfaces/email-sender.service';
 import { FilesystemService } from './interfaces/filesystem.service';
@@ -37,7 +36,6 @@ import {
 } from './modules/user/validate-email-address.command';
 
 export type Services = DomainDependencies & {
-  configService: ConfigService;
   loggerService: LoggerService;
   filesystemService: FilesystemService;
   emailCompilerService: EmailCompilerService;
