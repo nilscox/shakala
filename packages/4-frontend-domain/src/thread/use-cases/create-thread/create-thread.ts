@@ -1,12 +1,11 @@
 import { createAction, query, QueryState } from '@nilscox/redux-query';
-import { SerializedError } from '@reduxjs/toolkit';
 import { get } from 'shared';
 
 import { requireAuthentication } from '../../../authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
-import type { State, Thunk } from '../../../store';
+import { State, Thunk } from '../../../store.types';
 import { FormErrors, FormField, ValidationError } from '../../../types';
-import { serializeError } from '../../../utils/serialize-error';
+import { SerializedError, serializeError } from '../../../utils/serialize-error';
 
 export type ThreadForm = {
   description: string;

@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { clearAllAuthenticationErrors } from '../../authentication.actions';
 import { fetchAuthenticatedUser } from '../fetch-authenticated-user/fetch-authenticated-user';
 

@@ -1,9 +1,8 @@
 import { createNormalizedSelectors } from '@nilscox/redux-query';
-import { createSelector } from '@reduxjs/toolkit';
 
 import { selectParentComment } from '../comment/comments.selectors';
 import { schemas, selectNormalizedEntities } from '../normalization';
-import type { State } from '../store';
+import { State } from '../store.types';
 import { Thread } from '../types';
 import { formatDate } from '../utils/format-date';
 
@@ -22,11 +21,11 @@ export const selectThread = (state: State, threadId: string) => {
   return thread;
 };
 
-export const selectFormattedThreadDate = createSelector(selectThread, (thread) => {
-  const { date } = thread;
+export const selectFormattedThreadDate = (state: State, threadId: string) => {
+  const { date } = selectThread(state, threadId);
 
   return formatDate(date, "'Le' d MMMM yyyy");
-});
+};
 
 export const selectCommentThreadId = (state: State, commentId: string): string => {
   const parent = selectParentComment(state, commentId);

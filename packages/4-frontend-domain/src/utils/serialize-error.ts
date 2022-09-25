@@ -2,7 +2,7 @@ import { BaseError } from 'shared';
 
 export const SerializeErrorError = BaseError.extend('cannot serialize error', (error) => ({ error }));
 
-type SerializedError = {
+export type SerializedError = {
   name: string;
   message: string;
   stack?: string;

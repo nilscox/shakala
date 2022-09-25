@@ -1,5 +1,5 @@
 import { requireAuthentication } from '../../../authentication';
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { selectIsAuthUserAuthor } from '../../comments.selectors';
 
 export const openReportModal = (commentId: string): Thunk => {

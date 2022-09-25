@@ -2,7 +2,7 @@ import { query, QueryState } from '@nilscox/redux-query';
 import { getIds, isDefined, Sort } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
-import { State, Thunk } from '../../../store';
+import { State, Thunk } from '../../../store.types';
 import { clearCreatedRootComments } from '../../../thread/lists/created-root-comments';
 import { setThreadComments } from '../../../thread/thread.actions';
 import { GetCommentsOptions } from '../../../thread/thread.gateway';

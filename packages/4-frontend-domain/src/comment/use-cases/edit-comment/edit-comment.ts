@@ -3,7 +3,7 @@ import { createAction, query, QueryState } from '@nilscox/redux-query';
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
-import { State, Thunk } from '../../../store';
+import { State, Thunk } from '../../../store.types';
 import { AuthorizationError } from '../../../types';
 import { serializeError } from '../../../utils/serialize-error';
 import {

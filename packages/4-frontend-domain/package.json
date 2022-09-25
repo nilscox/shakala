@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@nilscox/redux-query": "^0.1.9",
-    "@reduxjs/toolkit": "^1.8.5",
     "normalizr": "^3.6.2",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1"
   }
 }

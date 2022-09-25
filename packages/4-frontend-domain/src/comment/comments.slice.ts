@@ -1,5 +1,5 @@
 import { createNormalizedUpdater, Normalized, normalized } from '@nilscox/redux-query';
-import { AnyAction, combineReducers } from '@reduxjs/toolkit';
+import { AnyAction, combineReducers } from 'redux';
 
 import { schemas } from '../normalization';
 import { Comment } from '../types';

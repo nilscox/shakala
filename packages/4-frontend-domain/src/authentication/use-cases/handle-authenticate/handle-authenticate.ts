@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { AuthenticationForm, AuthenticationType, LoginForm, SignupForm } from '../../authentication.types';
 import { login } from '../login/login';
 import { signup } from '../signup/signup';

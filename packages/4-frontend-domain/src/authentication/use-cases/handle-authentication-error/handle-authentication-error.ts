@@ -1,6 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { AuthorizationError, ValidationError } from '../../../types';
 import { setAuthenticationFieldError, setAuthenticationFormError } from '../../authentication.actions';
 import { InvalidCredentialsError } from '../../authentication.gateway';

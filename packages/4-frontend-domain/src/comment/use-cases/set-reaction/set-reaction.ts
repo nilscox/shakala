@@ -2,7 +2,7 @@ import { pick } from 'shared';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { ReactionType } from '../../../types';
 import { updateComment } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';

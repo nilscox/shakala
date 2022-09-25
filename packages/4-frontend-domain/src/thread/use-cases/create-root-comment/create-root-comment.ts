@@ -4,7 +4,7 @@ import { requireAuthentication } from '../../../authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { addComment } from '../../../comment/comments.actions';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
-import type { State, Thunk } from '../../../store';
+import { State, Thunk } from '../../../store.types';
 import { Comment } from '../../../types';
 import { selectUserOrFail } from '../../../user';
 import { serializeError } from '../../../utils/serialize-error';

@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 
 export const closeAuthenticationForm = (): Thunk<void> => {
   return (_dispatch, _getState, { routerGateway }) => {

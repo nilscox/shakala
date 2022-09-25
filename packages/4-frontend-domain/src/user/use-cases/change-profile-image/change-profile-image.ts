@@ -1,6 +1,6 @@
 import { BaseError } from 'shared';
 
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { updateUser } from '../../user.actions';
 
 export const InvalidImageFormat = BaseError.extend('invalid image format');

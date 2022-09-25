@@ -1,6 +1,6 @@
 import { list } from '@nilscox/redux-query';
 
-import { State } from '../../store';
+import { State } from '../../store.types';
 import { selectThreads } from '../thread.selectors';
 
 const lastThreads = list('lastThreads');

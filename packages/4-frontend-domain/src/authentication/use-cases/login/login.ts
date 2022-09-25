@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { setUser } from '../../../user';
 import { clearAllAuthenticationErrors, setAuthenticating } from '../../authentication.actions';
 import { closeAuthenticationForm } from '../close-authentication-form/close-authentication-form';

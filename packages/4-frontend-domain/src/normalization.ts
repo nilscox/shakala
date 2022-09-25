@@ -1,6 +1,6 @@
 import { schema } from 'normalizr';
 
-import type { State } from './store';
+import { State } from './store.types';
 
 export const userSchema = new schema.Entity('user');
 

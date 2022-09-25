@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { setUser } from '../../../user';
 
 export const fetchAuthenticatedUser = (): Thunk => {

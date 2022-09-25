@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { unsetUser } from '../../../user';
 
 export const logout = (): Thunk => {

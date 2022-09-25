@@ -2,7 +2,7 @@ import { createNormalizedSelectors } from '@nilscox/redux-query';
 import { getIds } from 'shared';
 
 import { schemas, selectNormalizedEntities } from '../normalization';
-import { Selector, State } from '../store';
+import { State, Selector } from '../store.types';
 import { Comment } from '../types';
 import { selectUser } from '../user';
 import { formatDate } from '../utils/format-date';

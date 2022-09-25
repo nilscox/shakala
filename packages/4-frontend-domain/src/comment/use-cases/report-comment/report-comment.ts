@@ -1,6 +1,6 @@
 import { UnexpectedError } from 'shared';
 
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { AuthorizationError } from '../../../types';
 
 export const reportComment = (reason: string): Thunk => {

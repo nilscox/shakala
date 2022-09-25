@@ -1,7 +1,7 @@
 import { list } from '@nilscox/redux-query';
 
 import { selectComments } from '../../comment/comments.selectors';
-import type { State } from '../../store';
+import { State } from '../../store.types';
 import { Comment } from '../../types';
 
 const createdRootCommentsList = list('createdRootComment');

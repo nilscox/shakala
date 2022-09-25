@@ -1,5 +1,5 @@
 import { fetchComments } from '../../../comment/use-cases';
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { Sort } from '../../../types';
 
 type ThreadFilters = {

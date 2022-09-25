@@ -1,4 +1,4 @@
-import { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { setAcceptRulesWarningVisible, setRulesAccepted } from '../../authentication.actions';
 import { selectIsAcceptRulesWarningVisible } from '../../authentication.selectors';
 

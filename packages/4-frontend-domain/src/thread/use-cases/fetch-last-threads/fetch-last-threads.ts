@@ -1,6 +1,6 @@
 import { getIds } from 'shared';
 
-import type { Thunk } from '../../../store';
+import { Thunk } from '../../../store.types';
 import { threadDtoToEntity } from '../../domain/thread-dto-to-entity';
 import { selectLastThreads, setLastThreads } from '../../lists/last-threads';
 import { addThreads } from '../../thread.actions';

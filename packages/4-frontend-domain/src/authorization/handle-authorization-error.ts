@@ -1,6 +1,6 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { Thunk } from '../store';
+import { Thunk } from '../store.types';
 import { AuthorizationError } from '../types';
 
 export const handleAuthorizationError = (

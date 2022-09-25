@@ -1,15 +1,14 @@
-import { createSelector } from '@reduxjs/toolkit';
-
-import { State } from '../store';
+import { State } from '../store.types';
 
 import { AuthenticationField, AuthenticationType } from './authentication.types';
 
-const selectAuthenticationSlice = (state: State) => state.authentication;
+const selectAuthenticationSlice = (state: State) => {
+  return state.authentication;
+};
 
-export const selectIsAuthenticating = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.authenticating,
-);
+export const selectIsAuthenticating = (state: State) => {
+  return selectAuthenticationSlice(state).authenticating;
+};
 
 export const isAuthenticationFieldVisible = (form: AuthenticationType, field: AuthenticationField) => {
   if (field === 'email') {
@@ -23,30 +22,25 @@ export const isAuthenticationFieldVisible = (form: AuthenticationType, field: Au
   return form === AuthenticationType.signup;
 };
 
-export const selectAreRulesAccepted = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.rulesAccepted,
-);
+export const selectAreRulesAccepted = (state: State) => {
+  return selectAuthenticationSlice(state).rulesAccepted;
+};
 
-export const selectIsAcceptRulesWarningVisible = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.acceptRulesWarningVisible,
-);
+export const selectIsAcceptRulesWarningVisible = (state: State) => {
+  return selectAuthenticationSlice(state).acceptRulesWarningVisible;
+};
 
-export const selectAuthenticationFieldError = createSelector(
-  [selectAuthenticationSlice, (_, field: AuthenticationField) => field],
-  (slice, field) => slice.fieldErrors[field],
-);
+export const selectAuthenticationFieldError = (state: State, field: AuthenticationField) => {
+  return selectAuthenticationSlice(state).fieldErrors[field];
+};
 
-export const selectAuthenticationFormError = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.formError,
-);
+export const selectAuthenticationFormError = (state: State) => {
+  return selectAuthenticationSlice(state).formError;
+};
 
-export const selectIsAuthenticationFormValid = createSelector(
-  selectAuthenticationSlice,
-  (slice) => slice.isValid,
-);
+export const selectIsAuthenticationFormValid = (state: State) => {
+  return selectAuthenticationSlice(state).isValid;
+};
 
 export const selectCanSubmitAuthenticationForm = (state: State, form: AuthenticationType) => {
   const { isValid, fieldErrors, formError, rulesAccepted } = selectAuthenticationSlice(state);
