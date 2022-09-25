@@ -1,15 +1,12 @@
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { selectUser } from '../../../user/user.selectors';
-import {
-  setAuthenticationFieldError,
-  setAuthenticationFormError,
-} from '../../actions/authentication.actions';
-import { AuthenticationField, AuthenticationType } from '../../authentication.types';
+import { setAuthenticationFieldError, setAuthenticationFormError } from '../../authentication.actions';
 import {
   selectAuthenticationFieldError,
   selectAuthenticationFormError,
-} from '../../selectors/authentication.selectors';
+} from '../../authentication.selectors';
+import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 
 import { initializeAuthentication } from './initialize-authentication';
 

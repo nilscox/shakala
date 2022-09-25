@@ -1,6 +1,6 @@
 import { Thunk } from '../../../store';
-import { setAcceptRulesWarningVisible, setRulesAccepted } from '../../actions/authentication.actions';
-import { selectIsAcceptRulesWarningVisible } from '../../selectors/authentication.selectors';
+import { setAcceptRulesWarningVisible, setRulesAccepted } from '../../authentication.actions';
+import { selectIsAcceptRulesWarningVisible } from '../../authentication.selectors';
 
 export const acceptRules = (accepted: boolean): Thunk<void> => {
   return (dispatch, getState) => {

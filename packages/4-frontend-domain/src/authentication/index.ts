@@ -1,6 +1,5 @@
-export * from './actions/authentication.actions';
-
-export * from './selectors/authentication.selectors';
+export * from './authentication.actions';
+export * from './authentication.selectors';
 export * from '../user/user.selectors';
 
 export * from './use-cases';

@@ -1,5 +1,5 @@
 import { Thunk } from '../../../store';
-import { clearAllAuthenticationErrors } from '../../actions/authentication.actions';
+import { clearAllAuthenticationErrors } from '../../authentication.actions';
 import { fetchAuthenticatedUser } from '../fetch-authenticated-user/fetch-authenticated-user';
 
 export const initializeAuthentication = (): Thunk => {

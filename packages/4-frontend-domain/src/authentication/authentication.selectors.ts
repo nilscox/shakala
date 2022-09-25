@@ -1,7 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { State } from '../../store';
-import { AuthenticationField, AuthenticationType } from '../authentication.types';
+import { State } from '../store';
+
+import { AuthenticationField, AuthenticationType } from './authentication.types';
 
 const selectAuthenticationSlice = (state: State) => state.authentication;
 

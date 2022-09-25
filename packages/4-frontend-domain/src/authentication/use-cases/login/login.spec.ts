@@ -4,14 +4,14 @@ import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
 import { selectUser } from '../../../user/user.selectors';
-import { setAuthenticationFieldError } from '../../actions/authentication.actions';
+import { setAuthenticationFieldError } from '../../authentication.actions';
 import { InvalidCredentialsError } from '../../authentication.gateway';
-import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 import {
   selectAuthenticationFieldError,
   selectAuthenticationFormError,
   selectIsAuthenticating,
-} from '../../selectors/authentication.selectors';
+} from '../../authentication.selectors';
+import { AuthenticationField, AuthenticationType } from '../../authentication.types';
 
 import { login } from './login';
 

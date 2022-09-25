@@ -1,9 +1,6 @@
 import { TestStore } from '../../../test';
-import { setAcceptRulesWarningVisible, setRulesAccepted } from '../../actions/authentication.actions';
-import {
-  selectAreRulesAccepted,
-  selectIsAcceptRulesWarningVisible,
-} from '../../selectors/authentication.selectors';
+import { setAcceptRulesWarningVisible, setRulesAccepted } from '../../authentication.actions';
+import { selectAreRulesAccepted, selectIsAcceptRulesWarningVisible } from '../../authentication.selectors';
 
 import { acceptRules } from './accept-rules';
 

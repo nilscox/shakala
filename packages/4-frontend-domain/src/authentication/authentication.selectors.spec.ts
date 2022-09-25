@@ -1,13 +1,13 @@
-import { TestStore } from '../../test';
+import { TestStore } from '../test';
+
 import {
   setAuthenticationFieldError,
   setAuthenticationFormError,
   setIsAuthenticationFormValid,
   setRulesAccepted,
-} from '../actions/authentication.actions';
-import { AuthenticationField, AuthenticationType } from '../authentication.types';
-
+} from './authentication.actions';
 import { isAuthenticationFieldVisible, selectCanSubmitAuthenticationForm } from './authentication.selectors';
+import { AuthenticationField, AuthenticationType } from './authentication.types';
 
 describe('authentication selectors', () => {
   const store = new TestStore();

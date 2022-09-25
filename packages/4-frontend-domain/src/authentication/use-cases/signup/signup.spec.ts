@@ -4,12 +4,9 @@ import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { AuthorizationError, ValidationError } from '../../../types';
 import { selectUser } from '../../../user/user.selectors';
-import { setAuthenticationFieldError } from '../../actions/authentication.actions';
+import { setAuthenticationFieldError } from '../../authentication.actions';
+import { selectAuthenticationFieldError, selectIsAuthenticating } from '../../authentication.selectors';
 import { AuthenticationField, AuthenticationType } from '../../authentication.types';
-import {
-  selectAuthenticationFieldError,
-  selectIsAuthenticating,
-} from '../../selectors/authentication.selectors';
 
 import { signup } from './signup';
 

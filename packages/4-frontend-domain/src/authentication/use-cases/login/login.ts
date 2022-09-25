@@ -1,6 +1,6 @@
 import { Thunk } from '../../../store';
 import { setUser } from '../../../user/user.slice';
-import { clearAllAuthenticationErrors, setAuthenticating } from '../../actions/authentication.actions';
+import { clearAllAuthenticationErrors, setAuthenticating } from '../../authentication.actions';
 import { closeAuthenticationForm } from '../close-authentication-form/close-authentication-form';
 import { handleAuthenticationError } from '../handle-authentication-error/handle-authentication-error';
 

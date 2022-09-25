@@ -3,12 +3,12 @@ import {
   clearAuthenticationFieldError,
   clearAuthenticationFormError,
   setIsAuthenticationFormValid,
-} from '../../actions/authentication.actions';
-import { isAuthenticationField } from '../../authentication.types';
+} from '../../authentication.actions';
 import {
   selectAuthenticationFieldError,
   selectAuthenticationFormError,
-} from '../../selectors/authentication.selectors';
+} from '../../authentication.selectors';
+import { isAuthenticationField } from '../../authentication.types';
 
 // todo: early username availability check
 export const handleAuthenticationFormChange = (isValid: boolean, field: string): Thunk => {
