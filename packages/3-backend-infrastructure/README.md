@@ -19,3 +19,9 @@ podman run -d --name shakala-postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 5432
 ```
 yarn db:migrate
 ```
+
+### Start maildev
+
+```
+podman run -d --name shakala-maildev -p 1080:1080 -p 1025:1025 maildev/maildev
+```
