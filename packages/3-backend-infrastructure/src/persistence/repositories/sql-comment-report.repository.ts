@@ -1,8 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import {
-  CommentReportRepository,
-  FindCommentReportOptions,
-} from 'backend-application/src/interfaces/repositories/comment-report.repository';
+import { CommentReportRepository, FindCommentReportOptions } from 'backend-application';
 import { CommentReport, DomainDependencies } from 'backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';

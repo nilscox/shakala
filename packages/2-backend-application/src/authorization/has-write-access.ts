@@ -1,6 +1,6 @@
 import { AuthorizationErrorReason, UnexpectedError } from 'shared';
 
-import { ExecutionContext } from '../utils/execution-context';
+import { ExecutionContext } from '../utils';
 
 import { AuthorizationError } from './authorization-error';
 import { Authorizer } from './authorizer';

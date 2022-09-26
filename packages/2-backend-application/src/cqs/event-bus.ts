@@ -1,6 +1,6 @@
 import { AggregateRoot, DomainEvent, EntityProps } from 'backend-domain';
 
-import { ExecutionContext } from '../utils/execution-context';
+import { ExecutionContext } from '../utils';
 
 export interface IEventPublisher {
   addAggregate(aggregate: AggregateRoot<EntityProps>): void;

@@ -1,6 +1,6 @@
 import { ClassType } from 'shared';
 
-import { ExecutionContext } from '../utils/execution-context';
+import { ExecutionContext } from '../utils';
 
 export interface Authorizer {
   authorize(ctx: ExecutionContext): void | Promise<void>;

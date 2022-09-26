@@ -1,6 +1,6 @@
 import clone from 'lodash.clonedeep';
 
-import { Repository } from '../interfaces/repository';
+import { Repository } from '../interfaces';
 
 export class InMemoryRepository<Item extends { id: string }> implements Repository<Item> {
   private items: Map<string, Item>;

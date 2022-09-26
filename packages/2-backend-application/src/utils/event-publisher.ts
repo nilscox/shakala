@@ -1,6 +1,6 @@
 import { AggregateRoot, DomainEvent, EntityProps } from 'backend-domain';
 
-import { IEventBus, IEventPublisher } from '../cqs/event-bus';
+import { IEventBus, IEventPublisher } from '../cqs';
 
 import { ExecutionContext } from './execution-context';
 

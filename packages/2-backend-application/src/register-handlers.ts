@@ -1,39 +1,18 @@
 import { CommentService, DomainDependencies } from 'backend-domain';
 import { ClassType } from 'shared';
 
-import { Command, CommandHandler, CommandResult } from './cqs/command-handler';
-import { IEventBus } from './cqs/event-bus';
-import { Query, QueryHandler } from './cqs/query-handler';
-import { EmailCompilerPort } from './interfaces/email-compiler.port';
-import { EmailSenderPort } from './interfaces/email-sender.port';
-import { FilesystemPort } from './interfaces/filesystem.port';
-import { LoggerPort } from './interfaces/logger.port';
-import {
-  CommentRepository,
-  ReactionRepository,
-  ThreadRepository,
-  UserRepository,
-} from './interfaces/repositories';
-import { CommentReportRepository } from './interfaces/repositories/comment-report.repository';
-import { LoginCommand, LoginCommandHandler } from './modules/authentication/login.command';
-import { SignupCommand, SignupCommandHandler } from './modules/authentication/signup.command';
-import { SendEmailCommand, SendEmailHandler } from './modules/email/send-email.command';
-import { CreateCommentCommand, CreateCommentCommandHandler } from './modules/thread/create-comment.command';
-import { CreateThreadCommand, CreateThreadHandler } from './modules/thread/create-thread.command';
-import { EditCommentCommand, EditCommentCommandHandler } from './modules/thread/edit-comment.command';
-import { GetCommentQuery, GetCommentQueryHandler } from './modules/thread/get-comment.query';
-import { GetLastThreadsHandler, GetLastThreadsQuery } from './modules/thread/get-last-threads.query';
-import { GetThreadHandler, GetThreadQuery } from './modules/thread/get-thread.query';
-import { ReportCommentCommand, ReportCommentHandler } from './modules/thread/report-comment.command';
-import { SetReactionCommand, SetReactionCommandHandler } from './modules/thread/set-reaction.command';
-import { GetProfileImageHandler, GetProfileImageQuery } from './modules/user/get-profile-image.query';
-import { GetUserByEmailHandler, GetUserByEmailQuery } from './modules/user/get-user-by-email.query';
-import { GetUserByIdHandler, GetUserByIdQuery } from './modules/user/get-user-by-id.query';
-import { UpdateUserCommand, UpdateUserHandler } from './modules/user/update-user.command';
-import {
-  ValidateEmailAddressCommand,
-  ValidateEmailAddressHandler,
-} from './modules/user/validate-email-address.command';
+// prettier-ignore
+import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler } from './cqs';
+// prettier-ignore
+import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort } from './interfaces';
+// prettier-ignore
+import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler } from './modules/authentication';
+// prettier-ignore
+import { SendEmailCommand, SendEmailHandler } from './modules/email';
+// prettier-ignore
+import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
+// prettier-ignore
+import { GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
 
 export type ApplicationDependencies = DomainDependencies & {
   logger: LoggerPort;

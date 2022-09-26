@@ -1,4 +1,4 @@
-import { ExecutionContext } from '../utils/execution-context';
+import { ExecutionContext } from '../utils';
 
 export type CommandResult = void | string;
 
