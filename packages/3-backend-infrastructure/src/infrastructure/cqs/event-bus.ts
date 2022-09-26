@@ -1,11 +1,11 @@
-import { EventHandler, ExecutionContext, IEventBus, LoggerService } from 'backend-application';
+import { EventHandler, ExecutionContext, IEventBus, LoggerPort } from 'backend-application';
 import { DomainEvent } from 'backend-domain';
 import { ClassType } from 'shared';
 
 export class EventBus implements IEventBus {
   private handlers = new Map<string, Array<EventHandler<DomainEvent>>>();
 
-  constructor(private readonly logger: LoggerService) {}
+  constructor(private readonly logger: LoggerPort) {}
 
   registerHandler<Event extends DomainEvent>(eventClass: ClassType<Event>, handler: EventHandler<Event>) {
     const name = eventClass.name;

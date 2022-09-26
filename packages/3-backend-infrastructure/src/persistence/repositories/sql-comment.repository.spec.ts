@@ -1,7 +1,7 @@
 import { Sort } from 'backend-application';
-import { createDomainDependencies, factories, StubDateService } from 'backend-domain';
+import { createDomainDependencies, factories } from 'backend-domain';
 
-import { MathRandomGeneratorService } from '../../infrastructure';
+import { MathRandomGeneratorAdapter } from '../../infrastructure';
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
 import { SqlCommentRepository } from './sql-comment.repository';
@@ -9,10 +9,9 @@ import { SqlCommentRepository } from './sql-comment.repository';
 describe('SqlCommentRepository', () => {
   let repository: SqlCommentRepository;
 
-  const generatorService = new MathRandomGeneratorService();
-  const dateService = new StubDateService();
+  const generator = new MathRandomGeneratorAdapter();
 
-  const deps = createDomainDependencies({ generatorService, dateService });
+  const deps = createDomainDependencies({ generator });
   const create = factories(deps);
 
   const { save, getEntityManager } = setupTestDatabase();

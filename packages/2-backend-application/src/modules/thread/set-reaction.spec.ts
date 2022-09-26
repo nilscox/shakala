@@ -3,7 +3,7 @@ import {
   CommentService,
   factories,
   ReactionType,
-  StubGeneratorService,
+  StubGeneratorAdapter,
   User,
 } from 'backend-domain';
 
@@ -14,10 +14,10 @@ import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 import { SetReactionCommand, SetReactionCommandHandler } from './set-reaction.command';
 
 describe('SetReactionCommand', () => {
-  const generatorService = new StubGeneratorService();
+  const generator = new StubGeneratorAdapter();
   const reactionRepository = new InMemoryReactionRepository();
   const commentRepository = new InMemoryCommentRepository(reactionRepository);
-  const commentService = new CommentService(generatorService);
+  const commentService = new CommentService(generator);
 
   const handler = new SetReactionCommandHandler(commentRepository, reactionRepository, commentService);
 
@@ -44,7 +44,7 @@ describe('SetReactionCommand', () => {
   };
 
   it('creates a new reaction on a comment', async () => {
-    generatorService.nextId = reactionId;
+    generator.nextId = reactionId;
 
     await execute(user, ReactionType.upvote);
 

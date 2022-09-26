@@ -1,7 +1,7 @@
 import { factories, Nick, ProfileImage, Timestamp } from 'backend-domain';
 import { createAuthUserDto } from 'shared';
 
-import { StubConfigService } from '../../infrastructure';
+import { StubConfigAdapter } from '../../infrastructure';
 
 import { UserPresenter } from './user.presenter';
 
@@ -25,7 +25,7 @@ describe('UserPresenter', () => {
       profileImage: 'http://api.url/user/profile-image/image.png',
     });
 
-    const config = new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } });
+    const config = new StubConfigAdapter({ app: { apiBaseUrl: 'http://api.url' } });
     const presenter = new UserPresenter(config);
 
     expect(presenter.transformAuthenticatedUser(user)).toEqual(dto);

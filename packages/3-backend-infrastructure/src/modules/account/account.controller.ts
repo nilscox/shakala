@@ -1,4 +1,4 @@
-import { ExecutionContext, GetUserByIdQuery, LoggerService, UpdateUserCommand } from 'backend-application';
+import { ExecutionContext, GetUserByIdQuery, LoggerPort, UpdateUserCommand } from 'backend-application';
 import { ProfileImageData, ProfileImageType, User } from 'backend-domain';
 import multer, { memoryStorage } from 'multer';
 
@@ -11,7 +11,7 @@ import {
   Request,
   RequestHandler,
   Response,
-  SessionService,
+  SessionPort,
 } from '../../infrastructure';
 import { UserPresenter } from '../user/user.presenter';
 
@@ -20,10 +20,10 @@ const upload = multer({ storage: storage });
 
 export class AccountController extends Controller {
   constructor(
-    logger: LoggerService,
+    logger: LoggerPort,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-    private readonly sessionService: SessionService,
+    private readonly session: SessionPort,
     private readonly userPresenter: UserPresenter,
   ) {
     super(logger, '/account');
@@ -37,7 +37,7 @@ export class AccountController extends Controller {
 
   @Middlewares(upload.single('profileImage'))
   async changeProfileImage(req: Request): Promise<Response<string | undefined>> {
-    const user = await this.sessionService.getUser(req);
+    const user = await this.session.getUser(req);
 
     await this.commandBus.execute(
       new UpdateUserCommand({

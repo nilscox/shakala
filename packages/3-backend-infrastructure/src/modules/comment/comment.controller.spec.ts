@@ -18,27 +18,27 @@ import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
 
 import {
   BadRequest,
-  MockLoggerService,
+  MockLoggerAdapter,
   Unauthorized,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
 import { CommentController } from './comment.controller';
 
 describe('CommentController', () => {
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
-  const sessionService = new StubSessionService();
-  const validationService = new ValidationService();
+  const session = new StubSessionAdapter();
+  const validation = new ValidationService();
 
   const controller = new CommentController(
-    new MockLoggerService(),
+    new MockLoggerAdapter(),
     queryBus,
     commandBus,
-    sessionService,
-    validationService,
+    session,
+    validation,
   );
 
   const create = factories();
@@ -47,7 +47,7 @@ describe('CommentController', () => {
   const ctx = new ExecutionContext(user);
 
   beforeEach(() => {
-    sessionService.user = user;
+    session.user = user;
   });
 
   describe('createComment', () => {

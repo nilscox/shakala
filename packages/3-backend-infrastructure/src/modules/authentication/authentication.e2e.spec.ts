@@ -1,7 +1,7 @@
-import { InMemoryEmailSenderService } from 'backend-application';
+import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
-import { MockLoggerService, StubConfigService } from '../../infrastructure';
+import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Authentication e2e', () => {
@@ -9,12 +9,12 @@ describe('Authentication e2e', () => {
   const agent = server.agent();
 
   const apiBaseUrl = 'https://api.url';
-  const emailSenderService = new InMemoryEmailSenderService();
+  const emailSender = new InMemoryEmailSenderAdapter();
 
-  server.overrideServices({
-    loggerService: new MockLoggerService(),
-    configService: new StubConfigService({ app: { apiBaseUrl } }).withEnvDatabase(),
-    emailSenderService,
+  server.override({
+    logger: new MockLoggerAdapter(),
+    config: new StubConfigAdapter({ app: { apiBaseUrl } }).withEnvDatabase(),
+    emailSender,
   });
 
   beforeAll(async () => {
@@ -33,7 +33,7 @@ describe('Authentication e2e', () => {
     };
 
     const validateEmail = async () => {
-      const match = emailSenderService.lastSentEmail?.body.text.match(/(http.+)\n/);
+      const match = emailSender.lastSentEmail?.body.text.match(/(http.+)\n/);
       const endpoint = match?.at(1)?.replace(apiBaseUrl, '') as string;
 
       await agent.get(endpoint).expect(307);

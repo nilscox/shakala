@@ -67,8 +67,8 @@ export class SqlComment extends BaseSqlEntity<Comment> {
         message: message.toDomain(deps, author),
         history: history.map((message) => message.toDomain(deps, author)),
       },
-      deps.generatorService,
-      deps.dateService,
+      deps.generator,
+      deps.date,
     );
   }
 }

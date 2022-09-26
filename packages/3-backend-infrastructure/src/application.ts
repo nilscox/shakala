@@ -10,27 +10,27 @@ import {
   InMemoryUserRepository,
   registerHandlers,
   Repositories,
-  Services,
+  ApplicationDependencies,
 } from 'backend-application';
 import { UserCreatedEvent } from 'backend-domain';
 
 import {
-  BcryptService,
+  BcryptAdapter,
   CommandBus,
-  MathRandomGeneratorService,
+  MathRandomGeneratorAdapter,
   RealCommandBus,
-  RealDateService,
-  ConfigService,
-  EnvConfigService,
-  ConsoleLoggerService,
+  RealDateAdapter,
+  ConfigPort,
+  EnvConfigAdapter,
+  ConsoleLoggerAdapter,
 } from './infrastructure';
+import { MjmlEmailCompilerAdapter } from './infrastructure/adapters/email/mjml-email-compiler.adapter';
+import { NodeMailerEmailSenderAdapter } from './infrastructure/adapters/email/node-mailer-email-sender.adapter';
+import { RealFilesystemAdapter } from './infrastructure/adapters/filesystem/real-filesystem.adapter';
+import { SqlProfileImageStoreAdapter } from './infrastructure/adapters/profile-image-store/sql-profile-image-store.adapter';
 import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
-import { MjmlEmailCompilerService } from './infrastructure/services/email/mjml-email-compiler.service';
-import { NodeMailerEmailSenderService } from './infrastructure/services/email/node-mailer-email-sender.service';
-import { RealFilesystemService } from './infrastructure/services/filesystem/real-filesystem.service';
-import { SqlProfileImageStoreService } from './infrastructure/services/profile-image-store/sql-profile-image-store.service';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
 import {
   SqlCommentRepository,
@@ -42,7 +42,7 @@ import { createDatabaseConnection } from './persistence/mikro-orm/create-databas
 import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
 
 export class Application {
-  private services = {} as Services & { configService: ConfigService };
+  private adapters = {} as ApplicationDependencies & { config: ConfigPort };
 
   protected commandBus!: RealCommandBus;
   protected queryBus!: RealQueryBus;
@@ -52,11 +52,11 @@ export class Application {
   private repositories!: Repositories;
 
   protected get logger() {
-    return this.services.loggerService;
+    return this.adapters.logger;
   }
 
   protected get config() {
-    return this.services.configService;
+    return this.adapters.config;
   }
 
   protected get em() {
@@ -67,14 +67,14 @@ export class Application {
     return this.orm.em.fork() as EntityManager;
   }
 
-  overrideServices(services: Partial<Services & { configService: ConfigService }>) {
-    Object.assign(this.services, services);
+  override(adapters: Partial<Application['adapters']>) {
+    Object.assign(this.adapters, adapters);
   }
 
   async init() {
-    this.services.dateService ??= new RealDateService();
-    this.services.loggerService ??= new ConsoleLoggerService(this.services.dateService);
-    this.services.configService ??= new EnvConfigService();
+    this.adapters.date ??= new RealDateAdapter();
+    this.adapters.logger ??= new ConsoleLoggerAdapter(this.adapters.date);
+    this.adapters.config ??= new EnvConfigAdapter();
 
     if (true as boolean) {
       this.logger.log('connecting to the database');
@@ -93,11 +93,11 @@ export class Application {
       const em = this.em;
 
       this.repositories = {
-        userRepository: new SqlUserRepository(em, this.services),
-        threadRepository: new SqlThreadRepository(em, this.services),
-        reactionRepository: new SqlReactionRepository(em, this.services),
-        commentRepository: new SqlCommentRepository(em, this.services),
-        commentReportRepository: new SqlCommentReportRepository(em, this.services),
+        userRepository: new SqlUserRepository(em, this.adapters),
+        threadRepository: new SqlThreadRepository(em, this.adapters),
+        reactionRepository: new SqlReactionRepository(em, this.adapters),
+        commentRepository: new SqlCommentRepository(em, this.adapters),
+        commentReportRepository: new SqlCommentReportRepository(em, this.adapters),
       };
     } else {
       this.logger.log('instantiating in-memory repositories');
@@ -113,30 +113,30 @@ export class Application {
       };
     }
 
-    this.logger.log('instantiating services');
+    this.logger.log('instantiating adapters');
 
-    this.services.filesystemService ??= new RealFilesystemService(path.resolve(__dirname, '..'));
-    this.services.generatorService ??= new MathRandomGeneratorService();
-    this.services.cryptoService ??= new BcryptService();
+    this.adapters.filesystem ??= new RealFilesystemAdapter(path.resolve(__dirname, '..'));
+    this.adapters.generator ??= new MathRandomGeneratorAdapter();
+    this.adapters.crypto ??= new BcryptAdapter();
 
-    this.services.emailCompilerService ??= new MjmlEmailCompilerService(this.services.filesystemService);
-    this.services.emailSenderService ??= new NodeMailerEmailSenderService(this.services.configService);
-    this.services.profileImageStoreService ??= new SqlProfileImageStoreService(this.em);
+    this.adapters.emailCompiler ??= new MjmlEmailCompilerAdapter(this.adapters.filesystem);
+    this.adapters.emailSender ??= new NodeMailerEmailSenderAdapter(this.adapters.config);
+    this.adapters.profileImageStore ??= new SqlProfileImageStoreAdapter(this.em);
 
     this.logger.log('instantiating CQS dependencies');
 
     this.commandBus = new RealCommandBus();
     this.queryBus = new RealQueryBus();
-    this.eventBus = new EventBus(this.services.loggerService);
+    this.eventBus = new EventBus(this.adapters.logger);
 
     this.logger.log('registering query and command handlers');
 
     registerHandlers(
       this.commandBus.register.bind(this.commandBus),
       this.queryBus.register.bind(this.queryBus),
-      this.services,
-      this.repositories,
       this.eventBus,
+      this.repositories,
+      this.adapters,
     );
 
     if (this.orm) {

@@ -1,4 +1,4 @@
-export interface DateService {
+export interface DatePort {
   now(): Date;
   nowAsString(): string;
 }

@@ -1,4 +1,4 @@
-import { MockLoggerService, StubConfigService } from './infrastructure';
+import { MockLoggerAdapter, StubConfigAdapter } from './infrastructure';
 import { TestServer } from './test';
 
 describe('Server', () => {
@@ -7,9 +7,9 @@ describe('Server', () => {
     async () => {
       const server = new TestServer();
 
-      server.overrideServices({
-        loggerService: new MockLoggerService(),
-        configService: new StubConfigService({
+      server.override({
+        logger: new MockLoggerAdapter(),
+        config: new StubConfigAdapter({
           app: { port: 4242 },
         }).withEnvDatabase(),
       });
@@ -37,9 +37,9 @@ describe('Server', () => {
       const server = new TestServer();
       const agent = server.agent();
 
-      server.overrideServices({
-        loggerService: new MockLoggerService(),
-        configService: new StubConfigService({
+      server.override({
+        logger: new MockLoggerAdapter(),
+        config: new StubConfigAdapter({
           app: { trustProxy: true },
           session: { secure: true },
         }).withEnvDatabase(),

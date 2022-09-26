@@ -1,4 +1,4 @@
-import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
+import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
 
 import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
@@ -6,11 +6,11 @@ import { CreateThreadCommand, CreateThreadHandler } from './create-thread.comman
 import { InMemoryThreadRepository } from './thread.in-memory-repository';
 
 describe('CreateThreadCommand', () => {
-  const generatorService = new StubGeneratorService();
-  const dateService = new StubDateService();
+  const generator = new StubGeneratorAdapter();
+  const dateAdapter = new StubDateAdapter();
   const threadRepository = new InMemoryThreadRepository();
 
-  const handler = new CreateThreadHandler(generatorService, dateService, threadRepository);
+  const handler = new CreateThreadHandler(generator, dateAdapter, threadRepository);
 
   const create = factories();
 
@@ -18,8 +18,8 @@ describe('CreateThreadCommand', () => {
   const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
-    generatorService.nextId = 'threadId';
-    dateService.setNow(now);
+    generator.nextId = 'threadId';
+    dateAdapter.setNow(now);
   });
 
   const execute = async (description: string, text: string, keywords: string[]) => {

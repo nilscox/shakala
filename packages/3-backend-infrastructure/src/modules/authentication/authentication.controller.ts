@@ -2,7 +2,7 @@ import {
   AuthorizationError,
   EmailAlreadyExistsError,
   GetUserByEmailQuery,
-  LoggerService,
+  LoggerPort,
   LoginCommand,
   NickAlreadyExistsError,
   SignupCommand,
@@ -13,14 +13,14 @@ import { AuthorizationErrorReason, AuthUserDto, loginBodySchema, signupBodySchem
 
 import {
   CommandBus,
-  ConfigService,
+  ConfigPort,
   Controller,
   Forbidden,
   NotImplemented,
   QueryBus,
   Request,
   Response,
-  SessionService,
+  SessionPort,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
@@ -29,10 +29,10 @@ import { UserPresenter } from '../user/user.presenter';
 
 export class AuthenticationController extends Controller {
   constructor(
-    logger: LoggerService,
-    private readonly configService: ConfigService,
-    private readonly validationService: ValidationService,
-    private readonly sessionService: SessionService,
+    logger: LoggerPort,
+    private readonly config: ConfigPort,
+    private readonly validation: ValidationService,
+    private readonly session: SessionPort,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly userPresenter: UserPresenter,
@@ -52,7 +52,7 @@ export class AuthenticationController extends Controller {
   }
 
   async login(req: Request): Promise<Response<AuthUserDto>> {
-    const body = await this.validationService.body(req, loginBodySchema);
+    const body = await this.validation.body(req, loginBodySchema);
 
     await execute(this.commandBus)
       .command(new LoginCommand(body.email, body.password))
@@ -61,13 +61,13 @@ export class AuthenticationController extends Controller {
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
 
-    this.sessionService.setUser(req, user);
+    this.session.setUser(req, user);
 
     return Response.ok(this.userPresenter.transformAuthenticatedUser(user));
   }
 
   async signup(req: Request): Promise<Response<AuthUserDto>> {
-    const body = await this.validationService.body(req, signupBodySchema);
+    const body = await this.validation.body(req, signupBodySchema);
 
     await execute(this.commandBus)
       .command(new SignupCommand(body.nick, body.email, body.password))
@@ -83,7 +83,7 @@ export class AuthenticationController extends Controller {
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
 
-    this.sessionService.setUser(req, user);
+    this.session.setUser(req, user);
 
     return Response.created(this.userPresenter.transformAuthenticatedUser(user));
   }
@@ -91,7 +91,7 @@ export class AuthenticationController extends Controller {
   async validateEmailAddress(request: Request): Promise<Response> {
     const userId = request.params.get('userId') as string;
     const token = request.params.get('token') as string;
-    const { appBaseUrl } = this.configService.app();
+    const { appBaseUrl } = this.config.app();
 
     const response = (status: string) => {
       return Response.redirect(`${appBaseUrl}/?${new URLSearchParams({ 'validate-email': status })}`, 307);
@@ -117,19 +117,19 @@ export class AuthenticationController extends Controller {
   }
 
   async logout(req: Request): Promise<Response> {
-    const user = await this.sessionService.getUser(req);
+    const user = await this.session.getUser(req);
 
     if (!user) {
       throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
     }
 
-    this.sessionService.unsetUser(req);
+    this.session.unsetUser(req);
 
     return Response.noContent();
   }
 
   async getAuthenticatedUser(request: Request): Promise<Response<AuthUserDto | undefined>> {
-    const user = await this.sessionService.getUser(request);
+    const user = await this.session.getUser(request);
 
     if (!user) {
       return Response.noContent();

@@ -2,7 +2,7 @@ import {
   CannotReportOwnCommentError,
   CommentService,
   factories,
-  StubGeneratorService,
+  StubGeneratorAdapter,
   CommentAlreadyReportedError,
 } from 'backend-domain';
 
@@ -13,8 +13,8 @@ import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { ReportCommentCommand, ReportCommentHandler } from './report-comment.command';
 
 describe('ReportCommentCommand', () => {
-  const generatorService = new StubGeneratorService();
-  const commentService = new CommentService(generatorService);
+  const generator = new StubGeneratorAdapter();
+  const commentService = new CommentService(generator);
 
   const commentRepository = new InMemoryCommentRepository();
   const commentReportRepository = new InMemoryCommentReportRepository();
@@ -29,7 +29,7 @@ describe('ReportCommentCommand', () => {
 
   beforeEach(() => {
     commentRepository.add(comment);
-    generatorService.nextId = 'reportId';
+    generator.nextId = 'reportId';
   });
 
   it('creates a new comment report', async () => {

@@ -1,18 +1,18 @@
 import { GetProfileImageQuery, GetUserByIdQuery } from 'backend-application';
 import { factories, ProfileImageType } from 'backend-domain';
 
-import { MockLoggerService, StubConfigService } from '../../infrastructure';
-import { MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
+import { MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
 import { UserController } from './user.controller';
 import { UserPresenter } from './user.presenter';
 
 describe('UserController', () => {
   const queryBus = new MockQueryBus();
-  const sessionService = new StubSessionService();
-  const configService = new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } });
+  const session = new StubSessionAdapter();
+  const config = new StubConfigAdapter({ app: { apiBaseUrl: 'http://api.url' } });
 
-  const controller = new UserController(new MockLoggerService(), queryBus, new UserPresenter(configService));
+  const controller = new UserController(new MockLoggerAdapter(), queryBus, new UserPresenter(config));
 
   const create = factories();
 
@@ -24,7 +24,7 @@ describe('UserController', () => {
 
   describe('getUser', () => {
     beforeEach(() => {
-      sessionService.user = user;
+      session.user = user;
     });
 
     it('retrieves a user', async () => {
@@ -43,7 +43,7 @@ describe('UserController', () => {
 
   describe('getProfileImage', () => {
     beforeEach(() => {
-      sessionService.user = user;
+      session.user = user;
     });
 
     it('retrieves a user', async () => {

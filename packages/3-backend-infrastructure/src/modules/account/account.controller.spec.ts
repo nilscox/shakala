@@ -1,8 +1,8 @@
 import { ExecutionContext, GetUserByIdQuery, UpdateUserCommand } from 'backend-application';
 import { factories, ProfileImageType } from 'backend-domain';
 
-import { BadRequest, MockLoggerService, RequestFile, StubConfigService } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { BadRequest, MockLoggerAdapter, RequestFile, StubConfigAdapter } from '../../infrastructure';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 
 import { AccountController } from './account.controller';
@@ -10,15 +10,15 @@ import { AccountController } from './account.controller';
 describe('AccountController', () => {
   const commandBus = new MockCommandBus();
   const queryBus = new MockQueryBus();
-  const sessionService = new StubSessionService();
-  const configService = new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } });
+  const session = new StubSessionAdapter();
+  const config = new StubConfigAdapter({ app: { apiBaseUrl: 'http://api.url' } });
 
   const controller = new AccountController(
-    new MockLoggerService(),
+    new MockLoggerAdapter(),
     commandBus,
     queryBus,
-    sessionService,
-    new UserPresenter(configService),
+    session,
+    new UserPresenter(config),
   );
 
   const create = factories();
@@ -28,7 +28,7 @@ describe('AccountController', () => {
 
   describe('changeProfileImage', () => {
     beforeEach(() => {
-      sessionService.user = user;
+      session.user = user;
     });
 
     it("changes the user's profile image", async () => {

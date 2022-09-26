@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
 import { Comment, createDomainDependencies, Reaction, Thread, User } from 'backend-domain';
 
-import { MathRandomGeneratorService, RealDateService } from '../../infrastructure';
+import { MathRandomGeneratorAdapter, RealDateAdapter } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
 import { SqlReactionRepository } from '../repositories/sql-reaction.repository';
 import { SqlThreadRepository } from '../repositories/sql-thread.repository';
@@ -15,8 +15,8 @@ export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
     const em = getEntityManager();
 
     const deps = createDomainDependencies({
-      generatorService: new MathRandomGeneratorService(),
-      dateService: new RealDateService(),
+      generator: new MathRandomGeneratorAdapter(),
+      date: new RealDateAdapter(),
     });
 
     const commentRepository = new SqlCommentRepository(em, deps);

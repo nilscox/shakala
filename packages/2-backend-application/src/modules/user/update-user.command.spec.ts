@@ -1,5 +1,11 @@
-import { factories, ProfileImageData, ProfileImageType, StubGeneratorService, User } from 'backend-domain';
-import { StubProfileImageStoreService } from 'backend-domain/src/utils/stub-profile-image-store.service';
+import {
+  factories,
+  ProfileImageData,
+  ProfileImageType,
+  StubGeneratorAdapter,
+  User,
+  StubProfileImageStoreAdapter,
+} from 'backend-domain';
 
 import { ExecutionContext } from '../../utils/execution-context';
 
@@ -7,12 +13,13 @@ import { UpdateUserCommand, UpdateUserHandler } from './update-user.command';
 import { InMemoryUserRepository } from './user.in-memory-repository';
 
 describe('UpdateUserCommand', () => {
+  const generator = new StubGeneratorAdapter();
   const userRepository = new InMemoryUserRepository();
-  const profileImageStoreService = new StubProfileImageStoreService();
+  const profileImageStore = new StubProfileImageStoreAdapter();
+
   const handler = new UpdateUserHandler(userRepository);
 
-  const generatorService = new StubGeneratorService();
-  const create = factories({ profileImageStoreService, generatorService });
+  const create = factories({ profileImageStore, generator });
 
   const userId = 'userId';
   const imageId = 'imageId';
@@ -37,37 +44,37 @@ describe('UpdateUserCommand', () => {
     const user = create.user({ id: userId, profileImage: null });
 
     userRepository.add(user);
-    generatorService.nextId = 'imageId';
+    generator.nextId = 'imageId';
 
     await execute(user, imageData);
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', profileImage);
 
-    expect(await profileImageStoreService.readProfileImage(profileImage)).toEqual(imageData);
+    expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
   });
 
   it("changes the user's profile image", async () => {
     const user = create.user({ id: userId, profileImage: profileImage });
 
     userRepository.add(user);
-    profileImageStoreService.set(profileImage, currentData);
-    generatorService.nextId = imageId;
+    profileImageStore.set(profileImage, currentData);
+    generator.nextId = imageId;
 
     await execute(user, imageData);
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', profileImage);
-    expect(await profileImageStoreService.readProfileImage(profileImage)).toEqual(imageData);
+    expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
   });
 
   it("unsets the user's profile image", async () => {
     const user = create.user({ id: userId, profileImage: profileImage });
 
     userRepository.add(user);
-    profileImageStoreService.set(profileImage, currentData);
+    profileImageStore.set(profileImage, currentData);
 
     await execute(user, null);
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', null);
-    expect(await profileImageStoreService.readProfileImage(profileImage)).not.toBeUndefined();
+    expect(await profileImageStore.readProfileImage(profileImage)).not.toBeUndefined();
   });
 });

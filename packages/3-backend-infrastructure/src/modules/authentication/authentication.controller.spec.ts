@@ -18,32 +18,32 @@ import { get, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import {
   Forbidden,
-  MockLoggerService,
+  MockLoggerAdapter,
   NotImplemented,
   Request,
-  StubConfigService,
+  StubConfigAdapter,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 
 import { AuthenticationController } from './authentication.controller';
 
 describe('AuthenticationController', () => {
-  const configService = new StubConfigService({ app: { appBaseUrl: 'http://app.url' } });
-  const sessionService = new StubSessionService();
+  const config = new StubConfigAdapter({ app: { appBaseUrl: 'http://app.url' } });
+  const session = new StubSessionAdapter();
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
 
   const controller = new AuthenticationController(
-    new MockLoggerService(),
-    configService,
+    new MockLoggerAdapter(),
+    config,
     new ValidationService(),
-    sessionService,
+    session,
     queryBus,
     commandBus,
-    new UserPresenter(configService),
+    new UserPresenter(config),
   );
 
   const create = factories();
@@ -75,7 +75,7 @@ describe('AuthenticationController', () => {
       });
 
       expect(commandBus.execute).toHaveBeenCalledWith(new LoginCommand(body.email, body.password), ctx);
-      expect(sessionService.user).toEqual(user);
+      expect(session.user).toEqual(user);
     });
 
     it('fails to log in when the body is invalid', async () => {
@@ -115,7 +115,7 @@ describe('AuthenticationController', () => {
         ctx,
       );
 
-      expect(sessionService.user).toEqual(user);
+      expect(session.user).toEqual(user);
     });
 
     it('fails to sign up when the body is invalid', async () => {
@@ -193,7 +193,7 @@ describe('AuthenticationController', () => {
 
   describe('logout', () => {
     beforeEach(() => {
-      sessionService.user = create.user();
+      session.user = create.user();
     });
 
     const logout = async () => {
@@ -204,11 +204,11 @@ describe('AuthenticationController', () => {
       const response = await logout();
 
       expect(response).toHaveStatus(204);
-      expect(sessionService.user).toBeUndefined();
+      expect(session.user).toBeUndefined();
     });
 
     it('fails to log out when the user is not authenticated', async () => {
-      sessionService.reset();
+      session.reset();
 
       await expect(logout()).rejects.toThrow(AuthorizationError);
     });
@@ -228,7 +228,7 @@ describe('AuthenticationController', () => {
     it('returns the authenticated user', async () => {
       const user = create.user();
 
-      sessionService.user = user;
+      session.user = user;
 
       const response = await getAuthenticatedUser();
 

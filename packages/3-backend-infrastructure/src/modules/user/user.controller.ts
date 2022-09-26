@@ -1,4 +1,4 @@
-import { GetProfileImageQuery, GetUserByIdQuery, LoggerService } from 'backend-application';
+import { GetProfileImageQuery, GetUserByIdQuery, LoggerPort } from 'backend-application';
 import { ProfileImageData, User } from 'backend-domain';
 
 import { Controller, NotFound, QueryBus, Request, RequestHandler, Response } from '../../infrastructure';
@@ -7,7 +7,7 @@ import { UserPresenter } from './user.presenter';
 
 export class UserController extends Controller {
   constructor(
-    logger: LoggerService,
+    logger: LoggerPort,
     private readonly queryBus: QueryBus,
     private readonly userPresenter: UserPresenter,
   ) {

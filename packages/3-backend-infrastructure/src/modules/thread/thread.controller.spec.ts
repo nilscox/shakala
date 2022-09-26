@@ -9,12 +9,12 @@ import {
 import { factories } from 'backend-domain';
 
 import {
-  MockLoggerService,
-  StubConfigService,
+  MockLoggerAdapter,
+  StubConfigAdapter,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
-import { MockCommandBus, MockQueryBus, MockRequest, StubSessionService } from '../../test';
+import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 
 import { ThreadController } from './thread.controller';
@@ -23,15 +23,15 @@ import { ThreadPresenter } from './thread.presenter';
 describe('ThreadController', () => {
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
-  const sessionService = new StubSessionService();
+  const session = new StubSessionAdapter();
   const validationService = new ValidationService();
-  const threadPresenter = new ThreadPresenter(new UserPresenter(new StubConfigService()));
+  const threadPresenter = new ThreadPresenter(new UserPresenter(new StubConfigAdapter()));
 
   const controller = new ThreadController(
-    new MockLoggerService(),
+    new MockLoggerAdapter(),
     queryBus,
     commandBus,
-    sessionService,
+    session,
     validationService,
     threadPresenter,
   );
@@ -94,7 +94,7 @@ describe('ThreadController', () => {
     it('retrieves a thread as an authenticated user', async () => {
       const userId = 'userId';
 
-      sessionService.user = create.user({ id: userId });
+      session.user = create.user({ id: userId });
 
       await controller.getThread(new MockRequest().withParam('id', thread.id));
 
@@ -127,7 +127,7 @@ describe('ThreadController', () => {
     const threadId = 'threadId';
 
     beforeEach(() => {
-      sessionService.user = user;
+      session.user = user;
       commandBus.execute.mockResolvedValue(threadId);
     });
 

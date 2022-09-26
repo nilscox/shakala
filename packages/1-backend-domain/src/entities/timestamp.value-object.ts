@@ -1,5 +1,5 @@
 import { ValueObject } from '../ddd/value-object';
-import type { DateService } from '../interfaces/date.interface';
+import type { DatePort } from '../interfaces/date.interface';
 
 import { DomainError } from './domain-error';
 
@@ -28,7 +28,7 @@ export class Timestamp extends ValueObject<string> {
     return this.toDate().getTime();
   }
 
-  static now(dateService: DateService) {
-    return new Timestamp(dateService.nowAsString());
+  static now(date: DatePort) {
+    return new Timestamp(date.nowAsString());
   }
 }

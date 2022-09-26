@@ -1,4 +1,4 @@
-import { factories, InvalidCredentials, StubDateService } from 'backend-domain';
+import { factories, InvalidCredentials, StubDateAdapter } from 'backend-domain';
 
 import { InMemoryUserRepository } from '../user/user.in-memory-repository';
 
@@ -6,11 +6,11 @@ import { LoginCommand, LoginCommandHandler } from './login.command';
 
 describe('LoginCommand', () => {
   const userRepository = new InMemoryUserRepository();
-  const dateService = new StubDateService();
+  const dateAdapter = new StubDateAdapter();
 
   const handler = new LoginCommandHandler(userRepository);
 
-  const create = factories({ dateService });
+  const create = factories({ date: dateAdapter });
 
   const email = 'user@domain.tld';
   const password = 'p4ssw0rd';
@@ -21,7 +21,7 @@ describe('LoginCommand', () => {
   const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
-    dateService.setNow(now);
+    dateAdapter.setNow(now);
     userRepository.add(user);
   });
 

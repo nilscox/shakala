@@ -8,10 +8,10 @@ export * from './cqs/query-handler';
 
 export * from './modules/email/send-email.command';
 
-export * from './interfaces/email-sender.service';
-export * from './interfaces/email-compiler.service';
-export * from './interfaces/filesystem.service';
-export * from './interfaces/logger.service';
+export * from './interfaces/email-sender.port';
+export * from './interfaces/email-compiler.port';
+export * from './interfaces/filesystem.port';
+export * from './interfaces/logger.port';
 export * from './interfaces/repositories';
 export * from './interfaces/repository';
 
@@ -22,9 +22,9 @@ export * from './modules/thread/thread.in-memory-repository';
 export * from './modules/user/user.in-memory-repository';
 
 export * from './utils/execution-context';
-export * from './utils/in-memory-email-compiler.service';
-export * from './utils/in-memory-email-sender.service';
-export * from './utils/in-memory-filesystem.service';
+export * from './utils/in-memory-email-compiler.adapter';
+export * from './utils/in-memory-email-sender.adapter';
+export * from './utils/in-memory-filesystem.adapter';
 
 export * from './modules/authentication/login.command';
 export * from './modules/authentication/signup.command';

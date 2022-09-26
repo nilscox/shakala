@@ -1,10 +1,10 @@
 import {
-  CryptoService,
-  DateService,
+  CryptoPort,
+  DatePort,
   DomainError,
-  GeneratorService,
+  GeneratorPort,
   Nick,
-  ProfileImageStoreService,
+  ProfileImageStorePort,
   User,
 } from 'backend-domain';
 
@@ -30,10 +30,10 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
   constructor(
     private readonly eventBus: IEventBus,
     private readonly userRepository: UserRepository,
-    private readonly generatorService: GeneratorService,
-    private readonly cryptoService: CryptoService,
-    private readonly dateService: DateService,
-    private readonly profileImageStoreService: ProfileImageStoreService,
+    private readonly generator: GeneratorPort,
+    private readonly crypto: CryptoPort,
+    private readonly dateAdapter: DatePort,
+    private readonly profileImageStore: ProfileImageStorePort,
   ) {}
 
   async handle(command: SignupCommand, ctx: ExecutionContext): Promise<string> {
@@ -48,10 +48,10 @@ export class SignupCommandHandler implements CommandHandler<SignupCommand, strin
         email,
         password,
       },
-      this.generatorService,
-      this.dateService,
-      this.cryptoService,
-      this.profileImageStoreService,
+      this.generator,
+      this.dateAdapter,
+      this.crypto,
+      this.profileImageStore,
     );
 
     const publisher = new EventPublisher(ctx, user);

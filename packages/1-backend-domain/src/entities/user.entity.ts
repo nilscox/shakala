@@ -3,10 +3,10 @@ import { UnexpectedError } from 'shared';
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';
 import { UserCreatedEvent } from '../events/user-created.event';
-import { CryptoService } from '../interfaces/crypto.interface';
-import { DateService } from '../interfaces/date.interface';
-import { GeneratorService } from '../interfaces/generator-service.interface';
-import { ProfileImageStoreService } from '../interfaces/profile-image-store-service.interface';
+import { CryptoPort } from '../interfaces/crypto.interface';
+import { DatePort } from '../interfaces/date.interface';
+import { GeneratorPort } from '../interfaces/generator.port';
+import { ProfileImageStorePort } from '../interfaces/profile-image-store.port';
 
 import { DomainError } from './domain-error';
 import { Nick } from './nick.value-object';
@@ -33,37 +33,37 @@ type CreateUserProps = {
 export class User extends AggregateRoot<UserProps> {
   constructor(
     props: UserProps,
-    private readonly generatorService: GeneratorService,
-    private readonly dateService: DateService,
-    private readonly cryptoService: CryptoService,
-    private readonly profileImageStoreService: ProfileImageStoreService,
+    private readonly generator: GeneratorPort,
+    private readonly date: DatePort,
+    private readonly crypto: CryptoPort,
+    private readonly profileImageStore: ProfileImageStorePort,
   ) {
     super(props);
   }
 
   static async create(
     { nick, email, password }: CreateUserProps,
-    generatorService: GeneratorService,
-    dateService: DateService,
-    cryptoService: CryptoService,
-    profileImageStoreService: ProfileImageStoreService,
+    generator: GeneratorPort,
+    date: DatePort,
+    crypto: CryptoPort,
+    profileImageStore: ProfileImageStorePort,
   ) {
     const user = new User(
       {
-        id: await generatorService.generateId(),
+        id: await generator.generateId(),
         nick: new Nick(nick),
         email,
-        hashedPassword: await cryptoService.hash(password),
+        hashedPassword: await crypto.hash(password),
         profileImage: null,
-        signupDate: new Timestamp(dateService.nowAsString()),
+        signupDate: new Timestamp(date.nowAsString()),
         lastLoginDate: null,
-        emailValidationToken: await generatorService.generateToken(),
+        emailValidationToken: await generator.generateToken(),
         hasWriteAccess: true,
       },
-      generatorService,
-      dateService,
-      cryptoService,
-      profileImageStoreService,
+      generator,
+      date,
+      crypto,
+      profileImageStore,
     );
 
     user.addEvent(new UserCreatedEvent(user.id));
@@ -108,13 +108,13 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   async authenticate(password: string): Promise<void> {
-    const matchPassword = await this.cryptoService.compare(password, this.props.hashedPassword);
+    const matchPassword = await this.crypto.compare(password, this.props.hashedPassword);
 
     if (!matchPassword) {
       throw new InvalidCredentials();
     }
 
-    this.props.lastLoginDate = new Timestamp(this.dateService.now());
+    this.props.lastLoginDate = new Timestamp(this.date.now());
   }
 
   validateEmailAddress(token: string) {
@@ -134,7 +134,7 @@ export class User extends AggregateRoot<UserProps> {
       return null;
     }
 
-    const data = await this.profileImageStoreService.readProfileImage(this.profileImage);
+    const data = await this.profileImageStore.readProfileImage(this.profileImage);
 
     if (!data) {
       throw new UnexpectedError('User: expected profile image data to exist', {
@@ -148,10 +148,10 @@ export class User extends AggregateRoot<UserProps> {
 
   async setProfileImage(data: ProfileImageData | null): Promise<void> {
     if (data) {
-      const imageId = await this.generatorService.generateId();
+      const imageId = await this.generator.generateId();
       const profileImage = new ProfileImage([imageId, data.type].join('.'));
 
-      await this.profileImageStoreService.writeProfileImage(this.id, profileImage, data);
+      await this.profileImageStore.writeProfileImage(this.id, profileImage, data);
       this.props.profileImage = profileImage;
     } else {
       this.props.profileImage = null;

@@ -1,11 +1,11 @@
-import { CryptoService } from './interfaces/crypto.interface';
-import { DateService } from './interfaces/date.interface';
-import { GeneratorService } from './interfaces/generator-service.interface';
-import { ProfileImageStoreService } from './interfaces/profile-image-store-service.interface';
+import { CryptoPort } from './interfaces/crypto.interface';
+import { DatePort } from './interfaces/date.interface';
+import { GeneratorPort } from './interfaces/generator.port';
+import { ProfileImageStorePort } from './interfaces/profile-image-store.port';
 
 export type DomainDependencies = {
-  generatorService: GeneratorService;
-  dateService: DateService;
-  cryptoService: CryptoService;
-  profileImageStoreService: ProfileImageStoreService;
+  generator: GeneratorPort;
+  date: DatePort;
+  crypto: CryptoPort;
+  profileImageStore: ProfileImageStorePort;
 };

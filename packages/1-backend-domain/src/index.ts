@@ -21,12 +21,13 @@ export * from './events/user-created.event';
 
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
-export * from './interfaces/generator-service.interface';
-export * from './interfaces/profile-image-store-service.interface';
+export * from './interfaces/generator.port';
+export * from './interfaces/profile-image-store.port';
 
 export * from './domain-dependencies';
 
 export * from './utils/factories';
-export * from './utils/stub-crypto.service';
-export * from './utils/stub-date.service';
-export * from './utils/stub-generator.service';
+export * from './utils/stub-crypto.adapter';
+export * from './utils/stub-date.adapter';
+export * from './utils/stub-generator.adapter';
+export * from './utils/stub-profile-image-store.adapter';

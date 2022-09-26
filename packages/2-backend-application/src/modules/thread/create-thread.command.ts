@@ -1,4 +1,4 @@
-import { Author, DateService, GeneratorService, Markdown, Thread, Timestamp } from 'backend-domain';
+import { Author, DatePort, GeneratorPort, Markdown, Thread, Timestamp } from 'backend-domain';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../authorization';
 import { Command, CommandHandler } from '../../cqs/command-handler';
@@ -12,8 +12,8 @@ export class CreateThreadCommand implements Command {
 @Authorize(IsAuthenticated, HasWriteAccess)
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, string> {
   constructor(
-    private readonly generatorService: GeneratorService,
-    private readonly dateService: DateService,
+    private readonly generator: GeneratorPort,
+    private readonly dateAdapter: DatePort,
     private readonly threadRepository: ThreadRepository,
   ) {}
 
@@ -22,12 +22,12 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, 
     const { user: author } = ctx;
 
     const thread = new Thread({
-      id: await this.generatorService.generateId(),
+      id: await this.generator.generateId(),
       author: new Author(author),
       description,
       text: new Markdown(text),
       keywords,
-      created: Timestamp.now(this.dateService),
+      created: Timestamp.now(this.dateAdapter),
     });
 
     await this.threadRepository.save(thread);

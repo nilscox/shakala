@@ -39,7 +39,7 @@ export class SqlUser extends BaseSqlEntity<User> {
     this.hasWriteAccess = entity.hasWriteAccess;
   }
 
-  toDomain({ generatorService, dateService, cryptoService, profileImageStoreService }: DomainDependencies) {
+  toDomain({ generator, date, crypto, profileImageStore }: DomainDependencies) {
     return new User(
       {
         id: this.id,
@@ -52,10 +52,10 @@ export class SqlUser extends BaseSqlEntity<User> {
         emailValidationToken: this.emailValidationToken ?? null,
         hasWriteAccess: this.hasWriteAccess,
       },
-      generatorService,
-      dateService,
-      cryptoService,
-      profileImageStoreService,
+      generator,
+      date,
+      crypto,
+      profileImageStore,
     );
   }
 }

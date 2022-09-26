@@ -1,4 +1,4 @@
-import { AuthorizationError, LoggerService } from 'backend-application';
+import { AuthorizationError, LoggerPort } from 'backend-application';
 import {
   Application,
   RequestHandler as ExpressRequestHandler,
@@ -29,7 +29,7 @@ export const Middlewares = (...middlewares: ExpressRequestHandler[]): MethodDeco
 export abstract class Controller {
   private router = Router();
 
-  constructor(private readonly logger: LoggerService, private readonly prefix = '') {}
+  constructor(private readonly logger: LoggerPort, private readonly prefix = '') {}
 
   abstract endpoints(): Record<string, RequestHandler>;
 

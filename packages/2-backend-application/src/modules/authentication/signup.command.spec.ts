@@ -1,11 +1,11 @@
 import {
   factories,
-  StubCryptoService,
-  StubDateService,
-  StubGeneratorService,
+  StubCryptoAdapter,
+  StubDateAdapter,
+  StubGeneratorAdapter,
   UserCreatedEvent,
+  StubProfileImageStoreAdapter,
 } from 'backend-domain';
-import { StubProfileImageStoreService } from 'backend-domain/src/utils/stub-profile-image-store.service';
 
 import { ExecutionContext } from '../../utils/execution-context';
 import { StubEventBus } from '../../utils/stub-event-bus';
@@ -21,17 +21,17 @@ import {
 describe('SignupCommand', () => {
   const eventBus = new StubEventBus();
   const userRepository = new InMemoryUserRepository();
-  const generatorService = new StubGeneratorService();
-  const cryptoService = new StubCryptoService();
-  const dateService = new StubDateService();
+  const generator = new StubGeneratorAdapter();
+  const crypto = new StubCryptoAdapter();
+  const dateAdapter = new StubDateAdapter();
 
   const handler = new SignupCommandHandler(
     eventBus,
     userRepository,
-    generatorService,
-    cryptoService,
-    dateService,
-    new StubProfileImageStoreService(),
+    generator,
+    crypto,
+    dateAdapter,
+    new StubProfileImageStoreAdapter(),
   );
 
   const create = factories();
@@ -48,9 +48,9 @@ describe('SignupCommand', () => {
   };
 
   beforeEach(() => {
-    generatorService.nextId = userId;
-    generatorService.nextToken = token;
-    dateService.setNow(now);
+    generator.nextId = userId;
+    generator.nextToken = token;
+    dateAdapter.setNow(now);
   });
 
   it('signs up as a new user', async () => {

@@ -15,10 +15,10 @@ import { Thread } from '../entities/thread.entity';
 import { Timestamp } from '../entities/timestamp.value-object';
 import { User } from '../entities/user.entity';
 
-import { StubCryptoService } from './stub-crypto.service';
-import { StubDateService } from './stub-date.service';
-import { StubGeneratorService } from './stub-generator.service';
-import { StubProfileImageStoreService } from './stub-profile-image-store.service';
+import { StubCryptoAdapter } from './stub-crypto.adapter';
+import { StubDateAdapter } from './stub-date.adapter';
+import { StubGeneratorAdapter } from './stub-generator.adapter';
+import { StubProfileImageStoreAdapter } from './stub-profile-image-store.adapter';
 
 type ValueObjectFactory<VO extends ValueObject<unknown>> = VO extends ValueObject<infer V>
   ? Factory<VO, Partial<V>>
@@ -49,10 +49,10 @@ type Factories = {
 };
 
 export const createDomainDependencies: Factory<DomainDependencies> = (overrides) => ({
-  generatorService: new StubGeneratorService(),
-  dateService: new StubDateService(),
-  cryptoService: new StubCryptoService(),
-  profileImageStoreService: new StubProfileImageStoreService(),
+  generator: new StubGeneratorAdapter(),
+  date: new StubDateAdapter(),
+  crypto: new StubCryptoAdapter(),
+  profileImageStore: new StubProfileImageStoreAdapter(),
   ...overrides,
 });
 
@@ -110,8 +110,8 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
           history: [],
           ...props,
         },
-        deps.generatorService,
-        deps.dateService,
+        deps.generator,
+        deps.date,
       );
     },
 
@@ -171,10 +171,10 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
           hasWriteAccess: true,
           ...props,
         },
-        deps.generatorService,
-        deps.dateService,
-        deps.cryptoService,
-        deps.profileImageStoreService,
+        deps.generator,
+        deps.date,
+        deps.crypto,
+        deps.profileImageStore,
       );
     },
 

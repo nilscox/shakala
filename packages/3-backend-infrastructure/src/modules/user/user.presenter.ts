@@ -1,7 +1,7 @@
 import { Author, User } from 'backend-domain';
 import { AuthUserDto, UserDto } from 'shared';
 
-import { ConfigService } from '../../infrastructure';
+import { ConfigPort } from '../../infrastructure';
 
 export const userToDto = (user: User): AuthUserDto => ({
   id: user.id,
@@ -12,7 +12,7 @@ export const userToDto = (user: User): AuthUserDto => ({
 });
 
 export class UserPresenter {
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly config: ConfigPort) {}
 
   transformUser = (user: User | Author): UserDto => {
     const { apiBaseUrl } = this.config.app();

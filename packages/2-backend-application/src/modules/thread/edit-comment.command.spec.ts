@@ -1,4 +1,4 @@
-import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
+import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
 
 import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
@@ -6,13 +6,13 @@ import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { EditCommentCommand, EditCommentCommandHandler } from './edit-comment.command';
 
 describe('EditCommentCommand', () => {
-  const generatorService = new StubGeneratorService();
-  const dateService = new StubDateService();
+  const generator = new StubGeneratorAdapter();
+  const dateAdapter = new StubDateAdapter();
   const commentRepository = new InMemoryCommentRepository();
 
   const handler = new EditCommentCommandHandler(commentRepository);
 
-  const create = factories({ generatorService, dateService });
+  const create = factories({ generator, date: dateAdapter });
 
   const user = create.user();
   const author = create.author(user);
@@ -21,8 +21,8 @@ describe('EditCommentCommand', () => {
   const now = create.timestamp('2022-01-01');
 
   beforeEach(() => {
-    generatorService.nextId = 'messageId';
-    dateService.setNow(now);
+    generator.nextId = 'messageId';
+    dateAdapter.setNow(now);
     commentRepository.add(comment);
   });
 

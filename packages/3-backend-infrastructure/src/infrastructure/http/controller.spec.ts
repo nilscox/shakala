@@ -3,13 +3,13 @@ import express from 'express';
 import { AuthorizationErrorReason } from 'shared';
 import supertest from 'supertest';
 
-import { MockLoggerService } from '../services';
+import { MockLoggerAdapter } from '../adapters';
 
 import { Controller, Middlewares, RequestHandler } from './controller';
 import { Response } from './response';
 
 describe('Controller', () => {
-  const logger = new MockLoggerService();
+  const logger = new MockLoggerAdapter();
 
   abstract class TestController extends Controller {
     constructor() {

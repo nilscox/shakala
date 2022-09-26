@@ -1,4 +1,4 @@
-import { factories, StubDateService, StubGeneratorService } from 'backend-domain';
+import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
 
 import { AuthenticatedExecutionContext } from '../../utils/execution-context';
 
@@ -6,11 +6,11 @@ import { InMemoryCommentRepository } from './comment.in-memory-repository';
 import { CreateCommentCommand, CreateCommentCommandHandler } from './create-comment.command';
 
 describe('CreateCommentCommand', () => {
-  const generatorService = new StubGeneratorService();
-  const dateService = new StubDateService();
+  const generator = new StubGeneratorAdapter();
+  const dateAdapter = new StubDateAdapter();
   const commentRepository = new InMemoryCommentRepository();
 
-  const handler = new CreateCommentCommandHandler(generatorService, dateService, commentRepository);
+  const handler = new CreateCommentCommandHandler(generator, dateAdapter, commentRepository);
 
   const create = factories();
 
@@ -25,8 +25,8 @@ describe('CreateCommentCommand', () => {
   };
 
   beforeEach(() => {
-    generatorService.nextIds = ['commentId', 'messageId'];
-    dateService.setNow(now);
+    generator.nextIds = ['commentId', 'messageId'];
+    dateAdapter.setNow(now);
   });
 
   it('creates a new root comment', async () => {

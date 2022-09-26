@@ -2,12 +2,12 @@ import { CannotReportOwnCommentError, CommentReport } from '../entities/comment-
 import { Comment } from '../entities/comment.entity';
 import { CannotSetReactionOnOwnCommentError, Reaction, ReactionType } from '../entities/reaction.entity';
 import { User } from '../entities/user.entity';
-import { GeneratorService } from '../interfaces/generator-service.interface';
+import { GeneratorPort } from '../interfaces/generator.port';
 
 export const del = Symbol('delete');
 
 export class CommentService {
-  constructor(private readonly generatorService: GeneratorService) {}
+  constructor(private readonly generator: GeneratorPort) {}
 
   async setUserReaction(
     comment: Comment,
@@ -21,7 +21,7 @@ export class CommentService {
 
     if (!currentReaction && targetReaction) {
       return new Reaction({
-        id: await this.generatorService.generateId(),
+        id: await this.generator.generateId(),
         commentId: comment.id,
         userId: user.id,
         type: targetReaction,
@@ -46,7 +46,7 @@ export class CommentService {
     }
 
     return new CommentReport({
-      id: await this.generatorService.generateId(),
+      id: await this.generator.generateId(),
       commentId: comment.id,
       reportedBy: user,
       reason: reason ?? null,

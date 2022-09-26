@@ -1,18 +1,18 @@
-import { InMemoryEmailSenderService } from 'backend-application';
+import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { UserDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
-import { MockLoggerService, StubConfigService } from '../../infrastructure';
+import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Account e2e', () => {
   const server = new TestServer();
   let agent: SuperAgentTest;
 
-  server.overrideServices({
-    loggerService: new MockLoggerService(),
-    configService: new StubConfigService({ app: { apiBaseUrl: 'http://api.url' } }).withEnvDatabase(),
-    emailSenderService: new InMemoryEmailSenderService(),
+  server.override({
+    logger: new MockLoggerAdapter(),
+    config: new StubConfigAdapter({ app: { apiBaseUrl: 'http://api.url' } }).withEnvDatabase(),
+    emailSender: new InMemoryEmailSenderAdapter(),
   });
 
   beforeAll(async () => {

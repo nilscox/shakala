@@ -4,12 +4,12 @@ import { Browser, BrowserContext, expect, Page } from '@playwright/test';
 import {
   ExecutionContext,
   GetUserByEmailQuery,
-  LoggerService,
+  LoggerPort,
   SignupCommand,
   ValidateEmailAddressCommand,
 } from 'backend-application';
 import { User } from 'backend-domain';
-import { Application, ClearDatabaseCommand, EnvConfigService } from 'backend-infrastructure';
+import { Application, ClearDatabaseCommand, EnvConfigAdapter } from 'backend-infrastructure';
 import { Dependencies } from 'frontend-domain';
 import { AuthUserDto, wait } from 'shared';
 
@@ -24,7 +24,7 @@ declare global {
 }
 
 const noop = () => {};
-const loggerService: LoggerService = {
+const logger: LoggerPort = {
   log: noop,
   info: noop,
   error: noop,
@@ -43,9 +43,9 @@ export class AppContext extends AppAccessors {
 
     const app = new AppContext(ctx, page);
 
-    app.backend.overrideServices({
-      loggerService,
-      configService: new EnvConfigService(),
+    app.backend.override({
+      logger,
+      config: new EnvConfigAdapter(),
     });
 
     await app.backend.init();

@@ -1,3 +1,5 @@
+export * from './adapters';
+
 export * from './cqs/command-bus';
 export * from './cqs/query-bus';
 

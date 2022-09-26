@@ -4,7 +4,7 @@ import {
   GetLastThreadsQuery,
   GetThreadQuery,
   GetThreadQueryResult,
-  LoggerService,
+  LoggerPort,
   Sort,
 } from 'backend-application';
 import { Thread } from 'backend-domain';
@@ -23,7 +23,7 @@ import {
   QueryBus,
   Request,
   Response,
-  SessionService,
+  SessionPort,
   ValidationService,
 } from '../../infrastructure';
 
@@ -31,10 +31,10 @@ import { ThreadPresenter } from './thread.presenter';
 
 export class ThreadController extends Controller {
   constructor(
-    logger: LoggerService,
+    logger: LoggerPort,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-    private readonly sessionService: SessionService,
+    private readonly session: SessionPort,
     private readonly validationService: ValidationService,
     private readonly threadPresenter: ThreadPresenter,
   ) {
@@ -59,7 +59,7 @@ export class ThreadController extends Controller {
   async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
     const threadId = req.params.get('id') as string;
     const query = await this.validationService.query(req, getThreadQuerySchema);
-    const user = await this.sessionService.getUser(req);
+    const user = await this.session.getUser(req);
 
     const result = await this.queryBus.execute<GetThreadQueryResult>(
       new GetThreadQuery(threadId, query.sort as Sort, query.search, user?.id),
@@ -74,7 +74,7 @@ export class ThreadController extends Controller {
 
   async createThread(req: Request): Promise<Response<string>> {
     const body = await this.validationService.body(req, createThreadBodySchema);
-    const user = await this.sessionService.getUser(req);
+    const user = await this.session.getUser(req);
 
     const threadId = await this.commandBus.execute<string>(
       new CreateThreadCommand(body.description, body.text, body.keywords),

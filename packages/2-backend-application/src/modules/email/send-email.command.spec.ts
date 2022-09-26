@@ -1,13 +1,13 @@
-import { Email } from '../../interfaces/email-sender.service';
-import { InMemoryEmailCompilerService } from '../../utils/in-memory-email-compiler.service';
-import { InMemoryEmailSenderService } from '../../utils/in-memory-email-sender.service';
-import { FilesystemObject, InMemoryFilesystemService } from '../../utils/in-memory-filesystem.service';
+import { Email } from '../../interfaces/email-sender.port';
+import { InMemoryEmailCompilerAdapter } from '../../utils/in-memory-email-compiler.adapter';
+import { InMemoryEmailSenderAdapter } from '../../utils/in-memory-email-sender.adapter';
+import { FilesystemObject, InMemoryFilesystemAdapter } from '../../utils/in-memory-filesystem.adapter';
 
 import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
 
 describe('SendEmailCommand', () => {
-  const emailCompilerService = new InMemoryEmailCompilerService();
-  const emailSenderService = new InMemoryEmailSenderService();
+  const emailCompiler = new InMemoryEmailCompilerAdapter();
+  const emailSender = new InMemoryEmailSenderAdapter();
 
   it('sends a welcome email to a user', async () => {
     const fs: FilesystemObject = {
@@ -15,11 +15,7 @@ describe('SendEmailCommand', () => {
       'welcome.mjml': '<p>Welcome {nick}</p>',
     };
 
-    const handler = new SendEmailHandler(
-      new InMemoryFilesystemService(fs),
-      emailCompilerService,
-      emailSenderService,
-    );
+    const handler = new SendEmailHandler(new InMemoryFilesystemAdapter(fs), emailCompiler, emailSender);
 
     await handler.init();
 
@@ -39,6 +35,6 @@ describe('SendEmailCommand', () => {
       },
     };
 
-    expect(emailSenderService.lastSentEmail).toEqual(expected);
+    expect(emailSender.lastSentEmail).toEqual(expected);
   });
 });

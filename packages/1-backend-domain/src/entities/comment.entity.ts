@@ -1,8 +1,8 @@
 import { first } from 'shared';
 
 import { Entity, EntityProps } from '../ddd/entity';
-import { DateService } from '../interfaces/date.interface';
-import { GeneratorService } from '../interfaces/generator-service.interface';
+import { DatePort } from '../interfaces/date.interface';
+import { GeneratorPort } from '../interfaces/generator.port';
 
 import { Author } from './author.entity';
 import { DomainError } from './domain-error';
@@ -24,8 +24,8 @@ export type CommentProps = EntityProps<{
 export class Comment extends Entity<CommentProps> {
   constructor(
     props: CommentProps,
-    private readonly generatorService: GeneratorService,
-    private readonly dateService: DateService,
+    private readonly generator: GeneratorPort,
+    private readonly date: DatePort,
   ) {
     super(props);
   }
@@ -70,9 +70,9 @@ export class Comment extends Entity<CommentProps> {
     this.props.history.push(this.message);
 
     this.props.message = new Message({
-      id: await this.generatorService.generateId(),
+      id: await this.generator.generateId(),
       author: this.author,
-      date: new Timestamp(this.dateService.now()),
+      date: new Timestamp(this.date.now()),
       text: new Markdown(text),
     });
   }

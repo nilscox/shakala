@@ -1,7 +1,7 @@
 import { Command, CommandHandler } from '../../cqs/command-handler';
-import { EmailCompilerService, EmailRenderer } from '../../interfaces/email-compiler.service';
-import { EmailSenderService } from '../../interfaces/email-sender.service';
-import { FilesystemService } from '../../interfaces/filesystem.service';
+import { EmailCompilerPort, EmailRenderer } from '../../interfaces/email-compiler.port';
+import { EmailSenderPort } from '../../interfaces/email-sender.port';
+import { FilesystemPort } from '../../interfaces/filesystem.port';
 
 export enum EmailKind {
   welcome = 'welcome',
@@ -26,9 +26,9 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
   private renderers = new Map<EmailKind, EmailRenderer>();
 
   constructor(
-    private readonly filesystemService: FilesystemService,
-    private readonly emailCompilerService: EmailCompilerService,
-    private readonly emailSenderService: EmailSenderService,
+    private readonly filesystem: FilesystemPort,
+    private readonly emailCompiler: EmailCompilerPort,
+    private readonly emailSender: EmailSenderPort,
   ) {}
 
   async init(): Promise<void> {
@@ -45,7 +45,7 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
       throw new Error(`no renderer found for email kind "${kind}"`);
     }
 
-    await this.emailSenderService.send({
+    await this.emailSender.send({
       to,
       subject: 'Bienvenue sur Shakala !',
       body: renderer(payload),
@@ -53,9 +53,9 @@ export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKi
   }
 
   private async loadTemplate(kind: EmailKind) {
-    const templateHtml = await this.filesystemService.readEmailTemplate(`${kind}.mjml`);
-    const templateText = await this.filesystemService.readEmailTemplate(`${kind}.txt`);
+    const templateHtml = await this.filesystem.readEmailTemplate(`${kind}.mjml`);
+    const templateText = await this.filesystem.readEmailTemplate(`${kind}.txt`);
 
-    return this.emailCompilerService.compile(templateText, templateHtml);
+    return this.emailCompiler.compile(templateText, templateHtml);
   }
 }

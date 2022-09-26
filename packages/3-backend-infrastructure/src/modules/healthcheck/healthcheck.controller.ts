@@ -1,14 +1,10 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { LoggerService } from 'backend-application';
+import { LoggerPort } from 'backend-application';
 
-import { ConfigService, Controller, Response } from '../../infrastructure';
+import { ConfigPort, Controller, Response } from '../../infrastructure';
 
 export class HealthcheckController extends Controller {
-  constructor(
-    logger: LoggerService,
-    private readonly configService: ConfigService,
-    private readonly em: EntityManager,
-  ) {
+  constructor(logger: LoggerPort, private readonly config: ConfigPort, private readonly em: EntityManager) {
     super(logger);
   }
 
@@ -31,6 +27,6 @@ export class HealthcheckController extends Controller {
   }
 
   version(): Response<string> {
-    return Response.ok(this.configService.app().version);
+    return Response.ok(this.config.app().version);
   }
 }

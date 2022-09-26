@@ -2,7 +2,7 @@ import { GetThreadQueryResult } from 'backend-application';
 import { factories, ReactionType } from 'backend-domain';
 import { CommentDto, ThreadWithCommentsDto } from 'shared';
 
-import { StubConfigService } from '../../infrastructure';
+import { StubConfigAdapter } from '../../infrastructure';
 import { UserPresenter } from '../user/user.presenter';
 
 import { ThreadPresenter } from './thread.presenter';
@@ -85,7 +85,7 @@ describe('ThreadPresenter', () => {
     date: thread.created.toString(),
   };
 
-  const presenter = new ThreadPresenter(new UserPresenter(new StubConfigService()));
+  const presenter = new ThreadPresenter(new UserPresenter(new StubConfigAdapter()));
 
   it('transforms a thread', () => {
     expect(presenter.transformThread(getThreadQueryResult)).toEqual(threadDto);

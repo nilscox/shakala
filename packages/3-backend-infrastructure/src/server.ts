@@ -9,7 +9,7 @@ import session from 'express-session';
 import { pick } from 'shared';
 
 import { Application } from './application';
-import { ExpressSessionService, ValidationService } from './infrastructure';
+import { ExpressSessionAdapter, ValidationService } from './infrastructure';
 import { AccountController } from './modules/account/account.controller';
 import { AuthenticationController } from './modules/authentication/authentication.controller';
 import { CommentController } from './modules/comment/comment.controller';
@@ -115,18 +115,18 @@ export class Server extends Application {
     const { queryBus, commandBus, em, logger, config } = this;
 
     const validationService = new ValidationService();
-    const sessionService = new ExpressSessionService(queryBus);
+    const session = new ExpressSessionAdapter(queryBus);
 
     const userPresenter = new UserPresenter(config);
     const threadPresenter = new ThreadPresenter(userPresenter);
 
     const controllers = [
       new HealthcheckController(logger, config, em),
-      new AuthenticationController(logger, config, validationService, sessionService, queryBus, commandBus, userPresenter),
-      new AccountController(logger, commandBus, queryBus, sessionService, userPresenter),
+      new AuthenticationController(logger, config, validationService, session, queryBus, commandBus, userPresenter),
+      new AccountController(logger, commandBus, queryBus, session, userPresenter),
       new UserController(logger, queryBus, userPresenter),
-      new ThreadController(logger, queryBus, commandBus, sessionService, validationService, threadPresenter),
-      new CommentController(logger, queryBus, commandBus, sessionService, validationService),
+      new ThreadController(logger, queryBus, commandBus, session, validationService, threadPresenter),
+      new CommentController(logger, queryBus, commandBus, session, validationService),
     ];
 
     for (const controller of controllers) {

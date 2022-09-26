@@ -1,18 +1,18 @@
-import { InMemoryEmailSenderService } from 'backend-application';
+import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { CreateCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto, SetReactionBodyDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
-import { MockLoggerService, StubConfigService } from '../../infrastructure';
+import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
 import { TestServer } from '../../test';
 
 describe('Comment e2e', () => {
   const server = new TestServer();
   let agent: SuperAgentTest;
 
-  server.overrideServices({
-    loggerService: new MockLoggerService(),
-    configService: new StubConfigService().withEnvDatabase(),
-    emailSenderService: new InMemoryEmailSenderService(),
+  server.override({
+    logger: new MockLoggerAdapter(),
+    config: new StubConfigAdapter().withEnvDatabase(),
+    emailSender: new InMemoryEmailSenderAdapter(),
   });
 
   beforeAll(async () => {
