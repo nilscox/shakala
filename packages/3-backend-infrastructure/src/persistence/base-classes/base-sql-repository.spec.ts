@@ -3,10 +3,9 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { createDomainDependencies, DomainDependencies } from 'backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
-import { EntityNotFoundError } from '../utils/entity-not-found.error';
 
 import { BaseSqlEntity } from './base-sql-entity';
-import { BaseSqlRepository } from './base-sql-repository';
+import { BaseSqlRepository, EntityNotFound } from './base-sql-repository';
 
 type TestProps = {
   id: string;
@@ -133,7 +132,7 @@ describe('SqlRepository', () => {
     await em.clear();
 
     await expect(repository.findByIdOrFail(sqlTest.id)).resolves.toBeDefined();
-    await expect(repository.findByIdOrFail('nope')).rejects.toThrow(new EntityNotFoundError('Test'));
+    await expect(repository.findByIdOrFail('nope')).rejects.toThrow(new EntityNotFound('Test', 'nope'));
   });
 
   it('deletes an entity from the database', async () => {

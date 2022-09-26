@@ -2,9 +2,7 @@ import { FilterQuery, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
 import { DomainDependencies } from 'backend-domain';
-import { ClassType } from 'shared';
-
-import { EntityNotFoundError } from '../utils/entity-not-found.error';
+import { BaseError, ClassType } from 'shared';
 
 import { BaseSqlEntity } from './base-sql-entity';
 
@@ -56,7 +54,7 @@ export abstract class BaseSqlRepository<
     const entity = await this.findById(entityId);
 
     if (!entity) {
-      throw new EntityNotFoundError(this.entityName);
+      throw new EntityNotFound(this.entityName, entityId);
     }
 
     return entity;
@@ -72,4 +70,17 @@ export abstract class BaseSqlRepository<
   async delete(entity: DomainEntity): Promise<void> {
     await this.repository.removeAndFlush(this.getReference(entity.id));
   }
+}
+
+export class EntityNotFound extends BaseError<{ entityName: string; entityId: string }> {
+  constructor(entityName: string, entityId: string) {
+    super(`${entityName} not found`);
+
+    this.details = {
+      entityName,
+      entityId,
+    };
+  }
+
+  public details: { entityName: string; entityId: string };
 }

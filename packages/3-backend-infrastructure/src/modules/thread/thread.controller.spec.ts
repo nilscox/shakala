@@ -137,7 +137,7 @@ describe('ThreadController', () => {
       );
 
       expect(response).toHaveStatus(201);
-      expect(response).toHaveBody(threadId);
+      expect(response).toHaveBody({ id: threadId });
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new CreateThreadCommand(description, text, keywords),

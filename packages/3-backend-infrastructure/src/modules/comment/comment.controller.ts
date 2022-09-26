@@ -53,7 +53,7 @@ export class CommentController extends Controller {
     };
   }
 
-  async createComment(req: Request): Promise<Response<string>> {
+  async createComment(req: Request): Promise<Response<{ id: string }>> {
     const user = await this.session.getUser(req);
     const body = await this.validation.body(req, createCommentBodySchema);
 
@@ -62,7 +62,7 @@ export class CommentController extends Controller {
       .asUser(user)
       .run();
 
-    return Response.created(commentId);
+    return Response.created({ id: commentId });
   }
 
   async editComment(req: Request): Promise<Response<void>> {

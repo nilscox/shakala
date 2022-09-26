@@ -72,7 +72,7 @@ export class ThreadController extends Controller {
     return Response.ok(this.threadPresenter.transformThread(result));
   }
 
-  async createThread(req: Request): Promise<Response<string>> {
+  async createThread(req: Request): Promise<Response<{ id: string }>> {
     const body = await this.validationService.body(req, createThreadBodySchema);
     const user = await this.session.getUser(req);
 
@@ -81,6 +81,6 @@ export class ThreadController extends Controller {
       new ExecutionContext(user),
     );
 
-    return Response.created(threadId);
+    return Response.created({ id: threadId });
   }
 }

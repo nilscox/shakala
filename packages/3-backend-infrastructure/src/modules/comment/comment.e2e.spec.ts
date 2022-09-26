@@ -48,7 +48,7 @@ describe('Comment e2e', () => {
     const threadId = await server.createThread(userId);
 
     const createResponse = await createComment(threadId);
-    const createdId: string = createResponse.body;
+    const createdId = createResponse.body.id;
 
     await editComment(createdId);
 

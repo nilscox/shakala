@@ -68,7 +68,7 @@ describe('CommentController', () => {
       const response = await controller.createComment(request);
 
       expect(response).toHaveStatus(201);
-      expect(response).toHaveBody(commentId);
+      expect(response).toHaveBody({ id: commentId });
 
       expect(commandBus.execute).toHaveBeenCalledWith(new CreateCommentCommand(threadId, null, text), ctx);
     });

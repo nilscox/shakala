@@ -30,7 +30,7 @@ describe('Thread e2e', () => {
 
     const createThread = async (): Promise<string> => {
       const { body } = await agent.post('/thread').send(createThreadDto).expect(201);
-      return body;
+      return body.id;
     };
 
     const getThread = async (threadId: string) => {
