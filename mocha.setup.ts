@@ -15,6 +15,10 @@ export const mochaHooks: RootHookObject = {
     }
   },
 
+  afterAll() {
+    expect.cleanup();
+  },
+
   afterEach() {
     Sinon.restore();
   },

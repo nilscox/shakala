@@ -1,8 +1,11 @@
-import { UnexpectedError } from 'shared';
+import { AuthenticationMethod, UnexpectedError } from 'shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';
-import { UserCreatedEvent } from '../events/user-created.event';
+import { UserAuthenticatedEvent } from '../events/authentication/user-authenticated.event';
+import { UserAuthenticationFailedEvent } from '../events/authentication/user-authentication-failed.event';
+import { UserCreatedEvent } from '../events/authentication/user-created.event';
+import { UserSignedOutEvent } from '../events/authentication/user-signed-out.event';
 import { CryptoPort } from '../interfaces/crypto.interface';
 import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
@@ -111,10 +114,17 @@ export class User extends AggregateRoot<UserProps> {
     const matchPassword = await this.crypto.compare(password, this.props.hashedPassword);
 
     if (!matchPassword) {
+      this.addEvent(new UserAuthenticationFailedEvent(this.id, AuthenticationMethod.emailPassword));
       throw new InvalidCredentials();
     }
 
     this.props.lastLoginDate = new Timestamp(this.date.now());
+
+    this.addEvent(new UserAuthenticatedEvent(this.id, AuthenticationMethod.emailPassword));
+  }
+
+  signOut() {
+    this.addEvent(new UserSignedOutEvent(this.id));
   }
 
   validateEmailAddress(token: string) {

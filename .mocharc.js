@@ -22,4 +22,5 @@ module.exports = {
   spec: [spec()],
   extension: 'ts',
   require: ['esbuild-register', path.join(__dirname, 'mocha.setup.ts')],
+  watchFiles: path.join(__dirname, 'packages/*/src/**/*'),
 };

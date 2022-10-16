@@ -1,5 +1,10 @@
 import { isEnumValue } from './libs/is-enum-value';
 
+export enum AuthenticationMethod {
+  emailPassword = 'emailPassword',
+  token = 'token',
+}
+
 export type AuthUserDto = {
   id: string;
   email: string;

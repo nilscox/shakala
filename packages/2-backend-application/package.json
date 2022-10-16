@@ -8,6 +8,11 @@
     "lint": "eslint src",
     "test": "mocha"
   },
+  "mocha": {
+    "require": [
+      "./mocha.setup.ts"
+    ]
+  },
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.7"
   },

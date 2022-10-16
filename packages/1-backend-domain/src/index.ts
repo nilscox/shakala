@@ -17,7 +17,10 @@ export * from './ddd/domain-event';
 export * from './ddd/entity';
 export * from './ddd/aggregate-root';
 
-export * from './events/user-created.event';
+export * from './events/authentication/user-authenticated.event';
+export * from './events/authentication/user-authentication-failed.event';
+export * from './events/authentication/user-created.event';
+export * from './events/authentication/user-signed-out.event';
 
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';

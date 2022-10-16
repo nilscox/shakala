@@ -5,6 +5,7 @@ import {
   LoggerPort,
   LoginCommand,
   NickAlreadyExistsError,
+  SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
 } from 'backend-application';
@@ -122,6 +123,8 @@ export class AuthenticationController extends Controller {
     if (!user) {
       throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
     }
+
+    await execute(this.commandBus).command(new SignOutCommand()).asUser(user).run();
 
     this.session.unsetUser(req);
 

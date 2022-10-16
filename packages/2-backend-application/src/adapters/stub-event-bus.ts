@@ -6,6 +6,12 @@ import { IEventBus } from '../cqs';
 export class StubEventBus implements IEventBus {
   public events: DomainEvent[] = [];
 
+  constructor() {
+    beforeEach(() => {
+      this.events = [];
+    });
+  }
+
   publish(event: DomainEvent) {
     this.events.push(event);
   }

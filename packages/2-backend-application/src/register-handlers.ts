@@ -6,7 +6,7 @@ import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler 
 // prettier-ignore
 import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort } from './interfaces';
 // prettier-ignore
-import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler } from './modules/authentication';
+import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler, SignOutCommand, SignOutCommandHandler } from './modules/authentication';
 // prettier-ignore
 import { SendEmailCommand, SendEmailHandler } from './modules/email';
 // prettier-ignore
@@ -44,8 +44,9 @@ export const registerHandlers = (
   registerCommand(SendEmailCommand, new SendEmailHandler(filesystem, emailCompiler, emailSender));
 
   // authentication
-  registerCommand(LoginCommand, new LoginCommandHandler(userRepository));
+  registerCommand(LoginCommand, new LoginCommandHandler(eventBus, userRepository));
   registerCommand(SignupCommand, new SignupCommandHandler(eventBus, userRepository, generator, crypto, date, profileImageStore));
+  registerCommand(SignOutCommand, new SignOutCommandHandler(eventBus));
 
   // account
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));

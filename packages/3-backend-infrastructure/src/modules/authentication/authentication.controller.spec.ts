@@ -5,6 +5,7 @@ import {
   GetUserByEmailQuery,
   LoginCommand,
   NickAlreadyExistsError,
+  SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
 } from 'backend-application';
@@ -189,13 +190,21 @@ describe('AuthenticationController', () => {
   });
 
   describe('logout', () => {
+    const user = create.user();
+
     beforeEach(() => {
-      session.user = create.user();
+      session.user = user;
     });
 
     const logout = async () => {
       return controller.logout(new MockRequest());
     };
+
+    it('executes a SignOutCommand', async () => {
+      await logout();
+
+      expect(commandBus.execute).toHaveBeenCalledWith(new SignOutCommand(), ExecutionContext.as(user));
+    });
 
     it("clears the user's current session", async () => {
       const response = await logout();
