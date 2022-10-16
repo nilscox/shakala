@@ -1,6 +1,9 @@
 import { first } from 'shared';
 
-import { Entity, EntityProps } from '../ddd/entity';
+import { AggregateRoot } from '../ddd/aggregate-root';
+import { EntityProps } from '../ddd/entity';
+import { CommentCreatedEvent } from '../events/comment/comment-created.event';
+import { CommentEditedEvent } from '../events/comment/comment-edited.event';
 import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
 
@@ -21,13 +24,21 @@ export type CommentProps = EntityProps<{
   history: Message[];
 }>;
 
-export class Comment extends Entity<CommentProps> {
+export class Comment extends AggregateRoot<CommentProps> {
   constructor(
     props: CommentProps,
     private readonly generator: GeneratorPort,
     private readonly date: DatePort,
   ) {
     super(props);
+  }
+
+  static create(props: CommentProps, generator: GeneratorPort, date: DatePort) {
+    const comment = new Comment(props, generator, date);
+
+    comment.addEvent(new CommentCreatedEvent(comment.id));
+
+    return comment;
   }
 
   get threadId() {
@@ -75,5 +86,7 @@ export class Comment extends Entity<CommentProps> {
       date: new Timestamp(this.date.now()),
       text: new Markdown(text),
     });
+
+    this.addEvent(new CommentEditedEvent(this.id));
   }
 }

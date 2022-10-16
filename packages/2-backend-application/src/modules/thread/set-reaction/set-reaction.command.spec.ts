@@ -1,5 +1,6 @@
 import {
   CannotSetReactionOnOwnCommentError,
+  CommentReactionSetEvent,
   CommentService,
   factories,
   ReactionType,
@@ -7,18 +8,24 @@ import {
   User,
 } from 'backend-domain';
 
-import { InMemoryReactionRepository, InMemoryCommentRepository } from '../../../adapters';
+import { InMemoryReactionRepository, InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
 
 import { SetReactionCommand, SetReactionCommandHandler } from './set-reaction.command';
 
 describe('SetReactionCommand', () => {
+  const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const reactionRepository = new InMemoryReactionRepository();
   const commentRepository = new InMemoryCommentRepository(reactionRepository);
   const commentService = new CommentService(generator);
 
-  const handler = new SetReactionCommandHandler(commentRepository, reactionRepository, commentService);
+  const handler = new SetReactionCommandHandler(
+    eventBus,
+    commentRepository,
+    reactionRepository,
+    commentService,
+  );
 
   const create = factories();
 
@@ -55,6 +62,8 @@ describe('SetReactionCommand', () => {
         type: ReactionType.upvote,
       }),
     );
+
+    expect(eventBus).toHaveEmitted(new CommentReactionSetEvent(comment.id, user.id, ReactionType.upvote));
   });
 
   it('updates an existing reaction on a comment', async () => {
@@ -63,6 +72,8 @@ describe('SetReactionCommand', () => {
     await execute(user, ReactionType.downvote);
 
     expect(reactionRepository.get(reactionId)).toHaveProperty('type', ReactionType.downvote);
+
+    expect(eventBus).toHaveEmitted(new CommentReactionSetEvent(comment.id, user.id, ReactionType.downvote));
   });
 
   it('removes a reaction on a comment', async () => {
@@ -71,6 +82,8 @@ describe('SetReactionCommand', () => {
     await execute(user, null);
 
     expect(reactionRepository.get(reactionId)).toBeUndefined();
+
+    expect(eventBus).toHaveEmitted(new CommentReactionSetEvent(comment.id, user.id, null));
   });
 
   it('prevents a user to set a reaction on his own comment', async () => {

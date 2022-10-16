@@ -1,16 +1,17 @@
-import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
+import { factories, StubDateAdapter, StubGeneratorAdapter, ThreadCreatedEvent } from 'backend-domain';
 
-import { InMemoryThreadRepository } from '../../../adapters';
+import { InMemoryThreadRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
 
 import { CreateThreadCommand, CreateThreadHandler } from './create-thread.command';
 
 describe('CreateThreadCommand', () => {
+  const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const dateAdapter = new StubDateAdapter();
   const threadRepository = new InMemoryThreadRepository();
 
-  const handler = new CreateThreadHandler(generator, dateAdapter, threadRepository);
+  const handler = new CreateThreadHandler(eventBus, generator, dateAdapter, threadRepository);
 
   const create = factories();
 
@@ -44,6 +45,8 @@ describe('CreateThreadCommand', () => {
     expect(created).toHaveProperty('text', create.markdown(text));
     expect(created).toHaveProperty('keywords', keywords);
     expect(created).toHaveProperty('created', now);
+
+    expect(eventBus).toHaveEmitted(new ThreadCreatedEvent('threadId'));
   });
 
   it("returns the created thread's id", async () => {

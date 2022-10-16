@@ -54,7 +54,7 @@ describe('UpdateUserCommand', () => {
 
     expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
 
-    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, imageId));
+    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, profileImage.toString()));
   });
 
   it("changes the user's profile image", async () => {
@@ -69,7 +69,7 @@ describe('UpdateUserCommand', () => {
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', profileImage);
     expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
 
-    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, imageId));
+    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, profileImage.toString()));
   });
 
   it("unsets the user's profile image", async () => {

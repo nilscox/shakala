@@ -1,9 +1,9 @@
 import { Author, DatePort, GeneratorPort, Markdown, Thread, Timestamp } from 'backend-domain';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../../authorization';
-import { Command, CommandHandler } from '../../../cqs';
+import { Command, CommandHandler, IEventBus } from '../../../cqs';
 import { ThreadRepository } from '../../../interfaces';
-import { AuthenticatedExecutionContext } from '../../../utils';
+import { AuthenticatedExecutionContext, EventPublisher } from '../../../utils';
 
 export class CreateThreadCommand implements Command {
   constructor(readonly description: string, readonly text: string, readonly keywords: string[]) {}
@@ -12,6 +12,7 @@ export class CreateThreadCommand implements Command {
 @Authorize(IsAuthenticated, HasWriteAccess)
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, string> {
   constructor(
+    private readonly eventBus: IEventBus,
     private readonly generator: GeneratorPort,
     private readonly dateAdapter: DatePort,
     private readonly threadRepository: ThreadRepository,
@@ -21,7 +22,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, 
     const { description, text, keywords } = command;
     const { user: author } = ctx;
 
-    const thread = new Thread({
+    const thread = Thread.create({
       id: await this.generator.generateId(),
       author: new Author(author),
       description,
@@ -30,7 +31,10 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand, 
       created: Timestamp.now(this.dateAdapter),
     });
 
+    const publisher = new EventPublisher(ctx, thread);
+
     await this.threadRepository.save(thread);
+    publisher.publish(this.eventBus);
 
     return thread.id;
   }

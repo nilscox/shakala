@@ -1,9 +1,9 @@
 import { Author, Comment, DatePort, GeneratorPort, Markdown, Message, Timestamp } from 'backend-domain';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../../authorization';
-import { CommandHandler } from '../../../cqs';
+import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository } from '../../../interfaces';
-import { AuthenticatedExecutionContext } from '../../../utils';
+import { AuthenticatedExecutionContext, EventPublisher } from '../../../utils';
 
 export class CreateCommentCommand {
   constructor(
@@ -16,6 +16,7 @@ export class CreateCommentCommand {
 @Authorize(IsAuthenticated, HasWriteAccess)
 export class CreateCommentCommandHandler implements CommandHandler<CreateCommentCommand, string> {
   constructor(
+    private readonly eventBus: IEventBus,
     private readonly generator: GeneratorPort,
     private readonly dateAdapter: DatePort,
     private readonly commentRepository: CommentRepository,
@@ -26,7 +27,7 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
     const { threadId, parentId, text } = command;
     const { user: author } = ctx;
 
-    const comment = new Comment(
+    const comment = Comment.create(
       {
         id: await this.generator.generateId(),
         threadId,
@@ -44,7 +45,10 @@ export class CreateCommentCommandHandler implements CommandHandler<CreateComment
       this.dateAdapter,
     );
 
+    const publisher = new EventPublisher(ctx, comment);
+
     await this.commentRepository.save(comment);
+    publisher.publish(this.eventBus);
 
     return comment.id;
   }

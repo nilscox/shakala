@@ -1,16 +1,17 @@
-import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
+import { CommentEditedEvent, factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
 
-import { InMemoryCommentRepository } from '../../../adapters';
+import { InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
 
 import { EditCommentCommand, EditCommentCommandHandler } from './edit-comment.command';
 
 describe('EditCommentCommand', () => {
+  const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const dateAdapter = new StubDateAdapter();
   const commentRepository = new InMemoryCommentRepository();
 
-  const handler = new EditCommentCommandHandler(commentRepository);
+  const handler = new EditCommentCommandHandler(eventBus, commentRepository);
 
   const create = factories({ generator, date: dateAdapter });
 
@@ -48,5 +49,7 @@ describe('EditCommentCommand', () => {
     expect(edited).toHaveProperty('message', newMessage);
     expect(edited).toHaveProperty('edited', now);
     expect(edited).toHaveProperty('history', [initialMessage]);
+
+    expect(eventBus).toHaveEmitted(new CommentEditedEvent(comment.id));
   });
 });

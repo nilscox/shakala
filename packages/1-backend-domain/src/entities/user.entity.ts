@@ -168,7 +168,7 @@ export class User extends AggregateRoot<UserProps> {
       await this.profileImageStore.writeProfileImage(this.id, profileImage, data);
       this.props.profileImage = profileImage;
 
-      this.addEvent(new ProfileImageChangedEvent(this.id, imageId));
+      this.addEvent(new ProfileImageChangedEvent(this.id, profileImage.toString()));
     } else {
       this.props.profileImage = null;
       this.addEvent(new ProfileImageChangedEvent(this.id, null));

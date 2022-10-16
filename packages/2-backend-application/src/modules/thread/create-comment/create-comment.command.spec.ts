@@ -1,16 +1,17 @@
-import { factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
+import { CommentCreatedEvent, factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
 
-import { InMemoryCommentRepository } from '../../../adapters';
+import { InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
 
 import { CreateCommentCommand, CreateCommentCommandHandler } from './create-comment.command';
 
 describe('CreateCommentCommand', () => {
+  const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const dateAdapter = new StubDateAdapter();
   const commentRepository = new InMemoryCommentRepository();
 
-  const handler = new CreateCommentCommandHandler(generator, dateAdapter, commentRepository);
+  const handler = new CreateCommentCommandHandler(eventBus, generator, dateAdapter, commentRepository);
 
   const create = factories();
 
@@ -45,6 +46,8 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('history', []);
     expect(created).toHaveProperty('edited', false);
     expect(created).toHaveProperty('creationDate', now);
+
+    expect(eventBus).toHaveEmitted(new CommentCreatedEvent('commentId'));
   });
 
   it('creates a new reply', async () => {
@@ -53,6 +56,8 @@ describe('CreateCommentCommand', () => {
     const created = commentRepository.get('commentId');
 
     expect(created).toHaveProperty('parentId', 'parentId');
+
+    expect(eventBus).toHaveEmitted(new CommentCreatedEvent('commentId'));
   });
 
   it("returns the created comment's id", async () => {

@@ -1,9 +1,9 @@
 import { CommentService, del, Reaction, ReactionType } from 'backend-domain';
 
 import { Authorize, IsAuthenticated, HasWriteAccess } from '../../../authorization';
-import { CommandHandler } from '../../../cqs';
+import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository, ReactionRepository } from '../../../interfaces';
-import { AuthenticatedExecutionContext } from '../../../utils';
+import { AuthenticatedExecutionContext, EventPublisher } from '../../../utils';
 
 export class SetReactionCommand {
   constructor(public readonly commentId: string, public readonly reactionType: ReactionType | null) {}
@@ -12,6 +12,7 @@ export class SetReactionCommand {
 @Authorize(IsAuthenticated, HasWriteAccess)
 export class SetReactionCommandHandler implements CommandHandler<SetReactionCommand> {
   constructor(
+    private readonly eventBus: IEventBus,
     private readonly commentRepository: CommentRepository,
     private readonly reactionRepository: ReactionRepository,
     private readonly commentService: CommentService,
@@ -24,6 +25,8 @@ export class SetReactionCommandHandler implements CommandHandler<SetReactionComm
     const comment = await this.commentRepository.findByIdOrFail(commentId);
     const reaction = await this.reactionRepository.getUserReaction(commentId, user.id);
 
+    const publisher = new EventPublisher(ctx, comment);
+
     const result = await this.commentService.setUserReaction(comment, user, reaction ?? null, reactionType);
 
     if (result === del && reaction) {
@@ -31,5 +34,7 @@ export class SetReactionCommandHandler implements CommandHandler<SetReactionComm
     } else if (result instanceof Reaction) {
       await this.reactionRepository.save(result);
     }
+
+    publisher.publish(this.eventBus);
   }
 }

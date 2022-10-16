@@ -21,8 +21,13 @@ export * from './events/authentication/user-authenticated.event';
 export * from './events/authentication/user-authentication-failed.event';
 export * from './events/authentication/user-created.event';
 export * from './events/authentication/user-signed-out.event';
+export * from './events/comment/comment-created.event';
+export * from './events/comment/comment-edited.event';
+export * from './events/comment/comment-reaction-set.event';
+export * from './events/comment/comment-reported.event';
 export * from './events/profile/email-address-validated.event';
 export * from './events/profile/profile-image-changed.event';
+export * from './events/thread/thread-created.event';
 
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';
