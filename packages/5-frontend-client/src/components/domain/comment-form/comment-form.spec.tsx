@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   addComment,
@@ -10,11 +10,15 @@ import {
   selectComment,
   selectCommentReplies,
   selectCreatedRootComments,
+  selectCreateReplyError,
+  selectCreateRootCommentError,
+  selectEditCommentError,
   selectIsEditingComment,
   setIsEditingComment,
   setThreadComments,
   TestStore,
 } from 'frontend-domain';
+import { mockFn } from 'shared';
 
 import { TestRenderer } from '~/test/render';
 
@@ -37,6 +41,8 @@ describe('CommentForm', () => {
   it('creates a new root comment', async () => {
     const user = userEvent.setup();
 
+    store.threadGateway.createComment = mockFn('');
+
     new TestRenderer()
       .withMemoryRouter()
       .withRedux(store)
@@ -44,10 +50,10 @@ describe('CommentForm', () => {
 
     const input = screen.getByPlaceholderText('Répondre à author');
 
-    await act(async () => {
-      await user.type(input, 'comment');
-      await user.click(screen.getByText('Envoyer'));
-    });
+    await user.type(input, 'comment');
+    await user.click(screen.getByText('Envoyer'));
+
+    expect(store.select(selectCreateRootCommentError, threadId)).toBeUndefined();
 
     await waitFor(() => {
       expect(store.select(selectCreatedRootComments)).toHaveLength(1);
@@ -65,19 +71,21 @@ describe('CommentForm', () => {
     store.dispatch(addComment(parentComment));
     store.dispatch(setThreadComments(threadId, [parentComment]));
 
+    store.threadGateway.createReply = mockFn('');
+
     new TestRenderer()
       .withMemoryRouter()
       .withRedux(store)
       .render(<ReplyForm parentId={parentCommentId} />);
 
-    user.click(screen.getByPlaceholderText('Répondre'));
+    await user.click(screen.getByPlaceholderText('Répondre'));
 
     const input = await screen.findByPlaceholderText('Rédigez votre message');
 
-    await act(async () => {
-      await user.type(input, 'reply');
-      await user.click(screen.getByText('Envoyer'));
-    });
+    await user.type(input, 'reply');
+    await user.click(screen.getByText('Envoyer'));
+
+    expect(store.select(selectCreateReplyError, parentCommentId)).toBeUndefined();
 
     await waitFor(() => {
       expect(store.select(selectCommentReplies, parentCommentId)).toHaveLength(1);
@@ -96,6 +104,8 @@ describe('CommentForm', () => {
     store.dispatch(setThreadComments(threadId, [comment]));
     store.dispatch(setIsEditingComment(commentId));
 
+    store.threadGateway.editComment = mockFn('');
+
     new TestRenderer()
       .withMemoryRouter()
       .withRedux(store)
@@ -105,11 +115,11 @@ describe('CommentForm', () => {
 
     expect(input).toHaveValue('initial text');
 
-    await act(async () => {
-      await user.clear(input);
-      await user.type(input, 'edited text');
-      await user.click(screen.getByText('Envoyer'));
-    });
+    await user.clear(input);
+    await user.type(input, 'edited text');
+    await user.click(screen.getByText('Envoyer'));
+
+    expect(store.select(selectEditCommentError, commentId)).toBeUndefined();
 
     await waitFor(() => {
       expect(store.select(selectIsEditingComment, commentId)).toBe(false);

@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["src/**/*"],
+  "include": ["../../global.d.ts", "src/**/*"],
   "references": [{ "path": "../1-backend-domain" }],
   "compilerOptions": {
     "outDir": "dist",

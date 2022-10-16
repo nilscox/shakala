@@ -25,3 +25,6 @@ export * from './schemas/thread';
 export * from './dtos';
 
 export * from './factories';
+
+export * from './test/mock-fn';
+export * from './test/mock-object';

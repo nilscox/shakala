@@ -15,7 +15,7 @@ describe('Account e2e', () => {
     emailSender: new InMemoryEmailSenderAdapter(),
   });
 
-  beforeAll(async () => {
+  before(async () => {
     await server.init();
   });
 
@@ -28,7 +28,7 @@ describe('Account e2e', () => {
     userId = await server.createUserAndLogin(agent, { email: 'user@domain.tld', password: 'p4ssw0rd' });
   });
 
-  test('As a user, I can change my profile image', async () => {
+  it('As a user, I can change my profile image', async () => {
     const changeProfileImage = async (image: string) => {
       return agent
         .post('/account/profile-image')

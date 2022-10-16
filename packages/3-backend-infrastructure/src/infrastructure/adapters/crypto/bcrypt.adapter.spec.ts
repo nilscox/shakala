@@ -1,6 +1,8 @@
 import { BcryptAdapter } from './bcrypt.adapter';
 
-describe('BcryptAdapter', () => {
+describe('BcryptAdapter', function () {
+  this.slow(300);
+
   const crypto = new BcryptAdapter();
 
   // cspell:disable

@@ -1,3 +1,5 @@
+import { mockFn } from 'shared';
+
 import { createThread, TestStore } from '../../../test';
 import { Sort } from '../../../types';
 import { addThread } from '../../thread.actions';
@@ -11,6 +13,7 @@ describe('setThreadFilters', () => {
 
   beforeEach(() => {
     store.dispatch(addThread(createThread({ id: threadId })));
+    store.threadGateway.getComments = mockFn([]);
   });
 
   it('refreshes the thread according to the current filters', async () => {

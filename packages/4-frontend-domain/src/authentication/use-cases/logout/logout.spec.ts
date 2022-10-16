@@ -1,3 +1,5 @@
+import { mockResolve } from 'shared';
+
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 
@@ -9,6 +11,7 @@ describe('logout', () => {
   beforeEach(() => {
     store.user = createAuthUser();
     store.routerGateway.pathname = '/profile';
+    store.authenticationGateway.logout = mockResolve();
   });
 
   it('logs out', async () => {

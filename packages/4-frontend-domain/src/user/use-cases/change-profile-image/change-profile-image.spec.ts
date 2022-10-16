@@ -1,3 +1,5 @@
+import { mockResolve, mockReject } from 'shared';
+
 import { createAuthUser, TestStore } from '../../../test';
 
 import { changeProfileImage, InvalidImageFormat } from './change-profile-image';
@@ -18,7 +20,7 @@ describe('changeProfileImage', () => {
   it("change the user's profile image", async () => {
     const file = mockFile();
 
-    store.userGateway.changeProfileImage.mockResolvedValue('image.url');
+    store.userGateway.changeProfileImage = mockResolve('image.url');
 
     await store.dispatch(changeProfileImage(file));
 
@@ -29,7 +31,7 @@ describe('changeProfileImage', () => {
   it('handles invalid image format errors', async () => {
     const file = mockFile();
 
-    store.userGateway.changeProfileImage.mockRejectedValue(new InvalidImageFormat());
+    store.userGateway.changeProfileImage = mockReject(new InvalidImageFormat());
 
     await store.dispatch(changeProfileImage(file));
 

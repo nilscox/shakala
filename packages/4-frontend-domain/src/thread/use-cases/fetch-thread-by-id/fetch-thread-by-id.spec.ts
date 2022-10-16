@@ -1,7 +1,8 @@
-import { createCommentDto, createThreadDto } from 'shared';
+import { createCommentDto, createThreadDto, mockReject, mockResolve } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { TestStore } from '../../../test';
+import { Comment } from '../../../types';
 import { selectThread } from '../../thread.selectors';
 import { selectCreateRootCommentFormText } from '../create-root-comment/create-root-comment';
 
@@ -20,8 +21,8 @@ describe('fetchThreadById', () => {
   const commentsDto = [createCommentDto()];
 
   beforeEach(() => {
-    store.threadGateway.getById.mockResolvedValue([threadDto, commentsDto]);
-    store.threadGateway.getComments.mockResolvedValue(commentsDto);
+    store.threadGateway.getById = mockResolve([threadDto, commentsDto]);
+    store.threadGateway.getComments = mockResolve(commentsDto);
   });
 
   it('fetches a thread from its id', async () => {
@@ -38,7 +39,7 @@ describe('fetchThreadById', () => {
 
     expect(store.select(selectThread, threadId)).toEqual({
       ...threadDto,
-      comments: [expect.objectContaining({ id: commentsDto[0].id })],
+      comments: [expect.objectWith({ id: commentsDto[0].id } as Comment)],
       createCommentForm: {
         text: '',
       },
@@ -56,16 +57,16 @@ describe('fetchThreadById', () => {
   it('stores the error and re-throws it when the gateway throws', async () => {
     const error = new Error('nope');
 
-    store.threadGateway.getById.mockRejectedValue(error);
+    store.threadGateway.getById = mockReject(error);
 
-    await expect(store.dispatch(fetchThreadById(threadId))).rejects.toThrow(error);
+    await expect.rejects(store.dispatch(fetchThreadById(threadId))).with(error);
 
     expect(store.select(selectIsLoadingThread, threadId)).toBe(false);
     expect(store.select(selectLoadingThreadError, threadId)).toHaveProperty('message', error.message);
   });
 
   it('sets the error to NotFound when the thread is not found', async () => {
-    store.threadGateway.getById.mockResolvedValue(undefined);
+    store.threadGateway.getById = mockResolve(undefined);
 
     await store.dispatch(fetchThreadById(threadId));
 

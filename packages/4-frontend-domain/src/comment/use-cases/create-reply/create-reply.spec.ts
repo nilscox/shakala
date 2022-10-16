@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
@@ -40,7 +40,7 @@ describe('createReply', () => {
     store.dispatch(setReplyFormText(parent.id, text));
 
     store.dateGateway.setNow(now);
-    store.threadGateway.createReply.mockResolvedValue(createdCommentId);
+    store.threadGateway.createReply = mockResolve(createdCommentId);
   });
 
   const execute = () => {
@@ -76,7 +76,7 @@ describe('createReply', () => {
       replies: [],
     };
 
-    expect(store.select(selectCommentReplies, parent.id)).toContainEqual(created);
+    expect(store.select(selectCommentReplies, parent.id)).toInclude(created);
   });
 
   it('requires user authentication', async () => {
@@ -109,7 +109,7 @@ describe('createReply', () => {
 
   describe('authorization error handling', () => {
     it('shows a snack when the user is not authorized to reply to a comment', async () => {
-      store.threadGateway.createReply.mockRejectedValue(
+      store.threadGateway.createReply = mockReject(
         new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
       );
 
@@ -125,7 +125,7 @@ describe('createReply', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
-      store.threadGateway.createReply.mockRejectedValue(error);
+      store.threadGateway.createReply = mockReject(error);
     });
 
     it('stores the error', async () => {

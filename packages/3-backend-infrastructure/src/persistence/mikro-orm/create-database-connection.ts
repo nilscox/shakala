@@ -30,12 +30,12 @@ export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
   let orm: MikroORM<PostgreSqlDriver>;
   let isReady = false;
 
-  beforeAll(async () => {
+  before(async () => {
     // cspell:word intg
     orm = await createTestDatabaseConnection({ dbName: 'intg', ...override });
   });
 
-  afterAll(async () => {
+  after(async () => {
     await orm.close();
   });
 

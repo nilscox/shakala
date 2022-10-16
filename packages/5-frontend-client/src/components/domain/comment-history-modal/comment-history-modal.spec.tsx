@@ -1,5 +1,4 @@
 import { screen } from '@testing-library/dom';
-import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { addComment, createComment, createDate, createUser, TestStore } from 'frontend-domain';
 import { createMemoryHistory } from 'history';
@@ -47,7 +46,7 @@ describe('CommentHistoryModal', () => {
 
     expect(screen.getByTitle('Version suivante')).toBeDisabled();
 
-    await act(() => user.click(screen.getByTitle('Version précédente')));
+    await user.click(screen.getByTitle('Version précédente'));
 
     expect(screen.getByText('Édition 1')).toBeVisible();
 
@@ -59,7 +58,7 @@ describe('CommentHistoryModal', () => {
 
     expect(screen.getByTitle('Version précédente')).toBeDisabled();
 
-    await act(() => user.click(screen.getByTitle('Version suivante')));
+    await user.click(screen.getByTitle('Version suivante'));
 
     expect(screen.getByText('Édition 2')).toBeVisible();
   });

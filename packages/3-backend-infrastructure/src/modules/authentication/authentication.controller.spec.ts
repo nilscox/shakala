@@ -14,7 +14,7 @@ import {
   factories,
   InvalidCredentials,
 } from 'backend-domain';
-import { get, LoginBodyDto, SignupBodyDto } from 'shared';
+import { get, LoginBodyDto, mockReject, SignupBodyDto } from 'shared';
 
 import {
   Forbidden,
@@ -79,16 +79,15 @@ describe('AuthenticationController', () => {
     });
 
     it('fails to log in when the body is invalid', async () => {
-      await expect(login(new MockRequest().withBody({}))).rejects.toThrow(ValidationError);
+      await expect.rejects(login(new MockRequest().withBody({}))).with(ValidationError);
     });
 
     it('handles InvalidCredentials errors', async () => {
-      commandBus.execute.mockRejectedValueOnce(new InvalidCredentials());
+      commandBus.execute = mockReject(new InvalidCredentials());
 
-      await expect(login()).rejects.test((error) => {
-        expect(error).toBeInstanceOf(Forbidden);
-        expect(error).toHaveProperty('body.code', 'InvalidCredentials');
-      });
+      const error = await expect.rejects(login()).with(Forbidden);
+
+      expect(error).toHaveProperty('body.code', 'InvalidCredentials');
     });
   });
 
@@ -108,7 +107,7 @@ describe('AuthenticationController', () => {
       const response = await signup();
 
       expect(response).toHaveStatus(201);
-      expect(response).toHaveBody(expect.objectContaining({ id: user.id }));
+      expect(response).toHaveBody(expect.objectWithId(user.id));
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new SignupCommand(body.nick, body.email, body.password),
@@ -119,32 +118,30 @@ describe('AuthenticationController', () => {
     });
 
     it('fails to sign up when the body is invalid', async () => {
-      await expect(signup(new MockRequest().withBody({}))).rejects.toThrow(ValidationError);
+      await expect.rejects(signup(new MockRequest().withBody({}))).with(ValidationError);
     });
 
     it('handles EmailAlreadyExists errors', async () => {
-      commandBus.execute.mockRejectedValueOnce(new EmailAlreadyExistsError(body.email));
+      commandBus.execute = mockReject(new EmailAlreadyExistsError(body.email));
 
-      await expect(signup()).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
-          field: 'email',
-          error: 'alreadyExists',
-          value: body.email,
-        });
+      const error = await expect.rejects(signup()).with(ValidationError);
+
+      expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
+        field: 'email',
+        error: 'alreadyExists',
+        value: body.email,
       });
     });
 
     it('handles NickAlreadyExists errors', async () => {
-      commandBus.execute.mockRejectedValueOnce(new NickAlreadyExistsError(body.nick));
+      commandBus.execute = mockReject(new NickAlreadyExistsError(body.nick));
 
-      await expect(signup()).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
-          field: 'nick',
-          error: 'alreadyExists',
-          value: body.nick,
-        });
+      const error = await expect.rejects(signup()).with(ValidationError);
+
+      expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
+        field: 'nick',
+        error: 'alreadyExists',
+        value: body.nick,
       });
     });
   });
@@ -174,20 +171,20 @@ describe('AuthenticationController', () => {
     });
 
     it('handles EmailValidationFailed errors', async () => {
-      commandBus.execute.mockRejectedValue(
+      commandBus.execute = mockReject(
         new EmailValidationFailed(EmailValidationFailedReason.alreadyValidated),
       );
 
-      await expect(validateEmailAddress()).rejects.test((response) => {
-        expect(response).toHaveStatus(307);
-        expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=already-validated');
-      });
+      const response = await expect.rejects(validateEmailAddress()).with(expect.anything());
+
+      expect(response).toHaveStatus(307);
+      expect(response).toHaveHeader('Location', 'http://app.url/?validate-email=already-validated');
     });
   });
 
   describe('requestLoginEmail', () => {
     it('throws a NotImplemented error', async () => {
-      await expect(controller.requestLoginEmail()).rejects.toThrow(NotImplemented);
+      await expect.rejects(controller.requestLoginEmail()).with(NotImplemented);
     });
   });
 
@@ -210,7 +207,7 @@ describe('AuthenticationController', () => {
     it('fails to log out when the user is not authenticated', async () => {
       session.reset();
 
-      await expect(logout()).rejects.toThrow(AuthorizationError);
+      await expect.rejects(logout()).with(AuthorizationError);
     });
   });
 
@@ -233,7 +230,7 @@ describe('AuthenticationController', () => {
       const response = await getAuthenticatedUser();
 
       expect(response).toHaveStatus(200);
-      expect(response).toHaveBody(expect.objectContaining({ id: user.id }));
+      expect(response).toHaveBody(expect.objectWithId(user.id));
     });
   });
 });

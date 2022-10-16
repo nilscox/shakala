@@ -1,6 +1,7 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
+import { mockFn } from 'shared';
 
 import { TestRenderer } from '~/test/render';
 
@@ -11,8 +12,8 @@ type UserEvent = ReturnType<typeof userEvent.setup>;
 describe('ThreadForm', () => {
   const props: ComponentProps<typeof ThreadForm> = {
     errors: {},
-    onSubmit: vi.fn(),
-    onChange: vi.fn(),
+    onSubmit: mockFn(),
+    onChange: mockFn(),
   };
 
   const fields = {
@@ -24,16 +25,14 @@ describe('ThreadForm', () => {
 
   it('fills and submits the form', async () => {
     const user = userEvent.setup();
-    const onSubmit = vi.fn();
+    const onSubmit = mockFn();
 
     new TestRenderer().withMemoryRouter().render(<ThreadForm {...props} onSubmit={onSubmit} />);
 
-    await act(async () => {
-      await user.type(fields.description(), 'description');
-      await user.type(fields.keywords(), 'key words');
-      await user.type(fields.text(), 'text');
-      await user.click(fields.submit());
-    });
+    await user.type(fields.description(), 'description');
+    await user.type(fields.keywords(), 'key words');
+    await user.type(fields.text(), 'text');
+    await user.click(fields.submit());
 
     expect(onSubmit).toHaveBeenCalledWith({
       description: 'description',
@@ -44,16 +43,14 @@ describe('ThreadForm', () => {
 
   it('normalizes the fields (trim whitespace)', async () => {
     const user = userEvent.setup();
-    const onSubmit = vi.fn();
+    const onSubmit = mockFn();
 
     new TestRenderer().withMemoryRouter().render(<ThreadForm {...props} onSubmit={onSubmit} />);
 
-    await act(async () => {
-      await user.type(fields.description(), ' description ');
-      await user.type(fields.keywords(), ' key   words ');
-      await user.type(fields.text(), ' text ');
-      await user.click(fields.submit());
-    });
+    await user.type(fields.description(), ' description ');
+    await user.type(fields.keywords(), ' key   words ');
+    await user.type(fields.text(), ' text ');
+    await user.click(fields.submit());
 
     expect(onSubmit).toHaveBeenCalledWith({
       description: 'description',
@@ -64,7 +61,7 @@ describe('ThreadForm', () => {
 
   describe('field errors', () => {
     let user: UserEvent;
-    const clearFieldError = vi.fn();
+    const clearFieldError = mockFn();
 
     beforeEach(() => {
       user = userEvent.setup();
@@ -89,10 +86,10 @@ describe('ThreadForm', () => {
     });
 
     it('clears the field errors', async () => {
-      await act(() => user.type(fields.description(), 'a'));
+      await user.type(fields.description(), 'a');
       expect(clearFieldError).toHaveBeenCalledWith('description');
 
-      await act(() => user.type(fields.keywords(), 'a'));
+      await user.type(fields.keywords(), 'a');
       expect(clearFieldError).toHaveBeenCalledWith('keywords');
     });
   });

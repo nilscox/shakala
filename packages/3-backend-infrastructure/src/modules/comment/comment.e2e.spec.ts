@@ -5,7 +5,9 @@ import { SuperAgentTest } from 'supertest';
 import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
 import { TestServer } from '../../test';
 
-describe('Comment e2e', () => {
+describe('Comment e2e', function () {
+  this.slow(1000);
+
   const server = new TestServer();
   let agent: SuperAgentTest;
 
@@ -15,7 +17,7 @@ describe('Comment e2e', () => {
     emailSender: new InMemoryEmailSenderAdapter(),
   });
 
-  beforeAll(async () => {
+  before(async () => {
     await server.init();
   });
 
@@ -28,7 +30,7 @@ describe('Comment e2e', () => {
     userId = await server.createUserAndLogin(agent, { email: 'user@domain.tld', password: 'p4ssw0rd' });
   });
 
-  test('as a user, I can create and edit a comment', async () => {
+  it('as a user, I can create and edit a comment', async () => {
     const getThread = async (threadId: string) => {
       return agent.get(`/thread/${threadId}`).expect(200);
     };
@@ -54,11 +56,11 @@ describe('Comment e2e', () => {
 
     const { body: thread } = await getThread(threadId);
 
-    expect(thread.comments).toHaveProperty('[0].edited', expect.any(String));
-    expect(thread.comments).toHaveProperty('[0].history.[0].text', 'hello');
+    expect(thread.comments).toHaveProperty('0.edited', expect.any(String));
+    expect(thread.comments).toHaveProperty('0.history.0.text', 'hello');
   });
 
-  test('as a user, I can set a reaction on a comment', async () => {
+  it('as a user, I can set a reaction on a comment', async () => {
     const agent = server.agent();
 
     await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
@@ -77,7 +79,7 @@ describe('Comment e2e', () => {
     await setReaction(commentId, null);
   });
 
-  test('as a user, I can report a comment', async () => {
+  it('as a user, I can report a comment', async () => {
     const agent = server.agent();
 
     await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });

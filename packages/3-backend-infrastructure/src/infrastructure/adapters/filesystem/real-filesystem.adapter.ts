@@ -4,8 +4,8 @@ import path from 'path';
 import { FileNotFoundError, FilesystemAccessError, FilesystemPort } from 'backend-application';
 import { get } from 'shared';
 
-type NodeFs = {
-  readFile: (path: string) => Promise<Buffer>;
+export type NodeFs = {
+  readFile: (path: string) => Promise<string | Buffer>;
 };
 
 export class RealFilesystemAdapter implements FilesystemPort {

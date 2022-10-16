@@ -40,10 +40,10 @@ describe('LoginCommand', () => {
   });
 
   it('fails to log in when the user does not exist', async () => {
-    await expect(login(new LoginCommand('nope@domain.tld', ''))).rejects.toThrow(InvalidCredentials);
+    await expect.rejects(login(new LoginCommand('nope@domain.tld', ''))).with(InvalidCredentials);
   });
 
   it('fails to log in when the password does not match', async () => {
-    await expect(login(new LoginCommand(email, 'nope'))).rejects.toThrow(InvalidCredentials);
+    await expect.rejects(login(new LoginCommand(email, 'nope'))).with(InvalidCredentials);
   });
 });

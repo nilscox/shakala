@@ -14,7 +14,7 @@ import {
   ReactionType,
   UserMustBeAuthorError,
 } from 'backend-domain';
-import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
+import { CreateCommentBodyDto, EditCommentBodyDto, mockReject, mockResolve } from 'shared';
 
 import {
   BadRequest,
@@ -60,7 +60,7 @@ describe('CommentController', () => {
     let request: MockRequest;
 
     beforeEach(() => {
-      commandBus.execute.mockResolvedValue(commentId);
+      commandBus.execute = mockResolve(commentId);
       request = new MockRequest().withBody<CreateCommentBodyDto>({ threadId, text });
     });
 
@@ -83,11 +83,12 @@ describe('CommentController', () => {
     });
 
     it('fails to create a comment with an invalid body', async () => {
-      await expect(controller.createComment(request.withBody({ threadId }))).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(error).toHaveProperty('fields.0.field', 'text');
-        expect(error).toHaveProperty('fields.0.error', 'required');
-      });
+      const error = await expect
+        .rejects(controller.createComment(request.withBody({ threadId })))
+        .with(ValidationError);
+
+      expect(error).toHaveProperty('fields.0.field', 'text');
+      expect(error).toHaveProperty('fields.0.error', 'required');
     });
   });
 
@@ -116,20 +117,18 @@ describe('CommentController', () => {
     });
 
     it('fails to edit a comment with an invalid body', async () => {
-      await expect(controller.editComment(request.withBody({}))).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(error).toHaveProperty('fields.0.field', 'text');
-        expect(error).toHaveProperty('fields.0.error', 'required');
-      });
+      const error = await expect.rejects(controller.editComment(request.withBody({}))).with(ValidationError);
+
+      expect(error).toHaveProperty('fields.0.field', 'text');
+      expect(error).toHaveProperty('fields.0.error', 'required');
     });
 
     it('handles UserMustBeAuthor errors', async () => {
-      commandBus.execute.mockRejectedValue(new UserMustBeAuthorError());
+      commandBus.execute = mockReject(new UserMustBeAuthorError());
 
-      await expect(controller.editComment(request)).rejects.test((error) => {
-        expect(error).toBeInstanceOf(Unauthorized);
-        expect(error).toHaveProperty('body.code', 'UserMustBeAuthor');
-      });
+      const error = await expect.rejects(controller.editComment(request)).with(Unauthorized);
+
+      expect(error).toHaveProperty('body.code', 'UserMustBeAuthor');
     });
   });
 
@@ -155,12 +154,11 @@ describe('CommentController', () => {
     });
 
     it('handles CannotSetReactionOnOwnCommentError', async () => {
-      commandBus.execute.mockRejectedValue(new CannotSetReactionOnOwnCommentError());
+      commandBus.execute = mockReject(new CannotSetReactionOnOwnCommentError());
 
-      await expect(controller.setReaction(request)).rejects.test((error) => {
-        expect(error).toBeInstanceOf(BadRequest);
-        expect(error).toHaveProperty('body.code', 'CannotSetReactionOnOwnComment');
-      });
+      const error = await expect.rejects(controller.setReaction(request)).with(BadRequest);
+
+      expect(error).toHaveProperty('body.code', 'CannotSetReactionOnOwnComment');
     });
   });
 
@@ -186,25 +184,23 @@ describe('CommentController', () => {
     it('throws a BadRequest when the body is not valid', async () => {
       request.withBody({ reason: 42 });
 
-      await expect(controller.reportComment(request)).rejects.toThrow(BadRequest);
+      await expect.rejects(controller.reportComment(request)).with(BadRequest);
     });
 
     it('handles CommentAlreadyReportedError', async () => {
-      commandBus.execute.mockRejectedValue(new CommentAlreadyReportedError(comment.id));
+      commandBus.execute = mockReject(new CommentAlreadyReportedError(comment.id));
 
-      await expect(controller.reportComment(request)).rejects.test((error) => {
-        expect(error).toBeInstanceOf(BadRequest);
-        expect(error).toHaveProperty('body.code', 'CommentAlreadyReported');
-      });
+      const error = await expect.rejects(controller.reportComment(request)).with(BadRequest);
+
+      expect(error).toHaveProperty('body.code', 'CommentAlreadyReported');
     });
 
     it('handles CannotReportOwnCommentError', async () => {
-      commandBus.execute.mockRejectedValue(new CannotReportOwnCommentError(comment.id));
+      commandBus.execute = mockReject(new CannotReportOwnCommentError(comment.id));
 
-      await expect(controller.reportComment(request)).rejects.test((error) => {
-        expect(error).toBeInstanceOf(BadRequest);
-        expect(error).toHaveProperty('body.code', 'CannotReportOwnComment');
-      });
+      const error = await expect.rejects(controller.reportComment(request)).with(BadRequest);
+
+      expect(error).toHaveProperty('body.code', 'CannotReportOwnComment');
     });
   });
 });

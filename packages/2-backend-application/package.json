@@ -4,8 +4,9 @@
   "private": true,
   "main": "src/index.ts",
   "scripts": {
+    "clean": "rm -rf dist",
     "lint": "eslint src",
-    "test": "vitest"
+    "test": "mocha"
   },
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.7"

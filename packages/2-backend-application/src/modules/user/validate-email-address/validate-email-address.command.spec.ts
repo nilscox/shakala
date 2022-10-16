@@ -26,10 +26,11 @@ describe('ValidateEmailAddressCommand', () => {
 
     userRepository.add(user);
 
-    await expect(handler.handle(new ValidateEmailAddressCommand(user.id, 'nope'))).rejects.test((error) => {
-      expect(error).toBeInstanceOf(EmailValidationFailed);
-      expect(error).toHaveProperty('details.reason', 'InvalidToken');
-    });
+    const error = await expect
+      .rejects(handler.handle(new ValidateEmailAddressCommand(user.id, 'nope')))
+      .with(EmailValidationFailed);
+
+    expect(error).toHaveProperty('details.reason', 'InvalidToken');
   });
 
   it('throws an error when email was already validated', async () => {
@@ -37,9 +38,10 @@ describe('ValidateEmailAddressCommand', () => {
 
     userRepository.add(user);
 
-    await expect(handler.handle(new ValidateEmailAddressCommand(user.id, ''))).rejects.test((error) => {
-      expect(error).toBeInstanceOf(EmailValidationFailed);
-      expect(error).toHaveProperty('details.reason', 'EmailAlreadyValidated');
-    });
+    const error = await expect
+      .rejects(handler.handle(new ValidateEmailAddressCommand(user.id, '')))
+      .with(EmailValidationFailed);
+
+    expect(error).toHaveProperty('details.reason', 'EmailAlreadyValidated');
   });
 });

@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "NODE_ENV=production webpack",
     "lint": "eslint src",
-    "test": "vitest",
+    "test": "NODE_ENV=test instant-mocha --webpack-config=webpack.config.js",
     "start": "webpack serve",
     "storybook": "start-storybook -p 6006 --ci"
+  },
+  "mocha": {
+    "require": [
+      "jsdom-global/register",
+      "./mocha.setup.ts"
+    ]
   },
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.5.1",
@@ -37,6 +44,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
+    "@nilscox/expect-dom": "^0.1.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
@@ -48,7 +56,6 @@
     "@svgr/webpack": "^6.3.1",
     "@tailwindcss/typography": "^0.5.7",
     "@testing-library/dom": "^8.17.1",
-    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/diff": "^5.0.2",
@@ -59,7 +66,6 @@
     "@types/react-helmet": "^6.1.5",
     "@types/react-modal": "^3.13.1",
     "@types/unist": "^2.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
     "autoprefixer": "^10.4.8",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
@@ -70,13 +76,14 @@
     "eslint-plugin-tailwindcss": "3.6.1",
     "events": "^3.3.0",
     "html-webpack-plugin": "^5.5.0",
-    "jsdom": "^20.0.0",
+    "instant-mocha": "^1.4.1",
+    "jsdom": "^20.0.1",
+    "jsdom-global": "^3.0.2",
     "postcss": "^8.4.16",
     "postcss-loader": "^7.0.1",
     "react-refresh": "^0.14.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.1.8",
-    "vite-plugin-svgr": "^2.2.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.0"

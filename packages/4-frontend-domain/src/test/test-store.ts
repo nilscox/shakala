@@ -1,4 +1,5 @@
 import { Middleware } from 'redux';
+import { AuthUserDto, mockFn, mockImpl, mockResolve } from 'shared';
 
 import { AuthenticationType } from '../authentication';
 import { AuthenticationGateway } from '../authentication/authentication.gateway';
@@ -9,12 +10,10 @@ import { SnackbarGateway } from '../interfaces/snackbar.gateway';
 import { DraftCommentKind, StorageGateway } from '../interfaces/storage.gateway';
 import { TimerGateway } from '../interfaces/timer.gateway';
 import { createStore } from '../store';
-import { Dispatch, Selector, Store, Dependencies } from '../store.types';
+import { Dependencies, Selector, Store } from '../store.types';
 import { ThreadGateway } from '../thread/thread.gateway';
 import { AuthUser } from '../types';
 import { selectUser, setUser, unsetUser, UserGateway } from '../user';
-
-import { mockFn } from './mock-fn';
 
 class StubDateGateway implements DateGateway {
   private _now = new Date();
@@ -149,26 +148,26 @@ class InMemoryStorageGateway implements StorageGateway {
 }
 
 class MockAuthenticationGateway implements AuthenticationGateway {
-  fetchUser = mockFn<AuthenticationGateway['fetchUser']>();
-  login = mockFn<AuthenticationGateway['login']>();
-  signup = mockFn<AuthenticationGateway['signup']>();
-  logout = mockFn<AuthenticationGateway['logout']>();
+  fetchUser = mockResolve<AuthUserDto | undefined>(undefined);
+  login = mockImpl<AuthenticationGateway['login']>();
+  signup = mockImpl<AuthenticationGateway['signup']>();
+  logout = mockImpl<AuthenticationGateway['logout']>();
 }
 
 class MockThreadGateway implements ThreadGateway {
-  getById = mockFn<ThreadGateway['getById']>();
-  getLast = mockFn<ThreadGateway['getLast']>();
-  createThread = mockFn<ThreadGateway['createThread']>();
-  getComments = mockFn<ThreadGateway['getComments']>();
-  createComment = mockFn<ThreadGateway['createComment']>();
-  createReply = mockFn<ThreadGateway['createReply']>();
-  editComment = mockFn<ThreadGateway['editComment']>();
-  setReaction = mockFn<ThreadGateway['setReaction']>();
-  reportComment = mockFn<ThreadGateway['reportComment']>();
+  getById = mockImpl<ThreadGateway['getById']>();
+  getLast = mockImpl<ThreadGateway['getLast']>();
+  createThread = mockImpl<ThreadGateway['createThread']>();
+  getComments = mockImpl<ThreadGateway['getComments']>();
+  createComment = mockImpl<ThreadGateway['createComment']>();
+  createReply = mockImpl<ThreadGateway['createReply']>();
+  editComment = mockImpl<ThreadGateway['editComment']>();
+  setReaction = mockImpl<ThreadGateway['setReaction']>();
+  reportComment = mockImpl<ThreadGateway['reportComment']>();
 }
 
 class MockUserGateway implements UserGateway {
-  changeProfileImage = mockFn<UserGateway['changeProfileImage']>();
+  changeProfileImage = mockImpl<UserGateway['changeProfileImage']>();
 }
 
 export class TestStore implements Dependencies {
@@ -204,12 +203,12 @@ export class TestStore implements Dependencies {
     });
   }
 
-  getState() {
-    return this.reduxStore.getState();
+  get getState() {
+    return this.reduxStore.getState;
   }
 
-  dispatch(...args: Parameters<Dispatch>) {
-    return this.reduxStore.dispatch(...args);
+  get dispatch() {
+    return this.reduxStore.dispatch;
   }
 
   select<Params extends unknown[], Result>(selector: Selector<Params, Result>, ...params: Params) {

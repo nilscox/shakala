@@ -53,7 +53,7 @@ export const selectThreadComments = (state: State, threadId: string, search?: st
   return selectComments(state, commentsIds);
 };
 
-export const fetchComments = (threadId: string): Thunk => {
+export const fetchComments = (threadId: string): Thunk<Promise<void>> => {
   return async (dispatch, getState, { threadGateway, routerGateway, storageGateway }) => {
     const search = routerGateway.getQueryParam('search');
     const sort = routerGateway.getQueryParam('sort') as Sort;

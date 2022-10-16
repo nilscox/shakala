@@ -1,6 +1,6 @@
 import { AuthorizationError } from 'backend-application';
-import express from 'express';
-import { AuthorizationErrorReason } from 'shared';
+import express, { RequestHandler as ExpressRequestHandler } from 'express';
+import { AuthorizationErrorReason, mockImpl } from 'shared';
 import supertest from 'supertest';
 
 import { MockLoggerAdapter } from '../adapters';
@@ -111,7 +111,7 @@ describe('Controller', () => {
   });
 
   it('registers express middlewares before the request handler', async () => {
-    const middleware = vi.fn((_req, _res, next) => {
+    const middleware = mockImpl<ExpressRequestHandler>((_req, _res, next) => {
       next();
     });
 

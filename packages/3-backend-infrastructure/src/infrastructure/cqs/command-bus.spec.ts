@@ -1,5 +1,6 @@
 import { Authorize, Authorizer, Command, CommandHandler, ExecutionContext } from 'backend-application';
 import { factories } from 'backend-domain';
+import { mockFn } from 'shared';
 
 import { RealCommandBus } from './command-bus';
 
@@ -8,7 +9,7 @@ describe('RealCommandBus', () => {
   const ctx = ExecutionContext.unauthenticated;
 
   it('executes a command', async () => {
-    const handle = vi.fn();
+    const handle = mockFn();
 
     class TestHandler implements CommandHandler<TestCommand> {
       handle = handle;
@@ -26,11 +27,11 @@ describe('RealCommandBus', () => {
   });
 
   it('initializes all registered commands', async () => {
-    const init = vi.fn();
+    const init = mockFn();
 
     class TestHandler implements CommandHandler<TestCommand> {
       init = init;
-      handle = vi.fn();
+      handle = mockFn();
     }
 
     const commandBus = new RealCommandBus();
@@ -44,7 +45,7 @@ describe('RealCommandBus', () => {
 
   it('invokes the authorizers with the execution context', async () => {
     const user = factories().user();
-    const authorize = vi.fn();
+    const authorize = mockFn();
 
     class TestAuthorizer implements Authorizer {
       authorize = authorize;
@@ -52,7 +53,7 @@ describe('RealCommandBus', () => {
 
     @Authorize(TestAuthorizer)
     class TestHandler implements CommandHandler<TestCommand> {
-      handle = vi.fn();
+      handle = mockFn();
     }
 
     const commandBus = new RealCommandBus();
@@ -77,7 +78,7 @@ describe('RealCommandBus', () => {
 
     @Authorize(TestAuthorizer)
     class TestHandler implements CommandHandler<TestCommand> {
-      handle = vi.fn();
+      handle = mockFn();
     }
 
     const commandBus = new RealCommandBus();
@@ -85,14 +86,14 @@ describe('RealCommandBus', () => {
     commandBus.register(TestCommand, new TestHandler());
     await commandBus.init();
 
-    await expect(commandBus.execute(new TestCommand(), ctx)).rejects.toThrow(error);
+    await expect.rejects(commandBus.execute(new TestCommand(), ctx)).with(error);
   });
 
   it('throws when no handler is found for a given command', async () => {
     const commandBus = new RealCommandBus();
 
-    await expect(commandBus.execute(new TestCommand(), ctx)).rejects.toThrow(
-      'cannot find handler for TestCommand',
-    );
+    const error = await expect.rejects(commandBus.execute(new TestCommand(), ctx)).with(Error);
+
+    expect(error).toHaveProperty('message', 'CommandBus: cannot find handler for TestCommand');
   });
 });

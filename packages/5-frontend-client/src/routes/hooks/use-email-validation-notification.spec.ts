@@ -1,12 +1,9 @@
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory, MemoryHistory } from 'history';
+import { mockFn } from 'shared';
 
-import { useSnackbar } from '~/components/elements/snackbar';
-import { UseSnackbarResult } from '~/components/elements/snackbar/use-snackbar';
 import { TestRenderer } from '~/test/render';
 
-import { useEmailValidationNotification } from './use-email-validation-snackbar';
-
-vi.mock('~/components/elements/snackbar');
+import { useEmailValidationNotification } from './use-email-validation-notification';
 
 describe('useEmailValidationNotification', () => {
   const createHistory = (emailValidationStatus: string) => {
@@ -15,24 +12,16 @@ describe('useEmailValidationNotification', () => {
     });
   };
 
-  const mockUseSnackbar = (mocks?: Partial<UseSnackbarResult>) => {
-    vi.mocked(useSnackbar).mockReturnValue({
-      success: vi.fn(),
-      info: vi.fn(),
-      warning: vi.fn(),
-      error: vi.fn(),
-      ...mocks,
-    });
+  const render = (history: MemoryHistory, { success = mockFn(), error = mockFn() } = {}) => {
+    const { renderHook } = new TestRenderer().withMemoryRouter(history);
+
+    renderHook(() => useEmailValidationNotification(success, error));
   };
 
   it('shows a success notification when the email was correctly validated', () => {
-    const success = vi.fn();
+    const success = mockFn();
 
-    mockUseSnackbar({ success });
-
-    const { renderHook } = new TestRenderer().withMemoryRouter(createHistory('success'));
-
-    renderHook(() => useEmailValidationNotification());
+    render(createHistory('success'), { success });
 
     expect(success).toHaveBeenCalledWith('Votre adresse email a bien été validée. Bienvenue ! 🎉');
   });
@@ -40,24 +29,15 @@ describe('useEmailValidationNotification', () => {
   it('removes the validate-email search param', () => {
     const history = createHistory('success');
 
-    mockUseSnackbar();
-
-    const { renderHook } = new TestRenderer().withMemoryRouter(history);
-
-    renderHook(() => useEmailValidationNotification());
+    render(history);
 
     expect(history.location.search).toEqual('');
   });
 
   const testError = (emailValidationStatus: string, expectedMessage: string) => {
-    const history = createHistory(emailValidationStatus);
-    const error = vi.fn();
+    const error = mockFn();
 
-    mockUseSnackbar({ error });
-
-    const { renderHook } = new TestRenderer().withMemoryRouter(history);
-
-    renderHook(() => useEmailValidationNotification());
+    render(createHistory(emailValidationStatus), { error });
 
     expect(error).toHaveBeenCalledWith(expectedMessage);
   };

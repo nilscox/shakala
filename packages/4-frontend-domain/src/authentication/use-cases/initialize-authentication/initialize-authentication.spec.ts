@@ -1,3 +1,5 @@
+import { mockResolve } from 'shared';
+
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 import { setAuthenticationFieldError, setAuthenticationFormError } from '../../authentication.actions';
@@ -32,7 +34,7 @@ describe('initializeAuthentication', () => {
   it('fetches the authenticated user', async () => {
     const user = createAuthUser();
 
-    store.authenticationGateway.fetchUser.mockResolvedValue(user);
+    store.authenticationGateway.fetchUser = mockResolve(user);
 
     await store.dispatch(initializeAuthentication());
 

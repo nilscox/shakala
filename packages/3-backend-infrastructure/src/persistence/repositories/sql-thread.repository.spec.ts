@@ -1,4 +1,4 @@
-import { createDomainDependencies, factories } from 'backend-domain';
+import { createDomainDependencies, factories, Thread } from 'backend-domain';
 import { array } from 'shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
@@ -29,7 +29,7 @@ describe('SqlThreadRepository', () => {
 
   it('finds the last threads', async () => {
     const author = await save(create.user());
-    const threads = array(3, () => create.thread({ author }));
+    const threads = array(3, () => create.thread({ author })) as [Thread, Thread, Thread];
 
     for (const thread of threads) {
       await repository.save(thread);

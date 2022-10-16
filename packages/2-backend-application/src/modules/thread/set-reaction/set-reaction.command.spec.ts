@@ -74,6 +74,6 @@ describe('SetReactionCommand', () => {
   });
 
   it('prevents a user to set a reaction on his own comment', async () => {
-    await expect(execute(author, ReactionType.upvote)).rejects.toThrow(CannotSetReactionOnOwnCommentError);
+    await expect.rejects(execute(author, ReactionType.upvote)).with(CannotSetReactionOnOwnCommentError);
   });
 });

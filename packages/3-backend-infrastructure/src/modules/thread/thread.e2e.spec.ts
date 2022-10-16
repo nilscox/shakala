@@ -14,7 +14,7 @@ describe('Thread e2e', () => {
     emailSender: new InMemoryEmailSenderAdapter(),
   });
 
-  beforeAll(async () => {
+  before(async () => {
     await server.init();
   });
 
@@ -25,7 +25,7 @@ describe('Thread e2e', () => {
     await server.createUserAndLogin(agent, { email: 'user@domain.tld', password: 'p4ssw0rd' });
   });
 
-  test('create a thread', async () => {
+  it('create a thread', async () => {
     const createThreadDto = { description: 'description', text: 'text', keywords: ['key', 'words'] };
 
     const createThread = async (): Promise<string> => {

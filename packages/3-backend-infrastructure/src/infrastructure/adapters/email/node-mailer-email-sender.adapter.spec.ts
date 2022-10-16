@@ -1,12 +1,10 @@
-import { createTransport, Transporter } from 'nodemailer';
+import { Transporter } from 'nodemailer';
+import { mockFn } from 'shared';
 
 import { EmailConfig } from '../config/config.port';
 import { StubConfigAdapter } from '../config/stub-config.adapter';
 
 import { NodeMailerEmailSenderAdapter } from './node-mailer-email-sender.adapter';
-
-vi.mock('nodemailer');
-const mockCreateTransport = vi.mocked(createTransport);
 
 describe('NodeMailerEmailSenderAdapter', () => {
   const emailConfig: EmailConfig = {
@@ -18,16 +16,16 @@ describe('NodeMailerEmailSenderAdapter', () => {
     from: 'Someone',
   };
 
+  const sendMail = mockFn();
+
+  const mockCreateTransport = mockFn({
+    sendMail,
+  } as unknown as Transporter<unknown>);
+
   const config = new StubConfigAdapter({ email: emailConfig });
-  const emailSender = new NodeMailerEmailSenderAdapter(config);
+  const emailSender = new NodeMailerEmailSenderAdapter(config, mockCreateTransport);
 
   it('sends an email', async () => {
-    const sendMail = vi.fn();
-
-    mockCreateTransport.mockReturnValue({
-      sendMail,
-    } as unknown as Transporter<unknown>);
-
     await emailSender.send({
       to: 'you',
       subject: 'hello',

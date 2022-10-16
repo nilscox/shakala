@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { createAuthUser, TestStore } from '../../../test';
 import { AuthorizationError, ValidationError } from '../../../types';
@@ -18,7 +18,7 @@ describe('createThread', () => {
 
   beforeEach(() => {
     store.user = createAuthUser();
-    store.threadGateway.createThread.mockResolvedValue(threadId);
+    store.threadGateway.createThread = mockResolve(threadId);
   });
 
   const description = 'description';
@@ -66,7 +66,7 @@ describe('createThread', () => {
     ]);
 
     beforeEach(() => {
-      store.threadGateway.createThread.mockRejectedValue(error);
+      store.threadGateway.createThread = mockReject(error);
     });
 
     it('stores the error', async () => {
@@ -90,7 +90,7 @@ describe('createThread', () => {
 
   describe('authorization error handling', () => {
     it('shows a snack when the user is not authorized to create a thread', async () => {
-      store.threadGateway.createThread.mockRejectedValue(
+      store.threadGateway.createThread = mockReject(
         new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
       );
 
@@ -106,7 +106,7 @@ describe('createThread', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
-      store.threadGateway.createThread.mockRejectedValue(error);
+      store.threadGateway.createThread = mockReject(error);
     });
 
     it('stores the error', async () => {

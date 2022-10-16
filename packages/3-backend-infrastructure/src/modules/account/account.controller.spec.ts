@@ -75,16 +75,17 @@ describe('AccountController', () => {
         data: Buffer.from('file data'),
       };
 
-      await expect(controller.changeProfileImage(new MockRequest().withFile(file))).rejects.test((error) => {
-        expect(error).toBeInstanceOf(BadRequest);
-        expect(error.body).toEqual({
-          code: 'InvalidImageFormat',
-          message: expect.any(String),
-          details: {
-            type: 'image/webp',
-            allowedTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'],
-          },
-        });
+      const request = new MockRequest().withFile(file);
+
+      const error = await expect.rejects(controller.changeProfileImage(request)).with(BadRequest);
+
+      expect(error.body).toEqual({
+        code: 'InvalidImageFormat',
+        message: expect.any(String),
+        details: {
+          type: 'image/webp',
+          allowedTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'],
+        },
       });
     });
   });

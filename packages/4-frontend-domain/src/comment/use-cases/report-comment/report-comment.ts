@@ -3,12 +3,12 @@ import { UnexpectedError } from 'shared';
 import { Thunk } from '../../../store.types';
 import { AuthorizationError } from '../../../types';
 
-export const reportComment = (reason: string): Thunk => {
+export const reportComment = (reason: string): Thunk<Promise<void>> => {
   return async (dispatch, getState, { threadGateway, routerGateway, snackbarGateway }) => {
     const commentId = routerGateway.getQueryParam('report');
 
     if (!commentId) {
-      throw new UnexpectedError('reportComment: expected the report query param be set');
+      throw new UnexpectedError('reportComment: expected the report query param to be set');
     }
 
     try {

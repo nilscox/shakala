@@ -7,6 +7,7 @@ import {
   Sort,
 } from 'backend-application';
 import { factories } from 'backend-domain';
+import { mockResolve } from 'shared';
 
 import {
   MockLoggerAdapter,
@@ -62,9 +63,9 @@ describe('ThreadController', () => {
     });
 
     it('fails when the count is not valid', async () => {
-      await expect(controller.getLastThreads(new MockRequest().withQuery('count', '-1'))).rejects.toThrow(
-        ValidationError,
-      );
+      await expect
+        .rejects(controller.getLastThreads(new MockRequest().withQuery('count', '-1')))
+        .with(ValidationError);
     });
   });
 
@@ -104,15 +105,15 @@ describe('ThreadController', () => {
     it('fails to retrieves an thread that does not exist', async () => {
       queryBus.for(GetThreadQuery).return(undefined);
 
-      await expect(controller.getThread(new MockRequest().withParam('id', thread.id))).rejects.test(
-        (response) => {
-          expect(response).toHaveProperty('body', {
-            code: 'NotFound',
-            message: 'thread not found',
-            details: { threadId: thread.id },
-          });
-        },
-      );
+      const response = await expect
+        .rejects(controller.getThread(new MockRequest().withParam('id', thread.id)))
+        .with(expect.anything());
+
+      expect(response).toHaveProperty('body', {
+        code: 'NotFound',
+        message: 'thread not found',
+        details: { threadId: thread.id },
+      });
     });
   });
 
@@ -128,7 +129,7 @@ describe('ThreadController', () => {
 
     beforeEach(() => {
       session.user = user;
-      commandBus.execute.mockResolvedValue(threadId);
+      commandBus.execute = mockResolve(threadId);
     });
 
     it('creates a thread', async () => {
@@ -146,15 +147,14 @@ describe('ThreadController', () => {
     });
 
     it('fails to create a thread with an invalid body', async () => {
-      await expect(
-        controller.createThread(new MockRequest().withBody({ description: 'a', text, keywords: ['a'] })),
-      ).rejects.test((error) => {
-        expect(error).toBeInstanceOf(ValidationError);
-        expect(error).toHaveProperty('fields.0.field', 'description');
-        expect(error).toHaveProperty('fields.0.error', 'min');
-        expect(error).toHaveProperty('fields.1.field', 'keywords[0]');
-        expect(error).toHaveProperty('fields.1.error', 'min');
-      });
+      const request = new MockRequest().withBody({ description: 'a', text, keywords: ['a'] });
+
+      const error = await expect.rejects(controller.createThread(request)).with(ValidationError);
+
+      expect(error).toHaveProperty('fields.0.field', 'description');
+      expect(error).toHaveProperty('fields.0.error', 'min');
+      expect(error).toHaveProperty('fields.1.field', 'keywords[0]');
+      expect(error).toHaveProperty('fields.1.error', 'min');
     });
   });
 });

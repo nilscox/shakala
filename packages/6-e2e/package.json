@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "exit 0",
     "lint": "exit 0",
     "test": "exit 0",
     "e2e": "node -r ../3-backend-infrastructure/register-aliases.js ./node_modules/.bin/playwright test"

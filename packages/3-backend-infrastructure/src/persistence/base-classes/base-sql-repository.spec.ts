@@ -60,7 +60,9 @@ class SqlTestRepository extends BaseSqlRepository<SqlTest, Test> {
   }
 }
 
-describe('SqlRepository', () => {
+describe('BaseSqlRepository', function () {
+  this.timeout(5 * 1000);
+
   const { getEntityManager, waitForDatabaseConnection } = setupTestDatabase({ entities: [SqlTest] });
 
   let em: EntityManager;
@@ -82,10 +84,10 @@ describe('SqlRepository', () => {
     await repository.save(entity);
     await em.clear();
 
-    expect(await em.findOne(SqlTest, entity.id)).toMatchObject({
-      id: 'testId',
-      foo: 'bar',
-    });
+    const found = await em.findOne(SqlTest, entity.id);
+
+    expect(found).toHaveProperty('id', 'testId');
+    expect(found).toHaveProperty('foo', 'bar');
   });
 
   it('updates an existing entity in the database', async () => {
@@ -131,8 +133,13 @@ describe('SqlRepository', () => {
     await em.persistAndFlush(sqlTest);
     await em.clear();
 
-    await expect(repository.findByIdOrFail(sqlTest.id)).resolves.toBeDefined();
-    await expect(repository.findByIdOrFail('nope')).rejects.toThrow(new EntityNotFound('Test', 'nope'));
+    await expect.async(repository.findByIdOrFail(sqlTest.id)).toBeDefined();
+
+    const error = await expect.rejects(repository.findByIdOrFail('nope')).with(EntityNotFound);
+
+    expect(error).toHaveProperty('message', 'Test not found');
+    expect(error).toHaveProperty('details.entityName', 'Test');
+    expect(error).toHaveProperty('details.entityId', 'nope');
   });
 
   it('deletes an entity from the database', async () => {

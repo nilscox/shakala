@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';
@@ -37,6 +37,7 @@ describe('editComment', () => {
     store.dispatch(setIsEditingComment(comment.id));
 
     store.dateGateway.setNow(now);
+    store.threadGateway.editComment = mockResolve();
   });
 
   const execute = () => {
@@ -130,7 +131,7 @@ describe('editComment', () => {
 
   describe('authorization error handling', () => {
     it('shows a snack when the user is not authorized to edit a comment', async () => {
-      store.threadGateway.editComment.mockRejectedValue(
+      store.threadGateway.editComment = mockReject(
         new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
       );
 
@@ -146,7 +147,7 @@ describe('editComment', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
-      store.threadGateway.editComment.mockRejectedValue(error);
+      store.threadGateway.editComment = mockReject(error);
     });
 
     it('stores the error', async () => {
@@ -171,7 +172,7 @@ describe('editComment', () => {
     });
 
     it("shows an error when the user tries to edit someone else's comment", async () => {
-      store.threadGateway.editComment.mockRejectedValue(new AuthorizationError('UserMustBeAuthor'));
+      store.threadGateway.editComment = mockReject(new AuthorizationError('UserMustBeAuthor'));
 
       await execute();
 

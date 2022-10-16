@@ -1,3 +1,5 @@
+import { mockResolve } from 'shared';
+
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
 
@@ -15,7 +17,7 @@ describe('fetchAuthenticatedUser', () => {
   });
 
   it('fetches the user currently authenticated', async () => {
-    store.authenticationGateway.fetchUser.mockResolvedValue(user);
+    store.authenticationGateway.fetchUser = mockResolve(user);
 
     await store.dispatch(fetchAuthenticatedUser());
 
@@ -24,7 +26,7 @@ describe('fetchAuthenticatedUser', () => {
   });
 
   it('fetches no one when the user is not authenticated', async () => {
-    store.authenticationGateway.fetchUser.mockResolvedValue(undefined);
+    store.authenticationGateway.fetchUser = mockResolve(undefined);
 
     await store.dispatch(fetchAuthenticatedUser());
 

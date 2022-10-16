@@ -1,3 +1,5 @@
+import { mockResolve } from 'shared';
+
 import { createThread, TestStore } from '../../../test';
 import { selectLastThreads, setLastThreads } from '../../lists/last-threads';
 
@@ -9,7 +11,7 @@ describe('fetchLastThreads', () => {
   const thread = createThread();
 
   beforeEach(() => {
-    store.threadGateway.getLast.mockResolvedValue([thread]);
+    store.threadGateway.getLast = mockResolve([thread]);
   });
 
   it('fetches the last threads', async () => {

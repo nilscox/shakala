@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
@@ -30,7 +30,7 @@ describe('login', () => {
 
   beforeEach(() => {
     store.routerGateway.currentAuthenticationForm = AuthenticationType.login;
-    store.authenticationGateway.login.mockResolvedValue(user);
+    store.authenticationGateway.login = mockResolve(user);
   });
 
   it('logs in', async () => {
@@ -63,7 +63,7 @@ describe('login', () => {
   });
 
   it('handles validation errors', async () => {
-    store.authenticationGateway.login.mockRejectedValue(
+    store.authenticationGateway.login = mockReject(
       new ValidationError([{ field: 'email', error: 'required', value: null }]),
     );
 
@@ -73,7 +73,7 @@ describe('login', () => {
   });
 
   it('handles invalid credentials error', async () => {
-    store.authenticationGateway.login.mockRejectedValue(new InvalidCredentialsError());
+    store.authenticationGateway.login = mockReject(new InvalidCredentialsError());
 
     await store.dispatch(login(email, password));
 
@@ -81,7 +81,7 @@ describe('login', () => {
   });
 
   it('shows a snack when the user is already authenticated', async () => {
-    store.authenticationGateway.login.mockRejectedValue(
+    store.authenticationGateway.login = mockReject(
       new AuthorizationError(AuthorizationErrorReason.authenticated),
     );
 
@@ -101,9 +101,9 @@ describe('login', () => {
   it('throws when the gateway throws', async () => {
     const error = new Error();
 
-    store.authenticationGateway.login.mockRejectedValue(error);
+    store.authenticationGateway.login = mockReject(error);
 
-    await expect(store.dispatch(login(email, password))).rejects.toThrow(error);
+    await expect.rejects(store.dispatch(login(email, password))).with(error);
     expect(store.snackbarGateway.error).toHaveBeenCalledWith("Une erreur s'est produite");
   });
 });

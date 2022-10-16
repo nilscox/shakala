@@ -13,7 +13,7 @@ describe('authentication selectors', () => {
   const store = new TestStore();
 
   describe('isAuthenticationFieldVisible', () => {
-    test('email-login form', () => {
+    it('email-login form', () => {
       const form = AuthenticationType.emailLogin;
 
       expect(isAuthenticationFieldVisible(form, AuthenticationField.email)).toBe(true);
@@ -22,7 +22,7 @@ describe('authentication selectors', () => {
       expect(isAuthenticationFieldVisible(form, AuthenticationField.acceptRulesCheckbox)).toBe(false);
     });
 
-    test('login form', () => {
+    it('login form', () => {
       const form = AuthenticationType.login;
 
       expect(isAuthenticationFieldVisible(form, AuthenticationField.email)).toBe(true);
@@ -31,7 +31,7 @@ describe('authentication selectors', () => {
       expect(isAuthenticationFieldVisible(form, AuthenticationField.acceptRulesCheckbox)).toBe(false);
     });
 
-    test('signup form', () => {
+    it('signup form', () => {
       const form = AuthenticationType.signup;
 
       expect(isAuthenticationFieldVisible(form, AuthenticationField.email)).toBe(true);
@@ -47,29 +47,29 @@ describe('authentication selectors', () => {
       store.dispatch(setRulesAccepted(true));
     });
 
-    test('valid form', () => {
+    it('valid form', () => {
       expect(store.select(selectCanSubmitAuthenticationForm, AuthenticationType.signup)).toEqual(true);
     });
 
-    test('invalid form', () => {
+    it('invalid form', () => {
       store.dispatch(setIsAuthenticationFormValid(false));
 
       expect(store.select(selectCanSubmitAuthenticationForm, AuthenticationType.signup)).toEqual(false);
     });
 
-    test('fields errors', () => {
+    it('fields errors', () => {
       store.dispatch(setAuthenticationFieldError(AuthenticationField.email, 'error'));
 
       expect(store.select(selectCanSubmitAuthenticationForm, AuthenticationType.signup)).toEqual(false);
     });
 
-    test('form error', () => {
+    it('form error', () => {
       store.dispatch(setAuthenticationFormError('error'));
 
       expect(store.select(selectCanSubmitAuthenticationForm, AuthenticationType.signup)).toEqual(false);
     });
 
-    test('rules not accepted', () => {
+    it('rules not accepted', () => {
       store.dispatch(setRulesAccepted(false));
 
       expect(store.select(selectCanSubmitAuthenticationForm, AuthenticationType.emailLogin)).toEqual(true);

@@ -1,4 +1,3 @@
-import { act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { addComment, createComment, createUser, TestStore } from 'frontend-domain';
 import { createMemoryHistory } from 'history';
@@ -41,8 +40,8 @@ describe('ReportCommentModal', () => {
 
     render();
 
-    await act(() => user.type(screen.getByRole('textbox'), reason));
-    await act(() => user.click(screen.getByRole('button', { name: 'Signaler' })));
+    await user.type(screen.getByRole('textbox'), reason);
+    await user.click(screen.getByRole('button', { name: 'Signaler' }));
 
     expect(store.threadGateway.reportComment).toHaveBeenCalledWith(comment.id, reason);
   });

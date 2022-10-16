@@ -6,7 +6,9 @@ import { setupTestDatabase } from '../../../persistence/mikro-orm/create-databas
 
 import { SqlProfileImageStoreAdapter } from './sql-profile-image-store.adapter';
 
-describe('SqlProfileImageStoreAdapter', () => {
+describe('SqlProfileImageStoreAdapter', function () {
+  this.timeout(5 * 1000);
+
   const { getEntityManager, waitForDatabaseConnection } = setupTestDatabase();
 
   const create = factories();
@@ -59,7 +61,7 @@ describe('SqlProfileImageStoreAdapter', () => {
 
     const saved = await repository.findOne({ name: 'image.png' });
 
-    expect(saved).not.toBeNull();
+    expect(saved).toBeDefined();
     expect(saved).toHaveProperty('name', 'image.png');
     expect(saved).toHaveProperty('data', data);
   });

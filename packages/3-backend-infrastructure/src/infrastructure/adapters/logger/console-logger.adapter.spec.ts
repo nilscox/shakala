@@ -1,16 +1,11 @@
 import { StubDateAdapter } from 'backend-domain';
-import { MockedObject } from 'vitest';
+import { mockObject } from 'shared';
 
 import { ConsoleLoggerAdapter } from './console-logger.adapter';
 
 describe('ConsoleLoggerAdapter', () => {
   const dateAdapter = new StubDateAdapter();
-
-  const mockConsole = {
-    log: vi.fn(),
-    info: vi.fn(),
-    error: vi.fn(),
-  } as MockedObject<typeof console>;
+  const mockConsole = mockObject(console);
 
   const logger = new ConsoleLoggerAdapter(dateAdapter, mockConsole);
 
@@ -25,18 +20,18 @@ describe('ConsoleLoggerAdapter', () => {
   it('logs a message with level info', () => {
     logger.info('Fire in the hole!');
 
-    const [call] = mockConsole.info.mock.calls;
+    const { args } = mockConsole.info.getCall(0);
 
-    expect(call?.[0]).toMatch(/ \[info\]$/);
-    expect(call?.[1]).toEqual('Fire in the hole!');
+    expect(args[0]).toMatch(/ \[info\]$/);
+    expect(args[1]).toEqual('Fire in the hole!');
   });
 
   it('logs a message with level error', () => {
     logger.error(new Error('Enemy spotted.'));
 
-    const [call] = mockConsole.error.mock.calls;
+    const { args } = mockConsole.error.getCall(0);
 
-    expect(call?.[0]).toMatch(/ \[error\]$/);
-    expect(call?.[1]).toMatch(/^Error: Enemy spotted.\n {4}at/);
+    expect(args?.[0]).toMatch(/ \[error\]$/);
+    expect(args?.[1]).toMatch(/^Error: Enemy spotted.\n {4}at/);
   });
 });

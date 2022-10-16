@@ -1,21 +1,16 @@
 import { AuthorizationError, FieldError, ValidationError } from 'frontend-domain';
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockResolve } from 'shared';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 
-import 'shared/src/vitest.setup';
-
 const mockFetch = (overrides?: Partial<Response>) => {
-  return vi.fn<Parameters<typeof fetch>, ReturnType<typeof fetch>>(
-    async () =>
-      ({
-        ok: true,
-        text() {},
-        json() {},
-        headers: new Headers(),
-        ...overrides,
-      } as Response),
-  );
+  return mockResolve<Response>({
+    ok: true,
+    text() {},
+    json() {},
+    headers: new Headers(),
+    ...overrides,
+  } as Response);
 };
 
 describe('FetchHttpGateway', () => {
@@ -141,10 +136,9 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 403, headers, json });
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await expect(http.post('/')).rejects.test((error: AuthorizationError) => {
-      expect(error).toBeInstanceOf(AuthorizationError);
-      expect(error).toHaveProperty('reason', reason);
-    });
+    const error = await expect.rejects(http.post('/')).with(AuthorizationError);
+
+    expect(error).toHaveProperty('reason', reason);
   });
 
   it('handles validation errors', async () => {
@@ -161,9 +155,8 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await expect(http.post('/')).rejects.test((error: ValidationError) => {
-      expect(error).toBeInstanceOf(ValidationError);
-      expect(error).toHaveProperty('fields', fields);
-    });
+    const error = await expect.rejects(http.post('/')).with(ValidationError);
+
+    expect(error).toHaveProperty('fields', fields);
   });
 });

@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createThread, TestStore } from '../../../test';
@@ -31,7 +31,7 @@ describe('createRootComment', () => {
     await store.dispatch(setCreateRootCommentText(thread.id, text));
 
     store.dateGateway.setNow(now);
-    store.threadGateway.createComment.mockResolvedValue(commentId);
+    store.threadGateway.createComment = mockResolve(commentId);
   });
 
   const execute = () => {
@@ -109,7 +109,7 @@ describe('createRootComment', () => {
 
   describe('authorization error handling', () => {
     it('shows a snack when the user is not authorized to create a root comment', async () => {
-      store.threadGateway.createComment.mockRejectedValue(
+      store.threadGateway.createComment = mockReject(
         new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
       );
 
@@ -125,7 +125,7 @@ describe('createRootComment', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
-      store.threadGateway.createComment.mockRejectedValue(error);
+      store.threadGateway.createComment = mockReject(error);
     });
 
     it('stores the error', async () => {

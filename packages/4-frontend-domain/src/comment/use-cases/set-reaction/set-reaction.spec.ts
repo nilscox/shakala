@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { createAuthUser, createComment, createThread, TestStore } from '../../../test';
 import { addThread } from '../../../thread/thread.actions';
@@ -29,6 +29,7 @@ describe('setReaction', () => {
     store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(comment));
+    store.threadGateway.setReaction = mockResolve();
   });
 
   const execute = async (reactionType = ReactionType.upvote) => {
@@ -104,7 +105,7 @@ describe('setReaction', () => {
 
   describe('authorization error handling', () => {
     it('shows a snack when the user is not authorized to create a root comment', async () => {
-      store.threadGateway.setReaction.mockRejectedValue(
+      store.threadGateway.setReaction = mockReject(
         new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
       );
 
@@ -120,7 +121,7 @@ describe('setReaction', () => {
     const error = new Error('nope.');
 
     beforeEach(() => {
-      store.threadGateway.setReaction.mockRejectedValue(error);
+      store.threadGateway.setReaction = mockReject(error);
     });
 
     it('shows a snack with a fallback message', async () => {

@@ -1,6 +1,6 @@
 import { GetThreadQueryResult } from 'backend-application';
 import { factories, ReactionType } from 'backend-domain';
-import { CommentDto, ThreadWithCommentsDto } from 'shared';
+import { CommentDto, ReactionTypeDto, ThreadWithCommentsDto } from 'shared';
 
 import { StubConfigAdapter } from '../../infrastructure';
 import { UserPresenter } from '../user/user.presenter';
@@ -101,7 +101,7 @@ describe('ThreadPresenter', () => {
       presenter.transformComment(comment, [reply], getThreadQueryResult.reactionsCounts, userReactions),
     ).toEqual({
       ...commentDto,
-      userReaction: ReactionType.downvote,
+      userReaction: ReactionTypeDto.downvote,
     });
   });
 });

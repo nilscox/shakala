@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["src/**/*"],
+  "include": ["../../global.d.ts", "mocha.setup.ts", "src/**/*"],
   "references": [{ "path": "../2-backend-application" }],
   "compilerOptions": {
     "outDir": "dist",

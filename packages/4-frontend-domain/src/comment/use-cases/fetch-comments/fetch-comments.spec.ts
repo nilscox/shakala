@@ -1,4 +1,4 @@
-import { createCommentDto } from 'shared';
+import { createCommentDto, mockReject, mockResolve } from 'shared';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createComment, createThread, TestStore } from '../../../test';
@@ -7,7 +7,7 @@ import {
   selectCreatedRootComments,
 } from '../../../thread/lists/created-root-comments';
 import { addThread, setThreadComments } from '../../../thread/thread.actions';
-import { Sort } from '../../../types';
+import { Comment, Sort } from '../../../types';
 import { addComment, addComments } from '../../comments.actions';
 import { selectReplyFormText } from '../create-reply/create-reply';
 import { selectEditCommentFormText } from '../edit-comment/edit-comment';
@@ -30,7 +30,7 @@ describe('fetchComments', () => {
 
   beforeEach(() => {
     store.dispatch(addThread(thread));
-    store.threadGateway.getComments.mockResolvedValue([commentDto]);
+    store.threadGateway.getComments = mockResolve([commentDto]);
   });
 
   const execute = () => {
@@ -53,7 +53,7 @@ describe('fetchComments', () => {
     expect(store.select(selectThreadComments, threadId)).toEqual([
       {
         ...commentDto,
-        replies: [expect.objectContaining({ id: replyDto.id })],
+        replies: [expect.objectWith({ id: replyDto.id } as Comment)],
       },
     ]);
   });
@@ -91,7 +91,7 @@ describe('fetchComments', () => {
 
     await execute();
 
-    expect(store.select(selectCreatedRootComments), 'created comments were not cleared').toHaveLength(0);
+    expect(store.select(selectCreatedRootComments)).toHaveLength(0);
   });
 
   it('restores the draft replies texts', async () => {
@@ -113,9 +113,9 @@ describe('fetchComments', () => {
   it('stores and re-throws the error when the call to the gateway fails', async () => {
     const error = new Error('nope.');
 
-    store.threadGateway.getComments.mockRejectedValue(error);
+    store.threadGateway.getComments = mockReject(error);
 
-    await expect(execute()).rejects.toThrow(error);
+    await expect.rejects(execute()).with(error);
 
     expect(store.select(selectIsFetchingComments, threadId)).toBe(false);
     expect(store.select(selectFetchCommentsError, threadId)).toHaveProperty('message', error.message);

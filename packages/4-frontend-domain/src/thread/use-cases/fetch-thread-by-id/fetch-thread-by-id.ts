@@ -27,7 +27,7 @@ export const selectLoadingThreadError = (state: State, threadId: string) => {
   return selectors.selectError(state, { threadId });
 };
 
-export const fetchThreadById = (threadId: string): Thunk => {
+export const fetchThreadById = (threadId: string): Thunk<Promise<void>> => {
   return async (dispatch, getState, { threadGateway, storageGateway }) => {
     const key = { threadId };
 

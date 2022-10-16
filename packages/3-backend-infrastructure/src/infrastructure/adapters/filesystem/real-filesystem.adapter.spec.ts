@@ -1,13 +1,12 @@
 import { FileNotFoundError } from 'backend-application';
+import { mockReject, mockResolve } from 'shared';
 
 import { RealFilesystemAdapter } from './real-filesystem.adapter';
 
 describe('RealFilesystemAdapter', () => {
   it('reads a file from the filesystem', async () => {
-    const readFile = vi.fn();
+    const readFile = mockResolve(Buffer.from('content'));
     const filesystem = new RealFilesystemAdapter('/base', { readFile });
-
-    readFile.mockResolvedValue(Buffer.from('content'));
 
     const result = await filesystem.readEmailTemplate('file.mjml');
 
@@ -16,13 +15,10 @@ describe('RealFilesystemAdapter', () => {
   });
 
   it('throws a FileNotFound error', async () => {
-    const readFile = vi.fn();
+    const error = Object.assign(new Error(), { syscall: 'open', code: 'ENOENT' });
+    const readFile = mockReject(error);
     const filesystem = new RealFilesystemAdapter('/', { readFile });
 
-    const error = Object.assign(new Error(), { syscall: 'open', code: 'ENOENT' });
-
-    readFile.mockRejectedValue(error);
-
-    await expect(filesystem.readEmailTemplate('/root/.ssh')).rejects.toThrow(FileNotFoundError);
+    await expect.rejects(filesystem.readEmailTemplate('/root/.ssh')).with(FileNotFoundError);
   });
 });

@@ -78,7 +78,7 @@ export const selectEditCommentError = (state: State, commentId: string) => {
 
 // thunk
 
-export const editComment = (commentId: string): Thunk => {
+export const editComment = (commentId: string): Thunk<Promise<void>> => {
   return async (dispatch, getState, { threadGateway, snackbarGateway, dateGateway, loggerGateway }) => {
     if (!dispatch(requireAuthentication())) {
       return;

@@ -4,7 +4,9 @@ import { LoginBodyDto, SignupBodyDto } from 'shared';
 import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
 import { TestServer } from '../../test';
 
-describe('Authentication e2e', () => {
+describe('Authentication e2e', function () {
+  this.slow(1000);
+
   const server = new TestServer();
   const agent = server.agent();
 
@@ -17,7 +19,7 @@ describe('Authentication e2e', () => {
     emailSender,
   });
 
-  beforeAll(async () => {
+  before(async () => {
     await server.init();
   });
 
@@ -25,7 +27,7 @@ describe('Authentication e2e', () => {
     await server.reset();
   });
 
-  test('as a user, I can sign up, log out and and log back in', async () => {
+  it('as a user, I can sign up, log out and and log back in', async () => {
     const signup = async () => {
       const body: SignupBodyDto = { nick: 'nick', email: 'user@domain.tld', password: 'p4ssw0rd' };
 

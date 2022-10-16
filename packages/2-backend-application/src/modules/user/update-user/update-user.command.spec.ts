@@ -3,8 +3,8 @@ import {
   ProfileImageData,
   ProfileImageType,
   StubGeneratorAdapter,
-  User,
   StubProfileImageStoreAdapter,
+  User,
 } from 'backend-domain';
 
 import { InMemoryUserRepository } from '../../../adapters';
@@ -75,6 +75,6 @@ describe('UpdateUserCommand', () => {
     await execute(user, null);
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', null);
-    expect(await profileImageStore.readProfileImage(profileImage)).not.toBeUndefined();
+    expect(await profileImageStore.readProfileImage(profileImage)).toBeDefined();
   });
 });

@@ -4,8 +4,9 @@
   "private": true,
   "main": "src/index.ts",
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc",
-    "test": "vitest",
+    "test": "mocha",
     "lint": "eslint src"
   },
   "dependencies": {

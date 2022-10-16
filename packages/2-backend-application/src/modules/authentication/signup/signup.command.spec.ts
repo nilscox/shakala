@@ -79,12 +79,12 @@ describe('SignupCommand', () => {
   it('fails to signup when the email already exists', async () => {
     userRepository.add(create.user({ email }));
 
-    await expect(signup()).rejects.toThrow(EmailAlreadyExistsError);
+    await expect.rejects(signup()).with(EmailAlreadyExistsError);
   });
 
   it('fails to signup when the nick already exists', async () => {
     userRepository.add(create.user({ nick: create.nick(nick) }));
 
-    await expect(signup()).rejects.toThrow(NickAlreadyExistsError);
+    await expect.rejects(signup()).with(NickAlreadyExistsError);
   });
 });

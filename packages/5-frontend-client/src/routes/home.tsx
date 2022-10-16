@@ -4,6 +4,7 @@ import { ReactNode, useEffect } from 'react';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';
+import { useSnackbar } from '~/components/elements/snackbar';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSelector } from '~/hooks/use-selector';
 import CommunityIcon from '~/icons/community.svg';
@@ -18,10 +19,12 @@ import imageCharte from '../images/charte.png';
 import imageIndépendance from '../images/indépendance.png';
 import imageModeration from '../images/moderation.png';
 
-import { useEmailValidationNotification } from './hooks/use-email-validation-snackbar';
+import { useEmailValidationNotification } from './hooks/use-email-validation-notification';
 
 export const Home = () => {
-  useEmailValidationNotification();
+  const snackbar = useSnackbar();
+
+  useEmailValidationNotification(snackbar.success, snackbar.error);
 
   return (
     <>

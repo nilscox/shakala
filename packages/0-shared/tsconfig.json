@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["src/**/*"],
+  "include": ["../../global.d.ts", "src/**/*"],
   "compilerOptions": {
     "composite": true,
     "noEmit": false,

@@ -1,3 +1,5 @@
+import { mockReject, mockResolve } from 'shared';
+
 import { createComment, TestStore } from '../../../test';
 import { AuthorizationError } from '../../../types';
 
@@ -10,6 +12,7 @@ describe('reportComment', () => {
 
   beforeEach(() => {
     store.routerGateway.setQueryParam('report', comment.id);
+    store.threadGateway.reportComment = mockResolve();
   });
 
   const execute = async (reason = '') => {
@@ -43,7 +46,7 @@ describe('reportComment', () => {
   });
 
   it('shows a notification when a the comment was already reported', async () => {
-    store.threadGateway.reportComment.mockRejectedValue(new AuthorizationError('CommentAlreadyReported'));
+    store.threadGateway.reportComment = mockReject(new AuthorizationError('CommentAlreadyReported'));
 
     await execute();
 
@@ -51,7 +54,7 @@ describe('reportComment', () => {
   });
 
   it('shows a notification when an unknown error happens', async () => {
-    store.threadGateway.reportComment.mockRejectedValue(new Error('oops'));
+    store.threadGateway.reportComment = mockReject(new Error('oops'));
 
     await execute();
 
@@ -63,6 +66,6 @@ describe('reportComment', () => {
   it('throws when the report query param is not set', async () => {
     store.routerGateway.removeQueryParam('report');
 
-    await expect(execute()).rejects.toThrow();
+    await expect.rejects(execute()).with(expect.stringMatching(/expected the report query param to be set/));
   });
 });

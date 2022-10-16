@@ -1,4 +1,4 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
 
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';
@@ -26,7 +26,7 @@ describe('signup', () => {
 
   beforeEach(() => {
     store.routerGateway.currentAuthenticationForm = AuthenticationType.signup;
-    store.authenticationGateway.signup.mockResolvedValue(user);
+    store.authenticationGateway.signup = mockResolve(user);
   });
 
   it('signs up', async () => {
@@ -61,7 +61,7 @@ describe('signup', () => {
   });
 
   it('handles validation errors', async () => {
-    store.authenticationGateway.signup.mockRejectedValue(
+    store.authenticationGateway.signup = mockReject(
       new ValidationError([{ field: 'nick', error: 'already-exists', value: 'nick' }]),
     );
 
@@ -71,7 +71,7 @@ describe('signup', () => {
   });
 
   it('shows a snack when the user is already authenticated', async () => {
-    store.authenticationGateway.signup.mockRejectedValue(
+    store.authenticationGateway.signup = mockReject(
       new AuthorizationError(AuthorizationErrorReason.authenticated),
     );
 
@@ -91,8 +91,8 @@ describe('signup', () => {
   it('throws when the gateway throws', async () => {
     const error = new Error();
 
-    store.authenticationGateway.signup.mockRejectedValue(error);
+    store.authenticationGateway.signup = mockReject(error);
 
-    await expect(store.dispatch(signup(email, password, nick))).rejects.toThrow(error);
+    await expect.rejects(store.dispatch(signup(email, password, nick))).with(error);
   });
 });

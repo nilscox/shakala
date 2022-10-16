@@ -53,14 +53,14 @@ describe('ReportCommentCommand', () => {
   it('prevents a user to report the same comment twice', async () => {
     commentReportRepository.add(create.commentReport({ commentId: comment.id, reportedBy: user }));
 
-    await expect(
-      handler.handle(new ReportCommentCommand(comment.id, undefined), ExecutionContext.as(user)),
-    ).rejects.toThrow(CommentAlreadyReportedError);
+    await expect
+      .rejects(handler.handle(new ReportCommentCommand(comment.id, undefined), ExecutionContext.as(user)))
+      .with(CommentAlreadyReportedError);
   });
 
   it('prevents a user to report his own comment', async () => {
-    await expect(
-      handler.handle(new ReportCommentCommand(comment.id, undefined), ExecutionContext.as(author)),
-    ).rejects.toThrow(CannotReportOwnCommentError);
+    await expect
+      .rejects(handler.handle(new ReportCommentCommand(comment.id, undefined), ExecutionContext.as(author)))
+      .with(CannotReportOwnCommentError);
   });
 });

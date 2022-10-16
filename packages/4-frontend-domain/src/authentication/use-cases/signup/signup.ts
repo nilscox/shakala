@@ -4,7 +4,7 @@ import { clearAllAuthenticationErrors, setAuthenticating } from '../../authentic
 import { closeAuthenticationForm } from '../close-authentication-form/close-authentication-form';
 import { handleAuthenticationError } from '../handle-authentication-error/handle-authentication-error';
 
-export const signup = (email: string, password: string, nick: string): Thunk => {
+export const signup = (email: string, password: string, nick: string): Thunk<Promise<void>> => {
   return async (dispatch, _getState, { authenticationGateway, snackbarGateway }) => {
     dispatch(clearAllAuthenticationErrors());
 

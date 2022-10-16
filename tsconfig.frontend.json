@@ -9,12 +9,13 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "allowJs": false,
     "strict": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vitest/globals"],
+    "types": ["mocha", "node"],
     "jsx": "react-jsx"
   }
 }

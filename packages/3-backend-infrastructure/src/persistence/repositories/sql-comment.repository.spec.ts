@@ -109,7 +109,7 @@ describe('SqlCommentRepository', () => {
     ]);
   });
 
-  it.todo("find a thread's root comments having one of its reply matching a search query", async () => {
+  it.skip("find a thread's root comments having one of its reply matching a search query", async () => {
     const author = create.author(await save(create.user()));
     const thread = await save(create.thread({ author }));
 

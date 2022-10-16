@@ -5,9 +5,10 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.js",
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc -b && cp -r ./email-templates ./dist",
     "lint": "eslint src",
-    "test": "vitest",
+    "test": "NODE_NO_WARNINGS=1 mocha",
     "start": "nodemon",
     "db:create": "mikro-orm database:create",
     "db:drop": "mikro-orm schema:drop --drop-db -r",
@@ -20,6 +21,11 @@
     "useTsNode": true,
     "configPaths": [
       "./src/persistence/mikro-orm/mikro-orm.config.ts"
+    ]
+  },
+  "mocha": {
+    "require": [
+      "./mocha.setup.ts"
     ]
   },
   "dependencies": {
