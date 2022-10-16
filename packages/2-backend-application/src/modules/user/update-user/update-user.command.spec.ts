@@ -1,5 +1,6 @@
 import {
   factories,
+  ProfileImageChangedEvent,
   ProfileImageData,
   ProfileImageType,
   StubGeneratorAdapter,
@@ -7,17 +8,18 @@ import {
   User,
 } from 'backend-domain';
 
-import { InMemoryUserRepository } from '../../../adapters';
+import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';
 
 import { UpdateUserCommand, UpdateUserHandler } from './update-user.command';
 
 describe('UpdateUserCommand', () => {
+  const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const userRepository = new InMemoryUserRepository();
   const profileImageStore = new StubProfileImageStoreAdapter();
 
-  const handler = new UpdateUserHandler(userRepository);
+  const handler = new UpdateUserHandler(eventBus, userRepository);
 
   const create = factories({ profileImageStore, generator });
 
@@ -44,13 +46,15 @@ describe('UpdateUserCommand', () => {
     const user = create.user({ id: userId, profileImage: null });
 
     userRepository.add(user);
-    generator.nextId = 'imageId';
+    generator.nextId = imageId;
 
     await execute(user, imageData);
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', profileImage);
 
     expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
+
+    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, imageId));
   });
 
   it("changes the user's profile image", async () => {
@@ -64,6 +68,8 @@ describe('UpdateUserCommand', () => {
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', profileImage);
     expect(await profileImageStore.readProfileImage(profileImage)).toEqual(imageData);
+
+    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, imageId));
   });
 
   it("unsets the user's profile image", async () => {
@@ -76,5 +82,7 @@ describe('UpdateUserCommand', () => {
 
     expect(userRepository.get(user.id)).toHaveProperty('profileImage', null);
     expect(await profileImageStore.readProfileImage(profileImage)).toBeDefined();
+
+    expect(eventBus).toHaveEmitted(new ProfileImageChangedEvent(user.id, null));
   });
 });

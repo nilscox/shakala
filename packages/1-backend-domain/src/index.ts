@@ -21,6 +21,8 @@ export * from './events/authentication/user-authenticated.event';
 export * from './events/authentication/user-authentication-failed.event';
 export * from './events/authentication/user-created.event';
 export * from './events/authentication/user-signed-out.event';
+export * from './events/profile/email-address-validated.event';
+export * from './events/profile/profile-image-changed.event';
 
 export * from './interfaces/crypto.interface';
 export * from './interfaces/date.interface';

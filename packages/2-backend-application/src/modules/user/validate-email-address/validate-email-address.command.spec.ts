@@ -1,14 +1,20 @@
-import { EmailValidationFailed, factories } from 'backend-domain';
+import { EmailAddressValidatedEvent, EmailValidationFailed, factories, User } from 'backend-domain';
 
-import { InMemoryUserRepository } from '../../../adapters';
+import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
+import { ExecutionContext } from '../../../utils';
 
 import { ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './validate-email-address.command';
 
 describe('ValidateEmailAddressCommand', () => {
+  const eventBus = new StubEventBus();
   const userRepository = new InMemoryUserRepository();
-  const handler = new ValidateEmailAddressHandler(userRepository);
+  const handler = new ValidateEmailAddressHandler(eventBus, userRepository);
 
   const create = factories();
+
+  const execute = async (user: User, token: string) => {
+    await handler.handle(new ValidateEmailAddressCommand(user.id, token), ExecutionContext.as(user));
+  };
 
   it("confirms the user's email address using its email validation token", async () => {
     const token = 'token';
@@ -16,9 +22,20 @@ describe('ValidateEmailAddressCommand', () => {
 
     userRepository.add(user);
 
-    await handler.handle(new ValidateEmailAddressCommand(user.id, token));
+    await execute(user, token);
 
     expect(userRepository.get(user.id)).toHaveProperty('isEmailValidated', true);
+  });
+
+  it('emits an EmailAddressValidatedEvent', async () => {
+    const token = 'token';
+    const user = create.user({ emailValidationToken: token });
+
+    userRepository.add(user);
+
+    await execute(user, token);
+
+    expect(eventBus).toHaveEmitted(new EmailAddressValidatedEvent(user.id));
   });
 
   it('throws an error when the tokens do not match', async () => {
@@ -26,9 +43,7 @@ describe('ValidateEmailAddressCommand', () => {
 
     userRepository.add(user);
 
-    const error = await expect
-      .rejects(handler.handle(new ValidateEmailAddressCommand(user.id, 'nope')))
-      .with(EmailValidationFailed);
+    const error = await expect.rejects(execute(user, 'nope')).with(EmailValidationFailed);
 
     expect(error).toHaveProperty('details.reason', 'InvalidToken');
   });
@@ -38,9 +53,7 @@ describe('ValidateEmailAddressCommand', () => {
 
     userRepository.add(user);
 
-    const error = await expect
-      .rejects(handler.handle(new ValidateEmailAddressCommand(user.id, '')))
-      .with(EmailValidationFailed);
+    const error = await expect.rejects(execute(user, '')).with(EmailValidationFailed);
 
     expect(error).toHaveProperty('details.reason', 'EmailAlreadyValidated');
   });

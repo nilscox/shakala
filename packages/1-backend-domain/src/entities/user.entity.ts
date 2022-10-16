@@ -6,6 +6,8 @@ import { UserAuthenticatedEvent } from '../events/authentication/user-authentica
 import { UserAuthenticationFailedEvent } from '../events/authentication/user-authentication-failed.event';
 import { UserCreatedEvent } from '../events/authentication/user-created.event';
 import { UserSignedOutEvent } from '../events/authentication/user-signed-out.event';
+import { EmailAddressValidatedEvent } from '../events/profile/email-address-validated.event';
+import { ProfileImageChangedEvent } from '../events/profile/profile-image-changed.event';
 import { CryptoPort } from '../interfaces/crypto.interface';
 import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
@@ -137,6 +139,8 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     this.props.emailValidationToken = null;
+
+    this.addEvent(new EmailAddressValidatedEvent(this.id));
   }
 
   async getProfileImageData(): Promise<ProfileImageData | null> {
@@ -163,8 +167,11 @@ export class User extends AggregateRoot<UserProps> {
 
       await this.profileImageStore.writeProfileImage(this.id, profileImage, data);
       this.props.profileImage = profileImage;
+
+      this.addEvent(new ProfileImageChangedEvent(this.id, imageId));
     } else {
       this.props.profileImage = null;
+      this.addEvent(new ProfileImageChangedEvent(this.id, null));
     }
   }
 }

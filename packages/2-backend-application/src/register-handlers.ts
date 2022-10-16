@@ -51,8 +51,8 @@ export const registerHandlers = (
   // account
   registerQuery(GetUserByIdQuery, new GetUserByIdHandler(userRepository));
   registerQuery(GetUserByEmailQuery, new GetUserByEmailHandler(userRepository));
-  registerCommand(ValidateEmailAddressCommand, new ValidateEmailAddressHandler(userRepository));
-  registerCommand(UpdateUserCommand, new UpdateUserHandler(userRepository));
+  registerCommand(ValidateEmailAddressCommand, new ValidateEmailAddressHandler(eventBus, userRepository));
+  registerCommand(UpdateUserCommand, new UpdateUserHandler(eventBus, userRepository));
 
   // user
   registerQuery(GetProfileImageQuery, new GetProfileImageHandler(profileImageStore));
