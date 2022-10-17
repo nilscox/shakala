@@ -16,7 +16,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async handle(event: UserCreatedEvent, ctx: ExecutionContext): Promise<void> {
+  async handle(event: UserCreatedEvent): Promise<void> {
     const user = await this.userRepository.findByIdOrFail(event.userId);
     const { apiBaseUrl } = this.config.app();
 
@@ -25,7 +25,7 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
         nick: user.nick.toString(),
         emailValidationLink: `${apiBaseUrl}/auth/signup/${user.id}/validate/${user.emailValidationToken}`,
       }),
-      ctx,
+      ExecutionContext.unauthenticated,
     );
   }
 }

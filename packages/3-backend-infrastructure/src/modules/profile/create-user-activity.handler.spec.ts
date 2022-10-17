@@ -16,7 +16,7 @@ describe('CreateUserActivityHandler', () => {
   it('executes a CreateUserActivity command', async () => {
     const event = new UserCreatedEvent(user.id);
 
-    await handler.handle(event, ExecutionContext.unauthenticated);
+    await handler.handle(event);
 
     expect(commandBus.execute).toHaveBeenCalledWith(
       new CreateUserActivityCommand(event),

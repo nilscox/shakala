@@ -146,7 +146,7 @@ export class Application {
 
     this.commandBus = new RealCommandBus();
     this.queryBus = new RealQueryBus();
-    this.eventBus = new EventBus(this.adapters.logger);
+    this.eventBus = new EventBus();
 
     this.logger.log('registering query and command handlers');
 
@@ -169,7 +169,7 @@ export class Application {
 
     this.logger.log('registering domain event handlers');
 
-    this.eventBus.registerHandler(
+    this.eventBus.subscribe(
       UserCreatedEvent,
       new UserCreatedHandler(this.config, this.repositories.userRepository, this.commandBus),
     );
@@ -189,7 +189,7 @@ export class Application {
     ];
 
     for (const event of events) {
-      this.eventBus.registerHandler(event, new CreateUserActivityHandler(this.commandBus));
+      this.eventBus.subscribe(event, new CreateUserActivityHandler(this.commandBus));
     }
 
     this.logger.info('application initialized');

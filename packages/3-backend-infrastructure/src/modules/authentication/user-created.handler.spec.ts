@@ -22,11 +22,9 @@ describe('UserCreatedHandler', () => {
   });
 
   it('sends a welcome email to the user', async () => {
-    const ctx = new ExecutionContext(user);
-
     userRepository.add(user);
 
-    await handler.handle(new UserCreatedEvent(user.id), ctx);
+    await handler.handle(new UserCreatedEvent(user.id));
 
     const emailValidationLink = `https://api.url/auth/signup/${user.id}/validate/${user.emailValidationToken}`;
 
@@ -35,7 +33,7 @@ describe('UserCreatedHandler', () => {
         nick: user.nick.toString(),
         emailValidationLink,
       }),
-      ctx,
+      ExecutionContext.unauthenticated,
     );
   });
 });
