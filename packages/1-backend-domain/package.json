@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "clean": "rm -rf dist",
-    "test": "exit 0",
+    "test": "mocha",
     "lint": "eslint src"
   }
 }

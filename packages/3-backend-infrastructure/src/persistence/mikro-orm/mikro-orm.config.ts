@@ -3,8 +3,16 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import dotenv from 'dotenv';
 
-import { SqlComment, SqlProfileImage, SqlReaction, SqlSession, SqlThread, SqlUser } from '../entities';
-import { SqlCommentReport } from '../entities/sql-comment-report.entity';
+import {
+  SqlComment,
+  SqlCommentReport,
+  SqlProfileImage,
+  SqlReaction,
+  SqlSession,
+  SqlThread,
+  SqlUser,
+  SqlUserActivity,
+} from '../entities';
 
 dotenv.config();
 
@@ -16,6 +24,17 @@ const {
   DATABASE_NAME: dbName,
 } = process.env;
 
+const entities = [
+  SqlComment,
+  SqlCommentReport,
+  SqlProfileImage,
+  SqlReaction,
+  SqlSession,
+  SqlThread,
+  SqlUser,
+  SqlUserActivity,
+];
+
 const config: Options<PostgreSqlDriver> = {
   type: 'postgresql',
   host,
@@ -24,7 +43,7 @@ const config: Options<PostgreSqlDriver> = {
   dbName,
   debug: false,
   metadataProvider: TsMorphMetadataProvider,
-  entities: [SqlComment, SqlCommentReport, SqlProfileImage, SqlReaction, SqlSession, SqlThread, SqlUser],
+  entities,
   cache: { options: { cacheDir: 'node_modules/.cache/mikro-orm' } },
   migrations: {
     path: 'src/persistence/migrations',

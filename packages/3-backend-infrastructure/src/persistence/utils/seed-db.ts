@@ -70,6 +70,9 @@ const seed = async () => {
         );
       }
     });
+
+    // wait for all events to finish
+    await new Promise(r => setTimeout(r, 200));
   } finally {
     await app.close();
   }

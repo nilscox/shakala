@@ -1,3 +1,4 @@
+export * from './create-user-activity/create-user-activity.command';
 export * from './get-profile-image/get-profile-image.query';
 export * from './get-user-by-email/get-user-by-email.query';
 export * from './get-user-by-id/get-user-by-id.query';

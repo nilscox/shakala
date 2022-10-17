@@ -50,6 +50,8 @@ describe('SqlCommentRepository', () => {
     await repository.save(comment);
 
     await comment.edit(user, 'edited text');
+    comment.clearEvents();
+
     await repository.save(comment);
 
     expect(await repository.findById(comment.id)).toEqual(comment);

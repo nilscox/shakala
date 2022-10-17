@@ -10,8 +10,10 @@ export * from './entities/profile-image.value-object';
 export * from './entities/thread.entity';
 export * from './entities/timestamp.value-object';
 export * from './entities/user.entity';
+export * from './entities/user-activity.entity';
 
 export * from './services/comment.service';
+export * from './services/user-activity.service';
 
 export * from './ddd/domain-event';
 export * from './ddd/entity';

@@ -1,10 +1,10 @@
-import { CommentService, DomainDependencies } from 'backend-domain';
+import { CommentService, DomainDependencies, UserActivityService } from 'backend-domain';
 import { ClassType } from 'shared';
 
 // prettier-ignore
 import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler } from './cqs';
 // prettier-ignore
-import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort } from './interfaces';
+import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort, UserActivityRepository } from './interfaces';
 // prettier-ignore
 import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler, SignOutCommand, SignOutCommandHandler } from './modules/authentication';
 // prettier-ignore
@@ -12,7 +12,7 @@ import { SendEmailCommand, SendEmailHandler } from './modules/email';
 // prettier-ignore
 import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
 // prettier-ignore
-import { GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
+import { CreateUserActivityCommand, CreateUserActivityHandler, GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
 
 export type ApplicationDependencies = DomainDependencies & {
   logger: LoggerPort;
@@ -23,6 +23,7 @@ export type ApplicationDependencies = DomainDependencies & {
 
 export type Repositories = {
   userRepository: UserRepository;
+  userActivityRepository: UserActivityRepository;
   threadRepository: ThreadRepository;
   commentRepository: CommentRepository;
   reactionRepository: ReactionRepository;
@@ -38,7 +39,10 @@ export const registerHandlers = (
   dependencies: ApplicationDependencies,
 ) => {
   const { generator, crypto, date, filesystem, emailCompiler, emailSender, profileImageStore } = dependencies;
-  const { userRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
+  const { userRepository, userActivityRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
+
+  const commentService = new CommentService(generator);
+  const userActivityService = new UserActivityService(generator, date);
 
   // email
   registerCommand(SendEmailCommand, new SendEmailHandler(filesystem, emailCompiler, emailSender));
@@ -57,17 +61,18 @@ export const registerHandlers = (
   // user
   registerQuery(GetProfileImageQuery, new GetProfileImageHandler(profileImageStore));
 
+  // profile
+  registerCommand(CreateUserActivityCommand, new CreateUserActivityHandler(userActivityRepository, threadRepository, commentRepository, userActivityService));
+
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
   registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
-  registerCommand(CreateThreadCommand, new CreateThreadHandler(generator, date, threadRepository));
-
-  const commentService = new CommentService(generator);
+  registerCommand(CreateThreadCommand, new CreateThreadHandler(eventBus, generator, date, threadRepository));
 
   // comment
   registerQuery(GetCommentQuery, new GetCommentQueryHandler(commentRepository));
-  registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(generator, date, commentRepository));
-  registerCommand(EditCommentCommand, new EditCommentCommandHandler(commentRepository));
-  registerCommand(SetReactionCommand, new SetReactionCommandHandler(commentRepository, reactionRepository, commentService));
-  registerCommand(ReportCommentCommand, new ReportCommentHandler(commentRepository, commentReportRepository, commentService));
+  registerCommand(CreateCommentCommand, new CreateCommentCommandHandler(eventBus, generator, date, commentRepository));
+  registerCommand(EditCommentCommand, new EditCommentCommandHandler(eventBus, commentRepository));
+  registerCommand(SetReactionCommand, new SetReactionCommandHandler(eventBus, commentRepository, reactionRepository, commentService));
+  registerCommand(ReportCommentCommand, new ReportCommentHandler(eventBus, commentRepository, commentReportRepository, commentService));
 }

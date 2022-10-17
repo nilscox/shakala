@@ -8,11 +8,26 @@ import {
   InMemoryReactionRepository,
   InMemoryThreadRepository,
   InMemoryUserRepository,
+  InMemoryUserActivityRepository,
   registerHandlers,
   Repositories,
   ApplicationDependencies,
 } from 'backend-application';
-import { UserCreatedEvent } from 'backend-domain';
+import {
+  CommentCreatedEvent,
+  CommentEditedEvent,
+  CommentReactionSetEvent,
+  CommentReportedEvent,
+  DomainEvent,
+  EmailAddressValidatedEvent,
+  ProfileImageChangedEvent,
+  ThreadCreatedEvent,
+  UserAuthenticatedEvent,
+  UserAuthenticationFailedEvent,
+  UserCreatedEvent,
+  UserSignedOutEvent,
+} from 'backend-domain';
+import { ClassType } from 'shared';
 
 import {
   BcryptAdapter,
@@ -32,6 +47,7 @@ import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
+import { CreateUserActivityHandler } from './modules/profile/create-user-activity.handler';
 import {
   SqlCommentRepository,
   SqlReactionRepository,
@@ -40,6 +56,7 @@ import {
 } from './persistence';
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
+import { SqlUserActivityRepository } from './persistence/repositories/sql-user-activity.repository';
 
 export class Application {
   private adapters = {} as ApplicationDependencies & { config: ConfigPort };
@@ -94,6 +111,7 @@ export class Application {
 
       this.repositories = {
         userRepository: new SqlUserRepository(em, this.adapters),
+        userActivityRepository: new SqlUserActivityRepository(em, this.adapters),
         threadRepository: new SqlThreadRepository(em, this.adapters),
         reactionRepository: new SqlReactionRepository(em, this.adapters),
         commentRepository: new SqlCommentRepository(em, this.adapters),
@@ -106,6 +124,7 @@ export class Application {
 
       this.repositories = {
         userRepository: new InMemoryUserRepository(),
+        userActivityRepository: new InMemoryUserActivityRepository(),
         threadRepository: new InMemoryThreadRepository(),
         reactionRepository,
         commentRepository: new InMemoryCommentRepository(reactionRepository),
@@ -154,6 +173,24 @@ export class Application {
       UserCreatedEvent,
       new UserCreatedHandler(this.config, this.repositories.userRepository, this.commandBus),
     );
+
+    const events: Array<ClassType<DomainEvent>> = [
+      EmailAddressValidatedEvent,
+      ProfileImageChangedEvent,
+      UserAuthenticationFailedEvent,
+      UserSignedOutEvent,
+      UserCreatedEvent,
+      UserAuthenticatedEvent,
+      ThreadCreatedEvent,
+      CommentCreatedEvent,
+      CommentEditedEvent,
+      CommentReportedEvent,
+      CommentReactionSetEvent,
+    ];
+
+    for (const event of events) {
+      this.eventBus.registerHandler(event, new CreateUserActivityHandler(this.commandBus));
+    }
 
     this.logger.info('application initialized');
   }

@@ -17,6 +17,7 @@ export * from './libs/wait';
 
 export * from './types/class-type';
 export * from './types/deep-partial';
+export * from './types/instance-of';
 export * from './types/replace';
 
 export * from './schemas/authentication';
@@ -28,3 +29,5 @@ export * from './factories';
 
 export * from './test/mock-fn';
 export * from './test/mock-object';
+
+export * from './user-activity';
