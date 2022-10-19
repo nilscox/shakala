@@ -48,7 +48,7 @@ describe('SqlCommentReportRepository', () => {
 
     await repository.save(report);
 
-    expect(await repository.findBy({ commentId: '', reportedById: '' })).toBeUndefined();
+    expect(await repository.findBy({ commentId: '', reportedById: '' })).toBe(undefined);
     expect(await repository.findBy({ commentId: comment.id, reportedById: reporter.id })).toEqual(report);
   });
 });

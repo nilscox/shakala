@@ -24,8 +24,8 @@ describe('openReportModal', () => {
   it('requires user authentication', () => {
     store.dispatch(openReportModal(comment.id));
 
-    expect(store.routerGateway.getQueryParam('report')).toBeUndefined();
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.getQueryParam('report')).toBe(undefined);
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   it('shows a notification when the user is not authenticated', () => {

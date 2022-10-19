@@ -64,7 +64,7 @@ describe('comments selectors', () => {
     });
 
     it('returns undefined when the comment has no parent', () => {
-      expect(store.select(selectParentComment, parent.id)).toBeUndefined();
+      expect(store.select(selectParentComment, parent.id)).toBe(undefined);
     });
 
     it("returns a reply's parent comment", () => {

@@ -27,7 +27,7 @@ describe('handleAuthenticationFormChange', () => {
 
     store.dispatch(handleAuthenticationFormChange(true, 'email'));
 
-    expect(store.select(selectAuthenticationFieldError, AuthenticationField.email)).toBeUndefined();
+    expect(store.select(selectAuthenticationFieldError, AuthenticationField.email)).toBe(undefined);
   });
 
   it('clears the form error', () => {
@@ -35,6 +35,6 @@ describe('handleAuthenticationFormChange', () => {
 
     store.dispatch(handleAuthenticationFormChange(true, 'email'));
 
-    expect(store.select(selectAuthenticationFormError)).toBeUndefined();
+    expect(store.select(selectAuthenticationFormError)).toBe(undefined);
   });
 });

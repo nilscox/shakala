@@ -82,7 +82,7 @@ describe('createRootComment', () => {
 
     await execute();
 
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   it('clears the message input text', async () => {
@@ -104,7 +104,7 @@ describe('createRootComment', () => {
 
     await execute();
 
-    expect(store.storageGateway.get(DraftCommentKind.root, thread.id)).toBeUndefined();
+    expect(store.storageGateway.get(DraftCommentKind.root, thread.id)).toBe(undefined);
   });
 
   describe('authorization error handling', () => {

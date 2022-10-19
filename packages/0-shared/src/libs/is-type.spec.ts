@@ -7,7 +7,7 @@ describe('isType', () => {
   });
 
   it('returns undefined when the value does not match the given type', () => {
-    expect(isType('number', 'hello')).toBeUndefined();
-    expect(isType('string', Symbol())).toBeUndefined();
+    expect(isType('number', 'hello')).toBe(undefined);
+    expect(isType('string', Symbol())).toBe(undefined);
   });
 });

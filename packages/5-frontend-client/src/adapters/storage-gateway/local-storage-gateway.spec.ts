@@ -50,7 +50,7 @@ describe('LocalStorageGateway', () => {
   };
 
   it('reads a draft root comment text', async () => {
-    expect(await gateway.getDraftCommentText(DraftCommentKind.root, 'threadId')).toBeUndefined();
+    expect(await gateway.getDraftCommentText(DraftCommentKind.root, 'threadId')).toBe(undefined);
 
     mockDraftRootComments({ threadId: 'text' });
 

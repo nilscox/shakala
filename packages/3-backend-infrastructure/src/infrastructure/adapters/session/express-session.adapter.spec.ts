@@ -26,7 +26,7 @@ describe('ExpressSessionAdapter', () => {
     });
 
     it('returns nothing when the request is not authenticated', async () => {
-      expect(await session.getUser(new MockRequest())).toBeUndefined();
+      expect(await session.getUser(new MockRequest())).toBe(undefined);
     });
   });
 
@@ -44,7 +44,7 @@ describe('ExpressSessionAdapter', () => {
 
       session.unsetUser(request);
 
-      expect(request.session.userId).toBeUndefined();
+      expect(request.session.userId).toBe(undefined);
     });
   });
 });

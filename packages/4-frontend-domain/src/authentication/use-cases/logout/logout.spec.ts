@@ -18,7 +18,7 @@ describe('logout', () => {
     await store.dispatch(logout());
 
     expect(store.authenticationGateway.logout).toHaveBeenCalledWith();
-    expect(store.user).toBeUndefined();
+    expect(store.user).toBe(undefined);
   });
 
   it('redirects to the home page', async () => {

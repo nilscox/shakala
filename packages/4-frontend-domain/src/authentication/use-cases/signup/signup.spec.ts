@@ -49,7 +49,7 @@ describe('signup', () => {
   it('closes the authentication modal', async () => {
     await store.dispatch(signup(email, password, nick));
 
-    expect(store.routerGateway.currentAuthenticationForm).toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBe(undefined);
   });
 
   it('shows a snackbar', async () => {
@@ -85,7 +85,7 @@ describe('signup', () => {
 
     await store.dispatch(signup(email, password, nick));
 
-    expect(store.select(selectAuthenticationFieldError, AuthenticationField.password)).toBeUndefined();
+    expect(store.select(selectAuthenticationFieldError, AuthenticationField.password)).toBe(undefined);
   });
 
   it('throws when the gateway throws', async () => {

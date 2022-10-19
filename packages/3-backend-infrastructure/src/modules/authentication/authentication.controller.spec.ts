@@ -210,7 +210,7 @@ describe('AuthenticationController', () => {
       const response = await logout();
 
       expect(response).toHaveStatus(204);
-      expect(session.user).toBeUndefined();
+      expect(session.user).toBe(undefined);
     });
 
     it('fails to log out when the user is not authenticated', async () => {

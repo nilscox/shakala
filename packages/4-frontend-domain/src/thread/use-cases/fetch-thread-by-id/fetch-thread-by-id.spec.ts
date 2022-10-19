@@ -35,7 +35,7 @@ describe('fetchThreadById', () => {
     expect(store.threadGateway.getById).toHaveBeenCalledWith(threadId);
 
     expect(store.select(selectIsLoadingThread, threadId)).toBe(false);
-    expect(store.select(selectLoadingThreadError, threadId)).toBeUndefined();
+    expect(store.select(selectLoadingThreadError, threadId)).toBe(undefined);
 
     expect(store.select(selectThread, threadId)).toEqual({
       ...threadDto,

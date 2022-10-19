@@ -81,7 +81,7 @@ describe('SetReactionCommand', () => {
 
     await execute(user, null);
 
-    expect(reactionRepository.get(reactionId)).toBeUndefined();
+    expect(reactionRepository.get(reactionId)).toBe(undefined);
 
     expect(eventBus).toHaveEmitted(new CommentReactionSetEvent(comment.id, user.id, null));
   });

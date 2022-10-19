@@ -53,7 +53,7 @@ describe('CommentForm', () => {
     await user.type(input, 'comment');
     await user.click(screen.getByText('Envoyer'));
 
-    expect(store.select(selectCreateRootCommentError, threadId)).toBeUndefined();
+    expect(store.select(selectCreateRootCommentError, threadId)).toBe(undefined);
 
     await waitFor(() => {
       expect(store.select(selectCreatedRootComments)).toHaveLength(1);
@@ -85,7 +85,7 @@ describe('CommentForm', () => {
     await user.type(input, 'reply');
     await user.click(screen.getByText('Envoyer'));
 
-    expect(store.select(selectCreateReplyError, parentCommentId)).toBeUndefined();
+    expect(store.select(selectCreateReplyError, parentCommentId)).toBe(undefined);
 
     await waitFor(() => {
       expect(store.select(selectCommentReplies, parentCommentId)).toHaveLength(1);
@@ -119,7 +119,7 @@ describe('CommentForm', () => {
     await user.type(input, 'edited text');
     await user.click(screen.getByText('Envoyer'));
 
-    expect(store.select(selectEditCommentError, commentId)).toBeUndefined();
+    expect(store.select(selectEditCommentError, commentId)).toBe(undefined);
 
     await waitFor(() => {
       expect(store.select(selectIsEditingComment, commentId)).toBe(false);

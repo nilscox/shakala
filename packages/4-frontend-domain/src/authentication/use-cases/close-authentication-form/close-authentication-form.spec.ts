@@ -13,6 +13,6 @@ describe('closeAuthenticationForm', () => {
   it('removes the authentication form state from the url', () => {
     store.dispatch(closeAuthenticationForm());
 
-    expect(store.routerGateway.currentAuthenticationForm).toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBe(undefined);
   });
 });

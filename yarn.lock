@@ -2045,6 +2045,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.18.3":
+  version "7.19.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.4.tgz#a42f814502ee467d55b38dd1c256f53a7b885c78"
+  integrity sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.18.9":
   version "7.18.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.9.tgz#b4fcfce55db3d2e5e080d2490f608a3b9f407f4a"
@@ -2542,20 +2549,20 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nilscox/expect-dom@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@nilscox/expect-dom/0.1.1/a33a558b67f2761e1f353f1294cba022c25a5d73#a33a558b67f2761e1f353f1294cba022c25a5d73"
-  integrity sha512-zFIpIM1COW7RKBMq8nWgmhDY9xiDPQFuSwtL5id6pFTxW9vghROx4ISC7s8pm8srsRGwp0jXIgVRZ5xqXu1Ymg==
+"@nilscox/expect-dom@^0.1.2":
+  version "0.1.2"
+  resolved "https://npm.pkg.github.com/download/@nilscox/expect-dom/0.1.2/996a2e93c31150f1cdb463832b84b5929460acc8#996a2e93c31150f1cdb463832b84b5929460acc8"
+  integrity sha512-407CdOGIZwnd3IF0VvNaUfO6+0g3+eiBTqVQTyoPtJsTifcX8hwBC9q0RH83faTMruSxRO0tDGZato3j9BehsA==
 
-"@nilscox/expect-sinon@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@nilscox/expect-sinon/0.1.1/409c6df67e50939e1290e9f37e7359ce5243bd6a#409c6df67e50939e1290e9f37e7359ce5243bd6a"
-  integrity sha512-0DwoLQsugzumxFhVAEsCPnW89oCxa1CbdETUtL+WcAAjoY/AXLk/IX6y33DnPUwrJ4wAj8WbrGvkfpAcbYZGnw==
+"@nilscox/expect-sinon@^0.1.3":
+  version "0.1.3"
+  resolved "https://npm.pkg.github.com/download/@nilscox/expect-sinon/0.1.3/918ffef51dd495ac7df727171cf9f01581083ef0#918ffef51dd495ac7df727171cf9f01581083ef0"
+  integrity sha512-f02QpjJP/0vn9qT7Opypn+9lpK/5m5SEZ7k5xT3834cFuFltCXmxshTlKtEc3ZJAUmwxqR0YTMAeE57/hd9l7g==
 
-"@nilscox/expect@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@nilscox/expect/0.1.1/f10c889f7877e38acc0e576e94c070a5accb80a9#f10c889f7877e38acc0e576e94c070a5accb80a9"
-  integrity sha512-4uoBGFEnYbNmMbHQgd4HI+OS0i0MK0819eqIApBP7n0UrAaQ02fIly/EUNjkpJFr1NXvisSLskE6TKRe21Dkog==
+"@nilscox/expect@^0.2.3":
+  version "0.2.3"
+  resolved "https://npm.pkg.github.com/download/@nilscox/expect/0.2.3/f0bb17855d6732b3c30efa3281164a0b17eb0f08#f0bb17855d6732b3c30efa3281164a0b17eb0f08"
+  integrity sha512-3x32J+PQn769eayCfv81QPCRVyPjDb2DnWXenH+ohXxRzFfgVQqV05Hzx3MRdkzqadIRdvBSVrqsXFe5xIl+1w==
 
 "@nilscox/redux-query@^0.1.9":
   version "0.1.9"
@@ -2638,6 +2645,14 @@
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
     source-map "^0.7.3"
+
+"@redux-devtools/extension@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@redux-devtools/extension/-/extension-3.2.3.tgz#589361d9a62326558c39c8a2e09c4acdbe6393e0"
+  integrity sha512-y90IIqdQF6kIkP4KfBCfiFrnu9KMrEPUmcnb5A3v12tjfwRJUXecX8vCEbFqqJLjOomvVmis0Aal7QdFjk6CRQ==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    immutable "^4.0.0"
 
 "@rushstack/ts-command-line@^4.12.2":
   version "4.12.2"
@@ -9323,6 +9338,11 @@ ignore@^5.1.4, ignore@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
+
+immutable@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.1.0.tgz#f795787f0db780183307b9eb2091fcac1f6fafef"
+  integrity sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==
 
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"

@@ -86,7 +86,7 @@ describe('editComment', () => {
 
     await execute();
 
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   it('closes the edition form', async () => {
@@ -106,7 +106,7 @@ describe('editComment', () => {
 
     await execute();
 
-    expect(store.storageGateway.get(DraftCommentKind.edition, comment.id)).toBeUndefined();
+    expect(store.storageGateway.get(DraftCommentKind.edition, comment.id)).toBe(undefined);
   });
 
   describe('selectCanSubmitEditCommentForm', () => {

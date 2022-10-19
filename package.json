@@ -24,8 +24,8 @@
     "start:frontend": "yarn workspace frontend-client start"
   },
   "devDependencies": {
-    "@nilscox/expect": "^0.1.1",
-    "@nilscox/expect-sinon": "^0.1.1",
+    "@nilscox/expect": "^0.2.3",
+    "@nilscox/expect-sinon": "^0.1.3",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.16",
     "@types/sinon": "^10.0.13",

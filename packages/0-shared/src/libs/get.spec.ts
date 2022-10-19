@@ -14,9 +14,9 @@ describe('get', () => {
   });
 
   it('returns undefined when the path does not match the object', () => {
-    expect(get(undefined, 'value')).toBeUndefined();
-    expect(get({ nested: 51 }, 'nested', 'value')).toBeUndefined();
-    expect(get({ nested: { nope: 51 } }, 'nested', 'value')).toBeUndefined();
-    expect(get({ nope: { value: 51 } }, 'nested', 'value')).toBeUndefined();
+    expect(get(undefined, 'value')).toBe(undefined);
+    expect(get({ nested: 51 }, 'nested', 'value')).toBe(undefined);
+    expect(get({ nested: { nope: 51 } }, 'nested', 'value')).toBe(undefined);
+    expect(get({ nope: { value: 51 } }, 'nested', 'value')).toBe(undefined);
   });
 });

@@ -36,7 +36,7 @@ describe('SqlUserRepository', () => {
   it('finds a user from its email', async () => {
     const user = create.user({ email: 'user@email.tld' });
 
-    expect(await repository.findByEmail('nope')).toBeUndefined();
+    expect(await repository.findByEmail('nope')).toBe(undefined);
 
     await repository.save(user);
     expect(await repository.findByEmail(user.email)).toEqual(user);
@@ -45,7 +45,7 @@ describe('SqlUserRepository', () => {
   it('finds a user from its nick', async () => {
     const user = create.user({ nick: create.nick('mano') });
 
-    expect(await repository.findByNick(create.nick('nope'))).toBeUndefined();
+    expect(await repository.findByNick(create.nick('nope'))).toBe(undefined);
 
     await repository.save(user);
     expect(await repository.findByNick(user.nick)).toEqual(user);

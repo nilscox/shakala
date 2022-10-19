@@ -84,7 +84,7 @@ describe('createReply', () => {
 
     await execute();
 
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   it('closes the reply form', async () => {
@@ -104,7 +104,7 @@ describe('createReply', () => {
 
     await execute();
 
-    expect(store.storageGateway.get(DraftCommentKind.reply, parent.id)).toBeUndefined();
+    expect(store.storageGateway.get(DraftCommentKind.reply, parent.id)).toBe(undefined);
   });
 
   describe('authorization error handling', () => {

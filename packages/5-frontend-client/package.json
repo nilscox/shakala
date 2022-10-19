@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
-    "@nilscox/expect-dom": "^0.1.1",
+    "@nilscox/expect-dom": "^0.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",

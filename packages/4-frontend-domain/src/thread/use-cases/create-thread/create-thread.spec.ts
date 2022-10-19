@@ -44,7 +44,7 @@ describe('createThread', () => {
 
     await execute();
 
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   it('redirects to the new thread page', async () => {

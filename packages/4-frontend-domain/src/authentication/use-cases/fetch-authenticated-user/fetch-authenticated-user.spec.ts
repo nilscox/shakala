@@ -31,6 +31,6 @@ describe('fetchAuthenticatedUser', () => {
     await store.dispatch(fetchAuthenticatedUser());
 
     expect(store.authenticationGateway.fetchUser).toHaveBeenCalled();
-    expect(store.user).toBeUndefined();
+    expect(store.user).toBe(undefined);
   });
 });

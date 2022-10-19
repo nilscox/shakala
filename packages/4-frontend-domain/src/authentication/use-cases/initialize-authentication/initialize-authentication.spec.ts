@@ -27,8 +27,8 @@ describe('initializeAuthentication', () => {
     store.routerGateway.currentAuthenticationForm = AuthenticationType.signup;
     store.routerGateway.triggerLocationChange();
 
-    expect(store.select(selectAuthenticationFieldError, AuthenticationField.email)).toBeUndefined();
-    expect(store.select(selectAuthenticationFormError)).toBeUndefined();
+    expect(store.select(selectAuthenticationFieldError, AuthenticationField.email)).toBe(undefined);
+    expect(store.select(selectAuthenticationFormError)).toBe(undefined);
   });
 
   it('fetches the authenticated user', async () => {

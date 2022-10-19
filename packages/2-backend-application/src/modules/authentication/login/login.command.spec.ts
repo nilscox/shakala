@@ -39,7 +39,7 @@ describe('LoginCommand', () => {
   };
 
   it('logs in as an existing user', async () => {
-    expect(await login()).toBeUndefined();
+    expect(await login()).toBe(undefined);
   });
 
   it('updates the last login date', async () => {

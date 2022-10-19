@@ -34,7 +34,7 @@ describe('reportComment', () => {
   it('closes the comment report modal', async () => {
     await execute();
 
-    expect(store.routerGateway.getQueryParam('report')).toBeUndefined();
+    expect(store.routerGateway.getQueryParam('report')).toBe(undefined);
   });
 
   it('shows a success notification', async () => {

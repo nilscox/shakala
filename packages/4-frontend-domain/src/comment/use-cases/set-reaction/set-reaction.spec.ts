@@ -100,7 +100,7 @@ describe('setReaction', () => {
 
     await execute();
 
-    expect(store.routerGateway.currentAuthenticationForm).not.toBeUndefined();
+    expect(store.routerGateway.currentAuthenticationForm).toBeDefined();
   });
 
   describe('authorization error handling', () => {

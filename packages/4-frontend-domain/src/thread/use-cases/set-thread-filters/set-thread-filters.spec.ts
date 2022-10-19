@@ -35,14 +35,14 @@ describe('setThreadFilters', () => {
   it('does not store the search param when it is empty', async () => {
     await store.dispatch(setThreadFilters(threadId, { search: '', sort: Sort.dateDesc }));
 
-    expect(store.routerGateway.getQueryParam('search')).toBeUndefined();
+    expect(store.routerGateway.getQueryParam('search')).toBe(undefined);
     expect(store.routerGateway.getQueryParam('sort')).toEqual(Sort.dateDesc);
   });
 
   it('removes all params when there values are the default values', async () => {
     await store.dispatch(setThreadFilters(threadId, { search: '', sort: Sort.relevance }));
 
-    expect(store.routerGateway.getQueryParam('search')).toBeUndefined();
-    expect(store.routerGateway.getQueryParam('sort')).toBeUndefined();
+    expect(store.routerGateway.getQueryParam('search')).toBe(undefined);
+    expect(store.routerGateway.getQueryParam('sort')).toBe(undefined);
   });
 });

@@ -6,6 +6,6 @@ describe('last', () => {
   });
 
   it('returns undefined when the array is empty', () => {
-    expect(last([])).toBeUndefined();
+    expect(last([])).toBe(undefined);
   });
 });
