@@ -1,4 +1,5 @@
-import { InvalidImageFormat, UserGateway } from 'frontend-domain';
+import { InvalidImageFormat, Paginated, UserActivity, UserGateway } from 'frontend-domain';
+import { UserActivityDto, UserActivityType } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 
@@ -22,5 +23,16 @@ export class ApiUserGateway implements UserGateway {
     });
 
     return response.body;
+  }
+
+  async listActivities(page: number): Promise<Paginated<UserActivity<UserActivityType>>> {
+    const query = new URLSearchParams({ page: String(page) });
+    const response = await this.http.get<UserActivityDto<UserActivityType>[]>(`/user/activities?${query}`);
+    const total = Number(response.headers.get('pagination-total'));
+
+    return {
+      items: response.body,
+      total,
+    };
   }
 }

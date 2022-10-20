@@ -1,3 +1,5 @@
+import { UserActivities } from '~/components/domain/user-activities/user-activities';
+
 import { ProfileTitle } from './profile-title';
 
 export const TimelineRoute = () => (
@@ -7,5 +9,6 @@ export const TimelineRoute = () => (
       subTitle="L'activité de votre compte au cours du temps"
       pageTitle="timeline"
     />
+    <UserActivities />
   </div>
 );

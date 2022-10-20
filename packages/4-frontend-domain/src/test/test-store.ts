@@ -168,6 +168,7 @@ class MockThreadGateway implements ThreadGateway {
 
 class MockUserGateway implements UserGateway {
   changeProfileImage = mockImpl<UserGateway['changeProfileImage']>();
+  listActivities = mockImpl<UserGateway['listActivities']>();
 }
 
 export class TestStore implements Dependencies {

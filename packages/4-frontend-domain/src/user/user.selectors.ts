@@ -1,4 +1,7 @@
+import { first, last } from 'shared';
+
 import { State } from '../store.types';
+import { UserActivity } from '../types';
 
 export const selectUser = (state: State) => state.user;
 
@@ -10,4 +13,22 @@ export const selectUserOrFail = (state: State) => {
   }
 
   return user;
+};
+
+const selectUserActivitiesState = (state: State) => state.userActivities;
+
+export const selectUserActivities = (state: State) => {
+  return selectUserActivitiesState(state).items.slice().reverse();
+};
+
+export const selectTotalUserActivities = (state: State) => {
+  return selectUserActivitiesState(state).total;
+};
+
+export const selectIsLastUserActivity = (state: State, activity: UserActivity) => {
+  return activity === first(selectUserActivities(state));
+};
+
+export const selectIsFirstUserActivity = (state: State, activity: UserActivity) => {
+  return activity === last(selectUserActivities(state));
 };

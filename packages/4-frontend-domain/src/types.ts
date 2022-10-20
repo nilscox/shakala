@@ -7,6 +7,8 @@ import {
   HttpErrorBody,
   ReactionTypeDto,
   ThreadDto,
+  UserActivityDto,
+  UserActivityType,
   UserDto,
 } from 'shared';
 import * as yup from 'yup';
@@ -65,11 +67,18 @@ export class ValidationError extends Error {
   }
 }
 
+export type Paginated<T> = {
+  items: T[];
+  total: number;
+};
+
 export type FormField<Form> = keyof Form;
 export type FormErrors<Form> = Partial<Record<FormField<Form>, string>>;
 
 export type AuthUser = AuthUserDto;
 export type User = UserDto;
+
+export type UserActivity<Type extends UserActivityType = UserActivityType> = UserActivityDto<Type>;
 
 export type CommentForm = {
   text: string;
