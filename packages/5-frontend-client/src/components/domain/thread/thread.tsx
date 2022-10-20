@@ -63,7 +63,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
       <div className="my-5 md:my-10">
         <div className="row mb-2 flex-wrap items-center justify-between gap-4">
-          <AvatarNick big {...thread.author} />
+          <AvatarNick size="medium" {...thread.author} />
           <div className="text-muted">
             <time dateTime={thread.date}>{dateFormatted}</time>, {comments?.length ?? '?'} commentaires
           </div>

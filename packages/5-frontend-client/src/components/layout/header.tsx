@@ -41,7 +41,7 @@ const Authentication = () => {
     >
       <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
       <div className="h-6 w-6">
-        <Avatar big image={user?.profileImage} className="h-6 w-6 border-none" />
+        <Avatar size="medium" image={user?.profileImage} className="h-6 w-6 border-none" />
       </div>
     </AuthenticationLink>
   );

@@ -8,8 +8,8 @@ export default {
   component: Avatar,
 } as ComponentMeta<typeof Avatar>;
 
-export const avatar = () => <Avatar />;
-
-export const big = () => <Avatar big />;
+export const small = () => <Avatar />;
+export const medium = () => <Avatar size="medium" />;
+export const big = () => <Avatar size="big" />;
 
 export const withNick = () => <AvatarNick nick="Nick" />;

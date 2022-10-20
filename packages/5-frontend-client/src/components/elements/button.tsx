@@ -32,6 +32,10 @@ export const Button = ({
   </button>
 );
 
+export const SubmitButton = (props: ButtonProps) => {
+  return <Button type="submit" {...props} />;
+};
+
 const LoadingIndicator = () => {
   return <div className="absolute inset-y-0 right-0 animate-loading bg-neutral/20" />;
 };

@@ -91,7 +91,7 @@ type HeaderProps = {
 
 const Header = ({ author, version, onPrev, onNext, onClose }: HeaderProps) => (
   <div className="row items-center">
-    <AvatarNick big nick={author.nick} image={author.profileImage} />
+    <AvatarNick size="medium" nick={author.nick} image={author.profileImage} />
     <VersionSelector version={version} onPrev={onPrev} onNext={onNext} />
     <IconButton className="ml-auto self-start" icon={<Cross />} onClick={onClose} />
   </div>
