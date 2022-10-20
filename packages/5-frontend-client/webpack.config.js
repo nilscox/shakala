@@ -15,6 +15,7 @@ const config = (module.exports = {
   entry: './src/index.tsx',
 
   output: {
+    clean: true,
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
@@ -79,6 +80,8 @@ const config = (module.exports = {
 });
 
 if (NODE_ENV === 'development') {
+  config.output.filename = '[name].js';
+
   config.plugins.push(new ReactRefreshWebpackPlugin());
 
   config.devServer = {
