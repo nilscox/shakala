@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nilscox/redux-query": "^0.1.9",
+    "@redux-devtools/extension": "^3.2.3",
     "normalizr": "^3.6.2",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1"
