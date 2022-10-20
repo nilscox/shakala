@@ -1,5 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { UserActivityRepository } from 'backend-application';
+import { Paginated, Pagination } from 'backend-application/src/utils/pagination';
 import { DomainDependencies, UserActivity } from 'backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
@@ -15,5 +16,17 @@ export class SqlUserActivityRepository
 
   protected get entityName(): string {
     return 'UserActivity';
+  }
+
+  findForUser(userId: string, { limit, offset }: Pagination): Promise<Paginated<UserActivity>> {
+    return this.findAll(
+      {
+        user: userId,
+      },
+      {
+        limit,
+        offset,
+      },
+    );
   }
 }

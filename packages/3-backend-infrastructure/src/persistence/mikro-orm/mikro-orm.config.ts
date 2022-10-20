@@ -22,6 +22,7 @@ const {
   DATABASE_USER: user,
   DATABASE_PASSWORD: password,
   DATABASE_NAME: dbName,
+  DATABASE_DEBUG: debug,
 } = process.env;
 
 const entities = [
@@ -41,7 +42,7 @@ const config: Options<PostgreSqlDriver> = {
   user,
   password,
   dbName,
-  debug: false,
+  debug: debug === 'true',
   metadataProvider: TsMorphMetadataProvider,
   entities,
   cache: { options: { cacheDir: 'node_modules/.cache/mikro-orm' } },

@@ -11,6 +11,14 @@ export class Response<Body = unknown> {
     return new Response(200, body);
   }
 
+  static paginated<Item>(items: Item[], total: number): Response<Item[]> {
+    const response = this.ok(items);
+
+    response.headers.set('Pagination-Total', String(total));
+
+    return response;
+  }
+
   static created<Body>(body: Body): Response<Body> {
     return new Response(201, body);
   }

@@ -2,6 +2,8 @@ import clone from 'lodash.clonedeep';
 
 import { Repository } from '../interfaces';
 
+import { Paginated, Pagination } from './pagination';
+
 export class InMemoryRepository<Item extends { id: string }> implements Repository<Item> {
   private items: Map<string, Item>;
 
@@ -15,8 +17,13 @@ export class InMemoryRepository<Item extends { id: string }> implements Reposito
     }
   }
 
-  async findAll(): Promise<Item[]> {
-    return this.all();
+  async findAll(): Promise<Paginated<Item>> {
+    const items = this.all();
+
+    return {
+      items,
+      total: items.length,
+    };
   }
 
   async findById(id: string): Promise<Item | undefined> {
@@ -77,5 +84,12 @@ export class InMemoryRepository<Item extends { id: string }> implements Reposito
 
   filter(predicate: (item: Item) => boolean) {
     return this.all().filter(predicate);
+  }
+
+  paginate(items: Item[], { offset, limit }: Pagination): Paginated<Item> {
+    return {
+      items: items.slice(offset, offset + limit),
+      total: items.length,
+    };
   }
 }

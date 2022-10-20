@@ -15,8 +15,8 @@ export class SqlThreadRepository extends BaseSqlRepository<SqlThread, Thread> im
   }
 
   async findLasts(count: number): Promise<Thread[]> {
-    const threads = await this.findAll();
+    const { items } = await this.findAll();
 
-    return threads.reverse().slice(0, count);
+    return items.reverse().slice(0, count);
   }
 }

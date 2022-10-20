@@ -50,4 +50,22 @@ describe('Server', function () {
 
     await server.close();
   });
+
+  it('allows to read the Pagination-Total header', async () => {
+    const server = new TestServer();
+    const agent = server.agent();
+
+    server.override({
+      logger: new MockLoggerAdapter(),
+      config: new StubConfigAdapter().withEnvDatabase(),
+    });
+
+    await server.init();
+
+    const response = await agent.get('/healthcheck');
+
+    expect(response.headers).toHaveProperty('access-control-expose-headers', 'Pagination-Total');
+
+    await server.close();
+  });
 });

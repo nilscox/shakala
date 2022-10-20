@@ -3,7 +3,7 @@ import { UserActivityPayload, UserActivityType } from 'shared';
 import { Entity, EntityProps } from '../ddd/entity';
 
 type UserActivityProps<Type extends UserActivityType> = EntityProps<{
-  type: UserActivityType;
+  type: Type;
   date: Date;
   userId: string;
   payload: UserActivityPayload[Type];

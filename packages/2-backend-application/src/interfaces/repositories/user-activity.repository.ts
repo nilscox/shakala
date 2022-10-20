@@ -1,6 +1,8 @@
 import type { UserActivity } from 'backend-domain';
 
+import { Paginated, Pagination } from '../../utils/pagination';
 import { Repository } from '../repository';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface UserActivityRepository extends Repository<UserActivity> {}
+export interface UserActivityRepository extends Repository<UserActivity> {
+  findForUser(userId: string, pagination: Pagination): Promise<Paginated<UserActivity>>;
+}

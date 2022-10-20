@@ -21,6 +21,7 @@ export * from './types/instance-of';
 export * from './types/replace';
 
 export * from './schemas/authentication';
+export * from './schemas/pagination';
 export * from './schemas/thread';
 
 export * from './dtos';

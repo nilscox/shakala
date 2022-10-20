@@ -13,6 +13,8 @@ import { SendEmailCommand, SendEmailHandler } from './modules/email';
 import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
 // prettier-ignore
 import { CreateUserActivityCommand, CreateUserActivityHandler, GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
+// prettier-ignore
+import { GetUserActivitiesHandler, GetUserActivitiesQuery } from './modules/user/get-user-activities/get-user-activities.query';
 
 export type ApplicationDependencies = DomainDependencies & {
   logger: LoggerPort;
@@ -62,6 +64,7 @@ export const registerHandlers = (
   registerQuery(GetProfileImageQuery, new GetProfileImageHandler(profileImageStore));
 
   // profile
+  registerQuery(GetUserActivitiesQuery, new GetUserActivitiesHandler(userActivityRepository));
   registerCommand(CreateUserActivityCommand, new CreateUserActivityHandler(userActivityRepository, threadRepository, commentRepository, userActivityService));
 
   // thread

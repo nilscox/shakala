@@ -124,7 +124,7 @@ describe('BaseSqlRepository', function () {
     expect(entity?.foo).toEqual('bar');
   });
 
-  it('retrieves an if it exists, or throws otherwise', async () => {
+  it('retrieves an entity if it exists, or throws otherwise', async () => {
     const sqlTest = new SqlTest();
 
     sqlTest.id = 'id';

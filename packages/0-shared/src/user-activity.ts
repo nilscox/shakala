@@ -20,7 +20,7 @@ export enum CommentActivityType {
   replyCreated = 'replyCreated',
   commentEdited = 'commentEdited',
   commentReactionSet = 'commentReactionSet',
-  commentReactionReported = 'commentReactionReported',
+  commentReported = 'commentReported',
 }
 
 export const UserActivityType = {
@@ -65,5 +65,11 @@ export type UserActivityPayload = {
     userId: string;
     reaction: ReactionTypeDto | null;
   };
-  [UserActivityType.commentReactionReported]: CommentActivityPayload & { reason?: string };
+  [UserActivityType.commentReported]: CommentActivityPayload & { reason?: string };
+};
+
+export type UserActivityDto<Type extends UserActivityType> = {
+  date: string;
+  type: Type;
+  payload: UserActivityPayload[Type];
 };

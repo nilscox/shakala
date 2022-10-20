@@ -10,7 +10,6 @@ import { UserActivityType } from 'shared';
 
 import { InMemoryCommentRepository, InMemoryThreadRepository } from '../../../adapters';
 import { InMemoryUserActivityRepository } from '../../../adapters/in-memory-repositories/user-activity.in-memory-repository';
-import { ExecutionContext } from '../../../utils';
 
 import { CreateUserActivityCommand, CreateUserActivityHandler } from './create-user-activity.command';
 
@@ -55,12 +54,12 @@ describe('CreateUserActivityCommand', () => {
   it('creates a user activity from a domain event', async () => {
     const event = new CommentReportedEvent(comment.id, user.id, 'reason');
 
-    await handler.handle(new CreateUserActivityCommand(event), ExecutionContext.as(user));
+    await handler.handle(new CreateUserActivityCommand(event));
 
     expect(userActivityRepository.get(activityId)).toEqual(
       new UserActivity({
         id: activityId,
-        type: UserActivityType.commentReactionReported,
+        type: UserActivityType.commentReported,
         userId: user.id,
         date: now,
         payload: {

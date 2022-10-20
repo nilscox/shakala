@@ -82,6 +82,7 @@ export class Server extends Application {
       cors({
         origin: corsConfig.reflectOrigin,
         credentials: true,
+        exposedHeaders: 'Pagination-Total'
       }),
     );
 
@@ -124,7 +125,7 @@ export class Server extends Application {
       new HealthcheckController(logger, config, em),
       new AuthenticationController(logger, config, validationService, session, queryBus, commandBus, userPresenter),
       new AccountController(logger, commandBus, queryBus, session, userPresenter),
-      new UserController(logger, queryBus, userPresenter),
+      new UserController(logger, queryBus, validationService, userPresenter),
       new ThreadController(logger, queryBus, commandBus, session, validationService, threadPresenter),
       new CommentController(logger, queryBus, commandBus, session, validationService),
     ];

@@ -1,6 +1,7 @@
-import { FilterQuery, Primary } from '@mikro-orm/core';
+import { FilterQuery, FindOptions, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
+import { Paginated } from 'backend-application/src/utils/pagination';
 import { DomainDependencies } from 'backend-domain';
 import { BaseError, ClassType } from 'shared';
 
@@ -46,8 +47,19 @@ export abstract class BaseSqlRepository<
     return this.toDomain(await this.findOne(entityId));
   }
 
-  async findAll(): Promise<DomainEntity[]> {
-    return this.toDomain(await this.repository.findAll());
+  async findAll(
+    where?: FilterQuery<SqlEntity>,
+    options?: FindOptions<SqlEntity, never>,
+  ): Promise<Paginated<DomainEntity>> {
+    const [items, total] = await this.repository.findAndCount(
+      where ?? ({} as FilterQuery<SqlEntity>),
+      options,
+    );
+
+    return {
+      items: this.toDomain(items),
+      total,
+    };
   }
 
   async findByIdOrFail(entityId: string): Promise<DomainEntity> {

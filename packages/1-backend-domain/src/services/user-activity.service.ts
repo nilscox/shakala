@@ -10,7 +10,6 @@ import { DomainEvent } from '../ddd/domain-event';
 import { Comment } from '../entities/comment.entity';
 import { Thread } from '../entities/thread.entity';
 import { UserActivity } from '../entities/user-activity.entity';
-import { User } from '../entities/user.entity';
 import { UserAuthenticatedEvent } from '../events/authentication/user-authenticated.event';
 import { UserCreatedEvent } from '../events/authentication/user-created.event';
 import { UserSignedOutEvent } from '../events/authentication/user-signed-out.event';
@@ -44,49 +43,48 @@ export class UserActivityService {
   constructor(private readonly generator: GeneratorPort, private readonly dateAdapter: DatePort) {}
 
   private async createActivity<Type extends UserActivityType>(
-    user: User,
+    userId: string,
     type: Type,
     payload: UserActivityPayload[Type],
   ) {
     return UserActivity.create(type, {
       id: await this.generator.generateId(),
       date: this.dateAdapter.now(),
-      userId: user.id,
+      userId,
       payload,
     });
   }
 
   async mapEventToUserActivity(
-    user: User,
     event: DomainEvent,
     { getThread, getComment }: { getThread: GetThread; getComment: GetComment },
   ): Promise<UserActivity | void> {
     if (event instanceof UserCreatedEvent) {
-      return this.createActivity(user, UserActivityType.signUp, undefined);
+      return this.createActivity(event.userId, UserActivityType.signUp, undefined);
     }
 
     if (event instanceof UserAuthenticatedEvent) {
-      return this.createActivity(user, UserActivityType.signIn, {
+      return this.createActivity(event.userId, UserActivityType.signIn, {
         method: AuthenticationMethod.emailPassword,
       });
     }
 
     if (event instanceof UserSignedOutEvent) {
-      return this.createActivity(user, UserActivityType.signOut, undefined);
+      return this.createActivity(event.userId, UserActivityType.signOut, undefined);
     }
 
     if (event instanceof EmailAddressValidatedEvent) {
-      return this.createActivity(user, UserActivityType.emailAddressValidated, undefined);
+      return this.createActivity(event.userId, UserActivityType.emailAddressValidated, undefined);
     }
 
     if (event instanceof ProfileImageChangedEvent) {
-      return this.createActivity(user, UserActivityType.profileImageChanged, { image: event.image });
+      return this.createActivity(event.userId, UserActivityType.profileImageChanged, { image: event.image });
     }
 
     if (event instanceof ThreadCreatedEvent) {
       const thread = await getThread(event.threadId);
 
-      return this.createActivity(user, UserActivityType.threadCreated, {
+      return this.createActivity(thread.author.id, UserActivityType.threadCreated, {
         threadId: thread.id,
         authorId: thread.author.id,
         description: thread.description,
@@ -113,19 +111,23 @@ export class UserActivityService {
       if (comment.parentId) {
         const parent = await getComment(comment.parentId);
 
-        return this.createActivity(user, UserActivityType.replyCreated, payload({ parentId: parent.id }));
+        return this.createActivity(
+          comment.author.id,
+          UserActivityType.replyCreated,
+          payload({ parentId: parent.id }),
+        );
       }
 
-      return this.createActivity(user, UserActivityType.rootCommentCreated, payload({}));
+      return this.createActivity(comment.author.id, UserActivityType.rootCommentCreated, payload({}));
     }
 
     if (event instanceof CommentEditedEvent) {
-      return this.createActivity(user, UserActivityType.commentEdited, payload({}));
+      return this.createActivity(comment.author.id, UserActivityType.commentEdited, payload({}));
     }
 
     if (event instanceof CommentReactionSetEvent) {
       return this.createActivity(
-        user,
+        event.userId,
         UserActivityType.commentReactionSet,
         payload({
           userId: event.userId,
@@ -137,8 +139,8 @@ export class UserActivityService {
 
     if (event instanceof CommentReportedEvent) {
       return this.createActivity(
-        user,
-        UserActivityType.commentReactionReported,
+        event.userId,
+        UserActivityType.commentReported,
         payload({
           reason: event.reason,
         }),

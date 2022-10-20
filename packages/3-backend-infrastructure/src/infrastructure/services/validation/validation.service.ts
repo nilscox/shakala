@@ -1,3 +1,5 @@
+import { PaginationData } from 'backend-application/src/utils/pagination';
+import { paginationQuerySchema } from 'shared';
 import * as yup from 'yup';
 
 import { BadRequest } from '../../http/http-errors';
@@ -59,6 +61,15 @@ export class ValidationService {
 
       throw error;
     }
+  }
+
+  async pagination(req: Request): Promise<PaginationData> {
+    const result = await this.query(req, paginationQuerySchema);
+
+    return {
+      page: result.page ? Number(result.page) : undefined,
+      pageSize: result.pageSize ? Number(result.pageSize) : undefined,
+    };
   }
 
   async body<Schema extends yup.AnySchema>(req: Request, schema: Schema) {

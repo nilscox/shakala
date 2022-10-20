@@ -13,15 +13,31 @@ describe('ValidationService', () => {
   it("validates a request's query params", async () => {
     const service = new ValidationService();
 
-    const schema = yup.object({ limit: yup.string().required() });
+    const schema = yup.object({ id: yup.string().required() });
 
-    await expect.async(service.query(new MockRequest().withQuery('limit', 'value'), schema)).toEqual({
-      limit: 'value',
+    await expect.async(service.query(new MockRequest().withQuery('id', 'value'), schema)).toEqual({
+      id: 'value',
     });
 
     await expect
       .rejects(service.query(new MockRequest().withQuery('other', 'value'), schema))
-      .with(missingFieldError('limit'));
+      .with(missingFieldError('id'));
+  });
+
+  it("validates a request's pagination query params", async () => {
+    const service = new ValidationService();
+
+    await expect.async(service.pagination(new MockRequest())).toEqual({
+      page: undefined,
+      pageSize: undefined,
+    });
+
+    await expect
+      .async(service.pagination(new MockRequest().withQuery('page', '2').withQuery('pageSize', '4')))
+      .toEqual({
+        page: 2,
+        pageSize: 4,
+      });
   });
 
   it("validates a request's body", async () => {

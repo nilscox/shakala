@@ -1,7 +1,7 @@
 import { GetProfileImageQuery, GetUserByIdQuery } from 'backend-application';
 import { factories, ProfileImageType } from 'backend-domain';
 
-import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
+import { MockLoggerAdapter, StubConfigAdapter, ValidationService } from '../../infrastructure';
 import { MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
 import { UserController } from './user.controller';
@@ -12,7 +12,12 @@ describe('UserController', () => {
   const session = new StubSessionAdapter();
   const config = new StubConfigAdapter({ app: { apiBaseUrl: 'http://api.url' } });
 
-  const controller = new UserController(new MockLoggerAdapter(), queryBus, new UserPresenter(config));
+  const controller = new UserController(
+    new MockLoggerAdapter(),
+    queryBus,
+    new ValidationService(),
+    new UserPresenter(config),
+  );
 
   const create = factories();
 
