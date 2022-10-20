@@ -4,7 +4,7 @@ import { selectParentComment } from '../comment/comments.selectors';
 import { schemas, selectNormalizedEntities } from '../normalization';
 import { State } from '../store.types';
 import { Thread } from '../types';
-import { formatDate } from '../utils/format-date';
+import { DateFormat, formatDate } from '../utils/format-date';
 
 export const { selectEntity: selectThreadUnsafe, selectEntities: selectThreads } = createNormalizedSelectors<
   State,
@@ -24,7 +24,7 @@ export const selectThread = (state: State, threadId: string) => {
 export const selectFormattedThreadDate = (state: State, threadId: string) => {
   const { date } = selectThread(state, threadId);
 
-  return formatDate(date, "'Le' d MMMM yyyy");
+  return formatDate(date, DateFormat.date);
 };
 
 export const selectCommentThreadId = (state: State, commentId: string): string => {

@@ -1,4 +1,4 @@
-import { formatDate, selectComment, selectCommentUnsafe, User } from 'frontend-domain';
+import { DateFormat, formatDate, selectComment, selectCommentUnsafe, User } from 'frontend-domain';
 import { useState } from 'react';
 import { MessageDto } from 'shared';
 
@@ -132,7 +132,7 @@ type DateProps = {
 const Date = ({ date }: DateProps) => (
   <div className="flex-1 text-center">
     <time dateTime={date} className="font-semibold text-muted">
-      {formatDate(date, "'Le' d MMMM yyyy 'à' HH:mm")}
+      {formatDate(date, DateFormat.full)}
     </time>
   </div>
 );

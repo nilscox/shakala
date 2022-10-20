@@ -5,7 +5,7 @@ import { schemas, selectNormalizedEntities } from '../normalization';
 import { State, Selector } from '../store.types';
 import { Comment } from '../types';
 import { selectUser } from '../user';
-import { formatDate } from '../utils/format-date';
+import { DateFormat, formatDate } from '../utils/format-date';
 
 export const { selectEntity: selectCommentUnsafe, selectEntities: selectComments } =
   createNormalizedSelectors<State, Comment>(selectNormalizedEntities, schemas.comment);
@@ -23,7 +23,7 @@ export const selectComment: Selector<[string], Comment> = (state, id) => {
 export const selectFormattedCommentDate: Selector<[string], string> = (state, id) => {
   const { date, edited } = selectComment(state, id);
 
-  const formatted = formatDate(date, "'le' d MMMM");
+  const formatted = formatDate(date, DateFormat.date);
 
   if (!edited) {
     return formatted;
@@ -35,7 +35,7 @@ export const selectFormattedCommentDate: Selector<[string], string> = (state, id
 export const selectFormattedCommentDateDetailed: Selector<[string], string> = (state, id) => {
   const { date, edited } = selectComment(state, id);
 
-  const formatted = formatDate(date, "'Le' d MMMM yyyy 'à' HH:mm");
+  const formatted = formatDate(date, DateFormat.full);
 
   if (!edited) {
     return formatted;
