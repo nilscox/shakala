@@ -70,6 +70,7 @@ module.exports = {
     borderColor: (theme) => ({
       transparent: 'transparent',
       DEFAULT: colors.neutral[200],
+      primary: theme('colors.primary'),
       success: theme('colors.success'),
       info: theme('colors.info'),
       error: theme('colors.error'),
