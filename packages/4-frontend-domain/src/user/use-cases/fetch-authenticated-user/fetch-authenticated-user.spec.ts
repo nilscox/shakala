@@ -2,7 +2,11 @@ import { mockResolve } from 'shared';
 
 import { createAuthUser, TestStore } from '../../../test';
 
-import { fetchAuthenticatedUser, selectAuthenticatedUser } from './fetch-authenticated-user';
+import {
+  fetchAuthenticatedUser,
+  selectAuthenticatedUser,
+  selectIsFetchingAuthenticatedUser,
+} from './fetch-authenticated-user';
 
 describe('fetchAuthenticatedUser', () => {
   const store = new TestStore();
@@ -16,6 +20,7 @@ describe('fetchAuthenticatedUser', () => {
 
     expect(store.authenticationGateway.fetchUser).toHaveBeenCalled();
     expect(store.select(selectAuthenticatedUser)).toEqual(user);
+    expect(store.select(selectIsFetchingAuthenticatedUser)).toBe(false);
   });
 
   it('fetches no one when the user is not authenticated', async () => {
@@ -24,5 +29,6 @@ describe('fetchAuthenticatedUser', () => {
     await store.dispatch(fetchAuthenticatedUser());
 
     expect(store.select(selectAuthenticatedUser)).toBe(undefined);
+    expect(store.select(selectIsFetchingAuthenticatedUser)).toBe(false);
   });
 });

@@ -1,8 +1,9 @@
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
+import { useMatch } from 'react-router-dom';
 
-import { NavLink, Link } from '~/components/elements/link';
-import { useUser } from '~/hooks/use-user';
+import { Link, NavLink } from '~/components/elements/link';
+import { useIsFetchingUser, useUser } from '~/hooks/use-user';
 
 import { Avatar } from '../elements/avatar/avatar';
 import { SearchParamLink } from '../elements/search-param-link';
@@ -33,27 +34,52 @@ const Heading = () => (
 
 const Authentication = () => {
   const user = useUser();
+  const fetchingUser = useIsFetchingUser();
+  const isProfilePage = useMatch('/profil*');
+
+  const getNick = () => {
+    if (fetchingUser) {
+      return null;
+    }
+
+    if (!user) {
+      return 'Connexion';
+    }
+
+    return user.nick;
+  };
 
   return (
     <AuthenticationLink
+      loading={fetchingUser}
       authenticated={Boolean(user)}
       className="absolute top-0 right-0 flex flex-row items-center gap-2"
     >
-      <span className="font-bold">{user?.nick ?? 'Connexion'}</span>
+      <span className={clsx('font-bold', isProfilePage && 'text-primary')}>{getNick()}</span>
       <div className="h-6 w-6">
-        <Avatar size="medium" image={user?.profileImage} className="h-6 w-6 border-none" />
+        <Avatar
+          size="medium"
+          image={user?.profileImage}
+          loading={fetchingUser}
+          className="h-6 w-6 border-none"
+        />
       </div>
     </AuthenticationLink>
   );
 };
 
 type AuthenticationLinkProps = {
+  loading: boolean;
   authenticated: boolean;
   className?: string;
   children: ReactNode;
 };
 
-const AuthenticationLink = ({ authenticated, className, children }: AuthenticationLinkProps) => {
+const AuthenticationLink = ({ loading, authenticated, className, children }: AuthenticationLinkProps) => {
+  if (loading) {
+    return <div className={className}>{children}</div>;
+  }
+
   if (authenticated) {
     return (
       <Link to="/profil" className={className}>

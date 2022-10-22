@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { Fallback } from '~/components/elements/fallback';
 
+import Loader from './loader.svg';
+
 type AsyncResourceProps<T> = {
   data: T | undefined;
   loading: boolean;
@@ -48,7 +50,7 @@ export const AsyncResource = <T,>({ data, loading, error, renderError, render }:
       );
     }
 
-    return <Fallback>{displayLoader && 'Loading...'}</Fallback>;
+    return <Fallback>{displayLoader && <Loader />}</Fallback>;
   }
 
   if (data) {

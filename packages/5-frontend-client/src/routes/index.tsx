@@ -1,6 +1,9 @@
+import { fetchAuthenticatedUser } from 'frontend-domain';
+import { useEffect } from 'react';
 import { Outlet, Route, Routes as RRRoutes } from 'react-router-dom';
 
 import { Layout } from '~/components/layout/layout';
+import { useDispatch } from '~/hooks/use-dispatch';
 
 import { CharterRoute } from './charter';
 import { FaqRoute } from './faq';
@@ -47,8 +50,16 @@ export const Routes = () => (
   </RRRoutes>
 );
 
-const RouteLayout = () => (
-  <Layout>
-    <Outlet />
-  </Layout>
-);
+const RouteLayout = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAuthenticatedUser());
+  }, [dispatch]);
+
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
+};

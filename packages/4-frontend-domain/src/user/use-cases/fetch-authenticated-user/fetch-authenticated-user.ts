@@ -1,4 +1,4 @@
-import { createAction, query } from '@nilscox/redux-query';
+import { createAction, query, QueryState } from '@nilscox/redux-query';
 
 import { State, Thunk } from '../../../store.types';
 import { AuthUser } from '../../../types';
@@ -35,7 +35,13 @@ const selectors = fetchAuthenticatedUserQuery.selectors<State>(
   (state) => state.user.queries.fetchAuthenticatedUser,
 );
 
-export const selectAuthenticatedUser = (state: State) => selectors.selectResult(state, undefined);
+export const selectIsFetchingAuthenticatedUser = (state: State) => {
+  return selectors.selectState(state, undefined) === QueryState.pending;
+};
+
+export const selectAuthenticatedUser = (state: State) => {
+  return selectors.selectResult(state, undefined);
+};
 
 export const fetchAuthenticatedUser = (): Thunk<Promise<void>> => {
   return async (dispatch, getState, { authenticationGateway }) => {
@@ -44,9 +50,7 @@ export const fetchAuthenticatedUser = (): Thunk<Promise<void>> => {
 
       const user = await authenticationGateway.fetchUser();
 
-      if (user) {
-        dispatch(actions.setSuccess(undefined, user));
-      }
+      dispatch(actions.setSuccess(undefined, user));
     } catch (error) {
       dispatch(actions.setError(undefined, error));
     }

@@ -24,6 +24,21 @@ import { StorybookUserGateway } from '~/adapters/user-gateway/storybook-user.gat
 import { useReactRouterGateway } from '~/app';
 import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar';
 
+export const controls = {
+  inlineRadio: (options: string[], defaultValue: string) => ({
+    control: 'inline-radio',
+    options,
+    defaultValue,
+  }),
+  boolean: (defaultValue: boolean) => ({
+    control: 'boolean',
+    defaultValue,
+  }),
+  disabled: () => ({
+    table: { disable: true },
+  }),
+};
+
 export const maxWidthDecorator = () => {
   const MaxWidthDecorator: DecoratorFn = (Story) => (
     <div className="max-w-6">

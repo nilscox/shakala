@@ -3,7 +3,10 @@ import { first, last } from 'shared';
 import { State } from '../store.types';
 import { UserActivity } from '../types';
 
-import { selectAuthenticatedUser } from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
+import {
+  selectAuthenticatedUser,
+  selectIsFetchingAuthenticatedUser,
+} from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
 
 export const selectUser = selectAuthenticatedUser;
 
@@ -16,6 +19,8 @@ export const selectUserOrFail = (state: State) => {
 
   return user;
 };
+
+export const selectIsFetchingUser = selectIsFetchingAuthenticatedUser;
 
 const selectUserActivitiesState = (state: State) => state.userActivities;
 

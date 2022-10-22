@@ -107,6 +107,7 @@ module.exports = {
       DEFAULT: 'rgba(100, 100, 100, 0.2) 0px 2px 8px 0px',
     },
     animation: {
+      spin: 'spin 800ms linear infinite',
       'fade-in': 'fade 280ms ease-out',
       'fade-out': 'fade 280ms ease-out reverse',
       highlight: 'highlight 2s ease-out 2s both',
@@ -114,6 +115,10 @@ module.exports = {
       'loading-surface': 'loading-surface 2s ease infinite',
     },
     keyframes: (theme) => ({
+      spin: {
+        '0%': { transform: 'rotate(0deg)' },
+        '100%': { transform: 'rotate(360deg)' },
+      },
       fade: {
         '0%': { opacity: 0 },
         '100%': { opacity: 1 },

@@ -18,6 +18,10 @@ describe('logout', () => {
     await store.dispatch(logout());
 
     expect(store.authenticationGateway.logout).toHaveBeenCalledWith();
+    expect(store.user).toBeDefined();
+
+    store.timerGateway.invokeTimeout();
+
     expect(store.user).toBe(undefined);
   });
 

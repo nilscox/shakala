@@ -1,11 +1,12 @@
 import clsx from 'clsx';
 import { logout } from 'frontend-domain';
-import { Outlet, useMatch } from 'react-router-dom';
+import { Navigate, Outlet, useMatch } from 'react-router-dom';
 
+import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { Avatar } from '~/components/elements/avatar/avatar';
 import { NavLink } from '~/components/elements/link';
 import { useDispatch } from '~/hooks/use-dispatch';
-import { useUser } from '~/hooks/use-user';
+import { useIsFetchingUser, useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconEdit from '~/icons/edit.svg';
 import IconProfile from '~/icons/profile.svg';
@@ -14,14 +15,37 @@ import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
 
-export const ProfileLayout = () => (
-  <div className="row my-4 gap-6">
-    <Sidebar />
-    <div className="flex-1">
-      <Outlet />
-    </div>
-  </div>
-);
+class UnauthenticatedError extends Error {}
+
+export const ProfileLayout = () => {
+  const user = useUser();
+  const fetchingUser = useIsFetchingUser();
+
+  return (
+    <AsyncResource
+      loading={fetchingUser}
+      data={user}
+      error={!fetchingUser && !user && new UnauthenticatedError()}
+      render={() => (
+        <div className="row my-4 gap-6">
+          <Sidebar />
+          <div className="flex-1">
+            <Outlet />
+          </div>
+        </div>
+      )}
+      renderError={(error) => {
+        if (error instanceof UnauthenticatedError) {
+          return (
+            <Navigate to={{ pathname: '/', search: new URLSearchParams({ auth: 'login' }).toString() }} />
+          );
+        }
+
+        throw error;
+      }}
+    />
+  );
+};
 
 const Sidebar = () => {
   const user = useUser();

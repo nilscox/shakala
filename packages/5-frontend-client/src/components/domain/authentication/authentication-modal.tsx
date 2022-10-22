@@ -1,5 +1,6 @@
-import { closeAuthenticationForm, initializeAuthentication } from 'frontend-domain';
+import { clearAllAuthenticationErrors, closeAuthenticationForm } from 'frontend-domain';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Modal } from '~/components/elements/modal';
 import { useDispatch } from '~/hooks/use-dispatch';
@@ -13,9 +14,11 @@ export const AuthenticationModal = () => {
   const isOpen = useSearchParam('auth') !== undefined;
   const [closing, setClosing] = useState(false);
 
+  const location = useLocation();
+
   useEffect(() => {
-    dispatch(initializeAuthentication());
-  }, [dispatch]);
+    dispatch(clearAllAuthenticationErrors());
+  }, [dispatch, location]);
 
   const handleClose = () => {
     setClosing(true);
