@@ -3,7 +3,7 @@ import formatDateFns from 'date-fns/format';
 import { fr } from 'date-fns/locale';
 
 export enum DateFormat {
-  date = "'Le' d MMMM",
+  date = "'Le' d MMMM yyyy",
   full = "'Le' d MMMM yyyy 'à' HH:mm",
 }
 

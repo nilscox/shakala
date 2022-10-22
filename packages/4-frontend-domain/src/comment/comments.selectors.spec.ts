@@ -21,13 +21,13 @@ describe('comments selectors', () => {
     });
 
     it('returns the formatted comment date', () => {
-      expect(store.select(selectFormattedCommentDate, comment.id)).toEqual('le 16 juillet');
+      expect(store.select(selectFormattedCommentDate, comment.id)).toEqual('Le 16 juillet 2016');
     });
 
     it('appends a * when the comment was edited', () => {
       store.dispatch(setCommentEdited(comment.id, new Date().toISOString()));
 
-      expect(store.select(selectFormattedCommentDate, comment.id)).toEqual('le 16 juillet *');
+      expect(store.select(selectFormattedCommentDate, comment.id)).toEqual('Le 16 juillet 2016 *');
     });
   });
 
