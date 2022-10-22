@@ -1,27 +1,9 @@
-import { AnyAction } from 'redux';
+import { combineReducers } from 'redux';
 
-import { AuthUser } from '../types';
+import { fetchAuthenticatedUserReducer } from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
 
-import { isSetUserAction, isUnsetUserAction, isUpdateUserAction } from './user.actions';
-
-type UserState = AuthUser | null;
-
-export const userReducer = (user: UserState = null, action: AnyAction): UserState => {
-  if (isSetUserAction(action)) {
-    return action.user;
-  }
-
-  if (!user) {
-    return null;
-  }
-
-  if (isUnsetUserAction(action)) {
-    return null;
-  }
-
-  if (isUpdateUserAction(action)) {
-    return { ...user, ...action.changes };
-  }
-
-  return user;
-};
+export const userReducer = combineReducers({
+  queries: combineReducers({
+    fetchAuthenticatedUser: fetchAuthenticatedUserReducer,
+  }),
+});

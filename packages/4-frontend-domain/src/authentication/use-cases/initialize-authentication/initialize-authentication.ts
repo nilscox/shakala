@@ -1,6 +1,6 @@
 import { Thunk } from '../../../store.types';
+import { fetchAuthenticatedUser } from '../../../user/use-cases/fetch-authenticated-user/fetch-authenticated-user';
 import { clearAllAuthenticationErrors } from '../../authentication.actions';
-import { fetchAuthenticatedUser } from '../fetch-authenticated-user/fetch-authenticated-user';
 
 export const initializeAuthentication = (): Thunk => {
   return async (dispatch, _getState, { routerGateway }) => {

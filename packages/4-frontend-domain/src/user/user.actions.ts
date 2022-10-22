@@ -1,16 +1,8 @@
 import { createAction } from '@nilscox/redux-query';
 
-import { AuthUser, UserActivity } from '../types';
+import { UserActivity } from '../types';
 
-export const [setUser, isSetUserAction] = createAction('user/set', (user: AuthUser) => ({
-  user,
-}));
-
-export const [unsetUser, isUnsetUserAction] = createAction('user/unset');
-
-export const [updateUser, isUpdateUserAction] = createAction('user/update', (changes: Partial<AuthUser>) => ({
-  changes,
-}));
+export { setUser, unsetUser, updateUser } from './use-cases';
 
 export const [addUserActivities, isAddUserActivitiesAction] = createAction(
   'user-activities/add',

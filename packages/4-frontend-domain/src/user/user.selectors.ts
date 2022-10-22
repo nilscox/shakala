@@ -3,10 +3,12 @@ import { first, last } from 'shared';
 import { State } from '../store.types';
 import { UserActivity } from '../types';
 
-export const selectUser = (state: State) => state.user;
+import { selectAuthenticatedUser } from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
+
+export const selectUser = selectAuthenticatedUser;
 
 export const selectUserOrFail = (state: State) => {
-  const user = selectUser(state);
+  const user = selectAuthenticatedUser(state);
 
   if (!user) {
     throw new Error('expected user to be defined');
