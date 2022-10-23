@@ -1,10 +1,14 @@
 import { mockResolve, UserActivityDto, UserActivityType } from 'shared';
 
 import { createUserActivity, TestStore } from '../../../test';
-import { addUserActivities, setTotalUserActivities } from '../../user.actions';
-import { selectTotalUserActivities, selectUserActivities } from '../../user.selectors';
 
-import { fetchUserActivities } from './fetch-user-activities';
+import {
+  fetchUserActivities,
+  selectTotalUserActivities,
+  selectUserActivities,
+  setTotalUserActivities,
+  setUserActivities,
+} from './fetch-user-activities';
 
 describe('fetchUserActivities', () => {
   const store = new TestStore();
@@ -30,7 +34,7 @@ describe('fetchUserActivities', () => {
       createUserActivity({ type: UserActivityType.signUp }),
     ];
 
-    store.dispatch(addUserActivities(activities.slice(1)));
+    store.dispatch(setUserActivities({ page: 1 }, activities.slice(1)));
     store.dispatch(setTotalUserActivities(1));
 
     store.userGateway.listActivities = mockResolve({ items: activities.slice(0, 1), total: 2 });
@@ -41,5 +45,14 @@ describe('fetchUserActivities', () => {
 
     expect(store.select(selectUserActivities)).toEqual(activities);
     expect(store.select(selectTotalUserActivities)).toEqual(2);
+  });
+
+  it('does not refetch the activities when already fetched', async () => {
+    store.dispatch(setUserActivities({ page: 1 }, []));
+    store.userGateway.listActivities = mockResolve({ items: [], total: 0 });
+
+    await store.dispatch(fetchUserActivities(1));
+
+    expect(store.userGateway.listActivities).not.toHaveBeenCalled();
   });
 });

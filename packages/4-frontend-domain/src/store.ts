@@ -12,14 +12,12 @@ import { authenticationReducer } from './authentication/authentication.slice';
 import { commentsReducer } from './comment/comments.slice';
 import type { Dependencies } from './store.types';
 import { threadsReducer } from './thread/thread.slice';
-import { userActivitiesReducer } from './user/user-activities.slice';
 import { userReducer } from './user/user.slice';
 import { usersReducer } from './user/users.slice';
 
 const rootReducer = combineReducers({
   authentication: authenticationReducer,
   user: userReducer,
-  userActivities: userActivitiesReducer,
   users: usersReducer,
   threads: threadsReducer,
   comments: commentsReducer,

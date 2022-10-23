@@ -4,9 +4,10 @@ import { State } from '../store.types';
 import { UserActivity } from '../types';
 
 import {
+  selectUserActivities,
   selectAuthenticatedUser,
   selectIsFetchingAuthenticatedUser,
-} from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
+} from './use-cases';
 
 export const selectUser = selectAuthenticatedUser;
 
@@ -21,16 +22,6 @@ export const selectUserOrFail = (state: State) => {
 };
 
 export const selectIsFetchingUser = selectIsFetchingAuthenticatedUser;
-
-const selectUserActivitiesState = (state: State) => state.userActivities;
-
-export const selectUserActivities = (state: State) => {
-  return selectUserActivitiesState(state).items.slice().reverse();
-};
-
-export const selectTotalUserActivities = (state: State) => {
-  return selectUserActivitiesState(state).total;
-};
 
 export const selectIsLastUserActivity = (state: State, activity: UserActivity) => {
   return activity === first(selectUserActivities(state));

@@ -32,7 +32,7 @@ const [updateUser, isUpdateUserAction] = createAction('user/update', (changes: P
 export { updateUser };
 
 const selectors = fetchAuthenticatedUserQuery.selectors<State>(
-  (state) => state.user.queries.fetchAuthenticatedUser,
+  (state) => state.user.queries.authenticatedUser,
 );
 
 export const selectIsFetchingAuthenticatedUser = (state: State) => {
