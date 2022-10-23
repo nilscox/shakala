@@ -29,9 +29,7 @@ module.exports = {
   },
 
   webpackFinal: (config) => {
-    Object.assign(config.resolve.alias, {
-      '~': path.resolve(__dirname, '..', 'src'),
-    });
+    Object.assign(config.resolve.alias, webpackConfig.resolve.alias);
 
     config.module.rules = webpackConfig.module.rules;
 
