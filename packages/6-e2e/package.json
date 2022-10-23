@@ -10,6 +10,6 @@
     "e2e": "yarn playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.25.2"
+    "@playwright/test": "^1.27.1"
   }
 }
