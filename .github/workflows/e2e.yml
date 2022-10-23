@@ -7,11 +7,14 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+permissions:
+  packages: read
+
 jobs:
   e2e:
     name: End-to-end tests
     runs-on: ubuntu-latest
-    container: node:18
+    container: mcr.microsoft.com/playwright:v1.27.0-focal
     timeout-minutes: 25
 
     services:
@@ -20,12 +23,15 @@ jobs:
         env:
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: shakala-e2e
+          POSTGRES_DB: test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+      maildev:
+        image: maildev/maildev
 
     steps:
       - uses: actions/checkout@v3
@@ -34,42 +40,89 @@ jobs:
           node-version: 18
           cache: yarn
 
-      - run: yarn install --frozen-lockfile
-      - run: yarn playwright install-deps && yarn playwright install chromium
+      - name: Install node dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install playwright dependencies
+        run: yarn playwright install-deps && yarn playwright install chromium
         working-directory: packages/6-e2e
 
-      - run: |
-          cat << EOF > .env
-            NODE_ENV=development
-
-            HOST=0.0.0.0
-            PORT=3000
-
-            DATABASE_HOST=postgres
-            DATABASE_USER=user
-            DATABASE_PASSWORD=password
-            DATABASE_NAME=shakala-e2e
-
-            SESSION_SECRET=secret
-          EOF
-          yarn db:migrate
+      - name: Start backend
+        run: |
           yarn build
+          yarn db:migrate
           node -r ./register-aliases.js ./dist/src/main.js &
         working-directory: packages/3-backend-infrastructure
+        env:
+          NODE_ENV: test
+          VERSION: e2e
 
-      - run: yarn start &
+          API_BASE_URL: http://localhost:3000
+          APP_BASE_URL: http://localhost:8080
+
+          SESSION_SECRET: secret
+
+          HOST: 0.0.0.0
+          PORT: 3000
+
+          DATABASE_HOST: postgres
+          DATABASE_USER: user
+          DATABASE_PASSWORD: password
+          DATABASE_NAME: test
+          DATABASE_DEBUG: false
+
+          EMAIL_HOST: maildev
+          EMAIL_PORT: 1025
+          EMAIL_SECURE: false
+          EMAIL_USER: hello@shakala.local
+          EMAIL_PASSWORD:
+          EMAIL_FROM: 'Shakala (dev)'
+
+      - name: Start frontend
+        run: |
+          yarn build
+          npx http-server-spa dist &
+          sleep 5
         working-directory: packages/5-frontend-client
+        env:
+          VERSION: e2e
 
-      - run: sleep 20
-      # - run: |
-      #     yarn global add wait-on
-      #     wait-on http://127.0.0.1:3000/healthcheck && echo "backend is up"
-      #     wait-on http://127.0.0.1:8000 && echo "frontend is up"
+      - name: Wait for everything to be up
+        timeout-minutes: 1
+        run: |
+          npx wait-on -v -l http://127.0.0.1:3000/healthcheck && echo "backend is up"
+          npx wait-on -v -l http://127.0.0.1:8080 && echo "frontend is up"
 
-      - run: yarn test:headless
+      - name: Run end-to-end tests
+        run: yarn e2e
         working-directory: packages/6-e2e
         env:
-          BASE_URL: https://localhost:8000
+          NODE_ENV: test
+          VERSION: e2e
+
+          API_BASE_URL: http://localhost:3000
+          APP_BASE_URL: http://localhost:8080
+
+          SESSION_SECRET: secret
+
+          HOST:
+          PORT:
+
+          DATABASE_HOST: postgres
+          DATABASE_USER: user
+          DATABASE_PASSWORD: password
+          DATABASE_NAME: test
+          DATABASE_DEBUG: false
+
+          EMAIL_HOST: maildev
+          EMAIL_PORT: 1025
+          EMAIL_SECURE: false
+          EMAIL_USER: hello@shakala.local
+          EMAIL_PASSWORD:
+          EMAIL_FROM: 'Shakala (e2e)'
+
+          MAILDEV_API_HOST: maildev
+          MAILDEV_API_PORT: 1080
 
       - uses: actions/upload-artifact@v3
         if: ${{ failure() || cancelled() }}

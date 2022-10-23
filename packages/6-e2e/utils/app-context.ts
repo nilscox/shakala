@@ -63,8 +63,13 @@ export class AppContext extends AppAccessors {
     });
   }
 
+  get maildevApi() {
+    const { MAILDEV_API_HOST: host, MAILDEV_API_PORT: port } = process.env;
+    return `http://${host}:${port}`;
+  }
+
   async clearEmails() {
-    const response = await fetch('http://localhost:1080/email/all', { method: 'DELETE' });
+    const response = await fetch(`${this.maildevApi}/email/all`, { method: 'DELETE' });
     const body = await response.json();
 
     expect(response.ok, JSON.stringify(body)).toBe(true);
@@ -94,7 +99,7 @@ export class AppContext extends AppAccessors {
       text: string;
     };
 
-    const response = await fetch('http://localhost:1080/email');
+    const response = await fetch(`${this.maildevApi}/email`);
     const body = (await response.json()) as Email[];
 
     expect(response.ok).toBe(true);
