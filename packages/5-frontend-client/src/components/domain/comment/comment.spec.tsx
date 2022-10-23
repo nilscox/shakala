@@ -35,7 +35,7 @@ describe('Comment', () => {
       .render(<Comment commentId={comment.id} />);
 
     expect(screen.getByText('Paul')).toBeDefined();
-    expect(screen.getByText('le 1 mai')).toBeDefined();
+    expect(screen.getByText('Le 1 mai 2022')).toBeDefined();
     expect(screen.getByText('Hello!')).toBeDefined();
     expect(screen.getByText('41')).toBeDefined();
     expect(screen.getByText('6')).toBeDefined();

@@ -1,5 +1,11 @@
 import clsx from 'clsx';
-import { UserActivity, selectIsFirstUserActivity, formatDate, DateFormat } from 'frontend-domain';
+import {
+  DateFormat,
+  formatActivityDate,
+  formatDate,
+  selectIsFirstUserActivity,
+  UserActivity,
+} from 'frontend-domain';
 import { UserActivityType } from 'shared';
 
 import { Link } from '~/components/elements/link';
@@ -27,7 +33,9 @@ export const Activity = ({ activity, icon, children }: ActivityComponentProps) =
       </div>
       <div>
         <div className="relative -top-2 h-0 text-xs font-medium text-muted/75">
-          {formatDate(activity.date, DateFormat.full)}
+          <time dateTime={activity.date} title={formatDate(activity.date, DateFormat.full)}>
+            {formatActivityDate(activity)}
+          </time>
         </div>
         {children}
       </div>

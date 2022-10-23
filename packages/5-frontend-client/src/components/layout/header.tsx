@@ -35,7 +35,7 @@ const Heading = () => (
 const Authentication = () => {
   const user = useUser();
   const fetchingUser = useIsFetchingUser();
-  const isProfilePage = useMatch('/profil*');
+  const isProfilePage = useMatch('/profil/*');
 
   const getNick = () => {
     if (fetchingUser) {

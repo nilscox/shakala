@@ -18,7 +18,7 @@ export const createUserDto = createFactory<UserDto>(() => ({
 }));
 
 export const createUserActivityDto = <Type extends UserActivityType>(
-  overrides: Partial<UserActivityDto<Type>>,
+  overrides?: Partial<UserActivityDto<Type>>,
 ): UserActivityDto<UserActivityType> => ({
   date: '',
   type: UserActivityType.signUp,

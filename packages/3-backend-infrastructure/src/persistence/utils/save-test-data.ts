@@ -1,17 +1,24 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
-import { Comment, createDomainDependencies, Reaction, Thread, User } from 'backend-domain';
+import { Comment, createDomainDependencies, Reaction, Thread, User, UserActivity } from 'backend-domain';
+import { first } from 'shared';
 
 import { MathRandomGeneratorAdapter, RealDateAdapter } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
 import { SqlReactionRepository } from '../repositories/sql-reaction.repository';
 import { SqlThreadRepository } from '../repositories/sql-thread.repository';
+import { SqlUserActivityRepository } from '../repositories/sql-user-activity.repository';
 import { SqlUserRepository } from '../repositories/sql-user.repository';
 
-export type SaveEntity = <T>(entity: T) => Promise<T>;
-
 export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
-  return async <T>(entity: T) => {
+  async function save<T>(entity: T): Promise<T>;
+  async function save<T>(entity: T[]): Promise<T[]>;
+
+  async function save<T>(entities: T | T[]): Promise<T | T[]> {
+    if (!Array.isArray(entities)) {
+      return first(await save([entities])) as T;
+    }
+
     const em = getEntityManager();
 
     const deps = createDomainDependencies({
@@ -19,28 +26,28 @@ export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
       date: new RealDateAdapter(),
     });
 
-    const commentRepository = new SqlCommentRepository(em, deps);
-    const reactionRepository = new SqlReactionRepository(em, deps);
-    const threadRepository = new SqlThreadRepository(em, deps);
-    const userRepository = new SqlUserRepository(em, deps);
-
     const repositoryMap = new Map<unknown, Repository<unknown>>([
-      [Comment, commentRepository],
-      [Reaction, reactionRepository],
-      [Thread, threadRepository],
-      [User, userRepository],
+      [Comment, new SqlCommentRepository(em, deps)],
+      [Reaction, new SqlReactionRepository(em, deps)],
+      [Thread, new SqlThreadRepository(em, deps)],
+      [User, new SqlUserRepository(em, deps)],
+      [UserActivity, new SqlUserActivityRepository(em, deps)],
     ]);
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    const ctor = (entity as { constructor: Function }).constructor;
+    const ctor = (entities[0] as { constructor: Function }).constructor;
     const repository = repositoryMap.get(ctor);
 
     if (!repository) {
       throw new Error(`No repository for entity ${ctor.name}`);
     }
 
-    await repository.save(entity);
+    for (const entity of entities) {
+      await repository.save(entity);
+    }
 
-    return entity;
-  };
+    return entities;
+  }
+
+  return save;
 };

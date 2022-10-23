@@ -25,13 +25,17 @@ import { useReactRouterGateway } from '~/app';
 import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar';
 
 export const controls = {
+  boolean: (defaultValue: boolean) => ({
+    control: 'boolean',
+    defaultValue,
+  }),
+  range: (defaultValue: number, options: Partial<Record<'min' | 'max' | 'step', number>> = {}) => ({
+    control: { type: 'range', ...options },
+    defaultValue,
+  }),
   inlineRadio: (options: string[], defaultValue: string) => ({
     control: 'inline-radio',
     options,
-    defaultValue,
-  }),
-  boolean: (defaultValue: boolean) => ({
-    control: 'boolean',
     defaultValue,
   }),
   disabled: () => ({

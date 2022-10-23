@@ -54,7 +54,7 @@ const registerAssertions = () => {
     guard: isResponse,
     assert(response, header, value) {
       const actual = response.headers.get(header);
-      const error = new AssertionFailed(actual);
+      const error = new AssertionFailed({ actual, expected: value });
 
       if (!response.headers.has(header)) {
         throw error;

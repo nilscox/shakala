@@ -44,6 +44,10 @@ export class Pagination {
     return (this.page - 1) * this.pageSize;
   }
 
+  static get firstPage() {
+    return this.from({});
+  }
+
   static from(data: PaginationData | undefined) {
     const page = data?.page ?? 1;
     const pageSize = data?.pageSize ?? 20;

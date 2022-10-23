@@ -1,13 +1,6 @@
-import { first, last } from 'shared';
-
 import { State } from '../store.types';
-import { UserActivity } from '../types';
 
-import {
-  selectUserActivities,
-  selectAuthenticatedUser,
-  selectIsFetchingAuthenticatedUser,
-} from './use-cases';
+import { selectAuthenticatedUser, selectIsFetchingAuthenticatedUser } from './use-cases';
 
 export const selectUser = selectAuthenticatedUser;
 
@@ -22,11 +15,3 @@ export const selectUserOrFail = (state: State) => {
 };
 
 export const selectIsFetchingUser = selectIsFetchingAuthenticatedUser;
-
-export const selectIsLastUserActivity = (state: State, activity: UserActivity) => {
-  return activity === first(selectUserActivities(state));
-};
-
-export const selectIsFirstUserActivity = (state: State, activity: UserActivity) => {
-  return activity === last(selectUserActivities(state));
-};

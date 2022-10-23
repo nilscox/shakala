@@ -1,3 +1,4 @@
+import { QueryOrder } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { UserActivityRepository } from 'backend-application';
 import { Paginated, Pagination } from 'backend-application/src/utils/pagination';
@@ -26,6 +27,7 @@ export class SqlUserActivityRepository
       {
         limit,
         offset,
+        orderBy: { createdAt: QueryOrder.desc },
       },
     );
   }

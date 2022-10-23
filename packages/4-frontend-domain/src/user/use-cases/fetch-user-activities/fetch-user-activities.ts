@@ -1,8 +1,10 @@
-import { createAction, query } from '@nilscox/redux-query';
+import { createAction, query, QueryState } from '@nilscox/redux-query';
 import { AnyAction } from 'redux';
+import { first, last } from 'shared';
 
 import { State, Thunk } from '../../../store.types';
 import { UserActivity } from '../../../types';
+import { DateFormat, formatDate, formatDistanceToNow, isBefore24Hours } from '../../../utils/format-date';
 
 type Key = {
   page: number;
@@ -27,7 +29,38 @@ export const selectUserActivities = (state: State) => {
     activities.push(...results);
   }
 
-  return activities.reverse();
+  return activities;
+};
+
+export const selectIsLoadingActivities = (state: State, page: number) => {
+  return selectors.selectState(state, { page }) === QueryState.pending;
+};
+
+export const selectHasMoreActivities = (state: State) => {
+  const activities = selectUserActivities(state);
+  const total = selectTotalUserActivities(state);
+
+  return activities.length < total;
+};
+
+export const selectIsLastUserActivity = (state: State, activity: UserActivity) => {
+  return activity === first(selectUserActivities(state));
+};
+
+export const selectIsFirstUserActivity = (state: State, activity: UserActivity) => {
+  if (selectHasMoreActivities(state)) {
+    return false;
+  }
+
+  return activity === last(selectUserActivities(state));
+};
+
+export const formatActivityDate = ({ date }: UserActivity) => {
+  if (isBefore24Hours(date)) {
+    return formatDate(date, DateFormat.date);
+  }
+
+  return 'Il y a ' + formatDistanceToNow(date);
 };
 
 export const fetchUserActivities = (page: number): Thunk<Promise<void>> => {
@@ -39,14 +72,14 @@ export const fetchUserActivities = (page: number): Thunk<Promise<void>> => {
     }
 
     try {
-      actions.setPending(key);
+      dispatch(actions.setPending(key));
 
       const { items: activities, total } = await userGateway.listActivities(page);
 
       dispatch(actions.setSuccess(key, activities));
       dispatch(setTotalUserActivities(total));
     } catch (error) {
-      actions.setError(key, error);
+      dispatch(actions.setError(key, error));
     }
   };
 };

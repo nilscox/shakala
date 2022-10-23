@@ -1,5 +1,6 @@
+import { Pagination } from 'backend-application/src/utils/pagination';
 import { createDomainDependencies, factories, UserActivity } from 'backend-domain';
-import { AuthenticationActivityType, AuthenticationMethod } from 'shared';
+import { AuthenticationActivityType, AuthenticationMethod, UserActivityType } from 'shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
@@ -51,5 +52,32 @@ describe('SqlUserActivityRepository', () => {
 
     await repository.save(activity);
     expect(await repository.findById(activity.id)).toEqual(activity);
+  });
+
+  it('finds the paginated activities for a given user', async () => {
+    const user = await save(create.user());
+
+    const [activity1, activity2] = await save(
+      [new Date('2022-01-01'), new Date('2022-01-02')].map((date) =>
+        UserActivity.create(UserActivityType.signUp, {
+          id: create.id(),
+          userId: user.id,
+          date,
+          payload: undefined,
+        }),
+      ),
+    );
+
+    expect(await repository.findForUser('notUserId', Pagination.firstPage)).toEqual({ total: 0, items: [] });
+
+    expect(await repository.findForUser(user.id, new Pagination(1, 1))).toEqual({
+      total: 2,
+      items: [activity2 as UserActivity],
+    });
+
+    expect(await repository.findForUser(user.id, new Pagination(2, 1))).toEqual({
+      total: 2,
+      items: [activity1 as UserActivity],
+    });
   });
 });
