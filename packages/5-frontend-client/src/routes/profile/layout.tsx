@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { logout } from 'frontend-domain';
 import { Outlet, useMatch } from 'react-router-dom';
 
