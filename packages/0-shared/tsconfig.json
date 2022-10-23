@@ -2,8 +2,7 @@
   "extends": "../../tsconfig.backend.json",
   "include": ["../../global.d.ts", "src/**/*"],
   "compilerOptions": {
-    "composite": true,
-    "noEmit": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "composite": true
   }
 }

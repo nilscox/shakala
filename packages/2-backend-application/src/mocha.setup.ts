@@ -2,7 +2,7 @@ import expect, { AssertionFailed } from '@nilscox/expect';
 import { DomainEvent } from 'backend-domain';
 import { RootHookObject } from 'mocha';
 
-import { StubEventBus } from './src';
+import { type StubEventBus } from './adapters';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClass = { new (...args: any[]): any };

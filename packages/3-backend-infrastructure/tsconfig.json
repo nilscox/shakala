@@ -1,12 +1,14 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["../../global.d.ts", "mocha.setup.ts", "src/**/*"],
-  "references": [{ "path": "../2-backend-application" }],
+  "include": ["../../global.d.ts", "src/**/*"],
+  "references": [
+    { "path": "../0-shared" },
+    { "path": "../1-backend-domain" },
+    { "path": "../2-backend-application" }
+  ],
   "compilerOptions": {
     "outDir": "dist",
-    "noEmit": false,
     "composite": true,
-    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }

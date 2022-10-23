@@ -1,7 +1,7 @@
 import expect, { AssertionFailed, createMatcher } from '@nilscox/expect';
 import { RootHookObject } from 'mocha';
 
-import { Response } from './src/infrastructure';
+import { Response } from './infrastructure';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 

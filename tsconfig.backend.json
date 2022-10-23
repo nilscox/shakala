@@ -1,9 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "noEmit": true,
     "module": "commonjs",
     "target": "es2021",
+    "noEmit": false,
+    "declaration": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,

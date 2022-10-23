@@ -1,6 +1,12 @@
-import { AuthorizationError, GetProfileImageQuery, GetUserByIdQuery, LoggerPort } from 'backend-application';
-import { GetUserActivitiesQuery } from 'backend-application/src/modules/user/get-user-activities/get-user-activities.query';
-import { Paginated, PaginationError } from 'backend-application/src/utils/pagination';
+import {
+  AuthorizationError,
+  GetProfileImageQuery,
+  GetUserByIdQuery,
+  LoggerPort,
+  GetUserActivitiesQuery,
+  Paginated,
+  PaginationError,
+} from 'backend-application';
 import { ProfileImageData, User, UserActivity } from 'backend-domain';
 import { AuthorizationErrorReason, UserDto } from 'shared';
 
