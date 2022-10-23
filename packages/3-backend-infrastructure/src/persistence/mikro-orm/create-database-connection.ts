@@ -26,13 +26,12 @@ export const resetDatabase = async (orm: MikroORM) => {
   await schemaGenerator.clearDatabase();
 };
 
-export const setupTestDatabase = (override: Options<PostgreSqlDriver> = {}) => {
+export const setupTestDatabase = (options: Options<PostgreSqlDriver> = {}) => {
   let orm: MikroORM<PostgreSqlDriver>;
   let isReady = false;
 
   before(async () => {
-    // cspell:word intg
-    orm = await createTestDatabaseConnection({ dbName: 'intg', ...override });
+    orm = await createTestDatabaseConnection({ dbName: 'test', ...options });
   });
 
   after(async () => {

@@ -85,12 +85,16 @@ export class StubConfigAdapter implements ConfigPort {
       return process.env[key] ?? defaultValue;
     };
 
-    Object.assign(this.config.database, {
-      host: getEnv('DATABASE_HOST', 'localhost'),
-      user: getEnv('DATABASE_USER', 'postgres'),
-      password: getEnv('DATABASE_PASSWORD', ''),
-      database: getEnv('DATABASE_NAME', 'test'),
-    });
+    const { database } = this.config;
+
+    database.host ||= getEnv('DATABASE_HOST', 'localhost');
+    database.user ||= getEnv('DATABASE_USER', 'postgres');
+    database.password ||= getEnv('DATABASE_PASSWORD', '');
+    database.database ||= getEnv('DATABASE_NAME', 'shakala');
+
+    if (getEnv('NODE_ENV', 'development') === 'test') {
+      database.database = 'test';
+    }
 
     return this;
   }
