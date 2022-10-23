@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.backend.json",
-  "include": ["../../global.d.ts", "src/**/*"],
+  "include": ["src/**/*"],
   "references": [
     { "path": "../0-shared" },
     { "path": "../1-backend-domain" },
     { "path": "../2-backend-application" }
   ],
   "compilerOptions": {
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "composite": true
   }
 }

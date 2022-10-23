@@ -1,18 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2021",
     "noEmit": false,
     "declaration": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowJs": false,
     "lib": ["es2021"],
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": false,
@@ -23,7 +17,6 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "types": ["mocha", "node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }

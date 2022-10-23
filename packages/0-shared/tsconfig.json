@@ -1,8 +1,9 @@
 {
-  "extends": "../../tsconfig.backend.json",
-  "include": ["../../global.d.ts", "src/**/*"],
+  "extends": "../../tsconfig.base.json",
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "composite": true
   }
 }

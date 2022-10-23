@@ -16,9 +16,10 @@
     "test": "yarn workspaces run test",
     "lint": "yarn workspaces run lint",
     "spellcheck": "cspell --locale en,fr 'packages/*/src/**'",
+    "build:shared": "yarn workspace shared build",
     "build:backend": "yarn workspace backend-infrastructure build",
     "build:frontend": "yarn workspace shared build && yarn workspace frontend-client build",
-    "build": "yarn build:backend && yarn build:frontend",
+    "build": "yarn build:shared && yarn build:backend && yarn build:frontend",
     "typecheck": "yarn build:backend && yarn workspace frontend-client tsc -b",
     "start:backend": "yarn workspace backend-infrastructure start",
     "start:frontend": "yarn workspace frontend-client start"

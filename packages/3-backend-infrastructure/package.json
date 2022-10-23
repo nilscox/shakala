@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.js",
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && cp -r ./email-templates ./dist",
     "lint": "eslint src",
     "test": "NODE_NO_WARNINGS=1 NODE_ENV=test mocha",

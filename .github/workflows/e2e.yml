@@ -51,7 +51,7 @@ jobs:
         run: |
           yarn build
           yarn db:migrate
-          node -r ./register-aliases.js ./dist/src/main.js &
+          node -r ./register-aliases.js ./dist/main.js &
         working-directory: packages/3-backend-infrastructure
         env:
           NODE_ENV: test
