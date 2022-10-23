@@ -52,7 +52,7 @@ const config: Options<PostgreSqlDriver> = {
     disableForeignKeys: false,
   },
   // cspell:word millis
-  pool: { min: 0, max: 3, idleTimeoutMillis: 5000 },
+  pool: { min: 0, max: 10, idleTimeoutMillis: 5000 },
 };
 
 export default config;

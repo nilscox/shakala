@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { wait } from 'shared';
 
 import { AppContext } from '../utils/app-context';
 
@@ -12,7 +11,7 @@ test.describe('Authentication', () => {
 
   test.beforeEach(async () => {
     await app.clearDatabase();
-    await app.clearEmails();
+    await app.emails.clearEmails();
   });
 
   test('As a user, I can signup, logout and log back in', async () => {
@@ -40,11 +39,8 @@ test.describe('Authentication', () => {
 
     app.within(notification).findByLabel('Fermer').click();
 
-    // wait for the email to be sent
-    await wait(100);
-
     const page = await app.newPage();
-    await page.navigate(await app.getEmailValidationLink('user@domain.tld'));
+    await page.navigate(await app.emails.getEmailValidationLink('user@domain.tld'));
 
     expect(page.findNotification('Votre adresse email a bien été validée. Bienvenue ! 🎉')).toBeVisible();
 
@@ -66,7 +62,7 @@ test.describe('Authentication', () => {
     const { email } = await app.credentials(nick);
 
     await app.createUser(nick);
-    await app.validateEmailAddress(email);
+    await app.emails.validateEmailAddress(email);
     await app.navigate('/');
 
     await app.within(app.locator('header')).findByText('Connexion').click();
@@ -76,6 +72,6 @@ test.describe('Authentication', () => {
     await app.findByPlaceholder('Mot de passe').fill('nope');
     await app.findButton('Connexion').click();
 
-    await app.findByText('Combinaison email / mot de passe non valide').click();
+    await expect(app.findByText('Combinaison email / mot de passe non valide')).toBeVisible();
   });
 });

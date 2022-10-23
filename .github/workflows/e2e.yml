@@ -1,7 +1,7 @@
 name: E2E
 
 on:
-  # push:
+  push:
   workflow_dispatch:
 
 env:
@@ -51,7 +51,7 @@ jobs:
         run: |
           yarn build
           yarn db:migrate
-          node -r ./register-aliases.js ./dist/main.js &
+          node -r ./register-aliases.js ./dist/main.js > ./backend.stdout 2> ./backend.stderr &
         working-directory: packages/3-backend-infrastructure
         env:
           NODE_ENV: test
@@ -81,17 +81,16 @@ jobs:
       - name: Start frontend
         run: |
           yarn build
-          npx http-server-spa dist &
-          sleep 5
+          npx http-server-spa dist > ./frontend.stdout 2> ./frontend.stderr &
         working-directory: packages/5-frontend-client
         env:
           VERSION: e2e
 
-      - name: Wait for everything to be up
-        timeout-minutes: 1
-        run: |
-          npx wait-on -v -l http://127.0.0.1:3000/healthcheck && echo "backend is up"
-          npx wait-on -v -l http://127.0.0.1:8080 && echo "frontend is up"
+      # - name: Wait for everything to be up
+      #   timeout-minutes: 1
+      #   run: |
+      #     npx wait-on -v -l http://127.0.0.1:3000/healthcheck
+      #     npx wait-on -v -l http://127.0.0.1:8080
 
       - name: Run end-to-end tests
         run: yarn e2e
@@ -127,5 +126,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: ${{ failure() || cancelled() }}
         with:
+          name: outputs
+          path: packages/*/*.std*
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ failure() || cancelled() }}
+        with:
           name: playwright-traces
-          path: test-results
+          path: packages/6-e2e/test-results

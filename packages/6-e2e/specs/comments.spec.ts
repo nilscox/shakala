@@ -15,7 +15,7 @@ test.describe('Comments', () => {
     charlie = await AppContext.create(browser);
 
     await alice.clearDatabase();
-    await alice.clearEmails();
+    await alice.emails.clearEmails();
   });
 
   const login = async (app: AppContext, nick: string) => {
@@ -73,7 +73,7 @@ test.describe('Comments', () => {
     await charlie.findButton('Inscription').click();
     await expect.poll(() => charlie.searchParams.get('auth')).toBeNull();
 
-    await charlie.validateEmailAddress('user@domain.tld');
+    await charlie.emails.validateEmailAddress('user@domain.tld');
 
     await charlie.within(comment).findButton('Envoyer').click();
 

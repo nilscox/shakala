@@ -1,20 +1,13 @@
 import fs from 'fs/promises';
 
-import { Browser, BrowserContext, expect, Page } from '@playwright/test';
-import {
-  ExecutionContext,
-  GetUserByEmailQuery,
-  LoggerPort,
-  SignupCommand,
-  ValidateEmailAddressCommand,
-} from 'backend-application';
-import { User } from 'backend-domain';
+import { Browser, BrowserContext, Page } from '@playwright/test';
+import { ExecutionContext, LoggerPort, SignupCommand } from 'backend-application';
 import { Application, ClearDatabaseCommand, EnvConfigAdapter } from 'backend-infrastructure';
 import { Dependencies } from 'frontend-domain';
-import { AuthUserDto, wait } from 'shared';
+import { AuthUserDto } from 'shared';
 
 import { AppAccessors } from './app-accessors';
-
+import { Emails } from './emails';
 import './hooks';
 
 declare global {
@@ -35,6 +28,10 @@ export class AppContext extends AppAccessors {
 
   constructor(private ctx: BrowserContext, private page: Page) {
     super(page);
+  }
+
+  get emails() {
+    return new Emails(this.backend);
   }
 
   static async create(browser: Browser) {
@@ -63,18 +60,6 @@ export class AppContext extends AppAccessors {
     });
   }
 
-  get maildevApi() {
-    const { MAILDEV_API_HOST: host, MAILDEV_API_PORT: port } = process.env;
-    return `http://${host}:${port}`;
-  }
-
-  async clearEmails() {
-    const response = await fetch(`${this.maildevApi}/email/all`, { method: 'DELETE' });
-    const body = await response.json();
-
-    expect(response.ok, JSON.stringify(body)).toBe(true);
-  }
-
   credentials(nick: string) {
     return {
       email: `${nick.toLowerCase()}@localhost.tld`,
@@ -88,53 +73,13 @@ export class AppContext extends AppAccessors {
     await this.backend.run(async ({ commandBus }) => {
       await commandBus.execute(new SignupCommand(nick, email, password), ExecutionContext.unauthenticated);
     });
-
-    // wait for the email to be sent
-    await wait(100);
-  }
-
-  async getEmailValidationLink(emailAddress: string): Promise<string> {
-    type Email = {
-      to: Array<{ address: string }>;
-      text: string;
-    };
-
-    const response = await fetch(`${this.maildevApi}/email`);
-    const body = (await response.json()) as Email[];
-
-    expect(response.ok).toBe(true);
-
-    const email = body.find(({ to }) => to[0].address === emailAddress);
-
-    expect(email).toBeDefined();
-
-    const { text } = email as Email;
-    const match = text.match(/http.*\n/);
-
-    expect(match).toBeDefined();
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return match![0].trimEnd();
-  }
-
-  async validateEmailAddress(email: string) {
-    const user = await this.backend.run<User>(async ({ queryBus }) => {
-      return queryBus.execute(new GetUserByEmailQuery(email));
-    });
-
-    await this.backend.run(async ({ commandBus }) => {
-      await commandBus.execute(
-        new ValidateEmailAddressCommand(user.id, user.emailValidationToken as string),
-        ExecutionContext.unauthenticated,
-      );
-    });
   }
 
   async login(nick: string): Promise<AuthUserDto> {
     const { email, password } = this.credentials(nick);
 
     await this.createUser(nick);
-    await this.validateEmailAddress(email);
+    await this.emails.validateEmailAddress(email);
 
     const user = await this.page.evaluate(
       async ([email, password]) => {

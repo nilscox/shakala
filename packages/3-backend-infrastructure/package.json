@@ -2,8 +2,8 @@
   "name": "backend-infrastructure",
   "version": "0.1.0",
   "private": true,
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && cp -r ./email-templates ./dist",
