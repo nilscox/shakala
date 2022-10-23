@@ -5,6 +5,8 @@ import IconThumbUp from '~/icons/thumb-up.svg';
 
 import { Activity, ActivityItem, CommentLink, ThreadLink } from '../user-activity';
 
+// cspell:words upvoté downvoté
+
 export const CommentReactionSetActivity: ActivityItem<CommentActivityType.commentReactionSet> = ({
   activity,
 }) => (
