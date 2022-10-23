@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { UserActivity } from 'backend-domain';
+import { Timestamp, UserActivity } from 'backend-domain';
 import { UserActivityType, UserActivityPayload } from 'shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
@@ -21,7 +21,7 @@ export class SqlUserActivity extends BaseSqlEntity<UserActivity> {
   assignFromDomain(em: EntityManager, entity: UserActivity) {
     this.id = entity.id;
     this.type = entity.type;
-    this.createdAt = entity.date;
+    this.createdAt = entity.date.toDate();
     this.user = em.getReference(SqlUser, entity.userId);
     this.payload = entity.payload;
   }
@@ -30,7 +30,7 @@ export class SqlUserActivity extends BaseSqlEntity<UserActivity> {
     return new UserActivity({
       id: this.id,
       type: this.type,
-      date: this.createdAt,
+      date: new Timestamp(this.createdAt),
       userId: this.user.id,
       payload: this.payload ?? undefined,
     });

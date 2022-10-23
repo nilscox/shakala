@@ -2,9 +2,11 @@ import { UserActivityPayload, UserActivityType } from 'shared';
 
 import { Entity, EntityProps } from '../ddd/entity';
 
-type UserActivityProps<Type extends UserActivityType> = EntityProps<{
+import { Timestamp } from './timestamp.value-object';
+
+export type UserActivityProps<Type extends UserActivityType> = EntityProps<{
   type: Type;
-  date: Date;
+  date: Timestamp;
   userId: string;
   payload: UserActivityPayload[Type];
 }>;

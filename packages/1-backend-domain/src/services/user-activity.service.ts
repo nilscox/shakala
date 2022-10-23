@@ -9,6 +9,7 @@ import {
 import { DomainEvent } from '../ddd/domain-event';
 import { Comment } from '../entities/comment.entity';
 import { Thread } from '../entities/thread.entity';
+import { Timestamp } from '../entities/timestamp.value-object';
 import { UserActivity } from '../entities/user-activity.entity';
 import { UserAuthenticatedEvent } from '../events/authentication/user-authenticated.event';
 import { UserCreatedEvent } from '../events/authentication/user-created.event';
@@ -49,7 +50,7 @@ export class UserActivityService {
   ) {
     return UserActivity.create(type, {
       id: await this.generator.generateId(),
-      date: this.dateAdapter.now(),
+      date: Timestamp.now(this.dateAdapter),
       userId,
       payload,
     });

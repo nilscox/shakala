@@ -7,7 +7,7 @@ export class UserActivityPresenter {
   ): UserActivityDto<Type> => {
     return {
       type: userActivity.type,
-      date: userActivity.date.toISOString(),
+      date: userActivity.date.toString(),
       payload: userActivity.payload,
     };
   };

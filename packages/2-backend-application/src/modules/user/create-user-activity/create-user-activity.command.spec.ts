@@ -3,6 +3,7 @@ import {
   factories,
   StubDateAdapter,
   StubGeneratorAdapter,
+  Timestamp,
   UserActivity,
   UserActivityService,
 } from 'backend-domain';
@@ -28,7 +29,7 @@ describe('CreateUserActivityCommand', () => {
   );
 
   const activityId = 'activityId';
-  const now = new Date('2022-01-01');
+  const now = new Timestamp('2022-01-01');
 
   const create = factories();
 

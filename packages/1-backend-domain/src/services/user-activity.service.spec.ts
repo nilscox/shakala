@@ -13,6 +13,7 @@ import {
   StubDateAdapter,
   StubGeneratorAdapter,
   ThreadCreatedEvent,
+  Timestamp,
   UserActivity,
   UserActivityService,
   UserAuthenticatedEvent,
@@ -27,7 +28,7 @@ describe('UserActivityService', () => {
   const service = new UserActivityService(generator, dateAdapter);
 
   const activityId = 'activityId';
-  const now = new Date('2022-01-01');
+  const now = new Timestamp('2022-01-01');
 
   const create = factories();
 

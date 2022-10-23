@@ -1,5 +1,5 @@
 import { Pagination } from 'backend-application/src/utils/pagination';
-import { createDomainDependencies, factories, UserActivity } from 'backend-domain';
+import { createDomainDependencies, factories, Timestamp, UserActivity } from 'backend-domain';
 import { AuthenticationActivityType, AuthenticationMethod, UserActivityType } from 'shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
@@ -27,7 +27,7 @@ describe('SqlUserActivityRepository', () => {
     const activity = new UserActivity<AuthenticationActivityType.signOut>({
       id: 'userActivityId',
       type: AuthenticationActivityType.signOut,
-      date,
+      date: new Timestamp(date),
       userId: user.id,
       payload: undefined,
     });
@@ -43,7 +43,7 @@ describe('SqlUserActivityRepository', () => {
     const activity = new UserActivity<AuthenticationActivityType.signIn>({
       id: 'userActivityId',
       type: AuthenticationActivityType.signIn,
-      date,
+      date: new Timestamp(date),
       userId: user.id,
       payload: {
         method: AuthenticationMethod.emailPassword,
@@ -62,7 +62,7 @@ describe('SqlUserActivityRepository', () => {
         UserActivity.create(UserActivityType.signUp, {
           id: create.id(),
           userId: user.id,
-          date,
+          date: new Timestamp(date),
           payload: undefined,
         }),
       ),
