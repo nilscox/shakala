@@ -1,14 +1,16 @@
 {
   "extends": "../../tsconfig.frontend.json",
-  "include": ["../../global.d.ts", "src"],
+  "include": ["src/**/*"],
   "references": [{ "path": "../0-shared" }],
   "compilerOptions": {
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "noEmit": false,
     "composite": true,
-    "baseUrl": ".",
+    "baseUrl": "..",
     "paths": {
-      "shared/test": ["../0-shared/src/index.test.ts"]
+      "shared": ["0-shared/src"],
+      "shared/test": ["0-shared/src/index.test.ts"]
     }
   }
 }

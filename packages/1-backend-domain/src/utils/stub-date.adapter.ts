@@ -1,4 +1,5 @@
-import { DatePort, Timestamp } from 'backend-domain';
+import { Timestamp } from '../entities/timestamp.value-object';
+import { DatePort } from '../interfaces/date.interface';
 
 export class StubDateAdapter implements DatePort {
   date = new Date();

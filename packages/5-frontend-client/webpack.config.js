@@ -23,8 +23,12 @@ const config = (module.exports = {
 
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
+
     alias: {
+      // order matters, keep shared/test before shared
       'shared/test': path.resolve(__dirname, '..', '0-shared', 'src', 'index.test.ts'),
+      shared: path.resolve(__dirname, '..', '0-shared', 'src'),
+      'frontend-domain': path.resolve(__dirname, '..', '4-frontend-domain', 'src'),
       '~': path.resolve(__dirname, 'src'),
     },
   },
@@ -68,10 +72,15 @@ const config = (module.exports = {
       ANALYTICS_URL: false,
       ANALYTICS_SITE_ID: false,
     }),
-    new ProvidePlugin({ React: 'react' }),
+
+    new ProvidePlugin({
+      React: 'react',
+    }),
+
     new HtmlWebpackPlugin({
       title: 'Shakala',
     }),
+
     new HtmlWebpackPlugin({
       filename: 'version.txt',
       inject: false,

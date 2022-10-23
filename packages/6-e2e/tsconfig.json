@@ -6,6 +6,13 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "..",
+    "paths": {
+      "shared": ["0-shared/src"],
+      "shared/test": ["0-shared/src/index.test.ts"],
+      "backend-infrastructure": ["3-backend-infrastructure/dist"],
+      "frontend-domain": ["4-frontend-domain/src"]
+    }
   }
 }

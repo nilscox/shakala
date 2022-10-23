@@ -1,9 +1,9 @@
 {
-  "name": "backend-infrastructure",
+  "name": "@shakala/backend-infrastructure",
   "version": "0.1.0",
   "private": true,
   "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && cp -r ./email-templates ./dist",

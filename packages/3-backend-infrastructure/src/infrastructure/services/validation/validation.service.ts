@@ -1,4 +1,4 @@
-import { PaginationData } from 'backend-application/src/utils/pagination';
+import { PaginationData } from 'backend-application';
 import { paginationQuerySchema } from 'shared';
 import * as yup from 'yup';
 

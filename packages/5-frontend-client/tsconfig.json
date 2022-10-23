@@ -2,12 +2,14 @@
   "extends": "../../tsconfig.frontend.json",
   "include": ["../../global.d.ts", "./mocha.setup.ts", "src"],
   "files": [".storybook/preview.ts"],
-  "references": [{ "path": "../4-frontend-domain" }],
+  "references": [{ "path": "../0-shared" }, { "path": "../4-frontend-domain" }],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "..",
     "paths": {
-      "shared/test": ["../0-shared/src/index.test.ts"],
-      "~/*": ["src/*"]
+      "shared": ["0-shared/src"],
+      "shared/test": ["0-shared/src/index.test.ts"],
+      "frontend-domain": ["4-frontend-domain/src"],
+      "~/*": ["5-frontend-client/src/*"]
     }
   }
 }

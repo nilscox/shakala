@@ -1,25 +1,24 @@
 import { AuthenticationMethod, ReactionTypeDto, UserActivityPayload, UserActivityType } from 'shared';
 
-import {
-  CommentCreatedEvent,
-  CommentEditedEvent,
-  CommentReactionSetEvent,
-  CommentReportedEvent,
-  DomainEvent,
-  EmailAddressValidatedEvent,
-  factories,
-  ProfileImageChangedEvent,
-  ReactionType,
-  StubDateAdapter,
-  StubGeneratorAdapter,
-  ThreadCreatedEvent,
-  Timestamp,
-  UserActivity,
-  UserActivityService,
-  UserAuthenticatedEvent,
-  UserCreatedEvent,
-  UserSignedOutEvent,
-} from 'backend-domain';
+import { DomainEvent } from '../ddd/domain-event';
+import { ReactionType } from '../entities/reaction.entity';
+import { Timestamp } from '../entities/timestamp.value-object';
+import { UserActivity } from '../entities/user-activity.entity';
+import { UserAuthenticatedEvent } from '../events/authentication/user-authenticated.event';
+import { UserCreatedEvent } from '../events/authentication/user-created.event';
+import { UserSignedOutEvent } from '../events/authentication/user-signed-out.event';
+import { CommentCreatedEvent } from '../events/comment/comment-created.event';
+import { CommentEditedEvent } from '../events/comment/comment-edited.event';
+import { CommentReactionSetEvent } from '../events/comment/comment-reaction-set.event';
+import { CommentReportedEvent } from '../events/comment/comment-reported.event';
+import { EmailAddressValidatedEvent } from '../events/profile/email-address-validated.event';
+import { ProfileImageChangedEvent } from '../events/profile/profile-image-changed.event';
+import { ThreadCreatedEvent } from '../events/thread/thread-created.event';
+import { factories } from '../utils/factories';
+import { StubDateAdapter } from '../utils/stub-date.adapter';
+import { StubGeneratorAdapter } from '../utils/stub-generator.adapter';
+
+import { UserActivityService } from './user-activity.service';
 
 describe('UserActivityService', () => {
   const generator = new StubGeneratorAdapter();

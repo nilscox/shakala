@@ -1,4 +1,4 @@
-import { Pagination } from 'backend-application/src/utils/pagination';
+import { Pagination } from 'backend-application';
 import { createDomainDependencies, factories, Timestamp, UserActivity } from 'backend-domain';
 import { AuthenticationActivityType, AuthenticationMethod, UserActivityType } from 'shared';
 

@@ -15,8 +15,8 @@ export class SqlUserActivity extends BaseSqlEntity<UserActivity> {
   @ManyToOne()
   user!: SqlUser;
 
-  @Property({ type: 'json' })
-  payload!: UserActivityPayload[UserActivityType];
+  @Property({ type: 'json', nullable: true })
+  payload?: UserActivityPayload[UserActivityType];
 
   assignFromDomain(em: EntityManager, entity: UserActivity) {
     this.id = entity.id;

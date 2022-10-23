@@ -1,7 +1,6 @@
 import { FilterQuery, FindOptions, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Repository } from 'backend-application';
-import { Paginated } from 'backend-application/src/utils/pagination';
+import { Repository, Paginated } from 'backend-application';
 import { DomainDependencies } from 'backend-domain';
 import { BaseError, ClassType } from 'shared';
 

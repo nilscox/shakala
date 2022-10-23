@@ -1,7 +1,6 @@
 import { QueryOrder } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { UserActivityRepository } from 'backend-application';
-import { Paginated, Pagination } from 'backend-application/src/utils/pagination';
+import { UserActivityRepository, Paginated, Pagination } from 'backend-application';
 import { DomainDependencies, UserActivity } from 'backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
