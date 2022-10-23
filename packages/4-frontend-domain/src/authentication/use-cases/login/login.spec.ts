@@ -62,6 +62,14 @@ describe('login', () => {
     expect(store.snackbarGateway.success).toHaveBeenCalledWith('Vous êtes maintenant connecté(e)');
   });
 
+  it('redirects to a previously saved authenticated location', async () => {
+    store.routerGateway.afterAuthenticationRedirection = '/profil';
+
+    await store.dispatch(login(email, password));
+
+    expect(store.routerGateway.pathname).toEqual('/profil');
+  });
+
   it('handles validation errors', async () => {
     store.authenticationGateway.login = mockReject(
       new ValidationError([{ field: 'email', error: 'required', value: null }]),

@@ -60,6 +60,14 @@ describe('signup', () => {
     );
   });
 
+  it('redirects to a previously saved authenticated location', async () => {
+    store.routerGateway.afterAuthenticationRedirection = '/profil';
+
+    await store.dispatch(signup(email, password, nick));
+
+    expect(store.routerGateway.pathname).toEqual('/profil');
+  });
+
   it('handles validation errors', async () => {
     store.authenticationGateway.signup = mockReject(
       new ValidationError([{ field: 'nick', error: 'already-exists', value: 'nick' }]),

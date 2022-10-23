@@ -85,6 +85,13 @@ class StubRouterGateway implements RouterGateway {
     return () => delete this.locationChangeListener;
   }
 
+  afterAuthenticationRedirection?: string;
+  redirectAfterAuthentication() {
+    if (this.afterAuthenticationRedirection) {
+      this.navigate(this.afterAuthenticationRedirection);
+    }
+  }
+
   triggerLocationChange() {
     this.locationChangeListener?.();
   }

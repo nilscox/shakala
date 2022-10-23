@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { logout } from 'frontend-domain';
-import { Navigate, Outlet, useMatch } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { Avatar } from '~/components/elements/avatar/avatar';
@@ -14,6 +14,7 @@ import IconSignOut from '~/icons/sign-out.svg';
 import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
+import { RedirectToSignIn } from '~/utils/RedirectToSignIn';
 
 class UnauthenticatedError extends Error {}
 
@@ -36,9 +37,7 @@ export const ProfileLayout = () => {
       )}
       renderError={(error) => {
         if (error instanceof UnauthenticatedError) {
-          return (
-            <Navigate to={{ pathname: '/', search: new URLSearchParams({ auth: 'login' }).toString() }} />
-          );
+          return <RedirectToSignIn />;
         }
 
         throw error;

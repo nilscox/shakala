@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 
-import { RouterGateway, LocationChange, RemoveListener, AuthenticationType } from 'frontend-domain';
-import { Location, NavigateFunction } from 'react-router-dom';
+import { AuthenticationType, LocationChange, RemoveListener, RouterGateway } from 'frontend-domain';
+import { Location, NavigateFunction, Path } from 'react-router-dom';
 
 export class ReactRouterGateway extends EventEmitter implements RouterGateway {
   private queryParams: URLSearchParams;
@@ -59,6 +59,17 @@ export class ReactRouterGateway extends EventEmitter implements RouterGateway {
     this.addListener(LocationChange, listener);
 
     return () => this.removeListener(LocationChange, listener);
+  }
+
+  redirectAfterAuthentication(): void {
+    if (!this._location.state) {
+      return;
+    }
+
+    if ('next' in this._location.state) {
+      const { next } = this._location.state as { next: Path };
+      this._navigate(next.pathname, new URLSearchParams(next.search));
+    }
   }
 
   get currentAuthenticationForm(): AuthenticationType | undefined {

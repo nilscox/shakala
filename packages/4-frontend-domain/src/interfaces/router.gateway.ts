@@ -9,6 +9,7 @@ export interface RouterGateway {
   setQueryParam(key: string, value: string): void;
   removeQueryParam(key: string): void;
   onLocationChange(listener: () => void): RemoveListener;
+  redirectAfterAuthentication(): void;
 
   currentAuthenticationForm: AuthenticationType | undefined;
 }

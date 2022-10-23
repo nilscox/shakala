@@ -5,7 +5,7 @@ import { closeAuthenticationForm } from '../close-authentication-form/close-auth
 import { handleAuthenticationError } from '../handle-authentication-error/handle-authentication-error';
 
 export const signup = (email: string, password: string, nick: string): Thunk<Promise<void>> => {
-  return async (dispatch, _getState, { authenticationGateway, snackbarGateway }) => {
+  return async (dispatch, _getState, { authenticationGateway, routerGateway, snackbarGateway }) => {
     dispatch(clearAllAuthenticationErrors());
 
     try {
@@ -16,6 +16,7 @@ export const signup = (email: string, password: string, nick: string): Thunk<Pro
       dispatch(setUser(user));
       dispatch(closeAuthenticationForm());
 
+      routerGateway.redirectAfterAuthentication();
       snackbarGateway.success(
         `Votre compte a bien été créé ! Un email de validation a été envoyé à l'adresse ${email}.`,
       );
