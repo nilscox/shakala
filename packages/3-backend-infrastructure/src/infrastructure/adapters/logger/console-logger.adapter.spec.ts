@@ -1,5 +1,5 @@
 import { StubDateAdapter } from 'backend-domain';
-import { mockObject } from 'shared';
+import { mockObject } from 'shared/test';
 
 import { ConsoleLoggerAdapter } from './console-logger.adapter';
 

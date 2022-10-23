@@ -24,6 +24,7 @@ const config = (module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
     alias: {
+      'shared/test': path.resolve(__dirname, '..', '0-shared', 'src', 'index.test.ts'),
       '~': path.resolve(__dirname, 'src'),
     },
   },

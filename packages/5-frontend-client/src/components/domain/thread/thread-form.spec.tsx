@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { TestRenderer } from '~/test/render';
 

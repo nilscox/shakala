@@ -7,14 +7,10 @@ import {
   Sort,
 } from 'backend-application';
 import { factories } from 'backend-domain';
-import { mockResolve } from 'shared';
+import { mockResolve } from 'shared/test';
 
-import {
-  MockLoggerAdapter,
-  StubConfigAdapter,
-  ValidationError,
-  ValidationService,
-} from '../../infrastructure';
+import { StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 

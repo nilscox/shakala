@@ -1,5 +1,5 @@
 import { DraftCommentKind } from 'frontend-domain';
-import { MockedObject, mockFn, mockImpl } from 'shared';
+import { MockedObject, mockFn, mockImpl } from 'shared/test';
 import { SinonFakeTimers, useFakeTimers } from 'sinon';
 
 import { LocalStorageGateway } from './local-storage-gateway';

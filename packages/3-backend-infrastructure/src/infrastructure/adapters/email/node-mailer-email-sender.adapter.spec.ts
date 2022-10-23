@@ -1,5 +1,5 @@
 import { Transporter } from 'nodemailer';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { EmailConfig } from '../config/config.port';
 import { StubConfigAdapter } from '../config/stub-config.adapter';

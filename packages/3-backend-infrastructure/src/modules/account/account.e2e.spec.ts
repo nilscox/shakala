@@ -2,7 +2,8 @@ import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { UserDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
-import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
+import { StubConfigAdapter } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { TestServer } from '../../test';
 
 describe('Account e2e', () => {

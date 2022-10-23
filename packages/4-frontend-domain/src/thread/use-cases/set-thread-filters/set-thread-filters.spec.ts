@@ -1,4 +1,4 @@
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { createThread, TestStore } from '../../../test';
 import { Sort } from '../../../types';

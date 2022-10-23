@@ -1,4 +1,5 @@
-import { createCommentDto, createThreadDto, mockReject, mockResolve } from 'shared';
+import { createCommentDto, createThreadDto } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { TestStore } from '../../../test';

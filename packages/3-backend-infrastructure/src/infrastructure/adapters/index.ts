@@ -5,7 +5,6 @@ export * from './config/env-config.adapter';
 export * from './config/stub-config.adapter';
 
 export * from './logger/console-logger.adapter';
-export * from './logger/mock-logger.adapter';
 
 export * from './generator/math-random-generator.adapter';
 

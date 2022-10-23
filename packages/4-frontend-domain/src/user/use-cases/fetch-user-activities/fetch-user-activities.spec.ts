@@ -1,4 +1,5 @@
-import { array, mockResolve, UserActivityDto, UserActivityType } from 'shared';
+import { array, UserActivityDto, UserActivityType } from 'shared';
+import { mockResolve } from 'shared/test';
 import Sinon, { SinonFakeTimers } from 'sinon';
 
 import { createDate, createUserActivity, TestStore } from '../../../test';

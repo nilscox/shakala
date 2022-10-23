@@ -1,5 +1,5 @@
 import { LoggerPort } from 'backend-application';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 export class MockLoggerAdapter implements LoggerPort {
   log = mockFn<LoggerPort['log']>();

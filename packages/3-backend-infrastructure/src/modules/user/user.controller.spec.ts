@@ -1,7 +1,8 @@
 import { GetProfileImageQuery, GetUserByIdQuery } from 'backend-application';
 import { factories, ProfileImageType } from 'backend-domain';
 
-import { MockLoggerAdapter, StubConfigAdapter, ValidationService } from '../../infrastructure';
+import { StubConfigAdapter, ValidationService } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
 import { UserController } from './user.controller';

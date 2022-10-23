@@ -5,6 +5,10 @@
   "compilerOptions": {
     "outDir": "dist",
     "noEmit": false,
-    "composite": true
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "shared/test": ["../0-shared/src/index.test.ts"]
+    }
   }
 }

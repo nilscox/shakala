@@ -2,7 +2,8 @@ import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { CreateCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto, SetReactionBodyDto } from 'shared';
 import { SuperAgentTest } from 'supertest';
 
-import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
+import { StubConfigAdapter } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { TestServer } from '../../test';
 
 describe('Comment e2e', function () {

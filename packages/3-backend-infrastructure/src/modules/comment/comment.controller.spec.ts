@@ -14,15 +14,11 @@ import {
   ReactionType,
   UserMustBeAuthorError,
 } from 'backend-domain';
-import { CreateCommentBodyDto, EditCommentBodyDto, mockReject, mockResolve } from 'shared';
+import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
-import {
-  BadRequest,
-  MockLoggerAdapter,
-  Unauthorized,
-  ValidationError,
-  ValidationService,
-} from '../../infrastructure';
+import { BadRequest, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
 import { CommentController } from './comment.controller';

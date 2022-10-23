@@ -6,6 +6,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "shared/test": ["../0-shared/src/index.test.ts"],
       "~/*": ["src/*"]
     }
   }

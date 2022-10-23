@@ -1,5 +1,5 @@
 import { createMemoryHistory, MemoryHistory } from 'history';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { TestRenderer } from '~/test/render';
 

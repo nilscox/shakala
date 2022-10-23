@@ -1,4 +1,4 @@
-import { mockResolve } from 'shared';
+import { mockResolve } from 'shared/test';
 
 import { createThread, TestStore } from '../../../test';
 import { selectLastThreads, setLastThreads } from '../../lists/last-threads';

@@ -1,7 +1,8 @@
 import { InMemoryEmailSenderAdapter } from 'backend-application';
 import { LoginBodyDto, SignupBodyDto } from 'shared';
 
-import { MockLoggerAdapter, StubConfigAdapter } from '../../infrastructure';
+import { StubConfigAdapter } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { TestServer } from '../../test';
 
 describe('Authentication e2e', function () {

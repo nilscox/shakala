@@ -1,5 +1,5 @@
 import { FileNotFoundError } from 'backend-application';
-import { mockReject, mockResolve } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
 import { RealFilesystemAdapter } from './real-filesystem.adapter';
 

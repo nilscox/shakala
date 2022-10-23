@@ -9,6 +9,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "shared/test": ["../0-shared/src/index.test.ts"]
+    }
   }
 }

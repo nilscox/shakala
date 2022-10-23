@@ -1,5 +1,6 @@
 import { AuthorizationError, FieldError, ValidationError } from 'frontend-domain';
-import { AuthorizationErrorReason, mockResolve } from 'shared';
+import { AuthorizationErrorReason } from 'shared';
+import { mockResolve } from 'shared/test';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 

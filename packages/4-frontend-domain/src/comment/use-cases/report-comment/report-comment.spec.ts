@@ -1,4 +1,4 @@
-import { mockReject, mockResolve } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
 import { createComment, TestStore } from '../../../test';
 import { AuthorizationError } from '../../../types';

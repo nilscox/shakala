@@ -1,4 +1,4 @@
-import { mockResolve } from 'shared';
+import { mockResolve } from 'shared/test';
 
 import { TestStore } from '../../../test';
 import { createAuthUser } from '../../../test/factories';

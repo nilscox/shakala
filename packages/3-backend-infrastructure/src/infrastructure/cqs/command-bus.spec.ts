@@ -1,6 +1,6 @@
 import { Authorize, Authorizer, Command, CommandHandler, ExecutionContext } from 'backend-application';
 import { factories } from 'backend-domain';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { RealCommandBus } from './command-bus';
 

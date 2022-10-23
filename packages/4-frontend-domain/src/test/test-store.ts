@@ -1,5 +1,6 @@
 import { Middleware } from 'redux';
-import { AuthUserDto, mockFn, mockImpl, mockResolve } from 'shared';
+import { AuthUserDto } from 'shared';
+import { mockFn, mockImpl, mockResolve } from 'shared/test';
 
 import { AuthenticationType } from '../authentication';
 import { AuthenticationGateway } from '../authentication/authentication.gateway';

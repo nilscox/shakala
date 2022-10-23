@@ -1,4 +1,4 @@
-import { mockResolve, mockReject } from 'shared';
+import { mockResolve, mockReject } from 'shared/test';
 
 import { createAuthUser, TestStore } from '../../../test';
 

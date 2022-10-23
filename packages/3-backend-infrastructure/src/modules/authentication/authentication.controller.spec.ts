@@ -15,17 +15,18 @@ import {
   factories,
   InvalidCredentials,
 } from 'backend-domain';
-import { get, LoginBodyDto, mockReject, SignupBodyDto } from 'shared';
+import { get, LoginBodyDto, SignupBodyDto } from 'shared';
+import { mockReject } from 'shared/test';
 
 import {
   Forbidden,
-  MockLoggerAdapter,
   NotImplemented,
   Request,
   StubConfigAdapter,
   ValidationError,
   ValidationService,
 } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 

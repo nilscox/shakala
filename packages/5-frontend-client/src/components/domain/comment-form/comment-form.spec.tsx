@@ -18,7 +18,7 @@ import {
   setThreadComments,
   TestStore,
 } from 'frontend-domain';
-import { mockFn } from 'shared';
+import { mockFn } from 'shared/test';
 
 import { TestRenderer } from '~/test/render';
 

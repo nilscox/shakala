@@ -1,9 +1,10 @@
 import { AuthorizationError } from 'backend-application';
 import express, { RequestHandler as ExpressRequestHandler } from 'express';
-import { AuthorizationErrorReason, mockImpl } from 'shared';
+import { AuthorizationErrorReason } from 'shared';
+import { mockImpl } from 'shared/test';
 import supertest from 'supertest';
 
-import { MockLoggerAdapter } from '../adapters';
+import { MockLoggerAdapter } from '../test';
 
 import { Controller, Middlewares, RequestHandler } from './controller';
 import { Response } from './response';

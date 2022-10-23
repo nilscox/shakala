@@ -1,4 +1,5 @@
-import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
+import { AuthorizationErrorReason } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
 import { createAuthUser, TestStore } from '../../../test';
 import { AuthorizationError, ValidationError } from '../../../types';

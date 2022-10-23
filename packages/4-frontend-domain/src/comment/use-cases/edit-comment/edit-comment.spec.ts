@@ -1,4 +1,5 @@
-import { AuthorizationErrorReason, mockReject, mockResolve } from 'shared';
+import { AuthorizationErrorReason } from 'shared';
+import { mockReject, mockResolve } from 'shared/test';
 
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { createAuthUser, createComment, createDate, createThread, TestStore } from '../../../test';

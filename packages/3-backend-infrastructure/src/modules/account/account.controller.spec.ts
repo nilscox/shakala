@@ -1,7 +1,8 @@
 import { ExecutionContext, GetUserByIdQuery, UpdateUserCommand } from 'backend-application';
 import { factories, ProfileImageType } from 'backend-domain';
 
-import { BadRequest, MockLoggerAdapter, RequestFile, StubConfigAdapter } from '../../infrastructure';
+import { BadRequest, RequestFile, StubConfigAdapter } from '../../infrastructure';
+import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
 
