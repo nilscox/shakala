@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { logout } from 'frontend-domain';
+import React from 'react';
 import { Outlet, useMatch } from 'react-router-dom';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
@@ -80,7 +81,7 @@ const Sidebar = () => {
         <SidebarItem to="/profil/timeline" Icon={IconArrowDown}>
           Timeline
         </SidebarItem>
-        <SidebarItem to="#" Icon={IconSignOut} onClick={() => dispatch(logout())}>
+        <SidebarItem Icon={IconSignOut} onClick={() => dispatch(logout())}>
           Déconnexion
         </SidebarItem>
       </ul>
@@ -106,27 +107,42 @@ const Chip = ({ className, children }: ChipProps) => (
 );
 
 type SidebarItemProps = {
-  to: string;
+  to?: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
   children: React.ReactNode;
 };
 
 const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
-  const isActive = useMatch(to);
+  const isActive = useMatch(to ?? '/');
+
+  const kids = (
+    <>
+      {Icon && <Icon className="h-4 w-4 text-muted" />}
+      {children}
+    </>
+  );
+
+  const props = {
+    onClick,
+    className: clsx(
+      'row my-0.5 w-full items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5',
+      isActive && '!border-warning bg-inverted/5 font-semibold',
+    ),
+  };
+
+  if (!to) {
+    return (
+      <li>
+        <button {...props}>{kids}</button>
+      </li>
+    );
+  }
 
   return (
     <li>
-      <NavLink
-        to={to}
-        onClick={onClick}
-        className={clsx(
-          'row my-0.5 block items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5',
-          isActive && '!border-warning bg-inverted/5 font-semibold',
-        )}
-      >
-        {Icon && <Icon className="h-4 w-4 text-muted" />}
-        {children}
+      <NavLink to={to} {...props}>
+        {kids}
       </NavLink>
     </li>
   );

@@ -19,7 +19,7 @@ declare global {
 
 const registerAssertions = () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Response = require('./src/infrastructure').Response;
+  const Response = require('./infrastructure').Response;
 
   const isResponse: (value: unknown) => value is Response = Response.isResponse;
 

@@ -10,7 +10,7 @@
   },
   "mocha": {
     "require": [
-      "./mocha.setup.ts"
+      "./src/mocha.setup.ts"
     ]
   },
   "devDependencies": {

@@ -4,8 +4,6 @@
   "references": [{ "path": "../0-shared" }, { "path": "../1-backend-domain" }],
   "compilerOptions": {
     "outDir": "dist",
-    "composite": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "composite": true
   }
 }

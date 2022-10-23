@@ -1,4 +1,5 @@
 import { createNormalizedSelectors } from '@nilscox/redux-query';
+import { contains } from 'shared';
 
 import { selectParentComment } from '../comment/comments.selectors';
 import { schemas, selectNormalizedEntities } from '../normalization';
@@ -35,7 +36,7 @@ export const selectCommentThreadId = (state: State, commentId: string): string =
   }
 
   const normalizedThreads = Object.values(state.threads.entities);
-  const thread = normalizedThreads.find((thread) => thread.comments.includes(commentId));
+  const thread = normalizedThreads.find((thread) => contains(thread.comments, commentId));
 
   if (!thread) {
     throw new Error(`selectCommentThreadId: cannot find thread for commentId "${commentId}"`);

@@ -46,7 +46,7 @@ export const mochaHooks: RootHookObject = {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { StubEventBus } = require('./src');
+    const { StubEventBus } = require('./adapters');
 
     expect.addCustomAssertion({
       name: 'toHaveEmitted',

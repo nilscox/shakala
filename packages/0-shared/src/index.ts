@@ -1,5 +1,6 @@
 export * from './libs/array';
 export * from './libs/base-error';
+export * from './libs/contains';
 export * from './libs/create-factory';
 export * from './libs/create-map';
 export * from './libs/first';

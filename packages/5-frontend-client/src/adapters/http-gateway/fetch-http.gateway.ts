@@ -1,5 +1,5 @@
 import { AuthorizationError, ValidationError } from 'frontend-domain';
-import { get, HttpErrorBody, wait } from 'shared';
+import { contains, get, HttpErrorBody, wait } from 'shared';
 import * as yup from 'yup';
 
 import {
@@ -162,7 +162,7 @@ export class FetchHttpGateway implements HttpGateway {
     const chromeErrorMessage = 'Failed to fetch';
     const firefoxErrorMessage = 'NetworkError when attempting to fetch resource.';
 
-    if ([chromeErrorMessage, firefoxErrorMessage].includes(message as string)) {
+    if (contains([chromeErrorMessage, firefoxErrorMessage], message)) {
       throw new NetworkError();
     }
   }

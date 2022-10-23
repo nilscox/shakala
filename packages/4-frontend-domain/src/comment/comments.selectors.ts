@@ -1,5 +1,5 @@
 import { createNormalizedSelectors } from '@nilscox/redux-query';
-import { getIds } from 'shared';
+import { contains, getIds } from 'shared';
 
 import { schemas, selectNormalizedEntities } from '../normalization';
 import { State, Selector } from '../store.types';
@@ -53,7 +53,7 @@ const selectAllComments = (state: State) => {
 };
 
 export const selectParentComment = (state: State, replyId: string) => {
-  return selectAllComments(state).find((comment) => getIds(comment.replies).includes(replyId));
+  return selectAllComments(state).find((comment) => contains(getIds(comment.replies), replyId));
 };
 
 export const selectIsReply = (state: State, commentId: string) => {
