@@ -2,7 +2,7 @@ import { Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
-import { ConfigPort, EnvConfigAdapter } from '3-backend-infrastructure/src/infrastructure';
+import { ConfigPort, StubConfigAdapter } from '3-backend-infrastructure/src/infrastructure';
 
 import {
   SqlComment,
@@ -26,7 +26,9 @@ const entities = [
   SqlUserActivity,
 ];
 
-export const getConfig = (config: ConfigPort = new EnvConfigAdapter()): Options<PostgreSqlDriver> => {
+export const getConfig = (
+  config: ConfigPort = new StubConfigAdapter().withEnvDatabase(),
+): Options<PostgreSqlDriver> => {
   const { environment } = config.app();
   const { host, user, password, database, debug } = config.database();
 
