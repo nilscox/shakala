@@ -1,6 +1,5 @@
 {
   "include": ["specs", "utils"],
-  "references": [{ "path": "../3-backend-infrastructure" }, { "path": "../4-frontend-domain" }],
   "compilerOptions": {
     "target": "ES2022",
     "moduleResolution": "node",
@@ -10,7 +9,8 @@
     "baseUrl": "..",
     "paths": {
       "shared": ["0-shared/src"],
-      "shared/test": ["0-shared/src/index.test.ts"],
+      "backend-domain": ["1-backend-domain/src"],
+      "backend-application": ["2-backend-application/dist"],
       "backend-infrastructure": ["3-backend-infrastructure/dist"],
       "frontend-domain": ["4-frontend-domain/src"]
     }

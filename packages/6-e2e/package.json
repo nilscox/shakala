@@ -6,7 +6,7 @@
     "clean": "exit 0",
     "lint": "exit 0",
     "test": "exit 0",
-    "playwright": "node -r ../3-backend-infrastructure/register-aliases.js ./node_modules/.bin/playwright",
+    "playwright": "node -r tsconfig-paths/register ./node_modules/.bin/playwright",
     "e2e": "yarn playwright test"
   },
   "devDependencies": {

@@ -2,8 +2,7 @@ import { Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
-import { ConfigPort, StubConfigAdapter } from '3-backend-infrastructure/src/infrastructure';
-
+import { ConfigPort, StubConfigAdapter } from '../../infrastructure';
 import {
   SqlComment,
   SqlCommentReport,
