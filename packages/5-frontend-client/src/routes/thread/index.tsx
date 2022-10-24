@@ -3,6 +3,7 @@ import {
   createNewThread,
   FormField,
   selectCreateThreadFieldErrors,
+  selectLastThreads,
   ThreadForm as ThreadFormType,
 } from 'frontend-domain';
 
@@ -14,6 +15,7 @@ import { useSelector } from '~/hooks/use-selector';
 export const ThreadsRoute = () => {
   const dispatch = useDispatch();
 
+  const [thread] = useSelector(selectLastThreads);
   const errors = useSelector(selectCreateThreadFieldErrors);
 
   const handleSubmit = (form: ThreadFormType) => {
@@ -41,10 +43,12 @@ export const ThreadsRoute = () => {
         petit message pour nous montrer votre soutien !
       </p>
 
-      <p>
-        En attendant, vous pouvez voir à quoi pourrait ressembler une discussion{' '}
-        <Link to="/discussions/XXX">sur cette page</Link>.
-      </p>
+      {thread && (
+        <p>
+          En attendant, vous pouvez voir à quoi pourrait ressembler une discussion{' '}
+          <Link to={`/discussions/${thread.id}`}>sur cette page</Link>.
+        </p>
+      )}
 
       <h2>Créer un nouveau fil de discussion</h2>
 
