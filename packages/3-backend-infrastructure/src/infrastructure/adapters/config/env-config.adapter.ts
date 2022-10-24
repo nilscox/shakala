@@ -82,6 +82,7 @@ export class EnvConfigAdapter implements ConfigPort {
       user: this.get('DATABASE_USER'),
       password: this.get('DATABASE_PASSWORD'),
       database: this.get('DATABASE_NAME'),
+      debug: this.get('DATABASE_DEBUG', 'boolean'),
     };
   }
 

@@ -11,15 +11,10 @@ import { User } from 'backend-domain';
 import { LoginBodyDto } from 'shared';
 import { agent, SuperAgentTest } from 'supertest';
 
-import {
-  createTestDatabaseConnection,
-  resetDatabase,
-} from '../persistence/mikro-orm/create-database-connection';
+import { resetDatabase } from '../persistence/mikro-orm/create-database-connection';
 import { Server } from '../server';
 
 export class TestServer extends Server {
-  protected override createDatabaseConnection = createTestDatabaseConnection;
-
   async reset() {
     await resetDatabase(this.orm as MikroORM);
   }

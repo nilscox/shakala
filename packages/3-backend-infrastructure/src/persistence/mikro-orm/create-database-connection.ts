@@ -2,36 +2,34 @@ import { MikroORM, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { wait } from 'shared';
 
+import { ConfigPort } from '3-backend-infrastructure/src/infrastructure';
+
 import { createDatabaseSaver } from '../utils/save-test-data';
 
-import config from './mikro-orm.config';
+import { getConfig } from './mikro-orm.config';
 
-export const createDatabaseConnection = async (override: Options<PostgreSqlDriver> = {}) => {
-  return MikroORM.init<PostgreSqlDriver>({ ...config, ...override });
-};
-
-export const createTestDatabaseConnection = async (options: Options<PostgreSqlDriver> = {}) => {
-  const orm = await createDatabaseConnection(options);
-  const schemaGenerator = orm.getSchemaGenerator();
-
-  await schemaGenerator.ensureDatabase();
-  await schemaGenerator.refreshDatabase();
-
-  return orm;
+export const createDatabaseConnection = async (config?: ConfigPort, options?: Options<PostgreSqlDriver>) => {
+  return MikroORM.init<PostgreSqlDriver>({ ...getConfig(config), ...options });
 };
 
 export const resetDatabase = async (orm: MikroORM) => {
   const schemaGenerator = orm.getSchemaGenerator();
 
+  await schemaGenerator.refreshDatabase();
   await schemaGenerator.clearDatabase();
 };
 
-export const setupTestDatabase = (options: Options<PostgreSqlDriver> = {}) => {
+export const setupTestDatabase = (options?: Options<PostgreSqlDriver>) => {
   let orm: MikroORM<PostgreSqlDriver>;
   let isReady = false;
 
   before(async () => {
-    orm = await createTestDatabaseConnection({ dbName: 'test', ...options });
+    orm = await createDatabaseConnection(undefined, {
+      dbName: 'test',
+      ...options,
+    });
+
+    await resetDatabase(orm);
   });
 
   after(async () => {

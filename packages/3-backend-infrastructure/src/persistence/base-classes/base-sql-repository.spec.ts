@@ -63,7 +63,9 @@ class SqlTestRepository extends BaseSqlRepository<SqlTest, Test> {
 describe('BaseSqlRepository', function () {
   this.timeout(5 * 1000);
 
-  const { getEntityManager, waitForDatabaseConnection } = setupTestDatabase({ entities: [SqlTest] });
+  const { getEntityManager, waitForDatabaseConnection } = setupTestDatabase({
+    entities: [SqlTest],
+  });
 
   let em: EntityManager;
   let repository: SqlTestRepository;

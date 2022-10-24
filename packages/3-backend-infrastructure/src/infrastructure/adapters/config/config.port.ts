@@ -31,6 +31,7 @@ export type DatabaseConfig = {
   user: string;
   password: string;
   database: string;
+  debug: boolean;
 };
 
 export type EmailConfig = {

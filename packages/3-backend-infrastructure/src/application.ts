@@ -96,14 +96,7 @@ export class Application {
     if (true as boolean) {
       this.logger.log('connecting to the database');
 
-      const databaseConfig = this.config.database();
-
-      this.orm = await this.createDatabaseConnection({
-        host: databaseConfig.host,
-        user: databaseConfig.user,
-        password: databaseConfig.password,
-        dbName: databaseConfig.database,
-      });
+      this.orm = await createDatabaseConnection(this.config);
 
       this.logger.log('instantiating repositories');
 
@@ -208,6 +201,4 @@ export class Application {
       return cb({ commandBus: this.commandBus, queryBus: this.queryBus });
     });
   }
-
-  protected createDatabaseConnection = createDatabaseConnection;
 }

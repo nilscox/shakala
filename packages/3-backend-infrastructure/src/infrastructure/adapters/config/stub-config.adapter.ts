@@ -41,6 +41,7 @@ export class StubConfigAdapter implements ConfigPort {
       user: '',
       password: '',
       database: '',
+      debug: false,
     },
     email: {
       host: '',
