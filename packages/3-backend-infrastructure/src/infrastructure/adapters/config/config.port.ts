@@ -8,6 +8,7 @@ export interface ConfigPort {
 }
 
 export type AppConfig = {
+  environment: string;
   version: string;
   host: string;
   port: number;

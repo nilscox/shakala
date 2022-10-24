@@ -27,6 +27,7 @@ const entities = [
 ];
 
 export const getConfig = (config: ConfigPort = new EnvConfigAdapter()): Options<PostgreSqlDriver> => {
+  const { environment } = config.app();
   const { host, user, password, database, debug } = config.database();
 
   return {
@@ -48,7 +49,7 @@ export const getConfig = (config: ConfigPort = new EnvConfigAdapter()): Options<
     },
     pool: {
       min: 0,
-      max: 10,
+      max: environment === 'production' ? 1 : 10,
       // cspell:word millis
       idleTimeoutMillis: 5000,
     },

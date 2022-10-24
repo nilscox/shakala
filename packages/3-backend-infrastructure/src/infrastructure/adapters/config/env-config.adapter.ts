@@ -53,6 +53,7 @@ export class EnvConfigAdapter implements ConfigPort {
 
   app(): AppConfig {
     return {
+      environment: this.env,
       version: this.get('VERSION'),
       host: this.get('HOST'),
       port: this.get('PORT', 'number'),

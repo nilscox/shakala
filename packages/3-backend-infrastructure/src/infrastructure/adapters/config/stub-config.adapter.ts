@@ -21,6 +21,7 @@ type Config = {
 export class StubConfigAdapter implements ConfigPort {
   static defaultConfig: Config = {
     app: {
+      environment: '',
       version: '',
       host: '',
       port: NaN,
