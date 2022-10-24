@@ -109,10 +109,12 @@ const Navigation = ({ className }: NavigationProps) => (
       className,
     )}
   >
-    <HeaderNavLink to="/">Accueil</HeaderNavLink>
-    <HeaderNavLink to="/discussions">Discussions</HeaderNavLink>
-    <HeaderNavLink to="/charte">La charte</HeaderNavLink>
-    <HeaderNavLink to="/faq">FAQ</HeaderNavLink>
+    <HeaderNavLink to="" end>
+      Accueil
+    </HeaderNavLink>
+    <HeaderNavLink to="discussions">Discussions</HeaderNavLink>
+    <HeaderNavLink to="charte">La charte</HeaderNavLink>
+    <HeaderNavLink to="faq">FAQ</HeaderNavLink>
   </nav>
 );
 

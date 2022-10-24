@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { logout } from 'frontend-domain';
 import React from 'react';
-import { Outlet, useMatch } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { AsyncResource } from '~/components/elements/async-resource/async-resource';
 import { Avatar } from '~/components/elements/avatar/avatar';
@@ -57,7 +57,12 @@ const Sidebar = () => {
         <Avatar size="big" image={user?.profileImage} />
         <div>
           <div className="text-lg font-semibold">{user?.nick}</div>
-          <div className="text-xs leading-[1]">Votre compte utilisateur</div>
+          <div
+            // eslint-disable-next-line tailwindcss/no-arbitrary-value
+            className="text-xs leading-[1]"
+          >
+            Votre compte utilisateur
+          </div>
         </div>
       </div>
 
@@ -114,8 +119,6 @@ type SidebarItemProps = {
 };
 
 const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
-  const isActive = useMatch(to ?? '/');
-
   const kids = (
     <>
       {Icon && <Icon className="h-4 w-4 text-muted" />}
@@ -123,25 +126,25 @@ const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
     </>
   );
 
-  const props = {
-    onClick,
-    className: clsx(
+  const getClassName = (isActive: boolean) =>
+    clsx(
       'row my-0.5 w-full items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5',
       isActive && '!border-warning bg-inverted/5 font-semibold',
-    ),
-  };
+    );
 
   if (!to) {
     return (
       <li>
-        <button {...props}>{kids}</button>
+        <button className={getClassName(false)} onClick={onClick}>
+          {kids}
+        </button>
       </li>
     );
   }
 
   return (
     <li>
-      <NavLink to={to} {...props}>
+      <NavLink to={to} className={({ isActive }) => getClassName(isActive)} end onClick={onClick}>
         {kids}
       </NavLink>
     </li>
