@@ -13,7 +13,7 @@ import {
   ThreadWithCommentsDto,
 } from 'shared';
 
-import { HttpGateway, Response } from '../http-gateway/http.gateway';
+import { HttpError, HttpGateway, Response } from '../http-gateway/http.gateway';
 
 export class FetchError extends Error {
   constructor(public readonly response: Response<unknown>) {
@@ -33,19 +33,16 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async getById(threadId: string): Promise<[ThreadDto, CommentDto[]] | undefined> {
-    const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`);
+    try {
+      const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`);
+      const { comments, ...thread } = response.body;
 
-    if (response.status === 404) {
-      return;
+      return [thread, comments];
+    } catch (error) {
+      if (!HttpError.isHttpError(error, 404)) {
+        throw error;
+      }
     }
-
-    if (response.status !== 200) {
-      throw new FetchError(response);
-    }
-
-    const { comments, ...thread } = response.body;
-
-    return [thread, comments];
   }
 
   async getComments(threadId: string, options: GetCommentsOptions): Promise<CommentDto[] | undefined> {

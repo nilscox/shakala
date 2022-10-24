@@ -8,11 +8,24 @@ export interface Response<Body> {
   readonly error: unknown;
 }
 
-export class HttpError {
+export class HttpError extends Error {
   readonly status: number;
 
   constructor(readonly response: Response<HttpErrorBody>) {
+    super('http error');
     this.status = response.status;
+  }
+
+  static isHttpError(error: unknown, status?: number) {
+    if (!(error instanceof HttpError)) {
+      return false;
+    }
+
+    if (status !== undefined) {
+      return true;
+    }
+
+    return error.response.status === status;
   }
 }
 

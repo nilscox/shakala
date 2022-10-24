@@ -11,6 +11,7 @@ export * from './libs/is-defined';
 export * from './libs/is-enum-value';
 export * from './libs/is-type';
 export * from './libs/last';
+export * from './libs/omit';
 export * from './libs/pick';
 export * from './libs/random-id';
 export * from './libs/unexpected-error';
