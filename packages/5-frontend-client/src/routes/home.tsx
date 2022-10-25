@@ -39,14 +39,14 @@ export const Home = () => {
 };
 
 const Outline = () => (
-  <div className="my-8 mx-4 md:m-12">
-    <div className="my-2 text-xl">
+  <div className="my-8 mx-4 md:my-12 md:mx-10">
+    <div className="my-6 px-8 text-center text-xl">
       Vous rêvez de pouvoir discuter des sujets qui vous tiennent à cœur dans de « bonnes conditions » ?
     </div>
     <div className="text-lg">
-      <p>Et bien c'est le but de ce site 😄</p>
+      <p>Et bien c'est le but de ce site 😊</p>
       <p>
-        Ici, vous pouvez ouvrir des fils de discussions où chacun s'engage à respecter{' '}
+        Sur Shakala, vous pouvez participer à des discussions où chacun s'engage à respecter{' '}
         <Link to="/charte">une charte</Link>, un ensemble de règles pensées pour favoriser{' '}
         <strong>des échanges critiques et bienveillants</strong>.
       </p>
@@ -106,7 +106,9 @@ const Motivations = () => (
     <Heading id="pourquoi-ce-site">Pourquoi ce site ?</Heading>
 
     {/* cspell:word pfff */}
-    <p className="m-10 text-lg">Vous-êtes vous déjà dit "Pfff... les gens sur internet quoi... 🤦" ?</p>
+    <p className="m-10 text-lg">
+      Vous-êtes vous déjà dit <em>"Pfff... les gens sur internet quoi... 🤦" ?</em>
+    </p>
 
     <div className="flex flex-col md:flex-row">
       <div className="mb-2 flex-1 border-b pb-2 md:mr-2 md:mb-0 md:border-r md:border-b-0 md:pr-2 md:pb-0">
@@ -134,7 +136,7 @@ const Motivations = () => (
       </div>
     </div>
 
-    <p className="pt-2">
+    <p className="pt-4">
       Plus de détails sur les objectifs et ambitions de la plateforme sont expliqués sur{' '}
       <Link to="/motivations">la page motivations</Link>.
     </p>
@@ -148,7 +150,7 @@ type KeyFeatureProps = {
 };
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
-  <div className="max-w-1 flex-1 border-b-2 pb-1">
+  <div className="max-w-1 flex-1">
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
     <img src={image} className="mx-auto max-h-[5.5rem] py-2 opacity-80 md:max-h-1" alt={name} />
     <div className="text-center text-lg font-bold">{name}</div>
@@ -162,7 +164,7 @@ type FeatureProps = {
 };
 
 const Feature = ({ Icon, children }: FeatureProps) => (
-  <li className="flex flex-row items-center p-1">
+  <li className="flex flex-row items-center">
     <Icon className="fill-inverted" />
     <div className="ml-2 flex-1 border-l-2 pl-2">{children}</div>
   </li>
@@ -172,7 +174,7 @@ const KeyFeatures = () => (
   <>
     <Heading id="points-clés">Les points clés</Heading>
 
-    <div className="my-6 flex flex-col items-center justify-center gap-6 sm:flex-row">
+    <div className="my-8 flex flex-col items-center gap-6 sm:flex-row">
       <KeyFeature image={imageCharte} name="La charte">
         Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
         garantir des échanges pertinents
@@ -189,51 +191,47 @@ const KeyFeatures = () => (
       </KeyFeature>
     </div>
 
-    <p className="my-6 max-w-4">
+    <p className="my-8 max-w-4">
       Ces trois points sont les piliers fondateurs qui, on l'espère, feront le succès de la plateforme. Mais
       ce n'est pas tout ! D'autres fonctionnalités viennent rendre les fils de discussions pratiques et
       pertinents :
     </p>
 
-    <div className="flex flex-col md:flex-row md:gap-4">
-      <ul className="flex-1">
-        <Feature Icon={SearchIcon}>
-          Il est possible de <strong>rechercher par mots clés</strong> parmi tous les messages
-        </Feature>
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <Feature Icon={SearchIcon}>
+        Il est possible de <strong>rechercher par mots clés</strong> parmi tous les messages
+      </Feature>
 
-        <Feature Icon={FormatIcon}>
-          Chaque message peut être <strong>mis en forme</strong> avec des liens, du texte en gras, des listes,
-          des tableaux et bien plus
-        </Feature>
+      <Feature Icon={FormatIcon}>
+        Chaque message peut être <strong>mis en forme</strong> avec des liens, du texte en gras, des listes,
+        des tableaux et bien plus
+      </Feature>
 
-        <Feature Icon={SortIcon}>
-          Les messages peuvent être <strong>triés par pertinence</strong>, permettant de voir rapidement ceux
-          qui ont eu le plus d'impact
-        </Feature>
+      <Feature Icon={SortIcon}>
+        Les messages peuvent être <strong>triés par pertinence</strong>, permettant de voir rapidement ceux
+        qui ont eu le plus d'impact
+      </Feature>
 
-        <Feature Icon={CommunityIcon}>
-          La plateforme est <strong>pilotée par la communauté</strong>, partagez-nous vos impressions et
-          proposez vos idées !
-        </Feature>
-      </ul>
+      <Feature Icon={CommunityIcon}>
+        La plateforme est <strong>pilotée par la communauté</strong>, partagez-nous vos impressions et
+        proposez vos idées !
+      </Feature>
 
-      <ul className="flex-1">
-        <Feature Icon={SubscribeIcon}>
-          Il est possible de s'abonner aux messages, pour <strong>être notifié</strong> lorsqu'une réponse est
-          publiée
-        </Feature>
+      <Feature Icon={SubscribeIcon}>
+        Il est possible de s'abonner aux messages, pour <strong>être notifié</strong> lorsqu'une réponse est
+        publiée
+      </Feature>
 
-        <Feature Icon={EditIcon}>
-          Les discussions disposent d'un système <strong>d'édition collaborative</strong> : tout le monde peut
-          proposer d'améliorer un message
-        </Feature>
+      <Feature Icon={EditIcon}>
+        Les discussions disposent d'un système <strong>d'édition collaborative</strong> : tout le monde peut
+        proposer d'améliorer un message
+      </Feature>
 
-        <Feature Icon={TrophyIcon}>
-          Les utilisateurs gagnent des <strong>points de réputation</strong> lorsqu'ils apportent de la valeur
-          à la communauté
-        </Feature>
-      </ul>
-    </div>
+      <Feature Icon={TrophyIcon}>
+        Les utilisateurs gagnent des <strong>points de réputation</strong> lorsqu'ils apportent de la valeur à
+        la communauté
+      </Feature>
+    </ul>
   </>
 );
 
@@ -270,27 +268,29 @@ const TargetUsers = () => (
 
     <p>
       Les zones de commentaires sont mises à disposition de tous, publiquement pour lire les messages, et
-      après inscription pour y participer. Il n'est pas nécessaire de connaître par cœur les outils de la
-      pensée critique, les biais cognitifs ou la méthode scientifique pour s'inscrire. Le but, c'est de
-      rassembler des personnes qui « jouent le jeu », qui cherchent à partager leurs opinions et à comprendre
-      celles des autres, avec bienveillance et humilité.
+      après inscription pour y participer. Il n'est pas nécessaire de bien connaître les outils de la pensée
+      critique, les biais cognitifs ou la méthode scientifique pour s'inscrire. Le but est de rassembler des
+      personnes qui « jouent le jeu », qui cherchent à partager leurs opinions et à comprendre celles des
+      autres, avec courtoisie et humilité.
     </p>
 
     <p>
-      Mais reconnaissons tout de même que cette initiative s'adresse en premier lieu à des personnes qui
-      veulent creuser les sujets qui leurs tiennent à cœur, qui se posent des questions et cherchent des
-      réponses via des échanges critiques. Si cette démarche vous correspond, si vous cherchez à renforcer
-      votre autodéfense intellectuelle tout en exerçant votre esprit critique, alors vous avez beaucoup à
-      apporter à la communauté ! Vous pouvez montrer l'exemple, faire partie d'un groupe de personnes dans un
-      but commun : celui de mieux comprendre le monde.
+      Si vous voulez creuser les sujets qui leurs tiennent à cœur, si vous vous posez des questions et
+      attendez des réponses critiques, ou si vous cherchez simplement à renforcer votre autodéfense
+      intellectuelle, alors vous avez beaucoup à apporter à la communauté ! Vous pouvez apporter de l'inertie
+      dans groupe de personnes qui ont un but commun : celui de mieux comprendre le monde.
     </p>
 
     <p>
-      Et si vous n'êtes pas familier avec les méthodes du scepticisme, ou ne cherchez pas spécialement à
-      creuser certains sujets, cet outil vous permet de communiquer dans des conditions favorables, d'être
-      écouté.e et corrigé.e pour de bonnes raisons. À terme, l'objectif est qu'autour des zones de
-      commentaires Shakala se développe une communauté dont l'intégrité ne peut être remise en question. Pour
-      en faire partie, nous n'attendons rien de plus de votre part que le respect de la charte.
+      Et si ce n'est pas vraiment ce que vous cherchez, cet outil vous permettra de participer à des
+      discussions intéressantes, d'être écouté·e et corrigé·e pour de bonnes raisons.
+    </p>
+
+    <p>
+      À terme, l'objectif est qu'autour de Shakala se développe une communauté de personnes dont l'intégrité
+      ne peut être remise en question. Pour en faire partie, nous n'attendons rien de plus de votre part que
+      le respect de la charte. Et pour aller plus loin, vous pouvez devenir modérateur ou participer à la
+      construction du projet.
     </p>
   </>
 );

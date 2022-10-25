@@ -21,7 +21,7 @@
   }
 
   p {
-    @apply my-1;
+    @apply my-2;
   }
 
   h1 {
@@ -96,6 +96,8 @@
   }
 
   /* avoid eslint warnings */
-  .notification {}
-  .comment {}
+  .notification {
+  }
+  .comment {
+  }
 }
