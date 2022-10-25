@@ -22,9 +22,9 @@ koyeb service create frontend \
   --ports "$port":http \
   --regions fra \
   --routes "/:$port" \
+  --env GITHUB_TOKEN=@github-token
   --env PORT="$port" \
   --env API_URL=/api \
   --env ANALYTIC_URL="$analytics_url" \
   --env ANALYTIC_SITE_ID="$analytics_site_id"
 
-# --secret GITHUB_TOKEN=

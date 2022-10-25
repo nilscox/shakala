@@ -19,7 +19,6 @@ koyeb service create storybook \
   --ports "$port:http" \
   --regions fra \
   --routes "/storybook:$port" \
+  --env GITHUB_TOKEN=@github-token
   --env PORT="$port" \
-  --env PUBLIC_PATH=/storybook \
-
-# --secret GITHUB_TOKEN=
+  --env PUBLIC_PATH=/storybook
