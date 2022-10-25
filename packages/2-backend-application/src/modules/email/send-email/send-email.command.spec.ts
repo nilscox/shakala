@@ -24,6 +24,7 @@ describe('SendEmailCommand', () => {
 
     await handler.handle(
       new SendEmailCommand('user@domain.tld', EmailKind.welcome, {
+        appBaseUrl: 'https://app.url',
         nick: 'tamer',
         emailValidationLink: '',
       }),
