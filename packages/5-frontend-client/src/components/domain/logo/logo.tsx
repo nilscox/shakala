@@ -3,161 +3,149 @@ import { SVGProps } from 'react';
 const point = (x: number, y: number) => ({ x, y, toString: () => `${x},${y}` });
 type Point = ReturnType<typeof point>;
 
-type Ballon = {
-  center: Point;
-  radius: number;
-  tip: Point[];
-};
-
-const questionCenter = point(8, 7);
-const question: Ballon = {
-  center: questionCenter,
-  radius: 6,
-  tip: [
-    point(questionCenter.x - 4, questionCenter.y - 2),
-    point(questionCenter.x - 7, questionCenter.y + 6),
-    point(questionCenter.x + 2, questionCenter.y + 4),
-  ],
-};
-
-const answerCenter = point(17, 8);
-const answer: Ballon = {
-  center: answerCenter,
-  radius: 5,
-  tip: [
-    point(answerCenter.x + 3, answerCenter.y - 2),
-    point(answerCenter.x + 6, answerCenter.y + 5),
-    point(answerCenter.x - 2, answerCenter.y + 3),
-  ],
-};
+const width = 48;
+const height = 32;
+const strokeWidth = 1.7;
 
 type LogoProps = SVGProps<SVGSVGElement> & {
   debug?: boolean;
 };
 
 export const Logo = ({ debug, ...props }: LogoProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 14" {...props}>
-    <SpeechBallonQuestion question={question} answer={answer} debug={debug} />
-    <SpeechBallonAnswer answer={answer} debug={debug} />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox={`0 0 ${width} ${height}`}
+    {...props}
+  >
+    <Question debug={debug} />
+    <Answer debug={debug} />
   </svg>
 );
 
-export const SpeechBallonQuestion = ({
-  question: { center, radius, tip },
-  answer,
-  debug,
-}: {
-  question: Ballon;
-  answer: Ballon;
-  debug?: boolean;
-}) => (
+const questionCenter = point(16, 16);
+const questionRadius = 15;
+const questionTip = [
+  point(questionCenter.x - 8, questionCenter.y - 8),
+  point(questionCenter.x - questionRadius, questionCenter.y + questionRadius),
+  point(questionCenter.x + 8, questionCenter.y + 8),
+];
+
+const Question = ({ debug }: { debug?: boolean }) => (
   <>
     <circle
-      cx={center.x}
-      cy={center.y}
-      r={radius}
-      fill="transparent"
-      stroke="currentColor"
       mask="url(#question-circle-mask)"
-    />
-
-    <mask id="question-circle-mask">
-      <rect x="0" y="0" width="24" height="24" fill="white" />
-      <path fill="black" d={`M ${tip[0]} L ${tip[1]} L ${tip[2]} Z`} />
-      <circle fill="black" cx={answer.center.x} cy={answer.center.y} r={answer.radius} />
-    </mask>
-
-    <path
       fill="transparent"
       stroke="currentColor"
-      strokeLinejoin="round"
-      d={`M ${tip[0]} L ${tip[1]} L ${tip[2]} Z`}
+      strokeWidth={strokeWidth}
+      cx={questionCenter.x}
+      cy={questionCenter.y}
+      r={questionRadius}
+    />
+
+    <Mask id="question-circle-mask">
+      <path fill="black" d={`M ${questionTip.join(' L ')} Z`} />
+      <circle fill="black" cx={answerCenter.x} cy={answerCenter.y} r={answerRadius} />
+    </Mask>
+
+    <path
       mask="url(#question-tip-mask)"
+      fill="transparent"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinejoin="round"
+      d={`M ${questionTip.join(' L ')} Z`}
     />
 
-    <mask id="question-tip-mask">
-      <rect x="0" y="0" width="24" height="24" fill="white" />
-      <circle cx={center.x} cy={center.y} r={radius - 0.5} fill="black" />
-    </mask>
+    <Mask id="question-tip-mask">
+      <circle cx={questionCenter.x} cy={questionCenter.y} r={questionRadius - strokeWidth / 2} fill="black" />
+    </Mask>
 
     <path
-      d={`M ${center} c -0.5 -1.5 0 -3 2 -3 s 3 1 3 3 s -3 2 -3 4`}
-      style={{ transform: 'translate(0.9px, 0.5px) scale(70%)' }}
-      stroke="currentColor"
-      strokeWidth={1.5}
       fill="transparent"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
+      transform="translate(-4 -4)"
+      d={`M ${questionCenter} c 0,-1 1,-3 4,-3 c 4,0 5,3 4,5 s -4,3 -4,5`}
     />
 
-    <circle cx={center.x} cy={center.y + 3} r={0.8} stroke="transparent" fill="currentColor" />
+    <circle
+      fill="currentColor"
+      stroke="transparent"
+      cx={questionCenter.x}
+      cy={questionCenter.y + questionRadius / 2}
+      r={questionRadius / 10}
+    />
 
-    {/* <text
-      x={center.x}
-      y={center.y + 1}
-      textAnchor="middle"
-      dominantBaseline="middle"
-      fontSize="12"
-      fontFamily="Concert One"
-    >
-      ?
-    </text> */}
-
-    {debug &&
-      tip.map(({ x, y }, index) => <circle key={index} cx={x} cy={y} r={0.1} fill="red" stroke="none" />)}
+    {debug && <DebugPoints points={questionTip} />}
   </>
 );
 
-export const SpeechBallonAnswer = ({
-  answer: { center, radius, tip },
-  debug,
-}: {
-  answer: Ballon;
-  debug?: boolean;
-}) => (
+const answerCenter = point(35, 19);
+const answerRadius = 12;
+const answerTip = [
+  point(answerCenter.x + 7, answerCenter.y - 7),
+  point(answerCenter.x + answerRadius, answerCenter.y + answerRadius),
+  point(answerCenter.x - 7, answerCenter.y + 7),
+];
+
+const Answer = ({ debug }: { debug?: boolean }) => (
   <>
     <circle
-      cx={center.x}
-      cy={center.y}
-      r={radius}
+      mask="url(#answer-circle-mask)"
       fill="transparent"
       stroke="currentColor"
-      mask="url(#answer-circle-mask)"
+      strokeWidth={strokeWidth}
+      cx={answerCenter.x}
+      cy={answerCenter.y}
+      r={answerRadius}
     />
 
-    <mask id="answer-circle-mask">
-      <rect x="0" y="0" width="24" height="24" fill="white" />
-      <path strokeWidth={0.1} fill="black" d={`M ${tip[0]} L ${tip[1]} L ${tip[2]} Z`} />
-    </mask>
+    <Mask id="answer-circle-mask">
+      <path fill="black" d={`M ${answerTip.join(' L ')} Z`} />
+    </Mask>
 
     <path
+      mask="url(#answer-tip-mask)"
       fill="transparent"
       stroke="currentColor"
+      strokeWidth={strokeWidth}
       strokeLinejoin="round"
-      d={`M ${tip[0]} L ${tip[1]} L ${tip[2]} Z`}
-      mask="url(#answer-tip-mask)"
+      d={`M ${answerTip.join(' L ')} Z`}
     />
 
-    <mask id="answer-tip-mask">
-      <rect x="0" y="0" width="24" height="24" fill="white" />
-      <circle cx={center.x} cy={center.y} r={radius - 0.5} fill="black" />
-    </mask>
+    <Mask id="answer-tip-mask">
+      <circle cx={answerCenter.x} cy={answerCenter.y} r={answerRadius - strokeWidth / 2} fill="black" />
+    </Mask>
 
-    <circle cx={center.x - 2.5} cy={center.y} r={0.8} stroke="transparent" fill="currentColor" />
-    <circle cx={center.x} cy={center.y} r={0.8} stroke="transparent" fill="currentColor" />
-    <circle cx={center.x + 2.5} cy={center.y} r={0.8} stroke="transparent" fill="currentColor" />
+    {[-answerRadius * 0.4, 0, answerRadius * 0.4].map((x) => (
+      <circle
+        key={x}
+        fill="currentColor"
+        stroke="transparent"
+        cx={answerCenter.x + x}
+        cy={answerCenter.y}
+        r={answerRadius / 8}
+      />
+    ))}
 
-    {/* <text
-      x={center.x}
-      y={center.y - 1.5}
-      textAnchor="middle"
-      dominantBaseline="middle"
-      fontSize="10"
-      fontFamily="Concert One"
-    >
-      ...
-    </text> */}
+    {debug && <DebugPoints points={answerTip} />}
+  </>
+);
 
-    {debug &&
-      tip.map(({ x, y }, index) => <circle key={index} cx={x} cy={y} r={0.1} fill="red" stroke="none" />)}
+const Mask = ({ id, children }: { id: string; children: React.ReactNode }) => (
+  <mask id={id}>
+    <rect x="0" y="0" width={width} height={height} fill="white" />
+    {children}
+  </mask>
+);
+
+const DebugPoints = ({ points }: { points: Point[] }) => (
+  <>
+    {points.map(({ x, y }, index) => (
+      <circle key={index} cx={x} cy={y} r={0.2} fill="red" stroke="none" />
+    ))}
   </>
 );

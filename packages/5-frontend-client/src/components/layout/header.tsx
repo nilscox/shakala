@@ -2,9 +2,10 @@ import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
+// import { Logo } from '~/components/domain/logo/logo';
 import { Link, NavLink } from '~/components/elements/link';
 import { useIsFetchingUser, useUser } from '~/hooks/use-user';
-import Logo from '~/images/logos/shakala.svg';
+import Logo from '~/images/logo.svg';
 
 import { Avatar } from '../elements/avatar/avatar';
 import { SearchParamLink } from '../elements/search-param-link';
@@ -28,7 +29,7 @@ export const Header = ({ className }: HeaderProps): JSX.Element => (
 
 const Heading = () => (
   <Link to="/" className="row mt-4 items-end gap-4">
-    <Logo className="w-12 px-1 !text-white/90" />
+    <Logo className="text-inverted" width={64} height={undefined} />
     <div>
       <div className="text-xxl font-bold leading-10">Shakala</div>
       <div className="leading-3">Échanges critiques</div>
