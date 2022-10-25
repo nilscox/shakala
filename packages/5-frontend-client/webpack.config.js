@@ -98,6 +98,9 @@ if (NODE_ENV === 'development') {
     host: HOST,
     port: Number(PORT),
     historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, 'static'),
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',

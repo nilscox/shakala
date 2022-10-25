@@ -4,6 +4,7 @@ import { useMatch } from 'react-router-dom';
 
 import { Link, NavLink } from '~/components/elements/link';
 import { useIsFetchingUser, useUser } from '~/hooks/use-user';
+import Logo from '~/images/logos/shakala.svg';
 
 import { Avatar } from '../elements/avatar/avatar';
 import { SearchParamLink } from '../elements/search-param-link';
@@ -20,15 +21,18 @@ export const Header = ({ className }: HeaderProps): JSX.Element => (
         <Heading />
         <Navigation className="mt-auto hidden md:flex" />
       </div>
-      <Navigation className="mt-2 flex md:hidden" />
+      <Navigation className="flex md:hidden" />
     </div>
   </header>
 );
 
 const Heading = () => (
-  <Link to="/">
-    <div className="text-xxl font-bold">Shakala</div>
-    <div>Échanges critiques et bienveillants</div>
+  <Link to="/" className="row mt-4 items-end gap-4">
+    <Logo className="w-12 px-1 !text-white/90" />
+    <div>
+      <div className="text-xxl font-bold leading-10">Shakala</div>
+      <div className="leading-3">Échanges critiques</div>
+    </div>
   </Link>
 );
 

@@ -25,6 +25,10 @@ import { useReactRouterGateway } from '~/app';
 import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar';
 
 export const controls = {
+  text: (defaultValue: string) => ({
+    control: 'text',
+    defaultValue,
+  }),
   boolean: (defaultValue: boolean) => ({
     control: 'boolean',
     defaultValue,

@@ -12,7 +12,7 @@ export const PageTitle = ({ children }: PageTitleProps) => (
 
 const getTitle = (title?: string) => {
   if (!title) {
-    return 'Shakala, échanges critiques et bienveillants';
+    return 'Shakala, échanges critiques';
   }
 
   if (title.length > 60) {
