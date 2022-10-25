@@ -18,10 +18,11 @@ export class UserCreatedHandler implements EventHandler<UserCreatedEvent> {
 
   async handle(event: UserCreatedEvent): Promise<void> {
     const user = await this.userRepository.findByIdOrFail(event.userId);
-    const { apiBaseUrl } = this.config.app();
+    const { apiBaseUrl, appBaseUrl } = this.config.app();
 
     await this.commandBus.execute(
       new SendEmailCommand(user.email, EmailKind.welcome, {
+        appBaseUrl,
         nick: user.nick.toString(),
         emailValidationLink: `${apiBaseUrl}/auth/signup/${user.id}/validate/${user.emailValidationToken}`,
       }),

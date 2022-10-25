@@ -1,7 +1,20 @@
 <mj-attributes>
-  <mj-all padding="0" />
+  <mj-all padding="0" font-family="Montserrat, sans-serif" />
   <mj-body width="680px" background-color="#F6F6F6" />
-  <mj-text font-family="'Montserrat', sans-serif" font-size="16px" line-height="26px" color="#333" />
+
+  <mj-wrapper
+    css-class="wrapper"
+    background-color="white"
+    padding="20px"
+    border-radius="8px"
+  />
+
+  <mj-text
+    font-size="16px"
+    line-height="26px"
+    color="#333"
+  />
+
   <mj-button
     background-color="#EEF"
     border="1px solid #CCF"
@@ -13,11 +26,20 @@
 </mj-attributes>
 
 <mj-style inline="inline">
-  .wrapper { background-color: #FFF; padding: 20px 40px; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px,
-  rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px; border-radius: 8px }
+  .wrapper {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: #999;
+  }
 </mj-style>
 
 <mj-style>
-  @media all and (max-width: 479px) { .subtitle { display: none !important; } .logo { display: none
-  !important; } } @media all and (min-width: 600px) { .subtitle { text-indent: 55px; } }
+  @media all and (max-width: 480px) {
+    .logo {
+      display: none !important;
+    }
+  }
 </mj-style>

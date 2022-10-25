@@ -1,19 +1,18 @@
 <mjml>
 
   <mj-head>
-
     <mj-preview>Bienvenue sur Shakala, {{nick}} !</mj-preview>
-
     <mj-include path="./common/attributes.mjml" />
-
   </mj-head>
 
   <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-spacer height="40px" />
+      </mj-column>
+    </mj-section>
 
-    <mj-section padding-top="25px" />
-
-    <mj-wrapper css-class="wrapper">
-
+    <mj-wrapper>
       <mj-include path="./common/header.mjml" />
 
       <mj-section padding-bottom="25px">
@@ -33,7 +32,7 @@
         </mj-column>
       </mj-section>
 
-      <mj-section padding="50px 0">
+      <mj-section padding="40px 0">
         <mj-column>
           <mj-button href="{{emailValidationLink}}">Valider mon adresse email</mj-button>
         </mj-column>
@@ -49,8 +48,11 @@
 
     </mj-wrapper>
 
-    <mj-section padding-top="40px">
-
+    <mj-section>
+      <mj-column>
+        <mj-spacer height="40px" />
+      </mj-column>
+    </mj-section>
   </mj-body>
 
 </mjml>

@@ -1,24 +1,26 @@
-<mj-section padding="25px 0 10px 0" border-bottom="1px solid #CCC">
-  <mj-column vertical-align="bottom" width="10%">
-    <mj-image css-class="logo" src="https://github.com/nilscox/zetecom/raw/dev/website/static/logo.png" />
+<mj-section padding-bottom="8px" border-bottom="1px solid #CCCCCC">
+  <mj-column width="15%" vertical-align="bottom">
+    <mj-image width="90px" src="{{appBaseUrl}}/logo.png" css-class="logo" href="{{appBaseUrl}}" />
   </mj-column>
 
-  <mj-column vertical-align="bottom" width="50%">
+  <mj-column width="85%" padding-left="16px" vertical-align="bottom">
     <mj-text
-      padding-left="25px"
       font-size="32px"
-      line-height="32px"
-      font-family="'Noticia Text', serif"
+      line-height="40px"
       font-weight="bold"
       color="#446"
-      >Shakala</mj-text
     >
-  </mj-column>
+      <a href="{{appBaseUrl}}" style="text-decoration: none;">Shakala</a>
+    </mj-text>
 
-  <mj-column vertical-align="bottom" width="40%" css-class="subtitle">
-    <mj-text align="right" font-size="18px" line-height="18px" color="#666">Échanges critiques</mj-text>
-    <mj-text align="right" font-size="18px" line-height="18px" color="#666">et bienveillants</mj-text>
+    <mj-text font-size="18px" line-height="18px" color="#666">
+      Échanges critiques
+    </mj-text>
   </mj-column>
 </mj-section>
 
-<mj-section padding-top="25px" />
+<mj-section>
+  <mj-column>
+    <mj-spacer height="40px" />
+  </mj-column>
+</mj-section>

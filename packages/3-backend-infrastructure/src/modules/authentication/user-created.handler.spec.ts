@@ -9,7 +9,13 @@ import { UserCreatedHandler } from './user-created.handler';
 describe('UserCreatedHandler', () => {
   const userRepository = new InMemoryUserRepository();
   const commandBus = new MockCommandBus();
-  const config = new StubConfigAdapter({ app: { apiBaseUrl: 'https://api.url' } });
+
+  const config = new StubConfigAdapter({
+    app: {
+      apiBaseUrl: 'https://api.url',
+      appBaseUrl: 'https://app.url',
+    },
+  });
 
   const handler = new UserCreatedHandler(config, userRepository, commandBus);
 
@@ -30,6 +36,7 @@ describe('UserCreatedHandler', () => {
 
     expect(commandBus.execute).toHaveBeenCalledWith(
       new SendEmailCommand(user.email, EmailKind.welcome, {
+        appBaseUrl: 'https://app.url',
         nick: user.nick.toString(),
         emailValidationLink,
       }),

@@ -7,6 +7,7 @@ export enum EmailKind {
 
 type EmailPayloadMap = {
   [EmailKind.welcome]: {
+    appBaseUrl: string;
     nick: string;
     emailValidationLink: string;
   };
