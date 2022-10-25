@@ -1,4 +1,5 @@
-import { AuthenticationMethod, ReactionTypeDto } from './dtos';
+import { AuthenticationMethod } from './authentication.dtos';
+import { ReactionTypeDto } from './thread.dtos';
 
 export enum AuthenticationActivityType {
   signUp = 'signUp',
@@ -73,3 +74,12 @@ export type UserActivityDto<Type extends UserActivityType> = {
   type: Type;
   payload: UserActivityPayload[Type];
 };
+
+export const createUserActivityDto = <Type extends UserActivityType>(
+  overrides?: Partial<UserActivityDto<Type>>,
+): UserActivityDto<UserActivityType> => ({
+  date: '',
+  type: UserActivityType.signUp,
+  payload: undefined,
+  ...overrides,
+});
