@@ -1,5 +1,6 @@
 export { SqlComment } from './sql-comment.entity';
 export { SqlCommentReport } from './sql-comment-report.entity';
+export { SqlNotification } from './sql-notification.entity';
 export { SqlProfileImage } from './sql-profile-image.entity';
 export { SqlReaction } from './sql-reaction.entity';
 export { SqlSession } from './sql-session.entity';

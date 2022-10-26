@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import formatDateFns from 'date-fns/format';
-import formatDistanceToNowDateFns from 'date-fns/formatDistanceToNow';
+import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import isBefore from 'date-fns/isBefore';
 import { fr } from 'date-fns/locale';
 import sub from 'date-fns/sub';
@@ -15,9 +15,17 @@ export const formatDate = (date: string, format: string) => {
 };
 
 export const formatDistanceToNow = (date: string) => {
-  return formatDistanceToNowDateFns(new Date(date), { locale: fr });
+  return formatDistanceToNowStrict(new Date(date), { locale: fr });
 };
 
-export const isBefore24Hours = (date: string) => {
+const isBefore24Hours = (date: string) => {
   return isBefore(new Date(date), sub(new Date(), { days: 1 }));
+};
+
+export const formatDateRelativeOrAbsolute = (date: string) => {
+  if (isBefore24Hours(date)) {
+    return formatDate(date, DateFormat.date);
+  }
+
+  return 'Il y a ' + formatDistanceToNow(date);
 };

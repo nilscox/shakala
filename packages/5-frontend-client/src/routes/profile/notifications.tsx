@@ -1,9 +1,12 @@
+import { Notifications } from '../../components/domain/notifications/notifications';
+
 import { ProfileTitle } from './profile-title';
 
-export const NotificationsRoute = () => (
-  <>
-    <ProfileTitle title="Notifications" subTitle="Vos notifications" pageTitle="notifications" />
-
-    <div className="text-xxl">Coming soon...</div>
-  </>
-);
+export const NotificationsRoute = () => {
+  return (
+    <div>
+      <ProfileTitle title="Notifications" subTitle="Vos notifications" pageTitle="notifications" />
+      <Notifications />
+    </div>
+  );
+};

@@ -1,6 +1,16 @@
-import { ExecutionContext, GetUserByIdQuery, LoggerPort, UpdateUserCommand } from 'backend-application';
-import { ProfileImageData, ProfileImageType, User } from 'backend-domain';
+import {
+  AuthorizationError,
+  ExecutionContext,
+  GetUserByIdQuery,
+  LoggerPort,
+  MarkNotificationAsSeenCommand,
+  NotificationRepository,
+  Pagination,
+  UpdateUserCommand,
+} from 'backend-application';
+import { Notification, ProfileImageData, ProfileImageType, User } from 'backend-domain';
 import multer, { memoryStorage } from 'multer';
+import { AuthorizationErrorReason, NotificationDto, NotificationType } from 'shared';
 
 import {
   BadRequest,
@@ -12,7 +22,9 @@ import {
   RequestHandler,
   Response,
   SessionPort,
+  ValidationService,
 } from '../../infrastructure';
+import { execute } from '../../utils';
 import { UserPresenter } from '../user/user.presenter';
 
 const storage = memoryStorage();
@@ -23,7 +35,9 @@ export class AccountController extends Controller {
     logger: LoggerPort,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly notificationRepository: NotificationRepository,
     private readonly session: SessionPort,
+    private readonly validationService: ValidationService,
     private readonly userPresenter: UserPresenter,
   ) {
     super(logger, '/account');
@@ -31,7 +45,64 @@ export class AccountController extends Controller {
 
   endpoints(): Record<string, RequestHandler> {
     return {
+      'GET /notifications/count': this.getUnseenNotificationsCount,
+      'GET /notifications': this.getNotifications,
+      'PUT /notifications/:notificationId/seen': this.markNotificationAsSeen,
       'POST /profile-image': this.changeProfileImage,
+    };
+  }
+
+  async getUnseenNotificationsCount(req: Request): Promise<Response<number>> {
+    const user = await this.session.getUser(req);
+
+    if (!user) {
+      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
+    }
+
+    const count = await this.notificationRepository.countUnseenForUser(user.id);
+
+    return Response.ok(count);
+  }
+
+  async getNotifications(req: Request): Promise<Response<NotificationDto[]>> {
+    const user = await this.session.getUser(req);
+    const pagination = await this.validationService.pagination(req);
+
+    if (!user) {
+      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
+    }
+
+    const { items, total } = await this.notificationRepository.findForUser(
+      user.id,
+      Pagination.from(pagination),
+    );
+
+    return Response.paginated(items.map(this.transformNotification), total);
+  }
+
+  async markNotificationAsSeen(req: Request): Promise<Response> {
+    const user = await this.session.getUser(req);
+    const notificationId = req.params.get('notificationId') as string;
+
+    if (!user) {
+      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
+    }
+
+    await execute(this.commandBus)
+      .command(new MarkNotificationAsSeenCommand(notificationId))
+      .asUser(user)
+      .run();
+
+    return Response.noContent();
+  }
+
+  private transformNotification(notification: Notification): NotificationDto<NotificationType> {
+    return {
+      id: notification.id,
+      seen: notification.seenDate?.toString() ?? false,
+      date: notification.date.toString(),
+      type: notification.type,
+      payload: notification.payload,
     };
   }
 

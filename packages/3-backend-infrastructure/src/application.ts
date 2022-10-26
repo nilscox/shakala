@@ -12,6 +12,7 @@ import {
   registerHandlers,
   Repositories,
   ApplicationDependencies,
+  InMemoryNotificationRepository,
 } from 'backend-application';
 import {
   CommentCreatedEvent,
@@ -56,6 +57,7 @@ import {
 } from './persistence';
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
+import { SqlNotificationRepository } from './persistence/repositories/sql-notification.repository';
 import { SqlUserActivityRepository } from './persistence/repositories/sql-user-activity.repository';
 
 export class Application {
@@ -66,7 +68,7 @@ export class Application {
   protected eventBus!: EventBus;
 
   protected orm?: MikroORM;
-  private repositories!: Repositories;
+  protected repositories!: Repositories;
 
   protected get logger() {
     return this.adapters.logger;
@@ -105,6 +107,7 @@ export class Application {
       this.repositories = {
         userRepository: new SqlUserRepository(em, this.adapters),
         userActivityRepository: new SqlUserActivityRepository(em, this.adapters),
+        notificationRepository: new SqlNotificationRepository(em, this.adapters),
         threadRepository: new SqlThreadRepository(em, this.adapters),
         reactionRepository: new SqlReactionRepository(em, this.adapters),
         commentRepository: new SqlCommentRepository(em, this.adapters),
@@ -118,6 +121,7 @@ export class Application {
       this.repositories = {
         userRepository: new InMemoryUserRepository(),
         userActivityRepository: new InMemoryUserActivityRepository(),
+        notificationRepository: new InMemoryNotificationRepository(),
         threadRepository: new InMemoryThreadRepository(),
         reactionRepository,
         commentRepository: new InMemoryCommentRepository(reactionRepository),

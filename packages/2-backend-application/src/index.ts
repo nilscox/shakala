@@ -6,6 +6,7 @@ export * from './utils';
 
 export * from './modules/authentication';
 export * from './modules/email';
+export * from './modules/notifications';
 export * from './modules/thread';
 export * from './modules/user';
 

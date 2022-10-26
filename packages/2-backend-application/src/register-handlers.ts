@@ -4,11 +4,17 @@ import { ClassType } from 'shared';
 // prettier-ignore
 import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler } from './cqs';
 // prettier-ignore
-import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort, UserActivityRepository } from './interfaces';
+import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort, UserActivityRepository, NotificationRepository } from './interfaces';
 // prettier-ignore
 import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler, SignOutCommand, SignOutCommandHandler } from './modules/authentication';
 // prettier-ignore
 import { SendEmailCommand, SendEmailHandler } from './modules/email';
+import {
+  CreateNotificationCommand,
+  CreateNotificationHandler,
+  MarkNotificationAsSeenCommand,
+  MarkNotificationAsSeenHandler,
+} from './modules/notifications';
 // prettier-ignore
 import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
 // prettier-ignore
@@ -26,6 +32,7 @@ export type ApplicationDependencies = DomainDependencies & {
 export type Repositories = {
   userRepository: UserRepository;
   userActivityRepository: UserActivityRepository;
+  notificationRepository: NotificationRepository;
   threadRepository: ThreadRepository;
   commentRepository: CommentRepository;
   reactionRepository: ReactionRepository;
@@ -41,7 +48,7 @@ export const registerHandlers = (
   dependencies: ApplicationDependencies,
 ) => {
   const { generator, crypto, date, filesystem, emailCompiler, emailSender, profileImageStore } = dependencies;
-  const { userRepository, userActivityRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
+  const { userRepository, userActivityRepository, notificationRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
 
   const commentService = new CommentService(generator);
   const userActivityService = new UserActivityService(generator, date);
@@ -78,4 +85,8 @@ export const registerHandlers = (
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(eventBus, commentRepository));
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(eventBus, commentRepository, reactionRepository, commentService));
   registerCommand(ReportCommentCommand, new ReportCommentHandler(eventBus, commentRepository, commentReportRepository, commentService));
+
+  // comment
+  registerCommand(CreateNotificationCommand, new CreateNotificationHandler(generator, date, notificationRepository));
+  registerCommand(MarkNotificationAsSeenCommand, new MarkNotificationAsSeenHandler(date, notificationRepository));
 }

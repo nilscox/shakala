@@ -10,6 +10,8 @@ export const commentSchema = new schema.Entity('comment', {
 
 commentSchema.define({ replies: [commentSchema] });
 
+export const notificationSchema = new schema.Entity('notification');
+
 export const threadSchema = new schema.Entity('thread', {
   author: userSchema,
   comments: [commentSchema],
@@ -17,6 +19,7 @@ export const threadSchema = new schema.Entity('thread', {
 
 export const schemas = {
   user: userSchema,
+  notification: notificationSchema,
   comment: commentSchema,
   thread: threadSchema,
 };

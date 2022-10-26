@@ -1,4 +1,4 @@
-import { InvalidImageFormat, Paginated, UserActivity, UserGateway } from 'frontend-domain';
+import { InvalidImageFormat, Notification, Paginated, UserActivity, UserGateway } from 'frontend-domain';
 import { UserActivityDto, UserActivityType } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
@@ -25,7 +25,7 @@ export class ApiUserGateway implements UserGateway {
     return response.body;
   }
 
-  async listActivities(page: number): Promise<Paginated<UserActivity<UserActivityType>>> {
+  async listActivities(page: number): Promise<Paginated<UserActivity>> {
     const query = new URLSearchParams({ page: String(page) });
     const response = await this.http.get<UserActivityDto<UserActivityType>[]>(`/user/activities?${query}`);
     const total = Number(response.headers.get('pagination-total'));
@@ -34,5 +34,25 @@ export class ApiUserGateway implements UserGateway {
       items: response.body,
       total,
     };
+  }
+
+  async getNotificationsCount(): Promise<number> {
+    const response = await this.http.get<number>('/account/notifications/count');
+    return response.body;
+  }
+
+  async listNotifications(page: number): Promise<Paginated<Notification>> {
+    const query = new URLSearchParams({ page: String(page) });
+    const response = await this.http.get<Notification[]>(`/account/notifications?${query}`);
+    const total = Number(response.headers.get('pagination-total'));
+
+    return {
+      items: response.body,
+      total,
+    };
+  }
+
+  async markNotificationAsSeen(notificationId: string): Promise<void> {
+    await this.http.put(`/account/notifications/${notificationId}/seen`);
   }
 }

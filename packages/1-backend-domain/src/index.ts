@@ -4,6 +4,7 @@ export * from './entities/comment-report.entity';
 export * from './entities/reaction.entity';
 export * from './entities/domain-error';
 export * from './entities/markdown.value-object';
+export * from './entities/notification.entity';
 export * from './entities/message.entity';
 export * from './entities/nick.value-object';
 export * from './entities/profile-image.value-object';

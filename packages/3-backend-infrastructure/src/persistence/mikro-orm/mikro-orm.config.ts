@@ -6,6 +6,7 @@ import { ConfigPort, StubConfigAdapter } from '../../infrastructure';
 import {
   SqlComment,
   SqlCommentReport,
+  SqlNotification,
   SqlProfileImage,
   SqlReaction,
   SqlSession,
@@ -17,6 +18,7 @@ import {
 const entities = [
   SqlComment,
   SqlCommentReport,
+  SqlNotification,
   SqlProfileImage,
   SqlReaction,
   SqlSession,

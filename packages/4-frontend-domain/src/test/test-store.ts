@@ -115,6 +115,10 @@ class FakeTimerGateway implements TimerGateway {
     this.timeoutCb?.();
     delete this.timeoutCb;
   }
+
+  setInterval(): () => void {
+    throw new Error('Method not implemented.');
+  }
 }
 
 class InMemoryStorageGateway implements StorageGateway {
@@ -177,6 +181,9 @@ class MockThreadGateway implements ThreadGateway {
 class MockUserGateway implements UserGateway {
   changeProfileImage = mockImpl<UserGateway['changeProfileImage']>();
   listActivities = mockImpl<UserGateway['listActivities']>();
+  getNotificationsCount = mockImpl<UserGateway['getNotificationsCount']>();
+  listNotifications = mockImpl<UserGateway['listNotifications']>();
+  markNotificationAsSeen = mockImpl<UserGateway['markNotificationAsSeen']>();
 }
 
 export class TestStore implements Dependencies {

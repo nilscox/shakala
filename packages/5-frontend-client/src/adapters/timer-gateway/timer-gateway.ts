@@ -1,11 +1,13 @@
 import { TimerGateway } from 'frontend-domain';
 
 export class RealTimerGateway implements TimerGateway {
-  setTimeout(cb: () => void, ms: number): () => void {
-    const timeout = window.setTimeout(cb, ms);
+  setTimeout = this.timerMethod(window.setTimeout);
+  setInterval = this.timerMethod(window.setInterval);
 
-    return () => {
-      clearTimeout(timeout);
+  private timerMethod(method: Window['setTimeout'] | Window['setInterval']) {
+    return (cb: () => void, ms: number) => {
+      const interval = method(cb, ms);
+      return () => clearInterval(interval);
     };
   }
 }

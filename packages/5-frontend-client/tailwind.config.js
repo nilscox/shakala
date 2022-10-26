@@ -110,6 +110,7 @@ module.exports = {
       spin: 'spin 800ms linear infinite',
       'fade-in': 'fade 280ms ease-out',
       'fade-out': 'fade 280ms ease-out reverse',
+      'scale-in': 'scale 280ms ease-in',
       highlight: 'highlight 2s ease-out 2s both',
       loading: 'loading 1s linear infinite',
       'loading-surface': 'loading-surface 2s ease infinite',
@@ -122,6 +123,10 @@ module.exports = {
       fade: {
         '0%': { opacity: 0 },
         '100%': { opacity: 1 },
+      },
+      scale: {
+        '0%': { transform: 'scale(0)' },
+        '100%': { transform: 'scale(1)' },
       },
       highlight: {
         '0%': { background: theme('colors.primary') + '33' },

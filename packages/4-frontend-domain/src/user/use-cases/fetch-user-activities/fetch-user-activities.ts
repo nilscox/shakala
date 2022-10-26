@@ -4,7 +4,6 @@ import { first, last } from 'shared';
 
 import { State, Thunk } from '../../../store.types';
 import { UserActivity } from '../../../types';
-import { DateFormat, formatDate, formatDistanceToNow, isBefore24Hours } from '../../../utils/format-date';
 
 type Key = {
   page: number;
@@ -53,14 +52,6 @@ export const selectIsFirstUserActivity = (state: State, activity: UserActivity) 
   }
 
   return activity === last(selectUserActivities(state));
-};
-
-export const formatActivityDate = ({ date }: UserActivity) => {
-  if (isBefore24Hours(date)) {
-    return formatDate(date, DateFormat.date);
-  }
-
-  return 'Il y a ' + formatDistanceToNow(date);
 };
 
 export const fetchUserActivities = (page: number): Thunk<Promise<void>> => {

@@ -1,12 +1,10 @@
 import { array, UserActivityDto, UserActivityType } from 'shared';
 import { mockResolve } from 'shared/test';
-import Sinon, { SinonFakeTimers } from 'sinon';
 
-import { createDate, createUserActivity, TestStore } from '../../../test';
+import { createUserActivity, TestStore } from '../../../test';
 
 import {
   fetchUserActivities,
-  formatActivityDate,
   selectIsFirstUserActivity,
   selectIsLoadingActivities,
   selectTotalUserActivities,
@@ -83,31 +81,6 @@ describe('fetchUserActivities', () => {
     it('returns false when not all activities were fetched', async () => {
       store.dispatch(setTotalUserActivities(3));
       expect(store.select(selectIsFirstUserActivity, activities[1])).toBe(false);
-    });
-  });
-
-  describe('formatActivityDate', () => {
-    let clock: SinonFakeTimers;
-
-    beforeEach(() => {
-      clock = Sinon.useFakeTimers();
-      clock.setSystemTime(new Date('2022-01-02T12:00'));
-    });
-
-    afterEach(() => {
-      clock.restore();
-    });
-
-    it('returns a distance to now when the activity was created within 24 hours', () => {
-      const formatted = formatActivityDate(createUserActivity({ date: createDate('2022-01-02T10:00') }));
-
-      expect(formatted).toEqual('Il y a environ 2 heures');
-    });
-
-    it('returns the formatted date when the activity was created more than 24 hours ago', () => {
-      const formatted = formatActivityDate(createUserActivity({ date: createDate('2022-01-01T10:00') }));
-
-      expect(formatted).toEqual('Le 1 janvier 2022');
     });
   });
 });

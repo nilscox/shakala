@@ -121,10 +121,12 @@ export class Server extends Application {
     const userPresenter = new UserPresenter(config);
     const threadPresenter = new ThreadPresenter(userPresenter);
 
+    const { notificationRepository} = this.repositories;
+
     const controllers = [
       new HealthcheckController(logger, config, em),
       new AuthenticationController(logger, config, validationService, session, queryBus, commandBus, userPresenter),
-      new AccountController(logger, commandBus, queryBus, session, userPresenter),
+      new AccountController(logger, commandBus, queryBus, notificationRepository, session, validationService, userPresenter),
       new UserController(logger, queryBus, validationService, userPresenter),
       new ThreadController(logger, queryBus, commandBus, session, validationService, threadPresenter),
       new CommentController(logger, queryBus, commandBus, session, validationService),

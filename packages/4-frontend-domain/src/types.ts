@@ -5,6 +5,8 @@ import {
   CommentDto,
   get,
   HttpErrorBody,
+  NotificationDto,
+  NotificationType,
   ReactionTypeDto,
   ThreadDto,
   UserActivityDto,
@@ -79,6 +81,7 @@ export type AuthUser = AuthUserDto;
 export type User = UserDto;
 
 export type UserActivity<Type extends UserActivityType = UserActivityType> = UserActivityDto<Type>;
+export type Notification<Type extends NotificationType = NotificationType> = NotificationDto<Type>;
 
 export type CommentForm = {
   text: string;

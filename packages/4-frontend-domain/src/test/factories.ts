@@ -5,6 +5,7 @@ import {
   createUserDto,
   createFactory,
   createUserActivityDto,
+  createNotificationDto,
 } from 'shared';
 
 import { Comment, Thread } from '../types';
@@ -17,6 +18,7 @@ export const createAuthUser = createAuthUserDto;
 export const createUser = createUserDto;
 
 export const createUserActivity = createUserActivityDto;
+export const createNotification = createNotificationDto;
 
 export const createThread = createFactory<Thread>(() => ({
   ...createThreadDto(),

@@ -1,10 +1,19 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from 'backend-application';
-import { Comment, createDomainDependencies, Reaction, Thread, User, UserActivity } from 'backend-domain';
+import {
+  Comment,
+  createDomainDependencies,
+  Notification,
+  Reaction,
+  Thread,
+  User,
+  UserActivity,
+} from 'backend-domain';
 import { first } from 'shared';
 
 import { MathRandomGeneratorAdapter, RealDateAdapter } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
+import { SqlNotificationRepository } from '../repositories/sql-notification.repository';
 import { SqlReactionRepository } from '../repositories/sql-reaction.repository';
 import { SqlThreadRepository } from '../repositories/sql-thread.repository';
 import { SqlUserActivityRepository } from '../repositories/sql-user-activity.repository';
@@ -28,6 +37,7 @@ export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
 
     const repositoryMap = new Map<unknown, Repository<unknown>>([
       [Comment, new SqlCommentRepository(em, deps)],
+      [Notification, new SqlNotificationRepository(em, deps)],
       [Reaction, new SqlReactionRepository(em, deps)],
       [Thread, new SqlThreadRepository(em, deps)],
       [User, new SqlUserRepository(em, deps)],

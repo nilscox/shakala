@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { logout } from 'frontend-domain';
+import { logout, selectUnseenNotificationsCount } from 'frontend-domain';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -16,6 +16,9 @@ import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
 import { RedirectToSignIn } from '~/utils/RedirectToSignIn';
+
+import { Chip } from '../../components/elements/chip';
+import { useSelector } from '../../hooks/use-selector';
 
 class UnauthenticatedError extends Error {}
 
@@ -50,6 +53,7 @@ export const ProfileLayout = () => {
 const Sidebar = () => {
   const user = useUser();
   const dispatch = useDispatch();
+  const unseenNotificationsCount = useSelector(selectUnseenNotificationsCount);
 
   return (
     <aside>
@@ -72,7 +76,7 @@ const Sidebar = () => {
         </SidebarItem>
         <SidebarItem to="/profil/notifications" Icon={IconSubscribe}>
           Notifications
-          <Chip className="ml-auto">3</Chip>
+          {unseenNotificationsCount > 0 && <Chip className="ml-auto">{unseenNotificationsCount}</Chip>}
         </SidebarItem>
         <SidebarItem to="/profil/badges" Icon={IconTrophy}>
           Badges
@@ -93,23 +97,6 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-type ChipProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-const Chip = ({ className, children }: ChipProps) => (
-  <span
-    // eslint-disable-next-line tailwindcss/no-arbitrary-value
-    className={clsx(
-      'col h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full bg-primary text-sm text-white',
-      className,
-    )}
-  >
-    {children}
-  </span>
-);
 
 type SidebarItemProps = {
   to?: string;

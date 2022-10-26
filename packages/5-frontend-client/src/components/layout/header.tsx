@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
-import { ReactNode } from 'react';
+import { pollNotificationsCount, selectUnseenNotificationsCount } from 'frontend-domain';
+import { ReactNode, useEffect } from 'react';
 import { useMatch } from 'react-router-dom';
 
 // import { Logo } from '~/components/domain/logo/logo';
@@ -7,7 +8,10 @@ import { Link, NavLink } from '~/components/elements/link';
 import { useIsFetchingUser, useUser } from '~/hooks/use-user';
 import Logo from '~/images/logo.svg';
 
+import { useDispatch } from '../../hooks/use-dispatch';
+import { useSelector } from '../../hooks/use-selector';
 import { Avatar } from '../elements/avatar/avatar';
+import { Chip } from '../elements/chip';
 import { SearchParamLink } from '../elements/search-param-link';
 
 type HeaderProps = {
@@ -61,13 +65,14 @@ const Authentication = () => {
       className="absolute top-0 right-0 flex flex-row items-center gap-2"
     >
       <span className={clsx('font-bold', isProfilePage && 'text-primary')}>{getNick()}</span>
-      <div className="h-6 w-6">
+      <div className="relative h-6 w-6">
         <Avatar
           size="medium"
           image={user?.profileImage}
           loading={fetchingUser}
           className="h-6 w-6 border-none"
         />
+        {user && <UnseenNotificationsChip />}
       </div>
     </AuthenticationLink>
   );
@@ -87,6 +92,7 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
 
   if (authenticated) {
     return (
+      // todo: replace with NavLink
       <Link to="/profil" className={className}>
         {children}
       </Link>
@@ -98,6 +104,26 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
       {children}
     </SearchParamLink>
   );
+};
+
+const UnseenNotificationsChip = () => {
+  const dispatch = useDispatch();
+
+  const user = useUser();
+  const total = useSelector(selectUnseenNotificationsCount);
+
+  useEffect(() => {
+    if (user) {
+      // todo: double dispatch
+      return dispatch(pollNotificationsCount());
+    }
+  }, [dispatch, user]);
+
+  if (total === 0) {
+    return null;
+  }
+
+  return <Chip className="absolute -top-1 -right-1 animate-scale-in">{total}</Chip>;
 };
 
 type NavigationProps = {

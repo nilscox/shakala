@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 import {
   DateFormat,
-  formatActivityDate,
   formatDate,
+  formatDateRelativeOrAbsolute,
   selectIsFirstUserActivity,
   UserActivity,
 } from 'frontend-domain';
@@ -34,7 +34,7 @@ export const Activity = ({ activity, icon, children }: ActivityComponentProps) =
       <div>
         <div className="relative -top-2 h-0 text-xs font-medium text-muted/75">
           <time dateTime={activity.date} title={formatDate(activity.date, DateFormat.full)}>
-            {formatActivityDate(activity)}
+            {formatDateRelativeOrAbsolute(activity.date)}
           </time>
         </div>
         {children}
