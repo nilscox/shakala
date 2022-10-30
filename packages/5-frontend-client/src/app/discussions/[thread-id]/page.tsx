@@ -2,8 +2,9 @@ import { setThread } from 'frontend-domain';
 import { headers } from 'next/headers';
 
 import { api } from '../../../adapters';
-import { Thread } from '../../../components/domain/thread/thread';
 import { Dispatch } from '../../dispatch';
+
+import { Thread } from './thread/thread';
 
 type ThreadPageProps = {
   params: {

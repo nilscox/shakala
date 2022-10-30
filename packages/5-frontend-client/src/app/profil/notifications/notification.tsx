@@ -7,10 +7,9 @@ import {
 } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
+import { IconButton } from '~/components/elements/icon-button';
+import { useDispatch } from '~/hooks/use-dispatch';
 import Check from '~/icons/check.svg';
-
-import { useDispatch } from '../../../hooks/use-dispatch';
-import { IconButton } from '../../elements/icon-button';
 
 type NotificationItemProps<Type extends NotificationType> = {
   notification: TNotification<Type>;

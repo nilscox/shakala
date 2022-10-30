@@ -2,6 +2,7 @@ import { selectCommentUnsafe } from 'frontend-domain';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 
+import { PageTitle } from '~/app/page-title';
 import { Button } from '~/components/elements/button';
 import { Modal } from '~/components/elements/modal';
 import { useSnackbar } from '~/components/elements/snackbar';
@@ -11,8 +12,6 @@ import facebook from '~/images/logos/facebook-logo.png';
 import link from '~/images/logos/link.png';
 import linkedin from '~/images/logos/linkedin-logo.png';
 import twitter from '~/images/logos/twitter-logo.png';
-
-import { PageTitle } from '../../../app/page-title';
 
 export const ShareCommentModal = () => {
   const snackbar = useSnackbar();

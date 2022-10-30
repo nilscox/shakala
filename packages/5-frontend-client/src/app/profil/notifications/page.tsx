@@ -1,11 +1,11 @@
 import { setNotifications, setTotalNotifications } from 'frontend-domain';
 import { headers } from 'next/headers';
 
-import { Notifications } from '~/components/domain/notifications/notifications';
-
 import { api } from '../../../adapters';
 import { Dispatch } from '../../dispatch';
 import { ProfileTitle } from '../profile-title';
+
+import { Notifications } from './notifications';
 
 export default async function NotificationsPage() {
   const { userGateway } = api(headers().get('Cookie'));

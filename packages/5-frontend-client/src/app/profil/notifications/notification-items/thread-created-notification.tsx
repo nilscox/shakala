@@ -1,6 +1,7 @@
 import { NotificationType } from 'shared';
 
-import { Link } from '../../../elements/link';
+import { Link } from '~/components/elements/link';
+
 import { Notification, NotificationItem } from '../notification';
 
 export const ThreadCreatedNotification: NotificationItem<NotificationType.threadCreated> = ({

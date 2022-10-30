@@ -2,14 +2,14 @@
 
 import { Comment as CommentType, DateFormat, formatDate, selectThread, User } from 'frontend-domain';
 
+import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
+import { useSearchParam } from '~/hooks/use-search-param';
+import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
-import { PageTitle } from '../../../app/page-title';
-import { useSearchParam } from '../../../hooks/use-search-param';
-import { useSelector } from '../../../hooks/use-selector';
 import { RootCommentForm } from '../comment-form';
 import { CommentHistoryModal } from '../comment-history-modal';
 import { Comment } from '../comment/comment';

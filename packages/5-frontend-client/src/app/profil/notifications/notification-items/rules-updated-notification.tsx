@@ -1,7 +1,8 @@
 import { NotificationType } from 'shared';
 
-import { Link } from '../../../elements/link';
-import { Markdown } from '../../../elements/markdown';
+import { Link } from '~/components/elements/link';
+import { Markdown } from '~/components/elements/markdown';
+
 import { Notification, NotificationItem } from '../notification';
 
 export const RulesUpdatedNotification: NotificationItem<NotificationType.rulesUpdated> = ({

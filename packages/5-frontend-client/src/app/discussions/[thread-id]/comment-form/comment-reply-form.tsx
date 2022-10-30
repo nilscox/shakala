@@ -12,9 +12,8 @@ import {
 
 import { Avatar } from '~/components/elements/avatar/avatar';
 import { useDispatch } from '~/hooks/use-dispatch';
-
-import { useSelector } from '../../../hooks/use-selector';
-import { useUser } from '../../../hooks/use-user';
+import { useSelector } from '~/hooks/use-selector';
+import { useUser } from '~/hooks/use-user';
 
 import { CommentForm } from './comment-form';
 

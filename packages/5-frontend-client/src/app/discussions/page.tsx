@@ -1,5 +1,4 @@
 import { headers } from 'next/headers';
-import { useDispatch } from 'react-redux';
 
 import { api } from '~/adapters';
 import { Link } from '~/components/elements/link';
@@ -9,17 +8,6 @@ import { Link } from '~/components/elements/link';
 const ThreadsPage = async () => {
   const { threadGateway } = api(headers().get('Cookie'));
   const [thread] = await threadGateway.getLast(3);
-  const dispatch = useDispatch();
-
-  const handleSubmit = (form: ThreadFormType) => {
-    dispatch(createNewThread(form));
-  };
-
-  const handleChange = (field: FormField<ThreadFormType>) => {
-    if (errors[field]) {
-      dispatch(clearThreadFormFieldError(field));
-    }
-  };
 
   return (
     <>

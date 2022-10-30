@@ -3,7 +3,7 @@
 import { Notification, selectNotifications } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
-import { useSelector } from '../../../hooks/use-selector';
+import { useSelector } from '~/hooks/use-selector';
 
 import { NotificationItem } from './notification';
 import { notificationComponentMap } from './notification-items';
