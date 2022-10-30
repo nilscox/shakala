@@ -1,15 +1,15 @@
 import { array } from 'shared';
 import { mockResolve } from 'shared/test';
 
-import { createNotification, TestStore } from '../../../test';
-
+import { TestStore, createNotification } from '../../test';
+import { addNotifications, setNotifications, setTotalNotifications } from '../notifications.actions';
 import {
-  fetchNotifications,
   selectIsLoadingNotifications,
   selectNotifications,
   selectTotalNotifications,
-  setNotifications,
-} from './fetch-notifications';
+} from '../notifications.selectors';
+
+import { fetchNotifications } from './fetch-notifications';
 
 describe('fetchNotifications', () => {
   const store = new TestStore();
@@ -21,9 +21,9 @@ describe('fetchNotifications', () => {
 
     const promise = store.dispatch(fetchNotifications(1));
 
-    expect(store.select(selectIsLoadingNotifications, 1)).toBe(true);
+    expect(store.select(selectIsLoadingNotifications)).toBe(true);
     await promise;
-    expect(store.select(selectIsLoadingNotifications, 1)).toBe(false);
+    expect(store.select(selectIsLoadingNotifications)).toBe(false);
 
     expect(store.userGateway.listNotifications).toHaveBeenCalledWith(1);
 
@@ -31,10 +31,11 @@ describe('fetchNotifications', () => {
     expect(store.select(selectTotalNotifications)).toEqual(1);
   });
 
-  it('fetches the list of notifications on he second page', async () => {
+  it('fetches the list of notifications on the second page', async () => {
     const notifications = array(2, () => createNotification());
 
-    store.dispatch(setNotifications({ page: 1 }, notifications.slice(0, 1)));
+    store.dispatch(setNotifications(notifications.slice(0, 1)));
+    store.dispatch(addNotifications(notifications.slice(0, 1)));
     store.userGateway.listNotifications = mockResolve({ items: notifications.slice(1, 2), total: 2 });
 
     await store.dispatch(fetchNotifications(2));
@@ -43,13 +44,12 @@ describe('fetchNotifications', () => {
     expect(store.select(selectTotalNotifications)).toEqual(2);
   });
 
-  it('does not fetch the notifications when already fetched', async () => {
-    store.dispatch(setNotifications({ page: 1 }, []));
-
-    store.userGateway.listNotifications = mockResolve({ items: [], total: 0 });
+  it('updates the total number of notifications', async () => {
+    store.userGateway.listNotifications = mockResolve({ items: [], total: 2 });
+    store.dispatch(setTotalNotifications(1));
 
     await store.dispatch(fetchNotifications(1));
 
-    expect(store.userGateway.listNotifications).not.toHaveBeenCalled();
+    expect(store.select(selectTotalNotifications)).toEqual(2);
   });
 });

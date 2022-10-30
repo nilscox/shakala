@@ -1,5 +1,6 @@
 export * from './authentication';
 export * from './comment';
+export * from './notifications';
 export * from './thread';
 export * from './user';
 

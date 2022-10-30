@@ -1,4 +1,4 @@
-import { setNotifications, setTotalNotifications } from 'frontend-domain';
+import { addNotifications, setNotifications, setTotalNotifications } from 'frontend-domain';
 import { headers } from 'next/headers';
 
 import { api } from '../../../adapters';
@@ -12,9 +12,16 @@ export default async function NotificationsPage() {
   const notifications = await userGateway.listNotifications(1);
 
   return (
-    <Dispatch actions={[setNotifications(notifications.items), setTotalNotifications(notifications.total)]}>
+    <>
+      <Dispatch
+        actions={[
+          setNotifications(notifications.items),
+          addNotifications(notifications.items),
+          setTotalNotifications(notifications.total),
+        ]}
+      />
       <ProfileTitle title="Notifications" subTitle="Vos notifications" pageTitle="notifications" />
       <Notifications />
-    </Dispatch>
+    </>
   );
 }

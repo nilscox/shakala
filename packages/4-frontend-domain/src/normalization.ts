@@ -28,4 +28,5 @@ export const selectNormalizedEntities = (state: State) => ({
   user: state.users,
   comment: state.comments,
   thread: state.thread,
+  notification: state.notifications.entities,
 });
