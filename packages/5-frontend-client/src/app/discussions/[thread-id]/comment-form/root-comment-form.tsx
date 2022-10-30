@@ -1,6 +1,14 @@
-import { createRootComment, setCreateRootCommentText, User } from 'frontend-domain';
+import {
+  createRootComment,
+  selectCanSubmitRootComment,
+  selectCreateRootCommentFormText,
+  selectIsSubmittingRootCommentForm,
+  setCreateRootCommentText,
+  User,
+} from 'frontend-domain';
 
 import { useDispatch } from '~/hooks/use-dispatch';
+import { useSelector } from '~/hooks/use-selector';
 
 import { CommentForm } from './comment-form';
 
@@ -12,14 +20,9 @@ type RootCommentFormProps = {
 export const RootCommentForm = ({ threadId, author }: RootCommentFormProps) => {
   const dispatch = useDispatch();
 
-  // todo
-  // const message = useSelector(selectCreateRootCommentFormText, threadId);
-  // const canSubmit = useSelector(selectCanSubmitRootComment, threadId);
-  // const isSubmitting = useSelector(selectIsSubmittingRootCommentForm, threadId);
-
-  const message = '';
-  const canSubmit = false;
-  const isSubmitting = false;
+  const message = useSelector(selectCreateRootCommentFormText, threadId);
+  const canSubmit = useSelector(selectCanSubmitRootComment, threadId);
+  const isSubmitting = useSelector(selectIsSubmittingRootCommentForm, threadId);
 
   return (
     <CommentForm

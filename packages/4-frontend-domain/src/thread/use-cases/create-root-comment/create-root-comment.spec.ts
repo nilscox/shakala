@@ -1,10 +1,10 @@
 import { AuthorizationErrorReason } from 'shared';
 import { mockReject, mockResolve } from 'shared/test';
 
+import { selectComment } from '../../../comment';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
-import { createAuthUser, createThread, TestStore } from '../../../test';
+import { createAuthUser, createCommentForm, createThread, TestStore } from '../../../test';
 import { AuthorizationError } from '../../../types';
-import { selectCreatedRootComments } from '../../lists/created-root-comments';
 import { addThread } from '../../thread.actions';
 import { selectCommentThreadId } from '../../thread.selectors';
 
@@ -49,13 +49,12 @@ describe('createRootComment', () => {
     expect(store.threadGateway.createComment).toHaveBeenCalledWith(thread.id, text);
   });
 
-  it('adds the new comment to the list of created comments', async () => {
+  it('adds the created comment to the thread', async () => {
     await execute();
 
-    const createdComments = store.select(selectCreatedRootComments);
+    expect(store.select(selectCommentThreadId, commentId)).toEqual(thread.id);
 
-    expect(createdComments).toHaveLength(1);
-    expect(createdComments[0]).toEqual({
+    expect(store.select(selectComment, commentId)).toEqual({
       id: commentId,
       author: {
         id: user.id,
@@ -69,13 +68,9 @@ describe('createRootComment', () => {
       upvotes: 0,
       downvotes: 0,
       replies: [],
+      replyForm: createCommentForm(),
+      editionForm: createCommentForm(),
     });
-  });
-
-  it('adds the created comment to the thread', async () => {
-    await execute();
-
-    expect(store.select(selectCommentThreadId, commentId)).toEqual(thread.id);
   });
 
   it('requires user authentication', async () => {

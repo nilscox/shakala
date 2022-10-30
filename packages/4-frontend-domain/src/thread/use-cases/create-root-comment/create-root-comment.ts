@@ -1,5 +1,3 @@
-import { createAction, query, QueryState } from '@nilscox/redux-query';
-
 import { requireAuthentication } from '../../../authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { addComment } from '../../../comment/comments.actions';
@@ -7,50 +5,76 @@ import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { State, Thunk } from '../../../store.types';
 import { Comment } from '../../../types';
 import { selectUser } from '../../../user';
+import { createEntityAction } from '../../../utils/create-entity-action';
 import { serializeError } from '../../../utils/serialize-error';
-import { addCreatedRootComment } from '../../lists/created-root-comments';
-import { updateThread } from '../../thread.actions';
 import { selectThread } from '../../thread.selectors';
-
-type Key = {
-  threadId: string;
-};
-
-const createRootCommentQuery = query<Key, undefined>('createRootComment');
-
-export const createRootCommentQueryReducer = createRootCommentQuery.reducer();
+import { NormalizedThread } from '../../thread.slice2';
 
 // actions
 
-const actions = createRootCommentQuery.actions();
-
-export const [addRootCommentToThread, isAddRootCommentToThreadAction] = createAction(
+export const addRootCommentToThread = createEntityAction(
   'thread/add-root-comment',
-  (threadId: string, comment: Comment) => ({ threadId, commentId: comment.id }),
+  (thread: NormalizedThread, comment: Comment) => ({
+    ...thread,
+    comments: [...thread.comments, comment.id],
+  }),
+);
+
+export const setCreateRootCommentTextAction = createEntityAction(
+  'thread/set-root-comment-text',
+  (thread: NormalizedThread, text: string) => ({
+    ...thread,
+    createCommentForm: {
+      ...thread.createCommentForm,
+      text,
+    },
+  }),
+);
+
+export const setSubmittingRootComment = createEntityAction(
+  'thread/set-submitting-root-comment',
+  (thread: NormalizedThread, submitting: boolean) => ({
+    ...thread,
+    createCommentForm: {
+      ...thread.createCommentForm,
+      submitting,
+    },
+  }),
+);
+
+export const setCreateRootCommentError = createEntityAction(
+  'thread/set-root-comment-error',
+  (thread: NormalizedThread, error: unknown) => ({
+    ...thread,
+    createCommentForm: {
+      ...thread.createCommentForm,
+      error,
+    },
+  }),
 );
 
 export const setCreateRootCommentText = (threadId: string, text: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
-    dispatch(updateThread(threadId, { createCommentForm: { text } }));
+    dispatch(setCreateRootCommentTextAction(threadId, text));
     await storageGateway.setDraftCommentText(DraftCommentKind.root, threadId, text);
   };
 };
 
 const clearCreateRootCommentText = (threadId: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
-    dispatch(setCreateRootCommentText(threadId, ''));
+    dispatch(setCreateRootCommentTextAction(threadId, ''));
     await storageGateway.removeDraftCommentText(DraftCommentKind.root, threadId);
   };
 };
 
 // selectors
 
-const selectors = createRootCommentQuery.selectors(
-  (state: State) => state.threads.mutations.createRootComment,
-);
+const selectForm = (state: State, threadId: string) => {
+  return selectThread(state, threadId).createCommentForm;
+};
 
 export const selectCreateRootCommentFormText = (state: State, threadId: string) => {
-  return selectThread(state, threadId).createCommentForm.text;
+  return selectForm(state, threadId).text;
 };
 
 export const selectCanSubmitRootComment = (state: State, threadId: string) => {
@@ -58,11 +82,11 @@ export const selectCanSubmitRootComment = (state: State, threadId: string) => {
 };
 
 export const selectIsSubmittingRootCommentForm = (state: State, threadId: string) => {
-  return selectors.selectState(state, { threadId }) === QueryState.pending;
+  return selectForm(state, threadId).submitting;
 };
 
 export const selectCreateRootCommentError = (state: State, threadId: string) => {
-  return selectors.selectError(state, { threadId });
+  return selectForm(state, threadId).error;
 };
 
 // thunk
@@ -76,10 +100,8 @@ export const createRootComment = (threadId: string): Thunk => {
     const text = selectCreateRootCommentFormText(getState(), threadId);
     const user = selectUser(getState());
 
-    const key: Key = { threadId };
-
     try {
-      dispatch(actions.setPending(key));
+      dispatch(setSubmittingRootComment(threadId, true));
 
       const id = await threadGateway.createComment(threadId, text);
 
@@ -97,23 +119,33 @@ export const createRootComment = (threadId: string): Thunk => {
         upvotes: 0,
         downvotes: 0,
         replies: [],
+        replyForm: {
+          open: false,
+          text: '',
+          submitting: false,
+        },
+        editionForm: {
+          open: false,
+          text: '',
+          submitting: false,
+        },
       };
 
       dispatch(addComment(comment));
-      dispatch(addCreatedRootComment(comment));
       dispatch(addRootCommentToThread(threadId, comment));
 
       await dispatch(clearCreateRootCommentText(threadId));
 
-      dispatch(actions.setSuccess(key, undefined));
       snackbarGateway.success('Votre commentaire a bien été créé.');
     } catch (error) {
-      dispatch(actions.setError(key, serializeError(error)));
+      dispatch(setCreateRootCommentError(threadId, serializeError(error)));
 
       if (!dispatch(handleAuthorizationError(error, 'créer un commentaire'))) {
         loggerGateway.error(error);
         snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été créé.");
       }
+    } finally {
+      dispatch(setSubmittingRootComment(threadId, false));
     }
   };
 };
