@@ -85,6 +85,7 @@ export class FetchHttpGateway implements HttpGateway {
       method,
       headers: requestHeaders,
       credentials: 'include',
+      cache: 'no-store',
     };
 
     if (this.cookie) {

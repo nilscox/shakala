@@ -9,17 +9,17 @@ import {
 import thunkMiddleware, { ThunkDispatch, ThunkMiddleware } from 'redux-thunk';
 
 import { authenticationReducer } from './authentication/authentication.slice';
-import { commentsReducer } from './comment/comments.slice';
+import { commentsReducer } from './comment/comments.slice2';
 import type { Dependencies } from './store.types';
-import { threadsReducer } from './thread/thread.slice';
-import { userReducer } from './user/user.slice';
+import { threadsReducer } from './thread/thread.slice2';
+import { authenticatedUserReducer } from './user/authenticated-user.reducer';
 import { usersReducer } from './user/users.slice';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   authentication: authenticationReducer,
-  user: userReducer,
+  authenticatedUser: authenticatedUserReducer,
   users: usersReducer,
-  threads: threadsReducer,
+  thread: threadsReducer,
   comments: commentsReducer,
 });
 

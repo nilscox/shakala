@@ -37,7 +37,7 @@ describe('createReply', () => {
     store.dispatch(addComment(parent));
     store.dispatch(setThreadComments(thread.id, [parent]));
 
-    store.dispatch(setIsReplying(parent.id));
+    store.dispatch(setIsReplying(parent.id, true));
     store.dispatch(setReplyFormText(parent.id, text));
 
     store.dateGateway.setNow(now);
@@ -75,6 +75,16 @@ describe('createReply', () => {
       upvotes: 0,
       downvotes: 0,
       replies: [],
+      replyForm: {
+        open: false,
+        text: '',
+        submitting: false,
+      },
+      editionForm: {
+        open: false,
+        text: '',
+        submitting: false,
+      },
     };
 
     expect(store.select(selectCommentReplies, parent.id)).toInclude(created);
@@ -133,7 +143,7 @@ describe('createReply', () => {
       await execute();
 
       expect(store.select(selectIsSubmittingReply, parent.id)).toBe(false);
-      expect(store.select(selectCreateReplyError, parent.id)).toHaveProperty('message', error.message);
+      expect(store.select(selectCreateReplyError, parent.id)).toEqual(error.message);
     });
 
     it('logs the error', async () => {

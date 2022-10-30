@@ -1,45 +1,71 @@
-import { createAction, query, QueryState } from '@nilscox/redux-query';
+import { get } from 'shared';
 
 import { requireAuthentication } from '../../../authentication/use-cases/require-authentication/require-authentication';
 import { handleAuthorizationError } from '../../../authorization/handle-authorization-error';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { State, Thunk } from '../../../store.types';
 import { AuthorizationError } from '../../../types';
+import { createEntityAction } from '../../../utils/create-entity-action';
 import { serializeError } from '../../../utils/serialize-error';
-import {
-  addCommentHistoryMessage,
-  setCommentEdited,
-  setCommentText,
-  updateComment,
-} from '../../comments.actions';
+import { setCommentEdited, setCommentText } from '../../comments.actions';
 import { selectComment } from '../../comments.selectors';
-
-type Key = {
-  commentId: string;
-};
-
-const editCommentMutation = query<Key, undefined>('editComment');
-
-export const editCommentReducer = editCommentMutation.reducer();
+import { NormalizedComment } from '../../comments.slice2';
 
 // actions
 
-const actions = editCommentMutation.actions();
-
-export const [setIsEditingComment, isSetIsEditingCommentAction] = createAction(
+export const setIsEditingComment = createEntityAction(
   'comment/set-editing',
-  (commentId: string, isEditing = true) => ({ commentId, isEditing }),
+  (comment: NormalizedComment, isEditing: boolean) => ({
+    ...comment,
+    editionForm: { ...comment.editionForm, open: isEditing, text: comment.text },
+  }),
+);
+
+export const setCommentEditionText = createEntityAction(
+  'comment/set-edition-text',
+  (comment: NormalizedComment, text: string) => ({
+    ...comment,
+    editionForm: { ...comment.editionForm, text },
+  }),
+);
+
+export const setIsSubmittingCommentEdition = createEntityAction(
+  'comment/set-submitting-edition',
+  (comment: NormalizedComment, submitting: boolean) => ({
+    ...comment,
+    editionForm: { ...comment.editionForm, submitting },
+  }),
+);
+
+export const addCommentHistoryMessage = createEntityAction(
+  'comment/add-history-message',
+  (comment: NormalizedComment, text: string, date: string) => ({
+    ...comment,
+    history: [...comment.history, { text, date }],
+  }),
+);
+
+export const setCommentEditionError = createEntityAction(
+  'comment/set-edition-error',
+  (comment: NormalizedComment, error: unknown) => ({
+    ...comment,
+    editionForm: {
+      ...comment.editionForm,
+      error,
+    },
+  }),
 );
 
 export const setEditCommentFormText = (commentId: string, text: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
-    dispatch(updateComment(commentId, { editionForm: { text } }));
+    dispatch(setCommentEditionText(commentId, text));
     await storageGateway.setDraftCommentText(DraftCommentKind.edition, commentId, text);
   };
 };
 
 export const clearEditCommentFormText = (commentId: string): Thunk => {
   return async (dispatch, getState, { storageGateway }) => {
+    // todo: clear text
     dispatch(setIsEditingComment(commentId, false));
     await storageGateway.removeDraftCommentText(DraftCommentKind.edition, commentId);
   };
@@ -47,18 +73,17 @@ export const clearEditCommentFormText = (commentId: string): Thunk => {
 
 // selectors
 
-const selectors = editCommentMutation.selectors((state: State) => state.comments.mutations.editComment);
-
+// todo: renames to commentEdition instead of editComment
 export const selectEditCommentForm = (state: State, commentId: string) => {
   return selectComment(state, commentId).editionForm;
 };
 
 export const selectIsEditingComment = (state: State, commentId: string) => {
-  return selectEditCommentForm(state, commentId) !== undefined;
+  return selectEditCommentForm(state, commentId).open;
 };
 
 export const selectEditCommentFormText = (state: State, commentId: string) => {
-  return selectEditCommentForm(state, commentId)?.text;
+  return selectEditCommentForm(state, commentId).text;
 };
 
 export const selectCanSubmitEditCommentForm = (state: State, commentId: string) => {
@@ -69,11 +94,11 @@ export const selectCanSubmitEditCommentForm = (state: State, commentId: string) 
 };
 
 export const selectIsSubmittingCommentEditionForm = (state: State, commentId: string) => {
-  return selectors.selectState(state, { commentId }) === QueryState.pending;
+  return selectEditCommentForm(state, commentId).submitting;
 };
 
 export const selectEditCommentError = (state: State, commentId: string) => {
-  return selectors.selectError(state, { commentId });
+  return get(selectEditCommentForm(state, commentId).error, 'message');
 };
 
 // thunk
@@ -85,13 +110,10 @@ export const editComment = (commentId: string): Thunk<Promise<void>> => {
     }
 
     const comment = selectComment(getState(), commentId);
-    const key: Key = { commentId };
-
-    // todo: type cast
-    const text = selectEditCommentFormText(getState(), commentId) as string;
+    const text = selectEditCommentFormText(getState(), commentId);
 
     try {
-      dispatch(actions.setPending(key));
+      dispatch(setIsSubmittingCommentEdition(commentId, true));
 
       await threadGateway.editComment(commentId, text);
 
@@ -101,19 +123,19 @@ export const editComment = (commentId: string): Thunk<Promise<void>> => {
 
       await dispatch(clearEditCommentFormText(commentId));
 
-      dispatch(actions.setSuccess(key, undefined));
-
       snackbarGateway.success('Votre commentaire a bien été mis à jour.');
     } catch (error) {
       loggerGateway.error(error);
 
-      dispatch(actions.setError(key, serializeError(error)));
+      dispatch(setCommentEditionError(commentId, serializeError(error)));
 
       if (error instanceof AuthorizationError && error.reason === 'UserMustBeAuthor') {
         snackbarGateway.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");
       } else if (!dispatch(handleAuthorizationError(error, 'éditer un commentaire'))) {
         snackbarGateway.error("Une erreur s'est produite, votre commentaire n'a pas été mis à jour.");
       }
+    } finally {
+      dispatch(setIsSubmittingCommentEdition(commentId, false));
     }
   };
 };

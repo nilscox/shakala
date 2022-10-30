@@ -144,7 +144,7 @@ const EditButton = ({ commentId }: EditCommentProps) => {
   const dispatch = useDispatch();
 
   return (
-    <FooterButton icon={<EditIcon />} onClick={() => dispatch(setIsEditingComment(commentId))}>
+    <FooterButton icon={<EditIcon />} onClick={() => dispatch(setIsEditingComment(commentId, true))}>
       Éditer
     </FooterButton>
   );

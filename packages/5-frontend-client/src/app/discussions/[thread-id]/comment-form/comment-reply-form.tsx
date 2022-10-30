@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import {
-  clearReplyFormText,
+  clearReplyForm,
   createReply,
   selectCanSubmitReply,
   selectIsReplying,
@@ -30,7 +30,7 @@ export const ReplyForm = ({ parentId }: ReplyFormPros) => {
   const isSubmitting = useSelector(selectIsSubmittingReply, parentId);
 
   if (!isReplying) {
-    return <FakeForm onFocus={() => dispatch(setIsReplying(parentId))} />;
+    return <FakeForm onFocus={() => dispatch(setIsReplying(parentId, true))} />;
   }
 
   return (
@@ -39,7 +39,7 @@ export const ReplyForm = ({ parentId }: ReplyFormPros) => {
       setMessage={(text) => dispatch(setReplyFormText(parentId, text))}
       canSubmit={canSubmit}
       isSubmitting={isSubmitting as boolean}
-      onCancel={() => dispatch(clearReplyFormText(parentId))}
+      onCancel={() => dispatch(clearReplyForm(parentId))}
       onSubmit={() => dispatch(createReply(parentId))}
     />
   );

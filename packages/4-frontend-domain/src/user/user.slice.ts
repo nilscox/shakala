@@ -5,7 +5,6 @@ import {
   unseenNotificationsCountReducer,
   totalUserActivitiesReducer,
 } from './use-cases';
-import { fetchAuthenticatedUserReducer } from './use-cases/fetch-authenticated-user/fetch-authenticated-user';
 import {
   fetchNotificationsReducer,
   totalNotificationsReducer,
@@ -13,7 +12,6 @@ import {
 
 export const userReducer = combineReducers({
   queries: combineReducers({
-    authenticatedUser: fetchAuthenticatedUserReducer,
     activities: fetchUserActivitiesReducer,
     notifications: fetchNotificationsReducer,
   }),

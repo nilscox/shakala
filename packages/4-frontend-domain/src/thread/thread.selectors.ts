@@ -6,21 +6,14 @@ import { schemas, selectNormalizedEntities } from '../normalization';
 import { State } from '../store.types';
 import { Thread } from '../types';
 import { DateFormat, formatDate } from '../utils/format-date';
+import { safeSelector } from '../utils/safe-selector';
 
 export const { selectEntity: selectThreadUnsafe, selectEntities: selectThreads } = createNormalizedSelectors<
   State,
   Thread
 >(selectNormalizedEntities, schemas.thread);
 
-export const selectThread = (state: State, threadId: string) => {
-  const thread = selectThreadUnsafe(state, threadId);
-
-  if (!thread) {
-    throw new Error(`selectThread: thread with id "${threadId}" is not defined`);
-  }
-
-  return thread;
-};
+export const selectThread = safeSelector('thread', selectThreadUnsafe);
 
 export const selectFormattedThreadDate = (state: State, threadId: string) => {
   const { date } = selectThread(state, threadId);
@@ -35,7 +28,7 @@ export const selectCommentThreadId = (state: State, commentId: string): string =
     return selectCommentThreadId(state, parent.id);
   }
 
-  const normalizedThreads = Object.values(state.threads.entities);
+  const normalizedThreads = Object.values(state.thread);
   const thread = normalizedThreads.find((thread) => contains(thread.comments, commentId));
 
   if (!thread) {

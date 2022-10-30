@@ -35,7 +35,7 @@ describe('editComment', () => {
     store.user = user;
     store.dispatch(addThread(thread));
     store.dispatch(addComment(comment));
-    store.dispatch(setIsEditingComment(comment.id));
+    store.dispatch(setIsEditingComment(comment.id, true));
 
     store.dateGateway.setNow(now);
     store.threadGateway.editComment = mockResolve();
@@ -155,7 +155,7 @@ describe('editComment', () => {
       await execute();
 
       expect(store.select(selectIsSubmittingCommentEditionForm, comment.id)).toBe(false);
-      expect(store.select(selectEditCommentError, comment.id)).toHaveProperty('message', error.message);
+      expect(store.select(selectEditCommentError, comment.id)).toEqual(error.message);
     });
 
     it('logs the error', async () => {

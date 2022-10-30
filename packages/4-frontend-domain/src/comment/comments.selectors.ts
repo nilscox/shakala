@@ -2,23 +2,16 @@ import { createNormalizedSelectors } from '@nilscox/redux-query';
 import { contains, getIds } from 'shared';
 
 import { schemas, selectNormalizedEntities } from '../normalization';
-import { State, Selector } from '../store.types';
+import { Selector, State } from '../store.types';
 import { Comment } from '../types';
-import { selectUser } from '../user';
+import { selectUserUnsafe } from '../user';
 import { DateFormat, formatDate } from '../utils/format-date';
+import { safeSelector } from '../utils/safe-selector';
 
 export const { selectEntity: selectCommentUnsafe, selectEntities: selectComments } =
   createNormalizedSelectors<State, Comment>(selectNormalizedEntities, schemas.comment);
 
-export const selectComment: Selector<[string], Comment> = (state, id) => {
-  const comment = selectCommentUnsafe(state, id);
-
-  if (!comment) {
-    throw new Error(`selectComment: comment with id "${id}" is not defined`);
-  }
-
-  return comment;
-};
+export const selectComment = safeSelector('comment', selectCommentUnsafe);
 
 export const selectFormattedCommentDate: Selector<[string], string> = (state, id) => {
   const { date, edited } = selectComment(state, id);
@@ -49,7 +42,7 @@ export const selectCommentReplies = (state: State, commentId: string) => {
 };
 
 const selectAllComments = (state: State) => {
-  return selectComments(state, Object.keys(state.comments.entities));
+  return selectComments(state, Object.keys(state.comments));
 };
 
 export const selectParentComment = (state: State, replyId: string) => {
@@ -61,7 +54,7 @@ export const selectIsReply = (state: State, commentId: string) => {
 };
 
 export const selectIsAuthUserAuthor = (state: State, commentId: string) => {
-  const user = selectUser(state);
+  const user = selectUserUnsafe(state);
   const { author } = selectComment(state, commentId);
 
   return user?.id === author.id;

@@ -84,7 +84,10 @@ export type UserActivity<Type extends UserActivityType = UserActivityType> = Use
 export type Notification<Type extends NotificationType = NotificationType> = NotificationDto<Type>;
 
 export type CommentForm = {
+  open: boolean;
   text: string;
+  submitting: boolean;
+  error?: unknown;
 };
 
 export type Thread = ThreadDto & {
@@ -94,8 +97,8 @@ export type Thread = ThreadDto & {
 
 export type Comment = Omit<CommentDto, 'replies'> & {
   replies: Comment[];
-  replyForm?: CommentForm;
-  editionForm?: CommentForm;
+  replyForm: CommentForm;
+  editionForm: CommentForm;
 };
 
 export type ReactionType = ReactionTypeDto;

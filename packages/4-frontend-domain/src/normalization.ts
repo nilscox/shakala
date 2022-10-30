@@ -26,6 +26,6 @@ export const schemas = {
 
 export const selectNormalizedEntities = (state: State) => ({
   user: state.users,
-  comment: state.comments.entities,
-  thread: state.threads.entities,
+  comment: state.comments,
+  thread: state.thread,
 });
