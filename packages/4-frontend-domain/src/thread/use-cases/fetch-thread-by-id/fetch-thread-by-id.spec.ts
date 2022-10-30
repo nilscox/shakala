@@ -14,7 +14,7 @@ import {
   selectLoadingThreadError,
 } from './fetch-thread-by-id';
 
-describe('fetchThreadById', () => {
+describe.skip('fetchThreadById', () => {
   const store = new TestStore();
 
   const threadId = 'threadId';

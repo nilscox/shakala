@@ -1,6 +1,14 @@
 'use client';
 
-import { Comment as CommentType, DateFormat, formatDate, selectThread, User } from 'frontend-domain';
+import {
+  Comment as CommentType,
+  DateFormat,
+  formatDate,
+  restoreDraftComments,
+  selectThread,
+  User,
+} from 'frontend-domain';
+import { useEffect } from 'react';
 
 import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
@@ -10,6 +18,7 @@ import { useSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
+import { useDispatch } from '../../../../hooks/use-dispatch';
 import { RootCommentForm } from '../comment-form';
 import { CommentHistoryModal } from '../comment-history-modal';
 import { Comment } from '../comment/comment';
@@ -23,9 +32,15 @@ type ThreadProps = {
 };
 
 export const Thread = ({ threadId }: ThreadProps) => {
+  const dispatch = useDispatch();
+
   const thread = useSelector(selectThread, threadId);
   const dateFormatted = formatDate(thread.date, DateFormat.full);
   const { comments } = thread;
+
+  useEffect(() => {
+    dispatch(restoreDraftComments(threadId));
+  }, [dispatch, threadId]);
 
   // todo
   const createdComments: CommentType[] = [];
