@@ -6,7 +6,7 @@ import { addComment } from '../../../comment/comments.actions';
 import { DraftCommentKind } from '../../../interfaces/storage.gateway';
 import { State, Thunk } from '../../../store.types';
 import { Comment } from '../../../types';
-import { selectUserOrFail } from '../../../user';
+import { selectUser } from '../../../user';
 import { serializeError } from '../../../utils/serialize-error';
 import { addCreatedRootComment } from '../../lists/created-root-comments';
 import { updateThread } from '../../thread.actions';
@@ -74,7 +74,7 @@ export const createRootComment = (threadId: string): Thunk => {
     }
 
     const text = selectCreateRootCommentFormText(getState(), threadId);
-    const user = selectUserOrFail(getState());
+    const user = selectUser(getState());
 
     const key: Key = { threadId };
 

@@ -10,7 +10,7 @@ export const ThreadCreatedNotification: NotificationItem<NotificationType.thread
     <Notification notification={notification} title="Nouveau fil de discussion">
       <p>
         <strong>{notification.payload.author.nick}</strong> a créé un nouveau fil de discussion :{' '}
-        <Link to={`/discussion/${notification.payload.threadId}`}>{notification.payload.text}</Link>
+        <Link href={`/discussion/${notification.payload.threadId}`}>{notification.payload.text}</Link>
       </p>
     </Notification>
   );

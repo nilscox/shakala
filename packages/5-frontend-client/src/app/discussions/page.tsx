@@ -1,22 +1,15 @@
-import {
-  clearThreadFormFieldError,
-  createNewThread,
-  FormField,
-  selectCreateThreadFieldErrors,
-  selectLastThreads,
-  ThreadForm as ThreadFormType,
-} from 'frontend-domain';
+import { headers } from 'next/headers';
+import { useDispatch } from 'react-redux';
 
-import { ThreadForm } from '~/components/domain/thread/thread-form';
+import { api } from '~/adapters';
 import { Link } from '~/components/elements/link';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
 
-export const ThreadsRoute = () => {
+// import { ThreadForm } from '~/components/domain/thread/thread-form';
+
+const ThreadsPage = async () => {
+  const { threadGateway } = api(headers().get('Cookie'));
+  const [thread] = await threadGateway.getLast(3);
   const dispatch = useDispatch();
-
-  const [thread] = useSelector(selectLastThreads);
-  const errors = useSelector(selectCreateThreadFieldErrors);
 
   const handleSubmit = (form: ThreadFormType) => {
     dispatch(createNewThread(form));
@@ -46,13 +39,15 @@ export const ThreadsRoute = () => {
       {thread && (
         <p>
           En attendant, vous pouvez voir à quoi pourrait ressembler une discussion{' '}
-          <Link to={`/discussions/${thread.id}`}>sur cette page</Link>.
+          <Link href={`/discussions/${thread.id}`}>sur cette page</Link>.
         </p>
       )}
 
       <h2>Créer un nouveau fil de discussion</h2>
 
-      <ThreadForm errors={errors} onChange={handleChange} onSubmit={handleSubmit} />
+      {/* <ThreadForm errors={errors} onChange={handleChange} onSubmit={handleSubmit} /> */}
     </>
   );
 };
+
+export default ThreadsPage;

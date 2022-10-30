@@ -1,10 +1,10 @@
-import { Link } from '~/components/elements/link';
-import { PageTitle } from '~/components/layout/page-title';
+import { ExternalLink, Link } from '~/components/elements/link';
 
 // cspell:word languagetool
-export const CharterRoute = () => (
+
+export const RulesPage = () => (
   <>
-    <PageTitle>La charte</PageTitle>
+    {/* <PageTitle>La charte</PageTitle> */}
     <h1>La charte de Shakala</h1>
 
     <p>
@@ -38,7 +38,7 @@ export const CharterRoute = () => (
       <Rule rule="4. Préciser un degré de certitude des affirmations énoncées.">
         Pour vous assurer d'être bien compris, il peut vous être utile d'exprimer à quel point vous êtes sûr.e
         des affirmations clés que vous avancez. Shakala{' '}
-        <Link to="/faq.html">permet d'annoter une phrase</Link> avec un degré de certitude, via{' '}
+        <Link href="/faq.html">permet d'annoter une phrase</Link> avec un degré de certitude, via{' '}
         <a href="https://twitter.com/HygieneMentale/status/1230849591534407685">une notation en exposant</a>,
         comme ceci<sup>80</sup>.
       </Rule>
@@ -52,8 +52,8 @@ export const CharterRoute = () => (
       <Rule rule="6. Rédiger en français correct.">
         Votre message sera toujours mieux perçu s'il est bien écrit et lisible. Évitez le registre familier,
         les abréviations et le style "texto". Une extension comme
-        <a href="https://languagetool.org/fr/#plugins">languagetool</a> vous permettra même de corriger les
-        fautes d'orthographe directement pendant la rédaction d'un message.
+        <ExternalLink href="https://languagetool.org/fr/#plugins">languagetool</ExternalLink> vous permettra
+        même de corriger les fautes d'orthographe directement pendant la rédaction d'un message.
       </Rule>
 
       <Rule rule="7. Faire preuve de bienveillance.">
@@ -77,6 +77,8 @@ export const CharterRoute = () => (
     </p>
   </>
 );
+
+export default RulesPage;
 
 const Rule = ({ rule, children }: { rule: React.ReactNode; children: React.ReactNode }) => (
   <div>

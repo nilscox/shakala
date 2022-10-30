@@ -1,14 +1,18 @@
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 export const useSearchParam = (name: string) => {
-  const [params] = useSearchParams();
+  const params = useSearchParams();
 
   return params.get(name) ?? undefined;
 };
 
 export const useSetSearchParam = () => {
-  const [params, setParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
 
   return useCallback(
     (key: string, value: string | undefined) => {
@@ -20,8 +24,8 @@ export const useSetSearchParam = () => {
         nextParams.set(key, value);
       }
 
-      setParams(nextParams);
+      router.push(`${pathname}?${nextParams}`);
     },
-    [params, setParams],
+    [pathname, params, router],
   );
 };

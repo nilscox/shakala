@@ -8,8 +8,13 @@ export class LocalStorageGateway implements StorageGateway {
   public static readonly storageKey = 'draft-comments';
 
   private timeoutId?: number;
+  private storage!: Storage;
 
-  constructor(private storage = window.localStorage) {}
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.storage = localStorage;
+    }
+  }
 
   private getDrafts(kind: DraftCommentKind): Record<string, string> {
     const json = this.storage.getItem(LocalStorageGateway.storageKey);

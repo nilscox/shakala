@@ -1,9 +1,10 @@
-import { ProfileTitle } from './profile-title';
+import { ProfileTitle } from '../profile-title';
 
-export const ReputationRoute = () => (
+const ReputationPage = () => (
   <>
     <ProfileTitle title="Réputation" subTitle="Votre réputation" pageTitle="réputation" />
-
     <div className="text-xxl">Coming soon...</div>
   </>
 );
+
+export default ReputationPage;

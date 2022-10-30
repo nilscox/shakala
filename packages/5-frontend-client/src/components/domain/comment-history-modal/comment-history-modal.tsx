@@ -2,11 +2,11 @@ import { DateFormat, formatDate, selectComment, selectCommentUnsafe, User } from
 import { useState } from 'react';
 import { MessageDto } from 'shared';
 
+import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Diff } from '~/components/elements/diff/diff';
 import { IconButton } from '~/components/elements/icon-button';
 import { Modal } from '~/components/elements/modal';
-import { PageTitle } from '~/components/layout/page-title';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import ChevronLeft from '~/icons/chevron-left.svg';

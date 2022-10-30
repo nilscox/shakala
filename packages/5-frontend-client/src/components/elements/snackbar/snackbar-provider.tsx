@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -69,6 +71,7 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     [updateSnack, removeSnack],
   );
 
+  return <>{children}</>;
   return (
     <snackbarContext.Provider value={{ snacks, addSnack, updateSnack, removeSnack }}>
       {children}

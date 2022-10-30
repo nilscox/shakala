@@ -156,6 +156,7 @@ type ReplyButtonProps = {
 
 const ReplyButton = ({ commentId }: ReplyButtonProps) => {
   const dispatch = useDispatch();
+
   const canReply = useSelector(selectCanReply, commentId);
 
   if (!canReply) {

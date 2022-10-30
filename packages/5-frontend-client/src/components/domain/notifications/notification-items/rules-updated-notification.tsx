@@ -18,7 +18,7 @@ export const RulesUpdatedNotification: NotificationItem<NotificationType.rulesUp
 
       <p>
         Retrouvez la version complète de la charte mise à jour{' '}
-        <Link to={`/charte?${new URLSearchParams({ version: notification.payload.version })}`}>
+        <Link href={`/charte?${new URLSearchParams({ version: notification.payload.version })}`}>
           sur cette page
         </Link>
         .

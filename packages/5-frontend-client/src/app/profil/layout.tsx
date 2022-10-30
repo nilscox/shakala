@@ -1,13 +1,13 @@
-import { clsx } from 'clsx';
-import { logout, selectUnseenNotificationsCount } from 'frontend-domain';
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+'use client';
 
-import { AsyncResource } from '~/components/elements/async-resource/async-resource';
+import { clsx } from 'clsx';
+import { logout } from 'frontend-domain';
+import React from 'react';
+
 import { Avatar } from '~/components/elements/avatar/avatar';
 import { NavLink } from '~/components/elements/link';
 import { useDispatch } from '~/hooks/use-dispatch';
-import { useIsFetchingUser, useUser } from '~/hooks/use-user';
+import { useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconEdit from '~/icons/edit.svg';
 import IconProfile from '~/icons/profile.svg';
@@ -15,45 +15,29 @@ import IconSignOut from '~/icons/sign-out.svg';
 import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
-import { RedirectToSignIn } from '~/utils/RedirectToSignIn';
 
 import { Chip } from '../../components/elements/chip';
-import { useSelector } from '../../hooks/use-selector';
 
-class UnauthenticatedError extends Error {}
-
-export const ProfileLayout = () => {
-  const user = useUser();
-  const fetchingUser = useIsFetchingUser();
-
-  return (
-    <AsyncResource
-      loading={fetchingUser}
-      data={user}
-      error={!fetchingUser && !user && new UnauthenticatedError()}
-      render={() => (
-        <div className="row my-4 gap-6">
-          <Sidebar />
-          <div className="flex-1">
-            <Outlet />
-          </div>
-        </div>
-      )}
-      renderError={(error) => {
-        if (error instanceof UnauthenticatedError) {
-          return <RedirectToSignIn />;
-        }
-
-        throw error;
-      }}
-    />
-  );
+type ProfileLayoutProps = {
+  children: React.ReactNode;
 };
+
+export default function ProfileLayout({ children }: ProfileLayoutProps) {
+  return (
+    <div className="row my-4 gap-6">
+      <Sidebar />
+      <div className="flex-1">{children}</div>
+    </div>
+  );
+}
 
 const Sidebar = () => {
   const user = useUser();
   const dispatch = useDispatch();
-  const unseenNotificationsCount = useSelector(selectUnseenNotificationsCount);
+
+  // todo
+  // const unseenNotificationsCount = useSelector(selectUnseenNotificationsCount);
+  const unseenNotificationsCount = 0;
 
   return (
     <aside>
@@ -113,16 +97,14 @@ const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
     </>
   );
 
-  const getClassName = (isActive: boolean) =>
-    clsx(
-      'row my-0.5 w-full items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5',
-      isActive && '!border-warning bg-inverted/5 font-semibold',
-    );
+  const className = clsx(
+    'row my-0.5 w-full items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5',
+  );
 
   if (!to) {
     return (
       <li>
-        <button className={getClassName(false)} onClick={onClick}>
+        <button className={className} onClick={onClick}>
           {kids}
         </button>
       </li>
@@ -131,7 +113,12 @@ const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
 
   return (
     <li>
-      <NavLink to={to} className={({ isActive }) => getClassName(isActive)} end onClick={onClick}>
+      <NavLink
+        href={to}
+        className={className}
+        activeClassName="!border-warning bg-inverted/5 font-semibold"
+        onClick={onClick}
+      >
         {kids}
       </NavLink>
     </li>

@@ -3,6 +3,10 @@ import noScroll from 'no-scroll';
 import { useEffect } from 'react';
 import ReactModal from 'react-modal';
 
+if (typeof window !== 'undefined') {
+  ReactModal.setAppElement('body');
+}
+
 export const Modal = ({ className, isOpen, ...props }: ReactModal.Props) => {
   useEffect(() => {
     if (isOpen) {

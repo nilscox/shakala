@@ -18,6 +18,7 @@ type CommentHeaderProps = {
 
 export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
   const { author, date, edited } = useSelector(selectComment, commentId);
+
   const formattedDate = useSelector(selectFormattedCommentDate, commentId);
   const formattedDateDetailed = useSelector(selectFormattedCommentDateDetailed, commentId);
 
@@ -26,7 +27,7 @@ export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
       <AvatarNick {...author} />
       <div>{bullet}</div>
       <Link
-        to={`#${commentId}`}
+        href={`#${commentId}`}
         className={clsx('text-xs leading-none text-muted decoration-muted/40 hover:underline', {
           italic: edited,
         })}

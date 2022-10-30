@@ -1,13 +1,17 @@
-import { Helmet } from 'react-helmet';
+import Head from 'next/head';
+import { Fragment } from 'react';
 
 type PageTitleProps = {
   children?: string;
 };
 
+// todo: remove when next/head is available with next 13
+const Tag = (false as boolean) ? Head : Fragment;
+
 export const PageTitle = ({ children }: PageTitleProps) => (
-  <Helmet>
+  <Tag>
     <title>{getTitle(children)}</title>
-  </Helmet>
+  </Tag>
 );
 
 const getTitle = (title?: string) => {

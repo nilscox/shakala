@@ -25,7 +25,7 @@ const heights = {
 
 /** @type {import("tailwindcss").Config} */
 module.exports = {
-  content: ['./src/**/*.tsx'],
+  content: ['./app/**/*.tsx', './src/**/*.tsx'],
   theme: {
     screens: {
       sm: '480px',

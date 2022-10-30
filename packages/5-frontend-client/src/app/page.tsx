@@ -1,12 +1,10 @@
-import { fetchLastThreads, selectLastThreads } from 'frontend-domain';
-import { ReactNode, useEffect } from 'react';
+'use client';
 
-import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Link } from '~/components/elements/link';
-import { Markdown } from '~/components/elements/markdown';
 import { useSnackbar } from '~/components/elements/snackbar';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
+import { Markdown } from '~/components/elements/markdown';
+
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
 import FormatIcon from '~/icons/format.svg';
@@ -15,16 +13,36 @@ import SortIcon from '~/icons/sort.svg';
 import SubscribeIcon from '~/icons/subscribe.svg';
 import TrophyIcon from '~/icons/trophy.svg';
 
-import imageCharte from '../images/charte.png';
-import imageIndépendance from '../images/indépendance.png';
-import imageModeration from '../images/moderation.png';
+import imageCharte from '~/images/charte.png';
+import imageIndépendance from '~/images/indépendance.png';
+import imageModeration from '~/images/moderation.png';
+import Image, { StaticImageData } from 'next/image';
 
-import { useEmailValidationNotification } from './hooks/use-email-validation-notification';
+export default function HomePage() {
+  const login = async () => {
+    const response = await fetch('http://localhost:8000/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: 'nilscox@email.tld',
+        password: 'p4ssword',
+      }),
+    });
+
+    console.log(response);
+    console.dir(await response.json(), { depth: null });
+  };
+
+  return <Home />;
+}
 
 export const Home = () => {
   const snackbar = useSnackbar();
 
-  useEmailValidationNotification(snackbar.success, snackbar.error);
+  // todo
+  // useEmailValidationNotification(snackbar.success, snackbar.error);
 
   return (
     <>
@@ -47,7 +65,7 @@ const Outline = () => (
       <p>Et bien c'est le but de ce site 😊</p>
       <p>
         Sur Shakala, vous pouvez participer à des discussions où chacun s'engage à respecter{' '}
-        <Link to="/charte">une charte</Link>, un ensemble de règles pensées pour favoriser{' '}
+        <Link href="/charte">une charte</Link>, un ensemble de règles pensées pour favoriser{' '}
         <strong>des échanges critiques et bienveillants</strong>.
       </p>
     </div>
@@ -69,12 +87,13 @@ const Heading = ({ id, children }: HeadingProps) => (
 );
 
 const LastThreads = () => {
-  const threads = useSelector(selectLastThreads);
-  const dispatch = useDispatch();
+  const threads: any[] = [];
+  // const threads = useSelector(selectLastThreads);
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchLastThreads());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchLastThreads());
+  // }, [dispatch]);
 
   if (threads.length === 0) {
     return null;
@@ -88,7 +107,7 @@ const LastThreads = () => {
         {threads.map((thread) => (
           <Link
             key={thread.id}
-            to={`/discussions/${thread.id}`}
+            href={`/discussions/${thread.id}`}
             className="card max-w-1 flex-1 overflow-hidden p-4"
           >
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
@@ -138,21 +157,20 @@ const Motivations = () => (
 
     <p className="pt-4">
       Plus de détails sur les objectifs et ambitions de la plateforme sont expliqués sur{' '}
-      <Link to="/motivations">la page motivations</Link>.
+      <Link href="/motivations">la page motivations</Link>.
     </p>
   </>
 );
 
 type KeyFeatureProps = {
-  image: string;
+  image: StaticImageData;
   name: string;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
   <div className="max-w-1 flex-1">
-    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-    <img src={image} className="mx-auto max-h-[5.5rem] py-2 opacity-80 md:max-h-1" alt={name} />
+    <Image src={image} className="mx-auto max-h-1 py-2 opacity-80 w-auto" alt={name} />
     <div className="text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-xs">{children}</div>
   </div>

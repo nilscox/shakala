@@ -45,8 +45,12 @@ class FetchResponse<Body> implements Response<Body> {
 
 export class FetchHttpGateway implements HttpGateway {
   public fakeLag?: number;
+  public cookie?: string | null;
 
-  constructor(private readonly baseUrl: string, private readonly fetch = window.fetch.bind(window)) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly _fetch = typeof window === 'undefined' ? fetch : fetch.bind(window),
+  ) {}
 
   async get<ResponseBody, Query extends QueryParams = never>(
     path: string,
@@ -83,6 +87,10 @@ export class FetchHttpGateway implements HttpGateway {
       credentials: 'include',
     };
 
+    if (this.cookie) {
+      requestHeaders.set('Cookie', this.cookie);
+    }
+
     if (body) {
       if (body instanceof FormData) {
         init.body = body;
@@ -97,7 +105,7 @@ export class FetchHttpGateway implements HttpGateway {
     let response: globalThis.Response;
 
     try {
-      response = await this.fetch(url, init);
+      response = await this._fetch(url, init);
     } catch (error) {
       this.detectNetworkError(error);
       throw error;

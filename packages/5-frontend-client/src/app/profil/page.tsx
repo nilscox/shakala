@@ -1,3 +1,5 @@
+'use client';
+
 import { changeProfileImage } from 'frontend-domain';
 import { ComponentProps, FormEventHandler, useRef } from 'react';
 
@@ -11,18 +13,20 @@ import { withPreventDefault } from '~/utils/with-prevent-default';
 
 import { ProfileTitle } from './profile-title';
 
-export const ProfileRoute = () => (
-  <>
-    <ProfileTitle title="Profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
+export default function ProfilePage() {
+  return (
+    <>
+      <ProfileTitle title="Profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
 
-    <div className="col gap-6">
-      <NickForm />
-      <EmailForm />
-      <ProfileImageForm />
-      <BioForm />
-    </div>
-  </>
-);
+      <div className="col gap-6">
+        <NickForm />
+        <EmailForm />
+        <ProfileImageForm />
+        <BioForm />
+      </div>
+    </>
+  );
+}
 
 const ProfileFormField = (props: ComponentProps<typeof FormField>) => (
   <FormField consistentErrorHeight={false} className="col items-start gap-1" {...props} />

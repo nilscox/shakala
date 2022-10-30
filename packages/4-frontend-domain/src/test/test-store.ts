@@ -14,7 +14,7 @@ import { createStore } from '../store';
 import { Dependencies, Selector, Store } from '../store.types';
 import { ThreadGateway } from '../thread/thread.gateway';
 import { AuthUser } from '../types';
-import { selectUser, setUser, unsetUser, UserGateway } from '../user';
+import { selectUserUnsafe, setUser, unsetUser, UserGateway } from '../user';
 
 class StubDateGateway implements DateGateway {
   private _now = new Date();
@@ -240,7 +240,7 @@ export class TestStore implements Dependencies {
   }
 
   get user(): AuthUser | undefined {
-    return this.select(selectUser) ?? undefined;
+    return this.select(selectUserUnsafe);
   }
 
   set user(user: AuthUser | undefined) {

@@ -1,22 +1,16 @@
-import { useSearchParams } from 'react-router-dom';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-import { Link } from '~/components/elements/link';
+import { Link } from './link';
 
-type SearchParamLinkProps = Omit<React.ComponentProps<typeof Link>, 'to'> & {
+type SearchParamLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
   param: string;
   value: string;
   disabled?: boolean;
-  enableScrollRestoration?: boolean;
 };
 
-export const SearchParamLink = ({
-  param,
-  value,
-  disabled,
-  enableScrollRestoration = false,
-  ...props
-}: SearchParamLinkProps) => {
-  const [searchParams] = useSearchParams();
+export const SearchParamLink = ({ param, value, disabled, ...props }: SearchParamLinkProps) => {
+  const pathname = usePathname();
+  const searchParams = new URLSearchParams(Array.from(useSearchParams().entries()));
 
   searchParams.set(param, value);
 
@@ -24,8 +18,5 @@ export const SearchParamLink = ({
     return <span aria-disabled {...props} />;
   }
 
-  return (
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    <Link to={{ search: searchParams.toString() }} state={{ scroll: enableScrollRestoration }} {...props} />
-  );
+  return <Link href={{ pathname, search: searchParams.toString() }} {...props} />;
 };

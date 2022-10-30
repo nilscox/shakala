@@ -1,49 +1,52 @@
 import EventEmitter from 'events';
 
 import { AuthenticationType, LocationChange, RemoveListener, RouterGateway } from 'frontend-domain';
-import { Location, NavigateFunction, Path } from 'react-router-dom';
 
-export class ReactRouterGateway extends EventEmitter implements RouterGateway {
-  private queryParams: URLSearchParams;
+export class NextRouterGateway extends EventEmitter implements RouterGateway {
+  private _pathname = '/';
+  private _queryParams = new URLSearchParams();
 
-  constructor(private _location: Location, public navigate: NavigateFunction) {
-    super();
+  public navigate: (url: string) => void = () => {};
 
-    this.queryParams = new URLSearchParams(this.location.search);
-  }
-
-  set location(location: Location) {
-    this._location = location;
-    this.queryParams = new URLSearchParams(this.location.search);
-
+  set pathname(pathname: string) {
+    this._pathname = pathname;
     this.emit(LocationChange);
   }
 
-  get location() {
-    return this._location;
+  get pathname() {
+    return this._pathname;
+  }
+
+  set queryParams(queryParams: URLSearchParams) {
+    this._queryParams = queryParams;
+    this.emit(LocationChange);
+  }
+
+  get queryParams() {
+    return this._queryParams;
   }
 
   getQueryParam(key: string): string | undefined {
-    return this.queryParams.get(key) ?? undefined;
+    return this._queryParams.get(key) ?? undefined;
   }
 
   setQueryParam(key: string, value: string): void {
-    const params = this.queryParams;
+    const params = this._queryParams;
 
     params.set(key, value);
-    this._navigate(this.location.pathname, params);
+    this._navigate(this.pathname, params);
   }
 
   removeQueryParam(key: string): void {
-    const params = this.queryParams;
+    const params = this._queryParams;
 
     params.delete(key);
-    this._navigate(this.location.pathname, params);
+    this._navigate(this.pathname, params);
   }
 
   private navigateTimeout?: number;
 
-  private _navigate(pathname: string, queryParams = this.queryParams) {
+  private _navigate(pathname: string, queryParams = this._queryParams) {
     if (this.navigateTimeout) {
       window.clearTimeout(this.navigateTimeout);
       this.navigateTimeout = undefined;

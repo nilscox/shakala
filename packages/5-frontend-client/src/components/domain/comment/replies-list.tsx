@@ -12,7 +12,7 @@ type RepliesListProps = {
 };
 
 export const RepliesList = ({ commentId }: RepliesListProps) => {
-  const { replies } = useSelector(selectComment, commentId);
+  const { replies = [] } = useSelector(selectComment, commentId);
 
   return (
     // eslint-disable-next-line tailwindcss/no-arbitrary-value

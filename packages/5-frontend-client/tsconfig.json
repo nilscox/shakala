@@ -1,15 +1,34 @@
 {
-  "extends": "../../tsconfig.frontend.json",
-  "include": ["../../global.d.ts", "./mocha.setup.ts", "src"],
-  "files": [".storybook/preview.ts"],
-  "references": [{ "path": "../0-shared" }, { "path": "../4-frontend-domain" }],
   "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    // "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "baseUrl": "..",
     "paths": {
       "shared": ["0-shared/src"],
       "shared/test": ["0-shared/src/index.test.ts"],
       "frontend-domain": ["4-frontend-domain/src"],
-      "~/*": ["5-frontend-client/src/*"]
+      "src/*": ["5-frontend-client/src/*"]
     }
-  }
+  },
+  "references": [{ "path": "../0-shared" }, { "path": "../4-frontend-domain" }],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/server.js"],
+  "exclude": ["node_modules"]
 }

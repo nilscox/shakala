@@ -23,7 +23,7 @@ export const MarkdownPreviewTabs = ({ tab, setTab }: MarkdownPreviewTabsProps) =
     </TabComponent>
     <Link
       openInNewTab
-      to="/mise-en-forme"
+      href="/mise-en-forme"
       className="mr-1 ml-auto self-end text-right text-xs text-muted hover:underline"
     >
       Aide de mise en forme

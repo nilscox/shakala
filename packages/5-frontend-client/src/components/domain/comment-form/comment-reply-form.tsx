@@ -6,14 +6,15 @@ import {
   selectIsReplying,
   selectIsSubmittingReply,
   selectReplyFormText,
-  selectUser,
   setIsReplying,
   setReplyFormText,
 } from 'frontend-domain';
 
 import { Avatar } from '~/components/elements/avatar/avatar';
 import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+
+import { useSelector } from '../../../hooks/use-selector';
+import { useUser } from '../../../hooks/use-user';
 
 import { CommentForm } from './comment-form';
 
@@ -51,7 +52,7 @@ type FakeFormProps = {
 };
 
 const FakeForm = ({ className, onFocus }: FakeFormProps) => {
-  const user = useSelector(selectUser);
+  const user = useUser();
 
   return (
     <form className={clsx('row items-center gap-1 p-2', className)}>

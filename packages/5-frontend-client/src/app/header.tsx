@@ -1,18 +1,16 @@
+'use client';
+
 import { clsx } from 'clsx';
-import { pollNotificationsCount, selectUnseenNotificationsCount } from 'frontend-domain';
 import { ReactNode, useEffect } from 'react';
-import { useMatch } from 'react-router-dom';
 
-// import { Logo } from '~/components/domain/logo/logo';
+import { Avatar } from '~/components/elements/avatar/avatar';
+import { Chip } from '~/components/elements/chip';
 import { Link, NavLink } from '~/components/elements/link';
-import { useIsFetchingUser, useUser } from '~/hooks/use-user';
+import { SearchParamLink } from '~/components/elements/search-param-link';
+import { useDispatch } from '~/hooks/use-dispatch';
+import { useSelector } from '~/hooks/use-selector';
+import { useUser } from '~/hooks/use-user';
 import Logo from '~/images/logo.svg';
-
-import { useDispatch } from '../../hooks/use-dispatch';
-import { useSelector } from '../../hooks/use-selector';
-import { Avatar } from '../elements/avatar/avatar';
-import { Chip } from '../elements/chip';
-import { SearchParamLink } from '../elements/search-param-link';
 
 type HeaderProps = {
   className?: string;
@@ -32,8 +30,8 @@ export const Header = ({ className }: HeaderProps): JSX.Element => (
 );
 
 const Heading = () => (
-  <Link to="/" className="row mt-4 items-end gap-4">
-    <Logo className="text-inverted" width={64} height={undefined} />
+  <Link href="/" className="row mt-4 items-end gap-4">
+    <Logo className="text-inverted aspect-auto" width={64} height={undefined} />
     <div>
       <div className="text-xxl font-bold leading-10">Shakala</div>
       <div className="leading-3">Échanges critiques</div>
@@ -43,14 +41,9 @@ const Heading = () => (
 
 const Authentication = () => {
   const user = useUser();
-  const fetchingUser = useIsFetchingUser();
-  const isProfilePage = useMatch('/profil/*');
+  const isProfilePage = false; // useMatch('/profil/*');
 
   const getNick = () => {
-    if (fetchingUser) {
-      return null;
-    }
-
     if (!user) {
       return 'Connexion';
     }
@@ -60,7 +53,8 @@ const Authentication = () => {
 
   return (
     <AuthenticationLink
-      loading={fetchingUser}
+      // todo: remove loading
+      loading={false}
       authenticated={Boolean(user)}
       className="absolute top-0 right-0 flex flex-row items-center gap-2"
     >
@@ -69,7 +63,8 @@ const Authentication = () => {
         <Avatar
           size="medium"
           image={user?.profileImage}
-          loading={fetchingUser}
+          // todo
+          loading={false}
           className="h-6 w-6 border-none"
         />
         {user && <UnseenNotificationsChip />}
@@ -93,7 +88,7 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
   if (authenticated) {
     return (
       // todo: replace with NavLink
-      <Link to="/profil" className={className}>
+      <Link href="/profil" className={className}>
         {children}
       </Link>
     );
@@ -107,6 +102,7 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
 };
 
 const UnseenNotificationsChip = () => {
+  return null;
   const dispatch = useDispatch();
 
   const user = useUser();
@@ -140,23 +136,25 @@ const Navigation = ({ className }: NavigationProps) => (
       className,
     )}
   >
-    <HeaderNavLink to="" end>
+    <HeaderNavLink href="/" exact>
       Accueil
     </HeaderNavLink>
-    <HeaderNavLink to="discussions">Discussions</HeaderNavLink>
-    <HeaderNavLink to="charte">La charte</HeaderNavLink>
-    <HeaderNavLink to="faq">FAQ</HeaderNavLink>
+    <HeaderNavLink href="/discussions">Discussions</HeaderNavLink>
+    <HeaderNavLink href="/charte">La charte</HeaderNavLink>
+    <HeaderNavLink href="/faq">FAQ</HeaderNavLink>
   </nav>
 );
 
-const HeaderNavLink = (props: React.ComponentProps<typeof NavLink>) => (
+type HeaderNavLinkProps = {
+  href: string;
+  exact?: boolean;
+  children: React.ReactNode;
+};
+
+const HeaderNavLink = (props: HeaderNavLinkProps) => (
   <NavLink
-    className={({ isActive }) =>
-      clsx(
-        'underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-primary',
-        isActive && '!text-primary',
-      )
-    }
+    className="underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-primary"
+    activeClassName="!text-primary"
     {...props}
   />
 );

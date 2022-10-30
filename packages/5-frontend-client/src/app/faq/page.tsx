@@ -1,8 +1,9 @@
+'use client';
+
 import { clsx } from 'clsx';
 import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/components/elements/link';
-import { PageTitle } from '~/components/layout/page-title';
 
 type QuestionProps = {
   question: ReactNode;
@@ -63,7 +64,7 @@ const questions: Record<string, QuestionProps[]> = {
       answer: (
         <>
           Cela n'est pas possible pour le moment. Mais si c'est quelque chose que vous aimeriez faire,{' '}
-          <Link to="#contact">venez nous en parler</Link> ;)
+          <Link href="/faq#contact">venez nous en parler</Link> ;)
         </>
       ),
     },
@@ -164,16 +165,16 @@ const questions: Record<string, QuestionProps[]> = {
       question: <>Votre question ne figure pas dans cette liste... ?</>,
       answer: (
         <>
-          <Link to="#contact">Posez-la nous directement</Link>, nous l'y ajouterons sans tarder :)
+          <Link href="/faq#contact">Posez-la nous directement</Link>, nous l'y ajouterons sans tarder :)
         </>
       ),
     },
   ],
 };
 
-export const FaqRoute = () => (
+const FaqPage = () => (
   <>
-    <PageTitle>Questions posées fréquemment</PageTitle>
+    {/* <PageTitle>Questions posées fréquemment</PageTitle> */}
 
     <h1>Questions posées fréquemment</h1>
 
@@ -247,3 +248,5 @@ export const FaqRoute = () => (
     </ul>
   </>
 );
+
+export default FaqPage;

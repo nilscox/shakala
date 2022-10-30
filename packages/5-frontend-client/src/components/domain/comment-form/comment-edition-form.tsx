@@ -1,15 +1,6 @@
-import {
-  clearEditCommentFormText,
-  editComment,
-  selectCanSubmitEditCommentForm,
-  selectEditCommentFormText,
-  selectIsEditingComment,
-  selectIsSubmittingCommentEditionForm,
-  setEditCommentFormText,
-} from 'frontend-domain';
+import { clearEditCommentFormText, editComment, setEditCommentFormText } from 'frontend-domain';
 
 import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
 
 import { CommentForm } from '../comment-form/comment-form';
 
@@ -20,10 +11,16 @@ type CommentEditionFormProps = {
 export const CommentEditionForm = ({ commentId }: CommentEditionFormProps) => {
   const dispatch = useDispatch();
 
-  const isEditing = useSelector(selectIsEditingComment, commentId);
-  const message = useSelector(selectEditCommentFormText, commentId);
-  const canSubmit = useSelector(selectCanSubmitEditCommentForm, commentId);
-  const isSubmitting = useSelector(selectIsSubmittingCommentEditionForm, commentId);
+  // todo
+  // const isEditing = useSelector(selectIsEditingComment, commentId);
+  // const message = useSelector(selectEditCommentFormText, commentId);
+  // const canSubmit = useSelector(selectCanSubmitEditCommentForm, commentId);
+  // const isSubmitting = useSelector(selectIsSubmittingCommentEditionForm, commentId);
+
+  const isEditing = false;
+  const message = '';
+  const canSubmit = false;
+  const isSubmitting = false;
 
   if (!isEditing) {
     return null;

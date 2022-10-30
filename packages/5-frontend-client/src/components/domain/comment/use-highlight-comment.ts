@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 // delay + animation time
 const unsetHighlightedTimeout = (2 + 2) * 1000;
 
 export const useHighlightComment = (commentId: string) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
-  const { hash } = useLocation();
+
+  // todo
+  const { hash } = { hash: '' };
 
   const highlight = useCallback(() => {
     setIsHighlighted(true);

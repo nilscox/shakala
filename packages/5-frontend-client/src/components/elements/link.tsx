@@ -1,49 +1,30 @@
-import { ComponentProps, HTMLProps, MouseEventHandler } from 'react';
-import { Link as RRLink, NavLink as RRNavLink, To } from 'react-router-dom';
+import { clsx } from 'clsx';
+import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ComponentProps, HTMLProps } from 'react';
 
-type LinkProps = ComponentProps<typeof RRLink> & {
+type LinkProps = ComponentProps<typeof NextLink> & {
   openInNewTab?: boolean;
 };
 
-export const Link = ({ openInNewTab, to, onClick, ...props }: LinkProps) => {
-  const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
-    onClick?.(event);
+export const Link = ({ openInNewTab, href, onClick, ...props }: LinkProps) => {
+  return <NextLink prefetch={false} href={href} target={openInNewTab ? '_blank' : undefined} {...props} />;
+};
 
-    const hash = getHashFragment(to);
+type NavLinkProps = LinkProps & {
+  activeClassName: string;
+  exact?: boolean;
+};
 
-    if (!hash) {
-      return;
-    }
+export const NavLink = ({ href, className, activeClassName, exact, ...props }: NavLinkProps) => {
+  const pathname = usePathname();
 
-    const scrollToElement = (tryCount = 0) => {
-      const el = document.getElementById(hash);
-
-      if (el) {
-        el.scrollIntoView();
-      } else if (tryCount < 10) {
-        setTimeout(() => scrollToElement(tryCount + 1), 100);
-      }
-    };
-
-    setTimeout(scrollToElement, 0);
+  const isActive = () => {
+    return href.toString() === pathname;
   };
 
-  return <RRLink to={to} onClick={handleClick} target={openInNewTab ? '_blank' : undefined} {...props} />;
+  return <Link href={href} className={clsx(className, isActive() && activeClassName)} {...props} />;
 };
-
-const getHashFragment = (to: To) => {
-  if (typeof to === 'object') {
-    return to.hash;
-  }
-
-  if (!to.includes('#')) {
-    return;
-  }
-
-  return to.replace(/.*#/, '');
-};
-
-export const NavLink = RRNavLink;
 
 export const ExternalLink = ({ children, ...props }: HTMLProps<HTMLAnchorElement>) => (
   <a {...props}>{children}</a>

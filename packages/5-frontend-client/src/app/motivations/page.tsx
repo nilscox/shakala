@@ -1,8 +1,6 @@
-import { PageTitle } from '~/components/layout/page-title';
-
-export const MotivationsRoute = () => (
+const MotivationsPage = () => (
   <>
-    <PageTitle>Motivations</PageTitle>
+    {/* <PageTitle>Motivations</PageTitle> */}
     <h1>Motivations</h1>
 
     <p className="text-warning">
@@ -102,3 +100,5 @@ export const MotivationsRoute = () => (
     </p>
   </>
 );
+
+export default MotivationsPage;

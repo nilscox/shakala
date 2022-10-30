@@ -1,11 +1,11 @@
 import { reportComment, selectComment, selectCommentUnsafe } from 'frontend-domain';
 import { FormEventHandler, useState } from 'react';
-import { Link } from 'react-router-dom';
 
+import { PageTitle } from '~/app/page-title';
 import { Button } from '~/components/elements/button';
+import { Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';
 import { Modal } from '~/components/elements/modal';
-import { PageTitle } from '~/components/layout/page-title';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
@@ -67,7 +67,7 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
 
       <p className="text-sm text-muted">
         Il est important de signaler les commentaires qui ne respectent pas{' '}
-        <Link to="/charte">la charte</Link> : cela en informera les modérateurs qui pourront réagir en
+        <Link href="/charte">la charte</Link> : cela en informera les modérateurs qui pourront réagir en
         fonction de la situation.
       </p>
 
