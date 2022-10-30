@@ -37,6 +37,7 @@ export const InfiniteScroll = <T,>({
       }
     };
 
+    onScroll();
     document.addEventListener('scroll', onScroll);
     return () => document.removeEventListener('scroll', onScroll);
   }, [ref, offset, hasMore, loading, loadMore]);

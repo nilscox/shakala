@@ -42,7 +42,7 @@ export class ApiUserGateway implements UserGateway {
   }
 
   async listNotifications(page: number): Promise<Paginated<Notification>> {
-    const query = new URLSearchParams({ page: String(page) });
+    const query = new URLSearchParams({ page: String(page), pageSize: String(1) });
     const response = await this.http.get<Notification[]>(`/account/notifications?${query}`);
     const total = Number(response.headers.get('pagination-total'));
 

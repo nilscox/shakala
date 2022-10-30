@@ -1,6 +1,6 @@
-import { UserActivities } from '~/components/domain/user-activities/user-activities';
-
 import { ProfileTitle } from '../profile-title';
+
+import { UserActivities } from './user-activities';
 
 const TimelinePage = () => (
   <>

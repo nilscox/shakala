@@ -23,9 +23,10 @@ const ThreadPage = async ({ params }: ThreadPageProps) => {
   }
 
   return (
-    <Dispatch action={setThread(...result)}>
+    <>
+      <Dispatch action={setThread(...result)} />
       <Thread threadId={result[0].id} />
-    </Dispatch>
+    </>
   );
 };
 

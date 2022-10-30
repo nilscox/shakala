@@ -7,7 +7,7 @@ const lastThreads = list('lastThreads');
 
 export const lastThreadsReducer = lastThreads.reducer();
 const actions = lastThreads.actions();
-const selectors = lastThreads.selectors((state: State) => state.threads.lastThreads);
+const selectors = lastThreads.selectors((state: State) => state.lastThreads);
 
 export const setLastThreads = actions.appendMany;
 

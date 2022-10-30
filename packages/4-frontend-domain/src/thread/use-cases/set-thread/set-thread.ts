@@ -3,9 +3,9 @@ import { CommentDto, ThreadDto } from 'shared';
 
 import { Comment, Thread } from '../../../types';
 
-const { setEntity } = createNormalizedActions<Thread>('thread');
+const { setEntity, setEntities } = createNormalizedActions<Thread>('thread');
 
-export const setThread = (threadDto: ThreadDto, commentDtos: CommentDto[]) => {
+const transformThread = (threadDto: ThreadDto, commentDtos: CommentDto[]): Thread => {
   const comments: Comment[] = commentDtos.map((comment) => ({
     ...comment,
     replies:
@@ -35,7 +35,7 @@ export const setThread = (threadDto: ThreadDto, commentDtos: CommentDto[]) => {
     },
   }));
 
-  return setEntity({
+  return {
     ...threadDto,
     comments,
     createCommentForm: {
@@ -43,5 +43,13 @@ export const setThread = (threadDto: ThreadDto, commentDtos: CommentDto[]) => {
       text: '',
       submitting: false,
     },
-  });
+  };
+};
+
+export const setThread = (threadDto: ThreadDto, commentDtos: CommentDto[]) => {
+  return setEntity(transformThread(threadDto, commentDtos));
+};
+
+export const setThreads = (threadDtos: ThreadDto[]) => {
+  return setEntities(threadDtos.map((thread) => transformThread(thread, [])));
 };
