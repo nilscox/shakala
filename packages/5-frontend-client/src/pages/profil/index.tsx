@@ -1,8 +1,7 @@
-'use client';
-
 import { changeProfileImage } from 'frontend-domain';
 import { ComponentProps, FormEventHandler, useRef } from 'react';
 
+import { ProfileTitle } from '~/app/profile/profile-title';
 import { Button, SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
@@ -10,8 +9,6 @@ import { TextAreaAutoResize } from '~/elements/textarea-autoresize';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useUser } from '~/hooks/use-user';
 import { withPreventDefault } from '~/utils/with-prevent-default';
-
-import { ProfileTitle } from './profile-title';
 
 export default function ProfilePage() {
   return (

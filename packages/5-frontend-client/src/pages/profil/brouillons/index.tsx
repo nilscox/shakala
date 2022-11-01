@@ -1,4 +1,4 @@
-import { ProfileTitle } from '../profile-title';
+import { ProfileTitle } from '~/app/profile/profile-title';
 
 const DraftsPage = () => (
   <>

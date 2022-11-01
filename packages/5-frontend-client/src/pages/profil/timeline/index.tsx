@@ -1,6 +1,5 @@
-import { ProfileTitle } from '../profile-title';
-
-import { UserActivities } from './user-activities';
+import { ProfileTitle } from '~/app/profile/profile-title';
+import { UserActivities } from '~/app/user-activities/user-activities';
 
 const TimelinePage = () => (
   <>
