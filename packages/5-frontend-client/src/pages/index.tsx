@@ -1,11 +1,4 @@
-import {
-  createStore,
-  fetchAuthenticatedUser,
-  fetchLastThreads,
-  selectLastThreads,
-  State,
-} from 'frontend-domain';
-import { GetServerSideProps } from 'next';
+import { fetchAuthenticatedUser, fetchLastThreads, selectLastThreads } from 'frontend-domain';
 import { StaticImageData } from 'next/image';
 import { useEffect } from 'react';
 
@@ -24,26 +17,14 @@ import TrophyIcon from '~/icons/trophy.svg';
 import imageCharte from '~/images/charte.png';
 import imageIndépendance from '~/images/indépendance.png';
 import imageModeration from '~/images/moderation.png';
-import { productionDependencies } from '~/utils/production-dependencies';
+import { ssr } from '~/utils/ssr';
 
 import { useAppDispatch } from '../hooks/use-app-dispatch';
 
-type HomePageProps = {
-  state: State;
-};
-
-export const getServerSideProps: GetServerSideProps<HomePageProps> = async () => {
-  const store = createStore(productionDependencies);
-
+export const getServerSideProps = ssr(async (store) => {
   await store.dispatch(fetchAuthenticatedUser());
   await store.dispatch(fetchLastThreads());
-
-  return {
-    props: {
-      state: store.getState(),
-    },
-  };
-};
+});
 
 export default function HomePage() {
   const snackbar = useSnackbar();
@@ -118,7 +99,9 @@ const LastThreads = () => {
           >
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
-            <Markdown markdown={thread.text.slice(0, 220) + '...'} />
+            {/* todo: ssr error with link inside markdown */}
+            {/* <Markdown markdown={thread.text.slice(0, 220) + '...'} /> */}
+            <Markdown markdown={thread.text.slice(0, 10) + '...'} />
           </Link>
         ))}
       </div>

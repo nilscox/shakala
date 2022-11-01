@@ -7,7 +7,11 @@ import { Layout } from '../app/layout/layout';
 import { ProfileLayout } from '../app/layout/profile-layout';
 import { usePathname } from '../hooks/use-pathname';
 
-import '@fontsource/montserrat';
+import '@fontsource/montserrat/latin-400.css';
+import '@fontsource/montserrat/latin-500.css';
+import '@fontsource/montserrat/latin-600.css';
+import '@fontsource/montserrat/latin-700.css';
+
 import '../styles/tailwind.css';
 
 export default function App({ Component, pageProps }: AppProps<{ state: State }>) {

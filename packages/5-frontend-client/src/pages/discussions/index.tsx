@@ -1,35 +1,16 @@
-import {
-  createStore,
-  fetchAuthenticatedUser,
-  fetchLastThreads,
-  selectLastThreads,
-  State,
-} from 'frontend-domain';
-import { GetServerSideProps } from 'next';
+import { fetchAuthenticatedUser, fetchLastThreads, selectLastThreads } from 'frontend-domain';
 
 import { Link } from '~/elements/link';
+import { ssr } from '~/utils/ssr';
 
 import { useAppSelector } from '../../hooks/use-app-selector';
-import { productionDependencies } from '../../utils/production-dependencies';
 
 // import { ThreadForm } from '~/components/domain/thread/thread-form';
 
-type ThreadsPageProps = {
-  state: State;
-};
-
-export const getServerSideProps: GetServerSideProps<ThreadsPageProps> = async () => {
-  const store = createStore(productionDependencies);
-
+export const getServerSideProps = ssr(async (store) => {
   await store.dispatch(fetchAuthenticatedUser());
   await store.dispatch(fetchLastThreads());
-
-  return {
-    props: {
-      state: store.getState(),
-    },
-  };
-};
+});
 
 const ThreadsPage = () => {
   const [thread] = useAppSelector(selectLastThreads);
