@@ -1,4 +1,7 @@
-import { ProfileTitle } from '../../../app/profile/profile-title';
+import { ProfileTitle } from '~/app/profile/profile-title';
+import { ssr } from '~/utils/ssr';
+
+export const getServerSideProps = ssr.authenticated();
 
 const BadgesPage = () => (
   <>

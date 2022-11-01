@@ -1,19 +1,20 @@
 import { clsx } from 'clsx';
 import {
   AuthenticationType,
+  clearAllAuthenticationErrors,
   handleAuthenticate,
   handleAuthenticationFormChange,
   selectAuthenticationFormError,
   selectCanSubmitAuthenticationForm,
   selectIsAuthenticating,
 } from 'frontend-domain';
-import { FormEventHandler, useCallback } from 'react';
+import { FormEventHandler, useCallback, useEffect } from 'react';
 import { get } from 'shared';
 
-import { Button } from '~/components/elements/button';
-import { FieldError } from '~/components/elements/form-field';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+import { Button } from '~/elements/button';
+import { FieldError } from '~/elements/form-field';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { FormInputs } from './inputs';
 import { AuthenticationMessage } from './message';
@@ -37,13 +38,13 @@ type AuthenticationFormProps = {
 };
 
 export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const form = useAuthenticationForm();
 
-  const isAuthenticating = useSelector(selectIsAuthenticating);
-  const canSubmit = useSelector(selectCanSubmitAuthenticationForm, form);
-  const formError = useSelector(selectAuthenticationFormError);
+  const isAuthenticating = useAppSelector(selectIsAuthenticating);
+  const canSubmit = useAppSelector(selectCanSubmitAuthenticationForm, form);
+  const formError = useAppSelector(selectAuthenticationFormError);
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
@@ -71,6 +72,10 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
     },
     [dispatch],
   );
+
+  useEffect(() => {
+    dispatch(clearAllAuthenticationErrors());
+  }, [dispatch, form]);
 
   return (
     <>

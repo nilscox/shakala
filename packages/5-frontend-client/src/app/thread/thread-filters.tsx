@@ -4,9 +4,9 @@ import { FormEventHandler, useCallback } from 'react';
 import { isSort } from 'shared';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Input } from '~/components/elements/input';
-import { RadioItem, RadiosGroup } from '~/components/elements/radio-group';
-import { useDispatch } from '~/hooks/use-dispatch';
+import { Input } from '~/elements/input';
+import { RadioItem, RadiosGroup } from '~/elements/radio-group';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useSearchParam } from '~/hooks/use-search-param';
 import ArrowDownIcon from '~/icons/arrow-down.svg';
 import ArrowUpIcon from '~/icons/arrow-up.svg';
@@ -17,7 +17,7 @@ export type ThreadFiltersProps = {
 };
 
 export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const search = useSearchParam('search');
   const sort = useSearchParam('sort');

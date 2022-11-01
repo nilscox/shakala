@@ -1,6 +1,6 @@
 import { AuthenticationType } from 'frontend-domain';
 
-import { Link } from '~/components/elements/link';
+import { Link } from '~/elements/link';
 
 import { useAuthenticationForm } from './use-authentication-form';
 

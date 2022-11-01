@@ -8,22 +8,25 @@ import { Input } from '~/elements/input';
 import { TextAreaAutoResize } from '~/elements/textarea-autoresize';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useUser } from '~/hooks/use-user';
+import { ssr } from '~/utils/ssr';
 import { withPreventDefault } from '~/utils/with-prevent-default';
 
-export default function ProfilePage() {
-  return (
-    <>
-      <ProfileTitle title="Profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
+export const getServerSideProps = ssr.authenticated();
 
-      <div className="col gap-6">
-        <NickForm />
-        <EmailForm />
-        <ProfileImageForm />
-        <BioForm />
-      </div>
-    </>
-  );
-}
+const ProfilePage = () => (
+  <>
+    <ProfileTitle title="Profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
+
+    <div className="col gap-6">
+      <NickForm />
+      <EmailForm />
+      <ProfileImageForm />
+      <BioForm />
+    </div>
+  </>
+);
+
+export default ProfilePage;
 
 const ProfileFormField = (props: ComponentProps<typeof FormField>) => (
   <FormField consistentErrorHeight={false} className="col items-start gap-1" {...props} />
@@ -102,6 +105,7 @@ const BioForm = () => {
       <ProfileFormField label="Bio" description="Quelques mots à propos de vous, visible publiquement">
         <TextAreaAutoResize rows={3} className="w-full rounded border p-1" />
       </ProfileFormField>
+
       <p className="text-xs text-muted">La première ligne sera affichée sous votre pseudo</p>
 
       <SubmitButton primary className="self-end bg-muted">

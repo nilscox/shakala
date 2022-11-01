@@ -2,10 +2,10 @@ import { clsx } from 'clsx';
 import { logout } from 'frontend-domain';
 import React from 'react';
 
-import { Avatar } from '~/components/elements/avatar/avatar';
-import { Chip } from '~/components/elements/chip';
-import { NavLink } from '~/components/elements/link';
-import { useDispatch } from '~/hooks/use-dispatch';
+import { Avatar } from '~/elements/avatar/avatar';
+import { Chip } from '~/elements/chip';
+import { NavLink } from '~/elements/link';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconEdit from '~/icons/edit.svg';
@@ -28,7 +28,7 @@ export const ProfileLayout = ({ children }: ProfileLayoutProps) => (
 
 const Sidebar = () => {
   const user = useUser();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // todo
   // const unseenNotificationsCount = useSelector(selectUnseenNotificationsCount);

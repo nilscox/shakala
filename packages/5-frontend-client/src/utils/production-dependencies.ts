@@ -23,37 +23,20 @@ interface ProductionDependencies extends Dependencies {
   userGateway: ApiUserGateway;
 }
 
-const http = new FetchHttpGateway('http://localhost:3000');
+export const productionDependencies = (apiUrl: string, cookie?: string): ProductionDependencies => {
+  const http = new FetchHttpGateway(apiUrl);
 
-const dateGateway = new RealDateGateway();
-const snackbarGateway = new ConsoleLogSnackbarGateway();
-const loggerGateway = new ConsoleLoggerGateway();
-const routerGateway = new NextRouterGateway();
-const timerGateway = new RealTimerGateway();
-const storageGateway = new LocalStorageGateway();
+  http.cookie = cookie;
 
-export const productionDependencies: ProductionDependencies = {
-  dateGateway,
-  snackbarGateway,
-  loggerGateway,
-  routerGateway,
-  timerGateway,
-  storageGateway,
-  authenticationGateway: new ApiAuthenticationGateway(http),
-  threadGateway: new ApiThreadGateway(http),
-  userGateway: new ApiUserGateway(http),
+  return {
+    dateGateway: new RealDateGateway(),
+    snackbarGateway: new ConsoleLogSnackbarGateway(),
+    loggerGateway: new ConsoleLoggerGateway(),
+    routerGateway: new NextRouterGateway(),
+    timerGateway: new RealTimerGateway(),
+    storageGateway: new LocalStorageGateway(),
+    authenticationGateway: new ApiAuthenticationGateway(http),
+    threadGateway: new ApiThreadGateway(http),
+    userGateway: new ApiUserGateway(http),
+  };
 };
-
-class StubStorageGateway implements StorageGateway {
-  async getDraftCommentText(): Promise<string | undefined> {
-    return;
-  }
-
-  async setDraftCommentText(): Promise<void> {}
-
-  async removeDraftCommentText(): Promise<void> {}
-}
-
-if (typeof window === 'undefined') {
-  productionDependencies.storageGateway = new StubStorageGateway();
-}

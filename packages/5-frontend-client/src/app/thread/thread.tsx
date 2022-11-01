@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Comment as CommentType,
   DateFormat,
@@ -8,22 +6,25 @@ import {
   selectThread,
   User,
 } from 'frontend-domain';
+import Head from 'next/head';
 import { useEffect } from 'react';
 
-import { PageTitle } from '~/app/layout/page-title';
-import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
-import { Fallback } from '~/components/elements/fallback';
-import { Markdown } from '~/components/elements/markdown';
+import { PageTitle } from '~/app/page-title';
+import { AvatarNick } from '~/elements/avatar/avatar-nick';
+import { Fallback } from '~/elements/fallback';
+import { Markdown } from '~/elements/markdown';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import { useSearchParam } from '~/hooks/use-search-param';
-import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
-import { useDispatch } from '../../hooks/use-dispatch';
-import { RootCommentForm } from '../comment-form';
-import { CommentHistoryModal } from '../comment-history-modal';
-import { Comment } from '../comment/comment';
-import { ReportCommentModal } from '../report-comment-modal/report-comment-modal';
-import { ShareCommentModal } from '../share-comment';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import {
+  Comment,
+  RootCommentForm,
+  CommentHistoryModal,
+  ReportCommentModal,
+  ShareCommentModal,
+} from '../comment';
 
 import { ThreadFilters } from './thread-filters';
 
@@ -32,9 +33,9 @@ type ThreadProps = {
 };
 
 export const Thread = ({ threadId }: ThreadProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const thread = useSelector(selectThread, threadId);
+  const thread = useAppSelector(selectThread, threadId);
   const dateFormatted = formatDate(thread.date, DateFormat.full);
   const { comments } = thread;
 
@@ -82,12 +83,11 @@ type ThreadMetaProps = {
   keywords: string[];
 };
 
-// todo: add next/head when available
 const ThreadMeta = ({ description, keywords }: ThreadMetaProps) => (
-  <>
+  <Head>
     <meta name="description" content={description}></meta>
     <meta name="keywords" content={keywords.join(', ')}></meta>
-  </>
+  </Head>
 );
 
 type CommentsListProps = {

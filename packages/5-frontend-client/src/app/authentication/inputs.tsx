@@ -4,10 +4,10 @@ import {
   selectAuthenticationFieldError,
 } from 'frontend-domain';
 
-import { FormField, FormFieldProps } from '~/components/elements/form-field';
-import { Input } from '~/components/elements/input';
-import { SearchParamLink } from '~/components/elements/search-param-link';
-import { useSelector } from '~/hooks/use-selector';
+import { FormField, FormFieldProps } from '~/elements/form-field';
+import { Input } from '~/elements/input';
+import { SearchParamLink } from '~/elements/search-param-link';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { AcceptRulesCheckbox } from './accept-rules-checkbox';
 import { useAuthenticationForm } from './use-authentication-form';
@@ -72,7 +72,7 @@ type AuthenticationFormFieldProps = FormFieldProps & {
 export const AuthenticationFormField = ({ field, ...props }: AuthenticationFormFieldProps) => {
   const form = useAuthenticationForm();
   const visible = isAuthenticationFieldVisible(form, field);
-  const error = useSelector(selectAuthenticationFieldError, field);
+  const error = useAppSelector(selectAuthenticationFieldError, field);
 
   if (!visible) {
     return null;

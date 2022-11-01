@@ -1,11 +1,11 @@
 import { State } from 'frontend-domain';
 
-import { AuthenticationModal } from '../authentication/authentication-modal';
-import { ReduxProvider } from '../../utils/redux-provider';
+import { AuthenticationModal } from '~/app/authentication/authentication-modal';
+import { PageTitle } from '~/app/page-title/page-title';
+import { ReduxProvider } from '~/utils/redux-provider';
 
 import { Footer } from './footer';
 import { Header } from './header';
-import { PageTitle } from './page-title';
 
 type LayoutProps = {
   preloadedState: State;

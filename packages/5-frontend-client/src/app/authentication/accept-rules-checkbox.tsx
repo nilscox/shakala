@@ -7,18 +7,18 @@ import {
   selectIsAcceptRulesWarningVisible,
 } from 'frontend-domain';
 
-import { Link } from '~/components/elements/link';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+import { Link } from '~/elements/link';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { useAuthenticationForm } from './use-authentication-form';
 
 export const AcceptRulesCheckbox = () => {
-  const warningVisible = useSelector(selectIsAcceptRulesWarningVisible);
+  const warningVisible = useAppSelector(selectIsAcceptRulesWarningVisible);
   const form = useAuthenticationForm();
   const visible = isAuthenticationFieldVisible(form, AuthenticationField.acceptRulesCheckbox);
-  const checked = useSelector(selectAreRulesAccepted);
-  const dispatch = useDispatch();
+  const checked = useAppSelector(selectAreRulesAccepted);
+  const dispatch = useAppDispatch();
 
   if (!visible) {
     return null;

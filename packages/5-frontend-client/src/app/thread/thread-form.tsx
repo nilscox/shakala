@@ -1,10 +1,10 @@
 import { FormErrors, FormField as FormFieldType, ThreadForm as ThreadFormType } from 'frontend-domain';
 import { FormEventHandler, useState } from 'react';
 
-import { Button } from '~/components/elements/button';
-import { FormField } from '~/components/elements/form-field';
-import { Input } from '~/components/elements/input';
-import { MarkdownPreviewInput } from '~/components/elements/markdown-preview-input/markdown-preview-input';
+import { Button } from '~/elements/button';
+import { FormField } from '~/elements/form-field';
+import { Input } from '~/elements/input';
+import { MarkdownPreviewInput } from '~/elements/markdown-preview-input/markdown-preview-input';
 
 type CreateThreadFormProps = {
   errors: FormErrors<ThreadFormType>;

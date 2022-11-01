@@ -1,5 +1,8 @@
 import { ProfileTitle } from '~/app/profile/profile-title';
 import { UserActivities } from '~/app/user-activities/user-activities';
+import { ssr } from '~/utils/ssr';
+
+export const getServerSideProps = ssr.authenticated();
 
 const TimelinePage = () => (
   <>

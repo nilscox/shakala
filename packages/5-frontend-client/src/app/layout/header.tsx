@@ -1,12 +1,12 @@
 import { clsx } from 'clsx';
 import { ReactNode, useEffect } from 'react';
 
-import { Avatar } from '~/components/elements/avatar/avatar';
-import { Chip } from '~/components/elements/chip';
-import { Link, NavLink } from '~/components/elements/link';
-import { SearchParamLink } from '~/components/elements/search-param-link';
-import { useDispatch } from '~/hooks/use-dispatch';
-import { useSelector } from '~/hooks/use-selector';
+import { Avatar } from '~/elements/avatar/avatar';
+import { Chip } from '~/elements/chip';
+import { Link, NavLink } from '~/elements/link';
+import { SearchParamLink } from '~/elements/search-param-link';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import { useUser } from '~/hooks/use-user';
 import Logo from '~/images/logo.svg';
 
@@ -101,10 +101,10 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
 
 const UnseenNotificationsChip = () => {
   return null;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const user = useUser();
-  const total = useSelector(selectUnseenNotificationsCount);
+  const total = useAppSelector(selectUnseenNotificationsCount);
 
   useEffect(() => {
     if (user) {

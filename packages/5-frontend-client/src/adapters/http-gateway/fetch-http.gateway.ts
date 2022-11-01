@@ -45,7 +45,7 @@ class FetchResponse<Body> implements Response<Body> {
 
 export class FetchHttpGateway implements HttpGateway {
   public fakeLag?: number;
-  public cookie?: string | null;
+  public cookie?: string;
 
   constructor(
     private readonly baseUrl: string,

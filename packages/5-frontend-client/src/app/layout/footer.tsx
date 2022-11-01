@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
 import Image, { StaticImageData } from 'next/image';
 
-import { Link } from '~/components/elements/link';
-import { SearchParamLink } from '~/components/elements/search-param-link';
-import { useSnackbar } from '~/components/elements/snackbar';
+import { Link } from '~/elements/link';
+import { SearchParamLink } from '~/elements/search-param-link';
+import { useSnackbar } from '~/elements/snackbar';
 import { useUser } from '~/hooks/use-user';
 import discordLogo from '~/images/logos/discord-logo.png';
 import facebookLogo from '~/images/logos/facebook-logo.png';

@@ -1,6 +1,6 @@
 import { AuthenticationType } from 'frontend-domain';
 
-import { SearchParamLink } from '~/components/elements/search-param-link';
+import { SearchParamLink } from '~/elements/search-param-link';
 
 import { useAuthenticationForm } from './use-authentication-form';
 
