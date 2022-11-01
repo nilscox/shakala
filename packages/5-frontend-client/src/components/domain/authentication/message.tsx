@@ -14,8 +14,8 @@ export const AuthenticationMessage = () => {
   if (form === AuthenticationType.signup) {
     return (
       <p>
-        Créez votre compte sur Shakala. Vos <Link to="/faq#donnes-personnelles">données personnelles</Link> ne
-        seront pas communiquées en dehors de la plateforme.
+        Créez votre compte sur Shakala. Vos <Link href="/faq#donnes-personnelles">données personnelles</Link>{' '}
+        ne seront pas communiquées en dehors de la plateforme.
       </p>
     );
   }

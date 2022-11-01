@@ -25,10 +25,9 @@
       "shared": ["0-shared/src"],
       "shared/test": ["0-shared/src/index.test.ts"],
       "frontend-domain": ["4-frontend-domain/src"],
-      "src/*": ["5-frontend-client/src/*"]
+      "~/*": ["5-frontend-client/src/*"]
     }
   },
-  "references": [{ "path": "../0-shared" }, { "path": "../4-frontend-domain" }],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/server.js"],
   "exclude": ["node_modules"]
 }

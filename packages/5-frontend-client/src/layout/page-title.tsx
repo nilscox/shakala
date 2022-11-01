@@ -1,17 +1,13 @@
 import Head from 'next/head';
-import { Fragment } from 'react';
 
 type PageTitleProps = {
   children?: string;
 };
 
-// todo: remove when next/head is available with next 13
-const Tag = (false as boolean) ? Head : Fragment;
-
 export const PageTitle = ({ children }: PageTitleProps) => (
-  <Tag>
+  <Head>
     <title>{getTitle(children)}</title>
-  </Tag>
+  </Head>
 );
 
 const getTitle = (title?: string) => {

@@ -1,4 +1,5 @@
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from '../../hooks/use-pathname';
+import { useSearchParams } from '../../hooks/use-search-params';
 
 import { Link } from './link';
 

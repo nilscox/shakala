@@ -1,7 +1,8 @@
-'use client';
-
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+
+import { usePathname } from './use-pathname';
+import { useSearchParams } from './use-search-params';
 
 export const useSearchParam = (name: string) => {
   const params = useSearchParams();

@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
     externalDir: true,
+  },
+
+  eslint: {
+    ignoreDuringBuilds: true,
+    dirs: ['src'],
+  },
+
+  typescript: {
+    ignoreBuildErrors: true,
   },
 
   rewrites() {

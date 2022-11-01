@@ -1,7 +1,6 @@
-'use client';
-
-import { selectLastThreads } from 'frontend-domain';
-import Image, { StaticImageData } from 'next/image';
+import { createStore, fetchAuthenticatedUser, selectLastThreads, State } from 'frontend-domain';
+import { GetServerSideProps } from 'next';
+import { StaticImageData } from 'next/image';
 
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Link } from '~/components/elements/link';
@@ -18,8 +17,25 @@ import TrophyIcon from '~/icons/trophy.svg';
 import imageCharte from '~/images/charte.png';
 import imageIndépendance from '~/images/indépendance.png';
 import imageModeration from '~/images/moderation.png';
+import { productionDependencies } from '~/utils/production-dependencies';
 
-export const Home = () => {
+type HomePageProps = {
+  state: State;
+};
+
+export const getServerSideProps: GetServerSideProps<HomePageProps> = async () => {
+  const store = createStore(productionDependencies);
+
+  await store.dispatch(fetchAuthenticatedUser());
+
+  return {
+    props: {
+      state: store.getState(),
+    },
+  };
+};
+
+export default function HomePage() {
   const snackbar = useSnackbar();
 
   // todo
@@ -35,7 +51,7 @@ export const Home = () => {
       <TargetUsers />
     </>
   );
-};
+}
 
 const Outline = () => (
   <div className="my-8 mx-4 md:my-12 md:mx-10">
@@ -145,7 +161,10 @@ type KeyFeatureProps = {
 
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
   <div className="max-w-1 flex-1">
-    <Image src={image} className="mx-auto max-h-1 py-2 opacity-80 w-auto" alt={name} />
+    <div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={image.src} className="py-2 opacity-80 max-h-1 mx-auto" alt={name} />
+    </div>
     <div className="text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-xs">{children}</div>
   </div>

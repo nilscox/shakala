@@ -1,15 +1,21 @@
 import { clsx } from 'clsx';
 import NextLink from 'next/link';
-import { usePathname } from 'next/navigation';
 import { ComponentProps, HTMLProps } from 'react';
 
-type LinkProps = ComponentProps<typeof NextLink> & {
+import { usePathname } from '../../hooks/use-pathname';
+
+type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
+  href: string;
   openInNewTab?: boolean;
 };
 
-export const Link = ({ openInNewTab, href, onClick, ...props }: LinkProps) => {
-  return <NextLink prefetch={false} href={href} target={openInNewTab ? '_blank' : undefined} {...props} />;
-};
+export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
+  <NextLink prefetch={false} href={href}>
+    <a target={openInNewTab ? '_blank' : undefined} rel="noreferrer" {...props}>
+      {children}
+    </a>
+  </NextLink>
+);
 
 type NavLinkProps = LinkProps & {
   activeClassName: string;

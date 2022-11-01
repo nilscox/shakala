@@ -35,7 +35,7 @@ export const AcceptRulesCheckbox = () => {
       />
       <label htmlFor="accept-rules" className="ml-2 inline-block">
         J'accepte{' '}
-        <Link to="/charte" target="_blank">
+        <Link href="/charte" target="_blank">
           la charte
         </Link>
       </label>
