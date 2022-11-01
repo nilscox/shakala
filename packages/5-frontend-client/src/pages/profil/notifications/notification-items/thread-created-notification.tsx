@@ -1,6 +1,6 @@
 import { NotificationType } from 'shared';
 
-import { Link } from '~/components/elements/link';
+import { Link } from '~/elements/link';
 
 import { Notification, NotificationItem } from '../notification';
 

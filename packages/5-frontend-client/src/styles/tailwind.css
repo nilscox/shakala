@@ -1,3 +1,5 @@
+@import './react-modal.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -10,7 +10,7 @@ import {
 } from 'frontend-domain';
 import { useEffect } from 'react';
 
-import { PageTitle } from '~/app/page-title';
+import { PageTitle } from '~/app/layout/page-title';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Fallback } from '~/components/elements/fallback';
 import { Markdown } from '~/components/elements/markdown';
@@ -18,7 +18,7 @@ import { useSearchParam } from '~/hooks/use-search-param';
 import { useSelector } from '~/hooks/use-selector';
 import { useUser } from '~/hooks/use-user';
 
-import { useDispatch } from '../../../../hooks/use-dispatch';
+import { useDispatch } from '../../hooks/use-dispatch';
 import { RootCommentForm } from '../comment-form';
 import { CommentHistoryModal } from '../comment-history-modal';
 import { Comment } from '../comment/comment';

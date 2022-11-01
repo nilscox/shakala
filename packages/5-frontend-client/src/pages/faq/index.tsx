@@ -3,7 +3,7 @@
 import { clsx } from 'clsx';
 import { ReactNode, useState } from 'react';
 
-import { ExternalLink, Link } from '~/components/elements/link';
+import { ExternalLink, Link } from '~/elements/link';
 
 type QuestionProps = {
   question: ReactNode;

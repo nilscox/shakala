@@ -7,7 +7,9 @@ export const threadDtoToEntity = (dto: ThreadDto): Thread => {
     ...dto,
     comments: [],
     createCommentForm: {
+      open: false,
       text: '',
+      submitting: false,
     },
   };
 };

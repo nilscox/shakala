@@ -1,5 +1,4 @@
 import { clsx } from 'clsx';
-import Image from 'next/image';
 
 import defaultAvatar from './default-avatar.png';
 
@@ -12,8 +11,9 @@ type AvatarProps = {
 
 export const Avatar = ({ loading, size = 'small', image, className }: AvatarProps) => {
   const img = (
-    <Image
-      src={image ?? defaultAvatar}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={image ?? defaultAvatar.src}
       className={clsx(
         'rounded-full border object-cover',
         {

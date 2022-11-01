@@ -1,7 +1,7 @@
 import { State } from 'frontend-domain';
 
-import { AuthenticationModal } from '../components/domain/authentication/authentication-modal';
-import { ReduxProvider } from '../utils/redux-provider';
+import { AuthenticationModal } from '../authentication/authentication-modal';
+import { ReduxProvider } from '../../utils/redux-provider';
 
 import { Footer } from './footer';
 import { Header } from './header';

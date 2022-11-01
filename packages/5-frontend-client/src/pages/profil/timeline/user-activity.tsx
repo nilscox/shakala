@@ -8,8 +8,8 @@ import {
 } from 'frontend-domain';
 import { UserActivityType } from 'shared';
 
-import { Link } from '~/components/elements/link';
-import { useSelector } from '~/hooks/use-selector';
+import { Link } from '~/elements/link';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 export type ActivityItem<Type extends UserActivityType> = React.ComponentType<{
   activity: UserActivity<Type>;
@@ -22,7 +22,7 @@ type ActivityComponentProps = {
 };
 
 export const Activity = ({ activity, icon, children }: ActivityComponentProps) => {
-  const isFirst = useSelector(selectIsFirstUserActivity, activity);
+  const isFirst = useAppSelector(selectIsFirstUserActivity, activity);
 
   return (
     <div className="row items-center gap-4">

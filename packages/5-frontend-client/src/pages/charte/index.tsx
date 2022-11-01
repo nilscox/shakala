@@ -1,4 +1,4 @@
-import { ExternalLink, Link } from '~/components/elements/link';
+import { ExternalLink, Link } from '~/elements/link';
 
 // cspell:word languagetool
 

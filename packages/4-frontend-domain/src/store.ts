@@ -32,11 +32,15 @@ type State = ReturnType<typeof rootReducer>;
 type AppThunkMiddleware = ThunkMiddleware<State, AnyAction, Dependencies>;
 type AppThunkDispatch = ThunkDispatch<State, Dependencies, AnyAction>;
 
-export const createStore = (dependencies: Dependencies, middlewares: Middleware[] = []) => {
+export const createStore = (
+  dependencies: Dependencies,
+  preloadedState?: State,
+  middlewares: Middleware[] = [],
+) => {
   const enhancer = applyMiddleware<AppThunkDispatch>(
     thunkMiddleware.withExtraArgument(dependencies) as AppThunkMiddleware,
     ...middlewares,
   );
 
-  return createReduxStore(rootReducer, composeWithDevTools(enhancer) as typeof enhancer);
+  return createReduxStore(rootReducer, preloadedState, composeWithDevTools(enhancer) as typeof enhancer);
 };

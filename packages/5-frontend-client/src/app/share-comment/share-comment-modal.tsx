@@ -2,7 +2,7 @@ import { selectCommentUnsafe } from 'frontend-domain';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 
-import { PageTitle } from '~/app/page-title';
+import { PageTitle } from '~/app/layout/page-title';
 import { Button } from '~/components/elements/button';
 import { Modal } from '~/components/elements/modal';
 import { useSnackbar } from '~/components/elements/snackbar';

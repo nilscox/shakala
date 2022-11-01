@@ -1,8 +1,7 @@
 'use client';
 
+import { PageTitle } from '~/app/layout/page-title';
 import { useUser } from '~/hooks/use-user';
-
-import { PageTitle } from '../page-title';
 
 type ProfileTitleProps = {
   title: React.ReactNode;

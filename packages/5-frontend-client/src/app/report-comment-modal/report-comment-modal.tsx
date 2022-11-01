@@ -1,7 +1,7 @@
 import { reportComment, selectComment, selectCommentUnsafe } from 'frontend-domain';
 import { FormEventHandler, useState } from 'react';
 
-import { PageTitle } from '~/app/page-title';
+import { PageTitle } from '~/app/layout/page-title';
 import { Button } from '~/components/elements/button';
 import { Link } from '~/components/elements/link';
 import { Markdown } from '~/components/elements/markdown';

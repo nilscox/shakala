@@ -1,5 +1,5 @@
-import { usePathname } from '../../hooks/use-pathname';
-import { useSearchParams } from '../../hooks/use-search-params';
+import { usePathname } from '~/hooks/use-pathname';
+import { useSearchParams } from '~/hooks/use-search-params';
 
 import { Link } from './link';
 
@@ -19,5 +19,5 @@ export const SearchParamLink = ({ param, value, disabled, ...props }: SearchPara
     return <span aria-disabled {...props} />;
   }
 
-  return <Link href={{ pathname, search: searchParams.toString() }} {...props} />;
+  return <Link href={[pathname, searchParams].join('?')} {...props} />;
 };

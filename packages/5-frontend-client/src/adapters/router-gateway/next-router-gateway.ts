@@ -54,7 +54,7 @@ export class NextRouterGateway extends EventEmitter implements RouterGateway {
 
     this.navigateTimeout = window.setTimeout(() => {
       this.navigateTimeout = undefined;
-      this.navigate(pathname + '?' + queryParams.toString());
+      this.navigate(`${pathname}?${queryParams}`.replace(/\?$/, ''));
     }, 0);
   }
 
@@ -65,14 +65,13 @@ export class NextRouterGateway extends EventEmitter implements RouterGateway {
   }
 
   redirectAfterAuthentication(): void {
-    if (!this._location.state) {
+    const next = this.getQueryParam('next');
+
+    if (!next) {
       return;
     }
 
-    if ('next' in this._location.state) {
-      const { next } = this._location.state as { next: Path };
-      this._navigate(next.pathname, new URLSearchParams(next.search));
-    }
+    this._navigate(next);
   }
 
   get currentAuthenticationForm(): AuthenticationType | undefined {

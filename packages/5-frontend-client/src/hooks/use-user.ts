@@ -2,8 +2,8 @@
 
 import { selectUserUnsafe } from 'frontend-domain';
 
-import { useSelector } from './use-selector';
+import { useAppSelector } from './use-app-selector';
 
 export const useUser = () => {
-  return useSelector(selectUserUnsafe);
+  return useAppSelector(selectUserUnsafe);
 };

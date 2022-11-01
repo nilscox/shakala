@@ -1,12 +1,19 @@
-import { createStore, fetchAuthenticatedUser, selectLastThreads, State } from 'frontend-domain';
+import {
+  createStore,
+  fetchAuthenticatedUser,
+  fetchLastThreads,
+  selectLastThreads,
+  State,
+} from 'frontend-domain';
 import { GetServerSideProps } from 'next';
 import { StaticImageData } from 'next/image';
+import { useEffect } from 'react';
 
-import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
-import { Link } from '~/components/elements/link';
-import { Markdown } from '~/components/elements/markdown';
-import { useSnackbar } from '~/components/elements/snackbar';
-import { useSelector } from '~/hooks/use-selector';
+import { AvatarNick } from '~/elements/avatar/avatar-nick';
+import { Link } from '~/elements/link';
+import { Markdown } from '~/elements/markdown';
+import { useSnackbar } from '~/elements/snackbar';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
 import FormatIcon from '~/icons/format.svg';
@@ -19,6 +26,8 @@ import imageIndépendance from '~/images/indépendance.png';
 import imageModeration from '~/images/moderation.png';
 import { productionDependencies } from '~/utils/production-dependencies';
 
+import { useAppDispatch } from '../hooks/use-app-dispatch';
+
 type HomePageProps = {
   state: State;
 };
@@ -27,6 +36,7 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async () =>
   const store = createStore(productionDependencies);
 
   await store.dispatch(fetchAuthenticatedUser());
+  await store.dispatch(fetchLastThreads());
 
   return {
     props: {
@@ -84,7 +94,12 @@ const Heading = ({ id, children }: HeadingProps) => (
 );
 
 const LastThreads = () => {
-  const threads = useSelector(selectLastThreads);
+  const dispatch = useAppDispatch();
+  const threads = useAppSelector(selectLastThreads);
+
+  useEffect(() => {
+    dispatch(fetchLastThreads());
+  }, [dispatch]);
 
   if (threads.length === 0) {
     return null;

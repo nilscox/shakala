@@ -11,7 +11,7 @@
   opacity: 0;
 }
 
-.ReactModal__Body--open #app {
+.ReactModal__Body--open #__next {
   filter: grayscale(0.9);
   transition: filter linear 200ms;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Fallback } from '~/components/elements/fallback';
+import { Fallback } from '~/elements/fallback';
 
 import Loader from './loader.svg';
 

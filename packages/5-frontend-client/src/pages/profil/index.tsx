@@ -3,11 +3,11 @@
 import { changeProfileImage } from 'frontend-domain';
 import { ComponentProps, FormEventHandler, useRef } from 'react';
 
-import { Button, SubmitButton } from '~/components/elements/button';
-import { FormField } from '~/components/elements/form-field';
-import { Input } from '~/components/elements/input';
-import { TextAreaAutoResize } from '~/components/elements/textarea-autoresize';
-import { useDispatch } from '~/hooks/use-dispatch';
+import { Button, SubmitButton } from '~/elements/button';
+import { FormField } from '~/elements/form-field';
+import { Input } from '~/elements/input';
+import { TextAreaAutoResize } from '~/elements/textarea-autoresize';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useUser } from '~/hooks/use-user';
 import { withPreventDefault } from '~/utils/with-prevent-default';
 
@@ -65,7 +65,7 @@ const EmailForm = () => {
 };
 
 const ProfileImageForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     const form = new FormData(event.currentTarget);

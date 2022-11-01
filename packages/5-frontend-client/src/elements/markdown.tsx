@@ -8,7 +8,7 @@ type MarkdownProps = {
   markdown: string;
 };
 
-export const Markdown = ({ className, highlight, markdown }: MarkdownProps): JSX.Element => (
+export const Markdown = ({ className, highlight, markdown }: MarkdownProps) => (
   <div
     className={clsx('prose max-w-none', className)}
     dangerouslySetInnerHTML={{ __html: markdownToHtml(markdown, highlight) }}

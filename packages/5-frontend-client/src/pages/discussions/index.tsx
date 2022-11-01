@@ -1,13 +1,38 @@
-import { headers } from 'next/headers';
+import {
+  createStore,
+  fetchAuthenticatedUser,
+  fetchLastThreads,
+  selectLastThreads,
+  State,
+} from 'frontend-domain';
+import { GetServerSideProps } from 'next';
 
-import { api } from '~/adapters';
-import { Link } from '~/components/elements/link';
+import { Link } from '~/elements/link';
+
+import { useAppSelector } from '../../hooks/use-app-selector';
+import { productionDependencies } from '../../utils/production-dependencies';
 
 // import { ThreadForm } from '~/components/domain/thread/thread-form';
 
-const ThreadsPage = async () => {
-  const { threadGateway } = api(headers().get('Cookie'));
-  const [thread] = await threadGateway.getLast(3);
+type ThreadsPageProps = {
+  state: State;
+};
+
+export const getServerSideProps: GetServerSideProps<ThreadsPageProps> = async () => {
+  const store = createStore(productionDependencies);
+
+  await store.dispatch(fetchAuthenticatedUser());
+  await store.dispatch(fetchLastThreads());
+
+  return {
+    props: {
+      state: store.getState(),
+    },
+  };
+};
+
+const ThreadsPage = () => {
+  const [thread] = useAppSelector(selectLastThreads);
 
   return (
     <>

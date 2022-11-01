@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import NextLink from 'next/link';
 import { ComponentProps, HTMLProps } from 'react';
 
-import { usePathname } from '../../hooks/use-pathname';
+import { usePathname } from '~/hooks/use-pathname';
 
 type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   href: string;
@@ -10,7 +10,7 @@ type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
 };
 
 export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
-  <NextLink prefetch={false} href={href}>
+  <NextLink prefetch={false} shallow={true} href={href}>
     <a target={openInNewTab ? '_blank' : undefined} rel="noreferrer" {...props}>
       {children}
     </a>

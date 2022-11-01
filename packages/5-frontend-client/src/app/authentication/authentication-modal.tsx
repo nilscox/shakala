@@ -5,7 +5,7 @@ import { Modal } from '~/components/elements/modal';
 import { useDispatch } from '~/hooks/use-dispatch';
 import { useSearchParam } from '~/hooks/use-search-param';
 
-import { usePathname } from '../../../hooks/use-pathname';
+import { usePathname } from '../../hooks/use-pathname';
 
 import { AuthenticationForm } from './authentication-form';
 

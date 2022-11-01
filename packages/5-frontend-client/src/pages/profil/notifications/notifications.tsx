@@ -10,20 +10,20 @@ import {
 import { useState } from 'react';
 import { NotificationType } from 'shared';
 
-import { useSelector } from '~/hooks/use-selector';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
-import { InfiniteScroll } from '../../../components/elements/infinite-scroll/infinite-scroll';
-import { useDispatch } from '../../../hooks/use-dispatch';
+import { InfiniteScroll } from '../../../elements/infinite-scroll/infinite-scroll';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 
 import { NotificationItem } from './notification';
 import { notificationComponentMap } from './notification-items';
 
 export const Notifications = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const notifications = useSelector(selectNotifications);
-  const hasMoreNotifications = useSelector(selectHasMoreNotifications);
-  const isLoadingNotifications = useSelector(selectIsLoadingNotifications);
+  const notifications = useAppSelector(selectNotifications);
+  const hasMoreNotifications = useAppSelector(selectHasMoreNotifications);
+  const isLoadingNotifications = useAppSelector(selectIsLoadingNotifications);
 
   const [page, setPage] = useState(1);
 

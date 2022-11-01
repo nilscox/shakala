@@ -7,8 +7,8 @@ import {
 } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
-import { IconButton } from '~/components/elements/icon-button';
-import { useDispatch } from '~/hooks/use-dispatch';
+import { IconButton } from '~/elements/icon-button';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import Check from '~/icons/check.svg';
 
 type NotificationItemProps<Type extends NotificationType> = {
@@ -51,7 +51,7 @@ type MarkAsSeenButtonProps = {
 };
 
 const MarkAsSeenButton = ({ notification }: MarkAsSeenButtonProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   if (notification.seen) {
     return null;

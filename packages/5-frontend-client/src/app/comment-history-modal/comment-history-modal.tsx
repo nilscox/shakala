@@ -2,7 +2,6 @@ import { DateFormat, formatDate, selectComment, selectCommentUnsafe, User } from
 import { useState } from 'react';
 import { MessageDto } from 'shared';
 
-import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/components/elements/avatar/avatar-nick';
 import { Diff } from '~/components/elements/diff/diff';
 import { IconButton } from '~/components/elements/icon-button';
@@ -12,6 +11,8 @@ import { useSelector } from '~/hooks/use-selector';
 import ChevronLeft from '~/icons/chevron-left.svg';
 import ChevronRight from '~/icons/chevron-right.svg';
 import Cross from '~/icons/cross.svg';
+
+import { PageTitle } from '../layout/page-title';
 
 export const CommentHistoryModal = () => {
   const commentId = useSearchParam('historique');
