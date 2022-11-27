@@ -11,11 +11,10 @@ type AvatarProps = {
 
 export const Avatar = ({ loading, size = 'small', image, className }: AvatarProps) => {
   const img = (
-    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={image ?? defaultAvatar.src}
+      src={image ?? defaultAvatar}
       className={clsx(
-        'rounded-full border object-cover',
+        'bg-neutral rounded-full border object-cover',
         {
           'h-5 w-5': size === 'small',
           'h-6 w-6': size === 'medium',

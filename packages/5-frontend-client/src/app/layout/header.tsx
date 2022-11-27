@@ -1,11 +1,10 @@
 import { clsx } from 'clsx';
-import { ReactNode, useEffect } from 'react';
+import { notificationSelectors } from 'frontend-domain';
 
 import { Avatar } from '~/elements/avatar/avatar';
 import { Chip } from '~/elements/chip';
 import { Link, NavLink } from '~/elements/link';
 import { SearchParamLink } from '~/elements/search-param-link';
-import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import { useUser } from '~/hooks/use-user';
 import Logo from '~/images/logo.svg';
@@ -39,7 +38,6 @@ const Heading = () => (
 
 const Authentication = () => {
   const user = useUser();
-  const isProfilePage = false; // useMatch('/profil/*');
 
   const getNick = () => {
     if (!user) {
@@ -51,20 +49,12 @@ const Authentication = () => {
 
   return (
     <AuthenticationLink
-      // todo: remove loading
-      loading={false}
       authenticated={Boolean(user)}
       className="absolute top-0 right-0 flex flex-row items-center gap-2"
     >
-      <span className={clsx('font-bold', isProfilePage && 'text-primary')}>{getNick()}</span>
+      <span className={clsx('font-bold')}>{getNick()}</span>
       <div className="relative h-6 w-6">
-        <Avatar
-          size="medium"
-          image={user?.profileImage}
-          // todo
-          loading={false}
-          className="h-6 w-6 border-none"
-        />
+        <Avatar size="medium" image={user?.profileImage} className="h-6 w-6 border-none" />
         {user && <UnseenNotificationsChip />}
       </div>
     </AuthenticationLink>
@@ -72,23 +62,17 @@ const Authentication = () => {
 };
 
 type AuthenticationLinkProps = {
-  loading: boolean;
   authenticated: boolean;
   className?: string;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
-const AuthenticationLink = ({ loading, authenticated, className, children }: AuthenticationLinkProps) => {
-  if (loading) {
-    return <div className={className}>{children}</div>;
-  }
-
+const AuthenticationLink = ({ authenticated, className, children }: AuthenticationLinkProps) => {
   if (authenticated) {
     return (
-      // todo: replace with NavLink
-      <Link href="/profil" className={className}>
+      <NavLink href="/profil" className={className} activeClassName="!text-primary">
         {children}
-      </Link>
+      </NavLink>
     );
   }
 
@@ -100,18 +84,7 @@ const AuthenticationLink = ({ loading, authenticated, className, children }: Aut
 };
 
 const UnseenNotificationsChip = () => {
-  return null;
-  const dispatch = useAppDispatch();
-
-  const user = useUser();
-  const total = useAppSelector(selectUnseenNotificationsCount);
-
-  useEffect(() => {
-    if (user) {
-      // todo: double dispatch
-      return dispatch(pollNotificationsCount());
-    }
-  }, [dispatch, user]);
+  const total = useAppSelector(notificationSelectors.totalUnseen);
 
   if (total === 0) {
     return null;

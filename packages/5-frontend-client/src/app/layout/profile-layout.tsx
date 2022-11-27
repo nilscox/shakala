@@ -1,11 +1,12 @@
 import { clsx } from 'clsx';
-import { logout } from 'frontend-domain';
+import { authenticationActions, notificationSelectors } from 'frontend-domain';
 import React from 'react';
 
 import { Avatar } from '~/elements/avatar/avatar';
 import { Chip } from '~/elements/chip';
 import { NavLink } from '~/elements/link';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import { useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconEdit from '~/icons/edit.svg';
@@ -30,9 +31,7 @@ const Sidebar = () => {
   const user = useUser();
   const dispatch = useAppDispatch();
 
-  // todo
-  // const unseenNotificationsCount = useSelector(selectUnseenNotificationsCount);
-  const unseenNotificationsCount = 0;
+  const totalUnseenNotifications = useAppSelector(notificationSelectors.totalUnseen);
 
   return (
     <aside>
@@ -55,7 +54,7 @@ const Sidebar = () => {
         </SidebarItem>
         <SidebarItem to="/profil/notifications" Icon={IconSubscribe}>
           Notifications
-          {unseenNotificationsCount > 0 && <Chip className="ml-auto">{unseenNotificationsCount}</Chip>}
+          {totalUnseenNotifications > 0 && <Chip className="ml-auto">{totalUnseenNotifications}</Chip>}
         </SidebarItem>
         <SidebarItem to="/profil/badges" Icon={IconTrophy}>
           Badges
@@ -69,7 +68,7 @@ const Sidebar = () => {
         <SidebarItem to="/profil/timeline" Icon={IconArrowDown}>
           Timeline
         </SidebarItem>
-        <SidebarItem Icon={IconSignOut} onClick={() => dispatch(logout())}>
+        <SidebarItem Icon={IconSignOut} onClick={() => dispatch(authenticationActions.logout())}>
           Déconnexion
         </SidebarItem>
       </ul>
@@ -109,6 +108,7 @@ const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
   return (
     <li>
       <NavLink
+        exact
         href={to}
         className={className}
         activeClassName="!border-warning bg-inverted/5 font-semibold"

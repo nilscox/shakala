@@ -1,5 +1,5 @@
-import { changeProfileImage } from 'frontend-domain';
-import { ComponentProps, FormEventHandler, useRef } from 'react';
+import { userProfileActions } from 'frontend-domain';
+import { FormEventHandler, useRef } from 'react';
 
 import { ProfileTitle } from '~/app/profile/profile-title';
 import { Button, SubmitButton } from '~/elements/button';
@@ -28,7 +28,7 @@ const ProfilePage = () => (
 
 export default ProfilePage;
 
-const ProfileFormField = (props: ComponentProps<typeof FormField>) => (
+const ProfileFormField = (props: React.ComponentProps<typeof FormField>) => (
   <FormField consistentErrorHeight={false} className="col items-start gap-1" {...props} />
 );
 
@@ -71,7 +71,7 @@ const ProfileImageForm = () => {
     const form = new FormData(event.currentTarget);
     const image = form.get('profileImage') as File;
 
-    dispatch(changeProfileImage(image));
+    dispatch(userProfileActions.changeProfileImage(image));
   };
 
   const formRef = useRef<HTMLFormElement>(null);

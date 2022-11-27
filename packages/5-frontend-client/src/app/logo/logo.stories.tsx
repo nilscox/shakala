@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
 import { clsx } from 'clsx';
 
-import { controls } from '../../../utils/storybook';
+import { controls } from '~/utils/storybook';
 
 import { Logo } from './logo';
 

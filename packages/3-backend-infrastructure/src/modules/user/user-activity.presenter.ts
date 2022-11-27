@@ -6,6 +6,7 @@ export class UserActivityPresenter {
     userActivity: UserActivity<Type>,
   ): UserActivityDto<Type> => {
     return {
+      id: userActivity.id,
       type: userActivity.type,
       date: userActivity.date.toString(),
       payload: userActivity.payload,

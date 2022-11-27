@@ -1,73 +1,61 @@
-import { action } from '@storybook/addon-actions';
-import { Meta, Story } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import {
-  AuthenticationField,
-  AuthenticationType,
-  setAuthenticationFieldError,
-  setAuthenticationFormError,
+  AuthenticationFormType,
+  createAuthUser,
+  InvalidCredentialsError,
+  routerActions,
+  ValidationErrors,
 } from 'frontend-domain';
-import { createMemoryHistory } from 'history';
 
-import { reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
+import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 
-import { AuthenticationForm } from './authentication-form';
+import { AuthenticationModal } from './authentication-modal';
 
-const history = createMemoryHistory();
+type Args = {
+  type: AuthenticationFormType;
+  validationErrors: boolean;
+  emailAlreadyExists: boolean;
+  invalidCredentials: boolean;
+};
 
 export default {
   title: 'Domain/Authentication',
-  decorators: [
-    (Story) => (
-      <div className="max-w-3 rounded-lg border bg-neutral p-4">
-        <Story />
-      </div>
-    ),
-    reduxDecorator(),
-    routerDecorator(history),
-  ],
-} as Meta;
-
-const Template: Story<{ setup: SetupRedux }> = (props) => (
-  <AuthenticationForm onClose={action('onClose')} {...props} />
-);
-
-const setAuthSearchParam = (auth: AuthenticationType) => {
-  history.push({ pathname: '/toto', search: '?' + new URLSearchParams({ auth }) });
-};
-
-export const login = Template.bind({});
-login.args = {
-  setup(_dispatch, { routerGateway }) {
-    setAuthSearchParam(AuthenticationType.login);
-    routerGateway.currentAuthenticationForm = AuthenticationType.login;
+  decorators: [reduxDecorator()],
+  argTypes: {
+    type: controls.enum(AuthenticationFormType, AuthenticationFormType.login),
+    validationErrors: controls.boolean(false),
+    emailAlreadyExists: controls.boolean(false),
+    invalidCredentials: controls.boolean(false),
   },
-};
+} as Meta<Args>;
 
-export const signup = Template.bind({});
-signup.args = {
-  setup(_dispatch, { routerGateway }) {
-    setAuthSearchParam(AuthenticationType.signup);
-    routerGateway.currentAuthenticationForm = AuthenticationType.signup;
-  },
-};
+export const authentication: ReduxStory<Args> = () => <AuthenticationModal />;
 
-export const emailLogin = Template.bind({});
-emailLogin.args = {
-  setup(_dispatch, { routerGateway }) {
-    setAuthSearchParam(AuthenticationType.emailLogin);
-    routerGateway.currentAuthenticationForm = AuthenticationType.emailLogin;
-  },
-};
+authentication.args = {
+  setup(dispatch, getState, { args, authenticationGateway }) {
+    dispatch(routerActions.setQueryParam(['auth', args.type]));
 
-export const withErrors = Template.bind({});
-withErrors.args = {
-  setup(dispatch, { routerGateway }) {
-    setAuthSearchParam(AuthenticationType.signup);
-    routerGateway.currentAuthenticationForm = AuthenticationType.signup;
+    authenticationGateway.login.resolve(createAuthUser());
+    authenticationGateway.signup.resolve('');
 
-    dispatch(setAuthenticationFieldError(AuthenticationField.email, 'EmailAlreadyExists'));
+    if (args.validationErrors) {
+      authenticationGateway.signup.reject(
+        new ValidationErrors({
+          email: { value: '', error: 'email' },
+          password: { value: '', error: 'min' },
+          nick: { value: '', error: 'alreadyExists' },
+        }),
+      );
+    }
 
-    dispatch(setAuthenticationFieldError(AuthenticationField.nick, 'min'));
-    dispatch(setAuthenticationFormError('InvalidCredentials'));
+    if (args.emailAlreadyExists) {
+      authenticationGateway.signup.reject(
+        new ValidationErrors({ email: { value: '', error: 'alreadyExists' } }),
+      );
+    }
+
+    if (args.invalidCredentials) {
+      authenticationGateway.login.reject(new InvalidCredentialsError());
+    }
   },
 };

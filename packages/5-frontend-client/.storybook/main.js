@@ -1,27 +1,20 @@
 const path = require('path');
-const { ProvidePlugin } = require('webpack');
 
 const webpackConfig = require('../webpack.config');
 
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
 
-  addons: [
-    '@storybook/addon-essentials',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
-  ],
+  staticDirs: ['../public'],
+
+  addons: ['@storybook/addon-essentials'],
 
   framework: '@storybook/react',
 
   core: {
-    builder: '@storybook/builder-webpack5',
+    builder: 'webpack5',
+    disableTelemetry: true,
+    enableCrashReports: false,
   },
 
   reactOptions: {
@@ -29,15 +22,19 @@ module.exports = {
   },
 
   webpackFinal: (config) => {
-    Object.assign(config.resolve.alias, webpackConfig.resolve.alias);
+    config.devtool = webpackConfig.devtool;
+    // config.cache = webpackConfig.cache;
 
     config.module.rules = webpackConfig.module.rules;
+    // config.resolve.plugins = webpackConfig.resolve.plugins;
 
-    config.plugins.push(new ProvidePlugin({ React: 'react' }));
-
-    if (process.env.PUBLIC_PATH) {
-      config.output.publicPath = process.env.PUBLIC_PATH;
-    }
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      shared: path.resolve(__dirname, '..', '..', '0-shared', 'src'),
+      'frontend-domain': path.resolve(__dirname, '..', '..', '4-frontend-domain', 'src'),
+      '~/utils/config': path.resolve(__dirname, 'storybook-config'),
+      '~': path.resolve(__dirname, '..', 'src'),
+    };
 
     return config;
   },

@@ -26,7 +26,11 @@ export const NavLink = ({ href, className, activeClassName, exact, ...props }: N
   const pathname = usePathname();
 
   const isActive = () => {
-    return href.toString() === pathname;
+    if (exact) {
+      return pathname === href;
+    }
+
+    return pathname.startsWith(href);
   };
 
   return <Link href={href} className={clsx(className, isActive() && activeClassName)} {...props} />;

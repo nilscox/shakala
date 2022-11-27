@@ -1,4 +1,4 @@
-import { AuthenticationType } from 'frontend-domain';
+import { AuthenticationFormType } from 'frontend-domain';
 
 import { Link } from '~/elements/link';
 
@@ -7,11 +7,11 @@ import { useAuthenticationForm } from './use-authentication-form';
 export const AuthenticationMessage = () => {
   const form = useAuthenticationForm();
 
-  if (form === AuthenticationType.login) {
+  if (form === AuthenticationFormType.login) {
     return <p>Connectez-vous sur Shakala pour interagir avec le reste de la communauté.</p>;
   }
 
-  if (form === AuthenticationType.signup) {
+  if (form === AuthenticationFormType.signup) {
     return (
       <p>
         Créez votre compte sur Shakala. Vos <Link href="/faq#donnes-personnelles">données personnelles</Link>{' '}
@@ -20,7 +20,7 @@ export const AuthenticationMessage = () => {
     );
   }
 
-  if (form === AuthenticationType.emailLogin) {
+  if (form === AuthenticationFormType.emailLogin) {
     return <p>Identifiez-vous sur Shakala via un email contenant un lien de connexion sans mot de passe.</p>;
   }
 

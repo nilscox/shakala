@@ -1,4 +1,4 @@
-import { DateFormat, formatDate, selectComment, selectCommentUnsafe, User } from 'frontend-domain';
+import { commentSelectors, DateFormat, formatDate, User } from 'frontend-domain';
 import { useState } from 'react';
 import { MessageDto } from 'shared';
 
@@ -15,7 +15,7 @@ import Cross from '~/icons/cross.svg';
 
 export const CommentHistoryModal = () => {
   const commentId = useSearchParam('historique');
-  const comment = useAppSelector(selectCommentUnsafe, commentId);
+  const comment = useAppSelector(commentSelectors.byId.unsafe, commentId as string);
 
   const [requestClose, setRequestClose] = useState(false);
   const setSearchParam = useSetSearchParam();
@@ -46,7 +46,7 @@ type CommentHistoryProps = {
 };
 
 const CommentHistory = ({ commentId, onClose }: CommentHistoryProps) => {
-  const comment = useAppSelector(selectComment, commentId);
+  const comment = useAppSelector(commentSelectors.byId, commentId);
 
   const history: MessageDto[] = [...comment.history, { text: comment.text, date: comment.edited as string }];
   const [version, setVersion] = useState(history.length - 1);

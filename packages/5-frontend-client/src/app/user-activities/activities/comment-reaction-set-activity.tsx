@@ -16,8 +16,8 @@ export const CommentReactionSetActivity: ActivityItem<CommentActivityType.commen
   >
     <p>
       Vous avez {activity.payload.reaction === ReactionTypeDto.upvote ? 'upvoté' : 'downvoté'}{' '}
-      <CommentLink {...activity.payload}>un commentaire</CommentLink>
-      sur le fil de discussion <ThreadLink {...activity.payload} />.
+      <CommentLink {...activity.payload}>un commentaire</CommentLink> sur le fil de discussion{' '}
+      <ThreadLink {...activity.payload} />.
     </p>
   </Activity>
 );

@@ -1,12 +1,4 @@
-'use client';
-
-import {
-  fetchNotifications,
-  Notification,
-  selectHasMoreNotifications,
-  selectIsLoadingNotifications,
-  selectNotifications,
-} from 'frontend-domain';
+import { Notification, notificationActions, notificationSelectors } from 'frontend-domain';
 import { useState } from 'react';
 import { NotificationType } from 'shared';
 
@@ -20,9 +12,9 @@ import { notificationComponentMap } from './notification-items';
 export const Notifications = () => {
   const dispatch = useAppDispatch();
 
-  const notifications = useAppSelector(selectNotifications);
-  const hasMoreNotifications = useAppSelector(selectHasMoreNotifications);
-  const isLoadingNotifications = useAppSelector(selectIsLoadingNotifications);
+  const notifications = useAppSelector(notificationSelectors.list);
+  const hasMoreNotifications = useAppSelector(notificationSelectors.hasMore);
+  const isLoadingNotifications = useAppSelector(notificationSelectors.isFetching);
 
   const [page, setPage] = useState(1);
 
@@ -36,7 +28,7 @@ export const Notifications = () => {
   };
 
   const handleLoadMore = () => {
-    dispatch(fetchNotifications(page + 1));
+    dispatch(notificationActions.fetchNotifications(page + 1));
     setPage(page + 1);
   };
 

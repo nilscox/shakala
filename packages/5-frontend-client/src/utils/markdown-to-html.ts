@@ -51,7 +51,7 @@ const remarkExponent: Plugin = () => {
         const result: UnistNode[] = [];
         let idx = 0;
 
-        for (const matchObject of matches) {
+        for (const matchObject of Array.from(matches)) {
           const match = matchObject[1];
           const index = matchObject.index as number;
 
@@ -108,7 +108,7 @@ const remarkHighlight: Plugin<[string | undefined]> = (highlight) => {
         const result: UnistNode[] = [];
         let idx = 0;
 
-        for (const matchObject of matches) {
+        for (const matchObject of Array.from(matches)) {
           const match = matchObject[0];
           const index = matchObject.index as number;
 

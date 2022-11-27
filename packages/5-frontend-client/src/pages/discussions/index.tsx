@@ -1,19 +1,16 @@
-import { fetchAuthenticatedUser, fetchLastThreads, selectLastThreads } from 'frontend-domain';
+import { threadActions, threadSelectors } from 'frontend-domain';
 
+import { ThreadForm } from '~/app/thread/thread-form';
 import { Link } from '~/elements/link';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import { ssr } from '~/utils/ssr';
 
-import { useAppSelector } from '../../hooks/use-app-selector';
-
-// import { ThreadForm } from '~/components/domain/thread/thread-form';
-
 export const getServerSideProps = ssr(async (store) => {
-  await store.dispatch(fetchAuthenticatedUser());
-  await store.dispatch(fetchLastThreads());
+  await store.dispatch(threadActions.fetchLastThreads(3));
 });
 
 const ThreadsPage = () => {
-  const [thread] = useAppSelector(selectLastThreads);
+  const [thread] = useAppSelector(threadSelectors.nLastThreads, 1);
 
   return (
     <>
@@ -39,7 +36,7 @@ const ThreadsPage = () => {
 
       <h2>Créer un nouveau fil de discussion</h2>
 
-      {/* <ThreadForm errors={errors} onChange={handleChange} onSubmit={handleSubmit} /> */}
+      <ThreadForm />
     </>
   );
 };

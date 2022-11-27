@@ -1,5 +1,3 @@
-'use client';
-
 import { clsx } from 'clsx';
 import { ReactNode, useState } from 'react';
 
@@ -59,16 +57,6 @@ const questions: Record<string, QuestionProps[]> = {
   ],
 
   product: [
-    {
-      question: <>Comment ouvrir un nouveau fil de discussion (une nouvelle zone de commentaire) ?</>,
-      answer: (
-        <>
-          Cela n'est pas possible pour le moment. Mais si c'est quelque chose que vous aimeriez faire,{' '}
-          <Link href="/faq#contact">venez nous en parler</Link> ;)
-        </>
-      ),
-    },
-
     {
       question: <>Comment marche la mise en forme des messages ?</>,
       answer: (
@@ -142,9 +130,9 @@ const questions: Record<string, QuestionProps[]> = {
       question: <>Comment suivre l'évolution du projet ?</>,
       answer: (
         <>
-          Un <ExternalLink href="https://trello.com/b/CfC8aQ80/tasks">board trello</ExternalLink> est
-          accessible publiquement, n'hésitez pas à y jeter un œil ! Et si vous êtes développeu·r·se et que le
-          projet vous intéresse techniquement, les source sont disponibles{' '}
+          La <ExternalLink href="https://trello.com/b/CfC8aQ80/tasks">roadmap</ExternalLink> est accessible
+          publiquement, n'hésitez pas à y jeter un œil ! Et si vous êtes développeu·r·se et que le projet vous
+          intéresse techniquement, les source sont disponibles{' '}
           <ExternalLink href="https://github.com/nilscox/shakala">sur GitHub</ExternalLink>.
         </>
       ),

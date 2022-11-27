@@ -41,7 +41,11 @@ export class AppAccessors {
     return this.locator('a', { hasText: text });
   }
 
+  findComment(text: string | RegExp) {
+    return this.locator('.comment', { hasText: text });
+  }
+
   findNotification(text: string | RegExp) {
-    return this.closest(this.findByText(text), '.notification');
+    return this.locator('.notification', { hasText: text });
   }
 }

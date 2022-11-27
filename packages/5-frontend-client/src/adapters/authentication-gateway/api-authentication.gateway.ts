@@ -1,4 +1,4 @@
-import { AuthenticationGateway, AuthUser, InvalidCredentialsError } from 'frontend-domain';
+import { AuthenticatedUser, AuthenticationGateway, InvalidCredentialsError } from 'frontend-domain';
 import { AuthUserDto, LoginBodyDto, SignupBodyDto } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
@@ -6,7 +6,7 @@ import { HttpGateway } from '../http-gateway/http.gateway';
 export class ApiAuthenticationGateway implements AuthenticationGateway {
   constructor(private readonly http: HttpGateway) {}
 
-  async fetchUser(): Promise<AuthUserDto | undefined> {
+  async fetchAuthenticatedUser(): Promise<AuthenticatedUser | undefined> {
     const response = await this.http.get<AuthUserDto | undefined>('/auth/me');
 
     if (response.error) {
@@ -16,7 +16,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
     return response.body;
   }
 
-  async login(email: string, password: string): Promise<AuthUser> {
+  async login(email: string, password: string): Promise<AuthenticatedUser> {
     const response = await this.http.post<AuthUserDto, LoginBodyDto>('/auth/login', {
       body: { email, password },
       onError(error) {
@@ -31,7 +31,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
     return response.body;
   }
 
-  async signup(email: string, password: string, nick: string): Promise<AuthUser> {
+  async signup(email: string, password: string, nick: string): Promise<string> {
     const response = await this.http.post<AuthUserDto, SignupBodyDto>('/auth/signup', {
       body: { email, password, nick },
     });
@@ -40,7 +40,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
       throw response.error;
     }
 
-    return response.body;
+    return response.body.id;
   }
 
   async logout(): Promise<void> {

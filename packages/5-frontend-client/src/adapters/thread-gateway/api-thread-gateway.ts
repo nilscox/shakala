@@ -1,14 +1,10 @@
-import { AuthorizationError, GetCommentsOptions, ReactionType, ThreadGateway } from 'frontend-domain';
+import { Comment, FetchCommentsFilters, Reply, Thread, ThreadGateway } from 'frontend-domain';
 import {
   CommentDto,
   CreateCommentBodyDto,
   CreateThreadBodyDto,
-  EditCommentBodyDto,
-  get,
   GetLastThreadsQueryDto,
   GetThreadQueryDto,
-  ReportCommentBodyDto,
-  SetReactionBodyDto,
   ThreadDto,
   ThreadWithCommentsDto,
 } from 'shared';
@@ -24,20 +20,42 @@ export class FetchError extends Error {
 export class ApiThreadGateway implements ThreadGateway {
   constructor(private readonly http: HttpGateway) {}
 
-  async getLast(count: number): Promise<ThreadDto[]> {
+  private transformCommentDto = (commentDto: CommentDto): Comment => {
+    return {
+      ...commentDto,
+      editing: false,
+      replying: false,
+      replies: (commentDto.replies ?? []).map(this.transformReplyDto),
+    };
+  };
+
+  private transformReplyDto = (replyDto: CommentDto): Reply => {
+    return {
+      ...replyDto,
+      editing: false,
+    };
+  };
+
+  async fetchLast(count: number): Promise<Thread[]> {
     const response = await this.http.get<ThreadDto[], GetLastThreadsQueryDto>('/thread/last', {
       query: { count },
     });
 
-    return response.body;
+    return response.body.map((dto) => ({
+      ...dto,
+      comments: [],
+    }));
   }
 
-  async getById(threadId: string): Promise<[ThreadDto, CommentDto[]] | undefined> {
+  async fetchThread(threadId: string): Promise<Thread | undefined> {
     try {
       const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`);
-      const { comments, ...thread } = response.body;
+      const threadDto = response.body;
 
-      return [thread, comments];
+      return {
+        ...threadDto,
+        comments: threadDto.comments.map(this.transformCommentDto),
+      };
     } catch (error) {
       if (!HttpError.isHttpError(error, 404)) {
         throw error;
@@ -45,23 +63,15 @@ export class ApiThreadGateway implements ThreadGateway {
     }
   }
 
-  async getComments(threadId: string, options: GetCommentsOptions): Promise<CommentDto[] | undefined> {
+  async fetchComments(threadId: string, options: FetchCommentsFilters): Promise<Comment[]> {
     const response = await this.http.get<ThreadWithCommentsDto, GetThreadQueryDto>(`/thread/${threadId}`, {
       query: options as GetThreadQueryDto,
     });
 
-    if (response.status === 404) {
-      return;
-    }
-
-    if (response.status !== 200) {
-      throw new FetchError(response);
-    }
-
-    return response.body.comments;
+    return response.body.comments.map(this.transformCommentDto);
   }
 
-  async createThread(description: string, text: string, keywords: string[]): Promise<string> {
+  async createThread(description: string, keywords: string[], text: string): Promise<string> {
     const response = await this.http.post<{ id: string }, CreateThreadBodyDto>('/thread', {
       body: { description, text, keywords },
     });
@@ -83,54 +93,5 @@ export class ApiThreadGateway implements ThreadGateway {
     }
 
     return response.body.id;
-  }
-
-  async createReply(threadId: string, parentId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ id: string }, CreateCommentBodyDto>('/comment', {
-      body: { threadId, parentId, text },
-    });
-
-    if (response.status !== 201) {
-      throw new FetchError(response);
-    }
-
-    return response.body.id;
-  }
-
-  async editComment(commentId: string, text: string): Promise<void> {
-    const response = await this.http.put<void, EditCommentBodyDto>(`/comment/${commentId}`, {
-      body: { text },
-    });
-
-    const code = get(response.body, 'code');
-
-    if (response.status === 401 && code === 'UserMustBeAuthor') {
-      throw new AuthorizationError(code);
-    }
-
-    if (response.status !== 204) {
-      throw new FetchError(response);
-    }
-  }
-
-  async setReaction(commentId: string, reactionType: ReactionType | null): Promise<void> {
-    const response = await this.http.put<void, SetReactionBodyDto>(`/comment/${commentId}/reaction`, {
-      body: { type: reactionType },
-    });
-
-    if (response.status !== 204) {
-      throw new FetchError(response);
-    }
-  }
-
-  async reportComment(commentId: string, reason?: string | undefined): Promise<void> {
-    await this.http.post<void, ReportCommentBodyDto>(`/comment/${commentId}/report`, {
-      body: { reason },
-      onError: ({ response }) => {
-        if (response.status === 400 && response.body.code === 'CommentAlreadyReported') {
-          throw new AuthorizationError('CommentAlreadyReported');
-        }
-      },
-    });
   }
 }

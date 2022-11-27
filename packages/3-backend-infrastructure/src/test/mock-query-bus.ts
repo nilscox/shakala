@@ -6,6 +6,13 @@ export class MockQueryBus implements QueryBus {
   private map = new Map<Query, unknown>();
   private executed: Query[] = [];
 
+  constructor() {
+    beforeEach(() => {
+      this.map.clear();
+      this.executed = [];
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for(query: { new (...args: any[]): Query }) {
     return {

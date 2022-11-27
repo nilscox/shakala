@@ -3,8 +3,8 @@ import {
   DateFormat,
   formatDate,
   formatDateRelativeOrAbsolute,
-  selectIsFirstUserActivity,
   UserActivity,
+  userActivitySelectors,
 } from 'frontend-domain';
 import { UserActivityType } from 'shared';
 
@@ -22,7 +22,7 @@ type ActivityComponentProps = {
 };
 
 export const Activity = ({ activity, icon, children }: ActivityComponentProps) => {
-  const isFirst = useAppSelector(selectIsFirstUserActivity, activity);
+  const isFirst = useAppSelector(userActivitySelectors.isFirst, activity);
 
   return (
     <div className="row items-center gap-4">

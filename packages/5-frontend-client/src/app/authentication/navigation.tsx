@@ -1,4 +1,4 @@
-import { AuthenticationType } from 'frontend-domain';
+import { AuthenticationFormType } from 'frontend-domain';
 
 import { SearchParamLink } from '~/elements/search-param-link';
 
@@ -9,20 +9,20 @@ export const AuthenticationNavigation = () => {
 
   return (
     <nav className="links-nocolor flex flex-row justify-between gap-1 text-muted">
-      {form !== AuthenticationType.signup && (
-        <SearchParamLink param="auth" value="register">
+      {form !== AuthenticationFormType.signup && (
+        <SearchParamLink param="auth" value={AuthenticationFormType.signup}>
           Créer un compte
         </SearchParamLink>
       )}
 
-      {form !== AuthenticationType.login && (
-        <SearchParamLink param="auth" value="login">
+      {form !== AuthenticationFormType.login && (
+        <SearchParamLink param="auth" value={AuthenticationFormType.login}>
           Connexion
         </SearchParamLink>
       )}
 
-      {form !== AuthenticationType.emailLogin && (
-        <SearchParamLink param="auth" value="email-login">
+      {form !== AuthenticationFormType.emailLogin && (
+        <SearchParamLink param="auth" value={AuthenticationFormType.emailLogin}>
           Mot de passe oublié
         </SearchParamLink>
       )}

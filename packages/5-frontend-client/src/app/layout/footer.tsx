@@ -1,5 +1,4 @@
 import { clsx } from 'clsx';
-import Image, { StaticImageData } from 'next/image';
 
 import { Link } from '~/elements/link';
 import { SearchParamLink } from '~/elements/search-param-link';
@@ -71,7 +70,7 @@ const FooterColumn = ({ className, children }: FooterColumnProps) => (
 
 type SocialLinkProps = {
   href?: string;
-  image: StaticImageData;
+  image: string;
   imageAlt: string;
   children: string;
 };
@@ -85,7 +84,7 @@ const SocialLink = ({ href, image, imageAlt, children }: SocialLinkProps) => {
       className="row cursor-pointer items-center whitespace-nowrap"
       onClick={!href ? () => info('Coming soon! 😉') : undefined}
     >
-      <Image width={16} height={16} src={image} className="mr-1 grayscale" alt={imageAlt} />
+      <img width={16} height={16} src={image} className="mr-1 grayscale" alt={imageAlt} />
       {children}
     </a>
   );

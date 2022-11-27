@@ -4,13 +4,12 @@ import { randomId } from '../libs/random-id';
 export type UserDto = {
   id: string;
   nick: string;
-  profileImage: string | undefined;
+  profileImage?: string;
 };
 
 export const createUserDto = createFactory<UserDto>(() => ({
   id: randomId(),
   nick: '',
-  profileImage: undefined,
 }));
 
 export type ThreadDto = {

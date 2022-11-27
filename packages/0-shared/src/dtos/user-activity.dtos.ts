@@ -1,3 +1,5 @@
+import { randomId } from '../libs';
+
 import { AuthenticationMethod } from './authentication.dtos';
 import { ReactionTypeDto } from './thread.dtos';
 
@@ -70,6 +72,7 @@ export type UserActivityPayload = {
 };
 
 export type UserActivityDto<Type extends UserActivityType> = {
+  id: string;
   date: string;
   type: Type;
   payload: UserActivityPayload[Type];
@@ -78,6 +81,7 @@ export type UserActivityDto<Type extends UserActivityType> = {
 export const createUserActivityDto = <Type extends UserActivityType>(
   overrides?: Partial<UserActivityDto<Type>>,
 ): UserActivityDto<UserActivityType> => ({
+  id: randomId(),
   date: '',
   type: UserActivityType.signUp,
   payload: undefined,

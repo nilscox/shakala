@@ -38,9 +38,8 @@ export const FormField = ({
       {children}
     </Field>
 
-    {(error || consistentErrorHeight) && (
-      <FieldError id={`${name}-error`}>{getError(error, errorsMap) || <>&nbsp;</>}</FieldError>
-    )}
+    {error && <FieldError id={`${name}-error`} error={error} errorsMap={errorsMap} />}
+    {!error && consistentErrorHeight && <div>&nbsp;</div>}
   </div>
 );
 
@@ -67,8 +66,12 @@ const Field = ({ name, error, children, after }: FieldProps) => {
   );
 };
 
-const getError = (error?: string, errorsMap?: Record<string, ReactNode>) => {
+const getError = (error?: unknown, errorsMap?: Record<string, ReactNode>) => {
   if (!error) {
+    return;
+  }
+
+  if (typeof error !== 'string') {
     return;
   }
 
@@ -82,11 +85,13 @@ const getError = (error?: string, errorsMap?: Record<string, ReactNode>) => {
 type FieldErrorProps = {
   id?: string;
   className?: string;
-  children: React.ReactNode;
+  error?: string;
+  errorsMap?: Record<string, React.ReactNode>;
+  children?: React.ReactNode;
 };
 
-export const FieldError = ({ id, className, children }: FieldErrorProps) => (
+export const FieldError = ({ id, className, error, errorsMap, children }: FieldErrorProps) => (
   <div id={id} className={clsx('text-xs font-bold text-error', className)}>
-    {children}
+    {getError(error, errorsMap) ?? children}
   </div>
 );

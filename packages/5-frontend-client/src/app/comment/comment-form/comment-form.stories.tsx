@@ -1,8 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { Meta } from '@storybook/react';
-import { useState } from 'react';
 
-import { maxWidthDecorator, routerDecorator } from '~/utils/storybook';
+import { maxWidthDecorator } from '~/utils/storybook';
 
 import { CommentForm } from './comment-form';
 
@@ -15,21 +14,20 @@ export default {
       </div>
     ),
     maxWidthDecorator(),
-    routerDecorator(),
   ],
 } as Meta;
 
 export const commentForm = () => {
-  const [message, setMessage] = useState('');
-
   return (
     <CommentForm
-      message={message}
-      setMessage={setMessage}
       canSubmit
-      isSubmitting={false}
+      initialText=""
+      onTextChange={action('onTextChange')}
       onCancel={action('onCancel')}
-      onSubmit={action('onSubmit')}
+      onSubmit={async () => {
+        action('onSubmit')();
+        return true;
+      }}
     />
   );
 };

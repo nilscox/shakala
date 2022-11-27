@@ -1,4 +1,4 @@
-import { AuthorizationError, FieldError, ValidationError } from 'frontend-domain';
+import { AuthorizationError, ValidationErrors } from 'frontend-domain';
 import { AuthorizationErrorReason } from 'shared';
 import { mockResolve } from 'shared/test';
 
@@ -24,11 +24,23 @@ describe('FetchHttpGateway', () => {
 
     await http.get('/path');
 
-    expect(fetch).toHaveBeenCalledWith('https://base.url/path', {
-      method: 'GET',
-      headers: expect.anything(),
-      credentials: 'include',
-    });
+    expect(fetch).toHaveBeenCalledWith('https://base.url/path', expect.objectWith({ method: 'GET' }));
+  });
+
+  it('adds credentials and cache parameters when calling fetch', async () => {
+    const fetch = mockFetch();
+
+    const http = new FetchHttpGateway(baseUrl, fetch);
+
+    await http.get('/path');
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectWith({
+        credentials: 'include',
+        cache: 'no-store',
+      }),
+    );
   });
 
   it('returns the response json body', async () => {
@@ -101,12 +113,14 @@ describe('FetchHttpGateway', () => {
       body: { bo: 'dy' },
     });
 
-    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      body: '{"bo":"dy"}',
-      credentials: 'include',
-    });
+    expect(fetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectWith({
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        body: '{"bo":"dy"}',
+      }),
+    );
   });
 
   it('sends a body of type FormData', async () => {
@@ -119,12 +133,13 @@ describe('FetchHttpGateway', () => {
       body,
     });
 
-    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
-      method: 'POST',
-      headers: new Headers(),
-      body,
-      credentials: 'include',
-    });
+    expect(fetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectWith({
+        method: 'POST',
+        body,
+      }),
+    );
   });
 
   it('handles authorization errors', async () => {
@@ -147,7 +162,7 @@ describe('FetchHttpGateway', () => {
 
     headers.set('Content-Type', 'application/json');
 
-    const fields: FieldError[] = [
+    const fields = [
       { field: 'email', error: 'required', value: 'some@email.tld' },
       { field: 'nick', error: 'already-exists', value: 'nick' },
     ];
@@ -156,8 +171,8 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    const error = await expect.rejects(http.post('/')).with(ValidationError);
+    const error = await expect.rejects(http.post('/')).with(ValidationErrors);
 
-    expect(error).toHaveProperty('fields', fields);
+    expect(error.getFieldError('email')).toEqual('required');
   });
 });

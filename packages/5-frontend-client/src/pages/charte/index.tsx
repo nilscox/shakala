@@ -1,6 +1,9 @@
 import { ExternalLink, Link } from '~/elements/link';
+import { ssr } from '~/utils/ssr';
 
 // cspell:word languagetool
+
+export const getServerSideProps = ssr();
 
 export const RulesPage = () => (
   <>

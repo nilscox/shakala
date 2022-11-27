@@ -1,21 +1,25 @@
-import { Meta, Story } from '@storybook/react';
-import { addComment, addThread, createComment, createThread, createUser } from 'frontend-domain';
-import { createMemoryHistory } from 'history';
+import { Meta } from '@storybook/react';
+import { commentActions, createComment, createUser, routerActions } from 'frontend-domain';
 
-import { reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
+import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
+
+import { CommentAlreadyReportedError } from '../../../adapters/comment-gateway/api-comment-gateway';
 
 import { ReportCommentModal } from './report-comment-modal';
 
 // cspell:word gronaz
 
-const history = createMemoryHistory({
-  initialEntries: ['?' + new URLSearchParams({ report: 'commentId' })],
-});
+type Args = {
+  alreadyReported: boolean;
+};
 
 export default {
   title: 'Domain/ReportCommentModal',
-  decorators: [reduxDecorator(), routerDecorator(history)],
-} as Meta;
+  decorators: [reduxDecorator()],
+  argTypes: {
+    alreadyReported: controls.boolean(false),
+  },
+} as Meta<Args>;
 
 const comment = createComment({
   id: 'commentId',
@@ -24,11 +28,16 @@ const comment = createComment({
   downvotes: 51,
 });
 
-export const reportCommentModal: Story<{ setup: SetupRedux }> = () => <ReportCommentModal />;
+export const reportCommentModal: ReduxStory<Args> = () => <ReportCommentModal />;
 reportCommentModal.args = {
-  setup: (dispatch, { routerGateway }) => {
-    routerGateway.setQueryParam('report', 'commentId');
-    dispatch(addThread(createThread({ comments: [comment] })));
-    dispatch(addComment(comment));
+  setup: (dispatch, getState, { args, commentGateway }) => {
+    dispatch(routerActions.setQueryParam(['report', 'commentId']));
+    dispatch(commentActions.addComment(comment));
+
+    commentGateway.reportComment.resolve(undefined, 1000);
+
+    if (args.alreadyReported) {
+      commentGateway.reportComment.reject(new CommentAlreadyReportedError(), 1000);
+    }
   },
 };

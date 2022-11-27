@@ -1,12 +1,15 @@
 {
-  "extends": "../../tsconfig.frontend.json",
-  "include": ["src/**/*"],
+  "extends": "../../tsconfig.base.json",
   "references": [{ "path": "../0-shared" }],
+  "include": ["src"],
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "noEmit": false,
     "composite": true,
+    "declaration": true,
+    "target": "esnext",
+    "noEmit": false,
+    "lib": ["DOM"],
     "baseUrl": "..",
     "paths": {
       "shared": ["0-shared/src"],

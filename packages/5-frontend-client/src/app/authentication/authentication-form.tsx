@@ -1,103 +1,114 @@
+import { DevTool } from '@hookform/devtools';
 import { clsx } from 'clsx';
 import {
-  AuthenticationType,
-  clearAllAuthenticationErrors,
-  handleAuthenticate,
-  handleAuthenticationFormChange,
-  selectAuthenticationFormError,
-  selectCanSubmitAuthenticationForm,
-  selectIsAuthenticating,
+  authenticationActions,
+  AuthenticationField,
+  AuthenticationFormType,
+  AuthenticationForm as AuthenticationFormValues,
+  authenticationSelectors,
+  InvalidCredentialsError,
+  ValidationErrors,
 } from 'frontend-domain';
-import { FormEventHandler, useCallback, useEffect } from 'react';
-import { get } from 'shared';
+import { useCallback, useEffect, useState } from 'react';
+import { FormProvider, useForm, UseFormSetError } from 'react-hook-form';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
+import { getPublicConfig } from '~/utils/config';
 
-import { FormInputs } from './inputs';
+import { AuthenticationFields } from './authentication-fields';
 import { AuthenticationMessage } from './message';
 import { AuthenticationNavigation } from './navigation';
 import { useAuthenticationForm } from './use-authentication-form';
 
-const heading: Record<AuthenticationType, string> = {
-  [AuthenticationType.login]: 'Connexion',
-  [AuthenticationType.signup]: 'Inscription',
-  [AuthenticationType.emailLogin]: 'Mot de passe oublié',
+const defaultValues: AuthenticationFormValues = {
+  email: '',
+  password: '',
+  nick: '',
+  acceptRules: false,
 };
 
-const cta: Record<AuthenticationType, string> = {
-  [AuthenticationType.login]: 'Connexion',
-  [AuthenticationType.signup]: 'Inscription',
-  [AuthenticationType.emailLogin]: 'Envoyer',
+const heading: Record<AuthenticationFormType, string> = {
+  [AuthenticationFormType.login]: 'Connexion',
+  [AuthenticationFormType.signup]: 'Inscription',
+  [AuthenticationFormType.emailLogin]: 'Mot de passe oublié',
 };
+
+const { isDevelopment } = getPublicConfig();
 
 type AuthenticationFormProps = {
   onClose: () => void;
 };
 
 export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
-  const dispatch = useAppDispatch();
+  const formType = useAuthenticationForm() as AuthenticationFormType;
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+  const form = useForm<AuthenticationFormValues>({ defaultValues });
 
-  const form = useAuthenticationForm();
-
-  const isAuthenticating = useAppSelector(selectIsAuthenticating);
-  const canSubmit = useAppSelector(selectCanSubmitAuthenticationForm, form);
-  const formError = useAppSelector(selectAuthenticationFormError);
-
-  const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
-    (event) => {
-      const isValid = event.currentTarget.checkValidity();
-      const field = get(event.target, 'name') as string;
-
-      dispatch(handleAuthenticationFormChange(isValid, field));
-    },
-    [dispatch],
-  );
-
-  const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
-    (event) => {
-      event.preventDefault();
-
-      const form = new FormData(event.currentTarget);
-
-      dispatch(
-        handleAuthenticate({
-          email: form.get('email') as string,
-          password: form.get('password') as string,
-          nick: form.get('nick') as string,
-        }),
-      );
-    },
-    [dispatch],
-  );
+  const isSubmitting = useAppSelector(authenticationSelectors.isSubmitting);
+  const handleSubmit = useSubmit(form.setError, setInvalidCredentials);
 
   useEffect(() => {
-    dispatch(clearAllAuthenticationErrors());
-  }, [dispatch, form]);
+    form.clearErrors();
+    setInvalidCredentials(false);
+  }, [formType, form]);
 
   return (
-    <>
-      <h2 className="py-0 text-primary">{heading[form]}</h2>
+    <FormProvider {...form}>
+      {isDevelopment && <DevTool control={form.control} />}
+
+      <h2 className="py-0 text-primary">{heading[formType]}</h2>
 
       <AuthenticationMessage />
 
-      <form onChange={handleChange} onSubmit={handleSubmit}>
-        <fieldset className="flex flex-col gap-2" disabled={isAuthenticating}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
+        <fieldset className="flex flex-col gap-2" disabled={isSubmitting}>
           <AuthenticationNavigation />
 
-          <FormInputs />
+          <AuthenticationFields />
 
-          <FieldError className={clsx('my-1 text-center', !formError && 'hidden')}>
-            {formError === 'InvalidCredentials' && 'Combinaison email / mot de passe non valide'}
+          <FieldError className={clsx('my-1 text-center', !invalidCredentials && 'hidden')}>
+            {invalidCredentials && 'Combinaison email / mot de passe non valide'}
           </FieldError>
 
-          <Buttons canSubmit={canSubmit} onClose={onClose} />
+          <Buttons canSubmit={true} onClose={onClose} />
         </fieldset>
       </form>
-    </>
+    </FormProvider>
   );
+};
+
+const useSubmit = (
+  setError: UseFormSetError<AuthenticationFormValues>,
+  setInvalidCredentials: (invalid: boolean) => void,
+) => {
+  const dispatch = useAppDispatch();
+
+  return useCallback(
+    async (data: AuthenticationFormValues) => {
+      try {
+        await dispatch(authenticationActions.authenticate(data));
+      } catch (error) {
+        // todo: factorize this
+        if (error instanceof ValidationErrors) {
+          for (const field of Object.values(AuthenticationField)) {
+            setError(field, { message: error.getFieldError(field) });
+          }
+        } else if (error instanceof InvalidCredentialsError) {
+          setInvalidCredentials(true);
+        }
+      }
+    },
+    [dispatch, setError, setInvalidCredentials],
+  );
+};
+
+const cta: Record<AuthenticationFormType, string> = {
+  [AuthenticationFormType.login]: 'Connexion',
+  [AuthenticationFormType.signup]: 'Inscription',
+  [AuthenticationFormType.emailLogin]: 'Envoyer',
 };
 
 type ButtonsProps = {
@@ -106,7 +117,7 @@ type ButtonsProps = {
 };
 
 const Buttons = ({ canSubmit, onClose }: ButtonsProps) => {
-  const form = useAuthenticationForm();
+  const form = useAuthenticationForm() as AuthenticationFormType;
 
   return (
     <div className="flex flex-row justify-end gap-2">

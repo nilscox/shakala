@@ -1,28 +1,30 @@
 import {
   Comment as CommentType,
+  commentActions,
+  commentSelectors,
   DateFormat,
   formatDate,
-  restoreDraftComments,
-  selectThread,
+  threadSelectors,
   User,
 } from 'frontend-domain';
 import Head from 'next/head';
 import { useEffect } from 'react';
 
 import { PageTitle } from '~/app/page-title';
+import { AsyncResource } from '~/elements/async-resource';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Fallback } from '~/elements/fallback';
 import { Markdown } from '~/elements/markdown';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import { useSearchParam } from '~/hooks/use-search-param';
 import { useUser } from '~/hooks/use-user';
 
-import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import {
   Comment,
-  RootCommentForm,
   CommentHistoryModal,
   ReportCommentModal,
+  RootCommentForm,
   ShareCommentModal,
 } from '../comment';
 
@@ -35,41 +37,45 @@ type ThreadProps = {
 export const Thread = ({ threadId }: ThreadProps) => {
   const dispatch = useAppDispatch();
 
-  const thread = useAppSelector(selectThread, threadId);
-  const dateFormatted = formatDate(thread.date, DateFormat.full);
-  const { comments } = thread;
+  const thread = useAppSelector(threadSelectors.byId, threadId);
+  const { author, date, text, comments } = thread;
+
+  const fetchingComments = useAppSelector(commentSelectors.isFetching);
 
   useEffect(() => {
-    dispatch(restoreDraftComments(threadId));
+    dispatch(commentActions.openDraftComments(threadId));
   }, [dispatch, threadId]);
-
-  // todo
-  const createdComments: CommentType[] = [];
 
   return (
     <>
-      <PageTitle>{`${thread.author.nick} : ${thread.text}`}</PageTitle>
+      <PageTitle>{`${author.nick} : ${text}`}</PageTitle>
       <ThreadMeta {...thread} />
 
       <div className="my-5 md:my-10">
         <div className="row mb-2 flex-wrap items-center justify-between gap-4">
-          <AvatarNick size="medium" {...thread.author} />
+          <AvatarNick size="medium" {...author} />
           <div className="text-muted">
-            <time dateTime={thread.date}>{dateFormatted}</time>, {comments.length} commentaires
+            <time dateTime={date}>{formatDate(date, DateFormat.full)}</time>, {comments.length} commentaires
           </div>
         </div>
 
-        <Markdown markdown={thread.text} className="card p-4 sm:p-5" />
+        <Markdown markdown={text} className="card p-4 sm:p-5" />
       </div>
 
       <ThreadFilters threadId={threadId} className="my-4" />
 
-      {comments.length === 0 && <NoCommentFallback />}
-      <CommentsList
-        threadId={threadId}
-        threadAuthor={thread.author}
-        comments={[...comments, ...createdComments]}
-      />
+      <AsyncResource
+        loading={fetchingComments}
+        loader={(show) => <Fallback>{show && 'Chargement des commentaires...'}</Fallback>}
+      >
+        {() => (
+          // todo: <When /> component?
+          <>
+            {comments.length === 0 && <NoCommentFallback />}
+            <CommentsList threadId={threadId} threadAuthor={author} comments={comments} />
+          </>
+        )}
+      </AsyncResource>
 
       <ReportCommentModal />
       <CommentHistoryModal />

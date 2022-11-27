@@ -1,7 +1,13 @@
 {
+  "references": [
+    { "path": "../2-backend-application" },
+    { "path": "../3-backend-infrastructure" },
+    { "path": "../5-frontend-client" }
+  ],
   "include": ["specs", "utils"],
   "compilerOptions": {
-    "target": "ES2022",
+    "outDir": "./dist",
+    "target": "es2022",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -12,7 +18,7 @@
       "backend-domain": ["1-backend-domain/src"],
       "backend-application": ["2-backend-application/dist"],
       "backend-infrastructure": ["3-backend-infrastructure/dist"],
-      "frontend-domain": ["4-frontend-domain/src"]
+      "frontend-domain": ["4-frontend-domain/dist"]
     }
   }
 }

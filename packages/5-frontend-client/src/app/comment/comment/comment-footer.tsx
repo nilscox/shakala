@@ -1,19 +1,9 @@
 import { clsx } from 'clsx';
-import {
-  openReportModal,
-  ReactionType,
-  selectCanReply,
-  selectComment,
-  selectIsAuthUserAuthor,
-  selectIsEditingComment,
-  selectIsReply,
-  setIsEditingComment,
-  setIsReplying,
-  setReaction,
-} from 'frontend-domain';
+import { commentActions, commentSelectors, ReactionType } from 'frontend-domain';
 
 import { IconButton, IconButtonProps } from '~/elements/icon-button';
 import { SearchParamLink } from '~/elements/search-param-link';
+import { useSnackbar } from '~/elements/snackbar';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import EditIcon from '~/icons/edit.svg';
@@ -34,11 +24,12 @@ type CommentFooterProps = {
 };
 
 export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
+  const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
-  const { upvotes, downvotes, edited } = useAppSelector(selectComment, commentId);
-  const isReply = useAppSelector(selectIsReply, commentId);
-  const isEditing = useAppSelector(selectIsEditingComment, commentId);
+  const { upvotes, downvotes, edited } = useAppSelector(commentSelectors.byId, commentId);
+  const isReply = useAppSelector(commentSelectors.isReply, commentId);
+  const isEditing = useAppSelector(commentSelectors.isEditing, commentId);
 
   if (isEditing) {
     return null;
@@ -58,9 +49,19 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
           <>
             <EditButton commentId={commentId} />
 
-            {!isReply && <FooterButton icon={<SubscribeIcon />}>Suivre</FooterButton>}
+            {!isReply && (
+              <FooterButton
+                icon={<SubscribeIcon />}
+                onClick={() => snackbar.warning("Cette fonctionnalité n'est pas encore disponible")}
+              >
+                Suivre
+              </FooterButton>
+            )}
 
-            <FooterButton icon={<ReportIcon />} onClick={() => dispatch(openReportModal(commentId))}>
+            <FooterButton
+              icon={<ReportIcon />}
+              onClick={() => dispatch(commentActions.openReportModal(commentId))}
+            >
               Signaler
             </FooterButton>
 
@@ -115,14 +116,14 @@ type ReactionButtonProps = {
 const ReactionButton = ({ commentId, reactionType, children }: ReactionButtonProps) => {
   const dispatch = useAppDispatch();
 
-  const { userReaction } = useAppSelector(selectComment, commentId);
-  const isAuthor = useAppSelector(selectIsAuthUserAuthor, commentId);
+  const { userReaction } = useAppSelector(commentSelectors.byId, commentId);
+  const isAuthor = useAppSelector(commentSelectors.isAuthor, commentId);
 
   return (
     <FooterButton
       icon={reactionIconMap[reactionType]}
       active={userReaction === reactionType}
-      onClick={() => dispatch(setReaction(commentId, reactionType))}
+      onClick={() => dispatch(commentActions.setReaction(commentId, reactionType))}
       disabled={isAuthor}
       title={isAuthor ? "Vous ne pouvez pas voter pour un commentaire dont vous êtes l'auteur" : undefined}
     >
@@ -144,7 +145,7 @@ const EditButton = ({ commentId }: EditCommentProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <FooterButton icon={<EditIcon />} onClick={() => dispatch(setIsEditingComment(commentId, true))}>
+    <FooterButton icon={<EditIcon />} onClick={() => dispatch(commentActions.setEditing(commentId, true))}>
       Éditer
     </FooterButton>
   );
@@ -156,8 +157,7 @@ type ReplyButtonProps = {
 
 const ReplyButton = ({ commentId }: ReplyButtonProps) => {
   const dispatch = useAppDispatch();
-
-  const canReply = useAppSelector(selectCanReply, commentId);
+  const canReply = useAppSelector(commentSelectors.canReply, commentId);
 
   if (!canReply) {
     return null;
@@ -166,7 +166,7 @@ const ReplyButton = ({ commentId }: ReplyButtonProps) => {
   return (
     <FooterButton
       icon={<ReplyIcon />}
-      onClick={() => dispatch(setIsReplying(commentId, true))}
+      onClick={() => dispatch(commentActions.setReplying(commentId, true))}
       title="Répondre"
       className="ml-auto pl-2"
     >

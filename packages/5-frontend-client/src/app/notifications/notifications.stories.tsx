@@ -1,8 +1,8 @@
 import { Meta, Story } from '@storybook/react';
-import { createDate, createNotification, createUser, setNotifications } from 'frontend-domain';
+import { createDate, createNotification, createUser, notificationActions } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
-import { maxWidthDecorator, reduxDecorator, routerDecorator, SetupRedux } from '~/utils/storybook';
+import { maxWidthDecorator, reduxDecorator, SetupRedux } from '~/utils/storybook';
 
 import { Notifications } from './notifications';
 
@@ -10,7 +10,7 @@ import { Notifications } from './notifications';
 
 export default {
   title: 'Domain/Notifications',
-  decorators: [reduxDecorator(), routerDecorator(), maxWidthDecorator()],
+  decorators: [reduxDecorator(), maxWidthDecorator()],
 } as Meta;
 
 const notification1 = createNotification({
@@ -41,7 +41,9 @@ const notification2 = createNotification({
 export const notifications: Story<{ setup: SetupRedux }> = () => <Notifications />;
 
 notifications.args = {
-  setup: (dispatch) => {
-    dispatch(setNotifications({ page: 1 }, [notification1, notification2]));
+  setup(dispatch) {
+    dispatch(notificationActions.setNotifications([notification1, notification2]));
+    // todo: remove
+    dispatch(notificationActions.setList([notification1.id, notification2.id]));
   },
 };

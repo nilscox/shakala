@@ -1,8 +1,6 @@
-import { contains } from './contains';
+import { EnumType } from '../types/enum-type';
 
-type EnumType<T extends string> = {
-  [key: string]: T;
-};
+import { contains } from './contains';
 
 export const isEnumValue = <T extends string>(enumType: EnumType<T>) => {
   return (value?: string): value is T => {

@@ -1,28 +1,28 @@
-import { action } from '@storybook/addon-actions';
-import { DecoratorFn } from '@storybook/react';
+import { Args, DecoratorFn, Story } from '@storybook/react';
 import {
+  AppState,
   createStore,
+  createStubDependencies,
   Dependencies,
-  Dispatch,
-  DraftCommentKind,
   SnackbarGateway,
-  StorageGateway,
+  StubAuthenticationGateway,
+  StubCommentGateway,
+  StubDraftMessagesGateway,
+  StubNotificationGateway,
+  StubThreadGateway,
+  StubUserProfileGateway,
 } from 'frontend-domain';
-import { createMemoryHistory } from 'history';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { EnumType } from 'shared';
 
-import { StorybookAuthenticationGateway } from '~/adapters/authentication-gateway/storybook-authentication.gateway';
 import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';
-import { ReactRouterGateway } from '~/adapters/router-gateway/react-router-gateway';
-import { StorybookThreadGateway } from '~/adapters/thread-gateway/storybook-thread.gateway';
 import { RealTimerGateway } from '~/adapters/timer-gateway/timer-gateway';
-import { StorybookUserGateway } from '~/adapters/user-gateway/storybook-user.gateway';
-import { useReactRouterGateway } from '~/app';
-import { SnackbarProvider, useSnackbar } from '~/components/elements/snackbar';
+import { SnackbarProvider, useSnackbar } from '~/elements/snackbar';
 
 export const controls = {
   text: (defaultValue: string) => ({
@@ -42,6 +42,11 @@ export const controls = {
     options,
     defaultValue,
   }),
+  enum: <T extends string>(enumObject: EnumType<T>, defaultValue?: T) => ({
+    control: 'inline-radio',
+    options: Object.values(enumObject),
+    defaultValue,
+  }),
   disabled: () => ({
     table: { disable: true },
   }),
@@ -57,16 +62,6 @@ export const maxWidthDecorator = () => {
   return MaxWidthDecorator;
 };
 
-export const routerDecorator = (history = createMemoryHistory()) => {
-  const StorybookRouterDecorator: DecoratorFn = (Story) => (
-    <Router location={history.location} navigator={history}>
-      <Story />
-    </Router>
-  );
-
-  return StorybookRouterDecorator;
-};
-
 export const snackbarDecorator = () => {
   const SnackbarDecorator: DecoratorFn = (Story) => (
     <SnackbarProvider>
@@ -77,64 +72,55 @@ export const snackbarDecorator = () => {
   return SnackbarDecorator;
 };
 
-class StorybookStorageGateway implements StorageGateway {
-  async getDraftCommentText(kind: DraftCommentKind, id: string): Promise<string | undefined> {
-    action('StorybookStorageGateway.getDraftCommentText')(kind, id);
-    return;
-  }
-
-  async setDraftCommentText(kind: DraftCommentKind, id: string, text: string): Promise<void> {
-    action('StorybookStorageGateway.setDraftCommentText')(kind, id, text);
-  }
-
-  async removeDraftCommentText(kind: DraftCommentKind, id: string): Promise<void> {
-    action('StorybookStorageGateway.removeDraftCommentText')(kind, id, id);
-  }
-}
-
 interface StorybookDependencies extends Dependencies {
+  authenticationGateway: StubAuthenticationGateway;
+  commentGateway: StubCommentGateway;
   dateGateway: RealDateGateway;
-  snackbarGateway: SnackbarGateway;
+  draftMessagesGateway: StubDraftMessagesGateway;
   loggerGateway: ConsoleLoggerGateway;
-  routerGateway: ReactRouterGateway;
+  notificationGateway: StubNotificationGateway;
+  snackbarGateway: SnackbarGateway;
   timerGateway: RealTimerGateway;
-  authenticationGateway: StorybookAuthenticationGateway;
-  threadGateway: StorybookThreadGateway;
-  storageGateway: StorybookStorageGateway;
-  userGateway: StorybookUserGateway;
+  threadGateway: StubThreadGateway;
+  userProfileGateway: StubUserProfileGateway;
 }
 
-export type SetupRedux = (dispatch: Dispatch, deps: StorybookDependencies) => void;
+export type SetupRedux<TArgs = Args> = ThunkAction<
+  void,
+  AppState,
+  StorybookDependencies & { args: TArgs },
+  AnyAction
+>;
+
+export type ReduxStory<TArgs = Args> = Story<TArgs & { setup: SetupRedux<TArgs> }>;
 
 export const reduxDecorator = () => {
-  const StorybookReduxProvider: DecoratorFn = (Story, context: { args: { setup?: SetupRedux } }) => {
+  const StorybookReduxProvider: DecoratorFn = (Story, context: { args: Args }) => {
     const snackbar = useSnackbar();
-    const routerGateway = useReactRouterGateway();
 
     const dependencies = useMemo<StorybookDependencies>(
       () => ({
+        ...createStubDependencies(),
         dateGateway: new RealDateGateway(),
         snackbarGateway: snackbar,
         loggerGateway: new ConsoleLoggerGateway(),
-        routerGateway,
         timerGateway: new RealTimerGateway(),
-        authenticationGateway: new StorybookAuthenticationGateway(),
-        threadGateway: new StorybookThreadGateway(),
-        storageGateway: new StorybookStorageGateway(),
-        userGateway: new StorybookUserGateway(),
       }),
-      [snackbar, routerGateway],
+      [snackbar],
     );
 
     const store = useMemo(() => createStore(dependencies), [dependencies]);
-    const { setup } = context.args;
 
-    const [ready, setReady] = useState(false);
+    const { setup } = context.args ?? {};
+    const [ready, setReady] = useState(!setup);
 
     useEffect(() => {
-      setup?.(store.dispatch, dependencies);
+      if (setup) {
+        setup(store.dispatch, store.getState, { ...dependencies, args: context.args });
+      }
+
       setReady(true);
-    }, [setup, store, dependencies]);
+    }, [setup, store, dependencies, context.args]);
 
     if (!ready) {
       return <></>;

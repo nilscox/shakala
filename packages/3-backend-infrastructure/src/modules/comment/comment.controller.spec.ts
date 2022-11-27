@@ -14,10 +14,10 @@ import {
   ReactionType,
   UserMustBeAuthorError,
 } from 'backend-domain';
-import { CreateCommentBodyDto, EditCommentBodyDto } from 'shared';
+import { CreateCommentBodyDto, CreateReplyBodyDto, EditCommentBodyDto } from 'shared';
 import { mockReject, mockResolve } from 'shared/test';
 
-import { BadRequest, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { BadRequest, NotFound, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
@@ -48,7 +48,6 @@ describe('CommentController', () => {
 
   describe('createComment', () => {
     const threadId = 'threadId';
-    const parentId = 'parentId';
     const text = 'hello!';
 
     const commentId = 'commentId';
@@ -69,8 +68,36 @@ describe('CommentController', () => {
       expect(commandBus.execute).toHaveBeenCalledWith(new CreateCommentCommand(threadId, null, text), ctx);
     });
 
+    it('fails to create a comment with an invalid body', async () => {
+      const error = await expect
+        .rejects(controller.createComment(request.withBody({ threadId })))
+        .with(ValidationError);
+
+      expect(error).toHaveProperty('fields.0.field', 'text');
+      expect(error).toHaveProperty('fields.0.error', 'required');
+    });
+  });
+
+  describe('createReply', () => {
+    const threadId = 'threadId';
+    const parentId = 'parentId';
+    const replyId = 'replyId';
+    const text = 'reply';
+
+    let request: MockRequest;
+
+    beforeEach(() => {
+      commandBus.execute = mockResolve(replyId);
+
+      request = new MockRequest().withParam('id', parentId).withBody<CreateReplyBodyDto>({ text });
+    });
+
     it('creates a new reply', async () => {
-      await controller.createComment(request.withBody<CreateCommentBodyDto>({ threadId, text, parentId }));
+      queryBus.for(GetCommentQuery).return({
+        comment: create.comment({ id: parentId, threadId }),
+      });
+
+      await controller.createReply(request);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new CreateCommentCommand(threadId, parentId, text),
@@ -78,9 +105,15 @@ describe('CommentController', () => {
       );
     });
 
-    it('fails to create a comment with an invalid body', async () => {
+    it('fails to create a reply when the parent comment does not exist', async () => {
+      queryBus.for(GetCommentQuery).return(undefined);
+
+      await expect.rejects(controller.createReply(request)).with(NotFound);
+    });
+
+    it('fails to create a reply with an invalid body', async () => {
       const error = await expect
-        .rejects(controller.createComment(request.withBody({ threadId })))
+        .rejects(controller.createReply(request.withBody({ text: '' })))
         .with(ValidationError);
 
       expect(error).toHaveProperty('fields.0.field', 'text');

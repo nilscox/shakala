@@ -1,4 +1,4 @@
-import { reportComment, selectComment, selectCommentUnsafe } from 'frontend-domain';
+import { commentActions, commentSelectors } from 'frontend-domain';
 import { FormEventHandler, useState } from 'react';
 
 import { PageTitle } from '~/app/page-title';
@@ -11,8 +11,8 @@ import { useAppSelector } from '~/hooks/use-app-selector';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 
 export const ReportCommentModal = () => {
-  const commentId = useSearchParam('report');
-  const comment = useAppSelector(selectCommentUnsafe, commentId);
+  const commentId = useSearchParam('report') as string;
+  const comment = useAppSelector(commentSelectors.byId.unsafe, commentId);
 
   const [requestClose, setRequestClose] = useState(false);
   const setSearchParam = useSetSearchParam();
@@ -44,7 +44,7 @@ type ReportCommentProps = {
 
 const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
   const dispatch = useAppDispatch();
-  const comment = useAppSelector(selectComment, commentId);
+  const comment = useAppSelector(commentSelectors.byId, commentId);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -52,7 +52,7 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
     const data = new FormData(event.currentTarget);
     const reason = data.get('reason') as string;
 
-    dispatch(reportComment(reason));
+    dispatch(commentActions.reportComment(reason));
   };
 
   return (
@@ -85,6 +85,8 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
           <Button secondary onClick={onClose}>
             Annuler
           </Button>
+
+          {/* todo: loading state */}
           <Button primary type="submit">
             Signaler
           </Button>

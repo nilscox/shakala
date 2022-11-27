@@ -1,20 +1,18 @@
 import { screen } from '@testing-library/react';
-import {
-  addComment,
-  createComment,
-  createThread,
-  createUser,
-  TestStore,
-  addThread,
-  setThreadComments,
-} from 'frontend-domain';
+import { commentActions, createComment, createTestStore, createUser, TestStore } from 'frontend-domain';
 
-import { TestRenderer } from '~/test/render';
+import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 
 import { Comment } from './comment';
 
 describe('Comment', () => {
-  const store = new TestStore();
+  let store: TestStore;
+  let render: TestRenderer;
+
+  beforeEach(() => {
+    store = createTestStore();
+    render = createTestRenderer().withStore(store);
+  });
 
   it('renders a comment', () => {
     const comment = createComment({
@@ -25,14 +23,9 @@ describe('Comment', () => {
       downvotes: 6,
     });
 
-    store.dispatch(addThread(createThread({ id: 'threadId' })));
-    store.dispatch(addComment(comment));
-    store.dispatch(setThreadComments('threadId', [comment]));
+    store.dispatch(commentActions.addComment(comment));
 
-    new TestRenderer()
-      .withMemoryRouter()
-      .withRedux(store)
-      .render(<Comment commentId={comment.id} />);
+    render(<Comment commentId={comment.id} />);
 
     expect(screen.getByText('Paul')).toBeDefined();
     expect(screen.getByText('Le 1 mai 2022')).toBeDefined();

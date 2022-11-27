@@ -43,6 +43,10 @@ jobs:
       - name: Install node dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Build packages
+        run: yarn tsc -b
+        working-directory: packages/6-e2e
+
       - name: Install playwright dependencies
         run: yarn playwright install-deps && yarn playwright install chromium
         working-directory: packages/6-e2e
@@ -81,7 +85,7 @@ jobs:
       - name: Start frontend
         run: |
           yarn build
-          npx http-server-spa dist > ./frontend.stdout 2> ./frontend.stderr &
+          yarn start > ./frontend.stdout 2> ./frontend.stderr &
         working-directory: packages/5-frontend-client
         env:
           VERSION: e2e

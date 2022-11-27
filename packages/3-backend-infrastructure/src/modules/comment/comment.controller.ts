@@ -1,6 +1,8 @@
 import {
   CreateCommentCommand,
   EditCommentCommand,
+  GetCommentQuery,
+  GetCommentQueryResult,
   LoggerPort,
   ReportCommentCommand,
   SetReactionCommand,
@@ -14,6 +16,7 @@ import {
 } from 'backend-domain';
 import {
   createCommentBodySchema,
+  createReplyBodySchema,
   editCommentBodySchema,
   reportCommentBodySchema,
   setReactionBodySchema,
@@ -23,6 +26,7 @@ import {
   BadRequest,
   CommandBus,
   Controller,
+  NotFound,
   QueryBus,
   Request,
   Response,
@@ -48,6 +52,7 @@ export class CommentController extends Controller {
     return {
       'POST /': this.createComment,
       'PUT  /:id': this.editComment,
+      'POST /:id/reply': this.createReply,
       'PUT  /:id/reaction': this.setReaction,
       'POST /:id/report': this.reportComment,
     };
@@ -77,6 +82,29 @@ export class CommentController extends Controller {
       .run();
 
     return Response.noContent();
+  }
+
+  async createReply(req: Request): Promise<Response<{ id: string }>> {
+    const parentId = req.params.get('id') as string;
+    const user = await this.session.getUser(req);
+    const body = await this.validation.body(req, createReplyBodySchema);
+
+    const result = await this.queryBus.execute<GetCommentQueryResult | undefined>(
+      new GetCommentQuery(parentId),
+    );
+
+    if (!result) {
+      throw new NotFound('comment not found', { parentId });
+    }
+
+    const { comment: parent } = result;
+
+    const commentId = await execute<string>(this.commandBus)
+      .command(new CreateCommentCommand(parent.threadId, parentId, body.text))
+      .asUser(user)
+      .run();
+
+    return Response.created({ id: commentId });
   }
 
   async setReaction(req: Request): Promise<Response<void>> {

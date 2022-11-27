@@ -59,6 +59,7 @@ describe('AccountController', () => {
       expect(response).toHaveHeader('Pagination-Total', '1');
       expect(response).toHaveBody([
         {
+          id: notification.id,
           seen: false,
           date: notification.date.toString(),
           type: NotificationType.rulesUpdated,

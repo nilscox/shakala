@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
-import { selectComment } from 'frontend-domain';
+import { commentSelectors } from 'frontend-domain';
 
 import { useAppSelector } from '~/hooks/use-app-selector';
 
-import { ReplyForm } from '../comment-form/comment-reply-form';
+import { ReplyForm } from '../comment-form/reply-form';
 
 import { Reply } from './reply';
 
@@ -12,7 +12,7 @@ type RepliesListProps = {
 };
 
 export const RepliesList = ({ commentId }: RepliesListProps) => {
-  const { replies = [] } = useAppSelector(selectComment, commentId);
+  const { replies } = useAppSelector(commentSelectors.byId, commentId);
 
   return (
     // eslint-disable-next-line tailwindcss/no-arbitrary-value

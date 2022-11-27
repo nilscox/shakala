@@ -54,26 +54,27 @@ test.describe('Comments', () => {
   });
 
   test('As an unauthenticated user, I can signup to reply to a comment', async () => {
-    const comment = charlie.closest(charlie.findByText(/sur Twitter !$/), '.comment');
+    const comment = charlie.findComment(/sur Twitter !$/);
 
     await charlie.findByPlaceholder('Répondre').focus();
     await charlie.findByPlaceholder('Rédigez votre message').fill(texts.reply);
-    await charlie.within(comment).findButton('Envoyer').click();
-
-    await charlie.findByText('Créer un compte').click();
-    await charlie.findByPlaceholder('Email').fill('user@domain.tld');
-    await charlie.findByPlaceholder('Mot de passe').fill('password');
-    await charlie.findByPlaceholder('Pseudo').fill('user');
-    await charlie.findByText(/J'accepte la charte/).click();
-    await charlie.findByText(/J'accepte la charte/).click();
 
     const waitDebounceTime = 1000 + 100;
     await wait(waitDebounceTime);
 
+    await charlie.within(comment).findButton('Envoyer').click();
+
+    await charlie.findByText('Créer un compte').click();
+    await charlie.findByPlaceholder('Email').fill('charlie@domain.tld');
+    await charlie.findByPlaceholder('Mot de passe').fill('password');
+    await charlie.findByPlaceholder('Pseudo').fill('Charlie');
+    await charlie.findByText(/J'accepte la charte/).click();
+    await charlie.findByText(/J'accepte la charte/).click();
+
     await charlie.findButton('Inscription').click();
     await expect.poll(() => charlie.searchParams.get('auth')).toBeNull();
 
-    await charlie.emails.validateEmailAddress('user@domain.tld');
+    await charlie.emails.validateEmailAddress('charlie@domain.tld');
 
     await charlie.within(comment).findButton('Envoyer').click();
 

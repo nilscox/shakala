@@ -68,7 +68,7 @@
   }
 
   .card {
-    @apply bg-neutral rounded-lg shadow;
+    @apply bg-neutral rounded shadow;
   }
 }
 

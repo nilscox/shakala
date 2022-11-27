@@ -1,41 +1,34 @@
-import { closeAuthenticationForm, selectUserUnsafe } from 'frontend-domain';
-import { useCallback, useEffect, useState } from 'react';
+import { authenticationActions, authenticationSelectors, userProfileSelectors } from 'frontend-domain';
+import { useCallback, useEffect } from 'react';
 
 import { Modal } from '~/elements/modal';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
-import { useSearchParam } from '~/hooks/use-search-param';
 
 import { AuthenticationForm } from './authentication-form';
 
 export const AuthenticationModal = () => {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectUserUnsafe);
+  const user = useAppSelector(userProfileSelectors.authenticatedUser);
 
-  const isOpen = useSearchParam('auth') !== undefined;
-  const [closing, setClosing] = useState(false);
+  const auth = useAppSelector(authenticationSelectors.currentForm);
+  const isOpen = auth !== undefined;
 
   const handleClose = useCallback(() => {
-    setClosing(true);
-
-    const timeout = setTimeout(() => {
-      dispatch(closeAuthenticationForm());
-      setTimeout(() => setClosing(false), 0);
-    }, 200);
-
-    return () => clearTimeout(timeout);
+    dispatch(authenticationActions.closeAuthenticationForm());
   }, [dispatch]);
 
   useEffect(() => {
-    if (user) {
+    // todo: do we want that?
+    if (isOpen && user) {
       handleClose();
     }
-  }, [user, handleClose]);
+  }, [isOpen, user, handleClose]);
 
   return (
-    <Modal isOpen={isOpen && !closing} onRequestClose={handleClose} className="flex max-w-3 flex-col gap-4">
-      {isOpen && <AuthenticationForm onClose={handleClose} />}
+    <Modal isOpen={isOpen} onRequestClose={handleClose} className="max-w-3">
+      <AuthenticationForm onClose={handleClose} />
     </Modal>
   );
 };

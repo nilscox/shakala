@@ -1,32 +1,24 @@
-import { useRouter } from 'next/router';
+import { routerActions, routerSelectors } from 'frontend-domain';
 import { useCallback } from 'react';
 
-import { usePathname } from './use-pathname';
-import { useSearchParams } from './use-search-params';
+import { useAppDispatch } from './use-app-dispatch';
+import { useAppSelector } from './use-app-selector';
 
 export const useSearchParam = (name: string) => {
-  const params = useSearchParams();
-
-  return params.get(name) ?? undefined;
+  return useAppSelector(routerSelectors.queryParam, name);
 };
 
 export const useSetSearchParam = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
+  const dispatch = useAppDispatch();
 
   return useCallback(
     (key: string, value: string | undefined) => {
-      const nextParams = new URLSearchParams(params);
-
       if (value === undefined) {
-        nextParams.delete(key);
+        dispatch(routerActions.removeQueryParam(key));
       } else {
-        nextParams.set(key, value);
+        dispatch(routerActions.setQueryParam([key, value]));
       }
-
-      router.push(`${pathname}?${nextParams}`);
     },
-    [pathname, params, router],
+    [dispatch],
   );
 };

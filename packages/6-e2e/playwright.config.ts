@@ -5,6 +5,7 @@ dotenv.config();
 
 const config: PlaywrightTestConfig = {
   testDir: 'specs',
+  timeout: 20_000,
   use: {
     baseURL: process.env.APP_BASE_URL ?? 'http://localhost:8000',
     browserName: 'chromium',

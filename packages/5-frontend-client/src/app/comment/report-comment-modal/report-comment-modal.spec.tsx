@@ -1,48 +1,54 @@
-import userEvent from '@testing-library/user-event';
-import { addComment, createComment, createUser, TestStore } from 'frontend-domain';
-import { createMemoryHistory } from 'history';
+import { screen } from '@testing-library/react';
+import {
+  commentActions,
+  createComment,
+  createTestStore,
+  createUser,
+  routerActions,
+  TestStore,
+} from 'frontend-domain';
 
-import { screen, TestRenderer } from '~/test/render';
+import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 
 import { ReportCommentModal } from './report-comment-modal';
 
 describe('ReportCommentModal', () => {
-  const store = new TestStore();
-
-  const comment = createComment({ author: createUser({ nick: 'gros naze' }), text: 'you suck.' });
+  let store: TestStore;
+  let render: TestRenderer;
 
   beforeEach(() => {
-    store.dispatch(addComment(comment));
+    store = createTestStore();
+    render = createTestRenderer().withStore(store);
   });
 
-  const render = () => {
-    const history = createMemoryHistory({ initialEntries: [`/?report=${comment.id}`] });
+  beforeEach(() => {
+    const comment = createComment({
+      id: 'commentId',
+      author: createUser({ nick: 'gros naze' }),
+      text: 'you suck.',
+    });
 
-    store.routerGateway.setQueryParam('report', comment.id);
-
-    new TestRenderer()
-      .withMemoryRouter(history)
-      .withRedux(store)
-      .render(<ReportCommentModal />);
-
-    document.body.removeAttribute('aria-hidden');
-  };
+    store.dispatch(commentActions.addComment(comment));
+    store.dispatch(routerActions.setQueryParam(['report', 'commentId']));
+  });
 
   it('renders the modal allowing a user to report a comment', () => {
-    render();
+    render(<ReportCommentModal />);
+    document.body.removeAttribute('aria-hidden');
+
     expect(screen.getByRole('heading')).toHaveTextContent('Signaler le commentaire de gros naze');
     expect(screen.getByText('you suck.')).toBeVisible();
   });
 
   it('submits the report form', async () => {
-    const user = userEvent.setup();
     const reason = 'Le commentaire est en anglais.';
 
-    render();
+    const user = render(<ReportCommentModal />);
+    document.body.removeAttribute('aria-hidden');
 
     await user.type(screen.getByRole('textbox'), reason);
     await user.click(screen.getByRole('button', { name: 'Signaler' }));
 
-    expect(store.threadGateway.reportComment).toHaveBeenCalledWith(comment.id, reason);
+    expect(store.commentGateway.reportComment.lastCall).toEqual(['commentId', reason]);
   });
 });

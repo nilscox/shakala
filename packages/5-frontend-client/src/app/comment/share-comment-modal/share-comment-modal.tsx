@@ -1,5 +1,4 @@
-import { selectCommentUnsafe } from 'frontend-domain';
-import Image from 'next/image';
+import { commentSelectors } from 'frontend-domain';
 import { ReactNode } from 'react';
 
 import { PageTitle } from '~/app/page-title';
@@ -7,6 +6,7 @@ import { Button } from '~/elements/button';
 import { Modal } from '~/elements/modal';
 import { useSnackbar } from '~/elements/snackbar';
 import { useAppSelector } from '~/hooks/use-app-selector';
+import { useParams } from '~/hooks/use-params';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 import facebook from '~/images/logos/facebook-logo.png';
 import link from '~/images/logos/link.png';
@@ -20,7 +20,7 @@ export const ShareCommentModal = () => {
   const setSearchParam = useSetSearchParam();
   const permalink = usePermalink(commentId as string);
 
-  const comment = useAppSelector(selectCommentUnsafe, commentId ?? '');
+  const comment = useAppSelector(commentSelectors.byId.unsafe, commentId as string);
 
   const closeModal = () => {
     setSearchParam('share', undefined);
@@ -48,7 +48,7 @@ export const ShareCommentModal = () => {
           title="Partager sur Facebook"
           href={`https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({ u: permalink })}`}
         >
-          <Image src={facebook} alt="Facebook" className="w-full" />
+          <img src={facebook} alt="Facebook" className="w-full" />
         </ShareIcon>
 
         <ShareIcon
@@ -57,18 +57,18 @@ export const ShareCommentModal = () => {
             text: `Venez découvrir ce que dit ${comment?.author.nick} sur #shakala !\n${permalink}`,
           })}`}
         >
-          <Image src={twitter} alt="Twitter" className="w-full" />
+          <img src={twitter} alt="Twitter" className="w-full" />
         </ShareIcon>
 
         <ShareIcon
           title="Partager sur LinkedIn"
           href={`https://www.linkedin.com/sharing/share-offsite/?${new URLSearchParams({ url: permalink })}`}
         >
-          <Image src={linkedin} alt="LinkedIn" className="w-full" />
+          <img src={linkedin} alt="LinkedIn" className="w-full" />
         </ShareIcon>
 
         <ShareIcon title="Partager un lien" onClick={copyPermalink}>
-          <Image src={link} alt="Link" className="w-full" />
+          <img src={link} alt="Link" className="w-full" />
         </ShareIcon>
       </div>
 
@@ -87,9 +87,7 @@ export const ShareCommentModal = () => {
 };
 
 const usePermalink = (commentId: string) => {
-  // todo
-  // const { threadId } = useParams();
-  const { threadId } = { threadId: 'threadId' };
+  const { 'thread-id': threadId } = useParams();
 
   if (typeof window === 'undefined') {
     return '';

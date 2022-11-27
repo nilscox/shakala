@@ -43,6 +43,16 @@ export type CreateCommentBodyDto = {
   text: string;
 };
 
+export const createReplyBodySchema = yup
+  .object({
+    text: yup.string().required().trim().min(4).max(20000),
+  })
+  .required()
+  .noUnknown()
+  .strict();
+
+export type CreateReplyBodyDto = yup.InferType<typeof createReplyBodySchema>;
+
 export const editCommentBodySchema = yup
   .object({
     text: yup.string().required().trim().min(4).max(20000),

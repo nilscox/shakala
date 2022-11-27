@@ -1,18 +1,28 @@
 import { screen } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
-import { addComment, createComment, createDate, createUser, TestStore } from 'frontend-domain';
-import { createMemoryHistory } from 'history';
+import {
+  commentActions,
+  createComment,
+  createDate,
+  createTestStore,
+  createUser,
+  routerActions,
+  TestStore,
+} from 'frontend-domain';
 
-import { TestRenderer } from '~/test/render';
+import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 
 import { CommentHistoryModal } from './comment-history-modal';
 
 describe('CommentHistoryModal', () => {
-  const store = new TestStore();
+  let store: TestStore;
+  let render: TestRenderer;
+
+  beforeEach(() => {
+    store = createTestStore();
+    render = createTestRenderer().withStore(store);
+  });
 
   it("navigates through a comment's edition history", async () => {
-    const user = userEvent.setup();
-
     const comment = createComment({
       author: createUser({ nick: 'Nick' }),
       text: 'last edition',
@@ -23,16 +33,10 @@ describe('CommentHistoryModal', () => {
       ],
     });
 
-    const history = createMemoryHistory({
-      initialEntries: ['?' + new URLSearchParams({ historique: comment.id })],
-    });
+    store.dispatch(routerActions.setQueryParam(['historique', comment.id]));
+    store.dispatch(commentActions.addComment(comment));
 
-    store.dispatch(addComment(comment));
-
-    new TestRenderer()
-      .withMemoryRouter(history)
-      .withRedux(store)
-      .render(<CommentHistoryModal />);
+    const user = render(<CommentHistoryModal />);
 
     expect(screen.getByText('Nick')).toBeVisible();
 
@@ -64,13 +68,6 @@ describe('CommentHistoryModal', () => {
   });
 
   it('does not crash when the comment is being fetched', () => {
-    const history = createMemoryHistory({
-      initialEntries: ['?' + new URLSearchParams({ historique: 'commentId' })],
-    });
-
-    new TestRenderer()
-      .withMemoryRouter(history)
-      .withRedux(store)
-      .render(<CommentHistoryModal />);
+    render(<CommentHistoryModal />);
   });
 });

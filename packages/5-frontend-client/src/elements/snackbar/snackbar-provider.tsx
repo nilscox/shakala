@@ -1,7 +1,7 @@
-'use client';
-
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+import { ClientOnly } from '../client-only';
 
 import { Snackbar } from './snackbar';
 import { Snack } from './snackbar.types';
@@ -23,7 +23,7 @@ export const useSnackbarContext = () => {
 };
 
 type SnackbarProviderProps = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
@@ -39,7 +39,7 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
 
       return [
         //
-        ...snacks.slice(0, index - 1),
+        ...snacks.slice(0, index),
         { ...snacks[index], ...changes },
         ...snacks.slice(index + 1),
       ];
@@ -52,8 +52,8 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     });
   }, []);
 
-  const addSnack = useCallback<SnackbarContext['addSnack']>(
-    (snack) => {
+  const addSnack = useCallback(
+    (snack: Snack) => {
       setSnacks((snacks) => [...snacks, snack]);
 
       setTimeout(() => {
@@ -71,26 +71,29 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     [updateSnack, removeSnack],
   );
 
-  return <>{children}</>;
   return (
-    <snackbarContext.Provider value={{ snacks, addSnack, updateSnack, removeSnack }}>
+    <snackbarContext.Provider value={{ snacks, addSnack, removeSnack, updateSnack }}>
       {children}
 
-      {createPortal(
-        <div className="fixed top-0 right-0 z-10 m-4 flex flex-col gap-2">
-          {snacks.map((snack) => (
-            <Snackbar
-              key={snack.id}
-              type={snack.type}
-              transition={snack.transition}
-              onRemove={() => removeSnack(snack.id)}
-            >
-              {snack.message}
-            </Snackbar>
-          ))}
-        </div>,
-        document.body,
-      )}
+      <ClientOnly>
+        {() =>
+          createPortal(
+            <div className="fixed top-0 right-0 z-10 m-4 flex flex-col gap-2">
+              {snacks.map((snack) => (
+                <Snackbar
+                  key={snack.id}
+                  type={snack.type}
+                  transition={snack.transition}
+                  onRemove={() => removeSnack(snack.id)}
+                >
+                  {snack.message}
+                </Snackbar>
+              ))}
+            </div>,
+            document.body,
+          )
+        }
+      </ClientOnly>
     </snackbarContext.Provider>
   );
 };

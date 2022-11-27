@@ -1,9 +1,10 @@
-import { State } from 'frontend-domain';
+import { AppState } from 'frontend-domain';
+// eslint-disable-next-line no-restricted-imports
 import { useSelector } from 'react-redux';
 
 export const useAppSelector = <Params extends unknown[], Result>(
-  selector: (state: State, ...params: Params) => Result,
+  selector: (state: AppState, ...params: Params) => Result,
   ...params: Params
 ) => {
-  return useSelector<State, Result>((state) => selector(state, ...params));
+  return useSelector<AppState, Result>((state) => selector(state, ...params));
 };

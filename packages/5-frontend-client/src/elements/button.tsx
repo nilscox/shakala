@@ -37,5 +37,5 @@ export const SubmitButton = (props: ButtonProps) => {
 };
 
 const LoadingIndicator = () => {
-  return <div className="absolute inset-y-0 right-0 animate-loading bg-neutral/20" />;
+  return <div className="absolute inset-y-0 animate-loading bg-neutral/20" />;
 };

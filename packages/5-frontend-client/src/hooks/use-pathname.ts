@@ -1,5 +1,7 @@
-import { useRouter } from 'next/router';
+import { routerSelectors } from 'frontend-domain';
+
+import { useAppSelector } from './use-app-selector';
 
 export const usePathname = () => {
-  return useRouter().pathname;
+  return useAppSelector(routerSelectors.pathname);
 };

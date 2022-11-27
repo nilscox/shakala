@@ -1,4 +1,4 @@
-import { AuthorizationError, ValidationError } from 'frontend-domain';
+import { ValidationErrors, AuthorizationError } from 'frontend-domain';
 import { contains, get, HttpErrorBody, wait } from 'shared';
 import * as yup from 'yup';
 
@@ -133,7 +133,7 @@ export class FetchHttpGateway implements HttpGateway {
     }
 
     if (errorBody?.code === 'ValidationError') {
-      throw ValidationError.from(errorBody);
+      throw ValidationErrors.from(errorBody);
     }
 
     const httpError = new HttpError(new FetchResponse<HttpErrorBody>(response, errorBody));

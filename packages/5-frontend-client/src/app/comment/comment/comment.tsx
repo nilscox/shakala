@@ -1,7 +1,5 @@
-'use client';
-
 import { clsx } from 'clsx';
-import { selectComment, selectIsEditingComment } from 'frontend-domain';
+import { commentSelectors } from 'frontend-domain';
 import { useState } from 'react';
 
 import { Markdown } from '~/elements/markdown';
@@ -20,8 +18,8 @@ export type CommentProps = {
 };
 
 export const Comment = ({ commentId }: CommentProps) => {
-  const { id, text } = useAppSelector(selectComment, commentId);
-  const isEditing = useAppSelector(selectIsEditingComment, id);
+  const { id, text } = useAppSelector(commentSelectors.byId, commentId);
+  const isEditing = useAppSelector(commentSelectors.isEditing, id);
 
   const highlight = useHighlightComment(commentId);
   const [showActions, setShowActions] = useState(false);

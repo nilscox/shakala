@@ -1,0 +1,7 @@
+{
+  "extends": "../../.eslintrc",
+
+  "rules": {
+    "no-restricted-imports": ["error", { "patterns": ["**/modules/*/*"] }]
+  }
+}

@@ -7,7 +7,7 @@ export const useHighlightComment = (commentId: string) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
 
   // todo
-  const { hash } = { hash: '' };
+  const hash = '';
 
   const highlight = useCallback(() => {
     setIsHighlighted(true);

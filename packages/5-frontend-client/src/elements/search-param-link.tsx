@@ -1,5 +1,7 @@
+import { routerSelectors } from 'frontend-domain';
+
+import { useAppSelector } from '~/hooks/use-app-selector';
 import { usePathname } from '~/hooks/use-pathname';
-import { useSearchParams } from '~/hooks/use-search-params';
 
 import { Link } from './link';
 
@@ -11,7 +13,10 @@ type SearchParamLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
 
 export const SearchParamLink = ({ param, value, disabled, ...props }: SearchParamLinkProps) => {
   const pathname = usePathname();
-  const searchParams = new URLSearchParams(Array.from(useSearchParams().entries()));
+
+  const searchParams = new URLSearchParams(
+    useAppSelector(routerSelectors.queryParams) as Record<string, string>,
+  );
 
   searchParams.set(param, value);
 

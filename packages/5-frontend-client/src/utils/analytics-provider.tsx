@@ -1,23 +1,17 @@
-import { createInstance, MatomoProvider, useMatomo } from '@datapunt/matomo-tracker-react';
-import { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { wait } from 'shared';
+import { createInstance, MatomoProvider, useMatomo } from '@jonkoops/matomo-tracker-react';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useRef } from 'react';
 
-import { useConfig } from '~/hooks/use-config';
+import { getPublicConfig } from './config';
 
-// cspell:word matomo datapunt
+// cspell:word matomo jonkoops
 
 type AnalyticsProviderProps = {
   children: React.ReactNode;
 };
 
-const MatomoProviderWithChildren = MatomoProvider as React.ComponentType<{
-  value: ReturnType<typeof createInstance>;
-  children: React.ReactNode;
-}>;
-
 export const AnalyticsProvider = ({ children }: AnalyticsProviderProps) => {
-  const { analyticsUrl, analyticsSiteId } = useConfig();
+  const { analyticsUrl, analyticsSiteId } = getPublicConfig();
 
   const instance = useMemo(() => {
     if (!analyticsUrl || !analyticsSiteId) {
@@ -36,34 +30,32 @@ export const AnalyticsProvider = ({ children }: AnalyticsProviderProps) => {
   }
 
   return (
-    <MatomoProviderWithChildren value={instance}>
+    <MatomoProvider value={instance}>
       <TrackPageViews />
       <LinkTracking />
       {children}
-    </MatomoProviderWithChildren>
+    </MatomoProvider>
   );
 };
 
 const TrackPageViews = () => {
+  const router = useRouter();
   const { trackPageView } = useMatomo();
-  const location = useLocation();
+  const lastUrl = useRef<string>();
 
   useEffect(() => {
-    // wait for the page title to be set
-    (async () => {
-      const initialTitle = document.title;
-
-      for (let i = 0; i < 30; ++i) {
-        if (document.title !== initialTitle) {
-          break;
-        }
-
-        await wait(50);
+    const handler = (url: string) => {
+      // events are fired twice
+      if (url !== lastUrl.current) {
+        trackPageView();
       }
 
-      trackPageView({});
-    })();
-  }, [trackPageView, location]);
+      lastUrl.current = url;
+    };
+
+    router.events.on('routeChangeComplete', handler);
+    return () => router.events.off('routeChangeComplete', handler);
+  }, [router, trackPageView]);
 
   return null;
 };

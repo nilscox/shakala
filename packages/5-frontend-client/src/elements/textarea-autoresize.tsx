@@ -1,13 +1,18 @@
-import { ComponentProps } from 'react';
+import { forwardRef } from 'react';
 
-type TextAreaAutoResizeProps = ComponentProps<'textarea'>;
+import { useMergeRefs } from '~/hooks/use-merge-refs';
 
-export const TextAreaAutoResize = (props: TextAreaAutoResizeProps) => {
-  return <textarea ref={resize} {...props} />;
-};
+type TextAreaAutoResizeProps = React.ComponentPropsWithoutRef<'textarea'>;
+
+export const TextAreaAutoResize = forwardRef<HTMLTextAreaElement, TextAreaAutoResizeProps>((props, ref) => {
+  return <textarea ref={useMergeRefs(ref, resize)} {...props} />;
+});
+
+TextAreaAutoResize.displayName = 'TextAreaAutoResize';
 
 const resize = (textarea: HTMLTextAreaElement | null) => {
   if (textarea) {
-    textarea.style.height = textarea.scrollHeight + 'px';
+    // +2 is for the borders (I think...)
+    textarea.style.height = textarea.scrollHeight + 2 + 'px';
   }
 };

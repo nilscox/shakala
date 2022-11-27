@@ -1,31 +1,15 @@
-import { AuthenticationType } from 'frontend-domain';
-import { useEffect } from 'react';
+import { AuthenticationFormType, authenticationSelectors } from 'frontend-domain';
+import { useDebounce } from 'use-debounce';
 
-import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
-export const useAuthenticationForm = (): AuthenticationType => {
-  const auth = useSearchParam('auth');
-  const setSearchParam = useSetSearchParam();
+export const useAuthenticationForm = (): AuthenticationFormType | undefined => {
+  const auth = useAppSelector(authenticationSelectors.currentForm);
+  const [authDebounced] = useDebounce(auth, 200);
 
-  useEffect(() => {
-    if (!auth || !map[auth]) {
-      console.warn(
-        `the "auth" search param (${auth}) is invalid, replacing it with "${AuthenticationType.login}"`,
-      );
-
-      setSearchParam('auth', AuthenticationType.login);
-    }
-  }, [auth, setSearchParam]);
-
-  if (!auth || !map[auth]) {
-    return AuthenticationType.login;
+  if (auth) {
+    return auth;
   }
 
-  return map[auth];
-};
-
-const map: Record<string, AuthenticationType> = {
-  'email-login': AuthenticationType.emailLogin,
-  login: AuthenticationType.login,
-  register: AuthenticationType.signup,
+  return authDebounced;
 };

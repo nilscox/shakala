@@ -1,11 +1,8 @@
 import { clsx } from 'clsx';
-import {
-  selectComment,
-  selectFormattedCommentDate,
-  selectFormattedCommentDateDetailed,
-} from 'frontend-domain';
+import { commentSelectors } from 'frontend-domain';
 
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
+import { DateTime } from '~/elements/date-time';
 import { Link } from '~/elements/link';
 import { useAppSelector } from '~/hooks/use-app-selector';
 
@@ -17,10 +14,7 @@ type CommentHeaderProps = {
 };
 
 export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
-  const { author, date, edited } = useAppSelector(selectComment, commentId);
-
-  const formattedDate = useAppSelector(selectFormattedCommentDate, commentId);
-  const formattedDateDetailed = useAppSelector(selectFormattedCommentDateDetailed, commentId);
+  const { author, date, edited } = useAppSelector(commentSelectors.byId, commentId);
 
   return (
     <div className={clsx('row items-center gap-2', className)}>
@@ -32,10 +26,9 @@ export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
           italic: edited,
         })}
       >
-        <time dateTime={date} title={formattedDateDetailed}>
-          {formattedDate}
-        </time>
+        <DateTime date={date} />
       </Link>
+      {/* <div className="text-xs ml-auto">{commentId}</div> */}
     </div>
   );
 };

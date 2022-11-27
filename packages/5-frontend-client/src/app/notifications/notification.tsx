@@ -2,8 +2,8 @@ import {
   DateFormat,
   formatDate,
   formatDateRelativeOrAbsolute,
-  markNotificationAsSeen,
   Notification as TNotification,
+  notificationActions,
 } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
@@ -61,7 +61,7 @@ const MarkAsSeenButton = ({ notification }: MarkAsSeenButtonProps) => {
     <IconButton
       title="Marquer comme vue"
       icon={<Check />}
-      onClick={() => dispatch(markNotificationAsSeen(notification.id))}
+      onClick={() => dispatch(notificationActions.markNotificationAsSeen(notification.id))}
     />
   );
 };

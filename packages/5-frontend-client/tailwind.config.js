@@ -1,6 +1,3 @@
-/* eslint-env node */
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const colors = require('tailwindcss/colors');
 
 // prettier-ignore
@@ -16,8 +13,8 @@ const widths = {
 
 // prettier-ignore
 const heights = {
-  none: 'none',
   full: '100%',
+  0: '0',
   1: '8rem',  // 128px
   2: '16rem', // 256px
   3: '32rem', // 512px

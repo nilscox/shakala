@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
-import { setThreadFilters, Sort } from 'frontend-domain';
+import { threadActions } from 'frontend-domain';
 import { FormEventHandler, useCallback } from 'react';
-import { isSort } from 'shared';
+import { isSort, Sort } from 'shared';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '~/elements/input';
@@ -22,9 +22,16 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
   const search = useSearchParam('search');
   const sort = useSearchParam('sort');
 
-  const submitFilters = useDebouncedCallback((threadId: string, filters: { search: string; sort: Sort }) => {
-    dispatch(setThreadFilters(threadId, filters));
-  }, 220);
+  const setFilters = useDebouncedCallback(
+    useCallback(
+      (search: string, sort: Sort) => {
+        dispatch(threadActions.setThreadSearchFilter(threadId, search));
+        dispatch(threadActions.setThreadSortFilter(threadId, sort));
+      },
+      [dispatch, threadId],
+    ),
+    220,
+  );
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
@@ -38,9 +45,9 @@ export const ThreadFilters = ({ className, threadId }: ThreadFiltersProps) => {
         return;
       }
 
-      submitFilters(threadId, { search, sort });
+      setFilters(search, sort);
     },
-    [threadId, submitFilters],
+    [setFilters],
   );
 
   return (

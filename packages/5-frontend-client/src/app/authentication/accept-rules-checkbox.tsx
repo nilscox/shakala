@@ -1,24 +1,22 @@
 import { clsx } from 'clsx';
 import {
-  acceptRules,
   AuthenticationField,
-  isAuthenticationFieldVisible,
-  selectAreRulesAccepted,
-  selectIsAcceptRulesWarningVisible,
+  AuthenticationForm,
+  AuthenticationFormType,
+  authenticationSelectors,
 } from 'frontend-domain';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 
 import { Link } from '~/elements/link';
-import { useAppDispatch } from '~/hooks/use-app-dispatch';
-import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { useAuthenticationForm } from './use-authentication-form';
 
 export const AcceptRulesCheckbox = () => {
-  const warningVisible = useAppSelector(selectIsAcceptRulesWarningVisible);
-  const form = useAuthenticationForm();
-  const visible = isAuthenticationFieldVisible(form, AuthenticationField.acceptRulesCheckbox);
-  const checked = useAppSelector(selectAreRulesAccepted);
-  const dispatch = useAppDispatch();
+  const [warningVisible, setWarningVisible] = useState(false);
+
+  const form = useAuthenticationForm() as AuthenticationFormType;
+  const visible = authenticationSelectors.isAuthenticationFieldVisible(form, AuthenticationField.acceptRules);
 
   if (!visible) {
     return null;
@@ -26,13 +24,26 @@ export const AcceptRulesCheckbox = () => {
 
   return (
     <div>
-      <input
-        required
-        id="accept-rules"
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => dispatch(acceptRules(event.target.checked))}
+      <Controller<AuthenticationForm, 'acceptRules'>
+        name={AuthenticationField.acceptRules}
+        render={({ field: { value, onChange, ...field } }) => (
+          <input
+            required
+            type="checkbox"
+            id="accept-rules"
+            checked={value}
+            onChange={(event) => {
+              if (!warningVisible) {
+                setWarningVisible(true);
+              } else {
+                onChange(event);
+              }
+            }}
+            {...field}
+          />
+        )}
       />
+
       <label htmlFor="accept-rules" className="ml-2 inline-block">
         J'accepte{' '}
         <Link href="/charte" target="_blank">

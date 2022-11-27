@@ -1,58 +1,118 @@
-import { createStore, Dependencies, State, Store } from 'frontend-domain';
-import { useRouter } from 'next/router';
+import { Url } from 'url';
+
+import {
+  AppState,
+  AppStore,
+  createStore,
+  Dependencies,
+  routerActions,
+  routerSelectors,
+} from 'frontend-domain';
+import globalRouter from 'next/router';
 import { useEffect, useMemo } from 'react';
+// eslint-disable-next-line no-restricted-imports
 import { Provider } from 'react-redux';
 
-import { getClientConfig } from '~/utils/config';
-
-import { usePathname } from '../hooks/use-pathname';
-import { useSearchParams } from '../hooks/use-search-params';
+import { useSnackbar } from '~/elements/snackbar';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
+import { getPublicConfig } from '~/utils/config';
 
 import { productionDependencies } from './production-dependencies';
 
 declare global {
   interface Window {
     dependencies: Dependencies;
-    store: Store;
+    store: AppStore;
   }
 }
 
-const { apiBaseUrl } = getClientConfig();
+const { apiBaseUrl } = getPublicConfig();
 
 type ReduxProviderProps = {
-  preloadedState: State;
+  preloadedState: AppState;
   children: React.ReactNode;
 };
 
 export const ReduxProvider = ({ preloadedState, children }: ReduxProviderProps) => {
-  const dependencies = useMemo(() => productionDependencies(apiBaseUrl), []);
+  const snackbar = useSnackbar();
+  const dependencies = useMemo(() => productionDependencies({ apiBaseUrl, snackbar }), [snackbar]);
 
   // prevent re-creating a store when changing page in development
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const store = useMemo(() => createStore(dependencies, preloadedState), []);
+  const store = useMemo(() => createStore(dependencies, preloadedState), [dependencies]);
 
   useEffect(() => {
     window.store = store;
     window.dependencies = dependencies;
   }, [store, dependencies]);
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  return (
+    <Provider store={store}>
+      <ConnectRouter />
+      {children}
+    </Provider>
+  );
+};
+
+const ConnectRouter = () => {
+  useConnectRouterToStore();
+  useConnectStoreToRouter();
+
+  return null;
+};
+
+const useConnectRouterToStore = () => {
+  const dispatch = useAppDispatch();
+
+  const pathname = useAppSelector(routerSelectors.pathname);
+  const queryParams = useAppSelector(routerSelectors.queryParams);
 
   useEffect(() => {
-    dependencies.routerGateway.navigate = (url) => {
-      router.push(url, undefined, { shallow: true });
+    const handler = () => {
+      const url = new URL(`http://localhost${globalRouter.asPath}`);
+
+      if (pathname !== url.pathname) {
+        dispatch(routerActions.setPathname(url.pathname));
+      }
+
+      const query: Record<string, string> = {};
+
+      for (const [key, value] of url.searchParams.entries()) {
+        query[key] = value;
+      }
+
+      if (JSON.stringify(queryParams) !== JSON.stringify(query)) {
+        dispatch(routerActions.setQueryParams(query as Record<string, string>));
+      }
     };
-  }, [dependencies, router]);
+
+    globalRouter.events.on('routeChangeComplete', handler);
+    return () => globalRouter.events.off('routeChangeComplete', handler);
+  }, [dispatch, pathname, queryParams]);
+};
+
+const useConnectStoreToRouter = () => {
+  const pathname = useAppSelector(routerSelectors.pathname);
+  const queryParams = useAppSelector(routerSelectors.queryParams);
 
   useEffect(() => {
-    dependencies.routerGateway.pathname = pathname;
-  }, [dependencies, pathname]);
+    const next: Partial<Url> = {};
 
-  useEffect(() => {
-    dependencies.routerGateway.queryParams = searchParams;
-  }, [dependencies, searchParams]);
+    if (globalRouter.pathname === '/404') {
+      return;
+    }
 
-  return <Provider store={store}>{children}</Provider>;
+    if (globalRouter.pathname !== pathname) {
+      next.pathname = pathname;
+    }
+
+    if (JSON.stringify(globalRouter.query) !== JSON.stringify(queryParams)) {
+      next.query = queryParams;
+    }
+
+    if (Object.keys(next).length > 0) {
+      globalRouter.push(next, undefined, { shallow: true });
+    }
+  }, [pathname, queryParams]);
 };

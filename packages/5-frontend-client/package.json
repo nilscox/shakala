@@ -3,18 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf .next tsconfig.tsbuildinfo node_modules/.cache",
     "dev": "next dev -p 8000",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start --port \"${PORT:-8080}\"",
+    "lint": "next lint",
+    "test": "instant-mocha --webpack-config webpack.config.js",
+    "storybook": "start-storybook --ci -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "mocha": {
+    "spec": "src/**/*.spec.{ts,tsx}",
+    "require": [
+      "jsdom-global/register",
+      "./mocha.setup.ts"
+    ]
   },
   "dependencies": {
     "@fontsource/montserrat": "^4.5.13",
+    "@fontsource/open-sans": "^4.5.13",
+    "@hookform/devtools": "^4.2.3",
+    "@jonkoops/matomo-tracker-react": "^0.7.0",
+    "@next/bundle-analyzer": "^13.0.5",
     "@redux-devtools/extension": "^3.2.3",
     "@tailwindcss/typography": "^0.5.7",
     "@types/unist": "^2.0.6",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
+    "diff": "^5.1.0",
     "mdast": "^3.0.0",
     "mdast-builder": "^1.1.1",
     "mdast-util-to-hast": "^12.2.4",
@@ -22,6 +38,7 @@
     "no-scroll": "^2.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.39.5",
     "react-modal": "^3.16.1",
     "react-redux": "^8.0.4",
     "redux": "^4.2.0",
@@ -36,17 +53,40 @@
     "use-debounce": "^8.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@nilscox/expect-dom": "^0.1.2",
+    "@storybook/addon-actions": "^6.5.13",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/builder-webpack5": "^6.5.13",
+    "@storybook/manager-webpack5": "^6.5.13",
+    "@storybook/react": "^6.5.13",
     "@svgr/webpack": "^6.5.1",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/diff": "^5.0.2",
     "@types/no-scroll": "^2.1.0",
     "@types/node": "18.11.7",
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
     "@types/react-modal": "^3.13.1",
     "autoprefixer": "^10.4.13",
+    "babel-loader": "^9.1.0",
+    "css-loader": "^6.7.2",
+    "esbuild-loader": "^2.20.0",
     "eslint": "8.26.0",
     "eslint-config-next": "^12.0.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-tailwindcss": "^3.6.2",
+    "instant-mocha": "^1.5.0",
+    "jsdom": "^20.0.3",
+    "jsdom-global": "^3.0.2",
     "postcss": "^8.4.18",
+    "postcss-loader": "^7.0.1",
+    "style-loader": "^3.3.1",
     "tailwindcss": "^3.2.1",
-    "typescript": "4.8.4"
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "typescript": "4.8.4",
+    "webpack": "^5.75.0",
+    "webpackbar": "^5.0.2"
   }
 }

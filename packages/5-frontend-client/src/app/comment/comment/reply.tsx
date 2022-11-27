@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { selectComment, selectIsEditingComment } from 'frontend-domain';
+import { commentSelectors } from 'frontend-domain';
 import { useState } from 'react';
 
 import { Markdown } from '~/elements/markdown';
@@ -17,8 +17,8 @@ type ReplyProps = {
 };
 
 export const Reply = ({ replyId }: ReplyProps) => {
-  const { id, text } = useAppSelector(selectComment, replyId);
-  const isEditing = useAppSelector(selectIsEditingComment, id);
+  const { id, text } = useAppSelector(commentSelectors.byId, replyId);
+  const isEditing = useAppSelector(commentSelectors.isEditing, id);
 
   const highlight = useHighlightComment(replyId);
   const [showActions, setShowActions] = useState(false);

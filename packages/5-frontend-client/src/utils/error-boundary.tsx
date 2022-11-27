@@ -1,6 +1,8 @@
 import { Component } from 'react';
 
-import { Fallback } from '~/components/elements/fallback';
+import Bug from '~/images/bug.svg';
+
+import { PageTitle } from '../app/page-title';
 
 type ErrorBoundaryProps = {
   children: React.ReactNode;
@@ -28,30 +30,28 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     const { error } = this.state;
 
     if (error) {
-      return (
-        <Fallback>
-          <p className="my-10 text-xl">Une erreur s'est produite...</p>
-          <pre className="w-full max-w-6 overflow-x-auto rounded border bg-neutral p-2">
-            {this.renderError(error)}
-          </pre>
-        </Fallback>
-      );
+      return <ErrorView error={error} />;
     }
 
     return children;
   }
-
-  private renderError(error: unknown) {
-    const { message, stack } = error as Record<string, string>;
-
-    if (stack) {
-      return stack;
-    }
-
-    if (message) {
-      return message;
-    }
-
-    return JSON.stringify(error);
-  }
 }
+
+type ErrorViewProps = {
+  error: unknown;
+};
+
+export const ErrorView = ({ error }: ErrorViewProps) => (
+  <div className="col my-12 gap-4 text-center">
+    <PageTitle>Erreur</PageTitle>
+
+    <div className="text-xl">Une erreur qui ne devrait pas arriver... est arrivée quand même x(</div>
+
+    <div>
+      Message d'erreur : <pre>"{(error as Error)?.message}"</pre>
+    </div>
+
+    <Bug className="m-auto my-6 max-w-1 rounded-lg" />
+    <div className="text-center text-xs text-muted">Pour m'excuser, voilà une image sympa.</div>
+  </div>
+);

@@ -1,6 +1,7 @@
-import { Dispatch } from 'frontend-domain';
+import { AppStore } from 'frontend-domain';
+// eslint-disable-next-line no-restricted-imports
 import { useDispatch } from 'react-redux';
 
 export const useAppDispatch = () => {
-  return useDispatch<Dispatch>();
+  return useDispatch<AppStore['dispatch']>();
 };

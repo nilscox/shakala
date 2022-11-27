@@ -7,6 +7,7 @@
     "packages/2-backend-application",
     "packages/3-backend-infrastructure",
     "packages/4-frontend-domain",
-    "packages/5-frontend-client"
+    "packages/5-frontend-client",
+    "packages/6-e2e"
   ]
 }

@@ -3,9 +3,5 @@ node_modules
 yarn-error.log
 .env
 
-data
-
 /packages/*/tsconfig.tsbuildinfo
 /packages/*/dist
-
-/packages/5-frontend-client/storybook-static

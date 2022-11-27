@@ -1,11 +1,4 @@
-'use client';
-
-import {
-  selectHasMoreActivities,
-  selectIsLoadingActivities,
-  selectUserActivities,
-  UserActivity,
-} from 'frontend-domain';
+import { UserActivity, userActivitySelectors } from 'frontend-domain';
 import { useState } from 'react';
 import { UserActivityType } from 'shared';
 
@@ -18,9 +11,9 @@ import { ActivityItem } from './user-activity';
 export const UserActivities = () => {
   const [page, setPage] = useState(1);
 
-  const activities = useAppSelector(selectUserActivities);
-  const loadingActivities = useAppSelector(selectIsLoadingActivities, page);
-  const hasMoreActivities = useAppSelector(selectHasMoreActivities);
+  const activities = useAppSelector(userActivitySelectors.all);
+  const loadingActivities = useAppSelector(userActivitySelectors.isFetching);
+  const hasMoreActivities = useAppSelector(userActivitySelectors.hasMore);
 
   const renderActivity = <Type extends UserActivityType>(activity: UserActivity<Type>, index: number) => {
     const Component = activityComponentMap[activity.type] as ActivityItem<Type>;

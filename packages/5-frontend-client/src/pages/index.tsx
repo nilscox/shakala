@@ -1,11 +1,12 @@
-import { fetchAuthenticatedUser, fetchLastThreads, selectLastThreads } from 'frontend-domain';
-import { StaticImageData } from 'next/image';
+import { threadActions, threadSelectors } from 'frontend-domain';
 import { useEffect } from 'react';
 
+import { useEmailValidationNotification } from '~/app/authentication/email-validation/use-email-validation-notification';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Link } from '~/elements/link';
 import { Markdown } from '~/elements/markdown';
 import { useSnackbar } from '~/elements/snackbar';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
@@ -19,18 +20,14 @@ import imageIndépendance from '~/images/indépendance.png';
 import imageModeration from '~/images/moderation.png';
 import { ssr } from '~/utils/ssr';
 
-import { useAppDispatch } from '../hooks/use-app-dispatch';
-
 export const getServerSideProps = ssr(async (store) => {
-  await store.dispatch(fetchAuthenticatedUser());
-  await store.dispatch(fetchLastThreads());
+  await store.dispatch(threadActions.fetchLastThreads(3));
 });
 
 export default function HomePage() {
   const snackbar = useSnackbar();
 
-  // todo
-  // useEmailValidationNotification(snackbar.success, snackbar.error);
+  useEmailValidationNotification(snackbar.success, snackbar.error);
 
   return (
     <>
@@ -76,10 +73,10 @@ const Heading = ({ id, children }: HeadingProps) => (
 
 const LastThreads = () => {
   const dispatch = useAppDispatch();
-  const threads = useAppSelector(selectLastThreads);
+  const threads = useAppSelector(threadSelectors.nLastThreads, 3);
 
   useEffect(() => {
-    dispatch(fetchLastThreads());
+    dispatch(threadActions.fetchLastThreads(3));
   }, [dispatch]);
 
   if (threads.length === 0) {
@@ -152,7 +149,7 @@ const Motivations = () => (
 );
 
 type KeyFeatureProps = {
-  image: StaticImageData;
+  image: string;
   name: string;
   children: React.ReactNode;
 };
@@ -160,8 +157,7 @@ type KeyFeatureProps = {
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
   <div className="max-w-1 flex-1">
     <div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={image.src} className="py-2 opacity-80 max-h-1 mx-auto" alt={name} />
+      <img src={image} className="py-2 opacity-80 max-h-1 mx-auto" alt={name} />
     </div>
     <div className="text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-xs">{children}</div>
@@ -201,10 +197,9 @@ const KeyFeatures = () => (
       </KeyFeature>
     </div>
 
-    <p className="my-8 max-w-4">
-      Ces trois points sont les piliers fondateurs qui, on l'espère, feront le succès de la plateforme. Mais
-      ce n'est pas tout ! D'autres fonctionnalités viennent rendre les fils de discussions pratiques et
-      pertinents :
+    <p className="my-8 max-w-5">
+      Ce sont les piliers fondateurs qui font le succès de la plateforme. Mais ce n'est pas tout ! D'autres
+      fonctionnalités viennent rendre les fils de discussions plus pratiques et pertinents :
     </p>
 
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">

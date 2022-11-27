@@ -21,7 +21,7 @@ test.describe('Authentication', () => {
     await expect(app.searchParams.get('auth')).toEqual('login');
 
     await app.findByText('Créer un compte').click();
-    await expect(app.searchParams.get('auth')).toEqual('register');
+    await expect(app.searchParams.get('auth')).toEqual('signup');
 
     await app.findByPlaceholder('Email').fill('user@domain.tld');
     await app.findByPlaceholder('Mot de passe').fill('password');

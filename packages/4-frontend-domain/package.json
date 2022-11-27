@@ -6,14 +6,23 @@
   "types": "dist/index.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "build": "tsc -b",
     "lint": "eslint src",
     "test": "mocha"
   },
   "dependencies": {
+    "@nilscox/redux-kooltik": "^0.1.5",
     "@nilscox/redux-query": "^0.1.9",
     "@redux-devtools/extension": "^3.2.3",
+    "immer": "^9.0.16",
     "normalizr": "^3.6.2",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "reselect": "^4.1.7"
+  },
+  "mocha": {
+    "require": [
+      "./src/mocha.setup.ts"
+    ]
   }
 }

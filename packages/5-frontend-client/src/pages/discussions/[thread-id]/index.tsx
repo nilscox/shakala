@@ -1,7 +1,10 @@
-import { fetchAuthenticatedUser, fetchThreadById, selectThreadUnsafe } from 'frontend-domain';
+import { threadActions, threadSelectors } from 'frontend-domain';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { Thread } from '~/app/thread';
+import { Fallback } from '~/elements/fallback';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import { ssr } from '~/utils/ssr';
 
@@ -12,18 +15,22 @@ type Params = {
 export const getServerSideProps = ssr<Params>(async (store, { params }) => {
   const threadId = params?.['thread-id'] as string;
 
-  await store.dispatch(fetchAuthenticatedUser());
-  await store.dispatch(fetchThreadById(threadId));
+  await store.dispatch(threadActions.fetchThread(threadId));
 });
 
 const ThreadPage = () => {
   const router = useRouter();
   const threadId = router.query['thread-id'] as string;
 
-  const thread = useAppSelector(selectThreadUnsafe, threadId);
+  const dispatch = useAppDispatch();
+  const thread = useAppSelector(threadSelectors.byId.unsafe, threadId);
+
+  useEffect(() => {
+    dispatch(threadActions.fetchThread(threadId));
+  }, [dispatch, threadId]);
 
   if (!thread) {
-    return <>not found</>;
+    return <Fallback>Ce fil de discussion n'existe pas (ou n'existe plus).</Fallback>;
   }
 
   return <Thread threadId={threadId} />;

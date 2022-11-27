@@ -1,15 +1,8 @@
-import {
-  clearEditCommentFormText,
-  editComment,
-  selectCanSubmitEditCommentForm,
-  selectEditCommentFormText,
-  selectIsEditingComment,
-  selectIsSubmittingCommentEditionForm,
-  setEditCommentFormText,
-} from 'frontend-domain';
+import { commentActions, commentSelectors } from 'frontend-domain';
+import { useState, useEffect } from 'react';
 
-import { useAppSelector } from '~/hooks/use-app-selector';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { CommentForm } from '../comment-form/comment-form';
 
@@ -20,23 +13,28 @@ type CommentEditionFormProps = {
 export const CommentEditionForm = ({ commentId }: CommentEditionFormProps) => {
   const dispatch = useAppDispatch();
 
-  const isEditing = useAppSelector(selectIsEditingComment, commentId);
-  const message = useAppSelector(selectEditCommentFormText, commentId);
-  const canSubmit = useAppSelector(selectCanSubmitEditCommentForm, commentId);
-  const isSubmitting = useAppSelector(selectIsSubmittingCommentEditionForm, commentId);
+  const [initialText, setInitialText] = useState<string>();
 
-  if (!isEditing) {
+  const isEditing = useAppSelector(commentSelectors.isEditing, commentId);
+  const canSubmit = useAppSelector(() => true); // todo
+
+  useEffect(() => {
+    if (isEditing) {
+      dispatch(commentActions.getInitialEditionText(commentId, setInitialText));
+    }
+  }, [dispatch, commentId, isEditing]);
+
+  if (!isEditing || initialText === undefined) {
     return null;
   }
 
   return (
     <CommentForm
-      message={message as string}
-      setMessage={(message) => dispatch(setEditCommentFormText(commentId, message))}
+      initialText={initialText}
       canSubmit={canSubmit}
-      isSubmitting={isSubmitting as boolean}
-      onCancel={() => dispatch(clearEditCommentFormText(commentId))}
-      onSubmit={() => dispatch(editComment(commentId))}
+      onTextChange={(text) => dispatch(commentActions.saveDraftEditionText(commentId, text))}
+      onCancel={() => dispatch(commentActions.closeEditionForm(commentId))}
+      onSubmit={({ text }) => dispatch(commentActions.editComment(commentId, text))}
     />
   );
 };

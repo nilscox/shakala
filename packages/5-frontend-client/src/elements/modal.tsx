@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import ReactModal from 'react-modal';
 
 if (typeof window !== 'undefined') {
-  ReactModal.setAppElement('#__next');
+  ReactModal.setAppElement(document.getElementById('__next') ?? document.body);
 }
 
 export const Modal = ({ className, isOpen, ...props }: ReactModal.Props) => {
