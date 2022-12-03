@@ -1,12 +1,10 @@
 import { threadActions, threadSelectors } from 'frontend-domain';
-import { useEffect } from 'react';
 
 import { useEmailValidationNotification } from '~/app/authentication/email-validation/use-email-validation-notification';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Link } from '~/elements/link';
 import { Markdown } from '~/elements/markdown';
 import { useSnackbar } from '~/elements/snackbar';
-import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
@@ -72,12 +70,7 @@ const Heading = ({ id, children }: HeadingProps) => (
 );
 
 const LastThreads = () => {
-  const dispatch = useAppDispatch();
   const threads = useAppSelector(threadSelectors.nLastThreads, 3);
-
-  useEffect(() => {
-    dispatch(threadActions.fetchLastThreads(3));
-  }, [dispatch]);
 
   if (threads.length === 0) {
     return null;

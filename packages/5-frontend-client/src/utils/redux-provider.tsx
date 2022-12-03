@@ -36,11 +36,14 @@ type ReduxProviderProps = {
 
 export const ReduxProvider = ({ preloadedState, children }: ReduxProviderProps) => {
   const snackbar = useSnackbar();
-  const dependencies = useMemo(() => productionDependencies({ apiBaseUrl, snackbar }), [snackbar]);
 
-  // prevent re-creating a store when changing page in development
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const store = useMemo(() => createStore(dependencies, preloadedState), [dependencies]);
+  const dependencies = useMemo(() => {
+    return productionDependencies({ apiBaseUrl, snackbar });
+  }, [snackbar]);
+
+  const store = useMemo(() => {
+    return createStore(dependencies, preloadedState);
+  }, [preloadedState, dependencies]);
 
   useEffect(() => {
     window.store = store;

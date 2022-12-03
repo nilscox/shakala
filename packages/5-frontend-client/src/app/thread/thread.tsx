@@ -1,7 +1,6 @@
 import {
   Comment as CommentType,
   commentActions,
-  commentSelectors,
   DateFormat,
   formatDate,
   threadSelectors,
@@ -11,7 +10,6 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 
 import { PageTitle } from '~/app/page-title';
-import { AsyncResource } from '~/elements/async-resource';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Fallback } from '~/elements/fallback';
 import { Markdown } from '~/elements/markdown';
@@ -40,8 +38,6 @@ export const Thread = ({ threadId }: ThreadProps) => {
   const thread = useAppSelector(threadSelectors.byId, threadId);
   const { author, date, text, comments } = thread;
 
-  const fetchingComments = useAppSelector(commentSelectors.isFetching);
-
   useEffect(() => {
     dispatch(commentActions.openDraftComments(threadId));
   }, [dispatch, threadId]);
@@ -64,18 +60,8 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
       <ThreadFilters threadId={threadId} className="my-4" />
 
-      <AsyncResource
-        loading={fetchingComments}
-        loader={(show) => <Fallback>{show && 'Chargement des commentaires...'}</Fallback>}
-      >
-        {() => (
-          // todo: <When /> component?
-          <>
-            {comments.length === 0 && <NoCommentFallback />}
-            <CommentsList threadId={threadId} threadAuthor={author} comments={comments} />
-          </>
-        )}
-      </AsyncResource>
+      {comments.length === 0 && <NoCommentFallback />}
+      <CommentsList threadId={threadId} threadAuthor={author} comments={comments} />
 
       <ReportCommentModal />
       <CommentHistoryModal />
