@@ -9,6 +9,7 @@ export const getServerConfig = (): ServerConfig => {
 };
 
 export type PublicConfig = {
+  version: string;
   isDevelopment: boolean;
   apiBaseUrl: string;
   analyticsUrl?: string;

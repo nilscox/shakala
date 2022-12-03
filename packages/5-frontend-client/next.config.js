@@ -2,6 +2,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
+const pkg = require('./package.json');
+
 const {
   NODE_ENV = 'development',
   API_URL = 'http://localhost:3000',
@@ -9,7 +11,6 @@ const {
   ANALYTICS_SITE_ID,
 } = process.env;
 
-// todo: version.txt
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -35,6 +36,7 @@ const nextConfig = {
 
   publicRuntimeConfig: {
     isDevelopment: NODE_ENV === 'development',
+    version: pkg.version,
     apiBaseUrl: '/api',
     analyticsUrl: ANALYTICS_URL,
     analyticsSiteId: Number(ANALYTICS_SITE_ID),
@@ -45,6 +47,10 @@ const nextConfig = {
       {
         source: '/api/:path*',
         destination: `${API_URL}/:path*`,
+      },
+      {
+        source: '/version',
+        destination: '/api/version',
       },
     ];
   },

@@ -10,6 +10,9 @@ import {
   EmailConfig,
 } from './config.port';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { version } = require('../../../../package.json');
+
 export class EnvConfigAdapter implements ConfigPort {
   constructor() {
     dotenv.config();
@@ -54,7 +57,7 @@ export class EnvConfigAdapter implements ConfigPort {
   app(): AppConfig {
     return {
       environment: this.env,
-      version: this.get('VERSION'),
+      version,
       host: this.get('HOST'),
       port: this.get('PORT', 'number'),
       trustProxy: this.isProd,
