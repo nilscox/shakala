@@ -1,11 +1,5 @@
-import { AuthorizationError, CommentGateway } from 'frontend-domain';
-import {
-  BaseError,
-  CreateReplyBodyDto,
-  EditCommentBodyDto,
-  ReactionTypeDto,
-  ReportCommentBodyDto,
-} from 'shared';
+import { AuthorizationError, CommentAlreadyReportedError, CommentGateway } from 'frontend-domain';
+import { CreateReplyBodyDto, EditCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 
@@ -52,6 +46,3 @@ export class ApiCommentGateway implements CommentGateway {
     });
   }
 }
-
-// todo: handle it
-export const CommentAlreadyReportedError = BaseError.extend('CommentAlreadyReported');

@@ -1,7 +1,7 @@
 import { UnexpectedError } from 'shared';
 
+import { CommentAlreadyReportedError } from '../../../gateways';
 import { AppThunk } from '../../../store';
-import { AuthorizationError } from '../../authorization';
 import { routerActions, routerSelectors } from '../../router';
 
 // todo: loading state
@@ -19,7 +19,7 @@ export const reportComment = (reason: string): AppThunk => {
       dispatch(routerActions.removeQueryParam('report'));
       snackbarGateway.success('Votre signalement a bien été remonté. Merci pour votre contribution !');
     } catch (error) {
-      if (error instanceof AuthorizationError && error.reason === 'CommentAlreadyReported') {
+      if (error instanceof CommentAlreadyReportedError) {
         snackbarGateway.error('Vous avez déjà signalé ce commentaire.');
       } else {
         snackbarGateway.error("Une erreur s'est produite, votre signalement n'a pas pu être remonté.");

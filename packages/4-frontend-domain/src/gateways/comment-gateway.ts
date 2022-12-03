@@ -1,4 +1,8 @@
+import { BaseError } from 'shared';
+
 import { ReactionType } from '../modules/comment';
+
+export const CommentAlreadyReportedError = BaseError.extend('CommentAlreadyReported');
 
 export interface CommentGateway {
   createReply(parentId: string, text: string): Promise<string>;
