@@ -57,6 +57,7 @@ export class AuthenticationController extends Controller {
 
     await execute(this.commandBus)
       .command(new LoginCommand(body.email, body.password))
+      .asUser(await this.session.getUser(req))
       .handle(InvalidCredentials, (error) => new Forbidden('InvalidCredentials', error.message))
       .run();
 
@@ -72,6 +73,7 @@ export class AuthenticationController extends Controller {
 
     await execute(this.commandBus)
       .command(new SignupCommand(body.nick, body.email, body.password))
+      .asUser(await this.session.getUser(req))
       .handle(EmailAlreadyExistsError, (error) =>
         // description: error.message
         ValidationError.from({ email: ['alreadyExists', error.details.email] }),
@@ -105,6 +107,7 @@ export class AuthenticationController extends Controller {
 
     await execute(this.commandBus)
       .command(new ValidateEmailAddressCommand(userId, token))
+      .asUser(await this.session.getUser(request))
       .handle(EmailValidationFailed, (error) =>
         response(mapEmailValidationFailedReason[error.details.reason]),
       )
