@@ -1,9 +1,13 @@
 import { Meta } from '@storybook/react';
-import { commentActions, createComment, createUser, routerActions } from 'frontend-domain';
+import {
+  commentActions,
+  CommentAlreadyReportedError,
+  createComment,
+  createUser,
+  routerActions,
+} from 'frontend-domain';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
-
-import { CommentAlreadyReportedError } from '../../../adapters/comment-gateway/api-comment-gateway';
 
 import { ReportCommentModal } from './report-comment-modal';
 

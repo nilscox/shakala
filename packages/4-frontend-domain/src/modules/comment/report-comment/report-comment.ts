@@ -4,7 +4,6 @@ import { CommentAlreadyReportedError } from '../../../gateways';
 import { AppThunk } from '../../../store';
 import { routerActions, routerSelectors } from '../../router';
 
-// todo: loading state
 export const reportComment = (reason: string): AppThunk => {
   return async (dispatch, getState, { commentGateway, snackbarGateway }) => {
     const commentId = routerSelectors.queryParam(getState(), 'report');

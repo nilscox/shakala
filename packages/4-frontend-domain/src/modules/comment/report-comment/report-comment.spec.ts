@@ -1,6 +1,6 @@
+import { CommentAlreadyReportedError } from '../../../gateways';
 import { StubCommentGateway } from '../../../stubs/stub-comment-gateway';
 import { createTestStore, TestStore } from '../../../test-store';
-import { AuthorizationError } from '../../authorization';
 import { routerActions, routerSelectors } from '../../router';
 import { createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';
@@ -51,7 +51,7 @@ describe('reportComment', () => {
   });
 
   it('shows a notification when a the comment was already reported', async () => {
-    commentGateway.reportComment.reject(new AuthorizationError('CommentAlreadyReported'));
+    commentGateway.reportComment.reject(new CommentAlreadyReportedError());
 
     await store.dispatch(reportComment(''));
 

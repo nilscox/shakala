@@ -1,8 +1,9 @@
 import { commentActions, commentSelectors } from 'frontend-domain';
-import { FormEventHandler, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { PageTitle } from '~/app/page-title';
-import { Button } from '~/elements/button';
+import { Button, SubmitButton } from '~/elements/button';
 import { Link } from '~/elements/link';
 import { Markdown } from '~/elements/markdown';
 import { Modal } from '~/elements/modal';
@@ -46,14 +47,18 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
   const dispatch = useAppDispatch();
   const comment = useAppSelector(commentSelectors.byId, commentId);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
+  const form = useForm({
+    defaultValues: {
+      reason: '',
+    },
+  });
 
-    const data = new FormData(event.currentTarget);
-    const reason = data.get('reason') as string;
-
-    dispatch(commentActions.reportComment(reason));
-  };
+  const handleSubmit = useCallback(
+    async (data: { reason: string }) => {
+      await dispatch(commentActions.reportComment(data.reason));
+    },
+    [dispatch],
+  );
 
   return (
     <>
@@ -73,12 +78,12 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
 
       <Markdown markdown={comment.text} className="my-5 border-l-4 border-warning pl-2" />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <textarea
-          name="reason"
           placeholder="Précisez le motif du signalement si nécessaire"
           rows={2}
           className="my-2 w-full rounded border p-1"
+          {...form.register('reason')}
         />
 
         <div className="row justify-end gap-2">
@@ -86,10 +91,9 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
             Annuler
           </Button>
 
-          {/* todo: loading state */}
-          <Button primary type="submit">
+          <SubmitButton primary loading={form.formState.isSubmitting}>
             Signaler
-          </Button>
+          </SubmitButton>
         </div>
       </form>
     </>

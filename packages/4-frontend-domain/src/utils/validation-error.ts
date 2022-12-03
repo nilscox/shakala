@@ -1,12 +1,5 @@
 import * as yup from 'yup';
 
-// todo: still used?
-export class ValidationError extends Error {
-  constructor(public readonly code: string, message = code) {
-    super(message);
-  }
-}
-
 type FieldError = {
   value: string;
   error: string;

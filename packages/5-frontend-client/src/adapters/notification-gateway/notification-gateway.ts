@@ -1,4 +1,5 @@
 import { Notification, NotificationGateway, Paginated } from 'frontend-domain';
+import { PaginationQueryDto } from 'shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 
@@ -10,10 +11,11 @@ export class ApiNotificationGateway implements NotificationGateway {
     return response.body;
   }
 
-  // todo: refactor using query
   async fetchNotifications(page: number): Promise<Paginated<Notification>> {
-    const query = new URLSearchParams({ page: String(page), pageSize: String(10) });
-    const response = await this.http.get<Notification[]>(`/account/notifications?${query}`);
+    const response = await this.http.get<Notification[], PaginationQueryDto>(`/account/notifications`, {
+      query: { page: String(page), pageSize: String(10) },
+    });
+
     const total = Number(response.headers.get('pagination-total'));
 
     return {

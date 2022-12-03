@@ -1,8 +1,8 @@
-import { AuthorizationError, ReactionType } from 'frontend-domain';
+import { AuthorizationError, CommentAlreadyReportedError, ReactionType } from 'frontend-domain';
 
 import { StubHttpGateway, StubResponse } from '../http-gateway/stub-http.gateway';
 
-import { ApiCommentGateway, CommentAlreadyReportedError } from './api-comment-gateway';
+import { ApiCommentGateway } from './api-comment-gateway';
 
 describe('ApiCommentGateway', () => {
   describe('createReply', () => {

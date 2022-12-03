@@ -11,7 +11,7 @@ type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
 
 export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
   <NextLink prefetch={false} shallow={true} href={href}>
-    <a target={openInNewTab ? '_blank' : undefined} rel="noreferrer" {...props}>
+    <a target={openInNewTab ? '_blank' : undefined} {...props}>
       {children}
     </a>
   </NextLink>
@@ -37,5 +37,7 @@ export const NavLink = ({ href, className, activeClassName, exact, ...props }: N
 };
 
 export const ExternalLink = ({ children, ...props }: HTMLProps<HTMLAnchorElement>) => (
-  <a {...props}>{children}</a>
+  <a rel="noreferrer" {...props}>
+    {children}
+  </a>
 );
