@@ -37,10 +37,6 @@ describe('login', () => {
     expect(store.user).toEqual(user);
   });
 
-  it('updates the loading flag when the form is being submitted', async () => {
-    await store.testLoadingState(login('email', 'password'), authenticationSelectors.isSubmitting);
-  });
-
   it('closes the authentication dialog', async () => {
     await store.dispatch(login('email', 'password'));
 

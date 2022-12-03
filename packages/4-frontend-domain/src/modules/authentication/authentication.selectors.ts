@@ -5,15 +5,12 @@ import { isEnumValue } from 'shared';
 import { AppState } from '../../store';
 import { routerSelectors } from '../router';
 
-import { AuthenticationState } from './authentication.actions';
 import { AuthenticationField, AuthenticationFormType } from './authentication.types';
 
-class AuthenticationSelectors extends Selectors<AppState, AuthenticationState> {
+class AuthenticationSelectors extends Selectors<AppState, unknown> {
   constructor() {
-    super((state) => state.authentication);
+    super(() => {});
   }
-
-  isSubmitting = this.propertySelector('submitting');
 
   currentForm = createSelector([(state) => routerSelectors.queryParam(state, 'auth')], (auth) => {
     if (isEnumValue(AuthenticationFormType)(auth)) {

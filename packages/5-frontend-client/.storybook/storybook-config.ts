@@ -8,7 +8,8 @@ export const getServerConfig = (): ServerConfig => {
 
 export const getClientConfig = (): PublicConfig => {
   return {
-    apiBaseUrl: '',
     isDevelopment: true,
+    version: 'development',
+    apiBaseUrl: '',
   };
 };

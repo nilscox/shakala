@@ -4,14 +4,11 @@ import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { AuthorizationError } from '../../authorization';
 import { userProfileActions } from '../../user-account/user-profile.actions';
-import { authenticationActions } from '../authentication.actions';
 import { closeAuthenticationForm } from '../require-authentication/require-authentication';
 
 export const signup = (email: string, password: string, nick: string): AppThunk => {
   return async (dispatch, _getState, { authenticationGateway, dateGateway, snackbarGateway }) => {
     try {
-      dispatch(authenticationActions.setSubmitting(true));
-
       const userId = await authenticationGateway.signup(email, password, nick);
 
       const user = userProfileActions.setAuthenticatedUser({
@@ -39,8 +36,6 @@ export const signup = (email: string, password: string, nick: string): AppThunk 
       } else {
         snackbarGateway.error("Une erreur s'est produite");
       }
-    } finally {
-      dispatch(authenticationActions.setSubmitting(false));
     }
   };
 };

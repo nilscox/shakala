@@ -3,19 +3,17 @@ import { clsx } from 'clsx';
 import {
   authenticationActions,
   AuthenticationField,
-  AuthenticationFormType,
   AuthenticationForm as AuthenticationFormValues,
-  authenticationSelectors,
+  AuthenticationFormType,
   InvalidCredentialsError,
   ValidationErrors,
 } from 'frontend-domain';
 import { useCallback, useEffect, useState } from 'react';
-import { FormProvider, useForm, UseFormSetError } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
-import { useAppSelector } from '~/hooks/use-app-selector';
 import { getPublicConfig } from '~/utils/config';
 
 import { AuthenticationFields } from './authentication-fields';
@@ -43,12 +41,32 @@ type AuthenticationFormProps = {
 };
 
 export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
+  const dispatch = useAppDispatch();
+
   const formType = useAuthenticationForm() as AuthenticationFormType;
   const [invalidCredentials, setInvalidCredentials] = useState(false);
-  const form = useForm<AuthenticationFormValues>({ defaultValues });
 
-  const isSubmitting = useAppSelector(authenticationSelectors.isSubmitting);
-  const handleSubmit = useSubmit(form.setError, setInvalidCredentials);
+  const form = useForm<AuthenticationFormValues>({
+    defaultValues,
+  });
+
+  const handleSubmit = useCallback(
+    async (data: AuthenticationFormValues) => {
+      try {
+        await dispatch(authenticationActions.authenticate(data));
+      } catch (error) {
+        // todo: factorize this
+        if (error instanceof ValidationErrors) {
+          for (const field of Object.values(AuthenticationField)) {
+            form.setError(field, { message: error.getFieldError(field) });
+          }
+        } else if (error instanceof InvalidCredentialsError) {
+          setInvalidCredentials(true);
+        }
+      }
+    },
+    [dispatch, form, setInvalidCredentials],
+  );
 
   useEffect(() => {
     form.clearErrors();
@@ -64,7 +82,7 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
       <AuthenticationMessage />
 
       <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
-        <fieldset className="flex flex-col gap-2" disabled={isSubmitting}>
+        <fieldset className="flex flex-col gap-2" disabled={form.formState.isSubmitting}>
           <AuthenticationNavigation />
 
           <AuthenticationFields />
@@ -73,35 +91,10 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
             {invalidCredentials && 'Combinaison email / mot de passe non valide'}
           </FieldError>
 
-          <Buttons canSubmit={true} onClose={onClose} />
+          <Buttons loading={form.formState.isSubmitting} onClose={onClose} />
         </fieldset>
       </form>
     </FormProvider>
-  );
-};
-
-const useSubmit = (
-  setError: UseFormSetError<AuthenticationFormValues>,
-  setInvalidCredentials: (invalid: boolean) => void,
-) => {
-  const dispatch = useAppDispatch();
-
-  return useCallback(
-    async (data: AuthenticationFormValues) => {
-      try {
-        await dispatch(authenticationActions.authenticate(data));
-      } catch (error) {
-        // todo: factorize this
-        if (error instanceof ValidationErrors) {
-          for (const field of Object.values(AuthenticationField)) {
-            setError(field, { message: error.getFieldError(field) });
-          }
-        } else if (error instanceof InvalidCredentialsError) {
-          setInvalidCredentials(true);
-        }
-      }
-    },
-    [dispatch, setError, setInvalidCredentials],
   );
 };
 
@@ -112,11 +105,11 @@ const cta: Record<AuthenticationFormType, string> = {
 };
 
 type ButtonsProps = {
-  canSubmit: boolean;
+  loading: boolean;
   onClose: () => void;
 };
 
-const Buttons = ({ canSubmit, onClose }: ButtonsProps) => {
+const Buttons = ({ loading, onClose }: ButtonsProps) => {
   const form = useAuthenticationForm() as AuthenticationFormType;
 
   return (
@@ -124,7 +117,7 @@ const Buttons = ({ canSubmit, onClose }: ButtonsProps) => {
       <Button secondary type="reset" onClick={onClose}>
         Annuler
       </Button>
-      <Button primary type="submit" disabled={!canSubmit}>
+      <Button primary type="submit" loading={loading}>
         {cta[form]}
       </Button>
     </div>

@@ -7,19 +7,10 @@ import {
   requireAuthentication,
 } from './require-authentication/require-authentication';
 
-export type AuthenticationState = {
-  // todo: use isSubmitting flag
-  submitting: boolean;
-};
-
-class AuthenticationActions extends Actions<AuthenticationState> {
+class AuthenticationActions extends Actions<unknown> {
   constructor() {
-    super('authentication', {
-      submitting: false,
-    });
+    super('authentication', {});
   }
-
-  setSubmitting = this.createSetter('submitting');
 
   authenticate = handleAuthenticate;
   closeAuthenticationForm = closeAuthenticationForm;

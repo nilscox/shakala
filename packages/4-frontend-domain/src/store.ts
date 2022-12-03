@@ -20,7 +20,6 @@ import { NotificationGateway } from './gateways/notification-gateway';
 import { SnackbarGateway } from './gateways/snackbar.gateway';
 import { ThreadGateway } from './gateways/thread-gateway';
 import { UserProfileGateway } from './gateways/user-profile-gateway';
-import { authenticationActions } from './modules/authentication';
 import { commentActions } from './modules/comment';
 import { notificationActions } from './modules/notification';
 import { routerActions } from './modules/router';
@@ -51,7 +50,6 @@ type AppThunkDispatch = ThunkDispatch<AppState, Dependencies, AnyAction>;
 export type AppThunk<Result = Promise<void>> = ThunkAction<Result, AppState, Dependencies, AnyAction>;
 
 const rootReducer = combineReducers({
-  authentication: authenticationActions.reducer(),
   comment: commentActions.reducer(),
   notification: notificationActions.reducer(),
   router: routerActions.reducer(),
