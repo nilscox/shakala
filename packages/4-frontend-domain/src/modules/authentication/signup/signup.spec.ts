@@ -52,7 +52,8 @@ describe('signup', () => {
   it('shows a snackbar', async () => {
     await store.dispatch(signup('email', 'password', 'nick'));
 
-    expect(store.snackbarGateway).toHaveSuccessMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'success',
       `Votre compte a bien été créé ! Un email de validation a été envoyé à l'adresse email.`,
     );
   });
@@ -78,7 +79,7 @@ describe('signup', () => {
 
     await store.dispatch(signup('email', 'password', 'nick'));
 
-    expect(store.snackbarGateway).toHaveWarningMessage('Vous êtes déjà connecté(e)');
+    expect(store.snackbarGateway).toHaveSnack('warning', 'Vous êtes déjà connecté(e)');
   });
 
   it('shows a fallback error message when the error is not handled', async () => {
@@ -88,6 +89,6 @@ describe('signup', () => {
 
     await store.dispatch(signup('nick', 'email', 'password'));
 
-    expect(store.snackbarGateway).toHaveErrorMessage("Une erreur s'est produite");
+    expect(store.snackbarGateway).toHaveSnack('error', "Une erreur s'est produite");
   });
 });

@@ -50,7 +50,7 @@ describe('login', () => {
   it('shows a snackbar', async () => {
     await store.dispatch(login('email', 'password'));
 
-    expect(store.snackbarGateway).toHaveSuccessMessage('Vous êtes maintenant connecté(e)');
+    expect(store.snackbarGateway).toHaveSnack('success', 'Vous êtes maintenant connecté(e)');
   });
 
   it.skip('redirects to a previously saved restricted location', async () => {
@@ -82,7 +82,7 @@ describe('login', () => {
 
     await store.dispatch(login('email', 'password'));
 
-    expect(store.snackbarGateway).toHaveWarningMessage('Vous êtes déjà connecté(e)');
+    expect(store.snackbarGateway).toHaveSnack('warning', 'Vous êtes déjà connecté(e)');
   });
 
   it('shows a fallback error message when the error is not handled', async () => {
@@ -92,6 +92,6 @@ describe('login', () => {
 
     await store.dispatch(login('email', 'password'));
 
-    expect(store.snackbarGateway).toHaveErrorMessage("Une erreur s'est produite");
+    expect(store.snackbarGateway).toHaveSnack('error', "Une erreur s'est produite");
   });
 });

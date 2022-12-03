@@ -31,7 +31,8 @@ describe('changeProfileImage', () => {
 
     await store.dispatch(changeProfileImage(mockFile()));
 
-    expect(store.snackbarGateway).toHaveErrorMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
       "Le format d'image n'est pas reconnu. Les formats autorisés sont png, jpg et bmp.",
     );
   });

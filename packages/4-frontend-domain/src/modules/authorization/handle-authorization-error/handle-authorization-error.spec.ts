@@ -17,7 +17,8 @@ describe('handleAuthorizationError', () => {
   it('shows an error notification when the error is an authorization error', async () => {
     await execute(new AuthorizationError('emailValidationRequired'));
 
-    expect(store.snackbarGateway).toHaveErrorMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
       'Vous devez valider votre adresse email avant de pouvoir effectuer cette action.',
     );
   });
@@ -25,7 +26,8 @@ describe('handleAuthorizationError', () => {
   it('shows an error notification with a custom action', async () => {
     await execute(new AuthorizationError('emailValidationRequired'), 'aller à la plage');
 
-    expect(store.snackbarGateway).toHaveErrorMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
       'Vous devez valider votre adresse email avant de pouvoir aller à la plage.',
     );
   });
@@ -37,7 +39,8 @@ describe('handleAuthorizationError', () => {
   it('displays a fallback error message when the error is not known', async () => {
     await execute(new AuthorizationError('youShallNotPass'));
 
-    expect(store.snackbarGateway).toHaveErrorMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
       "Vous n'avez pas les autorisations nécessaires pour effectuer cette action.",
     );
   });

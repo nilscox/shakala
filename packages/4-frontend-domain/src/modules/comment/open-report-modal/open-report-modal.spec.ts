@@ -42,7 +42,8 @@ describe('openReportModal', () => {
 
     store.dispatch(openReportModal('commentId'));
 
-    expect(store.snackbarGateway).toHaveWarningMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'warning',
       'Vous devez vous connecter pour pouvoir signaler un commentaire.',
     );
   });
@@ -52,7 +53,8 @@ describe('openReportModal', () => {
 
     store.dispatch(openReportModal('commentId'));
 
-    expect(store.snackbarGateway).toHaveWarningMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'warning',
       "Vous ne pouvez pas signalez les commentaires dont vous êtes l'auteur.",
     );
   });

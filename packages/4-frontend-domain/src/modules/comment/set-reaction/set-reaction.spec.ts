@@ -118,7 +118,7 @@ describe('setReaction', () => {
 
       await execute();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(expect.stringMatching(/annoter un commentaire.$/));
+      expect(store.snackbarGateway).toHaveSnack('error', expect.stringMatching(/annoter un commentaire.$/));
     });
   });
 
@@ -132,7 +132,8 @@ describe('setReaction', () => {
     it('shows a snack with a fallback message', async () => {
       await execute();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
         "Une erreur s'est produite, votre action n'a pas été comptabilisée.",
       );
     });

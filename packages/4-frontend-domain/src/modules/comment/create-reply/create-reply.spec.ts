@@ -88,7 +88,7 @@ describe('createReply', () => {
   it('shows a snack when the edition succeeded', async () => {
     await createReply();
 
-    expect(store.snackbarGateway).toHaveSuccessMessage('Votre réponse a bien été créée.');
+    expect(store.snackbarGateway).toHaveSnack('success', 'Votre réponse a bien été créée.');
   });
 
   it('clears the persisted draft reply text', async () => {
@@ -117,7 +117,10 @@ describe('createReply', () => {
 
       await createReply();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(expect.stringMatching(/répondre à un commentaire.$/));
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
+        expect.stringMatching(/répondre à un commentaire.$/),
+      );
     });
   });
 
@@ -151,7 +154,8 @@ describe('createReply', () => {
     it('shows a fallback message to inform that the reply was not created', async () => {
       await createReply();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
         "Une erreur s'est produite, votre réponse n'a pas été créée.",
       );
     });

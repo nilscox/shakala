@@ -32,6 +32,6 @@ describe('logout', () => {
   it('shows a snackbar', async () => {
     await store.dispatch(logout());
 
-    expect(store.snackbarGateway).toHaveSuccessMessage("Vous n'êtes maintenant plus connecté(e)");
+    expect(store.snackbarGateway).toHaveSnack('success', "Vous n'êtes maintenant plus connecté(e)");
   });
 });

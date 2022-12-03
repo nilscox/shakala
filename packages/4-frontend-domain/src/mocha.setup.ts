@@ -5,12 +5,12 @@ import type { StubSnackbarGateway } from './stubs/stub-snackbar-gateway';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 
+type SnackType = 'success' | 'warning' | 'error';
+
 declare global {
   namespace Expect {
     export interface Assertions {
-      toHaveSuccessMessage(expected: string): void;
-      toHaveWarningMessage(expected: string): void;
-      toHaveErrorMessage(expected: string): void;
+      toHaveSnack(type: SnackType, expected: string): void;
     }
   }
 }
@@ -23,85 +23,43 @@ const registerAssertions = () => {
     return value instanceof StubSnackbarGateway;
   };
 
-  // todo: refactor toHaveMessage(status)
   expect.addCustomAssertion({
-    name: 'toHaveSuccessMessage',
+    name: 'toHaveSnack',
     expectedType: 'a StubSnackbarGateway',
     guard: isStubSnackbarGateway,
-    assert(snackbarGateway, expected) {
-      if (!snackbarGateway.successMessages.some((message) => this.deepEqual(message, expected))) {
+    assert(snackbarGateway, type, expected) {
+      const messages = getMessages(snackbarGateway, type);
+
+      if (!messages.some((message) => this.deepEqual(message, expected))) {
         throw new AssertionFailed();
       }
     },
-    getMessage(snackbarGateway, expected) {
-      return formatMessage(
-        'success',
-        this.not,
-        this.formatValue(expected),
-        snackbarGateway.successMessages.map(this.formatValue),
-      );
-    },
-  });
+    getMessage(snackbarGateway, type, expected) {
+      const messages = getMessages(snackbarGateway, type);
+      let message = 'expected snackbarGateway';
 
-  expect.addCustomAssertion({
-    name: 'toHaveWarningMessage',
-    expectedType: 'a StubSnackbarGateway',
-    guard: isStubSnackbarGateway,
-    assert(snackbarGateway, expected) {
-      if (!snackbarGateway.warningMessages.some((message) => this.deepEqual(message, expected))) {
-        throw new AssertionFailed();
+      if (this.not) {
+        message += 'not ';
       }
-    },
-    getMessage(snackbarGateway, expected) {
-      return formatMessage(
-        'warning',
-        this.not,
-        this.formatValue(expected),
-        snackbarGateway.warningMessages.map(this.formatValue),
-      );
-    },
-  });
 
-  expect.addCustomAssertion({
-    name: 'toHaveErrorMessage',
-    expectedType: 'a StubSnackbarGateway',
-    guard: isStubSnackbarGateway,
-    assert(snackbarGateway, expected) {
-      if (!snackbarGateway.errorMessages.some((message) => this.deepEqual(message, expected))) {
-        throw new AssertionFailed();
+      message += ` to have ${type} message `;
+      message += expected;
+
+      if (messages.length > 0) {
+        message += '\n\nmessages:\n';
+        message += messages.map((message) => `- ${this.formatValue(message)}`).join('\n');
       }
-    },
-    getMessage(snackbarGateway, expected) {
-      return formatMessage(
-        'error',
-        this.not,
-        this.formatValue(expected),
-        snackbarGateway.errorMessages.map(this.formatValue),
-      );
+
+      return message;
     },
   });
 
-  const formatMessage = (
-    type: 'success' | 'warning' | 'error',
-    not: boolean,
-    expected: string,
-    messages: string[],
-  ) => {
-    let message = 'expected snackbarGateway';
-
-    if (not) {
-      message += 'not ';
-    }
-
-    message += ` to have ${type} message `;
-    message += expected;
-
-    if (messages.length > 0) {
-      message += '\n\nmessages:\n';
-      message += messages.map((message) => `- ${message}`).join('\n');
-    }
-
-    return message;
+  const getMessages = (snackbarGateway: StubSnackbarGateway, type: SnackType) => {
+    return {
+      success: snackbarGateway.successMessages,
+      warning: snackbarGateway.warningMessages,
+      error: snackbarGateway.errorMessages,
+    }[type];
   };
 };
 

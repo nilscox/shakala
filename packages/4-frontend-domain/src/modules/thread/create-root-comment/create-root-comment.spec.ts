@@ -74,7 +74,7 @@ describe('createRootComment', () => {
   it('shows a snack when the creation succeeded', async () => {
     await createComment();
 
-    expect(store.snackbarGateway).toHaveSuccessMessage('Votre commentaire a bien été créé.');
+    expect(store.snackbarGateway).toHaveSnack('success', 'Votre commentaire a bien été créé.');
   });
 
   it('clears the persisted draft comment text', async () => {
@@ -93,7 +93,7 @@ describe('createRootComment', () => {
 
       await createComment();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(expect.stringMatching(/créer un commentaire.$/));
+      expect(store.snackbarGateway).toHaveSnack('error', expect.stringMatching(/créer un commentaire.$/));
     });
 
     it('throws validation errors', async () => {
@@ -125,7 +125,8 @@ describe('createRootComment', () => {
 
       await createComment();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
         "Une erreur s'est produite, votre commentaire n'a pas été créé.",
       );
     });

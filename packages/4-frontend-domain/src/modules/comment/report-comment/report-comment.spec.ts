@@ -45,7 +45,8 @@ describe('reportComment', () => {
   it('shows a success notification', async () => {
     await store.dispatch(reportComment(''));
 
-    expect(store.snackbarGateway).toHaveSuccessMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'success',
       'Votre signalement a bien été remonté. Merci pour votre contribution !',
     );
   });
@@ -55,7 +56,7 @@ describe('reportComment', () => {
 
     await store.dispatch(reportComment(''));
 
-    expect(store.snackbarGateway).toHaveErrorMessage('Vous avez déjà signalé ce commentaire.');
+    expect(store.snackbarGateway).toHaveSnack('error', 'Vous avez déjà signalé ce commentaire.');
   });
 
   it('shows a notification when an unknown error happens', async () => {
@@ -63,7 +64,8 @@ describe('reportComment', () => {
 
     await store.dispatch(reportComment(''));
 
-    expect(store.snackbarGateway).toHaveErrorMessage(
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
       "Une erreur s'est produite, votre signalement n'a pas pu être remonté.",
     );
   });

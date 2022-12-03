@@ -93,7 +93,7 @@ describe('editComment', () => {
   it('shows a snack when the edition succeeded', async () => {
     await editComment();
 
-    expect(store.snackbarGateway).toHaveSuccessMessage('Votre commentaire a bien été mis à jour.');
+    expect(store.snackbarGateway).toHaveSnack('success', 'Votre commentaire a bien été mis à jour.');
   });
 
   it('closes the comment edition form', async () => {
@@ -118,7 +118,7 @@ describe('editComment', () => {
 
       await editComment();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(expect.stringMatching(/éditer un commentaire.$/));
+      expect(store.snackbarGateway).toHaveSnack('error', expect.stringMatching(/éditer un commentaire.$/));
     });
 
     it("shows a snack when the user tries to edit another user's comment", async () => {
@@ -126,7 +126,8 @@ describe('editComment', () => {
 
       await expect.async(editComment()).toBe(false);
 
-      expect(store.snackbarGateway).toHaveErrorMessage(
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
         "Vous devez être l'auteur du message pour pouvoir l'éditer.",
       );
     });
@@ -162,7 +163,8 @@ describe('editComment', () => {
     it('displays a fallback message to inform that the comment was not edited', async () => {
       await editComment();
 
-      expect(store.snackbarGateway).toHaveErrorMessage(
+      expect(store.snackbarGateway).toHaveSnack(
+        'error',
         "Une erreur s'est produite, votre commentaire n'a pas été mis à jour.",
       );
     });
