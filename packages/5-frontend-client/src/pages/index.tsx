@@ -87,19 +87,15 @@ const LastThreads = () => {
     <>
       <Heading id="dernières-discussions">Dernières discussions</Heading>
 
-      <div className="my-5 flex flex-col items-center gap-5 md:flex-row md:items-stretch">
+      <div className="my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
         {threads.map((thread) => (
-          <Link
-            key={thread.id}
-            href={`/discussions/${thread.id}`}
-            className="card max-w-1 flex-1 overflow-hidden p-4"
-          >
+          <div key={thread.id} className="card relative overflow-hidden p-4">
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
-            {/* todo: ssr error with link inside markdown */}
-            {/* <Markdown markdown={thread.text.slice(0, 220) + '...'} /> */}
-            <Markdown markdown={thread.text.slice(0, 10) + '...'} />
-          </Link>
+            <Markdown markdown={thread.text} className="text-sm line-clamp-6" />
+            {/* avoid having a interactive contents within the link */}
+            <Link href={`/discussions/${thread.id}`} className="absolute inset-0" />
+          </div>
         ))}
       </div>
     </>
