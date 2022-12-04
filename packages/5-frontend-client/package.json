@@ -15,7 +15,7 @@
   "mocha": {
     "spec": "src/**/*.spec.{ts,tsx}",
     "require": [
-      "jsdom-global/register",
+      "./jsdom-global.js",
       "./mocha.setup.ts"
     ]
   },
@@ -80,7 +80,6 @@
     "eslint-plugin-tailwindcss": "^3.6.2",
     "instant-mocha": "^1.5.0",
     "jsdom": "^20.0.3",
-    "jsdom-global": "^3.0.2",
     "postcss": "^8.4.18",
     "postcss-loader": "^7.0.1",
     "style-loader": "^3.3.1",
