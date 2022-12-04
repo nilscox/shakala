@@ -1,8 +1,9 @@
 export * from './gateways';
 export * from './store';
 export * from './stubs';
-export * from './types';
 export * from './test-store';
+
+export * from './utils/pagination';
 export * from './utils/date-utils';
 export * from './utils/validation-error';
 

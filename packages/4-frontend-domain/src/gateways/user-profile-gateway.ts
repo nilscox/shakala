@@ -1,5 +1,5 @@
 import { UserActivity } from '../modules/user-account';
-import { Paginated } from '../types';
+import { Paginated } from '../utils/pagination';
 
 export class InvalidImageFormat extends Error {
   constructor() {

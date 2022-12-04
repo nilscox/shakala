@@ -1,15 +1,16 @@
-import { UserActivity, userActivitySelectors } from 'frontend-domain';
-import { useState } from 'react';
+import { UserActivity, userActivityActions, userActivitySelectors } from 'frontend-domain';
+import { useEffect, useState } from 'react';
 import { UserActivityType } from 'shared';
 
 import { InfiniteScroll } from '~/elements/infinite-scroll/infinite-scroll';
+import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 
 import { activityComponentMap } from './activities';
 import { ActivityItem } from './user-activity';
 
 export const UserActivities = () => {
-  const [page, setPage] = useState(1);
+  const dispatch = useAppDispatch();
 
   const activities = useAppSelector(userActivitySelectors.all);
   const loadingActivities = useAppSelector(userActivitySelectors.isFetching);
@@ -20,6 +21,12 @@ export const UserActivities = () => {
 
     return <Component key={index} activity={activity} />;
   };
+
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(userActivityActions.fetchActivities(page));
+  }, [dispatch, page]);
 
   return (
     <>

@@ -1,9 +1,10 @@
 import { array } from 'shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
+import { paginated } from '../../../utils/pagination';
 import { userActivityActions } from '../user-activity.actions';
 import { userActivitySelectors } from '../user-activity.selectors';
-import { createUserActivity } from '../user-activity.types';
+import { createUserActivity, UserActivity } from '../user-activity.types';
 
 import { fetchUserActivities } from './fetch-user-activities';
 
@@ -17,7 +18,7 @@ describe('fetchUserActivities', () => {
   it('retrieves the list of activities for the current user', async () => {
     const activity = createUserActivity();
 
-    store.userProfileGateway.fetchActivities.resolve({ items: [activity], total: 1 });
+    store.userProfileGateway.fetchActivities.resolve(paginated([activity]));
 
     await store.dispatch(fetchUserActivities(1));
 
@@ -25,13 +26,20 @@ describe('fetchUserActivities', () => {
     expect(store.select(userActivitySelectors.total)).toEqual(1);
   });
 
+  it('updates the fetching activities flag', async () => {
+    store.userProfileGateway.fetchActivities.resolve(paginated<UserActivity>([]));
+    await store.testLoadingState(fetchUserActivities(1), userActivitySelectors.isFetching);
+  });
+
+  it.skip('does not refetch activities on a given page when already fetched');
+
   it('retrieves the list of activities on the second page', async () => {
     const [activity1, activity2] = array(2, () => createUserActivity());
 
     store.dispatch(userActivityActions.addMany([activity1]));
     store.dispatch(userActivityActions.setTotal(1));
 
-    store.userProfileGateway.fetchActivities.resolve({ items: [activity2], total: 2 });
+    store.userProfileGateway.fetchActivities.resolve(paginated([activity2], 2));
 
     await store.dispatch(fetchUserActivities(2));
 

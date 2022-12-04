@@ -3,9 +3,9 @@ import { userActivityActions } from '../user-activity.actions';
 
 export const fetchUserActivities = (page = 1): AppThunk => {
   return async (dispatch, getState, { userProfileGateway }) => {
-    dispatch(userActivityActions.setFetching(true));
-
     try {
+      dispatch(userActivityActions.setFetching(true));
+
       const { items: activities, total } = await userProfileGateway.fetchActivities(page);
 
       dispatch(userActivityActions.addMany(activities));
@@ -13,7 +13,7 @@ export const fetchUserActivities = (page = 1): AppThunk => {
     } catch (error) {
       dispatch(userActivityActions.setError(error));
     } finally {
-      dispatch(userActivityActions.setFetching(true));
+      dispatch(userActivityActions.setFetching(false));
     }
   };
 };
