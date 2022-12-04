@@ -32,7 +32,6 @@ module.exports = {
       ...config.resolve.alias,
       shared: path.resolve(__dirname, '..', '..', '0-shared', 'src'),
       'frontend-domain': path.resolve(__dirname, '..', '..', '4-frontend-domain', 'src'),
-      '~/utils/config': path.resolve(__dirname, 'storybook-config'),
       '~': path.resolve(__dirname, '..', 'src'),
     };
 

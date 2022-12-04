@@ -7,6 +7,9 @@ import userEvent from '@testing-library/user-event';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Store } from 'redux';
 
+import { PublicConfig } from '~/utils/config';
+import { ConfigProvider } from '~/utils/config-provider';
+
 export type TestRenderer = ReturnType<typeof createTestRenderer>;
 
 export const createTestRenderer = () => {
@@ -39,6 +42,11 @@ export const createTestRenderer = () => {
 
   render.withStore = (store: Store) => {
     wrap(ReduxProvider, { store });
+    return render;
+  };
+
+  render.withConfig = (config: Partial<PublicConfig>) => {
+    wrap(ConfigProvider, { config: config as PublicConfig });
     return render;
   };
 
