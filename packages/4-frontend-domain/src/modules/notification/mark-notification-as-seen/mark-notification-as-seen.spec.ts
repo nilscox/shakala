@@ -36,4 +36,22 @@ describe('markNotificationAsSeen', () => {
 
     expect(store.select(notificationSelectors.totalUnseen)).toEqual(0);
   });
+
+  it('logs unhandled errors', async () => {
+    const error = new Error('nope');
+
+    store.notificationGateway.markNotificationAsSeen.reject(error);
+
+    await store.dispatch(markNotificationAsSeen('notificationId'));
+
+    expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+  });
+
+  it('shows a snack when an unknown error happens', async () => {
+    store.notificationGateway.markNotificationAsSeen.reject(new Error('nope'));
+
+    await store.dispatch(markNotificationAsSeen('notificationId'));
+
+    expect(store.snackbarGateway).toHaveSnack('error', "Quelque chose s'est mal passé");
+  });
 });

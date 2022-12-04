@@ -34,4 +34,22 @@ describe('logout', () => {
 
     expect(store.snackbarGateway).toHaveSnack('success', "Vous n'êtes maintenant plus connecté(e)");
   });
+
+  it('logs unknown errors', async () => {
+    const error = new Error('nope');
+
+    store.authenticationGateway.logout.reject(error);
+
+    await store.dispatch(logout());
+
+    expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+  });
+
+  it('shows a snack when an unknown error happens', async () => {
+    store.authenticationGateway.logout.reject(new Error('nope'));
+
+    await store.dispatch(logout());
+
+    expect(store.snackbarGateway).toHaveSnack('error', "Quelque chose s'est mal passé");
+  });
 });

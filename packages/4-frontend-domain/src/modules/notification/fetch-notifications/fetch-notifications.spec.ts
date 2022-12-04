@@ -55,4 +55,25 @@ describe('fetchNotifications', () => {
     expect(store.select(notificationSelectors.list)).toEqual([]);
     expect(store.select(notificationSelectors.total)).toEqual(0);
   });
+
+  it('logs unhandled errors', async () => {
+    const error = new Error('nope');
+
+    store.notificationGateway.fetchNotifications.reject(error);
+
+    await store.dispatch(fetchNotifications(1));
+
+    expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
+  });
+
+  it('shows a snack when an unknown error happens', async () => {
+    store.notificationGateway.fetchNotifications.reject(new Error('nope'));
+
+    await store.dispatch(fetchNotifications(1));
+
+    expect(store.snackbarGateway).toHaveSnack(
+      'error',
+      "Quelque chose s'est mal passé lors du chargement de vos notifications",
+    );
+  });
 });

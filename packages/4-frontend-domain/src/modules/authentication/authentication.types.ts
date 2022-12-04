@@ -4,7 +4,6 @@ export enum AuthenticationFormType {
   emailLogin = 'email-login',
 }
 
-// todo: remove this enum
 export type AuthenticationField = 'nick' | 'email' | 'password' | 'acceptRules';
 
 export type AuthenticationForm = {

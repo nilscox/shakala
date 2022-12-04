@@ -4,7 +4,7 @@ import { AppThunk } from '../../../store';
 import { notificationActions } from '../notification.actions';
 
 export const fetchNotifications = (page: number): AppThunk<Promise<void>> => {
-  return async (dispatch, getState, { notificationGateway }) => {
+  return async (dispatch, getState, { notificationGateway, snackbarGateway, loggerGateway }) => {
     try {
       dispatch(notificationActions.setFetching(true));
 
@@ -20,8 +20,8 @@ export const fetchNotifications = (page: number): AppThunk<Promise<void>> => {
 
       dispatch(notificationActions.setTotal(total));
     } catch (error) {
-      // todo
-      console.error(error);
+      loggerGateway.error(error);
+      snackbarGateway.error("Quelque chose s'est mal passé lors du chargement de vos notifications");
     } finally {
       dispatch(notificationActions.setFetching(false));
     }
