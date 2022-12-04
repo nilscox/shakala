@@ -1,10 +1,5 @@
 import { clsx } from 'clsx';
-import {
-  AuthenticationField,
-  AuthenticationForm,
-  AuthenticationFormType,
-  authenticationSelectors,
-} from 'frontend-domain';
+import { AuthenticationForm, AuthenticationFormType, authenticationSelectors } from 'frontend-domain';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
@@ -16,7 +11,7 @@ export const AcceptRulesCheckbox = () => {
   const [warningVisible, setWarningVisible] = useState(false);
 
   const form = useAuthenticationForm() as AuthenticationFormType;
-  const visible = authenticationSelectors.isAuthenticationFieldVisible(form, AuthenticationField.acceptRules);
+  const visible = authenticationSelectors.isAuthenticationFieldVisible(form, 'acceptRules');
 
   if (!visible) {
     return null;
@@ -25,7 +20,7 @@ export const AcceptRulesCheckbox = () => {
   return (
     <div>
       <Controller<AuthenticationForm, 'acceptRules'>
-        name={AuthenticationField.acceptRules}
+        name="acceptRules"
         render={({ field: { value, onChange, ...field } }) => (
           <input
             required

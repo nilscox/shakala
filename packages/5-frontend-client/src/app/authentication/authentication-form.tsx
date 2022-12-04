@@ -2,7 +2,6 @@ import { DevTool } from '@hookform/devtools';
 import { clsx } from 'clsx';
 import {
   authenticationActions,
-  AuthenticationField,
   AuthenticationForm as AuthenticationFormValues,
   AuthenticationFormType,
   InvalidCredentialsError,
@@ -57,7 +56,7 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
       } catch (error) {
         // todo: factorize this
         if (error instanceof ValidationErrors) {
-          for (const field of Object.values(AuthenticationField)) {
+          for (const field of ['email', 'password', 'nick'] as const) {
             form.setError(field, { message: error.getFieldError(field) });
           }
         } else if (error instanceof InvalidCredentialsError) {

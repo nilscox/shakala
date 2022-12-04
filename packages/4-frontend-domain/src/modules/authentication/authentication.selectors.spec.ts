@@ -1,7 +1,7 @@
 import { createTestStore, TestStore } from '../../test-store';
 
 import { authenticationSelectors } from './authentication.selectors';
-import { AuthenticationField, AuthenticationFormType } from './authentication.types';
+import { AuthenticationFormType } from './authentication.types';
 import { setCurrentAuthenticationForm } from './require-authentication/require-authentication';
 
 describe('authenticationSelectors', () => {
@@ -45,28 +45,28 @@ describe('authenticationSelectors', () => {
     it('email-login form', () => {
       const form = AuthenticationFormType.emailLogin;
 
-      expect(isFieldVisible(form, AuthenticationField.email)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.password)).toBe(false);
-      expect(isFieldVisible(form, AuthenticationField.nick)).toBe(false);
-      expect(isFieldVisible(form, AuthenticationField.acceptRules)).toBe(false);
+      expect(isFieldVisible(form, 'email')).toBe(true);
+      expect(isFieldVisible(form, 'password')).toBe(false);
+      expect(isFieldVisible(form, 'nick')).toBe(false);
+      expect(isFieldVisible(form, 'acceptRules')).toBe(false);
     });
 
     it('login form', () => {
       const form = AuthenticationFormType.login;
 
-      expect(isFieldVisible(form, AuthenticationField.email)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.password)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.nick)).toBe(false);
-      expect(isFieldVisible(form, AuthenticationField.acceptRules)).toBe(false);
+      expect(isFieldVisible(form, 'email')).toBe(true);
+      expect(isFieldVisible(form, 'password')).toBe(true);
+      expect(isFieldVisible(form, 'nick')).toBe(false);
+      expect(isFieldVisible(form, 'acceptRules')).toBe(false);
     });
 
     it('signup form', () => {
       const form = AuthenticationFormType.signup;
 
-      expect(isFieldVisible(form, AuthenticationField.email)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.password)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.nick)).toBe(true);
-      expect(isFieldVisible(form, AuthenticationField.acceptRules)).toBe(true);
+      expect(isFieldVisible(form, 'email')).toBe(true);
+      expect(isFieldVisible(form, 'password')).toBe(true);
+      expect(isFieldVisible(form, 'nick')).toBe(true);
+      expect(isFieldVisible(form, 'acceptRules')).toBe(true);
     });
   });
 });

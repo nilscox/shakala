@@ -5,16 +5,11 @@ export enum AuthenticationFormType {
 }
 
 // todo: remove this enum
-export enum AuthenticationField {
-  nick = 'nick',
-  email = 'email',
-  password = 'password',
-  acceptRules = 'acceptRules',
-}
+export type AuthenticationField = 'nick' | 'email' | 'password' | 'acceptRules';
 
 export type AuthenticationForm = {
-  [AuthenticationField.email]: string;
-  [AuthenticationField.password]: string;
-  [AuthenticationField.nick]: string;
-  [AuthenticationField.acceptRules]: boolean;
+  email: string;
+  password: string;
+  nick: string;
+  acceptRules: boolean;
 };

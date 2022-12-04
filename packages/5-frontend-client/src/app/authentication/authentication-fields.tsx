@@ -17,7 +17,7 @@ export const AuthenticationFields = () => (
   <>
     {/* todo: early username availability check */}
     <AuthenticationFormField
-      name={AuthenticationField.email}
+      name="email"
       type="email"
       placeholder="Email"
       minLength={3}
@@ -38,7 +38,7 @@ export const AuthenticationFields = () => (
 
     <AuthenticationFormField
       required
-      name={AuthenticationField.password}
+      name="password"
       type="password"
       placeholder="Mot de passe"
       autoComplete=""
@@ -52,7 +52,7 @@ export const AuthenticationFields = () => (
 
     <AuthenticationFormField
       required
-      name={AuthenticationField.nick}
+      name="nick"
       type="text"
       placeholder="Pseudo"
       minLength={3}
