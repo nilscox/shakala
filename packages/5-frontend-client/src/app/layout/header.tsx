@@ -100,7 +100,7 @@ type NavigationProps = {
 const Navigation = ({ className }: NavigationProps) => (
   <nav
     className={clsx(
-      'whitespace-nowrap font-semibold uppercase text-inverted/90',
+      'mt-2 whitespace-nowrap font-semibold uppercase text-inverted/90',
       'flex flex-row flex-nowrap items-end justify-between gap-x-2',
       'hide-scrollbars overflow-x-auto',
       'sm:justify-end sm:gap-x-4',
