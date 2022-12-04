@@ -5,5 +5,7 @@ type FallbackProps = {
 };
 
 export const Fallback = ({ children }: FallbackProps) => (
-  <div className="flex min-h-2 flex-col items-center justify-center font-bold text-muted">{children}</div>
+  <div className="flex min-h-1 md:min-h-2 flex-col items-center justify-center font-bold text-muted">
+    {children}
+  </div>
 );

@@ -29,7 +29,7 @@ const ProfilePage = () => (
 export default ProfilePage;
 
 const ProfileFormField = (props: React.ComponentProps<typeof FormField>) => (
-  <FormField consistentErrorHeight={false} className="col items-start gap-1" {...props} />
+  <FormField consistentErrorHeight={false} className="col gap-1" {...props} />
 );
 
 const NickForm = () => {
@@ -42,7 +42,7 @@ const NickForm = () => {
         description="Le nom sous lequel vous apparaissez"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.nick} placeholder="pseudo" className="max-w-1" />
+        <Input defaultValue={user?.nick} placeholder="pseudo" className="flex-1 max-w-1" />
       </ProfileFormField>
     </form>
   );
@@ -52,13 +52,13 @@ const EmailForm = () => {
   const user = useUser();
 
   return (
-    <form className="row" onSubmit={withPreventDefault(() => console.log('change email'))}>
+    <form onSubmit={withPreventDefault(() => console.log('change email'))}>
       <ProfileFormField
         label="Adresse email"
         description="L'adresse que vous utilisez pour vous connecter"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.email} placeholder="votre@adresse.email" className="max-w-1" />
+        <Input defaultValue={user?.email} placeholder="votre@adresse.email" className="flex-1 max-w-1" />
       </ProfileFormField>
     </form>
   );
@@ -81,7 +81,7 @@ const ProfileImageForm = () => {
   return (
     <form ref={formRef} onSubmit={withPreventDefault(handleSubmit)}>
       <ProfileFormField label="Image de profile">
-        <Button primary className="bg-muted" onClick={() => inputRef.current?.click()}>
+        <Button primary className="bg-muted self-start" onClick={() => inputRef.current?.click()}>
           Choisir un fichier...
         </Button>
       </ProfileFormField>
@@ -106,7 +106,7 @@ const BioForm = () => {
         <TextAreaAutoResize rows={3} className="w-full rounded border p-1" />
       </ProfileFormField>
 
-      <p className="text-xs text-muted">La première ligne sera affichée sous votre pseudo</p>
+      <p className="text-xs text-muted my-0">La première ligne sera affichée sous votre pseudo</p>
 
       <SubmitButton primary className="self-end bg-muted">
         Changer

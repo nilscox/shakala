@@ -21,7 +21,7 @@ type ProfileLayoutProps = {
 };
 
 export const ProfileLayout = ({ children }: ProfileLayoutProps) => (
-  <div className="row my-4 gap-6">
+  <div className="col md:row md:my-4 md:gap-6">
     <Sidebar />
     <div className="flex-1">{children}</div>
   </div>
@@ -34,8 +34,8 @@ const Sidebar = () => {
   const totalUnseenNotifications = useAppSelector(notificationSelectors.totalUnseen);
 
   return (
-    <aside>
-      <div className="row gap-4 self-center p-6">
+    <aside className="max-w-1">
+      <div className="row gap-4 self-center p-4 md:p-6">
         <Avatar size="big" image={user?.profileImage} />
         <div>
           <div className="text-lg font-semibold">{user?.nick}</div>
