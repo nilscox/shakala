@@ -17,6 +17,8 @@ class ThreadSelectors extends EntitySelectors<AppState, NormalizedThread, Thread
   byId = normalizationSelectors.createEntitySelector<Thread>('thread', threadSchema);
   byIds = normalizationSelectors.createEntitiesSelector<Thread>(threadSchema);
 
+  all = createSelector(this.entitiesSelector(), (entities) => Object.values(entities));
+
   private lastThreadIds = this.propertySelector('lastThreads');
 
   lastThreads = createSelector([(state: AppState) => state, this.lastThreadIds], this.byIds);

@@ -1,4 +1,3 @@
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationActions } from '../../authentication';
@@ -46,23 +45,27 @@ export const editComment = (commentId: string, text: string): AppThunk<Promise<b
 };
 
 export const getInitialEditionText = (commentId: string, setDraft: (text: string) => void): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
+  return async (dispatch, getState, { draftsGateway }) => {
+    const threadId = commentSelectors.threadId(getState(), commentId);
     const comment = commentSelectors.byId(getState(), commentId);
-    const draft = await draftMessagesGateway.getDraftCommentText(DraftCommentKind.edition, commentId);
+    const draft = await draftsGateway.getDraft('edition', threadId as string, commentId);
 
     setDraft(draft ?? comment.text);
   };
 };
 
 export const saveDraftEditionText = (commentId: string, text: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    await draftMessagesGateway.setDraftCommentText(DraftCommentKind.edition, commentId, text);
+  return async (dispatch, getState, { draftsGateway }) => {
+    const threadId = commentSelectors.threadId(getState(), commentId);
+    await draftsGateway.setDraft('edition', threadId as string, commentId, text);
   };
 };
 
 export const closeCommentEditionForm = (commentId: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
+  return async (dispatch, getState, { draftsGateway }) => {
     dispatch(commentActions.setEditing(commentId, false));
-    await draftMessagesGateway.removeDraftCommentText(DraftCommentKind.edition, commentId);
+
+    const threadId = commentSelectors.threadId(getState(), commentId);
+    await draftsGateway.clearDraft('edition', threadId as string, commentId);
   };
 };

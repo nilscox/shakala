@@ -1,10 +1,10 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
 import { AuthorizationError } from '../../authorization';
+import { createThread, Thread, threadActions } from '../../thread';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';
 import { commentSelectors } from '../comment.selectors';
@@ -14,6 +14,7 @@ describe('editComment', () => {
   let store: TestStore;
 
   let user: AuthUser;
+  let thread: Thread;
   let comment: Comment;
 
   beforeEach(() => {
@@ -23,7 +24,9 @@ describe('editComment', () => {
     store.user = user;
 
     comment = createComment({ id: 'commentId', text: 'text', date: new Date('2022-01-01').toISOString() });
-    store.dispatch(commentActions.addComment(comment));
+    thread = createThread({ comments: [comment] });
+
+    store.dispatch(threadActions.setThread(thread));
     store.dispatch(commentActions.setEditing(comment.id, true));
 
     store.dateGateway.setNow(new Date('2022-01-02'));
@@ -35,11 +38,11 @@ describe('editComment', () => {
   };
 
   const getDraftEdition = () => {
-    return store.draftMessagesGateway.getDraftCommentText(DraftCommentKind.edition, comment.id);
+    return store.draftsGateway.getDraft('edition', thread.id, comment.id);
   };
 
   const setDraftEdition = (text: string) => {
-    return store.draftMessagesGateway.setDraftCommentText(DraftCommentKind.edition, comment.id, text);
+    return store.draftsGateway.setDraft('edition', thread.id, comment.id, text);
   };
 
   it("edits an existing comment's message", async () => {

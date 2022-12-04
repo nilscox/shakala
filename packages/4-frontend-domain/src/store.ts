@@ -14,7 +14,7 @@ import { TimerGateway } from './gateways';
 import { AuthenticationGateway } from './gateways/authentication-gateway';
 import { CommentGateway } from './gateways/comment-gateway';
 import { DateGateway } from './gateways/date-gateway';
-import { DraftMessagesGateway } from './gateways/draft-messages.gateway';
+import { DraftsGateway } from './gateways/drafts.gateway';
 import { LoggerGateway } from './gateways/logger-gateway';
 import { NotificationGateway } from './gateways/notification-gateway';
 import { SnackbarGateway } from './gateways/snackbar.gateway';
@@ -31,7 +31,7 @@ export type Dependencies = {
   authenticationGateway: AuthenticationGateway;
   commentGateway: CommentGateway;
   dateGateway: DateGateway;
-  draftMessagesGateway: DraftMessagesGateway;
+  draftsGateway: DraftsGateway;
   loggerGateway: LoggerGateway;
   notificationGateway: NotificationGateway;
   snackbarGateway: SnackbarGateway;

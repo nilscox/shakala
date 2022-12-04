@@ -1,4 +1,3 @@
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationActions } from '../../authentication';
@@ -58,21 +57,21 @@ export const createRootComment = (threadId: string, text: string): AppThunk<Prom
 };
 
 export const getInitialDraftRootComment = (threadId: string, setDraft: (draft: string) => void): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    const draft = await draftMessagesGateway.getDraftCommentText(DraftCommentKind.root, threadId);
+  return async (dispatch, getState, { draftsGateway }) => {
+    const draft = await draftsGateway.getDraft('root', threadId);
 
     setDraft(draft ?? '');
   };
 };
 
 export const saveDraftRootComment = (threadId: string, text: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    await draftMessagesGateway.setDraftCommentText(DraftCommentKind.root, threadId, text);
+  return async (dispatch, getState, { draftsGateway }) => {
+    await draftsGateway.setDraft('root', threadId, text);
   };
 };
 
 export const clearDraftRootComment = (threadId: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    await draftMessagesGateway.removeDraftCommentText(DraftCommentKind.root, threadId);
+  return async (dispatch, getState, { draftsGateway }) => {
+    await draftsGateway.clearDraft('root', threadId);
   };
 };

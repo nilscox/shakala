@@ -7,7 +7,7 @@ import {
   SnackbarGateway,
   StubAuthenticationGateway,
   StubCommentGateway,
-  StubDraftMessagesGateway,
+  StubDraftsGateway,
   StubNotificationGateway,
   StubThreadGateway,
   StubUserProfileGateway,
@@ -76,7 +76,7 @@ interface StorybookDependencies extends Dependencies {
   authenticationGateway: StubAuthenticationGateway;
   commentGateway: StubCommentGateway;
   dateGateway: RealDateGateway;
-  draftMessagesGateway: StubDraftMessagesGateway;
+  draftsGateway: StubDraftsGateway;
   loggerGateway: ConsoleLoggerGateway;
   notificationGateway: StubNotificationGateway;
   snackbarGateway: SnackbarGateway;

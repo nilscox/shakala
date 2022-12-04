@@ -1,10 +1,10 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
 import { AuthorizationError } from '../../authorization';
+import { createThread, Thread, threadActions } from '../../thread';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';
 import { commentSelectors } from '../comment.selectors';
@@ -14,6 +14,7 @@ describe('createReply', () => {
   let store: TestStore;
 
   let user: AuthUser;
+  let thread: Thread;
   let parent: Comment;
 
   beforeEach(async () => {
@@ -23,7 +24,9 @@ describe('createReply', () => {
     store.user = user;
 
     parent = createComment({ id: 'parentId' });
-    store.dispatch(commentActions.addComment(parent));
+    thread = createThread({ comments: [parent] });
+
+    store.dispatch(threadActions.setThread(thread));
     store.dispatch(commentActions.setReplying(parent.id, true));
 
     store.commentGateway.createReply.resolve('replyId');
@@ -35,11 +38,11 @@ describe('createReply', () => {
   };
 
   const getDraftReply = () => {
-    return store.draftMessagesGateway.getDraftCommentText(DraftCommentKind.reply, parent.id);
+    return store.draftsGateway.getDraft('reply', thread.id, parent.id);
   };
 
   const setDraftReply = (text: string) => {
-    return store.draftMessagesGateway.setDraftCommentText(DraftCommentKind.reply, parent.id, text);
+    return store.draftsGateway.setDraft('reply', thread.id, parent.id, text);
   };
 
   it('creates a new reply to a comment', async () => {

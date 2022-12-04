@@ -1,6 +1,5 @@
 import { AuthorizationErrorReason } from 'shared';
 
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
@@ -31,14 +30,6 @@ describe('createRootComment', () => {
 
   const createComment = (text = 'text') => {
     return store.dispatch(threadActions.createRootComment(thread.id, text));
-  };
-
-  const getDraftComment = () => {
-    return store.draftMessagesGateway.getDraftCommentText(DraftCommentKind.root, thread.id);
-  };
-
-  const setDraftComment = (text: string) => {
-    return store.draftMessagesGateway.setDraftCommentText(DraftCommentKind.root, thread.id, text);
   };
 
   it('creates a new comment on a thread', async () => {
@@ -78,11 +69,11 @@ describe('createRootComment', () => {
   });
 
   it('clears the persisted draft comment text', async () => {
-    await setDraftComment('text');
+    await store.draftsGateway.setDraft('root', thread.id, 'text');
 
     await createComment();
 
-    expect(await getDraftComment()).toBe(undefined);
+    expect(await store.draftsGateway.getDraft('root', thread.id)).toBe(undefined);
   });
 
   describe('error handling', () => {

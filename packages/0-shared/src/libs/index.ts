@@ -8,6 +8,7 @@ export * from './get';
 export * from './get-ids';
 export * from './group-by';
 export * from './is-defined';
+export * from './is-empty-object';
 export * from './is-enum-value';
 export * from './is-type';
 export * from './last';

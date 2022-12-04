@@ -4,7 +4,7 @@ import { MockLoggerGateway } from '../test-store';
 import { StubAuthenticationGateway } from './stub-authentication-gateway';
 import { StubCommentGateway } from './stub-comment-gateway';
 import { StubDateGateway } from './stub-date-gateway';
-import { StubDraftMessagesGateway } from './stub-draft-messages-gateway';
+import { StubDraftsGateway } from './stub-drafts-gateway';
 import { StubNotificationGateway } from './stub-notification-gateway';
 import { StubSnackbarGateway } from './stub-snackbar-gateway';
 import { StubThreadGateway } from './stub-thread-gateway';
@@ -14,7 +14,7 @@ import { StubUserProfileGateway } from './stub-user-profile-gateway';
 export { StubAuthenticationGateway } from './stub-authentication-gateway';
 export { StubCommentGateway } from './stub-comment-gateway';
 export { StubDateGateway } from './stub-date-gateway';
-export { StubDraftMessagesGateway } from './stub-draft-messages-gateway';
+export { StubDraftsGateway } from './stub-drafts-gateway';
 export { StubNotificationGateway } from './stub-notification-gateway';
 export { StubSnackbarGateway } from './stub-snackbar-gateway';
 export { StubThreadGateway } from './stub-thread-gateway';
@@ -25,7 +25,7 @@ export interface StubDependencies extends Dependencies {
   authenticationGateway: StubAuthenticationGateway;
   commentGateway: StubCommentGateway;
   dateGateway: StubDateGateway;
-  draftMessagesGateway: StubDraftMessagesGateway;
+  draftsGateway: StubDraftsGateway;
   loggerGateway: MockLoggerGateway;
   notificationGateway: StubNotificationGateway;
   snackbarGateway: StubSnackbarGateway;
@@ -38,7 +38,7 @@ export const createStubDependencies = (): StubDependencies => ({
   authenticationGateway: new StubAuthenticationGateway(),
   dateGateway: new StubDateGateway(),
   commentGateway: new StubCommentGateway(),
-  draftMessagesGateway: new StubDraftMessagesGateway(),
+  draftsGateway: new StubDraftsGateway(),
   loggerGateway: new MockLoggerGateway(),
   notificationGateway: new StubNotificationGateway(),
   snackbarGateway: new StubSnackbarGateway(),

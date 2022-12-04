@@ -1,5 +1,4 @@
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
-import { StubDraftMessagesGateway } from '../../../stubs/stub-draft-messages-gateway';
+import { StubDraftsGateway } from '../../../stubs/stub-drafts-gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { createThread, threadActions } from '../../thread';
 import { commentSelectors } from '../comment.selectors';
@@ -9,11 +8,11 @@ import { openDraftComments } from './open-draft-comments';
 
 describe('openDraftComments', () => {
   let store: TestStore;
-  let draftMessagesGateway: StubDraftMessagesGateway;
+  let draftMessagesGateway: StubDraftsGateway;
 
   beforeEach(() => {
     store = createTestStore();
-    draftMessagesGateway = store.draftMessagesGateway;
+    draftMessagesGateway = store.draftsGateway;
 
     const thread = createThread({
       id: 'threadId',
@@ -29,7 +28,7 @@ describe('openDraftComments', () => {
   });
 
   it('opens the reply form on comments having a draft reply', async () => {
-    draftMessagesGateway.set(DraftCommentKind.reply, 'commentId', 'draft');
+    await draftMessagesGateway.setDraft('reply', 'threadId', 'commentId', 'draft');
 
     await store.dispatch(openDraftComments('threadId'));
 
@@ -37,7 +36,7 @@ describe('openDraftComments', () => {
   });
 
   it('opens the edition form on comments having a draft edition', async () => {
-    draftMessagesGateway.set(DraftCommentKind.edition, 'commentId', 'draft');
+    await draftMessagesGateway.setDraft('edition', 'threadId', 'commentId', 'draft');
 
     await store.dispatch(openDraftComments('threadId'));
 
@@ -45,7 +44,7 @@ describe('openDraftComments', () => {
   });
 
   it('opens the edition form on replies having a draft edition', async () => {
-    draftMessagesGateway.set(DraftCommentKind.edition, 'replyId', 'draft');
+    await draftMessagesGateway.setDraft('edition', 'threadId', 'replyId', 'draft');
 
     await store.dispatch(openDraftComments('threadId'));
 

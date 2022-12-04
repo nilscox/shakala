@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 
 import { commentSchema, normalizationSelectors } from '../../normalization';
 import { AppState } from '../../store';
+import { threadSelectors } from '../thread';
 import { userProfileSelectors } from '../user-account/user-profile.selectors';
 
 import { CommentMeta } from './comment.actions';
@@ -30,6 +31,14 @@ class CommentSelectors extends EntitySelectors<AppState, NormalizedComment, Comm
   isAuthor = createSelector(
     [userProfileSelectors.authenticatedUser, this.byId],
     (user, comment) => comment.author.id === user?.id,
+  );
+
+  // todo: make this a safe selector
+  threadId = createSelector(
+    [threadSelectors.all, (state, commentId: string) => commentId],
+    (threads, commentId) => {
+      return threads.find((thread) => thread.comments.includes(commentId))?.id;
+    },
   );
 }
 

@@ -1,9 +1,9 @@
-import { DraftCommentKind } from '../../../gateways/draft-messages.gateway';
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationActions } from '../../authentication';
 import { handleAuthorizationError } from '../../authorization';
 import { commentActions } from '../comment.actions';
+import { commentSelectors } from '../comment.selectors';
 import { Comment, Reply } from '../comment.types';
 
 export const createReply = (parentId: string, text: string): AppThunk<Promise<boolean>> => {
@@ -58,22 +58,26 @@ export const createReply = (parentId: string, text: string): AppThunk<Promise<bo
 };
 
 export const getInitialReplyText = (parentId: string, setDraft: (text: string) => void): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    const draft = await draftMessagesGateway.getDraftCommentText(DraftCommentKind.reply, parentId);
+  return async (dispatch, getState, { draftsGateway }) => {
+    const threadId = commentSelectors.threadId(getState(), parentId);
+    const draft = await draftsGateway.getDraft('reply', threadId as string, parentId);
 
     setDraft(draft ?? '');
   };
 };
 
 export const saveDraftReply = (parentId: string, text: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
-    await draftMessagesGateway.setDraftCommentText(DraftCommentKind.reply, parentId, text);
+  return async (dispatch, getState, { draftsGateway }) => {
+    const threadId = commentSelectors.threadId(getState(), parentId);
+    await draftsGateway.setDraft('reply', threadId as string, parentId, text);
   };
 };
 
 export const closeReplyForm = (parentId: string): AppThunk => {
-  return async (dispatch, getState, { draftMessagesGateway }) => {
+  return async (dispatch, getState, { draftsGateway }) => {
     dispatch(commentActions.setReplying(parentId, false));
-    await draftMessagesGateway.removeDraftCommentText(DraftCommentKind.reply, parentId);
+
+    const threadId = commentSelectors.threadId(getState(), parentId);
+    await draftsGateway.clearDraft('reply', threadId as string, parentId);
   };
 };
