@@ -32,19 +32,25 @@ export class LocalStorageDraftsGateway extends AbstractDraftsGateway implements 
     this.storage.setItem(LocalStorageDraftsGateway.storageKey, JSON.stringify(drafts));
   }
 
-  protected async save(threadId: string, drafts: ThreadDraftsComments): Promise<void> {
+  protected async save(threadId: string, drafts: ThreadDraftsComments, noDebounce?: boolean): Promise<void> {
+    const allDrafts = await this.getAllDrafts();
+
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
 
-    const allDrafts = await this.getAllDrafts();
-
-    this.timeoutId = window.setTimeout(() => {
+    const doSave = () => {
       allDrafts[threadId] = drafts;
       this.saveAllDrafts(allDrafts);
 
       delete this.timeoutId;
-    }, debounceTimeout);
+    };
+
+    if (noDebounce) {
+      doSave();
+    } else {
+      this.timeoutId = window.setTimeout(doSave, debounceTimeout);
+    }
   }
 
   protected async delete(threadId: string): Promise<void> {

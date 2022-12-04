@@ -5,7 +5,11 @@ import { DraftCommentKind, ThreadDraftsComments } from '../gateways/drafts.gatew
 export abstract class AbstractDraftsGateway {
   abstract getAllDrafts(): Promise<Record<string, ThreadDraftsComments>>;
 
-  protected abstract save(threadId: string, drafts: ThreadDraftsComments): Promise<void>;
+  protected abstract save(
+    threadId: string,
+    drafts: ThreadDraftsComments,
+    noDebounce?: boolean,
+  ): Promise<void>;
   protected abstract delete(threadId: string): Promise<void>;
 
   async getDrafts(threadId: string): Promise<ThreadDraftsComments | undefined> {
@@ -45,7 +49,7 @@ export abstract class AbstractDraftsGateway {
       drafts.editions[commentId as string] = text;
     }
 
-    this.save(threadId, drafts);
+    await this.save(threadId, drafts);
   }
 
   async clearDraft(kind: 'root' | 'reply' | 'edition', threadId: string, commentId?: string): Promise<void> {
@@ -60,9 +64,9 @@ export abstract class AbstractDraftsGateway {
     }
 
     if (!drafts.root && isEmptyObject(drafts.replies) && isEmptyObject(drafts.editions)) {
-      this.delete(threadId);
+      await this.delete(threadId);
     } else {
-      this.save(threadId, drafts);
+      await this.save(threadId, drafts, true);
     }
   }
 }
