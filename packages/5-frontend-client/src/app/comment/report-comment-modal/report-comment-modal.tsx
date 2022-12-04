@@ -1,5 +1,5 @@
 import { commentActions, commentSelectors } from 'frontend-domain';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { PageTitle } from '~/app/page-title';
@@ -9,6 +9,7 @@ import { Markdown } from '~/elements/markdown';
 import { Modal } from '~/elements/modal';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
+import { useFormSubmit } from '~/hooks/use-form-submit';
 import { useSearchParam, useSetSearchParam } from '~/hooks/use-search-param';
 
 export const ReportCommentModal = () => {
@@ -53,11 +54,9 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
     },
   });
 
-  const handleSubmit = useCallback(
-    async (data: { reason: string }) => {
-      await dispatch(commentActions.reportComment(data.reason));
-    },
-    [dispatch],
+  const handleSubmit = useFormSubmit(
+    (data) => dispatch(commentActions.reportComment(data.reason)),
+    form.setError,
   );
 
   return (

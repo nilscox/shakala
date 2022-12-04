@@ -7,7 +7,11 @@ import { userProfileActions } from '../../user-account/user-profile.actions';
 import { closeAuthenticationForm } from '../require-authentication/require-authentication';
 
 export const signup = (email: string, password: string, nick: string): AppThunk => {
-  return async (dispatch, _getState, { authenticationGateway, dateGateway, snackbarGateway }) => {
+  return async (
+    dispatch,
+    _getState,
+    { authenticationGateway, dateGateway, snackbarGateway, loggerGateway },
+  ) => {
     try {
       const userId = await authenticationGateway.signup(email, password, nick);
 
@@ -34,6 +38,7 @@ export const signup = (email: string, password: string, nick: string): AppThunk 
       ) {
         snackbarGateway.warning('Vous êtes déjà connecté(e)');
       } else {
+        loggerGateway.error(error);
         snackbarGateway.error("Une erreur s'est produite");
       }
     }

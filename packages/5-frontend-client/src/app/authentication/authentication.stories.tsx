@@ -1,9 +1,9 @@
 import { Meta } from '@storybook/react';
 import {
+  authenticationActions,
   AuthenticationFormType,
   createAuthUser,
   InvalidCredentialsError,
-  routerActions,
   ValidationErrors,
 } from 'frontend-domain';
 
@@ -33,7 +33,7 @@ export const authentication: ReduxStory<Args> = () => <AuthenticationModal />;
 
 authentication.args = {
   setup(dispatch, getState, { args, authenticationGateway }) {
-    dispatch(routerActions.setQueryParam(['auth', args.type]));
+    dispatch(authenticationActions.setAuthenticationForm(args.type));
 
     authenticationGateway.login.resolve(createAuthUser());
     authenticationGateway.signup.resolve('');

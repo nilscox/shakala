@@ -7,7 +7,7 @@ import { routerActions, routerSelectors } from '../../router';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { authenticationSelectors } from '../authentication.selectors';
 import { AuthenticationFormType } from '../authentication.types';
-import { setCurrentAuthenticationForm } from '../require-authentication/require-authentication';
+import { setAuthenticationForm } from '../require-authentication/require-authentication';
 
 import { signup } from './signup';
 
@@ -18,7 +18,7 @@ describe('signup', () => {
   beforeEach(() => {
     store = createTestStore();
 
-    store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.signup));
+    store.dispatch(setAuthenticationForm(AuthenticationFormType.signup));
 
     user = createAuthUser({
       id: 'userId',
@@ -76,6 +76,16 @@ describe('signup', () => {
     await store.dispatch(signup('email', 'password', 'nick'));
 
     expect(store.snackbarGateway).toHaveSnack('warning', 'Vous êtes déjà connecté(e)');
+  });
+
+  it('logs unhandled errors', async () => {
+    const error = new Error('nope');
+
+    store.authenticationGateway.signup.reject(error);
+
+    await store.dispatch(signup('nick', 'email', 'password'));
+
+    expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
   });
 
   it('shows a fallback error message when the error is not handled', async () => {

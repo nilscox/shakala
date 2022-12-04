@@ -5,6 +5,7 @@ import { logout } from './logout/logout';
 import {
   closeAuthenticationForm,
   requireAuthentication,
+  setAuthenticationForm,
 } from './require-authentication/require-authentication';
 
 class AuthenticationActions extends Actions<unknown> {
@@ -13,6 +14,7 @@ class AuthenticationActions extends Actions<unknown> {
   }
 
   authenticate = handleAuthenticate;
+  setAuthenticationForm = setAuthenticationForm;
   closeAuthenticationForm = closeAuthenticationForm;
   logout = logout;
   requireAuthentication = requireAuthentication;

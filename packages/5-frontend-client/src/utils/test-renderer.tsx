@@ -31,9 +31,10 @@ export const createTestRenderer = () => {
   const render = (ui: React.ReactElement) => {
     const user = userEvent.setup();
 
-    renderTestingLibrary(ui, { wrapper });
-
-    return user;
+    return {
+      ...user,
+      ...renderTestingLibrary(ui, { wrapper }),
+    };
   };
 
   render.hook = <Props, Result>(hook: (initialProps: Props) => Result) => {

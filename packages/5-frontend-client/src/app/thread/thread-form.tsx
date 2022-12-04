@@ -1,5 +1,4 @@
-import { threadActions, ThreadForm as ThreadFormType, ValidationErrors } from 'frontend-domain';
-import { useCallback } from 'react';
+import { threadActions, ThreadForm as ThreadFormType } from 'frontend-domain';
 import { useForm } from 'react-hook-form';
 
 import { SubmitButton } from '~/elements/button';
@@ -7,6 +6,7 @@ import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
 import { MarkdownPreviewInput } from '~/elements/markdown-preview-input/markdown-preview-input';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
+import { useFormSubmit } from '~/hooks/use-form-submit';
 
 export const ThreadForm = () => {
   const dispatch = useAppDispatch();
@@ -19,26 +19,7 @@ export const ThreadForm = () => {
     },
   });
 
-  const { setError } = form;
-
-  const handleSubmit = useCallback(
-    async (form: ThreadFormType) => {
-      try {
-        await dispatch(threadActions.createThread(form));
-      } catch (error) {
-        if (error instanceof ValidationErrors) {
-          for (const field of ['description', 'keywords', 'text']) {
-            const message = error.getFieldError(field);
-
-            if (message) {
-              setError(field as keyof ThreadFormType, { message });
-            }
-          }
-        }
-      }
-    },
-    [dispatch, setError],
-  );
+  const handleSubmit = useFormSubmit((data) => dispatch(threadActions.createThread(data)), form.setError);
 
   return (
     <form className="col gap-2" onSubmit={form.handleSubmit(handleSubmit)}>

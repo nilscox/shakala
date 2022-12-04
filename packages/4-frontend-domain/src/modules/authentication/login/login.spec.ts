@@ -8,7 +8,7 @@ import { routerActions, routerSelectors } from '../../router';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { authenticationSelectors } from '../authentication.selectors';
 import { AuthenticationFormType } from '../authentication.types';
-import { setCurrentAuthenticationForm } from '../require-authentication/require-authentication';
+import { setAuthenticationForm } from '../require-authentication/require-authentication';
 
 import { login } from './login';
 
@@ -27,7 +27,7 @@ describe('login', () => {
       profileImage: 'profile.png',
     });
 
-    store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.login));
+    store.dispatch(setAuthenticationForm(AuthenticationFormType.login));
     store.authenticationGateway.login.resolve(user);
   });
 
@@ -79,6 +79,16 @@ describe('login', () => {
     await store.dispatch(login('email', 'password'));
 
     expect(store.snackbarGateway).toHaveSnack('warning', 'Vous êtes déjà connecté(e)');
+  });
+
+  it('logs unhandled errors', async () => {
+    const error = new Error('nope');
+
+    store.authenticationGateway.login.reject(error);
+
+    await store.dispatch(login('email', 'password'));
+
+    expect(store.loggerGateway.error).toHaveBeenCalledWith(error);
   });
 
   it('shows a fallback error message when the error is not handled', async () => {

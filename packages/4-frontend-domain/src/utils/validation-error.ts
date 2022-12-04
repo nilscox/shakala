@@ -62,6 +62,10 @@ export class ValidationErrors {
     return this;
   }
 
+  getFields(): string[] {
+    return Object.keys(this.fieldErrors);
+  }
+
   getFieldError(field: string): string | undefined {
     return this.fieldErrors[field]?.error;
   }

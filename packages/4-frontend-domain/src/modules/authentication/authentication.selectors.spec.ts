@@ -2,7 +2,7 @@ import { createTestStore, TestStore } from '../../test-store';
 
 import { authenticationSelectors } from './authentication.selectors';
 import { AuthenticationFormType } from './authentication.types';
-import { setCurrentAuthenticationForm } from './require-authentication/require-authentication';
+import { setAuthenticationForm } from './require-authentication/require-authentication';
 
 describe('authenticationSelectors', () => {
   let store: TestStore;
@@ -15,17 +15,17 @@ describe('authenticationSelectors', () => {
     const form = () => store.select(authenticationSelectors.currentForm);
 
     it('email-login form', () => {
-      store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.emailLogin));
+      store.dispatch(setAuthenticationForm(AuthenticationFormType.emailLogin));
       expect(form()).toEqual(AuthenticationFormType.emailLogin);
     });
 
     it('login form', () => {
-      store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.login));
+      store.dispatch(setAuthenticationForm(AuthenticationFormType.login));
       expect(form()).toEqual(AuthenticationFormType.login);
     });
 
     it('signup form', () => {
-      store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.signup));
+      store.dispatch(setAuthenticationForm(AuthenticationFormType.signup));
       expect(form()).toEqual(AuthenticationFormType.signup);
     });
 
@@ -34,7 +34,7 @@ describe('authenticationSelectors', () => {
     });
 
     it('not a valid authentication form', () => {
-      store.dispatch(setCurrentAuthenticationForm('hello' as AuthenticationFormType));
+      store.dispatch(setAuthenticationForm('hello' as AuthenticationFormType));
       expect(form()).toBe(undefined);
     });
   });

@@ -1,10 +1,11 @@
-import { ValidationErrors } from 'frontend-domain';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { MarkdownPreviewInput } from '~/elements/markdown-preview-input';
+
+import { useFormSubmit } from '../../../hooks/use-form-submit';
 
 export type CommentForm = {
   text: string;
@@ -42,26 +43,11 @@ export const CommentForm = ({
     [onTextChange],
   );
 
-  const { setError, setValue } = form;
-
-  const handleSubmit = useCallback(
-    async (data: CommentForm) => {
-      try {
-        if (await onSubmit(data)) {
-          setValue('text', '');
-        }
-      } catch (error) {
-        if (error instanceof ValidationErrors) {
-          const message = error.getFieldError('text');
-
-          if (typeof message === 'string') {
-            setError('text', { message });
-          }
-        }
-      }
-    },
-    [onSubmit, setError, setValue],
-  );
+  const handleSubmit = useFormSubmit(async (data) => {
+    if (await onSubmit(data)) {
+      form.setValue('text', '');
+    }
+  }, form.setError);
 
   const error = form.formState.errors.text;
 

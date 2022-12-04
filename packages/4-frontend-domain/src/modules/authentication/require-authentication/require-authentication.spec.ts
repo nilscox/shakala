@@ -6,7 +6,7 @@ import { AuthenticationFormType } from '../authentication.types';
 import {
   closeAuthenticationForm,
   requireAuthentication,
-  setCurrentAuthenticationForm,
+  setAuthenticationForm,
 } from './require-authentication';
 
 describe('requireAuthentication', () => {
@@ -35,7 +35,7 @@ describe('requireAuthentication', () => {
   });
 
   it('closes the authentication form', () => {
-    store.dispatch(setCurrentAuthenticationForm(AuthenticationFormType.login));
+    store.dispatch(setAuthenticationForm(AuthenticationFormType.login));
 
     store.dispatch(closeAuthenticationForm());
 

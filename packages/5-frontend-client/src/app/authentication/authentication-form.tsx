@@ -5,15 +5,15 @@ import {
   AuthenticationForm as AuthenticationFormValues,
   AuthenticationFormType,
   InvalidCredentialsError,
-  ValidationErrors,
 } from 'frontend-domain';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
-import { getPublicConfig } from '~/utils/config';
+import { useFormSubmit } from '~/hooks/use-form-submit';
+import { useConfigValue } from '~/utils/config-provider';
 
 import { AuthenticationFields } from './authentication-fields';
 import { AuthenticationMessage } from './message';
@@ -33,14 +33,13 @@ const heading: Record<AuthenticationFormType, string> = {
   [AuthenticationFormType.emailLogin]: 'Mot de passe oublié',
 };
 
-const { isDevelopment } = getPublicConfig();
-
 type AuthenticationFormProps = {
   onClose: () => void;
 };
 
 export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
   const dispatch = useAppDispatch();
+  const isDevelopment = useConfigValue('isDevelopment');
 
   const formType = useAuthenticationForm() as AuthenticationFormType;
   const [invalidCredentials, setInvalidCredentials] = useState(false);
@@ -49,22 +48,14 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
     defaultValues,
   });
 
-  const handleSubmit = useCallback(
-    async (data: AuthenticationFormValues) => {
-      try {
-        await dispatch(authenticationActions.authenticate(data));
-      } catch (error) {
-        // todo: factorize this
-        if (error instanceof ValidationErrors) {
-          for (const field of ['email', 'password', 'nick'] as const) {
-            form.setError(field, { message: error.getFieldError(field) });
-          }
-        } else if (error instanceof InvalidCredentialsError) {
-          setInvalidCredentials(true);
-        }
+  const handleSubmit = useFormSubmit(
+    (data) => dispatch(authenticationActions.authenticate(data)),
+    form.setError,
+    (error) => {
+      if (error instanceof InvalidCredentialsError) {
+        setInvalidCredentials(true);
       }
     },
-    [dispatch, form, setInvalidCredentials],
   );
 
   useEffect(() => {

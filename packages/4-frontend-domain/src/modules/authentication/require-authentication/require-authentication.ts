@@ -9,14 +9,14 @@ export const requireAuthentication = (): AppThunk<AuthenticatedUser | null> => {
     const user = userProfileSelectors.authenticatedUser(getState());
 
     if (!user) {
-      dispatch(setCurrentAuthenticationForm(AuthenticationFormType.login));
+      dispatch(setAuthenticationForm(AuthenticationFormType.login));
     }
 
     return user;
   };
 };
 
-export const setCurrentAuthenticationForm = (form: AuthenticationFormType) => {
+export const setAuthenticationForm = (form: AuthenticationFormType) => {
   return routerActions.setQueryParam(['auth', form]);
 };
 
