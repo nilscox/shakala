@@ -28,7 +28,7 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
   const dispatch = useAppDispatch();
 
   const { upvotes, downvotes, edited } = useAppSelector(commentSelectors.byId, commentId);
-  const isReply = useAppSelector(commentSelectors.isReply, commentId);
+  const canSubscribe = useAppSelector(commentSelectors.canSubscribe, commentId);
   const isEditing = useAppSelector(commentSelectors.isEditing, commentId);
 
   if (isEditing) {
@@ -49,7 +49,7 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
           <>
             <EditButton commentId={commentId} />
 
-            {!isReply && (
+            {canSubscribe && (
               <FooterButton
                 icon={<SubscribeIcon />}
                 onClick={() => snackbar.warning("Cette fonctionnalité n'est pas encore disponible")}
