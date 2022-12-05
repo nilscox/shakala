@@ -1,7 +1,7 @@
 import { CommentSubscription, GeneratorPort } from 'backend-domain';
 
 import { CommandHandler, IEventBus } from '../../../cqs';
-import { CommentSubscriptionRepository } from '../../../interfaces';
+import { CommentRepository, CommentSubscriptionRepository } from '../../../interfaces';
 import { EventPublisher, ExecutionContext } from '../../../utils';
 
 export class CreateCommentSubscriptionCommand {
@@ -14,11 +14,19 @@ export class CreateCommentSubscriptionCommandHandler
   constructor(
     private readonly generator: GeneratorPort,
     private readonly eventBus: IEventBus,
+    private readonly commentRepository: CommentRepository,
     private readonly commentSubscriptionRepository: CommentSubscriptionRepository,
   ) {}
 
   async handle(command: CreateCommentSubscriptionCommand): Promise<void> {
-    const { commentId, userId } = command;
+    const { userId } = command;
+    let { commentId } = command;
+
+    const comment = await this.commentRepository.findById(commentId);
+
+    if (comment?.parentId) {
+      commentId = comment.parentId;
+    }
 
     const subscription = new CommentSubscription({
       id: await this.generator.generateId(),
