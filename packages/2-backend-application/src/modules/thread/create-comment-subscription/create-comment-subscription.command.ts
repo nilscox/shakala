@@ -1,0 +1,34 @@
+import { CommentSubscription, GeneratorPort } from 'backend-domain';
+
+import { CommandHandler, IEventBus } from '../../../cqs';
+import { CommentSubscriptionRepository } from '../../../interfaces';
+import { EventPublisher, ExecutionContext } from '../../../utils';
+
+export class CreateCommentSubscriptionCommand {
+  constructor(public readonly userId: string, public readonly commentId: string) {}
+}
+
+export class CreateCommentSubscriptionCommandHandler
+  implements CommandHandler<CreateCommentSubscriptionCommand>
+{
+  constructor(
+    private readonly generator: GeneratorPort,
+    private readonly eventBus: IEventBus,
+    private readonly commentSubscriptionRepository: CommentSubscriptionRepository,
+  ) {}
+
+  async handle(command: CreateCommentSubscriptionCommand): Promise<void> {
+    const { commentId, userId } = command;
+
+    const subscription = new CommentSubscription({
+      id: await this.generator.generateId(),
+      commentId,
+      userId,
+    });
+
+    const publisher = new EventPublisher(ExecutionContext.unauthenticated, subscription);
+
+    await this.commentSubscriptionRepository.save(subscription);
+    publisher.publish(this.eventBus);
+  }
+}

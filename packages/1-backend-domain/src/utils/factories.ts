@@ -5,6 +5,7 @@ import { ValueObject } from '../ddd/value-object';
 import { DomainDependencies } from '../domain-dependencies';
 import { Author } from '../entities/author.entity';
 import { CommentReport } from '../entities/comment-report.entity';
+import { CommentSubscription } from '../entities/comment-subscription.entity';
 import { Comment } from '../entities/comment.entity';
 import { Markdown } from '../entities/markdown.value-object';
 import { Message } from '../entities/message.entity';
@@ -40,6 +41,7 @@ type Factories = {
   author: EntityFactory<Author>;
   comment: EntityFactory<Comment>;
   commentReport: EntityFactory<CommentReport>;
+  commentSubscription: EntityFactory<CommentSubscription>;
   message: EntityFactory<Message>;
   reaction: EntityFactory<Reaction>;
   thread: EntityFactory<Thread>;
@@ -121,6 +123,15 @@ export const factories: Factory<Factories, Partial<DomainDependencies>> = (overr
         commentId: '',
         reportedBy: this.user(),
         reason: null,
+        ...props,
+      });
+    },
+
+    commentSubscription(props) {
+      return new CommentSubscription({
+        id: this.id(),
+        commentId: '',
+        userId: '',
         ...props,
       });
     },

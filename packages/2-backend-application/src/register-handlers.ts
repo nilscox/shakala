@@ -4,7 +4,7 @@ import { ClassType } from 'shared';
 // prettier-ignore
 import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler } from './cqs';
 // prettier-ignore
-import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort, UserActivityRepository, NotificationRepository } from './interfaces';
+import { CommentRepository, ReactionRepository, ThreadRepository, UserRepository, CommentReportRepository, EmailCompilerPort, EmailSenderPort, FilesystemPort, LoggerPort, UserActivityRepository, NotificationRepository, CommentSubscriptionRepository } from './interfaces';
 // prettier-ignore
 import { SignupCommand, SignupCommandHandler, LoginCommand, LoginCommandHandler, SignOutCommand, SignOutCommandHandler } from './modules/authentication';
 // prettier-ignore
@@ -16,7 +16,7 @@ import {
   MarkNotificationAsSeenHandler,
 } from './modules/notifications';
 // prettier-ignore
-import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
+import { CreateCommentCommand, CreateCommentCommandHandler, CreateCommentSubscriptionCommand, CreateCommentSubscriptionCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
 // prettier-ignore
 import { CreateUserActivityCommand, CreateUserActivityHandler, GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
 // prettier-ignore
@@ -37,6 +37,7 @@ export type Repositories = {
   commentRepository: CommentRepository;
   reactionRepository: ReactionRepository;
   commentReportRepository: CommentReportRepository;
+  commentSubscriptionRepository: CommentSubscriptionRepository;
 };
 
 // prettier-ignore
@@ -48,7 +49,7 @@ export const registerHandlers = (
   dependencies: ApplicationDependencies,
 ) => {
   const { generator, crypto, date, filesystem, emailCompiler, emailSender, profileImageStore } = dependencies;
-  const { userRepository, userActivityRepository, notificationRepository, threadRepository, commentRepository, commentReportRepository, reactionRepository } = repositories;
+  const { userRepository, userActivityRepository, notificationRepository, threadRepository, commentRepository, commentReportRepository, commentSubscriptionRepository, reactionRepository } = repositories;
 
   const commentService = new CommentService(generator);
   const userActivityService = new UserActivityService(generator, date);
@@ -85,8 +86,9 @@ export const registerHandlers = (
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(eventBus, commentRepository));
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(eventBus, commentRepository, reactionRepository, commentService));
   registerCommand(ReportCommentCommand, new ReportCommentHandler(eventBus, commentRepository, commentReportRepository, commentService));
+  registerCommand(CreateCommentSubscriptionCommand, new CreateCommentSubscriptionCommandHandler(generator, eventBus, commentSubscriptionRepository));
 
-  // comment
+  // notification
   registerCommand(CreateNotificationCommand, new CreateNotificationHandler(generator, date, notificationRepository));
   registerCommand(MarkNotificationAsSeenCommand, new MarkNotificationAsSeenHandler(date, notificationRepository));
 }

@@ -13,6 +13,7 @@ import {
   Repositories,
   ApplicationDependencies,
   InMemoryNotificationRepository,
+  InMemoryCommentSubscriptionRepository,
 } from 'backend-application';
 import {
   CommentCreatedEvent,
@@ -48,6 +49,7 @@ import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
+import { CreateCommentSubscriptionHandler } from './modules/comment/create-comment-subscription.handler';
 import { CreateUserActivityHandler } from './modules/profile/create-user-activity.handler';
 import {
   SqlCommentRepository,
@@ -57,6 +59,7 @@ import {
 } from './persistence';
 import { createDatabaseConnection } from './persistence/mikro-orm/create-database-connection';
 import { SqlCommentReportRepository } from './persistence/repositories/sql-comment-report.repository';
+import { SqlCommentSubscriptionRepository } from './persistence/repositories/sql-comment-subscription.repository';
 import { SqlNotificationRepository } from './persistence/repositories/sql-notification.repository';
 import { SqlUserActivityRepository } from './persistence/repositories/sql-user-activity.repository';
 
@@ -112,6 +115,7 @@ export class Application {
         reactionRepository: new SqlReactionRepository(em, this.adapters),
         commentRepository: new SqlCommentRepository(em, this.adapters),
         commentReportRepository: new SqlCommentReportRepository(em, this.adapters),
+        commentSubscriptionRepository: new SqlCommentSubscriptionRepository(em, this.adapters),
       };
     } else {
       this.logger.log('instantiating in-memory repositories');
@@ -126,6 +130,7 @@ export class Application {
         reactionRepository,
         commentRepository: new InMemoryCommentRepository(reactionRepository),
         commentReportRepository: new InMemoryCommentReportRepository(),
+        commentSubscriptionRepository: new InMemoryCommentSubscriptionRepository(),
       };
     }
 
@@ -169,6 +174,11 @@ export class Application {
     this.eventBus.subscribe(
       UserCreatedEvent,
       new UserCreatedHandler(this.config, this.repositories.userRepository, this.commandBus),
+    );
+
+    this.eventBus.subscribe(
+      CommentCreatedEvent,
+      new CreateCommentSubscriptionHandler(this.commandBus, this.repositories.commentRepository),
     );
 
     const events: Array<ClassType<DomainEvent>> = [

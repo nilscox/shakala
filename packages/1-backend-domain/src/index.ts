@@ -1,6 +1,7 @@
 export * from './entities/author.entity';
 export * from './entities/comment.entity';
 export * from './entities/comment-report.entity';
+export * from './entities/comment-subscription.entity';
 export * from './entities/reaction.entity';
 export * from './entities/domain-error';
 export * from './entities/markdown.value-object';
