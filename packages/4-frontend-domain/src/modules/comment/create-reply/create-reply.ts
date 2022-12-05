@@ -36,6 +36,7 @@ export const createReply = (parentId: string, text: string): AppThunk<Promise<bo
       };
 
       dispatch(commentActions.addReply(parentId, reply as Comment));
+      dispatch(commentActions.setSubscribed(parentId, true));
 
       await dispatch(closeReplyForm(parentId));
 

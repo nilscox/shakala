@@ -29,6 +29,7 @@ export const createRootComment = (threadId: string, text: string): AppThunk<Prom
         history: [],
         upvotes: 0,
         downvotes: 0,
+        isSubscribed: true,
         replies: [],
         editing: false,
         replying: false,

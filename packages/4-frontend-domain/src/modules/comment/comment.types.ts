@@ -13,6 +13,7 @@ export type Comment = {
   upvotes: number;
   downvotes: number;
   userReaction?: ReactionType;
+  isSubscribed?: boolean;
   replies: Reply[];
   editing: boolean;
   replying: boolean;

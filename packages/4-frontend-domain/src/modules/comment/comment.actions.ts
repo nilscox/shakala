@@ -57,6 +57,8 @@ class CommentActions extends EntityActions<NormalizedComment, CommentMeta> {
     },
   );
 
+  setSubscribed = this.setEntityProperty('isSubscribed');
+
   setEditing = this.setEntityProperty('editing');
   setReplying = this.setEntityProperty('replying');
 

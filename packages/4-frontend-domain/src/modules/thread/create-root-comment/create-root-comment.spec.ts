@@ -48,6 +48,7 @@ describe('createRootComment', () => {
       history: [],
       upvotes: 0,
       downvotes: 0,
+      isSubscribed: true,
       replies: [],
       replying: false,
       editing: false,

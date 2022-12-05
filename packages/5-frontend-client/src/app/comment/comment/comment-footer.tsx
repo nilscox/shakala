@@ -24,11 +24,9 @@ type CommentFooterProps = {
 };
 
 export const CommentFooter = ({ className, commentId, showActions, onShowActions }: CommentFooterProps) => {
-  const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
   const { upvotes, downvotes, edited } = useAppSelector(commentSelectors.byId, commentId);
-  const canSubscribe = useAppSelector(commentSelectors.canSubscribe, commentId);
   const isEditing = useAppSelector(commentSelectors.isEditing, commentId);
 
   if (isEditing) {
@@ -49,14 +47,7 @@ export const CommentFooter = ({ className, commentId, showActions, onShowActions
           <>
             <EditButton commentId={commentId} />
 
-            {canSubscribe && (
-              <FooterButton
-                icon={<SubscribeIcon />}
-                onClick={() => snackbar.warning("Cette fonctionnalité n'est pas encore disponible")}
-              >
-                Suivre
-              </FooterButton>
-            )}
+            <SubscribeButton commentId={commentId} />
 
             <FooterButton
               icon={<ReportIcon />}
@@ -147,6 +138,30 @@ const EditButton = ({ commentId }: EditCommentProps) => {
   return (
     <FooterButton icon={<EditIcon />} onClick={() => dispatch(commentActions.setEditing(commentId, true))}>
       Éditer
+    </FooterButton>
+  );
+};
+
+type SubscribeButtonProps = {
+  commentId: string;
+};
+
+const SubscribeButton = ({ commentId }: SubscribeButtonProps) => {
+  const snackbar = useSnackbar();
+  const canSubscribe = useAppSelector(commentSelectors.canSubscribe, commentId);
+  const isSubscribed = useAppSelector(commentSelectors.isSubscribed, commentId);
+
+  if (!canSubscribe) {
+    return null;
+  }
+
+  return (
+    <FooterButton
+      icon={<SubscribeIcon />}
+      active={isSubscribed}
+      onClick={() => snackbar.warning("Cette fonctionnalité n'est pas encore disponible")}
+    >
+      {isSubscribed ? 'Suivi' : 'Suivre'}
     </FooterButton>
   );
 };

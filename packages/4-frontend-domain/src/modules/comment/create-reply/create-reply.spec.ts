@@ -74,6 +74,12 @@ describe('createReply', () => {
     expect(store.select(commentSelectors.byId, 'replyId')).toHaveProperty('text', 'reply');
   });
 
+  it('mark the parent comment as subscribed', async () => {
+    await createReply();
+
+    expect(store.select(commentSelectors.byId, 'parentId')).toHaveProperty('isSubscribed', true);
+  });
+
   it('requires user authentication', async () => {
     store.user = null;
 

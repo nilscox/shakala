@@ -25,6 +25,7 @@ class CommentSelectors extends EntitySelectors<AppState, NormalizedComment, Comm
   });
 
   canSubscribe = createSelector(this.isReply, (isReply) => !isReply);
+  isSubscribed = this.entityPropertySelector('isSubscribed');
 
   isEditing = this.entityPropertySelector('editing');
   isReplying = this.entityPropertySelector('replying');
