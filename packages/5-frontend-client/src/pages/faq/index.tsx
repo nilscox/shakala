@@ -2,6 +2,9 @@ import { clsx } from 'clsx';
 import { ReactNode, useState } from 'react';
 
 import { ExternalLink, Link } from '~/elements/link';
+import { ssr } from '~/utils/ssr';
+
+export const getServerSideProps = ssr();
 
 type QuestionProps = {
   question: ReactNode;
