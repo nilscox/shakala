@@ -77,7 +77,7 @@ export const registerHandlers = (
 
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
-  registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository));
+  registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository, commentSubscriptionRepository));
   registerCommand(CreateThreadCommand, new CreateThreadHandler(eventBus, generator, date, threadRepository));
 
   // comment
@@ -86,7 +86,7 @@ export const registerHandlers = (
   registerCommand(EditCommentCommand, new EditCommentCommandHandler(eventBus, commentRepository));
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(eventBus, commentRepository, reactionRepository, commentService));
   registerCommand(ReportCommentCommand, new ReportCommentHandler(eventBus, commentRepository, commentReportRepository, commentService));
-  registerCommand(CreateCommentSubscriptionCommand, new CreateCommentSubscriptionCommandHandler(generator, eventBus, commentSubscriptionRepository));
+  registerCommand(CreateCommentSubscriptionCommand, new CreateCommentSubscriptionCommandHandler(generator, eventBus, commentRepository, commentSubscriptionRepository));
 
   // notification
   registerCommand(CreateNotificationCommand, new CreateNotificationHandler(generator, date, notificationRepository));

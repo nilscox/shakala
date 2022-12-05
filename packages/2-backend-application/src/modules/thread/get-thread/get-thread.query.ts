@@ -2,7 +2,13 @@ import { Comment, ReactionsCount, ReactionType, Thread } from 'backend-domain';
 import { getIds } from 'shared';
 
 import { Query, QueryHandler } from '../../../cqs';
-import { CommentRepository, Sort, ReactionRepository, ThreadRepository } from '../../../interfaces';
+import {
+  CommentRepository,
+  Sort,
+  ReactionRepository,
+  ThreadRepository,
+  CommentSubscriptionRepository,
+} from '../../../interfaces';
 
 export class GetThreadQuery implements Query {
   constructor(
@@ -19,6 +25,7 @@ export type GetThreadQueryResult = {
   replies: Map<string, Comment[]>;
   reactionsCounts: Map<string, ReactionsCount>;
   userReactions: Map<string, ReactionType | undefined> | undefined;
+  userSubscriptions: Map<string, boolean> | undefined;
 };
 
 export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadQueryResult | undefined> {
@@ -26,6 +33,7 @@ export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadQ
     private readonly threadRepository: ThreadRepository,
     private readonly commentRepository: CommentRepository,
     private readonly reactionRepository: ReactionRepository,
+    private readonly commentSubscriptionRepository: CommentSubscriptionRepository,
   ) {}
 
   async handle(query: GetThreadQuery): Promise<GetThreadQueryResult | undefined> {
@@ -43,6 +51,9 @@ export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadQ
 
     const reactionsCounts = await this.reactionRepository.countReactions(ids);
     const userReactions = userId ? await this.reactionRepository.getUserReactions(ids, userId) : undefined;
+    const userSubscriptions = userId
+      ? await this.commentSubscriptionRepository.getUserSubscriptions(ids, userId)
+      : undefined;
 
     return {
       thread,
@@ -50,6 +61,7 @@ export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadQ
       replies,
       reactionsCounts,
       userReactions,
+      userSubscriptions,
     };
   }
 }

@@ -35,6 +35,7 @@ describe('ThreadPresenter', () => {
       [reply.id, create.reactionsCount({ [ReactionType.upvote]: 1 })],
     ]),
     userReactions: undefined,
+    userSubscriptions: undefined,
   };
 
   const replyDto: CommentDto = {
@@ -98,10 +99,37 @@ describe('ThreadPresenter', () => {
     ]);
 
     expect(
-      presenter.transformComment(comment, [reply], getThreadQueryResult.reactionsCounts, userReactions),
+      presenter.transformComment(
+        comment,
+        [reply],
+        getThreadQueryResult.reactionsCounts,
+        userReactions,
+        undefined,
+      ),
     ).toEqual({
       ...commentDto,
       userReaction: ReactionTypeDto.downvote,
+    });
+  });
+
+  it("transforms the user's subscriptions", () => {
+    const userSubscriptions = new Map([
+      [comment.id, true],
+      [reply.id, false],
+    ]);
+
+    expect(
+      presenter.transformComment(
+        comment,
+        [reply],
+        getThreadQueryResult.reactionsCounts,
+        undefined,
+        userSubscriptions,
+      ),
+    ).toEqual({
+      ...commentDto,
+      isSubscribed: true,
+      replies: [{ ...replyDto, isSubscribed: false }],
     });
   });
 });

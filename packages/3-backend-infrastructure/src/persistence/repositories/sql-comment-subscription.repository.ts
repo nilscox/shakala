@@ -20,4 +20,17 @@ export class SqlCommentSubscriptionRepository
   async findByCommentId(commentId: string): Promise<CommentSubscription[]> {
     return this.toDomain(await this.repository.find({ comment: { id: commentId } }));
   }
+
+  async getUserSubscriptions(commentIds: string[], userId: string): Promise<Map<string, boolean>> {
+    const subscriptions = await this.findAll({
+      comment: { id: { $in: commentIds } },
+      user: { id: userId },
+    });
+
+    const isSubscribed = (commentId: string) => {
+      return Boolean(subscriptions.items.find((subscription) => subscription.commentId === commentId));
+    };
+
+    return new Map(commentIds.map((commentId) => [commentId, isSubscribed(commentId)]));
+  }
 }

@@ -76,6 +76,7 @@ describe('ThreadController', () => {
         replies: new Map(),
         reactionsCounts: new Map(),
         userReactions: new Map(),
+        userSubscriptions: new Map(),
       });
     });
 

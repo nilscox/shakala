@@ -4,4 +4,5 @@ import { Repository } from '../repository';
 
 export interface CommentSubscriptionRepository extends Repository<CommentSubscription> {
   findByCommentId(commentId: string): Promise<CommentSubscription[]>;
+  getUserSubscriptions(commentIds: string[], userId: string): Promise<Map<string, boolean>>;
 }

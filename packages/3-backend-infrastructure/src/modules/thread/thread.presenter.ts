@@ -29,6 +29,7 @@ export class ThreadPresenter {
           result.replies.get(comment.id),
           result.reactionsCounts,
           result.userReactions,
+          result.userSubscriptions,
         ),
       ),
     };
@@ -43,6 +44,7 @@ export class ThreadPresenter {
     replies: Comment[] | undefined,
     reactionsCounts: Map<string, ReactionsCount>,
     userReactions: Map<string, ReactionType | undefined> | undefined,
+    userSubscriptions: Map<string, boolean> | undefined,
   ): CommentDto => {
     const reactionCounts = reactionsCounts.get(comment.id) as ReactionsCount;
 
@@ -64,9 +66,13 @@ export class ThreadPresenter {
       dto.userReaction = this.transformReactionType(userReactions.get(comment.id));
     }
 
+    if (userSubscriptions) {
+      dto.isSubscribed = userSubscriptions.get(comment.id);
+    }
+
     if (replies) {
       dto.replies = replies.map((reply) =>
-        this.transformComment(reply, undefined, reactionsCounts, userReactions),
+        this.transformComment(reply, undefined, reactionsCounts, userReactions, userSubscriptions),
       );
     }
 

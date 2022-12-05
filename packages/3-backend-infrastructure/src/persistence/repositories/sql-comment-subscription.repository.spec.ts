@@ -1,4 +1,7 @@
+import assert from 'assert';
+
 import { createDomainDependencies, factories } from 'backend-domain';
+import { getIds } from 'shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 
@@ -48,5 +51,38 @@ describe('SqlCommentSubscriptionRepository', () => {
 
     expect(await repository.findByCommentId('')).toEqual([]);
     expect(await repository.findByCommentId(comment.id)).toEqual([subscription]);
+  });
+
+  it("retrieves the user's subscriptions for a set of comments", async () => {
+    const author = await save(create.user());
+    const user = await save(create.user());
+    const thread = await save(create.thread({ author }));
+
+    const subscribedComment = await save(create.comment({ threadId: thread.id, author }));
+    const notSubscribedComment = await save(create.comment({ threadId: thread.id, author }));
+    const comments = [subscribedComment, notSubscribedComment];
+
+    const subscription = create.commentSubscription({
+      commentId: subscribedComment.id,
+      userId: user.id,
+    });
+
+    await repository.save(subscription);
+
+    expect(await repository.getUserSubscriptions(getIds(comments), user.id)).toEqual(
+      new Map([
+        [subscribedComment.id, true],
+        [notSubscribedComment.id, false],
+      ]),
+    );
+
+    // todo: make expect work on object instances like Map
+    assert.deepEqual(
+      await repository.getUserSubscriptions(getIds(comments), user.id),
+      new Map([
+        [subscribedComment.id, true],
+        [notSubscribedComment.id, false],
+      ]),
+    );
   });
 });

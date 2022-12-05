@@ -4,6 +4,7 @@ import {
   InMemoryThreadRepository,
   InMemoryReactionRepository,
   InMemoryCommentRepository,
+  InMemoryCommentSubscriptionRepository,
 } from '../../../adapters';
 import { Sort } from '../../../interfaces';
 
@@ -13,8 +14,14 @@ describe('GetThreadQuery', () => {
   const threadRepository = new InMemoryThreadRepository();
   const reactionRepository = new InMemoryReactionRepository();
   const commentRepository = new InMemoryCommentRepository(reactionRepository);
+  const commentSubscriptionRepository = new InMemoryCommentSubscriptionRepository();
 
-  const handler = new GetThreadHandler(threadRepository, commentRepository, reactionRepository);
+  const handler = new GetThreadHandler(
+    threadRepository,
+    commentRepository,
+    reactionRepository,
+    commentSubscriptionRepository,
+  );
 
   const create = factories();
 
@@ -24,12 +31,14 @@ describe('GetThreadQuery', () => {
 
   const userId = 'userId';
   const reaction = create.reaction({ commentId: comment.id, userId, type: ReactionType.upvote });
+  const subscription = create.commentSubscription({ commentId: comment.id, userId });
 
   beforeEach(() => {
     threadRepository.add(thread);
     commentRepository.add(comment);
     commentRepository.add(reply);
     reactionRepository.add(reaction);
+    commentSubscriptionRepository.add(subscription);
   });
 
   const execute = async (userId?: string) => {
@@ -48,6 +57,7 @@ describe('GetThreadQuery', () => {
         [reply.id, create.reactionsCount()],
       ]),
       userReactions: undefined,
+      userSubscriptions: undefined,
     });
   });
 
@@ -61,6 +71,20 @@ describe('GetThreadQuery', () => {
       new Map([
         [comment.id, ReactionType.upvote],
         [reply.id, undefined],
+      ]),
+    );
+  });
+
+  it("sets the user's subscriptions", async () => {
+    const userId = 'userId';
+
+    const result = await execute(userId);
+
+    expect(result).toHaveProperty(
+      'userSubscriptions',
+      new Map([
+        [comment.id, true],
+        [reply.id, false],
       ]),
     );
   });

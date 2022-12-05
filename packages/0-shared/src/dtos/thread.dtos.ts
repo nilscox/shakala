@@ -44,6 +44,7 @@ export type CommentDto = {
   upvotes: number;
   downvotes: number;
   userReaction?: ReactionTypeDto;
+  isSubscribed?: boolean;
   replies?: CommentDto[];
 };
 
