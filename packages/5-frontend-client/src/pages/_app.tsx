@@ -9,10 +9,14 @@ import { ProfileLayout } from '~/app/layout/profile-layout';
 import { ErrorBoundary, ErrorView } from '../utils/error-boundary';
 import { PageProps } from '../utils/ssr';
 
-import '@fontsource/montserrat/latin-400.css';
-import '@fontsource/montserrat/latin-500.css';
-import '@fontsource/montserrat/latin-600.css';
-import '@fontsource/montserrat/latin-700.css';
+import '@fontsource/montserrat/400.css';
+import '@fontsource/montserrat/400-italic.css';
+import '@fontsource/montserrat/500.css';
+import '@fontsource/montserrat/500-italic.css';
+import '@fontsource/montserrat/600.css';
+import '@fontsource/montserrat/600-italic.css';
+import '@fontsource/montserrat/700.css';
+import '@fontsource/montserrat/700-italic.css';
 
 import '../styles/tailwind.css';
 
