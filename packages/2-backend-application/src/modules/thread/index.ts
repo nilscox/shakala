@@ -1,5 +1,5 @@
 export * from './create-comment/create-comment.command';
-export * from './create-comment-subscription/create-comment-subscription.command';
+export * from './set-comment-subscription/set-comment-subscription.command';
 export * from './create-thread/create-thread.command';
 export * from './edit-comment/edit-comment.command';
 export * from './get-comment/get-comment.query';

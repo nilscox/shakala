@@ -1,10 +1,13 @@
 import {
+  CommentAlreadySubscribedError,
+  CommentNotSubscribedError,
   CreateCommentCommand,
   EditCommentCommand,
   GetCommentQuery,
   GetCommentQueryResult,
   LoggerPort,
   ReportCommentCommand,
+  SetCommentSubscriptionCommand,
   SetReactionCommand,
 } from 'backend-application';
 import {
@@ -54,6 +57,8 @@ export class CommentController extends Controller {
       'PUT  /:id': this.editComment,
       'POST /:id/reply': this.createReply,
       'PUT  /:id/reaction': this.setReaction,
+      'POST /:id/subscription': this.subscribe,
+      'DELETE /:id/subscription': this.unsubscribe,
       'POST /:id/report': this.reportComment,
     };
   }
@@ -118,6 +123,38 @@ export class CommentController extends Controller {
       .handle(
         CannotSetReactionOnOwnCommentError,
         (error) => new BadRequest('CannotSetReactionOnOwnComment', error.message),
+      )
+      .run();
+
+    return Response.noContent();
+  }
+
+  async subscribe(req: Request): Promise<Response<void>> {
+    const commentId = req.params.get('id') as string;
+    const user = await this.session.getUser(req);
+
+    await execute(this.commandBus)
+      .command(new SetCommentSubscriptionCommand(user!.id, commentId, true))
+      .asUser(user)
+      .handle(
+        CommentAlreadySubscribedError,
+        (error) => new BadRequest('CommentAlreadySubscribed', error.message, error.details),
+      )
+      .run();
+
+    return Response.noContent();
+  }
+
+  async unsubscribe(req: Request): Promise<Response<void>> {
+    const commentId = req.params.get('id') as string;
+    const user = await this.session.getUser(req);
+
+    await execute(this.commandBus)
+      .command(new SetCommentSubscriptionCommand(user!.id, commentId, false))
+      .asUser(user)
+      .handle(
+        CommentNotSubscribedError,
+        (error) => new BadRequest('CommentNotSubscribed', error.message, error.details),
       )
       .run();
 

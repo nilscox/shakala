@@ -33,6 +33,14 @@ export class ApiCommentGateway implements CommentGateway {
     });
   }
 
+  async subscribe(commentId: string): Promise<void> {
+    await this.http.post(`/comment/${commentId}/subscription`);
+  }
+
+  async unsubscribe(commentId: string): Promise<void> {
+    await this.http.delete(`/comment/${commentId}/subscription`);
+  }
+
   async reportComment(commentId: string, reason?: string | undefined): Promise<void> {
     await this.http.post<void, ReportCommentBodyDto>(`/comment/${commentId}/report`, {
       body: { reason },

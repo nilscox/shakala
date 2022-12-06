@@ -17,6 +17,10 @@ export class SqlCommentSubscriptionRepository
     return 'CommentSubscription';
   }
 
+  async findForUserAndComment(userId: string, commentId: string): Promise<CommentSubscription | undefined> {
+    return this.toDomain(await this.repository.findOne({ user: { id: userId }, comment: { id: commentId } }));
+  }
+
   async findByCommentId(commentId: string): Promise<CommentSubscription[]> {
     return this.toDomain(await this.repository.find({ comment: { id: commentId } }));
   }

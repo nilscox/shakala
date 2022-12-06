@@ -67,4 +67,9 @@ export interface HttpGateway {
     path: string,
     options?: WriteRequestOptions<RequestBody, Query>,
   ): Promise<Response<ResponseBody>>;
+
+  delete<ResponseBody, Query extends QueryParams = never>(
+    path: string,
+    options?: WriteRequestOptions<never, Query>,
+  ): Promise<Response<ResponseBody>>;
 }

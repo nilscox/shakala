@@ -1,6 +1,6 @@
 import {
   CommentRepository,
-  CreateCommentSubscriptionCommand,
+  SetCommentSubscriptionCommand,
   EventHandler,
   ExecutionContext,
 } from 'backend-application';
@@ -18,7 +18,7 @@ export class CreateCommentSubscriptionHandler implements EventHandler<CommentCre
     const comment = await this.commentRepository.findByIdOrFail(event.commentId);
 
     await this.commandBus.execute(
-      new CreateCommentSubscriptionCommand(comment.author.id, comment.id),
+      new SetCommentSubscriptionCommand(comment.author.id, comment.id, true),
       ExecutionContext.unauthenticated,
     );
   }

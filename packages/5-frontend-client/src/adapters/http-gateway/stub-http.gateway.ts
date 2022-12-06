@@ -49,6 +49,7 @@ export class StubHttpGateway implements HttpGateway {
   get = this.createRequest('get');
   post = this.createRequest('post');
   put = this.createRequest('put');
+  delete = this.createRequest('delete');
 
   private key(method: string, path: string) {
     return [method, path].join(' ');

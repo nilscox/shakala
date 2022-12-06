@@ -73,6 +73,13 @@ export class FetchHttpGateway implements HttpGateway {
     return this.request('PUT', path, options);
   }
 
+  async delete<ResponseBody, Query extends QueryParams = never>(
+    path: string,
+    options?: WriteRequestOptions<never, Query>,
+  ): Promise<Response<ResponseBody>> {
+    return this.request('DELETE', path, options);
+  }
+
   private async request<RequestBody, ResponseBody, Query extends QueryParams>(
     method: string,
     path: string,

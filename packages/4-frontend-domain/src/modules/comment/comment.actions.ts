@@ -20,6 +20,7 @@ import { openDraftComments } from './open-draft-comments/open-draft-comments';
 import { openReportModal } from './open-report-modal/open-report-modal';
 import { reportComment } from './report-comment/report-comment';
 import { setReaction } from './set-reaction/set-reaction';
+import { toggleSubscription } from './toggle-subscription/toggle-subscription';
 
 export type CommentMeta = {
   fetching: boolean;
@@ -84,6 +85,7 @@ class CommentActions extends EntityActions<NormalizedComment, CommentMeta> {
   reportComment = reportComment;
   openDraftComments = openDraftComments;
   setReaction = setReaction;
+  toggleSubscription = toggleSubscription;
 
   getInitialEditionText = getInitialEditionText;
   saveDraftEditionText = saveDraftEditionText;

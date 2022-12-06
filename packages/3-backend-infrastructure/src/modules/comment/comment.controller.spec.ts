@@ -1,9 +1,12 @@
 import {
+  CommentAlreadySubscribedError,
+  CommentNotSubscribedError,
   CreateCommentCommand,
   EditCommentCommand,
   ExecutionContext,
   GetCommentQuery,
   ReportCommentCommand,
+  SetCommentSubscriptionCommand,
   SetReactionCommand,
 } from 'backend-application';
 import {
@@ -158,6 +161,57 @@ describe('CommentController', () => {
       const error = await expect.rejects(controller.editComment(request)).with(Unauthorized);
 
       expect(error).toHaveProperty('body.code', 'UserMustBeAuthor');
+    });
+  });
+
+  describe('subscribe / unsubscribe', () => {
+    const comment = create.comment();
+
+    let request: MockRequest;
+
+    beforeEach(() => {
+      queryBus.for(GetCommentQuery).return(comment);
+      request = new MockRequest().withParam('id', comment.id);
+    });
+
+    it('creates a subscription to a comment', async () => {
+      const response = await controller.subscribe(request);
+
+      expect(response).toHaveStatus(204);
+      expect(response).toHaveBody(undefined);
+
+      expect(commandBus.execute).toHaveBeenCalledWith(
+        new SetCommentSubscriptionCommand(user.id, comment.id, true),
+        ctx,
+      );
+    });
+
+    it('handles CommentAlreadySubscribedError', async () => {
+      commandBus.execute = mockReject(new CommentAlreadySubscribedError(user.id, comment.id));
+
+      const error = await expect.rejects(controller.subscribe(request)).with(BadRequest);
+
+      expect(error).toHaveProperty('body.code', 'CommentAlreadySubscribed');
+    });
+
+    it('removes a subscription to a comment', async () => {
+      const response = await controller.unsubscribe(request);
+
+      expect(response).toHaveStatus(204);
+      expect(response).toHaveBody(undefined);
+
+      expect(commandBus.execute).toHaveBeenCalledWith(
+        new SetCommentSubscriptionCommand(user.id, comment.id, false),
+        ctx,
+      );
+    });
+
+    it('handles CommentNotSubscribedError', async () => {
+      commandBus.execute = mockReject(new CommentNotSubscribedError(user.id, comment.id));
+
+      const error = await expect.rejects(controller.unsubscribe(request)).with(BadRequest);
+
+      expect(error).toHaveProperty('body.code', 'CommentNotSubscribed');
     });
   });
 
