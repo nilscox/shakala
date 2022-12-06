@@ -4,13 +4,11 @@ import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository, CommentSubscriptionRepository } from '../../../interfaces';
 import { EventPublisher, ExecutionContext } from '../../../utils';
 
-export class CreateCommentSubscriptionCommand {
+export class SetCommentSubscriptionCommand {
   constructor(public readonly userId: string, public readonly commentId: string) {}
 }
 
-export class CreateCommentSubscriptionCommandHandler
-  implements CommandHandler<CreateCommentSubscriptionCommand>
-{
+export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetCommentSubscriptionCommand> {
   constructor(
     private readonly generator: GeneratorPort,
     private readonly eventBus: IEventBus,
@@ -18,7 +16,7 @@ export class CreateCommentSubscriptionCommandHandler
     private readonly commentSubscriptionRepository: CommentSubscriptionRepository,
   ) {}
 
-  async handle(command: CreateCommentSubscriptionCommand): Promise<void> {
+  async handle(command: SetCommentSubscriptionCommand): Promise<void> {
     const { userId } = command;
     let { commentId } = command;
 

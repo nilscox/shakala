@@ -7,17 +7,17 @@ import {
 } from '../../../adapters';
 
 import {
-  CreateCommentSubscriptionCommand,
-  CreateCommentSubscriptionCommandHandler,
-} from './create-comment-subscription.command';
+  SetCommentSubscriptionCommand,
+  SetCommentSubscriptionCommandHandler,
+} from './set-comment-subscription.command';
 
-describe('CreateCommentSubscriptionCommand', () => {
+describe('SetCommentSubscriptionCommand', () => {
   const generator = new StubGeneratorAdapter();
   const eventBus = new StubEventBus();
   const commentRepository = new InMemoryCommentRepository();
   const commentSubscriptionRepository = new InMemoryCommentSubscriptionRepository();
 
-  const handler = new CreateCommentSubscriptionCommandHandler(
+  const handler = new SetCommentSubscriptionCommandHandler(
     generator,
     eventBus,
     commentRepository,
@@ -31,7 +31,7 @@ describe('CreateCommentSubscriptionCommand', () => {
   });
 
   const execute = async (commentId: string) => {
-    return handler.handle(new CreateCommentSubscriptionCommand('userId', commentId));
+    return handler.handle(new SetCommentSubscriptionCommand('userId', commentId));
   };
 
   it('creates a new subscription to a root comment', async () => {
