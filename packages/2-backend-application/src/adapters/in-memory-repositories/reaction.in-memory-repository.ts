@@ -5,6 +5,8 @@ import { ReactionRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';
 
 export class InMemoryReactionRepository extends InMemoryRepository<Reaction> implements ReactionRepository {
+  protected entityName = 'reaction';
+
   async countReactions(commentIds: string[]): Promise<Map<string, ReactionsCount>> {
     const countReactionsForType = (commentId: string, type: ReactionType): number => {
       return this.filter((reaction) => reaction.commentId === commentId && reaction.type === type).length;

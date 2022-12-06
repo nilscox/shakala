@@ -8,6 +8,8 @@ export class InMemoryNotificationRepository
   extends InMemoryRepository<Notification>
   implements NotificationRepository
 {
+  protected entityName = 'notification';
+
   async findForUser(userId: string, pagination: Pagination): Promise<Paginated<Notification>> {
     return this.paginate(
       this.filter((item) => item.userId === userId),

@@ -8,6 +8,8 @@ export class InMemoryUserActivityRepository
   extends InMemoryRepository<UserActivity>
   implements UserActivityRepository
 {
+  protected entityName = 'userActivity';
+
   async findForUser(userId: string, pagination: Pagination): Promise<Paginated<UserActivity>> {
     return this.paginate(
       this.filter((item) => item.userId === userId),

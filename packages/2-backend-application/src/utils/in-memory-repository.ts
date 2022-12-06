@@ -4,8 +4,10 @@ import { Repository } from '../interfaces';
 
 import { Paginated, Pagination } from './pagination';
 
-export class InMemoryRepository<Item extends { id: string }> implements Repository<Item> {
+export abstract class InMemoryRepository<Item extends { id: string }> implements Repository<Item> {
   private items: Map<string, Item>;
+
+  protected abstract entityName: string;
 
   constructor(private _items: Item[] = []) {
     this.items = new Map(_items.map((item) => [item.id, item]));
@@ -34,7 +36,7 @@ export class InMemoryRepository<Item extends { id: string }> implements Reposito
     const item = this.get(id);
 
     if (!item) {
-      throw new Error(`${this.constructor.name}: Item not found, id = "${id}"`);
+      throw new Error(`${this.entityName} not found, id = "${id}"`);
     }
 
     return item;

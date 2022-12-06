@@ -7,6 +7,8 @@ import { InMemoryRepository } from '../../utils';
 import { InMemoryReactionRepository } from './reaction.in-memory-repository';
 
 export class InMemoryCommentRepository extends InMemoryRepository<Comment> implements CommentRepository {
+  protected entityName = 'comment';
+
   constructor(
     private readonly reactionRepository: ReactionRepository = new InMemoryReactionRepository(),
     items?: Comment[],

@@ -7,6 +7,8 @@ export class InMemoryCommentSubscriptionRepository
   extends InMemoryRepository<CommentSubscription>
   implements CommentSubscriptionRepository
 {
+  protected entityName = 'commentSubscription';
+
   async findByCommentId(commentId: string): Promise<CommentSubscription[]> {
     return this.filter((subscription) => subscription.commentId === commentId);
   }
