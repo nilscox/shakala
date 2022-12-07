@@ -36,6 +36,19 @@ export const NavLink = ({ href, className, activeClassName, exact, ...props }: N
   return <Link href={href} className={clsx(className, isActive() && activeClassName)} {...props} />;
 };
 
+type ThreadLinkProps = {
+  threadId: string;
+  commentId?: string;
+  className?: string;
+  children?: React.ReactNode;
+};
+
+export const ThreadLink = ({ threadId, commentId, className, children }: ThreadLinkProps) => (
+  <Link href={`/discussions/${threadId}${commentId ? '#' + commentId : ''}`} className={className}>
+    {children}
+  </Link>
+);
+
 export const ExternalLink = ({ children, ...props }: HTMLProps<HTMLAnchorElement>) => (
   <a rel="noreferrer" {...props}>
     {children}

@@ -1,4 +1,10 @@
-import { CommentCreatedEvent, factories, StubDateAdapter, StubGeneratorAdapter } from 'backend-domain';
+import {
+  CommentCreatedEvent,
+  CommentReplyCreatedEvent,
+  factories,
+  StubDateAdapter,
+  StubGeneratorAdapter,
+} from 'backend-domain';
 
 import { InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
@@ -58,6 +64,7 @@ describe('CreateCommentCommand', () => {
     expect(created).toHaveProperty('parentId', 'parentId');
 
     expect(eventBus).toHaveEmitted(new CommentCreatedEvent('commentId'));
+    expect(eventBus).toHaveEmitted(new CommentReplyCreatedEvent('commentId'));
   });
 
   it("returns the created comment's id", async () => {

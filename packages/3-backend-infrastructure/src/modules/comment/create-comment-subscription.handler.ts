@@ -3,6 +3,7 @@ import {
   SetCommentSubscriptionCommand,
   EventHandler,
   ExecutionContext,
+  CommentAlreadySubscribedError,
 } from 'backend-application';
 import { CommentCreatedEvent } from 'backend-domain';
 
@@ -17,9 +18,17 @@ export class CreateCommentSubscriptionHandler implements EventHandler<CommentCre
   async handle(event: CommentCreatedEvent): Promise<void> {
     const comment = await this.commentRepository.findByIdOrFail(event.commentId);
 
-    await this.commandBus.execute(
-      new SetCommentSubscriptionCommand(comment.author.id, comment.id, true),
-      ExecutionContext.unauthenticated,
-    );
+    try {
+      await this.commandBus.execute(
+        new SetCommentSubscriptionCommand(comment.author.id, comment.id, true),
+        ExecutionContext.unauthenticated,
+      );
+    } catch (error) {
+      if (error instanceof CommentAlreadySubscribedError) {
+        return;
+      }
+
+      throw error;
+    }
   }
 }

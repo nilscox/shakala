@@ -80,6 +80,50 @@ describe('Comment e2e', function () {
     await setReaction(commentId, null);
   });
 
+  it('as a user, I can subscribe to a comment and be notified of replies', async () => {
+    const agent = server.agent();
+
+    await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
+
+    const subscribe = async (commentId: string) => {
+      await agent.post(`/comment/${commentId}/subscription`).expect(204);
+    };
+
+    const unsubscribe = async (commentId: string) => {
+      await agent.delete(`/comment/${commentId}/subscription`).expect(204);
+    };
+
+    const createReply = async (commentId: string) => {
+      await agent.post(`/comment/${commentId}/reply`).send({ text: 'reply' }).expect(201);
+    };
+
+    const getNotificationsCount = async () => {
+      const response = await agent.get('/account/notifications/count').send({ text: 'reply' }).expect(200);
+      return response.body;
+    };
+
+    const getNotifications = async () => {
+      const response = await agent.get('/account/notifications').send({ text: 'reply' }).expect(200);
+      return response.body;
+    };
+
+    const threadId = await server.createThread(userId);
+    const commentId = await server.createComment(threadId, userId);
+
+    await subscribe(commentId);
+    await createReply(commentId);
+    await new Promise((r) => setTimeout(r, 100));
+
+    expect(await getNotificationsCount()).toBe(1);
+    expect(await getNotifications()).toHaveProperty('0.payload.text', 'reply');
+
+    await unsubscribe(commentId);
+    await createReply(commentId);
+    await new Promise((r) => setTimeout(r, 100));
+
+    expect(await getNotificationsCount()).toBe(1);
+  });
+
   it('as a user, I can report a comment', async () => {
     const agent = server.agent();
 

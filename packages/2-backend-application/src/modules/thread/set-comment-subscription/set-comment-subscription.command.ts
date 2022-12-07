@@ -1,7 +1,6 @@
 import { Comment, CommentSubscription, GeneratorPort, User } from 'backend-domain';
 import { BaseError } from 'shared';
 
-import { Authorize, IsAuthenticated } from '../../../authorization';
 import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository, CommentSubscriptionRepository, UserRepository } from '../../../interfaces';
 import { EventPublisher, ExecutionContext } from '../../../utils';
@@ -14,7 +13,6 @@ export class SetCommentSubscriptionCommand {
   ) {}
 }
 
-@Authorize(IsAuthenticated)
 export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetCommentSubscriptionCommand> {
   constructor(
     private readonly generator: GeneratorPort,
@@ -27,19 +25,14 @@ export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetC
   async handle(command: SetCommentSubscriptionCommand): Promise<void> {
     const { userId, commentId, subscribe } = command;
 
-    const subscription = await this.commentSubscriptionRepository.findForUserAndComment(userId, commentId);
-
     if (subscribe) {
-      if (subscription) {
-        throw new CommentAlreadySubscribedError(userId, commentId);
-      }
-
       const user = await this.userRepository.findByIdOrFail(userId);
       const comment = await this.commentRepository.findByIdOrFail(commentId);
 
       await this.createSubscription(user, comment);
     } else {
-      await this.commentRepository.findByIdOrFail(command.commentId);
+      const subscription = await this.commentSubscriptionRepository.findForUserAndComment(userId, commentId);
+
       if (!subscription) {
         throw new CommentNotSubscribedError(userId, commentId);
       }
@@ -53,6 +46,10 @@ export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetC
 
     if (comment?.parentId) {
       commentId = comment.parentId;
+    }
+
+    if (await this.commentSubscriptionRepository.findForUserAndComment(user.id, commentId)) {
+      throw new CommentAlreadySubscribedError(user.id, commentId);
     }
 
     const subscription = new CommentSubscription({

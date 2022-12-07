@@ -36,7 +36,7 @@ export const Notification = ({ notification, title, children }: NotificationProp
         >
           {formatDateRelativeOrAbsolute(notification.date)}
         </time>
-        <strong className="mt-1 block text-lg">{title}</strong>
+        <strong className="my-1 block text-lg">{title}</strong>
       </div>
       <div>
         <MarkAsSeenButton notification={notification} />

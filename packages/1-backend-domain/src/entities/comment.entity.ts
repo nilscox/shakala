@@ -2,7 +2,7 @@ import { first } from 'shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';
-import { CommentCreatedEvent } from '../events/comment/comment-created.event';
+import { CommentCreatedEvent, CommentReplyCreatedEvent } from '../events/comment/comment-created.event';
 import { CommentEditedEvent } from '../events/comment/comment-edited.event';
 import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
@@ -37,6 +37,10 @@ export class Comment extends AggregateRoot<CommentProps> {
     const comment = new Comment(props, generator, date);
 
     comment.addEvent(new CommentCreatedEvent(comment.id));
+
+    if (comment.parentId) {
+      comment.addEvent(new CommentReplyCreatedEvent(comment.id));
+    }
 
     return comment;
   }

@@ -5,6 +5,7 @@ import { UserDto } from './thread.dtos';
 export enum NotificationType {
   rulesUpdated = 'rulesUpdated',
   threadCreated = 'threadCreated',
+  replyCreated = 'replyCreated',
 }
 
 export type NotificationPayloadMap = {
@@ -16,6 +17,16 @@ export type NotificationPayloadMap = {
   [NotificationType.threadCreated]: {
     threadId: string;
     author: UserDto;
+    text: string;
+  };
+
+  [NotificationType.replyCreated]: {
+    threadId: string;
+    threadDescription: string;
+    parentId: string;
+    parentAuthor: UserDto;
+    replyId: string;
+    replyAuthor: UserDto;
     text: string;
   };
 };

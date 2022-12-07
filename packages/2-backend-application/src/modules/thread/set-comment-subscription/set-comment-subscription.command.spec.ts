@@ -81,6 +81,18 @@ describe('SetCommentSubscriptionCommand', () => {
     await expect.rejects(execute(comment.id, true)).with(CommentAlreadySubscribedError);
   });
 
+  it('throws a CommentAlreadySubscribedError when subscribing to a reply', async () => {
+    const parent = create.comment({ id: 'parentId' });
+    const reply = create.comment({ id: 'replyId', parentId: parent.id });
+    const subscription = create.commentSubscription({ commentId: parent.id, userId: user.id });
+
+    commentRepository.add(parent);
+    commentRepository.add(reply);
+    commentSubscriptionRepository.add(subscription);
+
+    await expect.rejects(execute(reply.id, true)).with(CommentAlreadySubscribedError);
+  });
+
   it('throws a error when the comment does not exist', async () => {
     await expect.rejects(execute('notExistingCommentId', true)).with(Error);
   });

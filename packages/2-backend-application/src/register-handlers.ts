@@ -16,7 +16,7 @@ import {
   MarkNotificationAsSeenHandler,
 } from './modules/notifications';
 // prettier-ignore
-import { CreateCommentCommand, CreateCommentCommandHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetCommentSubscriptionCommand, SetCommentSubscriptionCommandHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
+import { CreateCommentCommand, CreateCommentCommandHandler, CreateCommentReplyNotificationsCommand, CreateCommentReplyNotificationsHandler, CreateThreadCommand, CreateThreadHandler, EditCommentCommand, EditCommentCommandHandler, GetCommentQuery, GetCommentQueryHandler, GetLastThreadsHandler, GetLastThreadsQuery, GetThreadHandler, GetThreadQuery, ReportCommentCommand, ReportCommentHandler, SetCommentSubscriptionCommand, SetCommentSubscriptionCommandHandler, SetReactionCommand, SetReactionCommandHandler } from './modules/thread';
 // prettier-ignore
 import { CreateUserActivityCommand, CreateUserActivityHandler, GetProfileImageHandler, GetProfileImageQuery, GetUserByEmailHandler, GetUserByEmailQuery, GetUserByIdHandler, GetUserByIdQuery, UpdateUserCommand, UpdateUserHandler, ValidateEmailAddressCommand, ValidateEmailAddressHandler } from './modules/user';
 // prettier-ignore
@@ -87,6 +87,7 @@ export const registerHandlers = (
   registerCommand(SetReactionCommand, new SetReactionCommandHandler(eventBus, commentRepository, reactionRepository, commentService));
   registerCommand(ReportCommentCommand, new ReportCommentHandler(eventBus, commentRepository, commentReportRepository, commentService));
   registerCommand(SetCommentSubscriptionCommand, new SetCommentSubscriptionCommandHandler(generator, eventBus, userRepository, commentRepository, commentSubscriptionRepository));
+  registerCommand(CreateCommentReplyNotificationsCommand, new CreateCommentReplyNotificationsHandler(generator, date, threadRepository, commentRepository, commentSubscriptionRepository, notificationRepository));
 
   // notification
   registerCommand(CreateNotificationCommand, new CreateNotificationHandler(generator, date, notificationRepository));

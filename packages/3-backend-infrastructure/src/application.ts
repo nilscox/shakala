@@ -19,6 +19,7 @@ import {
   CommentCreatedEvent,
   CommentEditedEvent,
   CommentReactionSetEvent,
+  CommentReplyCreatedEvent,
   CommentReportedEvent,
   DomainEvent,
   EmailAddressValidatedEvent,
@@ -49,6 +50,7 @@ import { EventBus } from './infrastructure/cqs/event-bus';
 import { QueryBus, RealQueryBus } from './infrastructure/cqs/query-bus';
 import { ClearDatabaseCommand, ClearDatabaseHandler } from './infrastructure/e2e/clear-database.command';
 import { UserCreatedHandler } from './modules/authentication/user-created.handler';
+import { CreateCommentReplyNotificationsHandlerInfra } from './modules/comment/create-comment-reply-notifications.handler';
 import { CreateCommentSubscriptionHandler } from './modules/comment/create-comment-subscription.handler';
 import { CreateUserActivityHandler } from './modules/profile/create-user-activity.handler';
 import {
@@ -179,6 +181,11 @@ export class Application {
     this.eventBus.subscribe(
       CommentCreatedEvent,
       new CreateCommentSubscriptionHandler(this.commandBus, this.repositories.commentRepository),
+    );
+
+    this.eventBus.subscribe(
+      CommentReplyCreatedEvent,
+      new CreateCommentReplyNotificationsHandlerInfra(this.commandBus),
     );
 
     const events: Array<ClassType<DomainEvent>> = [
