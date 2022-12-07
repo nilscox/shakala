@@ -126,7 +126,7 @@ module.exports = {
         '100%': { transform: 'scale(1)' },
       },
       highlight: {
-        '0%': { background: theme('colors.primary') + '33' },
+        '0%': { boxShadow: '0px 0px 10px 5px ' + theme('colors.primary') + '66' },
         '100%': {},
       },
       loading: {
