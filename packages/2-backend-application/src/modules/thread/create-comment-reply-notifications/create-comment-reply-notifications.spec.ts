@@ -96,6 +96,16 @@ describe('CreateCommentReplyNotificationsCommand', () => {
     });
   });
 
+  it('does not send a notification to the author of the reply', async () => {
+    const subscription = create.commentSubscription({ userId: reply.author.id, commentId: parent.id });
+
+    commentSubscriptionRepository.add(subscription);
+
+    await execute();
+
+    expect(notificationRepository.all()).toHaveLength(1);
+  });
+
   it('rejects when the comment id is not a reply', async () => {
     await expect.rejects(execute(parent.id)).with(UnexpectedError);
   });

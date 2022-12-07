@@ -8,7 +8,7 @@ import {
   Thread,
   Timestamp,
 } from 'backend-domain';
-import { NotificationType, UnexpectedError } from 'shared';
+import { isDefined, NotificationType, UnexpectedError } from 'shared';
 
 import { Command, CommandHandler } from '../../../cqs';
 import {
@@ -56,11 +56,11 @@ export class CreateCommentReplyNotificationsHandler
   private async createNotifications(comment: Comment, reply: Comment, subscriptions: CommentSubscription[]) {
     const thread = await this.threadRepository.findByIdOrFail(comment.threadId);
 
-    return Promise.all(
-      subscriptions.map((subscription) => {
-        return this.createNotification(thread, comment, reply, subscription);
-      }),
+    const notifications = await Promise.all(
+      subscriptions.map((subscription) => this.createNotification(thread, comment, reply, subscription)),
     );
+
+    return notifications.filter(isDefined);
   }
 
   private async createNotification(
@@ -69,6 +69,10 @@ export class CreateCommentReplyNotificationsHandler
     reply: Comment,
     subscription: CommentSubscription,
   ) {
+    if (reply.author.id === subscription.userId) {
+      return;
+    }
+
     return Notification.create(NotificationType.replyCreated, {
       id: await this.generator.generateId(),
       date: Timestamp.now(this.date),
