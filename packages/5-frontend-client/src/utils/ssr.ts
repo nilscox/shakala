@@ -15,6 +15,8 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getServerConfig } from '~/utils/config';
 import { productionDependencies } from '~/utils/production-dependencies';
 
+import { HttpError } from '../adapters/http-gateway/http.gateway';
+
 const { apiBaseUrl } = getServerConfig();
 
 export type PageProps = {
@@ -35,7 +37,7 @@ export const ssr = <Query extends ParsedUrlQuery = ParsedUrlQuery>(
     const cookie = req.headers.cookie;
 
     const store = createStore(productionDependencies({ apiBaseUrl, cookie }));
-    let error: unknown;
+    let error: unknown = null;
 
     try {
       const url = new URL(`http://localhost${resolvedUrl}`);
@@ -62,13 +64,13 @@ export const ssr = <Query extends ParsedUrlQuery = ParsedUrlQuery>(
       await initialize?.(store, context);
     } catch (caught) {
       console.error(caught);
-      error = caught;
+      error = serializeError(caught);
     }
 
     return {
       props: {
         state: store.getState(),
-        error: serializeError(error) ?? null,
+        error,
       },
     };
   };
@@ -80,15 +82,49 @@ ssr.authenticated = <Query extends ParsedUrlQuery = ParsedUrlQuery>(
   return ssr(initialize, { authenticated: true });
 };
 
-const serializeError = (error: unknown) => {
-  if (!(error instanceof Error)) {
-    return JSON.stringify(error);
+type SsrError = {
+  name: string;
+  status?: number;
+  message?: string;
+  details?: unknown;
+};
+
+const serializeError = (error: unknown): SsrError => {
+  if (error instanceof HttpError) {
+    const { response } = error;
+
+    return {
+      name: 'HttpError',
+      status: response.status,
+      details: {
+        body: response.body,
+      },
+    };
+  }
+
+  let serialized: object | null;
+
+  try {
+    serialized = JSON.parse(JSON.stringify(error));
+  } catch {
+    serialized = null;
+  }
+
+  if (error instanceof Error) {
+    return {
+      name: error.constructor.name,
+      message: error.message,
+      details: {
+        stack: error.stack,
+        error: serialized,
+      },
+    };
   }
 
   return {
-    ...error,
-    name: error.constructor.name,
-    message: error.message,
-    stack: error.stack,
+    name: 'unknown error',
+    details: {
+      error: serialized,
+    },
   };
 };

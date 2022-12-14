@@ -3,6 +3,7 @@ import { AuthorizationErrorReason } from 'shared';
 import { mockResolve } from 'shared/test';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
+import { NetworkError } from './http.gateway';
 
 const mockFetch = (overrides?: Partial<Response>) => {
   return mockResolve<Response>({
@@ -174,5 +175,13 @@ describe('FetchHttpGateway', () => {
     const error = await expect.rejects(http.post('/')).with(ValidationErrors);
 
     expect(error.getFieldError('email')).toEqual('required');
+  });
+
+  it('handles network errors', async () => {
+    const http = new FetchHttpGateway(baseUrl, (): never => {
+      throw new TypeError('fetch failed', { cause: { code: 'ECONNREFUSED' } });
+    });
+
+    await expect.rejects(http.post('/')).with(NetworkError);
   });
 });

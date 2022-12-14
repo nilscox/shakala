@@ -1,5 +1,5 @@
-import { ValidationErrors, AuthorizationError } from 'frontend-domain';
-import { contains, get, HttpErrorBody, wait } from 'shared';
+import { AuthorizationError, ValidationErrors } from 'frontend-domain';
+import { get, HttpErrorBody, wait } from 'shared';
 import * as yup from 'yup';
 
 import {
@@ -173,12 +173,7 @@ export class FetchHttpGateway implements HttpGateway {
   }
 
   private detectNetworkError(error: unknown) {
-    const message = get(error, 'message');
-
-    const chromeErrorMessage = 'Failed to fetch';
-    const firefoxErrorMessage = 'NetworkError when attempting to fetch resource.';
-
-    if (contains([chromeErrorMessage, firefoxErrorMessage], message)) {
+    if (error instanceof TypeError && get(error.cause, 'code') === 'ECONNREFUSED') {
       throw new NetworkError();
     }
   }

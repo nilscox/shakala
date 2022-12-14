@@ -1,8 +1,11 @@
-import { HttpErrorBody } from 'shared';
+import { BaseError, HttpErrorBody } from 'shared';
 
 import { Response } from './response';
 
-export class HttpError extends Error implements Response<HttpErrorBody> {
+export class HttpError
+  extends BaseError<Record<string, unknown> | undefined>
+  implements Response<HttpErrorBody>
+{
   public readonly headers = new Map<string, string>();
   public readonly body: HttpErrorBody;
 
@@ -10,10 +13,15 @@ export class HttpError extends Error implements Response<HttpErrorBody> {
     public readonly status: number,
     code: string,
     message: string,
-    details?: Record<string, unknown>,
+    public readonly details: Record<string, unknown> | undefined,
   ) {
     super(message);
-    this.body = { code, message, details };
+
+    this.body = {
+      code,
+      message,
+      details,
+    };
   }
 }
 
@@ -37,4 +45,5 @@ export const BadRequest = createHttpError(400);
 export const Unauthorized = createHttpError(401);
 export const Forbidden = createHttpError(403);
 export const NotFound = createHttpErrorWithCode(404, 'NotFound');
+export const InternalServerError = createHttpErrorWithCode(500, 'InternalServerError');
 export const NotImplemented = createHttpErrorWithCode(501, 'NotImplemented');

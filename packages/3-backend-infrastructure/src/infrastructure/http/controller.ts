@@ -6,7 +6,7 @@ import {
   Router,
 } from 'express';
 
-import { Forbidden, HttpError } from './http-errors';
+import { Forbidden, HttpError, InternalServerError } from './http-errors';
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';
 import { Response } from './response';
@@ -113,7 +113,12 @@ export abstract class Controller {
       res.status(500);
 
       if (error instanceof Error) {
-        res.set('Content-Type', 'text/plain').send(error?.stack);
+        return handleResponse(
+          new InternalServerError(error.message, {
+            error: error.constructor.name,
+            stack: error.stack,
+          }),
+        );
       } else {
         res.json(error);
       }

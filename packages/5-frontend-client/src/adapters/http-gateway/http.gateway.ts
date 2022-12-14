@@ -16,7 +16,7 @@ export class HttpError extends Error {
     this.status = response.status;
   }
 
-  static isHttpError(error: unknown, status?: number) {
+  static isHttpError(error: unknown, status?: number): error is HttpError {
     if (!(error instanceof HttpError)) {
       return false;
     }
@@ -29,8 +29,16 @@ export class HttpError extends Error {
   }
 }
 
-export class UnknownHttpError {
-  constructor(readonly response: globalThis.Response, readonly body: unknown) {}
+export class NetworkError extends Error {
+  constructor() {
+    super('network error');
+  }
+}
+
+export class UnknownHttpError extends Error {
+  constructor(readonly response: globalThis.Response, readonly body: unknown) {
+    super('unknown http error');
+  }
 }
 
 export type QueryParams = Record<string, string | number | undefined>;
@@ -44,12 +52,6 @@ export interface WriteRequestOptions<Body, Query extends QueryParams> {
   readonly query?: Query;
   readonly body?: Body;
   readonly onError?: (error: HttpError) => void;
-}
-
-export class NetworkError extends Error {
-  constructor() {
-    super('network error when attempting to fetch resource');
-  }
 }
 
 export interface HttpGateway {

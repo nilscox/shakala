@@ -7,6 +7,7 @@ import supertest from 'supertest';
 import { MockLoggerAdapter } from '../test';
 
 import { Controller, Middlewares, RequestHandler } from './controller';
+import { NotFound } from './http-errors';
 import { Response } from './response';
 
 describe('Controller', () => {
@@ -109,6 +110,57 @@ describe('Controller', () => {
 
     expect(response.get('Content-Type')).toEqual('application/octet-stream');
     expect(response.body).toEqual(Buffer.from('test'));
+  });
+
+  it('handles known errors, instances of HttpError', async () => {
+    const controller = TestController.create(() => {
+      throw new NotFound('this does not exist', { id: '42' });
+    });
+
+    const app = express();
+
+    controller.configure(app);
+
+    const response = await supertest(app).get('/');
+
+    expect(response.status).toEqual(404);
+    expect(response.body).toEqual({
+      code: 'NotFound',
+      message: 'this does not exist',
+      details: {
+        id: '42',
+      },
+    });
+  });
+
+  it('returns an internal server error when the error is not known', async () => {
+    class CustomError extends Error {
+      constructor() {
+        super('nope');
+      }
+    }
+
+    const error = new CustomError();
+
+    const controller = TestController.create(() => {
+      throw error;
+    });
+
+    const app = express();
+
+    controller.configure(app);
+
+    const response = await supertest(app).get('/');
+
+    expect(response.status).toEqual(500);
+    expect(response.body).toEqual({
+      code: 'InternalServerError',
+      message: 'nope',
+      details: {
+        error: 'CustomError',
+        stack: error.stack,
+      },
+    });
   });
 
   it('registers express middlewares before the request handler', async () => {
