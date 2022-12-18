@@ -81,16 +81,16 @@ describe('Comment e2e', function () {
   });
 
   it('as a user, I can subscribe to a comment and be notified of replies', async () => {
-    const agent = server.agent();
+    const subscriber = server.agent();
 
-    await server.createUserAndLogin(agent, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
+    await server.createUserAndLogin(subscriber, { email: 'user2@domain.tld', password: 'p4ssw0rd' });
 
     const subscribe = async (commentId: string) => {
-      await agent.post(`/comment/${commentId}/subscription`).expect(204);
+      await subscriber.post(`/comment/${commentId}/subscription`).expect(204);
     };
 
     const unsubscribe = async (commentId: string) => {
-      await agent.delete(`/comment/${commentId}/subscription`).expect(204);
+      await subscriber.delete(`/comment/${commentId}/subscription`).expect(204);
     };
 
     const createReply = async (commentId: string) => {
@@ -98,12 +98,12 @@ describe('Comment e2e', function () {
     };
 
     const getNotificationsCount = async () => {
-      const response = await agent.get('/account/notifications/count').send({ text: 'reply' }).expect(200);
+      const response = await subscriber.get('/account/notifications/count').expect(200);
       return response.body;
     };
 
     const getNotifications = async () => {
-      const response = await agent.get('/account/notifications').send({ text: 'reply' }).expect(200);
+      const response = await subscriber.get('/account/notifications').expect(200);
       return response.body;
     };
 
