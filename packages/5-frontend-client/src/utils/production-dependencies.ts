@@ -4,7 +4,7 @@ import { ApiAuthenticationGateway } from '../adapters/authentication-gateway/api
 import { ApiCommentGateway } from '../adapters/comment-gateway/api-comment-gateway';
 import { RealDateGateway } from '../adapters/date-gateway/real-date-gateway';
 import { LocalStorageDraftsGateway } from '../adapters/drafts-gateway/local-storage-drafts.gateway';
-import { FetchHttpGateway } from '../adapters/http-gateway/fetch-http.gateway';
+import { ApiFetchHttpGateway } from '../adapters/http-gateway/api-fetch-http.gateway';
 import { ConsoleLoggerGateway } from '../adapters/logger-gateway/console-logger.gateway';
 import { ApiNotificationGateway } from '../adapters/notification-gateway/notification-gateway';
 import { ConsoleLogSnackbarGateway } from '../adapters/snackbar-gateway/console-log-snackbar-gateway';
@@ -32,7 +32,7 @@ type DependenciesOptions = {
 };
 
 export const productionDependencies = (options: DependenciesOptions): ProductionDependencies => {
-  const http = new FetchHttpGateway(options.apiBaseUrl);
+  const http = new ApiFetchHttpGateway(options.apiBaseUrl);
 
   http.cookie = options.cookie;
 

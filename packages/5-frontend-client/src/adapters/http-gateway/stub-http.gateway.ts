@@ -1,5 +1,6 @@
 import { HttpErrorBody, last } from 'shared';
 
+import { ApiHttpError } from './api-fetch-http.gateway';
 import { HttpError, HttpGateway, ReadRequestOptions, Response, WriteRequestOptions } from './http.gateway';
 
 export class StubResponse<Body = unknown> implements Response<Body> {
@@ -31,7 +32,7 @@ export class StubResponse<Body = unknown> implements Response<Body> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyRequestOptions = ReadRequestOptions<any> | WriteRequestOptions<unknown, any>;
+type AnyRequestOptions = ReadRequestOptions<unknown, any> | WriteRequestOptions<unknown, unknown, any>;
 
 export class StubHttpGateway implements HttpGateway {
   private responses = new Map<string, Response<unknown>>();
@@ -69,9 +70,12 @@ export class StubHttpGateway implements HttpGateway {
       const error = this.errors.get(key);
 
       if (error) {
-        const httpError = new HttpError(error);
+        const httpError = new ApiHttpError(error);
 
-        options?.onError?.(httpError);
+        if (options?.onError) {
+          return new StubResponse(options.onError(httpError)) as Response<Body>;
+        }
+
         throw httpError;
       }
 

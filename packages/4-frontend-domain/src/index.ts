@@ -4,6 +4,7 @@ export * from './stubs';
 export * from './test-store';
 
 export * from './utils/abstract-drafts-gateway';
+export * from './utils/create-stub-function';
 export * from './utils/date-utils';
 export * from './utils/pagination';
 export * from './utils/validation-error';

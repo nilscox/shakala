@@ -21,7 +21,7 @@ const { apiBaseUrl } = getServerConfig();
 
 export type PageProps = {
   state: AppState;
-  error?: unknown;
+  error: SsrError | null;
 };
 
 type Options = Partial<{
@@ -37,7 +37,7 @@ export const ssr = <Query extends ParsedUrlQuery = ParsedUrlQuery>(
     const cookie = req.headers.cookie;
 
     const store = createStore(productionDependencies({ apiBaseUrl, cookie }));
-    let error: unknown = null;
+    let error: SsrError | null = null;
 
     try {
       const url = new URL(`http://localhost${resolvedUrl}`);
@@ -95,7 +95,8 @@ const serializeError = (error: unknown): SsrError => {
 
     return {
       name: 'HttpError',
-      status: response.status,
+      status: error.status,
+      message: error.message,
       details: {
         body: response.body,
       },

@@ -9,7 +9,7 @@ import {
   ThreadWithCommentsDto,
 } from 'shared';
 
-import { HttpError, HttpGateway, Response } from '../http-gateway/http.gateway';
+import { HttpGateway, Response } from '../http-gateway/http.gateway';
 
 export class FetchError extends Error {
   constructor(public readonly response: Response<unknown>) {
@@ -48,19 +48,24 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async fetchThread(threadId: string): Promise<Thread | undefined> {
-    try {
-      const response = await this.http.get<ThreadWithCommentsDto>(`/thread/${threadId}`);
-      const threadDto = response.body;
+    const { body } = await this.http.get<ThreadWithCommentsDto | undefined>(`/thread/${threadId}`, {
+      onError(error) {
+        if (error.status === 404) {
+          return undefined;
+        }
 
-      return {
-        ...threadDto,
-        comments: threadDto.comments.map(this.transformCommentDto),
-      };
-    } catch (error) {
-      if (!HttpError.isHttpError(error, 404)) {
         throw error;
-      }
+      },
+    });
+
+    if (!body) {
+      return;
     }
+
+    return {
+      ...body,
+      comments: body.comments.map(this.transformCommentDto),
+    };
   }
 
   async fetchComments(threadId: string, options: FetchCommentsFilters): Promise<Comment[]> {

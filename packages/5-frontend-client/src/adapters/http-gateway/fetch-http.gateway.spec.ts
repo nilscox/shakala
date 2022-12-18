@@ -1,19 +1,8 @@
-import { AuthorizationError, ValidationErrors } from 'frontend-domain';
-import { AuthorizationErrorReason } from 'shared';
-import { mockResolve } from 'shared/test';
+import { createStubFunction } from 'frontend-domain';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
-import { NetworkError } from './http.gateway';
-
-const mockFetch = (overrides?: Partial<Response>) => {
-  return mockResolve<Response>({
-    ok: true,
-    text() {},
-    json() {},
-    headers: new Headers(),
-    ...overrides,
-  } as Response);
-};
+import { HttpError, NetworkError, Response } from './http.gateway';
+import { mockFetch } from './mock-fetch';
 
 describe('FetchHttpGateway', () => {
   const baseUrl = 'https://base.url';
@@ -26,22 +15,6 @@ describe('FetchHttpGateway', () => {
     await http.get('/path');
 
     expect(fetch).toHaveBeenCalledWith('https://base.url/path', expect.objectWith({ method: 'GET' }));
-  });
-
-  it('adds credentials and cache parameters when calling fetch', async () => {
-    const fetch = mockFetch();
-
-    const http = new FetchHttpGateway(baseUrl, fetch);
-
-    await http.get('/path');
-
-    expect(fetch).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectWith({
-        credentials: 'include',
-        cache: 'no-store',
-      }),
-    );
   });
 
   it('returns the response json body', async () => {
@@ -143,45 +116,43 @@ describe('FetchHttpGateway', () => {
     );
   });
 
-  it('handles authorization errors', async () => {
-    const headers = new Headers();
-    const reason = AuthorizationErrorReason.emailValidationRequired;
-
-    headers.set('Content-Type', 'application/json');
-
-    const json = async () => ({ code: 'Unauthorized', message: "can't touch this", details: { reason } });
-    const fetch = mockFetch({ ok: false, status: 403, headers, json });
-    const http = new FetchHttpGateway(baseUrl, fetch);
-
-    const error = await expect.rejects(http.post('/')).with(AuthorizationError);
-
-    expect(error).toHaveProperty('reason', reason);
-  });
-
-  it('handles validation errors', async () => {
-    const headers = new Headers();
-
-    headers.set('Content-Type', 'application/json');
-
-    const fields = [
-      { field: 'email', error: 'required', value: 'some@email.tld' },
-      { field: 'nick', error: 'already-exists', value: 'nick' },
-    ];
-
-    const json = async () => ({ code: 'ValidationError', message: 'validation error', details: { fields } });
-    const fetch = mockFetch({ ok: false, status: 400, headers, json });
-    const http = new FetchHttpGateway(baseUrl, fetch);
-
-    const error = await expect.rejects(http.post('/')).with(ValidationErrors);
-
-    expect(error.getFieldError('email')).toEqual('required');
-  });
-
   it('handles network errors', async () => {
     const http = new FetchHttpGateway(baseUrl, (): never => {
       throw new TypeError('fetch failed', { cause: { code: 'ECONNREFUSED' } });
     });
 
     await expect.rejects(http.post('/')).with(NetworkError);
+  });
+
+  it('returns the handled error', async () => {
+    const fetch = mockFetch({
+      ok: false,
+      status: 400,
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      json: async () => ({ some: 'error' }),
+    });
+
+    const http = new FetchHttpGateway(baseUrl, fetch);
+
+    // todo: use default implementation
+    const onError = createStubFunction();
+    onError.return('result');
+
+    const response = await http.get('/', { onError });
+
+    await expect(onError.lastCall).toEqual([expect.objectWith({ status: 400, body: { some: 'error' } })]);
+
+    await expect(response).toHaveProperty('status', 400);
+    await expect(response).toHaveProperty('body', 'result');
+  });
+
+  it('HttpError.isHttpError type guard', async () => {
+    const error = new HttpError({ status: 404 } as Response);
+
+    expect(HttpError.isHttpError(undefined)).toBe(false);
+    expect(HttpError.isHttpError(new Error())).toBe(false);
+    expect(HttpError.isHttpError(error)).toBe(true);
+    expect(HttpError.isHttpError(error, 400)).toBe(false);
+    expect(HttpError.isHttpError(error, 404)).toBe(true);
   });
 });

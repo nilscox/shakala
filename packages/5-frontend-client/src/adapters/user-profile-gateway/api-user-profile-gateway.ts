@@ -1,6 +1,7 @@
 import { InvalidImageFormat, Paginated, UserActivity, UserProfileGateway } from 'frontend-domain';
 import { UserActivityDto, UserActivityType } from 'shared';
 
+import { ApiHttpError } from '../http-gateway/api-fetch-http.gateway';
 import { HttpGateway } from '../http-gateway/http.gateway';
 
 export class ApiUserProfileGateway implements UserProfileGateway {
@@ -28,7 +29,7 @@ export class ApiUserProfileGateway implements UserProfileGateway {
     const response = await this.http.post<string, FormData>(`/account/profile-image`, {
       body,
       onError: (error) => {
-        if (error.status === 400 && error.response.body.code === 'InvalidImageFormat') {
+        if (ApiHttpError.is(error, 'InvalidImageFormat')) {
           throw new InvalidImageFormat();
         }
 

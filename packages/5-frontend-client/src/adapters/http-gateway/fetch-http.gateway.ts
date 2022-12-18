@@ -1,6 +1,4 @@
-import { AuthorizationError, ValidationErrors } from 'frontend-domain';
-import { get, HttpErrorBody, wait } from 'shared';
-import * as yup from 'yup';
+import { get, wait } from 'shared';
 
 import {
   HttpError,
@@ -9,15 +7,8 @@ import {
   QueryParams,
   ReadRequestOptions,
   Response,
-  UnknownHttpError,
   WriteRequestOptions,
 } from './http.gateway';
-
-const httpErrorSchema = yup.object({
-  code: yup.string().required(),
-  message: yup.string().required(),
-  details: yup.object().optional(),
-});
 
 class FetchResponse<Body> implements Response<Body> {
   constructor(private readonly response: globalThis.Response, public readonly body: Body) {}
@@ -54,102 +45,103 @@ export class FetchHttpGateway implements HttpGateway {
 
   async get<ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: ReadRequestOptions<Query>,
+    options?: ReadRequestOptions<ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('GET', path, options);
   }
 
   async post<RequestBody, ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<RequestBody, Query>,
+    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('POST', path, options);
   }
 
   async put<RequestBody, ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<RequestBody, Query>,
+    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('PUT', path, options);
   }
 
   async delete<ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<never, Query>,
+    options?: WriteRequestOptions<void, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
     return this.request('DELETE', path, options);
   }
 
-  private async request<RequestBody, ResponseBody, Query extends QueryParams>(
+  protected async request<RequestBody, ResponseBody, Query extends QueryParams>(
     method: string,
     path: string,
-    options: WriteRequestOptions<RequestBody, Query> = {},
+    options: WriteRequestOptions<RequestBody, ResponseBody, Query> = {},
   ): Promise<Response<ResponseBody>> {
-    const { query, body } = options;
+    const init = this.getRequestInit(method, options);
+    const url = this.getUrl(path, options);
 
-    const requestHeaders = new Headers();
+    let fetchResponse: globalThis.Response;
+
+    try {
+      fetchResponse = await this._fetch(url, init);
+    } catch (error) {
+      this.detectNetworkError(error);
+      throw error;
+    }
+
+    const responseBody = await this.getResponseBody(fetchResponse);
+
+    if (this.fakeLag) {
+      await wait(this.fakeLag);
+    }
+
+    const response = new FetchResponse(fetchResponse, responseBody);
+
+    if (fetchResponse.ok) {
+      return response as Response<ResponseBody>;
+    }
+
+    const error = this.getError(response);
+
+    if (options.onError) {
+      return new FetchResponse(fetchResponse, options.onError(error));
+    }
+
+    throw error;
+  }
+
+  protected getRequestInit<RequestBody, ResponseBody, Query extends QueryParams>(
+    method: string,
+    options: WriteRequestOptions<RequestBody, ResponseBody, Query>,
+  ): RequestInit {
+    const { body } = options;
+
+    const headers = new Headers();
     const init: RequestInit = {
       method,
-      headers: requestHeaders,
-      credentials: 'include',
-      cache: 'no-store',
+      headers,
     };
 
     if (this.cookie) {
-      requestHeaders.set('Cookie', this.cookie);
+      headers.set('Cookie', this.cookie);
     }
 
     if (body) {
       if (body instanceof FormData) {
         init.body = body;
       } else {
-        requestHeaders.set('Content-Type', 'application/json');
+        headers.set('Content-Type', 'application/json');
         init.body = JSON.stringify(body);
       }
     }
 
-    const url = this.baseUrl + path + this.getQueryString(query);
+    return init;
+  }
 
-    let response: globalThis.Response;
-
-    try {
-      response = await this._fetch(url, init);
-    } catch (error) {
-      this.detectNetworkError(error);
-      throw error;
-    }
-
-    const responseBody = await this.getResponseBody(response);
-
-    if (this.fakeLag) {
-      await wait(this.fakeLag);
-    }
-
-    if (response.ok) {
-      return new FetchResponse(response, responseBody as ResponseBody);
-    }
-
-    const errorBody = this.parseErrorBody(responseBody);
-
-    if (!errorBody) {
-      throw new UnknownHttpError(response, responseBody);
-    }
-
-    if (errorBody?.code === 'Unauthorized') {
-      throw AuthorizationError.from(errorBody);
-    }
-
-    if (errorBody?.code === 'ValidationError') {
-      throw ValidationErrors.from(errorBody);
-    }
-
-    const httpError = new HttpError(new FetchResponse<HttpErrorBody>(response, errorBody));
-
-    if (options.onError) {
-      options.onError(httpError);
-    }
-
-    throw httpError;
+  protected getUrl<RequestBody, ResponseBody, Query extends QueryParams>(
+    path: string,
+    options: WriteRequestOptions<RequestBody, ResponseBody, Query>,
+  ) {
+    return this.baseUrl + path + this.getQueryString(options.query);
   }
 
   private getQueryString(query: QueryParams | undefined): string {
@@ -178,11 +170,7 @@ export class FetchHttpGateway implements HttpGateway {
     }
   }
 
-  private parseErrorBody(body: unknown): HttpErrorBody | undefined {
-    try {
-      return httpErrorSchema.validateSync(body);
-    } catch (error) {
-      return undefined;
-    }
+  protected getError(response: Response): HttpError {
+    return new HttpError(response);
   }
 }

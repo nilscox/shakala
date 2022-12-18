@@ -1,9 +1,7 @@
 import { Component } from 'react';
-import { get } from 'shared';
 
 import Bug from '~/images/bug.svg';
 
-import { HttpError, UnknownHttpError } from '../adapters/http-gateway/http.gateway';
 import { PageTitle } from '../app/page-title';
 import { Link } from '../elements/link';
 
@@ -50,7 +48,7 @@ export const ErrorView = ({ error }: ErrorViewProps) => (
 
     <div className="text-xl">Une erreur qui ne devrait pas arriver... est arrivée quand même x(</div>
 
-    <code>{getErrorMessage(error) as string}</code>
+    <code>{getErrorMessage(error)}</code>
 
     <Link href="/">
       <Bug className="m-auto my-6 max-w-1 rounded-lg" />
@@ -61,13 +59,11 @@ export const ErrorView = ({ error }: ErrorViewProps) => (
 );
 
 const getErrorMessage = (error: unknown) => {
-  if (HttpError.isHttpError(error)) {
-    return error.response.body.message;
+  const { message } = error as Error;
+
+  if (typeof message === 'string') {
+    return message;
   }
 
-  if (error instanceof UnknownHttpError) {
-    return get(error.body, 'message');
-  }
-
-  return get(error, 'message');
+  return 'unknown error';
 };

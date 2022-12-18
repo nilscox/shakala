@@ -1,26 +1,22 @@
 import { AuthenticatedUser, AuthenticationGateway, InvalidCredentialsError } from 'frontend-domain';
 import { AuthUserDto, LoginBodyDto, SignupBodyDto } from 'shared';
 
+import { ApiHttpError } from '../http-gateway/api-fetch-http.gateway';
 import { HttpGateway } from '../http-gateway/http.gateway';
 
 export class ApiAuthenticationGateway implements AuthenticationGateway {
   constructor(private readonly http: HttpGateway) {}
 
   async fetchAuthenticatedUser(): Promise<AuthenticatedUser | undefined> {
-    const response = await this.http.get<AuthUserDto | undefined>('/auth/me');
-
-    if (response.error) {
-      throw response.error;
-    }
-
-    return response.body;
+    const { body } = await this.http.get<AuthUserDto | undefined>('/auth/me');
+    return body;
   }
 
   async login(email: string, password: string): Promise<AuthenticatedUser> {
-    const response = await this.http.post<AuthUserDto, LoginBodyDto>('/auth/login', {
+    const { body } = await this.http.post<AuthUserDto, LoginBodyDto>('/auth/login', {
       body: { email, password },
       onError(error) {
-        if (error.response.body.code === 'InvalidCredentials') {
+        if (ApiHttpError.is(error, 'InvalidCredentials')) {
           throw new InvalidCredentialsError();
         }
 
@@ -28,19 +24,15 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
       },
     });
 
-    return response.body;
+    return body;
   }
 
   async signup(email: string, password: string, nick: string): Promise<string> {
-    const response = await this.http.post<AuthUserDto, SignupBodyDto>('/auth/signup', {
+    const { body } = await this.http.post<AuthUserDto, SignupBodyDto>('/auth/signup', {
       body: { email, password, nick },
     });
 
-    if (response.error) {
-      throw response.error;
-    }
-
-    return response.body.id;
+    return body.id;
   }
 
   async logout(): Promise<void> {

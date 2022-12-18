@@ -1,27 +1,29 @@
-import { HttpErrorBody } from 'shared';
-
-export interface Response<Body> {
+export interface Response<Body = unknown> {
   readonly ok: boolean;
   readonly status: number;
   readonly headers: Headers;
   readonly body: Body;
-  readonly error: unknown;
 }
 
-export class HttpError extends Error {
-  readonly status: number;
-
-  constructor(readonly response: Response<HttpErrorBody>) {
-    super('http error');
-    this.status = response.status;
+export class HttpError<Body = unknown> extends Error {
+  constructor(readonly response: Response<Body>) {
+    super(`http ${response.status} error`);
   }
 
-  static isHttpError(error: unknown, status?: number): error is HttpError {
+  get status() {
+    return this.response.status;
+  }
+
+  get body() {
+    return this.response.body;
+  }
+
+  static isHttpError(error: unknown, status?: number): error is HttpError<unknown> {
     if (!(error instanceof HttpError)) {
       return false;
     }
 
-    if (status !== undefined) {
+    if (status === undefined) {
       return true;
     }
 
@@ -35,43 +37,37 @@ export class NetworkError extends Error {
   }
 }
 
-export class UnknownHttpError extends Error {
-  constructor(readonly response: globalThis.Response, readonly body: unknown) {
-    super('unknown http error');
-  }
-}
-
 export type QueryParams = Record<string, string | number | undefined>;
 
-export interface ReadRequestOptions<Query extends QueryParams> {
+export interface ReadRequestOptions<ResponseBody, Query extends QueryParams> {
   readonly query?: Query;
-  readonly onError?: (error: HttpError) => void;
+  readonly onError?: (error: HttpError) => ResponseBody;
 }
 
-export interface WriteRequestOptions<Body, Query extends QueryParams> {
+export interface WriteRequestOptions<RequestBody, ResponseBody, Query extends QueryParams> {
   readonly query?: Query;
-  readonly body?: Body;
-  readonly onError?: (error: HttpError) => void;
+  readonly body?: RequestBody;
+  readonly onError?: (error: HttpError) => ResponseBody;
 }
 
 export interface HttpGateway {
   get<ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: ReadRequestOptions<Query>,
+    options?: ReadRequestOptions<ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 
   post<ResponseBody, RequestBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<RequestBody, Query>,
+    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 
   put<ResponseBody, RequestBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<RequestBody, Query>,
+    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 
   delete<ResponseBody, Query extends QueryParams = never>(
     path: string,
-    options?: WriteRequestOptions<never, Query>,
+    options?: WriteRequestOptions<never, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 }
