@@ -17,6 +17,8 @@ export class HttpError
   ) {
     super(message);
 
+    Object.setPrototypeOf(this, HttpError.prototype);
+
     this.body = {
       code,
       message,
