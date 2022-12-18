@@ -43,32 +43,20 @@ export class FetchHttpGateway implements HttpGateway {
     private readonly _fetch = typeof window === 'undefined' ? fetch : fetch.bind(window),
   ) {}
 
-  async get<ResponseBody, Query extends QueryParams = never>(
+  async read<ResponseBody, Query extends QueryParams = never>(
+    method: 'get',
     path: string,
     options?: ReadRequestOptions<ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
-    return this.request('GET', path, options);
+    return this.request(method, path, options);
   }
 
-  async post<RequestBody, ResponseBody, Query extends QueryParams = never>(
+  async write<RequestBody, ResponseBody, Query extends QueryParams = never>(
+    method: 'post' | 'put' | 'delete',
     path: string,
     options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>> {
-    return this.request('POST', path, options);
-  }
-
-  async put<RequestBody, ResponseBody, Query extends QueryParams = never>(
-    path: string,
-    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
-  ): Promise<Response<ResponseBody>> {
-    return this.request('PUT', path, options);
-  }
-
-  async delete<ResponseBody, Query extends QueryParams = never>(
-    path: string,
-    options?: WriteRequestOptions<void, ResponseBody, Query>,
-  ): Promise<Response<ResponseBody>> {
-    return this.request('DELETE', path, options);
+    return this.request(method, path, options);
   }
 
   protected async request<RequestBody, ResponseBody, Query extends QueryParams>(
@@ -117,7 +105,7 @@ export class FetchHttpGateway implements HttpGateway {
 
     const headers = new Headers();
     const init: RequestInit = {
-      method,
+      method: method.toUpperCase(),
       headers,
     };
 

@@ -8,7 +8,8 @@ export class ApiUserProfileGateway implements UserProfileGateway {
   constructor(private readonly http: HttpGateway) {}
 
   async fetchActivities(page: number): Promise<Paginated<UserActivity<UserActivityType>>> {
-    const response = await this.http.get<UserActivityDto<UserActivityType>[], { page: number }>(
+    const response = await this.http.read<UserActivityDto<UserActivityType>[], { page: number }>(
+      'get',
       '/user/activities',
       { query: { page } },
     );
@@ -26,7 +27,7 @@ export class ApiUserProfileGateway implements UserProfileGateway {
 
     body.set('profileImage', image);
 
-    const response = await this.http.post<string, FormData>(`/account/profile-image`, {
+    const response = await this.http.write<string, FormData>('post', `/account/profile-image`, {
       body,
       onError: (error) => {
         if (ApiHttpError.is(error, 'InvalidImageFormat')) {

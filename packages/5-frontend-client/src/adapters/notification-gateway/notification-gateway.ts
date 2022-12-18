@@ -7,14 +7,18 @@ export class ApiNotificationGateway implements NotificationGateway {
   constructor(private readonly http: HttpGateway) {}
 
   async fetchUnseenNotificationsCount(): Promise<number> {
-    const response = await this.http.get<number>('/account/notifications/count');
+    const response = await this.http.read<number>('get', '/account/notifications/count');
     return response.body;
   }
 
   async fetchNotifications(page: number): Promise<Paginated<Notification>> {
-    const response = await this.http.get<Notification[], PaginationQueryDto>(`/account/notifications`, {
-      query: { page: String(page), pageSize: String(10) },
-    });
+    const response = await this.http.read<Notification[], PaginationQueryDto>(
+      'get',
+      `/account/notifications`,
+      {
+        query: { page: String(page), pageSize: String(10) },
+      },
+    );
 
     const total = Number(response.headers.get('pagination-total'));
 
@@ -25,6 +29,6 @@ export class ApiNotificationGateway implements NotificationGateway {
   }
 
   async markNotificationAsSeen(notificationId: string): Promise<void> {
-    await this.http.put(`/account/notifications/${notificationId}/seen`);
+    await this.http.write('put', `/account/notifications/${notificationId}/seen`);
   }
 }

@@ -37,7 +37,7 @@ export class ApiThreadGateway implements ThreadGateway {
   };
 
   async fetchLast(count: number): Promise<Thread[]> {
-    const response = await this.http.get<ThreadDto[], GetLastThreadsQueryDto>('/thread/last', {
+    const response = await this.http.read<ThreadDto[], GetLastThreadsQueryDto>('get', '/thread/last', {
       query: { count },
     });
 
@@ -48,7 +48,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async fetchThread(threadId: string): Promise<Thread | undefined> {
-    const { body } = await this.http.get<ThreadWithCommentsDto | undefined>(`/thread/${threadId}`, {
+    const { body } = await this.http.read<ThreadWithCommentsDto | undefined>('get', `/thread/${threadId}`, {
       onError(error) {
         if (error.status === 404) {
           return undefined;
@@ -69,15 +69,19 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async fetchComments(threadId: string, options: FetchCommentsFilters): Promise<Comment[]> {
-    const response = await this.http.get<ThreadWithCommentsDto, GetThreadQueryDto>(`/thread/${threadId}`, {
-      query: options as GetThreadQueryDto,
-    });
+    const response = await this.http.read<ThreadWithCommentsDto, GetThreadQueryDto>(
+      'get',
+      `/thread/${threadId}`,
+      {
+        query: options as GetThreadQueryDto,
+      },
+    );
 
     return response.body.comments.map(this.transformCommentDto);
   }
 
   async createThread(description: string, keywords: string[], text: string): Promise<string> {
-    const response = await this.http.post<{ id: string }, CreateThreadBodyDto>('/thread', {
+    const response = await this.http.write<{ id: string }, CreateThreadBodyDto>('post', '/thread', {
       body: { description, text, keywords },
     });
 
@@ -89,7 +93,7 @@ export class ApiThreadGateway implements ThreadGateway {
   }
 
   async createComment(threadId: string, text: string): Promise<string> {
-    const response = await this.http.post<{ id: string }, CreateCommentBodyDto>('/comment', {
+    const response = await this.http.write<{ id: string }, CreateCommentBodyDto>('post', '/comment', {
       body: { threadId, text },
     });
 

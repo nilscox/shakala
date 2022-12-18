@@ -12,7 +12,7 @@ describe('FetchHttpGateway', () => {
 
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await http.get('/path');
+    await http.read('get', '/path');
 
     expect(fetch).toHaveBeenCalledWith('https://base.url/path', expect.objectWith({ method: 'GET' }));
   });
@@ -32,7 +32,7 @@ describe('FetchHttpGateway', () => {
 
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    const response = await http.get('/');
+    const response = await http.read('get', '/');
 
     expect(response.body).toBe(result);
   });
@@ -52,7 +52,7 @@ describe('FetchHttpGateway', () => {
 
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    const response = await http.get('/');
+    const response = await http.read('get', '/');
 
     expect(response.body).toBe(result);
   });
@@ -61,7 +61,7 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch();
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await http.get('/', {
+    await http.read('get', '/', {
       query: { one: 1, two: '2' },
     });
 
@@ -72,7 +72,7 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch();
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await http.get('/', {
+    await http.read('get', '/', {
       query: {},
     });
 
@@ -83,7 +83,7 @@ describe('FetchHttpGateway', () => {
     const fetch = mockFetch();
     const http = new FetchHttpGateway(baseUrl, fetch);
 
-    await http.post('/', {
+    await http.write('post', '/', {
       body: { bo: 'dy' },
     });
 
@@ -103,7 +103,7 @@ describe('FetchHttpGateway', () => {
 
     const body = new FormData();
 
-    await http.post('/', {
+    await http.write('post', '/', {
       body,
     });
 
@@ -121,7 +121,7 @@ describe('FetchHttpGateway', () => {
       throw new TypeError('fetch failed', { cause: { code: 'ECONNREFUSED' } });
     });
 
-    await expect.rejects(http.post('/')).with(NetworkError);
+    await expect.rejects(http.read('get', '/')).with(NetworkError);
   });
 
   it('returns the handled error', async () => {
@@ -138,7 +138,7 @@ describe('FetchHttpGateway', () => {
     const onError = createStubFunction();
     onError.return('result');
 
-    const response = await http.get('/', { onError });
+    const response = await http.read('get', '/', { onError });
 
     await expect(onError.lastCall).toEqual([expect.objectWith({ status: 400, body: { some: 'error' } })]);
 

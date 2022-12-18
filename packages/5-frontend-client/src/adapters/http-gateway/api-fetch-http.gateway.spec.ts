@@ -12,7 +12,7 @@ describe('ApiFetchHttpGateway', () => {
 
     const http = new ApiFetchHttpGateway(baseUrl, fetch);
 
-    await http.get('/path');
+    await http.read('get', '/path');
 
     expect(fetch).toHaveBeenCalledWith(
       expect.anything(),
@@ -33,7 +33,7 @@ describe('ApiFetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 403, headers, json });
     const http = new ApiFetchHttpGateway(baseUrl, fetch);
 
-    const error = await expect.rejects(http.post('/')).with(AuthorizationError);
+    const error = await expect.rejects(http.write('post', '/')).with(AuthorizationError);
 
     expect(error).toHaveProperty('reason', reason);
   });
@@ -52,7 +52,7 @@ describe('ApiFetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new ApiFetchHttpGateway(baseUrl, fetch);
 
-    const error = await expect.rejects(http.post('/')).with(ValidationErrors);
+    const error = await expect.rejects(http.write('post', '/')).with(ValidationErrors);
 
     expect(error.getFieldError('email')).toEqual('required');
   });
@@ -71,7 +71,7 @@ describe('ApiFetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new ApiFetchHttpGateway(baseUrl, fetch);
 
-    const error = await expect.rejects(http.get('/')).with(ApiHttpError);
+    const error = await expect.rejects(http.read('get', '/')).with(ApiHttpError);
 
     expect(error.code).toEqual('SomeErrorCode');
     expect(error.message).toEqual('some error message');

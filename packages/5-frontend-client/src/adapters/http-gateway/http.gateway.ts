@@ -51,23 +51,15 @@ export interface WriteRequestOptions<RequestBody, ResponseBody, Query extends Qu
 }
 
 export interface HttpGateway {
-  get<ResponseBody, Query extends QueryParams = never>(
+  read<ResponseBody, Query extends QueryParams = never>(
+    method: 'get',
     path: string,
     options?: ReadRequestOptions<ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 
-  post<ResponseBody, RequestBody, Query extends QueryParams = never>(
+  write<ResponseBody, RequestBody, Query extends QueryParams = never>(
+    method: 'post' | 'put' | 'delete',
     path: string,
     options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
-  ): Promise<Response<ResponseBody>>;
-
-  put<ResponseBody, RequestBody, Query extends QueryParams = never>(
-    path: string,
-    options?: WriteRequestOptions<RequestBody, ResponseBody, Query>,
-  ): Promise<Response<ResponseBody>>;
-
-  delete<ResponseBody, Query extends QueryParams = never>(
-    path: string,
-    options?: WriteRequestOptions<never, ResponseBody, Query>,
   ): Promise<Response<ResponseBody>>;
 }

@@ -8,12 +8,12 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   constructor(private readonly http: HttpGateway) {}
 
   async fetchAuthenticatedUser(): Promise<AuthenticatedUser | undefined> {
-    const { body } = await this.http.get<AuthUserDto | undefined>('/auth/me');
+    const { body } = await this.http.read<AuthUserDto | undefined>('get', '/auth/me');
     return body;
   }
 
   async login(email: string, password: string): Promise<AuthenticatedUser> {
-    const { body } = await this.http.post<AuthUserDto, LoginBodyDto>('/auth/login', {
+    const { body } = await this.http.write<AuthUserDto, LoginBodyDto>('post', '/auth/login', {
       body: { email, password },
       onError(error) {
         if (ApiHttpError.is(error, 'InvalidCredentials')) {
@@ -28,7 +28,7 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   }
 
   async signup(email: string, password: string, nick: string): Promise<string> {
-    const { body } = await this.http.post<AuthUserDto, SignupBodyDto>('/auth/signup', {
+    const { body } = await this.http.write<AuthUserDto, SignupBodyDto>('post', '/auth/signup', {
       body: { email, password, nick },
     });
 
@@ -36,6 +36,6 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   }
 
   async logout(): Promise<void> {
-    await this.http.post('/auth/logout');
+    await this.http.write('post', '/auth/logout');
   }
 }

@@ -47,11 +47,6 @@ export class StubHttpGateway implements HttpGateway {
     },
   });
 
-  get = this.createRequest('get');
-  post = this.createRequest('post');
-  put = this.createRequest('put');
-  delete = this.createRequest('delete');
-
   private key(method: string, path: string) {
     return [method, path].join(' ');
   }
@@ -62,30 +57,31 @@ export class StubHttpGateway implements HttpGateway {
     return last(this.requests);
   }
 
-  private createRequest(method: string) {
-    return async <Body>(path: string, options?: AnyRequestOptions): Promise<Response<Body>> => {
-      this.requests.push({ method, path, options });
+  read = this.request;
+  write = this.request;
 
-      const key = this.key(method, path);
-      const error = this.errors.get(key);
+  async request<Body>(method: string, path: string, options?: AnyRequestOptions): Promise<Response<Body>> {
+    this.requests.push({ method, path, options });
 
-      if (error) {
-        const httpError = new ApiHttpError(error);
+    const key = this.key(method, path);
+    const error = this.errors.get(key);
 
-        if (options?.onError) {
-          return new StubResponse(options.onError(httpError)) as Response<Body>;
-        }
+    if (error) {
+      const httpError = new ApiHttpError(error);
 
-        throw httpError;
+      if (options?.onError) {
+        return new StubResponse(options.onError(httpError)) as Response<Body>;
       }
 
-      const response = this.responses.get(key);
+      throw httpError;
+    }
 
-      if (!response) {
-        throw new HttpError(StubResponse.notFound());
-      }
+    const response = this.responses.get(key);
 
-      return response as Response<Body>;
-    };
+    if (!response) {
+      throw new HttpError(StubResponse.notFound());
+    }
+
+    return response as Response<Body>;
   }
 }
