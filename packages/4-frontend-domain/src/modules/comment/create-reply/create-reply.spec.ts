@@ -1,9 +1,8 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
-import { AuthorizationError } from '../../authorization';
 import { createThread, Thread, threadActions } from '../../thread';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';

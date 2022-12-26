@@ -1,8 +1,10 @@
+import { InvalidImageFormat } from 'shared';
+
 import { createTestStore, TestStore } from '../../../test-store';
 import { userProfileSelectors } from '../user-profile.selectors';
 import { createAuthUser } from '../user-profile.types';
 
-import { changeProfileImage, InvalidImageFormat } from './change-profile-image.';
+import { changeProfileImage } from './change-profile-image.';
 
 const mockFile = (): File => {
   return { name: '' } as File;
@@ -27,13 +29,15 @@ describe('changeProfileImage', () => {
   });
 
   it('handles invalid image format errors', async () => {
-    store.userProfileGateway.changeProfileImage.reject(new InvalidImageFormat());
+    store.userProfileGateway.changeProfileImage.reject(
+      new InvalidImageFormat({ type: 'pdf', allowedTypes: ['png', 'jpg', 'bmp'] }),
+    );
 
     await store.dispatch(changeProfileImage(mockFile()));
 
     expect(store.snackbarGateway).toHaveSnack(
       'error',
-      "Le format d'image n'est pas reconnu. Les formats autorisés sont png, jpg et bmp.",
+      "Le format d'image (pdf) n'est pas reconnu. Les formats autorisés sont png, jpg et bmp.",
     );
   });
 

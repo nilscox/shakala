@@ -1,6 +1,4 @@
 import {
-  CommentAlreadySubscribedError,
-  CommentNotSubscribedError,
   CreateCommentCommand,
   EditCommentCommand,
   ExecutionContext,
@@ -9,18 +7,11 @@ import {
   SetCommentSubscriptionCommand,
   SetReactionCommand,
 } from 'backend-application';
-import {
-  CannotReportOwnCommentError,
-  CannotSetReactionOnOwnCommentError,
-  CommentAlreadyReportedError,
-  factories,
-  ReactionType,
-  UserMustBeAuthorError,
-} from 'backend-domain';
-import { CreateCommentBodyDto, CreateReplyBodyDto, EditCommentBodyDto } from 'shared';
-import { mockReject, mockResolve } from 'shared/test';
+import { factories, ReactionType } from 'backend-domain';
+import { CreateCommentBodyDto, CreateReplyBodyDto, EditCommentBodyDto, NotFound } from 'shared';
+import { mockResolve } from 'shared/test';
 
-import { BadRequest, NotFound, Unauthorized, ValidationError, ValidationService } from '../../infrastructure';
+import { ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 
@@ -154,14 +145,6 @@ describe('CommentController', () => {
       expect(error).toHaveProperty('fields.0.field', 'text');
       expect(error).toHaveProperty('fields.0.error', 'required');
     });
-
-    it('handles UserMustBeAuthor errors', async () => {
-      commandBus.execute = mockReject(new UserMustBeAuthorError());
-
-      const error = await expect.rejects(controller.editComment(request)).with(Unauthorized);
-
-      expect(error).toHaveProperty('body.code', 'UserMustBeAuthor');
-    });
   });
 
   describe('subscribe / unsubscribe', () => {
@@ -186,14 +169,6 @@ describe('CommentController', () => {
       );
     });
 
-    it('handles CommentAlreadySubscribedError', async () => {
-      commandBus.execute = mockReject(new CommentAlreadySubscribedError(user.id, comment.id));
-
-      const error = await expect.rejects(controller.subscribe(request)).with(BadRequest);
-
-      expect(error).toHaveProperty('body.code', 'CommentAlreadySubscribed');
-    });
-
     it('removes a subscription to a comment', async () => {
       const response = await controller.unsubscribe(request);
 
@@ -204,14 +179,6 @@ describe('CommentController', () => {
         new SetCommentSubscriptionCommand(user.id, comment.id, false),
         ctx,
       );
-    });
-
-    it('handles CommentNotSubscribedError', async () => {
-      commandBus.execute = mockReject(new CommentNotSubscribedError(user.id, comment.id));
-
-      const error = await expect.rejects(controller.unsubscribe(request)).with(BadRequest);
-
-      expect(error).toHaveProperty('body.code', 'CommentNotSubscribed');
     });
   });
 
@@ -235,14 +202,6 @@ describe('CommentController', () => {
 
       expect(commandBus.execute).toHaveBeenCalledWith(new SetReactionCommand(comment.id, type), ctx);
     });
-
-    it('handles CannotSetReactionOnOwnCommentError', async () => {
-      commandBus.execute = mockReject(new CannotSetReactionOnOwnCommentError());
-
-      const error = await expect.rejects(controller.setReaction(request)).with(BadRequest);
-
-      expect(error).toHaveProperty('body.code', 'CannotSetReactionOnOwnComment');
-    });
   });
 
   describe('reportComment', () => {
@@ -264,26 +223,10 @@ describe('CommentController', () => {
       expect(commandBus.execute).toHaveBeenCalledWith(new ReportCommentCommand(comment.id, undefined), ctx);
     });
 
-    it('throws a BadRequest when the body is not valid', async () => {
+    it('throws a ValidationError when the body is not valid', async () => {
       request.withBody({ reason: 42 });
 
-      await expect.rejects(controller.reportComment(request)).with(BadRequest);
-    });
-
-    it('handles CommentAlreadyReportedError', async () => {
-      commandBus.execute = mockReject(new CommentAlreadyReportedError(comment.id));
-
-      const error = await expect.rejects(controller.reportComment(request)).with(BadRequest);
-
-      expect(error).toHaveProperty('body.code', 'CommentAlreadyReported');
-    });
-
-    it('handles CannotReportOwnCommentError', async () => {
-      commandBus.execute = mockReject(new CannotReportOwnCommentError(comment.id));
-
-      const error = await expect.rejects(controller.reportComment(request)).with(BadRequest);
-
-      expect(error).toHaveProperty('body.code', 'CannotReportOwnComment');
+      await expect.rejects(controller.reportComment(request)).with(ValidationError);
     });
   });
 });

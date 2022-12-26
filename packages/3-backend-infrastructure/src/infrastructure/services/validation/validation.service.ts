@@ -1,8 +1,7 @@
 import { PaginationData } from 'backend-application';
-import { paginationQuerySchema } from 'shared';
+import { BaseError, paginationQuerySchema, UnexpectedError } from 'shared';
 import * as yup from 'yup';
 
-import { BadRequest } from '../../http/http-errors';
 import { Request } from '../../http/request';
 
 type FieldValidationError = {
@@ -19,9 +18,9 @@ type FieldValidationError = {
   messages?: string[];
 };
 
-export class ValidationError extends BadRequest {
+export class ValidationError extends BaseError<{ fields: FieldValidationError[] }> {
   constructor(public readonly fields: FieldValidationError[]) {
-    super('ValidationError', 'invalid input', { fields });
+    super('invalid input', { fields });
   }
 
   static from(fields: Record<string, string | [string, string]>) {
@@ -75,7 +74,7 @@ export class ValidationService {
   async body<Schema extends yup.AnySchema>(req: Request, schema: Schema) {
     try {
       if (req.body === undefined) {
-        throw new BadRequest('MissingBody', 'the request body is required');
+        throw new UnexpectedError('missing request body');
       }
 
       return await schema.validate(req.body, { abortEarly: false });

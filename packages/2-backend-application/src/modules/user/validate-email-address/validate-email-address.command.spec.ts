@@ -1,4 +1,5 @@
-import { EmailAddressValidatedEvent, EmailValidationFailed, factories, User } from 'backend-domain';
+import { EmailAddressValidatedEvent, factories, User } from 'backend-domain';
+import { EmailValidationFailed, EmailValidationFailedReason } from 'shared';
 
 import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';
@@ -45,7 +46,7 @@ describe('ValidateEmailAddressCommand', () => {
 
     const error = await expect.rejects(execute(user, 'nope')).with(EmailValidationFailed);
 
-    expect(error).toHaveProperty('details.reason', 'InvalidToken');
+    expect(error).toHaveProperty('details.reason', EmailValidationFailedReason.invalidToken);
   });
 
   it('throws an error when email was already validated', async () => {
@@ -55,6 +56,6 @@ describe('ValidateEmailAddressCommand', () => {
 
     const error = await expect.rejects(execute(user, '')).with(EmailValidationFailed);
 
-    expect(error).toHaveProperty('details.reason', 'EmailAlreadyValidated');
+    expect(error).toHaveProperty('details.reason', EmailValidationFailedReason.alreadyValidated);
   });
 });

@@ -7,6 +7,7 @@ import {
   Sort,
 } from 'backend-application';
 import { factories } from 'backend-domain';
+import { NotFound } from 'shared';
 import { mockResolve } from 'shared/test';
 
 import { StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
@@ -102,15 +103,9 @@ describe('ThreadController', () => {
     it('fails to retrieves an thread that does not exist', async () => {
       queryBus.for(GetThreadQuery).return(undefined);
 
-      const response = await expect
+      await expect
         .rejects(controller.getThread(new MockRequest().withParam('id', thread.id)))
-        .with(expect.anything());
-
-      expect(response).toHaveProperty('body', {
-        code: 'NotFound',
-        message: 'thread not found',
-        details: { threadId: thread.id },
-      });
+        .with(new NotFound('thread not found', { threadId: thread.id }));
     });
   });
 

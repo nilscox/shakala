@@ -1,13 +1,11 @@
-import { AuthorizationError } from 'backend-application';
 import express, { RequestHandler as ExpressRequestHandler } from 'express';
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, NotFound } from 'shared';
 import { mockImpl } from 'shared/test';
 import supertest from 'supertest';
 
 import { MockLoggerAdapter } from '../test';
 
 import { Controller, Middlewares, RequestHandler } from './controller';
-import { NotFound } from './http-errors';
 import { Response } from './response';
 
 describe('Controller', () => {
@@ -51,7 +49,7 @@ describe('Controller', () => {
     expect(response.headers).toHaveProperty('x-test', 'true');
   });
 
-  it('fails with a 403 Forbidden error when the endpoint throws an AuthorizationError', async () => {
+  it('handles errors extending BaseError', async () => {
     const controller = TestController.create(() => {
       throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
     });

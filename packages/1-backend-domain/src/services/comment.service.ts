@@ -1,6 +1,8 @@
-import { CannotReportOwnCommentError, CommentReport } from '../entities/comment-report.entity';
+import { CannotSetReactionOnOwnCommentError, CannotReportOwnCommentError } from 'shared';
+
+import { CommentReport } from '../entities/comment-report.entity';
 import { Comment } from '../entities/comment.entity';
-import { CannotSetReactionOnOwnCommentError, Reaction, ReactionType } from '../entities/reaction.entity';
+import { Reaction, ReactionType } from '../entities/reaction.entity';
 import { User } from '../entities/user.entity';
 import { CommentReactionSetEvent } from '../events/comment/comment-reaction-set.event';
 import { CommentReportedEvent } from '../events/comment/comment-reported.event';
@@ -18,7 +20,7 @@ export class CommentService {
     targetReaction: ReactionType | null,
   ): Promise<Reaction | typeof del | undefined> {
     if (user.equals(comment.author)) {
-      throw new CannotSetReactionOnOwnCommentError();
+      throw new CannotSetReactionOnOwnCommentError(comment.id);
     }
 
     if (!currentReaction && targetReaction) {

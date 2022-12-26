@@ -1,12 +1,12 @@
-import { AuthorizationError, LoggerPort } from 'backend-application';
+import { LoggerPort } from 'backend-application';
 import {
   Application,
   RequestHandler as ExpressRequestHandler,
   Response as ExpressResponse,
   Router,
 } from 'express';
+import { BaseError } from 'shared';
 
-import { Forbidden, HttpError, InternalServerError } from './http-errors';
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';
 import { Response } from './response';
@@ -97,31 +97,32 @@ export abstract class Controller {
     const handleResponse = this.createResponseHandler(res);
 
     return (error: unknown) => {
-      if (error instanceof HttpError || error instanceof Response) {
-        return handleResponse(error);
-      }
-
-      if (error instanceof AuthorizationError) {
+      if (error instanceof BaseError) {
         return handleResponse(
-          new Forbidden('Unauthorized', 'user does not have the required permission to perform this action', {
-            reason: error.details.reason,
+          new Response(error.status ?? 500, {
+            code: error.code,
+            message: error.message,
+            details: error.details,
           }),
         );
       }
 
       this.logger.error(error);
-      res.status(500);
 
       if (error instanceof Error) {
         return handleResponse(
-          new InternalServerError(error.message, {
-            error: error.constructor.name,
-            stack: error.stack,
+          new Response(500, {
+            code: 'InternalServerError',
+            message: error.message,
+            details: {
+              error: error.constructor.name,
+              stack: error.stack,
+            },
           }),
         );
-      } else {
-        res.json(error);
       }
+
+      res.status(500).json(error);
     };
   }
 }

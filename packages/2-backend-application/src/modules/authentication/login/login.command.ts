@@ -1,4 +1,4 @@
-import { InvalidCredentials } from 'backend-domain';
+import { InvalidCredentials } from 'shared';
 
 import { Authorize, IsNotAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

@@ -4,10 +4,10 @@ import {
   authenticationActions,
   AuthenticationForm as AuthenticationFormValues,
   AuthenticationFormType,
-  InvalidCredentialsError,
 } from 'frontend-domain';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { InvalidCredentials } from 'shared';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
@@ -52,7 +52,7 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
     (data) => dispatch(authenticationActions.authenticate(data)),
     form.setError,
     (error) => {
-      if (error instanceof InvalidCredentialsError) {
+      if (error instanceof InvalidCredentials) {
         setInvalidCredentials(true);
       }
     },

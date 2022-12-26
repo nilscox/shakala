@@ -6,9 +6,9 @@ import {
   UpdateUserCommand,
 } from 'backend-application';
 import { factories, Notification, ProfileImageType } from 'backend-domain';
-import { NotificationType } from 'shared';
+import { InvalidImageFormat, NotificationType } from 'shared';
 
-import { BadRequest, RequestFile, StubConfigAdapter, ValidationService } from '../../infrastructure';
+import { RequestFile, StubConfigAdapter, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
@@ -173,15 +173,11 @@ describe('AccountController', () => {
 
       const request = new MockRequest().withFile(file);
 
-      const error = await expect.rejects(controller.changeProfileImage(request)).with(BadRequest);
+      const error = await expect.rejects(controller.changeProfileImage(request)).with(InvalidImageFormat);
 
-      expect(error.body).toEqual({
-        code: 'InvalidImageFormat',
-        message: expect.any(String),
-        details: {
-          type: 'image/webp',
-          allowedTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'],
-        },
+      expect(error).toHaveProperty('details', {
+        type: 'image/webp',
+        allowedTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'],
       });
     });
   });

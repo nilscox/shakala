@@ -1,6 +1,5 @@
-import { HttpErrorBody, last } from 'shared';
+import { HttpErrorBody, last, NotFound, parseError } from 'shared';
 
-import { ApiHttpError } from './api-fetch-http.gateway';
 import { HttpError, HttpGateway, ReadRequestOptions, Response, WriteRequestOptions } from './http.gateway';
 
 export class StubResponse<Body = unknown> implements Response<Body> {
@@ -27,7 +26,7 @@ export class StubResponse<Body = unknown> implements Response<Body> {
   }
 
   static notFound() {
-    return this.create<HttpErrorBody>({ status: 404, body: { code: '', message: '' } });
+    return new StubResponse(new NotFound().serialize());
   }
 }
 
@@ -64,16 +63,16 @@ export class StubHttpGateway implements HttpGateway {
     this.requests.push({ method, path, options });
 
     const key = this.key(method, path);
-    const error = this.errors.get(key);
+    const errorResponse = this.errors.get(key);
 
-    if (error) {
-      const httpError = new ApiHttpError(error);
+    if (errorResponse) {
+      const error = parseError(errorResponse.body) ?? new HttpError(errorResponse);
 
       if (options?.onError) {
-        return new StubResponse(options.onError(httpError)) as Response<Body>;
+        return new StubResponse(options.onError(error)) as Response<Body>;
       }
 
-      throw httpError;
+      throw error;
     }
 
     const response = this.responses.get(key);

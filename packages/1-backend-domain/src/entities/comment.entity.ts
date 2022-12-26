@@ -1,4 +1,4 @@
-import { first } from 'shared';
+import { first, UserMustBeAuthorError } from 'shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';
@@ -8,13 +8,10 @@ import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
 
 import { Author } from './author.entity';
-import { DomainError } from './domain-error';
 import { Markdown } from './markdown.value-object';
 import { Message } from './message.entity';
 import { Timestamp } from './timestamp.value-object';
 import { User } from './user.entity';
-
-export const UserMustBeAuthorError = DomainError.extend('user is not the author of the comment');
 
 export type CommentProps = EntityProps<{
   threadId: string;
@@ -79,7 +76,7 @@ export class Comment extends AggregateRoot<CommentProps> {
 
   async edit(user: User, text: string) {
     if (!user.equals(this.author)) {
-      throw new UserMustBeAuthorError();
+      throw new UserMustBeAuthorError(user.id, this.id);
     }
 
     this.props.history.push(this.message);

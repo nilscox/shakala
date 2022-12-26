@@ -1,23 +1,29 @@
 import {
-  AuthorizationError,
-  EmailAlreadyExistsError,
   GetUserByEmailQuery,
   LoggerPort,
   LoginCommand,
-  NickAlreadyExistsError,
   SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
 } from 'backend-application';
-import { EmailValidationFailed, EmailValidationFailedReason, InvalidCredentials, User } from 'backend-domain';
-import { AuthorizationErrorReason, AuthUserDto, loginBodySchema, signupBodySchema } from 'shared';
+import { User } from 'backend-domain';
+import {
+  AuthorizationError,
+  AuthorizationErrorReason,
+  AuthUserDto,
+  EmailAlreadyExistsError,
+  EmailValidationFailed,
+  EmailValidationFailedReason,
+  loginBodySchema,
+  NickAlreadyExistsError,
+  NotImplemented,
+  signupBodySchema,
+} from 'shared';
 
 import {
   CommandBus,
   ConfigPort,
   Controller,
-  Forbidden,
-  NotImplemented,
   QueryBus,
   Request,
   Response,
@@ -58,7 +64,6 @@ export class AuthenticationController extends Controller {
     await execute(this.commandBus)
       .command(new LoginCommand(body.email, body.password))
       .asUser(await this.session.getUser(req))
-      .handle(InvalidCredentials, (error) => new Forbidden('InvalidCredentials', error.message))
       .run();
 
     const user = await this.queryBus.execute<User>(new GetUserByEmailQuery(body.email));
@@ -117,7 +122,7 @@ export class AuthenticationController extends Controller {
   }
 
   async requestLoginEmail(): Promise<Response> {
-    throw new NotImplemented('email login request is not implemented yet');
+    throw new NotImplemented();
   }
 
   async logout(req: Request): Promise<Response> {

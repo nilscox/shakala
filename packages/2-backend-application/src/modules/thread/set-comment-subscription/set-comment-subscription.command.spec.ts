@@ -1,4 +1,5 @@
 import { factories, StubGeneratorAdapter } from 'backend-domain';
+import { CommentAlreadySubscribedError, CommentNotSubscribedError } from 'shared';
 
 import {
   InMemoryCommentRepository,
@@ -8,8 +9,6 @@ import {
 } from '../../../adapters';
 
 import {
-  CommentAlreadySubscribedError,
-  CommentNotSubscribedError,
   SetCommentSubscriptionCommand,
   SetCommentSubscriptionCommandHandler,
 } from './set-comment-subscription.command';

@@ -1,8 +1,7 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
-import { AuthorizationError } from '../../authorization';
 import { userProfileActions } from '../../user-account/user-profile.actions';
 import { closeAuthenticationForm } from '../require-authentication/require-authentication';
 
@@ -34,7 +33,7 @@ export const signup = (email: string, password: string, nick: string): AppThunk 
         throw error;
       } else if (
         error instanceof AuthorizationError &&
-        error.reason === AuthorizationErrorReason.authenticated
+        error.details.reason === AuthorizationErrorReason.authenticated
       ) {
         snackbarGateway.warning('Vous êtes déjà connecté(e)');
       } else {

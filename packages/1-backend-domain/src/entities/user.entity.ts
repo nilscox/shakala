@@ -1,4 +1,10 @@
-import { AuthenticationMethod, UnexpectedError } from 'shared';
+import {
+  AuthenticationMethod,
+  EmailValidationFailed,
+  EmailValidationFailedReason,
+  InvalidCredentials,
+  UnexpectedError,
+} from 'shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';
@@ -13,7 +19,6 @@ import { DatePort } from '../interfaces/date.interface';
 import { GeneratorPort } from '../interfaces/generator.port';
 import { ProfileImageStorePort } from '../interfaces/profile-image-store.port';
 
-import { DomainError } from './domain-error';
 import { Nick } from './nick.value-object';
 import { ProfileImage, ProfileImageData } from './profile-image.value-object';
 import { Timestamp } from './timestamp.value-object';
@@ -175,15 +180,3 @@ export class User extends AggregateRoot<UserProps> {
     }
   }
 }
-
-export const InvalidCredentials = DomainError.extend('invalid credentials');
-
-export enum EmailValidationFailedReason {
-  alreadyValidated = 'EmailAlreadyValidated',
-  invalidToken = 'InvalidToken',
-}
-
-export const EmailValidationFailed = DomainError.extend(
-  'email validation failed',
-  (reason: EmailValidationFailedReason) => ({ reason }),
-);

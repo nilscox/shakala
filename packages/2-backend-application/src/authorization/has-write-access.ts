@@ -1,8 +1,7 @@
-import { AuthorizationErrorReason, UnexpectedError } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, UnexpectedError } from 'shared';
 
 import { ExecutionContext } from '../utils';
 
-import { AuthorizationError } from './authorization-error';
 import { Authorizer } from './authorizer';
 
 export class HasWriteAccess implements Authorizer {

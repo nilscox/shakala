@@ -1,4 +1,4 @@
-import { AuthorizationError, CommentAlreadyReportedError, ReactionType } from 'frontend-domain';
+import { ReactionType } from 'frontend-domain';
 
 import { StubHttpGateway, StubResponse } from '../http-gateway/stub-http.gateway';
 
@@ -33,21 +33,6 @@ describe('ApiCommentGateway', () => {
       expect(http.lastRequest).toHaveProperty('options.body', {
         text: 'oops, I made a mistake',
       });
-    });
-
-    it('throws an authorization error when the call fails with a UserMustBeAuthor error', async () => {
-      const http = new StubHttpGateway();
-      const gateway = new ApiCommentGateway(http);
-
-      http
-        .for('put', '/comment/commentId')
-        .throw(StubResponse.create({ status: 401, body: { message: '', code: 'UserMustBeAuthor' } }));
-
-      const error = await expect
-        .rejects(gateway.editComment('commentId', 'oops, I made a mistake'))
-        .with(AuthorizationError);
-
-      expect(error.reason).toEqual('UserMustBeAuthor');
     });
   });
 
@@ -91,17 +76,6 @@ describe('ApiCommentGateway', () => {
       expect(http.lastRequest).toHaveProperty('options.body', {
         reason: 'he fought the law',
       });
-    });
-
-    it('throw a ValidationError when the comment was already reported', async () => {
-      const http = new StubHttpGateway();
-      const gateway = new ApiCommentGateway(http);
-
-      http
-        .for('post', '/comment/commentId/report')
-        .throw(StubResponse.create({ status: 400, body: { message: '', code: 'CommentAlreadyReported' } }));
-
-      await expect.rejects(gateway.reportComment('commentId')).with(CommentAlreadyReportedError);
     });
   });
 });

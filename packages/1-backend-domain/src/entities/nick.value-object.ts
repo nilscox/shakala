@@ -1,11 +1,6 @@
+import { NickTooShortError } from 'shared';
+
 import { ValueObject } from '../ddd/value-object';
-
-import { DomainError } from './domain-error';
-
-export const NickTooShortError = DomainError.extend(
-  'nick is too short',
-  (nick: string, minLength: number) => ({ nick, minLength }),
-);
 
 export class Nick extends ValueObject<string> {
   constructor(value: string) {

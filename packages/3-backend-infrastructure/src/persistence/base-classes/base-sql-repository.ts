@@ -1,8 +1,8 @@
 import { FilterQuery, FindOptions, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Repository, Paginated } from 'backend-application';
+import { Paginated, Repository } from 'backend-application';
 import { DomainDependencies } from 'backend-domain';
-import { BaseError, ClassType } from 'shared';
+import { ClassType, NotFound } from 'shared';
 
 import { BaseSqlEntity } from './base-sql-entity';
 
@@ -83,15 +83,8 @@ export abstract class BaseSqlRepository<
   }
 }
 
-export class EntityNotFound extends BaseError<{ entityName: string; entityId: string }> {
+export class EntityNotFound extends NotFound {
   constructor(entityName: string, entityId: string) {
-    super(`${entityName} not found`);
-
-    this.details = {
-      entityName,
-      entityId,
-    };
+    super(`${entityName} not found`, { id: entityId });
   }
-
-  public details: { entityName: string; entityId: string };
 }

@@ -1,11 +1,10 @@
 import {
   factories,
-  InvalidCredentials,
   StubDateAdapter,
   UserAuthenticatedEvent,
   UserAuthenticationFailedEvent,
 } from 'backend-domain';
-import { AuthenticationMethod } from 'shared';
+import { AuthenticationMethod, InvalidCredentials } from 'shared';
 
 import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

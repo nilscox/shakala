@@ -1,31 +1,26 @@
 import {
-  AuthorizationError,
-  EmailAlreadyExistsError,
   ExecutionContext,
   GetUserByEmailQuery,
   LoginCommand,
-  NickAlreadyExistsError,
   SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
 } from 'backend-application';
+import { factories } from 'backend-domain';
 import {
+  AuthorizationError,
+  EmailAlreadyExistsError,
   EmailValidationFailed,
   EmailValidationFailedReason,
-  factories,
-  InvalidCredentials,
-} from 'backend-domain';
-import { get, LoginBodyDto, SignupBodyDto } from 'shared';
+  get,
+  LoginBodyDto,
+  NickAlreadyExistsError,
+  NotImplemented,
+  SignupBodyDto,
+} from 'shared';
 import { mockReject } from 'shared/test';
 
-import {
-  Forbidden,
-  NotImplemented,
-  Request,
-  StubConfigAdapter,
-  ValidationError,
-  ValidationService,
-} from '../../infrastructure';
+import { Request, StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
 import { UserPresenter } from '../user/user.presenter';
@@ -83,14 +78,6 @@ describe('AuthenticationController', () => {
     it('fails to log in when the body is invalid', async () => {
       await expect.rejects(login(new MockRequest().withBody({}))).with(ValidationError);
     });
-
-    it('handles InvalidCredentials errors', async () => {
-      commandBus.execute = mockReject(new InvalidCredentials());
-
-      const error = await expect.rejects(login()).with(Forbidden);
-
-      expect(error).toHaveProperty('body.code', 'InvalidCredentials');
-    });
   });
 
   describe('signup', () => {
@@ -128,7 +115,7 @@ describe('AuthenticationController', () => {
 
       const error = await expect.rejects(signup()).with(ValidationError);
 
-      expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
+      expect(get(error, 'details', 'fields', '0')).toEqual({
         field: 'email',
         error: 'alreadyExists',
         value: body.email,
@@ -140,7 +127,7 @@ describe('AuthenticationController', () => {
 
       const error = await expect.rejects(signup()).with(ValidationError);
 
-      expect(get(error, 'body', 'details', 'fields', '0')).toEqual({
+      expect(get(error, 'details', 'fields', '0')).toEqual({
         field: 'nick',
         error: 'alreadyExists',
         value: body.nick,

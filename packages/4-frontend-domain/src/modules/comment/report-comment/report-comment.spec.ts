@@ -1,4 +1,5 @@
-import { CommentAlreadyReportedError } from '../../../gateways';
+import { CommentAlreadyReportedError } from 'shared';
+
 import { StubCommentGateway } from '../../../stubs/stub-comment-gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { routerActions, routerSelectors } from '../../router';
@@ -52,7 +53,7 @@ describe('reportComment', () => {
   });
 
   it('shows a notification when a the comment was already reported', async () => {
-    commentGateway.reportComment.reject(new CommentAlreadyReportedError());
+    commentGateway.reportComment.reject(new CommentAlreadyReportedError('commentId'));
 
     await store.dispatch(reportComment(''));
 

@@ -1,5 +1,5 @@
 import { Comment, CommentSubscription, GeneratorPort, User } from 'backend-domain';
-import { BaseError } from 'shared';
+import { CommentNotSubscribedError, CommentAlreadySubscribedError } from 'shared';
 
 import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository, CommentSubscriptionRepository, UserRepository } from '../../../interfaces';
@@ -68,13 +68,3 @@ export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetC
     await this.commentSubscriptionRepository.delete(subscription);
   }
 }
-
-export const CommentAlreadySubscribedError = BaseError.extend(
-  'a subscription to the comment already exists for the user',
-  (userId: string, commentId: string) => ({ userId, commentId }),
-);
-
-export const CommentNotSubscribedError = BaseError.extend(
-  'a subscription to the comment does not exists for the user',
-  (userId: string, commentId: string) => ({ userId, commentId }),
-);

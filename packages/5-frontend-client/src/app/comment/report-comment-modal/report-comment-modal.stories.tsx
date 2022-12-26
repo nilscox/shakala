@@ -1,11 +1,6 @@
 import { Meta } from '@storybook/react';
-import {
-  commentActions,
-  CommentAlreadyReportedError,
-  createComment,
-  createUser,
-  routerActions,
-} from 'frontend-domain';
+import { commentActions, createComment, createUser, routerActions } from 'frontend-domain';
+import { CommentAlreadyReportedError } from 'shared';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 
@@ -41,7 +36,7 @@ reportCommentModal.args = {
     commentGateway.reportComment.resolve(undefined, 1000);
 
     if (args.alreadyReported) {
-      commentGateway.reportComment.reject(new CommentAlreadyReportedError(), 1000);
+      commentGateway.reportComment.reject(new CommentAlreadyReportedError(comment.id), 1000);
     }
   },
 };

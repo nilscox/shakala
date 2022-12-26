@@ -1,19 +1,15 @@
 import {
-  AuthorizationError,
   GetProfileImageQuery,
   GetUserByIdQuery,
   LoggerPort,
   GetUserActivitiesQuery,
   Paginated,
-  PaginationError,
 } from 'backend-application';
 import { ProfileImageData, User, UserActivity } from 'backend-domain';
-import { AuthorizationErrorReason, UserDto } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, NotFound, UserDto } from 'shared';
 
 import {
-  BadRequest,
   Controller,
-  NotFound,
   QueryBus,
   Request,
   RequestHandler,
@@ -79,18 +75,10 @@ export class UserController extends Controller {
       throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
     }
 
-    try {
-      const { items, total } = await this.queryBus.execute<Paginated<UserActivity>>(
-        new GetUserActivitiesQuery(userId, pagination),
-      );
+    const { items, total } = await this.queryBus.execute<Paginated<UserActivity>>(
+      new GetUserActivitiesQuery(userId, pagination),
+    );
 
-      return Response.paginated(items.map(UserActivityPresenter.transform), total);
-    } catch (error) {
-      if (error instanceof PaginationError) {
-        throw new BadRequest('PaginationError', error.message, error.details);
-      }
-
-      throw error;
-    }
+    return Response.paginated(items.map(UserActivityPresenter.transform), total);
   }
 }

@@ -1,9 +1,7 @@
+import { InvalidDateError } from 'shared';
+
 import { ValueObject } from '../ddd/value-object';
 import type { DatePort } from '../interfaces/date.interface';
-
-import { DomainError } from './domain-error';
-
-export const InvalidDateError = DomainError.extend('date is not valid', (date: string | Date) => ({ date }));
 
 export class Timestamp extends ValueObject<string> {
   constructor(value: string | Date) {

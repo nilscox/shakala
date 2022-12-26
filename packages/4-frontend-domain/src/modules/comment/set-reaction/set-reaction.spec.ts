@@ -1,9 +1,8 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { StubCommentGateway } from '../../../stubs/stub-comment-gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { authenticationSelectors } from '../../authentication';
-import { AuthorizationError } from '../../authorization';
 import { createThread, threadActions } from '../../thread';
 import { createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';

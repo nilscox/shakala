@@ -1,4 +1,5 @@
-import { CommentService, CommentAlreadyReportedError } from 'backend-domain';
+import { CommentService } from 'backend-domain';
+import { CommentAlreadyReportedError } from 'shared';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

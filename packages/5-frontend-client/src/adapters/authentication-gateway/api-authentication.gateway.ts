@@ -1,7 +1,6 @@
-import { AuthenticatedUser, AuthenticationGateway, InvalidCredentialsError } from 'frontend-domain';
+import { AuthenticatedUser, AuthenticationGateway } from 'frontend-domain';
 import { AuthUserDto, LoginBodyDto, SignupBodyDto } from 'shared';
 
-import { ApiHttpError } from '../http-gateway/api-fetch-http.gateway';
 import { HttpGateway } from '../http-gateway/http.gateway';
 
 export class ApiAuthenticationGateway implements AuthenticationGateway {
@@ -15,13 +14,6 @@ export class ApiAuthenticationGateway implements AuthenticationGateway {
   async login(email: string, password: string): Promise<AuthenticatedUser> {
     const { body } = await this.http.write<AuthUserDto, LoginBodyDto>('post', '/auth/login', {
       body: { email, password },
-      onError(error) {
-        if (ApiHttpError.is(error, 'InvalidCredentials')) {
-          throw new InvalidCredentialsError();
-        }
-
-        throw error;
-      },
     });
 
     return body;

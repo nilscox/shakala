@@ -1,8 +1,7 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { ExecutionContext } from '../utils';
 
-import { AuthorizationError } from './authorization-error';
 import { Authorizer } from './authorizer';
 
 export class IsAuthenticated implements Authorizer {

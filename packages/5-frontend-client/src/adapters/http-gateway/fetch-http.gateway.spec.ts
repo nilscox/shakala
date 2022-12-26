@@ -140,7 +140,7 @@ describe('FetchHttpGateway', () => {
 
     const response = await http.read('get', '/', { onError });
 
-    await expect(onError.lastCall).toEqual([expect.objectWith({ status: 400, body: { some: 'error' } })]);
+    await expect(onError.lastCall).toEqual([expect.objectWith({ body: { some: 'error' } })]);
 
     await expect(response).toHaveProperty('status', 400);
     await expect(response).toHaveProperty('body', 'result');

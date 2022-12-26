@@ -1,3 +1,5 @@
+import { BaseError } from 'shared';
+
 export type PaginationData = Partial<{
   page: number;
   pageSize: number;
@@ -8,28 +10,15 @@ export type Paginated<T> = {
   total: number;
 };
 
-export class PaginationError extends Error {
-  constructor(private key: string, private value: number, message: string, private _details: string) {
-    super(message);
-  }
-
-  get details() {
-    return {
-      details: this._details,
-      [this.key]: this.value,
-    };
+class InvalidPageNumberError extends BaseError<{ page: number; error: string }> {
+  constructor(page: number, error: string) {
+    super('invalid page number', { page, error });
   }
 }
 
-class InvalidPageNumberError extends PaginationError {
-  constructor(public readonly page: number, details: string) {
-    super('page', page, 'invalid page number', details);
-  }
-}
-
-class InvalidPageSizeError extends PaginationError {
-  constructor(public readonly pageSize: number, details: string) {
-    super('pageSize', pageSize, 'invalid page size', details);
+class InvalidPageSizeError extends BaseError<{ pageSize: number; error: string }> {
+  constructor(pageSize: number, error: string) {
+    super('invalid page size', { pageSize, error });
   }
 }
 

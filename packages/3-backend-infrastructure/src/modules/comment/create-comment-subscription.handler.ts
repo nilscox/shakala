@@ -3,9 +3,9 @@ import {
   SetCommentSubscriptionCommand,
   EventHandler,
   ExecutionContext,
-  CommentAlreadySubscribedError,
 } from 'backend-application';
 import { CommentCreatedEvent } from 'backend-domain';
+import { CommentAlreadySubscribedError } from 'shared';
 
 import { CommandBus } from '../../infrastructure';
 

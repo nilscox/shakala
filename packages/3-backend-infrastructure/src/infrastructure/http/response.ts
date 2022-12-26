@@ -1,7 +1,7 @@
 export class Response<Body = unknown> {
   public readonly headers = new Map<string, string>();
 
-  protected constructor(public readonly status: number, public readonly body: Body) {}
+  constructor(public readonly status: number, public readonly body: Body) {}
 
   static isResponse(object: unknown): object is Response<unknown> {
     return object instanceof Response;

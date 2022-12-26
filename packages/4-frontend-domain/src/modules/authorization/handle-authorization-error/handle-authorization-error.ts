@@ -1,7 +1,6 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { AppThunk } from '../../../store';
-import { AuthorizationError } from '../authorization-error';
 
 export const handleAuthorizationError = (
   error: unknown,
@@ -12,7 +11,7 @@ export const handleAuthorizationError = (
       return false;
     }
 
-    const prefix = messages[error.reason as keyof typeof messages] ?? fallback;
+    const prefix = messages[error.details.reason as keyof typeof messages] ?? fallback;
     snackbarGateway.error(`${prefix} ${action}.`);
 
     return true;

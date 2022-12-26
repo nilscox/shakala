@@ -5,6 +5,7 @@ import {
   CreateThreadBodyDto,
   GetLastThreadsQueryDto,
   GetThreadQueryDto,
+  NotFound,
   ThreadDto,
   ThreadWithCommentsDto,
 } from 'shared';
@@ -50,7 +51,7 @@ export class ApiThreadGateway implements ThreadGateway {
   async fetchThread(threadId: string): Promise<Thread | undefined> {
     const { body } = await this.http.read<ThreadWithCommentsDto | undefined>('get', `/thread/${threadId}`, {
       onError(error) {
-        if (error.status === 404) {
+        if (error instanceof NotFound) {
           return undefined;
         }
 

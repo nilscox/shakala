@@ -1,7 +1,5 @@
 import { Entity, EntityProps } from '../ddd/entity';
 
-import { DomainError } from './domain-error';
-
 export enum ReactionType {
   upvote = 'upvote',
   downvote = 'downvote',
@@ -32,7 +30,3 @@ export class Reaction extends Entity<ReactionProps> {
     this.props.type = type;
   }
 }
-
-export const CannotSetReactionOnOwnCommentError = DomainError.extend(
-  'User cannot set a reaction on his own comment',
-);

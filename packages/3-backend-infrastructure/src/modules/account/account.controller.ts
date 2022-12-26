@@ -1,5 +1,4 @@
 import {
-  AuthorizationError,
   ExecutionContext,
   GetUserByIdQuery,
   LoggerPort,
@@ -10,10 +9,15 @@ import {
 } from 'backend-application';
 import { Notification, ProfileImageData, ProfileImageType, User } from 'backend-domain';
 import multer, { memoryStorage } from 'multer';
-import { AuthorizationErrorReason, NotificationDto, NotificationType } from 'shared';
+import {
+  AuthorizationError,
+  AuthorizationErrorReason,
+  InvalidImageFormat,
+  NotificationDto,
+  NotificationType,
+} from 'shared';
 
 import {
-  BadRequest,
   CommandBus,
   Controller,
   Middlewares,
@@ -144,7 +148,7 @@ export class AccountController extends Controller {
     const type = typesMap[req.file.type as keyof typeof typesMap];
 
     if (!type) {
-      throw new BadRequest('InvalidImageFormat', "the image's mime type is not recognized", {
+      throw new InvalidImageFormat({
         type: req.file.type,
         allowedTypes: Object.keys(typesMap),
       });

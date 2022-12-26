@@ -1,9 +1,8 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, UserMustBeAuthorError } from 'shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
-import { AuthorizationError } from '../../authorization';
 import { createThread, Thread, threadActions } from '../../thread';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { commentActions } from '../comment.actions';
@@ -125,7 +124,7 @@ describe('editComment', () => {
     });
 
     it("shows a snack when the user tries to edit another user's comment", async () => {
-      store.commentGateway.editComment.reject(new AuthorizationError('UserMustBeAuthor'));
+      store.commentGateway.editComment.reject(new UserMustBeAuthorError('', ''));
 
       await expect.async(editComment()).toBe(false);
 

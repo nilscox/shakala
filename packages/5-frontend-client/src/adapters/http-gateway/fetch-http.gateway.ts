@@ -1,4 +1,4 @@
-import { get, wait } from 'shared';
+import { BaseError, get, wait } from 'shared';
 
 import {
   HttpError,
@@ -158,7 +158,7 @@ export class FetchHttpGateway implements HttpGateway {
     }
   }
 
-  protected getError(response: Response): HttpError {
+  protected getError(response: Response): BaseError<unknown> | HttpError {
     return new HttpError(response);
   }
 }

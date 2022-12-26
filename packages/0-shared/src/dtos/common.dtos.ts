@@ -1,3 +1,4 @@
+import { BaseError } from '../libs';
 import { isEnumValue } from '../libs/is-enum-value';
 
 export enum Sort {
@@ -18,3 +19,27 @@ export type HttpErrorBody = {
   /** custom payload */
   details?: Record<string, unknown>;
 };
+
+export class InvalidDateError extends BaseError<{ date: string | Date }> {
+  status = 400;
+
+  constructor(date: string | Date) {
+    super('date is not valid', { date });
+  }
+}
+
+export class NotFound extends BaseError<unknown> {
+  status = 404;
+
+  constructor(message = 'not found', details?: unknown) {
+    super(message, details);
+  }
+}
+
+export class NotImplemented extends BaseError {
+  status = 501;
+
+  constructor() {
+    super('not implemented');
+  }
+}

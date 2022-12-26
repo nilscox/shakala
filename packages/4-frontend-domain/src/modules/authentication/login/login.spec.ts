@@ -1,9 +1,7 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, InvalidCredentials } from 'shared';
 
-import { InvalidCredentialsError } from '../../../gateways/authentication-gateway';
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';
-import { AuthorizationError } from '../../authorization';
 import { routerActions, routerSelectors } from '../../router';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { authenticationSelectors } from '../authentication.selectors';
@@ -66,7 +64,7 @@ describe('login', () => {
   });
 
   it('throws invalid credentials errors', async () => {
-    const error = new InvalidCredentialsError();
+    const error = new InvalidCredentials();
 
     store.authenticationGateway.login.reject(error);
 

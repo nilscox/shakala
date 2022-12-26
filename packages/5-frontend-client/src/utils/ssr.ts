@@ -11,6 +11,7 @@ import {
   userProfileSelectors,
 } from 'frontend-domain';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { BaseError } from 'shared';
 
 import { getServerConfig } from '~/utils/config';
 import { productionDependencies } from '~/utils/production-dependencies';
@@ -90,15 +91,17 @@ type SsrError = {
 };
 
 const serializeError = (error: unknown): SsrError => {
-  if (error instanceof HttpError) {
-    const { response } = error;
+  if (error instanceof BaseError) {
+    return { name: 'BaseError', ...error.serialize() };
+  }
 
+  if (error instanceof HttpError) {
     return {
       name: 'HttpError',
       status: error.status,
       message: error.message,
       details: {
-        body: response.body,
+        body: error.body,
       },
     };
   }

@@ -1,7 +1,8 @@
-import { AuthorizationError, ValidationErrors } from 'frontend-domain';
-import { AuthorizationErrorReason } from 'shared';
+import { ValidationErrors } from 'frontend-domain';
 
-import { ApiFetchHttpGateway, ApiHttpError } from './api-fetch-http.gateway';
+import { HttpError } from '~/adapters/http-gateway/http.gateway';
+
+import { ApiFetchHttpGateway } from './api-fetch-http.gateway';
 import { mockFetch } from './mock-fetch';
 
 describe('ApiFetchHttpGateway', () => {
@@ -23,21 +24,6 @@ describe('ApiFetchHttpGateway', () => {
     );
   });
 
-  it('handles authorization errors', async () => {
-    const headers = new Headers();
-    const reason = AuthorizationErrorReason.emailValidationRequired;
-
-    headers.set('Content-Type', 'application/json');
-
-    const json = async () => ({ code: 'Unauthorized', message: "can't touch this", details: { reason } });
-    const fetch = mockFetch({ ok: false, status: 403, headers, json });
-    const http = new ApiFetchHttpGateway(baseUrl, fetch);
-
-    const error = await expect.rejects(http.write('post', '/')).with(AuthorizationError);
-
-    expect(error).toHaveProperty('reason', reason);
-  });
-
   it('handles validation errors', async () => {
     const headers = new Headers();
 
@@ -57,7 +43,7 @@ describe('ApiFetchHttpGateway', () => {
     expect(error.getFieldError('email')).toEqual('required');
   });
 
-  it('throws an ApiHttpError when the error code is not known', async () => {
+  it('throws an HttpError when the error code is not known', async () => {
     const headers = new Headers();
 
     headers.set('Content-Type', 'application/json');
@@ -71,10 +57,12 @@ describe('ApiFetchHttpGateway', () => {
     const fetch = mockFetch({ ok: false, status: 400, headers, json });
     const http = new ApiFetchHttpGateway(baseUrl, fetch);
 
-    const error = await expect.rejects(http.read('get', '/')).with(ApiHttpError);
+    const error = await expect.rejects(http.read('get', '/')).with(HttpError);
 
-    expect(error.code).toEqual('SomeErrorCode');
-    expect(error.message).toEqual('some error message');
-    expect(error.details).toEqual({ some: 'details' });
+    expect(error.body).toEqual({
+      code: 'SomeErrorCode',
+      message: 'some error message',
+      details: { some: 'details' },
+    });
   });
 });

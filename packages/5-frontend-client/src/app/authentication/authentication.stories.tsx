@@ -3,9 +3,9 @@ import {
   authenticationActions,
   AuthenticationFormType,
   createAuthUser,
-  InvalidCredentialsError,
   ValidationErrors,
 } from 'frontend-domain';
+import { InvalidCredentials } from 'shared';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 
@@ -55,7 +55,7 @@ authentication.args = {
     }
 
     if (args.invalidCredentials) {
-      authenticationGateway.login.reject(new InvalidCredentialsError());
+      authenticationGateway.login.reject(new InvalidCredentials());
     }
   },
 };

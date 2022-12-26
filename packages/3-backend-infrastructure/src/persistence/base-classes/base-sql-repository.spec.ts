@@ -140,8 +140,7 @@ describe('BaseSqlRepository', function () {
     const error = await expect.rejects(repository.findByIdOrFail('nope')).with(EntityNotFound);
 
     expect(error).toHaveProperty('message', 'Test not found');
-    expect(error).toHaveProperty('details.entityName', 'Test');
-    expect(error).toHaveProperty('details.entityId', 'nope');
+    expect(error).toHaveProperty('details.id', 'nope');
   });
 
   it('deletes an entity from the database', async () => {

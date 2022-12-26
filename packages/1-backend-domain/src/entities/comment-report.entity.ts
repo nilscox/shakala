@@ -1,6 +1,5 @@
 import { Entity, EntityProps } from '../ddd/entity';
 
-import { DomainError } from './domain-error';
 import { User } from './user.entity';
 
 export type CommentReportProps = EntityProps<{
@@ -22,13 +21,3 @@ export class CommentReport extends Entity<CommentReportProps> {
     return this.props.reason;
   }
 }
-
-export const CannotReportOwnCommentError = DomainError.extend(
-  'user cannot report his own comment',
-  (commentId: string) => ({ commentId }),
-);
-
-export const CommentAlreadyReportedError = DomainError.extend(
-  'comment already reported by user',
-  (commentId: string) => ({ commentId }),
-);

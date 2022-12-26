@@ -6,16 +6,12 @@ import {
   UserCreatedEvent,
   StubProfileImageStoreAdapter,
 } from 'backend-domain';
+import { EmailAlreadyExistsError, NickAlreadyExistsError } from 'shared';
 
 import { StubEventBus, InMemoryUserRepository } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';
 
-import {
-  EmailAlreadyExistsError,
-  NickAlreadyExistsError,
-  SignupCommand,
-  SignupCommandHandler,
-} from './signup.command';
+import { SignupCommand, SignupCommandHandler } from './signup.command';
 
 describe('SignupCommand', () => {
   const eventBus = new StubEventBus();

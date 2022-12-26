@@ -1,7 +1,6 @@
-import { AuthorizationError, CommentAlreadyReportedError, CommentGateway } from 'frontend-domain';
+import { CommentGateway } from 'frontend-domain';
 import { CreateReplyBodyDto, EditCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto } from 'shared';
 
-import { ApiHttpError } from '../http-gateway/api-fetch-http.gateway';
 import { HttpGateway } from '../http-gateway/http.gateway';
 
 export class ApiCommentGateway implements CommentGateway {
@@ -22,11 +21,6 @@ export class ApiCommentGateway implements CommentGateway {
   async editComment(commentId: string, text: string): Promise<void> {
     await this.http.write<void, EditCommentBodyDto>('put', `/comment/${commentId}`, {
       body: { text },
-      onError: (error) => {
-        if (ApiHttpError.is(error, 'UserMustBeAuthor')) {
-          throw new AuthorizationError('UserMustBeAuthor');
-        }
-      },
     });
   }
 
@@ -47,11 +41,6 @@ export class ApiCommentGateway implements CommentGateway {
   async reportComment(commentId: string, reason?: string | undefined): Promise<void> {
     await this.http.write<void, ReportCommentBodyDto>('post', `/comment/${commentId}/report`, {
       body: { reason },
-      onError: (error) => {
-        if (ApiHttpError.is(error, 'CommentAlreadyReported')) {
-          throw new CommentAlreadyReportedError();
-        }
-      },
     });
   }
 }

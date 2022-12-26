@@ -1,3 +1,4 @@
+import { BaseError } from '../libs';
 import { createFactory } from '../libs/create-factory';
 import { randomId } from '../libs/random-id';
 
@@ -68,4 +69,52 @@ export type MessageDto = {
 export enum ReactionTypeDto {
   upvote = 'upvote',
   downvote = 'downvote',
+}
+
+export class UserMustBeAuthorError extends BaseError<{ userId: string; commentId: string }> {
+  status = 403;
+
+  constructor(userId: string, commentId: string) {
+    super('user must be the author of the comment', { userId, commentId });
+  }
+}
+
+export class CannotSetReactionOnOwnCommentError extends BaseError<{ commentId: string }> {
+  status = 400;
+
+  constructor(commentId: string) {
+    super('user cannot set a reaction on his own comment', { commentId });
+  }
+}
+
+export class CommentAlreadySubscribedError extends BaseError<{ userId: string; commentId: string }> {
+  status = 400;
+
+  constructor(userId: string, commentId: string) {
+    super('a subscription to the comment already exists for the user', { userId, commentId });
+  }
+}
+
+export class CommentNotSubscribedError extends BaseError<{ userId: string; commentId: string }> {
+  status = 400;
+
+  constructor(userId: string, commentId: string) {
+    super('a subscription to the comment does not exists for the user', { userId, commentId });
+  }
+}
+
+export class CannotReportOwnCommentError extends BaseError<{ commentId: string }> {
+  status = 400;
+
+  constructor(commentId: string) {
+    super('user cannot report his own comment', { commentId });
+  }
+}
+
+export class CommentAlreadyReportedError extends BaseError<{ commentId: string }> {
+  status = 400;
+
+  constructor(commentId: string) {
+    super('comment already reported by user', { commentId });
+  }
 }

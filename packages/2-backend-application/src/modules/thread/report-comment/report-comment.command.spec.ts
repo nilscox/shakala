@@ -1,11 +1,5 @@
-import {
-  CannotReportOwnCommentError,
-  CommentService,
-  factories,
-  StubGeneratorAdapter,
-  CommentAlreadyReportedError,
-  CommentReportedEvent,
-} from 'backend-domain';
+import { CommentService, factories, StubGeneratorAdapter, CommentReportedEvent } from 'backend-domain';
+import { CommentAlreadyReportedError, CannotReportOwnCommentError } from 'shared';
 
 import { InMemoryCommentRepository, InMemoryCommentReportRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

@@ -1,10 +1,9 @@
-import { AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { createDate } from '../../../utils/date-utils';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationSelectors } from '../../authentication';
-import { AuthorizationError } from '../../authorization';
 import { routerSelectors } from '../../router';
 import { AuthUser, createAuthUser } from '../../user-account';
 import { threadActions } from '../thread.actions';

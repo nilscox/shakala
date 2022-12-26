@@ -1,6 +1,5 @@
-import { UnexpectedError } from 'shared';
+import { CommentAlreadyReportedError, UnexpectedError } from 'shared';
 
-import { CommentAlreadyReportedError } from '../../../gateways';
 import { AppThunk } from '../../../store';
 import { routerActions, routerSelectors } from '../../router';
 

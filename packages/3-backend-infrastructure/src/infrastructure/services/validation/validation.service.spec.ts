@@ -1,7 +1,7 @@
+import { UnexpectedError } from 'shared';
 import * as yup from 'yup';
 
 import { MockRequest } from '../../../test';
-import { BadRequest } from '../../http/http-errors';
 
 import { ValidationError, ValidationService } from './validation.service';
 
@@ -49,9 +49,7 @@ describe('ValidationService', () => {
       age: 29,
     });
 
-    await expect
-      .rejects(service.body(new MockRequest(), schema))
-      .with(new BadRequest('MissingBody', 'the request body is required'));
+    await expect.rejects(service.body(new MockRequest(), schema)).with(UnexpectedError);
 
     await expect.rejects(service.body(new MockRequest().withBody({}), schema)).with(missingFieldError('age'));
 

@@ -12,6 +12,7 @@ import {
   createThreadBodySchema,
   getLastThreadsQuerySchema,
   getThreadQuerySchema,
+  NotFound,
   ThreadDto,
   ThreadWithCommentsDto,
 } from 'shared';
@@ -19,7 +20,6 @@ import {
 import {
   CommandBus,
   Controller,
-  NotFound,
   QueryBus,
   Request,
   Response,

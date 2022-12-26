@@ -14,7 +14,7 @@ export const SubscribeButton = ({ commentId }: SubscribeButtonProps) => {
   const dispatch = useAppDispatch();
 
   const canSubscribe = useAppSelector(commentSelectors.canSubscribe, commentId);
-  const isSubscribed = useAppSelector(commentSelectors.isSubscribed, commentId);
+  const isSubscribed = useAppSelector(commentSelectors.isSubscribed.unsafe, commentId);
 
   if (!canSubscribe) {
     return null;

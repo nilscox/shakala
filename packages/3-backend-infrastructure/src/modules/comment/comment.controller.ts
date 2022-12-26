@@ -1,6 +1,4 @@
 import {
-  CommentAlreadySubscribedError,
-  CommentNotSubscribedError,
   CreateCommentCommand,
   EditCommentCommand,
   GetCommentQuery,
@@ -10,31 +8,23 @@ import {
   SetCommentSubscriptionCommand,
   SetReactionCommand,
 } from 'backend-application';
-import {
-  CannotReportOwnCommentError,
-  CannotSetReactionOnOwnCommentError,
-  CommentAlreadyReportedError,
-  ReactionType,
-  UserMustBeAuthorError,
-} from 'backend-domain';
+import { ReactionType } from 'backend-domain';
 import {
   createCommentBodySchema,
   createReplyBodySchema,
   editCommentBodySchema,
+  NotFound,
   reportCommentBodySchema,
   setReactionBodySchema,
 } from 'shared';
 
 import {
-  BadRequest,
   CommandBus,
   Controller,
-  NotFound,
   QueryBus,
   Request,
   Response,
   SessionPort,
-  Unauthorized,
   ValidationService,
 } from '../../infrastructure';
 import { execute } from '../../utils';
@@ -80,11 +70,7 @@ export class CommentController extends Controller {
     const user = await this.session.getUser(req);
     const body = await this.validation.body(req, editCommentBodySchema);
 
-    await execute(this.commandBus)
-      .command(new EditCommentCommand(commentId, body.text))
-      .asUser(user)
-      .handle(UserMustBeAuthorError, (error) => new Unauthorized('UserMustBeAuthor', error.message))
-      .run();
+    await execute(this.commandBus).command(new EditCommentCommand(commentId, body.text)).asUser(user).run();
 
     return Response.noContent();
   }
@@ -120,10 +106,6 @@ export class CommentController extends Controller {
     await execute(this.commandBus)
       .command(new SetReactionCommand(commentId, body.type as ReactionType))
       .asUser(user)
-      .handle(
-        CannotSetReactionOnOwnCommentError,
-        (error) => new BadRequest('CannotSetReactionOnOwnComment', error.message),
-      )
       .run();
 
     return Response.noContent();
@@ -136,10 +118,6 @@ export class CommentController extends Controller {
     await execute(this.commandBus)
       .command(new SetCommentSubscriptionCommand(user!.id, commentId, true))
       .asUser(user)
-      .handle(
-        CommentAlreadySubscribedError,
-        (error) => new BadRequest('CommentAlreadySubscribed', error.message, error.details),
-      )
       .run();
 
     return Response.noContent();
@@ -152,10 +130,6 @@ export class CommentController extends Controller {
     await execute(this.commandBus)
       .command(new SetCommentSubscriptionCommand(user!.id, commentId, false))
       .asUser(user)
-      .handle(
-        CommentNotSubscribedError,
-        (error) => new BadRequest('CommentNotSubscribed', error.message, error.details),
-      )
       .run();
 
     return Response.noContent();
@@ -169,14 +143,6 @@ export class CommentController extends Controller {
     await execute(this.commandBus)
       .command(new ReportCommentCommand(commentId, body.reason))
       .asUser(user)
-      .handle(
-        CannotReportOwnCommentError,
-        (error) => new BadRequest('CannotReportOwnComment', error.message, error.details),
-      )
-      .handle(
-        CommentAlreadyReportedError,
-        (error) => new BadRequest('CommentAlreadyReported', error.message, error.details),
-      )
       .run();
 
     return Response.noContent();

@@ -1,3 +1,5 @@
+import { BaseError } from 'shared';
+
 export interface Response<Body = unknown> {
   readonly ok: boolean;
   readonly status: number;
@@ -5,17 +7,13 @@ export interface Response<Body = unknown> {
   readonly body: Body;
 }
 
-export class HttpError<Body = unknown> extends Error {
-  constructor(readonly response: Response<Body>) {
-    super(`http ${response.status} error`);
-  }
-
-  get status() {
-    return this.response.status;
+export class HttpError<Body = unknown> extends BaseError<{ response: Response<Body> }> {
+  constructor(response: Response<Body>) {
+    super(`http ${response.status} error`, { response });
   }
 
   get body() {
-    return this.response.body;
+    return this.details.response.body;
   }
 
   static isHttpError(error: unknown, status?: number): error is HttpError<unknown> {
@@ -27,7 +25,7 @@ export class HttpError<Body = unknown> extends Error {
       return true;
     }
 
-    return error.response.status === status;
+    return error.details.response.status === status;
   }
 }
 
@@ -41,13 +39,13 @@ export type QueryParams = Record<string, string | number | undefined>;
 
 export interface ReadRequestOptions<ResponseBody, Query extends QueryParams> {
   readonly query?: Query;
-  readonly onError?: (error: HttpError) => ResponseBody;
+  readonly onError?: (error: BaseError<unknown> | HttpError) => ResponseBody;
 }
 
 export interface WriteRequestOptions<RequestBody, ResponseBody, Query extends QueryParams> {
   readonly query?: Query;
   readonly body?: RequestBody;
-  readonly onError?: (error: HttpError) => ResponseBody;
+  readonly onError?: (error: BaseError<unknown> | HttpError) => ResponseBody;
 }
 
 export interface HttpGateway {

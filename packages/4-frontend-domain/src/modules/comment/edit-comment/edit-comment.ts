@@ -1,7 +1,9 @@
+import { UserMustBeAuthorError } from 'shared';
+
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';
 import { authenticationActions } from '../../authentication';
-import { AuthorizationError, handleAuthorizationError } from '../../authorization';
+import { handleAuthorizationError } from '../../authorization';
 import { commentActions } from '../comment.actions';
 import { commentSelectors } from '../comment.selectors';
 
@@ -29,7 +31,7 @@ export const editComment = (commentId: string, text: string): AppThunk<Promise<b
         throw error;
       }
 
-      if (error instanceof AuthorizationError && error.reason === 'UserMustBeAuthor') {
+      if (error instanceof UserMustBeAuthorError) {
         snackbarGateway.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");
         return false;
       }

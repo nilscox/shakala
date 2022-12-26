@@ -1,5 +1,6 @@
+import { AuthorizationError, AuthorizationErrorReason } from 'shared';
+
 import { createTestStore, TestStore } from '../../../test-store';
-import { AuthorizationError } from '../authorization-error';
 
 import { handleAuthorizationError } from './handle-authorization-error';
 
@@ -15,7 +16,7 @@ describe('handleAuthorizationError', () => {
   };
 
   it('shows an error notification when the error is an authorization error', async () => {
-    await execute(new AuthorizationError('emailValidationRequired'));
+    await execute(new AuthorizationError(AuthorizationErrorReason.emailValidationRequired));
 
     expect(store.snackbarGateway).toHaveSnack(
       'error',
@@ -24,7 +25,10 @@ describe('handleAuthorizationError', () => {
   });
 
   it('shows an error notification with a custom action', async () => {
-    await execute(new AuthorizationError('emailValidationRequired'), 'aller à la plage');
+    await execute(
+      new AuthorizationError(AuthorizationErrorReason.emailValidationRequired),
+      'aller à la plage',
+    );
 
     expect(store.snackbarGateway).toHaveSnack(
       'error',
@@ -33,11 +37,11 @@ describe('handleAuthorizationError', () => {
   });
 
   it('returns true when the error is an authorization error', async () => {
-    expect(await execute(new AuthorizationError('youShallNotPass'))).toBe(true);
+    expect(await execute(new AuthorizationError('youShallNotPass' as AuthorizationErrorReason))).toBe(true);
   });
 
   it('displays a fallback error message when the error is not known', async () => {
-    await execute(new AuthorizationError('youShallNotPass'));
+    await execute(new AuthorizationError('youShallNotPass' as AuthorizationErrorReason));
 
     expect(store.snackbarGateway).toHaveSnack(
       'error',

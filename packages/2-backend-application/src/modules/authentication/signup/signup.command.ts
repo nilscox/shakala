@@ -1,23 +1,10 @@
-import {
-  CryptoPort,
-  DatePort,
-  DomainError,
-  GeneratorPort,
-  Nick,
-  ProfileImageStorePort,
-  User,
-} from 'backend-domain';
+import { CryptoPort, DatePort, GeneratorPort, Nick, ProfileImageStorePort, User } from 'backend-domain';
+import { EmailAlreadyExistsError, NickAlreadyExistsError } from 'shared';
 
 import { Authorize, IsNotAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';
 import { UserRepository } from '../../../interfaces';
 import { EventPublisher, ExecutionContext } from '../../../utils';
-
-const emailAlreadyExistsDetails = (email: string) => ({ email });
-export const EmailAlreadyExistsError = DomainError.extend('email already exists', emailAlreadyExistsDetails);
-
-const nickAlreadyExistsDetails = (nick: string) => ({ nick });
-export const NickAlreadyExistsError = DomainError.extend('nick already exists', nickAlreadyExistsDetails);
 
 export class SignupCommand implements Command {
   constructor(readonly nick: string, readonly email: string, readonly password: string) {}

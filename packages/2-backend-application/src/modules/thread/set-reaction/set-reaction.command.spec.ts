@@ -1,5 +1,4 @@
 import {
-  CannotSetReactionOnOwnCommentError,
   CommentReactionSetEvent,
   CommentService,
   factories,
@@ -7,6 +6,7 @@ import {
   StubGeneratorAdapter,
   User,
 } from 'backend-domain';
+import { CannotSetReactionOnOwnCommentError } from 'shared';
 
 import { InMemoryReactionRepository, InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';
