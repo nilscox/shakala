@@ -1,4 +1,4 @@
-import { DecoratorFn, Parameters } from '@storybook/react';
+import { Decorator, Parameters } from '@storybook/react';
 import ReactModal from 'react-modal';
 
 import { SnackbarProvider } from '~/elements/snackbar/snackbar-provider';
@@ -13,7 +13,7 @@ import { PublicConfig } from '~/utils/config';
 import { ConfigProvider } from '~/utils/config-provider';
 
 Error.stackTraceLimit = 100;
-ReactModal.setAppElement('#root');
+ReactModal.setAppElement('.sb-wrapper');
 
 export const parameters: Parameters = {
   options: {
@@ -33,7 +33,7 @@ const config: PublicConfig = {
   apiBaseUrl: '',
 };
 
-export const decorators: DecoratorFn[] = [
+export const decorators: Decorator[] = [
   (Story) => (
     <SnackbarProvider>
       <Story />

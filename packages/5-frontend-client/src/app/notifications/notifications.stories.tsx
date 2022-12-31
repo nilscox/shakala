@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { createDate, createNotification, createUser, notificationActions } from 'frontend-domain';
 import { NotificationType } from 'shared';
 
@@ -38,7 +38,7 @@ const notification2 = createNotification({
   },
 });
 
-export const notifications: Story<{ setup: SetupRedux }> = () => <Notifications />;
+export const notifications: StoryFn<{ setup: SetupRedux }> = () => <Notifications />;
 
 notifications.args = {
   setup(dispatch) {

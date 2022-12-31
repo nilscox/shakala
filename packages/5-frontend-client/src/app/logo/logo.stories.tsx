@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { clsx } from 'clsx';
 
 import { controls } from '~/utils/storybook';
@@ -24,7 +24,7 @@ type Args = {
   className?: string;
 };
 
-export const logo: Story<Args> = ({ border, color, size, ...args }) => (
+export const logo: StoryFn<Args> = ({ border, color, size, ...args }) => (
   <Logo
     width={size * 48}
     height={size * 32}

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 
 import { Markdown } from '../markdown';
@@ -9,7 +9,7 @@ export default {
 
 // cspell:disable
 
-const Template: Story<ComponentProps<typeof Markdown>> = (props) => <Markdown {...props} />;
+const Template: StoryFn<ComponentProps<typeof Markdown>> = (props) => <Markdown {...props} />;
 Template.args = {
   markdown: `This is an awesome example, which demonstrates how easy it is to display some formatted text using the  Markdown syntax.
 

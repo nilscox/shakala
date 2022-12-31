@@ -1,4 +1,4 @@
-import { ComponentMeta, Story } from '@storybook/react';
+import { ComponentMeta, StoryFn } from '@storybook/react';
 
 import { controls } from '~/utils/storybook';
 
@@ -18,5 +18,5 @@ export default {
 
 type AvatarStoryArgs = Pick<React.ComponentProps<typeof Avatar>, 'size' | 'loading'>;
 
-export const avatar: Story<AvatarStoryArgs> = (args) => <Avatar {...args} />;
-export const withNick: Story<AvatarStoryArgs> = (args) => <AvatarNick nick="Nick" {...args} />;
+export const avatar: StoryFn<AvatarStoryArgs> = (args) => <Avatar {...args} />;
+export const withNick: StoryFn<AvatarStoryArgs> = (args) => <AvatarNick nick="Nick" {...args} />;

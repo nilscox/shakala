@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { controls } from '../../utils/storybook';
 
@@ -12,7 +12,7 @@ type Args = {
   loading: boolean;
 };
 
-export const asyncResource: Story<Args> = (args) => (
+export const asyncResource: StoryFn<Args> = (args) => (
   <AsyncResource loader={(show) => show && <>Loading...</>} {...args}>
     {() => <>Hello !</>}
   </AsyncResource>

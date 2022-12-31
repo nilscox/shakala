@@ -1,4 +1,4 @@
-import { Args, DecoratorFn, Story } from '@storybook/react';
+import { Args, Decorator, StoryFn } from '@storybook/react';
 import {
   AppState,
   createStore,
@@ -53,7 +53,7 @@ export const controls = {
 };
 
 export const maxWidthDecorator = () => {
-  const MaxWidthDecorator: DecoratorFn = (Story) => (
+  const MaxWidthDecorator: Decorator = (Story) => (
     <div className="max-w-6">
       <Story />
     </div>
@@ -63,7 +63,7 @@ export const maxWidthDecorator = () => {
 };
 
 export const snackbarDecorator = () => {
-  const SnackbarDecorator: DecoratorFn = (Story) => (
+  const SnackbarDecorator: Decorator = (Story) => (
     <SnackbarProvider>
       <Story />
     </SnackbarProvider>
@@ -92,10 +92,10 @@ export type SetupRedux<TArgs = Args> = ThunkAction<
   AnyAction
 >;
 
-export type ReduxStory<TArgs = Args> = Story<TArgs & { setup: SetupRedux<TArgs> }>;
+export type ReduxStory<TArgs = Args> = StoryFn<TArgs & { setup: SetupRedux<TArgs> }>;
 
 export const reduxDecorator = () => {
-  const StorybookReduxProvider: DecoratorFn = (Story, context: { args: Args }) => {
+  const StoryFnbookReduxProvider: Decorator = (Story, context: { args: Args }) => {
     const snackbar = useSnackbar();
 
     const dependencies = useMemo<StorybookDependencies>(
@@ -133,5 +133,5 @@ export const reduxDecorator = () => {
     );
   };
 
-  return StorybookReduxProvider;
+  return StoryFnbookReduxProvider;
 };

@@ -4,17 +4,12 @@ const webpackConfig = require('../webpack.config');
 
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
-
   staticDirs: ['../public'],
-
   addons: ['@storybook/addon-essentials'],
 
-  framework: '@storybook/react',
-
-  core: {
-    builder: 'webpack5',
-    disableTelemetry: true,
-    enableCrashReports: false,
+  framework: {
+    name: '@storybook/nextjs',
+    options: {},
   },
 
   reactOptions: {
@@ -22,18 +17,26 @@ module.exports = {
   },
 
   webpackFinal: (config) => {
-    config.devtool = webpackConfig.devtool;
-    // config.cache = webpackConfig.cache;
+    config.cache = webpackConfig.cache;
 
-    config.module.rules = webpackConfig.module.rules;
-    // config.resolve.plugins = webpackConfig.resolve.plugins;
+    config.module.rules = config.module.rules.filter((rule) => !rule.test.toString().match(/svg/));
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      shared: path.resolve(__dirname, '..', '..', '0-shared', 'src'),
-      'frontend-domain': path.resolve(__dirname, '..', '..', '4-frontend-domain', 'src'),
-      '~': path.resolve(__dirname, '..', 'src'),
-    };
+    config.module.rules.push(
+      {
+        test: /\.svg$/,
+        loader: '@svgr/webpack',
+        options: {
+          svgoConfig: {
+            cleanupIDs: false,
+            plugins: [{ name: 'removeViewBox', active: false }],
+          },
+        },
+      },
+      {
+        test: /\.png$/,
+        type: 'asset/resource',
+      },
+    );
 
     return config;
   },

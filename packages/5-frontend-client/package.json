@@ -9,8 +9,8 @@
     "start": "next start --port \"${PORT:-8080}\"",
     "lint": "next lint",
     "test": "instant-mocha --webpack-config webpack.config.js",
-    "storybook": "start-storybook --ci -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "storybook dev --ci -p 6006",
+    "build-storybook": "storybook build"
   },
   "mocha": {
     "spec": "src/**/*.spec.{ts,tsx}",
@@ -51,13 +51,11 @@
     "use-debounce": "^9.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
+    "@babel/core": "^7.20.7",
     "@nilscox/expect-dom": "^0.1.2",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.13",
-    "@storybook/manager-webpack5": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@storybook/addon-essentials": "^7.0.0-beta.17",
+    "@storybook/nextjs": "^7.0.0-beta.17",
+    "@storybook/react": "^7.0.0-beta.17",
     "@svgr/webpack": "^6.5.1",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@testing-library/react": "^13.4.0",
@@ -68,7 +66,6 @@
     "@types/react-dom": "18.0.10",
     "@types/react-modal": "^3.13.1",
     "autoprefixer": "^10.4.13",
-    "babel-loader": "^9.1.0",
     "css-loader": "^6.7.3",
     "esbuild-loader": "^2.20.0",
     "eslint-config-next": "^12.0.0",
@@ -78,6 +75,7 @@
     "jsdom": "^20.0.3",
     "postcss": "^8.4.20",
     "postcss-loader": "^7.0.2",
+    "storybook": "^7.0.0-beta.17",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.2.4",
     "tsconfig-paths-webpack-plugin": "^4.0.0",

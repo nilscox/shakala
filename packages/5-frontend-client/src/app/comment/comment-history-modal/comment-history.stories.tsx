@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { commentActions, createComment, createUser, routerActions } from 'frontend-domain';
 
 import { reduxDecorator, SetupRedux } from '~/utils/storybook';
@@ -92,7 +92,7 @@ const commentFixture = createComment({
   downvotes: 25,
 });
 
-export const commentHistoryModal: Story<{ setup: SetupRedux }> = () => <CommentHistoryModal />;
+export const commentHistoryModal: StoryFn<{ setup: SetupRedux }> = () => <CommentHistoryModal />;
 commentHistoryModal.args = {
   setup: (dispatch) => {
     dispatch(routerActions.setQueryParam(['historique', commentFixture.id]));

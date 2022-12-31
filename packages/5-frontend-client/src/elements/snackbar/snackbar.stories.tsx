@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { Snackbar, SnackbarProps } from './snackbar';
 import { SnackbarProvider } from './snackbar-provider';
@@ -17,7 +17,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<Partial<SnackbarProps> & { children: string }> = (props) => (
+const Template: StoryFn<Partial<SnackbarProps> & { children: string }> = (props) => (
   <Snackbar type={SnackType.success} transition={undefined} onRemove={action('remove')} {...props} />
 );
 

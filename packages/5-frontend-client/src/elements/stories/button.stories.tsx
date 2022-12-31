@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 
 import { Button } from '../button';
@@ -7,7 +7,7 @@ export default {
   title: 'Elements/Button',
 } as Meta;
 
-const Template: Story<ComponentProps<typeof Button>> = (props) => {
+const Template: StoryFn<ComponentProps<typeof Button>> = (props) => {
   return <Button {...props}>Click me!</Button>;
 };
 

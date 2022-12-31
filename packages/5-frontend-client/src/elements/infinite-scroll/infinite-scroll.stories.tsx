@@ -1,10 +1,15 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 import { array } from 'shared';
 
 import { controls } from '~/utils/storybook';
 
 import { InfiniteScroll } from './infinite-scroll';
+
+type StoryArgs = {
+  total: number;
+  loadingTimeout: number;
+};
 
 export default {
   title: 'Elements/InfiniteScroll',
@@ -16,7 +21,7 @@ export default {
     total: controls.range(42, { min: 1, max: 200 }),
     loadingTimeout: controls.range(1000, { min: 0, max: 10 * 1000 }),
   },
-} as Meta;
+} as Meta<StoryArgs>;
 
 const nextItems = (total: number, items: number[] = []) => {
   const length = items.length;
@@ -25,12 +30,7 @@ const nextItems = (total: number, items: number[] = []) => {
   return array(count, (index) => index + length + 1);
 };
 
-type StoryArgs = {
-  total: number;
-  loadingTimeout: number;
-};
-
-export const infiniteScroll: Story<StoryArgs> = ({ total, loadingTimeout }) => {
+export const infiniteScroll: StoryFn<StoryArgs> = ({ total, loadingTimeout }) => {
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState(nextItems(total));
 

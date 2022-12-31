@@ -24,8 +24,8 @@ export const comment: ReduxStory = () => {
 };
 
 comment.args = {
-  setup: (dispatch, getState, { commentGateway }) => {
-    dispatch(userProfileActions.setAuthenticatedUser(createAuthUser()));
+  setup(dispatch, getState, { commentGateway }) {
+    dispatch(userProfileActions.setAuthenticatedUser(createAuthUser({ nick: 'Storybook' })));
     dispatch(commentActions.addComments([commentFixture]));
 
     commentGateway.setReaction.resolve(undefined, 1000);
