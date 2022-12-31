@@ -59,7 +59,6 @@
     "@types/supertest": "^2.0.12",
     "nodemon": "^2.0.20",
     "sql-formatter": "^11.0.2",
-    "supertest": "^6.3.3",
-    "tsconfig-paths": "^4.1.0"
+    "supertest": "^6.3.3"
   }
 }
