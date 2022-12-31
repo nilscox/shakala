@@ -31,7 +31,7 @@ describe('toggleSubscription', () => {
   });
 
   it('unsubscribes to a comment', async () => {
-    await store.dispatch(commentActions.setSubscribed(comment.id, true));
+    store.dispatch(commentActions.setSubscribed(comment.id, true));
 
     store.commentGateway.unsubscribe.resolve();
 

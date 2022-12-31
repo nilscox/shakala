@@ -1,6 +1,6 @@
-import express, { RequestHandler as ExpressRequestHandler } from 'express';
 import { AuthorizationError, AuthorizationErrorReason, NotFound } from '@shakala/shared';
 import { mockImpl } from '@shakala/shared/test';
+import express, { RequestHandler as ExpressRequestHandler } from 'express';
 import supertest from 'supertest';
 
 import { MockLoggerAdapter } from '../test';
@@ -16,11 +16,13 @@ describe('Controller', () => {
       super(logger, '/');
     }
 
+    /* eslint-disable @typescript-eslint/unbound-method */
     endpoints(): Record<string, RequestHandler> {
       return {
         'GET /': this.endpoint,
       };
     }
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     abstract endpoint(): Response;
 
@@ -169,6 +171,7 @@ describe('Controller', () => {
     class TestController extends Controller {
       endpoints(): Record<string, RequestHandler> {
         return {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           'GET /': this.endpoint,
         };
       }

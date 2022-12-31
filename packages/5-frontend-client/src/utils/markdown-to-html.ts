@@ -1,5 +1,6 @@
 // cspell:word gemoji
 
+import { last } from '@shakala/shared';
 import { Text } from 'mdast';
 import { Children, text } from 'mdast-builder';
 import { all, Handler } from 'mdast-util-to-hast';
@@ -8,7 +9,6 @@ import remarkGemoji from 'remark-gemoji';
 import remarkGmf from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import { last } from '@shakala/shared';
 import { Plugin, unified } from 'unified';
 import { Node as UnistNode, Parent } from 'unist';
 import { visitParents } from 'unist-util-visit-parents';

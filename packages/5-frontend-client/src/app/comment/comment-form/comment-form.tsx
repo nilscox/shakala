@@ -52,7 +52,7 @@ export const CommentForm = ({
   const error = form.formState.errors.text;
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={void form.handleSubmit(handleSubmit)}>
       <MarkdownPreviewInput
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autofocus}

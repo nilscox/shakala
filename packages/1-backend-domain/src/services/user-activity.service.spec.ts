@@ -172,7 +172,7 @@ describe('UserActivityService', () => {
   };
 
   for (const { event, userId, activityType, payload } of tests) {
-    it(`creates a ${activityType} activity`, async () => {
+    it(`creates a ${String(activityType)} activity`, async () => {
       expect(await execute(event)).toEqual(
         new UserActivity({ id: activityId, userId, date: now, type: activityType, payload }),
       );

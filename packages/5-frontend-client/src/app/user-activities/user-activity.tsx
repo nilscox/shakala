@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import {
   DateFormat,
   formatDate,
@@ -7,6 +6,7 @@ import {
   userActivitySelectors,
 } from '@shakala/frontend-domain';
 import { UserActivityType } from '@shakala/shared';
+import { clsx } from 'clsx';
 
 import { Link } from '~/elements/link';
 import { useAppSelector } from '~/hooks/use-app-selector';

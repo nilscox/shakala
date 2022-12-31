@@ -56,8 +56,8 @@ export class StubHttpGateway implements HttpGateway {
     return last(this.requests);
   }
 
-  read = this.request;
-  write = this.request;
+  read = this.request.bind(this);
+  write = this.request.bind(this);
 
   async request<Body>(method: string, path: string, options?: AnyRequestOptions): Promise<Response<Body>> {
     this.requests.push({ method, path, options });

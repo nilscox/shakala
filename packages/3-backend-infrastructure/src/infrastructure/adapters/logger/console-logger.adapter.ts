@@ -20,12 +20,12 @@ export class ConsoleLoggerAdapter implements LoggerPort {
     const now = this.dateAdapter.now();
 
     return [
-      [now.getFullYear(), now.getMonth() + 1, now.getDate()].map(pad).join('-'),
+      [now.getFullYear(), Number(now.getMonth()) + 1, now.getDate()].map(pad).join('-'),
       [now.getHours(), now.getMinutes(), now.getSeconds()].map(pad).join(':'),
     ].join(' ');
   }
 
-  private formatArgument(arg: unknown) {
+  private formatArgument(this: void, arg: unknown) {
     if (arg instanceof Error) {
       return arg.stack;
     }

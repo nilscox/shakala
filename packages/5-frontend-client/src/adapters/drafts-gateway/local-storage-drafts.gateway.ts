@@ -41,7 +41,7 @@ export class LocalStorageDraftsGateway extends AbstractDraftsGateway implements 
 
     const doSave = () => {
       allDrafts[threadId] = drafts;
-      this.saveAllDrafts(allDrafts);
+      void this.saveAllDrafts(allDrafts);
 
       delete this.timeoutId;
     };
@@ -57,6 +57,6 @@ export class LocalStorageDraftsGateway extends AbstractDraftsGateway implements 
     const allDrafts = await this.getAllDrafts();
 
     delete allDrafts[threadId];
-    this.saveAllDrafts(allDrafts);
+    void this.saveAllDrafts(allDrafts);
   }
 }

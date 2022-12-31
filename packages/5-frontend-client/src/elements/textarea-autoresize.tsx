@@ -13,6 +13,6 @@ TextAreaAutoResize.displayName = 'TextAreaAutoResize';
 const resize = (textarea: HTMLTextAreaElement | null) => {
   if (textarea) {
     // +2 is for the borders (I think...)
-    textarea.style.height = textarea.scrollHeight + 2 + 'px';
+    textarea.style.height = String(textarea.scrollHeight + 2) + 'px';
   }
 };

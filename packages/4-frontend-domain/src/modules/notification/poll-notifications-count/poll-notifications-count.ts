@@ -7,7 +7,7 @@ const pollingInterval = 30 * 1_000;
 export const pollNotificationsCount = (): AppThunk<() => void> => {
   return (dispatch, getState, { timerGateway }) => {
     return timerGateway.setInterval(() => {
-      dispatch(fetchTotalUnseenNotifications());
+      void dispatch(fetchTotalUnseenNotifications());
     }, pollingInterval);
   };
 };

@@ -1,5 +1,5 @@
-import { clsx } from 'clsx';
 import { commentSelectors } from '@shakala/frontend-domain';
+import { clsx } from 'clsx';
 
 import { SearchParamLink } from '~/elements/search-param-link';
 import { useAppSelector } from '~/hooks/use-app-selector';

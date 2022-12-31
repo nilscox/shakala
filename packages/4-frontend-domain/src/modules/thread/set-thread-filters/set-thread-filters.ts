@@ -5,7 +5,7 @@ import { AppState, AppThunk } from '../../../store';
 import { commentActions } from '../../comment';
 import { routerActions, routerSelectors } from '../../router';
 
-export const setThreadSearchFilter = (threadId: string, search: string): AppThunk<void> => {
+export const setThreadSearchFilter = (threadId: string, search: string): AppThunk => {
   return async (dispatch) => {
     if (search !== '') {
       dispatch(routerActions.setQueryParam(['search', search]));
@@ -17,7 +17,7 @@ export const setThreadSearchFilter = (threadId: string, search: string): AppThun
   };
 };
 
-export const setThreadSortFilter = (threadId: string, sort: Sort): AppThunk<void> => {
+export const setThreadSortFilter = (threadId: string, sort: Sort): AppThunk => {
   return async (dispatch) => {
     if (sort !== Sort.relevance) {
       dispatch(routerActions.setQueryParam(['sort', sort]));
@@ -29,7 +29,7 @@ export const setThreadSortFilter = (threadId: string, sort: Sort): AppThunk<void
   };
 };
 
-const refreshComments = (threadId: string): AppThunk<void> => {
+const refreshComments = (threadId: string): AppThunk => {
   return async (dispatch, getState) => {
     await dispatch(commentActions.fetchComments(threadId, selectFilters(getState())));
   };

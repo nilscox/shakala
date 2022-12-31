@@ -1,11 +1,11 @@
 import { LoggerPort } from '@shakala/backend-application';
+import { BaseError } from '@shakala/shared';
 import {
   Application,
   RequestHandler as ExpressRequestHandler,
   Response as ExpressResponse,
   Router,
 } from 'express';
-import { BaseError } from '@shakala/shared';
 
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';
@@ -55,12 +55,12 @@ export abstract class Controller {
   }
 
   register(method: Method, path: string, middlewares: ExpressRequestHandler[], handler: RequestHandler) {
-    const expressHandler: ExpressRequestHandler = async (req, res) => {
+    const expressHandler: ExpressRequestHandler = (req, res) => {
       const handleResponse = this.createResponseHandler(res);
       const handleError = this.createdErrorHandler(res);
 
       try {
-        handleResponse(await handler(new RequestAdapter(req)));
+        void Promise.resolve(handler(new RequestAdapter(req))).then(handleResponse);
       } catch (error) {
         handleError(error);
       }

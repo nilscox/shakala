@@ -1,6 +1,5 @@
-import { clsx } from 'clsx';
 import { authenticationActions, notificationSelectors } from '@shakala/frontend-domain';
-import React from 'react';
+import { clsx } from 'clsx';
 
 import { Avatar } from '~/elements/avatar/avatar';
 import { Chip } from '~/elements/chip';

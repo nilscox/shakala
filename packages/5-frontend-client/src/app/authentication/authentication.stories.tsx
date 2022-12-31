@@ -1,4 +1,3 @@
-import { Meta } from '@storybook/react';
 import {
   authenticationActions,
   AuthenticationFormType,
@@ -6,6 +5,7 @@ import {
   ValidationErrors,
 } from '@shakala/frontend-domain';
 import { InvalidCredentials } from '@shakala/shared';
+import { Meta } from '@storybook/react';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 

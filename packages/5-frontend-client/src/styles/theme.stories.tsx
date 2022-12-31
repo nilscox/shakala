@@ -169,7 +169,7 @@ const FontFamily = ({ className, name }: FontFamilyProps) => (
   </div>
 );
 
-const fonts = theme.theme.fontFamily;
+const fonts: Record<string, string[]> = theme.theme.fontFamily;
 export const fontFamilies = () => (
   <div className="flex flex-col gap-2">
     <FontFamily name={fonts.sans.join(', ') + ' (default)'} />

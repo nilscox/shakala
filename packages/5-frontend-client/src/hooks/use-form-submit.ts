@@ -2,8 +2,8 @@ import { ValidationErrors } from '@shakala/frontend-domain';
 import { useCallback } from 'react';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 
-export const useFormSubmit = <Form extends FieldValues, Result>(
-  submit: (form: Form) => Result,
+export const useFormSubmit = <Form extends FieldValues>(
+  submit: (form: Form) => unknown,
   setError: UseFormSetError<Form>,
   onUnhandled?: (error: unknown) => void,
   deps: React.DependencyList = [],
@@ -29,7 +29,7 @@ export const useFormSubmit = <Form extends FieldValues, Result>(
   return useCallback(
     async (form: Form) => {
       try {
-        await submit(form);
+        submit(form);
       } catch (error) {
         handleError(error);
       }

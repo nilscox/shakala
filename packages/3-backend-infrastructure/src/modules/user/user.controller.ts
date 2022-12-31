@@ -30,6 +30,7 @@ export class UserController extends Controller {
     super(logger, '/user');
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints(): Record<string, RequestHandler> {
     return {
       'GET /activities': this.listUserActivities,
@@ -37,6 +38,7 @@ export class UserController extends Controller {
       'GET /:userId': this.getUser,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async getUser(req: Request): Promise<Response<UserDto>> {
     const userId = req.params.get('userId') as string;

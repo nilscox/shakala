@@ -21,21 +21,21 @@ export class SqlCommentRepository
   async findRoots(threadId: string, sort: Sort, search?: string | undefined): Promise<Comment[]> {
     const qb = this.repository.createQueryBuilder('comment');
 
-    qb.select('comment.*');
-    qb.leftJoinAndSelect('comment.author', 'author');
-    qb.leftJoinAndSelect('comment.history', 'history');
+    void qb.select('comment.*');
+    void qb.leftJoinAndSelect('comment.author', 'author');
+    void qb.leftJoinAndSelect('comment.history', 'history');
 
-    qb.where({ thread: { id: threadId } });
-    qb.andWhere({ parent: { id: null } });
+    void qb.where({ thread: { id: threadId } });
+    void qb.andWhere({ parent: { id: null } });
 
     if (sort === Sort.dateAsc) {
-      qb.orderBy({ createdAt: 'asc' });
+      void qb.orderBy({ createdAt: 'asc' });
     } else if (sort === Sort.dateDesc) {
-      qb.orderBy({ createdAt: 'desc' });
+      void qb.orderBy({ createdAt: 'desc' });
     }
 
     if (search) {
-      qb.andWhere({ history: { text: { $ilike: `%${search}%` } } });
+      void qb.andWhere({ history: { text: { $ilike: `%${search}%` } } });
     }
 
     return this.toDomain(await qb.getResult());

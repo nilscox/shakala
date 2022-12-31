@@ -1,4 +1,3 @@
-import { screen } from '@testing-library/react';
 import {
   createAuthUser,
   createDate,
@@ -8,6 +7,7 @@ import {
   TestStore,
 } from '@shakala/frontend-domain';
 import { createFactory, NotificationPayloadMap, NotificationType, randomId } from '@shakala/shared';
+import { screen } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';
 

@@ -1,13 +1,13 @@
 import { DevTool } from '@hookform/devtools';
-import { clsx } from 'clsx';
 import {
   authenticationActions,
   AuthenticationForm as AuthenticationFormValues,
   AuthenticationFormType,
 } from '@shakala/frontend-domain';
+import { InvalidCredentials } from '@shakala/shared';
+import { clsx } from 'clsx';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { InvalidCredentials } from '@shakala/shared';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
@@ -71,7 +71,7 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
 
       <AuthenticationMessage />
 
-      <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
+      <form onSubmit={void form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
         <fieldset className="flex flex-col gap-2" disabled={form.formState.isSubmitting}>
           <AuthenticationNavigation />
 

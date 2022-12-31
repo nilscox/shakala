@@ -1,5 +1,5 @@
-import { clsx } from 'clsx';
 import { notificationSelectors } from '@shakala/frontend-domain';
+import { clsx } from 'clsx';
 
 import { Avatar } from '~/elements/avatar/avatar';
 import { Chip } from '~/elements/chip';

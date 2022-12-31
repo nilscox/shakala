@@ -4,7 +4,7 @@ import { markdownToHtml } from './markdown-to-html';
 
 describe('markdownToHtml', () => {
   const test = async (markdown: string, expected: React.ReactElement, highlight?: string) => {
-    expect(await markdownToHtml(markdown, highlight)).toEqual(renderToStaticMarkup(expected));
+    expect(markdownToHtml(markdown, highlight)).toEqual(renderToStaticMarkup(expected));
   };
 
   it('transforms some markdown to an HTML string', async () => {

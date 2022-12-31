@@ -8,12 +8,14 @@ export class HealthcheckController extends Controller {
     super(logger);
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints() {
     return {
       'GET /healthcheck': this.healthcheck,
       'GET /version': this.version,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async healthcheck(): Promise<Response<{ api: boolean; database: boolean }>> {
     return Response.ok({

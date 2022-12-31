@@ -196,8 +196,10 @@ importers:
       date-fns: ^2.29.3
       diff: ^5.1.0
       esbuild-loader: ^2.20.0
-      eslint-config-next: ^12.0.0
+      eslint-config-next: ^12.1.0
       eslint-plugin-jsx-a11y: ^6.6.1
+      eslint-plugin-react: ^7.31.11
+      eslint-plugin-react-hooks: ^4.6.0
       eslint-plugin-tailwindcss: ^3.8.0
       instant-mocha: ^1.5.0
       jsdom: ^20.0.3
@@ -289,6 +291,8 @@ importers:
       esbuild-loader: 2.20.0_webpack@5.75.0
       eslint-config-next: 12.3.4
       eslint-plugin-jsx-a11y: 6.6.1
+      eslint-plugin-react: 7.31.11
+      eslint-plugin-react-hooks: 4.6.0
       eslint-plugin-tailwindcss: 3.8.0
       instant-mocha: 1.5.0_webpack@5.75.0
       jsdom: 20.0.3

@@ -1,6 +1,6 @@
-import { Meta, StoryFn } from '@storybook/react';
 import { createDate, createNotification, createUser, notificationActions } from '@shakala/frontend-domain';
 import { NotificationType } from '@shakala/shared';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { maxWidthDecorator, reduxDecorator, SetupRedux } from '~/utils/storybook';
 

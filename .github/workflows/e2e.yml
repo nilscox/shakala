@@ -1,3 +1,5 @@
+# cspell:disable
+
 name: E2E
 
 on:
@@ -34,7 +36,8 @@ jobs:
         image: maildev/maildev
 
     steps:
-      - uses: ./.github/actions/setup.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
 
       - name: Build packages
         run: pnpm tsc -b

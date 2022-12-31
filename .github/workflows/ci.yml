@@ -17,7 +17,8 @@ jobs:
     name: Types check
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/setup.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
       - run: pnpm typecheck
 
   test:
@@ -37,7 +38,8 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: .github/actions/setup.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
       - run: pnpm test
         env:
           SESSION_SECRET: secret
@@ -50,14 +52,16 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/setup.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
       - run: pnpm lint
 
   spellcheck:
     name: Spell check
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/setup.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
       - run: pnpm add -g cspell @cspell/dict-fr-fr
       - run: cspell link add @cspell/dict-fr-fr
       - run: pnpm spellcheck

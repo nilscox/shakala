@@ -140,10 +140,10 @@ describe('FetchHttpGateway', () => {
 
     const response = await http.read('get', '/', { onError });
 
-    await expect(onError.lastCall).toEqual([expect.objectWith({ body: { some: 'error' } })]);
+    expect(onError.lastCall).toEqual([expect.objectWith({ body: { some: 'error' } })]);
 
-    await expect(response).toHaveProperty('status', 400);
-    await expect(response).toHaveProperty('body', 'result');
+    expect(response).toHaveProperty('status', 400);
+    expect(response).toHaveProperty('body', 'result');
   });
 
   it('HttpError.isHttpError type guard', async () => {

@@ -4,8 +4,8 @@ import { AuthenticationFormType, AuthenticationForm } from '../authentication.ty
 import { login } from '../login/login';
 import { signup } from '../signup/signup';
 
-export const handleAuthenticate = (fields: AuthenticationForm): AppThunk<void> => {
-  return (dispatch, getState) => {
+export const handleAuthenticate = (fields: AuthenticationForm): AppThunk => {
+  return async (dispatch, getState) => {
     const currentAuthenticationForm = authenticationSelectors.currentForm(getState());
 
     switch (currentAuthenticationForm) {

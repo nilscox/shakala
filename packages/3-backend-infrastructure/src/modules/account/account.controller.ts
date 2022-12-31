@@ -8,7 +8,6 @@ import {
   UpdateUserCommand,
 } from '@shakala/backend-application';
 import { Notification, ProfileImageData, ProfileImageType, User } from '@shakala/backend-domain';
-import multer, { memoryStorage } from 'multer';
 import {
   AuthorizationError,
   AuthorizationErrorReason,
@@ -16,6 +15,7 @@ import {
   NotificationDto,
   NotificationType,
 } from '@shakala/shared';
+import multer, { memoryStorage } from 'multer';
 
 import {
   CommandBus,
@@ -47,6 +47,7 @@ export class AccountController extends Controller {
     super(logger, '/account');
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints(): Record<string, RequestHandler> {
     return {
       'GET /notifications/count': this.getUnseenNotificationsCount,
@@ -55,6 +56,7 @@ export class AccountController extends Controller {
       'POST /profile-image': this.changeProfileImage,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async getUnseenNotificationsCount(req: Request): Promise<Response<number>> {
     const user = await this.session.getUser(req);
@@ -100,7 +102,7 @@ export class AccountController extends Controller {
     return Response.noContent();
   }
 
-  private transformNotification(notification: Notification): NotificationDto<NotificationType> {
+  private transformNotification(this: void, notification: Notification): NotificationDto<NotificationType> {
     return {
       id: notification.id,
       seen: notification.seenDate?.toString() ?? false,

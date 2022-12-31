@@ -1,4 +1,3 @@
-import { Args, Decorator, StoryFn } from '@storybook/react';
 import {
   AppState,
   createStore,
@@ -12,12 +11,13 @@ import {
   StubThreadGateway,
   StubUserProfileGateway,
 } from '@shakala/frontend-domain';
+import { EnumType } from '@shakala/shared';
+import { Args, Decorator, StoryFn } from '@storybook/react';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { Provider } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { EnumType } from '@shakala/shared';
 
 import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';

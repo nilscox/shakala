@@ -1,4 +1,3 @@
-import { screen } from '@testing-library/dom';
 import {
   commentActions,
   createComment,
@@ -8,6 +7,7 @@ import {
   routerActions,
   TestStore,
 } from '@shakala/frontend-domain';
+import { screen } from '@testing-library/dom';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 

@@ -207,7 +207,7 @@ describe('createReply', () => {
     it('sets the replying flag to false when closing the reply form', async () => {
       await store.dispatch(commentActions.closeReplyForm(parent.id));
 
-      expect(await store.select(commentSelectors.isReplying, parent.id)).toBe(false);
+      expect(store.select(commentSelectors.isReplying, parent.id)).toBe(false);
     });
 
     it('clear the persisted draft reply text', async () => {

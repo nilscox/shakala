@@ -70,7 +70,7 @@ describe('setThreadFilters', () => {
   });
 
   it('discards the sort filter when its value is not a sort enum value', async () => {
-    await store.dispatch(routerActions.setQueryParam(['sort', 'boubou']));
+    store.dispatch(routerActions.setQueryParam(['sort', 'boubou']));
     await store.dispatch(setThreadSearchFilter('threadId', 'science'));
 
     expect(fetchComments.lastCall).toEqual(['threadId', { search: 'science' }]);

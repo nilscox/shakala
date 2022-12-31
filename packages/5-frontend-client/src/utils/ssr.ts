@@ -10,8 +10,8 @@ import {
   userProfileActions,
   userProfileSelectors,
 } from '@shakala/frontend-domain';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { BaseError } from '@shakala/shared';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { getServerConfig } from '~/utils/config';
 import { productionDependencies } from '~/utils/production-dependencies';

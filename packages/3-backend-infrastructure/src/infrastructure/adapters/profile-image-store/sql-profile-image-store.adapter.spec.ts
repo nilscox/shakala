@@ -25,7 +25,7 @@ describe('SqlProfileImageStoreAdapter', function () {
 
   it('retrieves an existing profile image', async () => {
     const em = getEntityManager();
-    const repository = await em.getRepository(SqlProfileImage);
+    const repository = em.getRepository(SqlProfileImage);
 
     const data = Buffer.from('image');
 
@@ -47,7 +47,7 @@ describe('SqlProfileImageStoreAdapter', function () {
 
   it('creates a new profile image', async () => {
     const em = getEntityManager();
-    const repository = await em.getRepository(SqlProfileImage);
+    const repository = em.getRepository(SqlProfileImage);
 
     const profileImageStore = new SqlProfileImageStoreAdapter(em);
 
@@ -68,7 +68,7 @@ describe('SqlProfileImageStoreAdapter', function () {
 
   it('updates an existing profile image', async () => {
     const em = getEntityManager();
-    const repository = await em.getRepository(SqlProfileImage);
+    const repository = em.getRepository(SqlProfileImage);
 
     const data = Buffer.from('image');
     const newData = Buffer.from('new image');

@@ -1,6 +1,6 @@
 import { Email, EmailSenderPort } from '@shakala/backend-application';
-import * as nodeMailer from 'nodemailer';
 import { pick } from '@shakala/shared';
+import * as nodeMailer from 'nodemailer';
 
 import { ConfigPort } from '../config/config.port';
 

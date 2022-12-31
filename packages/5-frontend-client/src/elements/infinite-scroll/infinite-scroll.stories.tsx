@@ -1,6 +1,6 @@
+import { array } from '@shakala/shared';
 import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
-import { array } from '@shakala/shared';
 
 import { controls } from '~/utils/storybook';
 

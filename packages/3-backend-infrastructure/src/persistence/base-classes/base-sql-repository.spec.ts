@@ -84,7 +84,7 @@ describe('BaseSqlRepository', function () {
     });
 
     await repository.save(entity);
-    await em.clear();
+    em.clear();
 
     const found = await em.findOne(SqlTest, entity.id);
 
@@ -99,7 +99,7 @@ describe('BaseSqlRepository', function () {
     sqlTest.foo = 'bar';
 
     await em.persistAndFlush(sqlTest);
-    await em.clear();
+    em.clear();
 
     const entity = createTest({
       id: 'id',
@@ -118,7 +118,7 @@ describe('BaseSqlRepository', function () {
     sqlTest.foo = 'bar';
 
     await em.persistAndFlush(sqlTest);
-    await em.clear();
+    em.clear();
 
     const entity = await repository.findById(sqlTest.id);
 
@@ -133,7 +133,7 @@ describe('BaseSqlRepository', function () {
     sqlTest.foo = 'bar';
 
     await em.persistAndFlush(sqlTest);
-    await em.clear();
+    em.clear();
 
     await expect.async(repository.findByIdOrFail(sqlTest.id)).toBeDefined();
 
@@ -150,7 +150,7 @@ describe('BaseSqlRepository', function () {
     sqlTest.foo = 'bar';
 
     await em.persistAndFlush(sqlTest);
-    await em.clear();
+    em.clear();
 
     await repository.delete(await repository.findByIdOrFail(sqlTest.id));
 

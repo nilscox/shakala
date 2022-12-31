@@ -16,6 +16,7 @@ export class MjmlEmailCompilerAdapter implements EmailCompilerPort {
     });
 
     if (errors.length) {
+      // todo: throw new UnexpectedError()
       console.error(errors);
       throw new Error(`failed to render template "${templateHtml}"`);
     }

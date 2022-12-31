@@ -47,6 +47,7 @@ export const createTestRenderer = () => {
   };
 
   render.withConfig = (config: Partial<PublicConfig>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     wrap(ConfigProvider, { config: config as PublicConfig });
     return render;
   };

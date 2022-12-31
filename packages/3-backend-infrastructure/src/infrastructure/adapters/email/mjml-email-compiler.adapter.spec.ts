@@ -18,6 +18,6 @@ describe('MjmlEmailCompilerAdapter', () => {
   });
 
   it('throws when the mjml body is incorrect', () => {
-    expect(() => emailCompiler.compile('hello {{name}}', '<html><body /></html>')).toThrow();
+    void expect(() => emailCompiler.compile('hello {{name}}', '<html><body /></html>')).toThrow();
   });
 });

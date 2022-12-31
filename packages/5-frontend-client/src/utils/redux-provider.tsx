@@ -86,7 +86,7 @@ const useConnectRouterToStore = () => {
       }
 
       if (JSON.stringify(queryParams) !== JSON.stringify(query)) {
-        dispatch(routerActions.setQueryParams(query as Record<string, string>));
+        dispatch(routerActions.setQueryParams(query));
       }
     };
 
@@ -115,7 +115,7 @@ const useConnectStoreToRouter = () => {
     }
 
     if (Object.keys(next).length > 0) {
-      globalRouter.push(next, undefined, { shallow: true });
+      void globalRouter.push(next, undefined, { shallow: true });
     }
   }, [pathname, queryParams]);
 };

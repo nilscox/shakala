@@ -46,7 +46,7 @@ export const parseError = (serialized: unknown) => {
     return;
   }
 
-  const ErrorClass = errors[code as keyof typeof errors];
+  const ErrorClass = errors[code];
 
   if (!ErrorClass) {
     return;

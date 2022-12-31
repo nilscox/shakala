@@ -1,4 +1,3 @@
-import { screen } from '@testing-library/react';
 import {
   commentActions,
   commentSelectors,
@@ -10,6 +9,7 @@ import {
   TestStore,
   threadActions,
 } from '@shakala/frontend-domain';
+import { screen } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';
 

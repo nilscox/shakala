@@ -8,7 +8,7 @@ const getClientRequest = ({ req }: any) => {
 };
 
 export const logRequestHeaders = (req: Request) => {
-  req.on('response', () => {
+  void req.on('response', () => {
     const request = getClientRequest(req);
 
     for (const [key, value] of Object.entries(request.getHeaders())) {
@@ -18,7 +18,7 @@ export const logRequestHeaders = (req: Request) => {
 };
 
 export const logResponseBody = (req: Request) => {
-  req.on('response', (res) => {
+  void req.on('response', (res) => {
     console.dir(res.body, { depth: null });
   });
 };

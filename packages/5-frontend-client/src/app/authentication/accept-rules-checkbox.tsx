@@ -1,9 +1,9 @@
-import { clsx } from 'clsx';
 import {
   AuthenticationForm,
   AuthenticationFormType,
   authenticationSelectors,
 } from '@shakala/frontend-domain';
+import { clsx } from 'clsx';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 

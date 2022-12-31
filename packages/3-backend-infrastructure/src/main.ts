@@ -6,7 +6,7 @@ const main = async () => {
   await server.init();
   await server.start();
 
-  const close = () => server.close();
+  const close = () => void server.close();
 
   process.on('SIGINT', close);
   process.on('SIGTERM', close);

@@ -1,4 +1,3 @@
-import { Meta } from '@storybook/react';
 import {
   commentActions,
   createAuthUser,
@@ -9,6 +8,7 @@ import {
   userProfileActions,
 } from '@shakala/frontend-domain';
 import { randomId } from '@shakala/shared';
+import { Meta } from '@storybook/react';
 
 import { maxWidthDecorator, reduxDecorator, ReduxStory } from '~/utils/storybook';
 

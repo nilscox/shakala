@@ -210,7 +210,7 @@ describe('editComment', () => {
     it('sets the editing flag to false when closing the edition form', async () => {
       await store.dispatch(commentActions.closeEditionForm(comment.id));
 
-      expect(await store.select(commentSelectors.isEditing, comment.id)).toBe(false);
+      expect(store.select(commentSelectors.isEditing, comment.id)).toBe(false);
     });
 
     it('clear the persisted draft edition text', async () => {

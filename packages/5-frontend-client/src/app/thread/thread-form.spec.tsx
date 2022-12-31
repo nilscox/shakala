@@ -1,4 +1,3 @@
-import { screen, waitFor } from '@testing-library/react';
 import {
   createAuthUser,
   createTestStore,
@@ -6,6 +5,7 @@ import {
   threadSelectors,
   ValidationErrors,
 } from '@shakala/frontend-domain';
+import { screen, waitFor } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 

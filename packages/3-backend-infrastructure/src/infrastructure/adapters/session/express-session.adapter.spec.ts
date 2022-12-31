@@ -42,7 +42,7 @@ describe('ExpressSessionAdapter', () => {
     it("removes the user's id from the request's session", async () => {
       const request = new MockRequest().withSession({ userId: user.id });
 
-      session.unsetUser(request);
+      await session.unsetUser(request);
 
       expect(request.session.userId).toBe(undefined);
     });

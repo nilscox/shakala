@@ -1,5 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react';
 import { commentActions, createComment, createUser, routerActions } from '@shakala/frontend-domain';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { reduxDecorator, SetupRedux } from '~/utils/storybook';
 

@@ -47,6 +47,7 @@ export class AuthenticationController extends Controller {
     super(logger, '/auth');
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints() {
     return {
       'POST /login': this.login,
@@ -57,6 +58,7 @@ export class AuthenticationController extends Controller {
       'GET  /me': this.getAuthenticatedUser,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async login(req: Request): Promise<Response<AuthUserDto>> {
     const body = await this.validation.body(req, loginBodySchema);
@@ -134,7 +136,7 @@ export class AuthenticationController extends Controller {
 
     await execute(this.commandBus).command(new SignOutCommand()).asUser(user).run();
 
-    this.session.unsetUser(req);
+    await this.session.unsetUser(req);
 
     return Response.noContent();
   }

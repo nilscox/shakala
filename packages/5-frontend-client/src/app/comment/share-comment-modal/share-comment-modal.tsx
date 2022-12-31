@@ -67,7 +67,7 @@ export const ShareCommentModal = () => {
           <img src={linkedin} alt="LinkedIn" className="w-full" />
         </ShareIcon>
 
-        <ShareIcon title="Partager un lien" onClick={copyPermalink}>
+        <ShareIcon title="Partager un lien" onClick={void copyPermalink}>
           <img src={link} alt="Link" className="w-full" />
         </ShareIcon>
       </div>

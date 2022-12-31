@@ -1,6 +1,6 @@
+import { contains } from '@shakala/shared';
 import { clsx } from 'clsx';
 import { ComponentProps } from 'react';
-import { contains } from '@shakala/shared';
 
 import { Avatar } from './avatar';
 

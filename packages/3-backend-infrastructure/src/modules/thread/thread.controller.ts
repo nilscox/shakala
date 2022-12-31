@@ -41,6 +41,7 @@ export class ThreadController extends Controller {
     super(logger, '/thread');
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints() {
     return {
       'GET  /last': this.getLastThreads,
@@ -48,6 +49,7 @@ export class ThreadController extends Controller {
       'POST /': this.createThread,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async getLastThreads(req: Request): Promise<Response<ThreadDto[]>> {
     const query = await this.validationService.query(req, getLastThreadsQuerySchema);

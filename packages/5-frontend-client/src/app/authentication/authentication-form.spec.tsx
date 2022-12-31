@@ -1,4 +1,3 @@
-import { screen, waitFor } from '@testing-library/react';
 import {
   authenticationActions,
   AuthenticationFormType,
@@ -8,6 +7,7 @@ import {
   userProfileSelectors,
 } from '@shakala/frontend-domain';
 import { mockFn } from '@shakala/shared/test';
+import { screen, waitFor } from '@testing-library/react';
 
 import { AuthenticationForm } from '~/app/authentication/authentication-form';
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';

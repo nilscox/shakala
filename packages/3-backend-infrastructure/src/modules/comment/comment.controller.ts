@@ -41,6 +41,7 @@ export class CommentController extends Controller {
     this.queryBus;
   }
 
+  /* eslint-disable @typescript-eslint/unbound-method */
   endpoints() {
     return {
       'POST /': this.createComment,
@@ -52,6 +53,7 @@ export class CommentController extends Controller {
       'POST /:id/report': this.reportComment,
     };
   }
+  /* eslint-enable @typescript-eslint/unbound-method */
 
   async createComment(req: Request): Promise<Response<{ id: string }>> {
     const user = await this.session.getUser(req);
@@ -117,7 +119,7 @@ export class CommentController extends Controller {
 
     await execute(this.commandBus)
       // todo
-      .command(new SetCommentSubscriptionCommand(user!.id, commentId, true))
+      .command(new SetCommentSubscriptionCommand(user?.id as string, commentId, true))
       .asUser(user)
       .run();
 
@@ -130,7 +132,7 @@ export class CommentController extends Controller {
 
     await execute(this.commandBus)
       // todo
-      .command(new SetCommentSubscriptionCommand(user!.id, commentId, false))
+      .command(new SetCommentSubscriptionCommand(user?.id as string, commentId, false))
       .asUser(user)
       .run();
 

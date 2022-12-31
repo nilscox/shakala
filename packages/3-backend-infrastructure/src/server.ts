@@ -2,11 +2,11 @@ import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
 import { RequestContext } from '@mikro-orm/core';
+import { pick } from '@shakala/shared';
 import connectPgSimple, { PGStore } from 'connect-pg-simple';
 import cors from 'cors';
 import express, { Express, json } from 'express';
 import session from 'express-session';
-import { pick } from '@shakala/shared';
 
 import { Application } from './application';
 import { ExpressSessionAdapter, ValidationService } from './infrastructure';
@@ -54,7 +54,7 @@ export class Server extends Application {
       await promisify<void>((cb) => this.server?.close(cb))();
     }
 
-    await this.sessionStore?.close();
+    this.sessionStore?.close();
 
     await super.close();
 

@@ -1,6 +1,6 @@
 import { EntitySelectors } from '@nilscox/redux-kooltik';
-import { createSelector } from 'reselect';
 import { last } from '@shakala/shared';
+import { createSelector } from 'reselect';
 
 import { AppState } from '../../store';
 
