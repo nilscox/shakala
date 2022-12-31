@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { ProfileImage, ProfileImageData, ProfileImageStorePort } from 'backend-domain';
+import { ProfileImage, ProfileImageData, ProfileImageStorePort } from '@shakala/backend-domain';
 
 import { SqlProfileImage, SqlUser } from '../../../persistence/entities';
 

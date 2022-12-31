@@ -1,5 +1,5 @@
-import { DomainEvent } from 'backend-domain';
-import { last } from 'shared';
+import { DomainEvent } from '@shakala/backend-domain';
+import { last } from '@shakala/shared';
 
 import { IEventBus } from '../cqs';
 

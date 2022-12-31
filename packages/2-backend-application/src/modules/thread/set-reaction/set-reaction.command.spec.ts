@@ -5,8 +5,8 @@ import {
   ReactionType,
   StubGeneratorAdapter,
   User,
-} from 'backend-domain';
-import { CannotSetReactionOnOwnCommentError } from 'shared';
+} from '@shakala/backend-domain';
+import { CannotSetReactionOnOwnCommentError } from '@shakala/shared';
 
 import { InMemoryReactionRepository, InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';

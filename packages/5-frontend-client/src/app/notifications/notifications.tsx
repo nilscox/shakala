@@ -1,6 +1,6 @@
-import { Notification, notificationActions, notificationSelectors } from 'frontend-domain';
+import { Notification, notificationActions, notificationSelectors } from '@shakala/frontend-domain';
 import { useState } from 'react';
-import { NotificationType } from 'shared';
+import { NotificationType } from '@shakala/shared';
 
 import { InfiniteScroll } from '~/elements/infinite-scroll';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';

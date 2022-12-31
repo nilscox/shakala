@@ -1,4 +1,4 @@
-import { Comment } from 'backend-domain';
+import { Comment } from '@shakala/backend-domain';
 
 import { Repository } from '../repository';
 

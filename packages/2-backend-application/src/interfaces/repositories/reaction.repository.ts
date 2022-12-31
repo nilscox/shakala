@@ -1,4 +1,4 @@
-import { Reaction, ReactionsCount, ReactionType } from 'backend-domain';
+import { Reaction, ReactionsCount, ReactionType } from '@shakala/backend-domain';
 
 import { Repository } from '../repository';
 

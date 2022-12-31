@@ -1,4 +1,4 @@
-import { CommentAlreadyReportedError } from 'shared';
+import { CommentAlreadyReportedError } from '@shakala/shared';
 
 import { StubCommentGateway } from '../../../stubs/stub-comment-gateway';
 import { createTestStore, TestStore } from '../../../test-store';

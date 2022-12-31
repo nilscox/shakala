@@ -1,4 +1,4 @@
-import { threadActions, User } from 'frontend-domain';
+import { threadActions, User } from '@shakala/frontend-domain';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch } from '~/hooks/use-app-dispatch';

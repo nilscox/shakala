@@ -1,5 +1,5 @@
-import { PaginationData } from 'backend-application';
-import { BaseError, paginationQuerySchema, UnexpectedError } from 'shared';
+import { PaginationData } from '@shakala/backend-application';
+import { BaseError, paginationQuerySchema, UnexpectedError } from '@shakala/shared';
 import * as yup from 'yup';
 
 import { Request } from '../../http/request';

@@ -1,4 +1,4 @@
-import { AuthenticationFormType, authenticationSelectors } from 'frontend-domain';
+import { AuthenticationFormType, authenticationSelectors } from '@shakala/frontend-domain';
 import { useDebounce } from 'use-debounce';
 
 import { useAppSelector } from '~/hooks/use-app-selector';

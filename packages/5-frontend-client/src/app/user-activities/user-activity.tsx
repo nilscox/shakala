@@ -5,8 +5,8 @@ import {
   formatDateRelativeOrAbsolute,
   UserActivity,
   userActivitySelectors,
-} from 'frontend-domain';
-import { UserActivityType } from 'shared';
+} from '@shakala/frontend-domain';
+import { UserActivityType } from '@shakala/shared';
 
 import { Link } from '~/elements/link';
 import { useAppSelector } from '~/hooks/use-app-selector';

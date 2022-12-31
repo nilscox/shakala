@@ -6,8 +6,8 @@ import {
   NotificationRepository,
   Pagination,
   UpdateUserCommand,
-} from 'backend-application';
-import { Notification, ProfileImageData, ProfileImageType, User } from 'backend-domain';
+} from '@shakala/backend-application';
+import { Notification, ProfileImageData, ProfileImageType, User } from '@shakala/backend-domain';
 import multer, { memoryStorage } from 'multer';
 import {
   AuthorizationError,
@@ -15,7 +15,7 @@ import {
   InvalidImageFormat,
   NotificationDto,
   NotificationType,
-} from 'shared';
+} from '@shakala/shared';
 
 import {
   CommandBus,

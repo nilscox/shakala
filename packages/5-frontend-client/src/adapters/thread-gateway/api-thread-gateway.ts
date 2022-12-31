@@ -1,4 +1,4 @@
-import { Comment, FetchCommentsFilters, Reply, Thread, ThreadGateway } from 'frontend-domain';
+import { Comment, FetchCommentsFilters, Reply, Thread, ThreadGateway } from '@shakala/frontend-domain';
 import {
   CommentDto,
   CreateCommentBodyDto,
@@ -8,7 +8,7 @@ import {
   NotFound,
   ThreadDto,
   ThreadWithCommentsDto,
-} from 'shared';
+} from '@shakala/shared';
 
 import { HttpGateway, Response } from '../http-gateway/http.gateway';
 

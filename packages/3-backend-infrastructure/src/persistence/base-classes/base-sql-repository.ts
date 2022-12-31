@@ -1,8 +1,8 @@
 import { FilterQuery, FindOptions, Primary } from '@mikro-orm/core';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Paginated, Repository } from 'backend-application';
-import { DomainDependencies } from 'backend-domain';
-import { ClassType, NotFound } from 'shared';
+import { Paginated, Repository } from '@shakala/backend-application';
+import { DomainDependencies } from '@shakala/backend-domain';
+import { ClassType, NotFound } from '@shakala/shared';
 
 import { BaseSqlEntity } from './base-sql-entity';
 

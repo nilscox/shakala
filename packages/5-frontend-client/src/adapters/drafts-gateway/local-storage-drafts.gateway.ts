@@ -1,4 +1,4 @@
-import { AbstractDraftsGateway, DraftsGateway, ThreadDraftsComments } from 'frontend-domain';
+import { AbstractDraftsGateway, DraftsGateway, ThreadDraftsComments } from '@shakala/frontend-domain';
 
 const debounceTimeout = 1000;
 

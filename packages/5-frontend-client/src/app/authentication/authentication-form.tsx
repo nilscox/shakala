@@ -4,10 +4,10 @@ import {
   authenticationActions,
   AuthenticationForm as AuthenticationFormValues,
   AuthenticationFormType,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { InvalidCredentials } from 'shared';
+import { InvalidCredentials } from '@shakala/shared';
 
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';

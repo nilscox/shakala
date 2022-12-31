@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthorizationErrorReason, UserMustBeAuthorError } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, UserMustBeAuthorError } from '@shakala/shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { ValidationErrors } from '../../../utils/validation-error';

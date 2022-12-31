@@ -1,4 +1,4 @@
-import { LoggerGateway } from 'frontend-domain';
+import { LoggerGateway } from '@shakala/frontend-domain';
 
 export class ConsoleLoggerGateway implements LoggerGateway {
   warn = console.warn;

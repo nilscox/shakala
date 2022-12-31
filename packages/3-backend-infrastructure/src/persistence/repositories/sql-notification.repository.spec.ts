@@ -1,6 +1,6 @@
-import { Pagination } from 'backend-application';
-import { createDomainDependencies, factories, Notification, Timestamp } from 'backend-domain';
-import { NotificationType } from 'shared';
+import { Pagination } from '@shakala/backend-application';
+import { createDomainDependencies, factories, Notification, Timestamp } from '@shakala/backend-domain';
+import { NotificationType } from '@shakala/shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 

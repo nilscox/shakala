@@ -1,4 +1,4 @@
-import { ValidationErrors } from 'frontend-domain';
+import { ValidationErrors } from '@shakala/frontend-domain';
 import { useCallback } from 'react';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 

@@ -1,5 +1,5 @@
-import { GetUserByIdQuery } from 'backend-application';
-import { factories } from 'backend-domain';
+import { GetUserByIdQuery } from '@shakala/backend-application';
+import { factories } from '@shakala/backend-domain';
 
 import { MockQueryBus, MockRequest } from '../../../test';
 

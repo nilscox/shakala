@@ -1,4 +1,4 @@
-import { threadActions, threadSelectors } from 'frontend-domain';
+import { threadActions, threadSelectors } from '@shakala/frontend-domain';
 
 import { ThreadForm } from '~/app/thread/thread-form';
 import { Link } from '~/elements/link';

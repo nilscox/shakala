@@ -1,4 +1,4 @@
-import { createFactory, randomId } from 'shared';
+import { createFactory, randomId } from '@shakala/shared';
 
 export type AuthenticatedUser = {
   id: string;

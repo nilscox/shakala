@@ -1,4 +1,4 @@
-import { Author, Comment, DatePort, GeneratorPort, Markdown, Message, Timestamp } from 'backend-domain';
+import { Author, Comment, DatePort, GeneratorPort, Markdown, Message, Timestamp } from '@shakala/backend-domain';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../../authorization';
 import { CommandHandler, IEventBus } from '../../../cqs';

@@ -1,5 +1,5 @@
-import { CreateUserActivityCommand, EventHandler, ExecutionContext } from 'backend-application';
-import { DomainEvent } from 'backend-domain';
+import { CreateUserActivityCommand, EventHandler, ExecutionContext } from '@shakala/backend-application';
+import { DomainEvent } from '@shakala/backend-domain';
 
 import { CommandBus } from '../../infrastructure';
 

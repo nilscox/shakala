@@ -5,8 +5,8 @@ import {
   StubGeneratorAdapter,
   UserCreatedEvent,
   StubProfileImageStoreAdapter,
-} from 'backend-domain';
-import { EmailAlreadyExistsError, NickAlreadyExistsError } from 'shared';
+} from '@shakala/backend-domain';
+import { EmailAlreadyExistsError, NickAlreadyExistsError } from '@shakala/shared';
 
 import { StubEventBus, InMemoryUserRepository } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

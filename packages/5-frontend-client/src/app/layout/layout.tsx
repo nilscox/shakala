@@ -1,4 +1,4 @@
-import { AppState, notificationActions } from 'frontend-domain';
+import { AppState, notificationActions } from '@shakala/frontend-domain';
 import { useEffect } from 'react';
 
 import { AuthenticationModal } from '~/app/authentication/authentication-modal';

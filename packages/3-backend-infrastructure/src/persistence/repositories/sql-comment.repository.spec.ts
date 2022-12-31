@@ -1,5 +1,5 @@
-import { Sort } from 'backend-application';
-import { createDomainDependencies, factories } from 'backend-domain';
+import { Sort } from '@shakala/backend-application';
+import { createDomainDependencies, factories } from '@shakala/backend-domain';
 
 import { MathRandomGeneratorAdapter } from '../../infrastructure';
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';

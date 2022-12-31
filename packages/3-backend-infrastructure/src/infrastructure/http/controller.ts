@@ -1,11 +1,11 @@
-import { LoggerPort } from 'backend-application';
+import { LoggerPort } from '@shakala/backend-application';
 import {
   Application,
   RequestHandler as ExpressRequestHandler,
   Response as ExpressResponse,
   Router,
 } from 'express';
-import { BaseError } from 'shared';
+import { BaseError } from '@shakala/shared';
 
 import { Request } from './request';
 import { RequestAdapter } from './request-adapter';

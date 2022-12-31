@@ -1,4 +1,4 @@
-import { createStubFunction } from 'frontend-domain';
+import { createStubFunction } from '@shakala/frontend-domain';
 
 import { FetchHttpGateway } from './fetch-http.gateway';
 import { HttpError, NetworkError, Response } from './http.gateway';

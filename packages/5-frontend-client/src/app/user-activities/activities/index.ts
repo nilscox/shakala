@@ -1,4 +1,4 @@
-import { UserActivityType } from 'shared';
+import { UserActivityType } from '@shakala/shared';
 
 import { ActivityItem } from '../user-activity';
 

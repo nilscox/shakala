@@ -1,4 +1,4 @@
-import { DateGateway } from 'frontend-domain';
+import { DateGateway } from '@shakala/frontend-domain';
 
 export class RealDateGateway implements DateGateway {
   nowAsString(): string {

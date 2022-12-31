@@ -1,4 +1,4 @@
-import { User } from 'backend-domain';
+import { User } from '@shakala/backend-domain';
 
 import { SessionPort } from '../infrastructure';
 import { Request } from '../infrastructure/http/request';

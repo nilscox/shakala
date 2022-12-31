@@ -1,4 +1,4 @@
-import { CommentService, del, Reaction, ReactionType } from 'backend-domain';
+import { CommentService, del, Reaction, ReactionType } from '@shakala/backend-domain';
 
 import { Authorize, IsAuthenticated, HasWriteAccess } from '../../../authorization';
 import { CommandHandler, IEventBus } from '../../../cqs';

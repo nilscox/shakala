@@ -1,4 +1,4 @@
-import { AuthenticationActivityType } from 'shared';
+import { AuthenticationActivityType } from '@shakala/shared';
 
 import IconSignUp from '~/icons/sign-up.svg';
 

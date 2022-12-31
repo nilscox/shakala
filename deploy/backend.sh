@@ -24,7 +24,7 @@ koyeb service create backend \
   --app "$app_name" \
   --git "$repo" \
   --git-branch "$branch" \
-  --git-build-command 'yarn build:backend' \
+  --git-build-command 'pnpm build:backend' \
   --git-run-command 'VERSION=$(git rev-parse HEAD) node -r ./packages/3-backend-infrastructure/register-aliases.js ./packages/3-backend-infrastructure/dist/main.js' \
   --instance-type 'micro' \
   --min-scale 2 \

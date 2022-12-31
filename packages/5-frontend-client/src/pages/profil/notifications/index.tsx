@@ -1,4 +1,4 @@
-import { notificationActions } from 'frontend-domain';
+import { notificationActions } from '@shakala/frontend-domain';
 import { useEffect } from 'react';
 
 import { Notifications } from '~/app/notifications/notifications';

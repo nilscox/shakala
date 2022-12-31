@@ -1,4 +1,4 @@
-import { factories, StubDateAdapter, StubGeneratorAdapter, ThreadCreatedEvent } from 'backend-domain';
+import { factories, StubDateAdapter, StubGeneratorAdapter, ThreadCreatedEvent } from '@shakala/backend-domain';
 
 import { InMemoryThreadRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';

@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "main": "dist/index.js",
-  "types": "dist/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "test": "mocha",
     "lint": "eslint src"
+  },
+  "dependencies": {
+    "@shakala/shared": "workspace:*"
   }
 }

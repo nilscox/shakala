@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { CommentRepository, Sort } from 'backend-application';
-import { Comment, DomainDependencies } from 'backend-domain';
-import { groupBy } from 'shared';
+import { CommentRepository, Sort } from '@shakala/backend-application';
+import { Comment, DomainDependencies } from '@shakala/backend-domain';
+import { groupBy } from '@shakala/shared';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
 import { SqlComment } from '../entities/sql-comment.entity';

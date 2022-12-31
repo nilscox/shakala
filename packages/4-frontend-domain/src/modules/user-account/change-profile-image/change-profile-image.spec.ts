@@ -1,4 +1,4 @@
-import { InvalidImageFormat } from 'shared';
+import { InvalidImageFormat } from '@shakala/shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { userProfileSelectors } from '../user-profile.selectors';

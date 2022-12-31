@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { ReactionRepository } from 'backend-application';
-import { DomainDependencies, Reaction, ReactionsCount, ReactionType } from 'backend-domain';
-import { groupBy } from 'shared';
+import { ReactionRepository } from '@shakala/backend-application';
+import { DomainDependencies, Reaction, ReactionsCount, ReactionType } from '@shakala/backend-domain';
+import { groupBy } from '@shakala/shared';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
 import { SqlReaction } from '../entities/sql-reaction.entity';

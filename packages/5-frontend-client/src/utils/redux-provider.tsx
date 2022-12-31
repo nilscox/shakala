@@ -7,7 +7,7 @@ import {
   Dependencies,
   routerActions,
   routerSelectors,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import globalRouter from 'next/router';
 import { useEffect, useMemo } from 'react';
 // eslint-disable-next-line no-restricted-imports

@@ -1,4 +1,4 @@
-import { userProfileActions } from 'frontend-domain';
+import { userProfileActions } from '@shakala/frontend-domain';
 import { FormEventHandler, useRef } from 'react';
 
 import { ProfileTitle } from '~/app/profile/profile-title';

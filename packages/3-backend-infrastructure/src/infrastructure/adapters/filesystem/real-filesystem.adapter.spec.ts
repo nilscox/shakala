@@ -1,5 +1,5 @@
-import { FileNotFoundError } from 'backend-application';
-import { mockReject, mockResolve } from 'shared/test';
+import { FileNotFoundError } from '@shakala/backend-application';
+import { mockReject, mockResolve } from '@shakala/shared/test';
 
 import { RealFilesystemAdapter } from './real-filesystem.adapter';
 

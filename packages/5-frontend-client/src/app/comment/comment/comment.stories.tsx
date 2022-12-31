@@ -7,8 +7,8 @@ import {
   createReply,
   createUser,
   userProfileActions,
-} from 'frontend-domain';
-import { randomId } from 'shared';
+} from '@shakala/frontend-domain';
+import { randomId } from '@shakala/shared';
 
 import { maxWidthDecorator, reduxDecorator, ReduxStory } from '~/utils/storybook';
 

@@ -1,6 +1,6 @@
 import { Selectors } from '@nilscox/redux-kooltik';
 import { createSelector } from 'reselect';
-import { isEnumValue } from 'shared';
+import { isEnumValue } from '@shakala/shared';
 
 import { AppState } from '../../store';
 import { routerSelectors } from '../router';

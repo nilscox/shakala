@@ -1,4 +1,4 @@
-import { UserActivity } from 'backend-domain';
+import { UserActivity } from '@shakala/backend-domain';
 
 import { Query, QueryHandler } from '../../../cqs';
 import { UserActivityRepository } from '../../../interfaces';

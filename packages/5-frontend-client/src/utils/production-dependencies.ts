@@ -1,4 +1,4 @@
-import { Dependencies, DraftsGateway, SnackbarGateway } from 'frontend-domain';
+import { Dependencies, DraftsGateway, SnackbarGateway } from '@shakala/frontend-domain';
 
 import { ApiAuthenticationGateway } from '../adapters/authentication-gateway/api-authentication.gateway';
 import { ApiCommentGateway } from '../adapters/comment-gateway/api-comment-gateway';

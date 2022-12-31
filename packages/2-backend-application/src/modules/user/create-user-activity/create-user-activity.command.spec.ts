@@ -6,8 +6,8 @@ import {
   Timestamp,
   UserActivity,
   UserActivityService,
-} from 'backend-domain';
-import { UserActivityType } from 'shared';
+} from '@shakala/backend-domain';
+import { UserActivityType } from '@shakala/shared';
 
 import { InMemoryCommentRepository, InMemoryThreadRepository } from '../../../adapters';
 import { InMemoryUserActivityRepository } from '../../../adapters/in-memory-repositories/user-activity.in-memory-repository';

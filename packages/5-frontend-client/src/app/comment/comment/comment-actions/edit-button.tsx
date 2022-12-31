@@ -1,4 +1,4 @@
-import { commentActions } from 'frontend-domain';
+import { commentActions } from '@shakala/frontend-domain';
 
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import EditIcon from '~/icons/edit.svg';

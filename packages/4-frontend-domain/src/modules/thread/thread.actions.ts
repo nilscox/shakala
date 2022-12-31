@@ -1,5 +1,5 @@
 import { EntityActions, EntityAdapter } from '@nilscox/redux-kooltik';
-import { getIds } from 'shared';
+import { getIds } from '@shakala/shared';
 
 import { normalizeThread, normalizeThreads, normalizeComments } from '../../normalization';
 

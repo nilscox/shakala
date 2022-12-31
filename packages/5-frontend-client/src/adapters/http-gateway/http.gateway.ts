@@ -1,4 +1,4 @@
-import { BaseError } from 'shared';
+import { BaseError } from '@shakala/shared';
 
 export interface Response<Body = unknown> {
   readonly ok: boolean;

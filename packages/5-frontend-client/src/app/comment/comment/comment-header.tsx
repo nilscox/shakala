@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { commentSelectors } from 'frontend-domain';
+import { commentSelectors } from '@shakala/frontend-domain';
 
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { DateTime } from '~/elements/date-time';

@@ -1,6 +1,6 @@
 import { PrimaryKey, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { DomainDependencies } from 'backend-domain';
+import { DomainDependencies } from '@shakala/backend-domain';
 
 export abstract class BaseSqlEntity<DomainEntity> {
   @PrimaryKey()

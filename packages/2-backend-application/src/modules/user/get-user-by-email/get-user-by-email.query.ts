@@ -1,4 +1,4 @@
-import { User } from 'backend-domain';
+import { User } from '@shakala/backend-domain';
 
 import { Query, QueryHandler } from '../../../cqs';
 import { UserRepository } from '../../../interfaces';

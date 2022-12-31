@@ -1,4 +1,4 @@
-import { DomainEvent, UserActivityService } from 'backend-domain';
+import { DomainEvent, UserActivityService } from '@shakala/backend-domain';
 
 import { Command, CommandHandler } from '../../../cqs';
 import { CommentRepository, ThreadRepository, UserActivityRepository } from '../../../interfaces';

@@ -1,4 +1,4 @@
-import { CommentActivityType } from 'shared';
+import { CommentActivityType } from '@shakala/shared';
 
 import IconNewComment from '~/icons/new-comment.svg';
 

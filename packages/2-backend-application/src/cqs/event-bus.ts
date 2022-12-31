@@ -1,4 +1,4 @@
-import { AggregateRoot, DomainEvent, EntityProps } from 'backend-domain';
+import { AggregateRoot, DomainEvent, EntityProps } from '@shakala/backend-domain';
 
 import { ExecutionContext } from '../utils';
 

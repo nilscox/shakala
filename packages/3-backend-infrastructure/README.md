@@ -17,7 +17,7 @@ podman run -d --name shakala-postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 5432
 ### Run the migrations
 
 ```
-yarn db:migrate
+pnpm db:migrate
 ```
 
 ### Start maildev

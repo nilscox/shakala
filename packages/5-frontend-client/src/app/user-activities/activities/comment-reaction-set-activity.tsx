@@ -1,4 +1,4 @@
-import { CommentActivityType, ReactionTypeDto } from 'shared';
+import { CommentActivityType, ReactionTypeDto } from '@shakala/shared';
 
 import IconThumbDown from '~/icons/thumb-down.svg';
 import IconThumbUp from '~/icons/thumb-up.svg';

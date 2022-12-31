@@ -1,5 +1,5 @@
-import { CreateNotificationCommand, ExecutionContext } from 'backend-application';
-import { NotificationPayloadMap, NotificationType } from 'shared';
+import { CreateNotificationCommand, ExecutionContext } from '@shakala/backend-application';
+import { NotificationPayloadMap, NotificationType } from '@shakala/shared';
 
 import { Application } from '../application';
 

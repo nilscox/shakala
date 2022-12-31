@@ -1,4 +1,4 @@
-import { UnexpectedError } from 'shared';
+import { UnexpectedError } from '@shakala/shared';
 import * as yup from 'yup';
 
 import { MockRequest } from '../../../test';

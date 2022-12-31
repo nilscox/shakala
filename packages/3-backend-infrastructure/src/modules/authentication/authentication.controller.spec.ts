@@ -5,8 +5,8 @@ import {
   SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
-} from 'backend-application';
-import { factories } from 'backend-domain';
+} from '@shakala/backend-application';
+import { factories } from '@shakala/backend-domain';
 import {
   AuthorizationError,
   EmailAlreadyExistsError,
@@ -17,8 +17,8 @@ import {
   NickAlreadyExistsError,
   NotImplemented,
   SignupBodyDto,
-} from 'shared';
-import { mockReject } from 'shared/test';
+} from '@shakala/shared';
+import { mockReject } from '@shakala/shared/test';
 
 import { Request, StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

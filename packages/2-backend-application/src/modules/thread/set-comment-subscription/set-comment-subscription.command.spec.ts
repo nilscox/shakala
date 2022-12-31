@@ -1,5 +1,5 @@
-import { factories, StubGeneratorAdapter } from 'backend-domain';
-import { CommentAlreadySubscribedError, CommentNotSubscribedError } from 'shared';
+import { factories, StubGeneratorAdapter } from '@shakala/backend-domain';
+import { CommentAlreadySubscribedError, CommentNotSubscribedError } from '@shakala/shared';
 
 import {
   InMemoryCommentRepository,

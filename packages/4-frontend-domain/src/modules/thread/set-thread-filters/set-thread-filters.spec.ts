@@ -1,4 +1,4 @@
-import { Sort } from 'shared';
+import { Sort } from '@shakala/shared';
 
 import { StubThreadGateway } from '../../../stubs/stub-thread-gateway';
 import { createTestStore, TestStore } from '../../../test-store';

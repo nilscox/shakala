@@ -1,4 +1,4 @@
-import { createComment, createThread } from 'frontend-domain';
+import { createComment, createThread } from '@shakala/frontend-domain';
 
 import { StubHttpGateway, StubResponse } from '../http-gateway/stub-http.gateway';
 

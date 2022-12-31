@@ -1,4 +1,4 @@
-import { UserMustBeAuthorError } from 'shared';
+import { UserMustBeAuthorError } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';

@@ -1,0 +1,19 @@
+name: Setup
+description: Setup Node.js and pnpm
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository branch
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        cache: pnpm
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+
+    - name: Install node dependencies
+      run: pnpm install --frozen-lockfile

@@ -1,4 +1,4 @@
-import { isSort, Sort } from 'shared';
+import { isSort, Sort } from '@shakala/shared';
 
 import { FetchCommentsFilters } from '../../../gateways/thread-gateway';
 import { AppState, AppThunk } from '../../../store';

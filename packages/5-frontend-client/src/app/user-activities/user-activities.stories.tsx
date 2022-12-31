@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
-import { createUserActivity, userActivityActions } from 'frontend-domain';
-import { AuthenticationMethod, ReactionTypeDto, UserActivityType } from 'shared';
+import { createUserActivity, userActivityActions } from '@shakala/frontend-domain';
+import { AuthenticationMethod, ReactionTypeDto, UserActivityType } from '@shakala/shared';
 
 import { reduxDecorator, ReduxStory } from '~/utils/storybook';
 

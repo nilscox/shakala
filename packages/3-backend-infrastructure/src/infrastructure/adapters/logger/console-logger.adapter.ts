@@ -1,5 +1,5 @@
-import { LoggerPort } from 'backend-application';
-import { DatePort } from 'backend-domain';
+import { LoggerPort } from '@shakala/backend-application';
+import { DatePort } from '@shakala/backend-domain';
 
 export class ConsoleLoggerAdapter implements LoggerPort {
   constructor(private readonly dateAdapter: DatePort, private readonly console = globalThis.console) {}

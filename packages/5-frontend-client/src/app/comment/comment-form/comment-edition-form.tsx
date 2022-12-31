@@ -1,4 +1,4 @@
-import { commentActions, commentSelectors } from 'frontend-domain';
+import { commentActions, commentSelectors } from '@shakala/frontend-domain';
 import { useState, useEffect } from 'react';
 
 import { useAppDispatch } from '~/hooks/use-app-dispatch';

@@ -1,9 +1,5 @@
 {
-  "references": [
-    { "path": "../2-backend-application" },
-    { "path": "../3-backend-infrastructure" },
-    { "path": "../5-frontend-client" }
-  ],
+  "references": [{ "path": "../3-backend-infrastructure" }, { "path": "../4-frontend-domain" }],
   "include": ["specs", "utils"],
   "compilerOptions": {
     "outDir": "./dist",
@@ -11,14 +7,6 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "baseUrl": "..",
-    "paths": {
-      "shared": ["0-shared/src"],
-      "backend-domain": ["1-backend-domain/src"],
-      "backend-application": ["2-backend-application/dist"],
-      "backend-infrastructure": ["3-backend-infrastructure/dist"],
-      "frontend-domain": ["4-frontend-domain/dist"]
-    }
+    "strict": true
   }
 }

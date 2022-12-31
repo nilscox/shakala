@@ -1,4 +1,4 @@
-import { createDomainDependencies, factories, ProfileImageType } from 'backend-domain';
+import { createDomainDependencies, factories, ProfileImageType } from '@shakala/backend-domain';
 
 import { SqlUserRepository } from '../../../persistence';
 import { SqlProfileImage, SqlUser } from '../../../persistence/entities';

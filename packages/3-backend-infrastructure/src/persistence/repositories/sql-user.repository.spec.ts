@@ -1,4 +1,4 @@
-import { createDomainDependencies, factories } from 'backend-domain';
+import { createDomainDependencies, factories } from '@shakala/backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 

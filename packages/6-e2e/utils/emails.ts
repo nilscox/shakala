@@ -1,7 +1,11 @@
 import { expect } from '@playwright/test';
-import { ExecutionContext, GetUserByEmailQuery, ValidateEmailAddressCommand } from 'backend-application';
-import { User } from 'backend-domain';
-import { Application } from 'backend-infrastructure';
+import {
+  ExecutionContext,
+  GetUserByEmailQuery,
+  ValidateEmailAddressCommand,
+} from '@shakala/backend-application';
+import { User } from '@shakala/backend-domain';
+import { Application } from '@shakala/backend-infrastructure';
 
 import './hooks';
 

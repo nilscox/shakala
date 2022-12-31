@@ -1,8 +1,8 @@
 import nodeFs from 'fs/promises';
 import path from 'path';
 
-import { FileNotFoundError, FilesystemAccessError, FilesystemPort } from 'backend-application';
-import { get } from 'shared';
+import { FileNotFoundError, FilesystemAccessError, FilesystemPort } from '@shakala/backend-application';
+import { get } from '@shakala/shared';
 
 export type NodeFs = {
   readFile: (path: string) => Promise<string | Buffer>;

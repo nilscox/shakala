@@ -1,9 +1,8 @@
 import { MikroORM, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { wait } from 'shared';
+import { wait } from '@shakala/shared';
 
-import { ConfigPort } from '3-backend-infrastructure/src/infrastructure';
-
+import { ConfigPort } from '../../infrastructure';
 import { createDatabaseSaver } from '../utils/save-test-data';
 
 import { getConfig } from './mikro-orm.config';

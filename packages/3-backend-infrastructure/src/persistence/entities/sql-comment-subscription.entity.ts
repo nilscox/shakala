@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Unique } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { CommentSubscription } from 'backend-domain';
+import { CommentSubscription } from '@shakala/backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

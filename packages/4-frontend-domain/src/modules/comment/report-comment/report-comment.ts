@@ -1,4 +1,4 @@
-import { CommentAlreadyReportedError, UnexpectedError } from 'shared';
+import { CommentAlreadyReportedError, UnexpectedError } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { routerActions, routerSelectors } from '../../router';

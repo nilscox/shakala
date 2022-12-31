@@ -1,4 +1,4 @@
-import { InMemoryEmailSenderAdapter } from 'backend-application';
+import { InMemoryEmailSenderAdapter } from '@shakala/backend-application';
 import { SuperAgentTest } from 'supertest';
 
 import { StubConfigAdapter } from '../../infrastructure';

@@ -1,4 +1,4 @@
-import { formatDate, DateFormat } from 'frontend-domain';
+import { formatDate, DateFormat } from '@shakala/frontend-domain';
 
 type DateTimeProps = {
   date: string;

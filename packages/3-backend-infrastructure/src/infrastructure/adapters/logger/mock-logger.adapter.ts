@@ -1,5 +1,5 @@
-import { LoggerPort } from 'backend-application';
-import { mockFn } from 'shared/test';
+import { LoggerPort } from '@shakala/backend-application';
+import { mockFn } from '@shakala/shared/test';
 
 export class MockLoggerAdapter implements LoggerPort {
   log = mockFn<LoggerPort['log']>();

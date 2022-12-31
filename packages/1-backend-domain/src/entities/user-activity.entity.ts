@@ -1,4 +1,4 @@
-import { UserActivityPayload, UserActivityType } from 'shared';
+import { UserActivityPayload, UserActivityType } from '@shakala/shared';
 
 import { Entity, EntityProps } from '../ddd/entity';
 

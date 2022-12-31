@@ -1,4 +1,4 @@
-import { routerSelectors } from 'frontend-domain';
+import { routerSelectors } from '@shakala/frontend-domain';
 
 import { useAppSelector } from './use-app-selector';
 

@@ -1,4 +1,4 @@
-import { factories, ReactionType } from 'backend-domain';
+import { factories, ReactionType } from '@shakala/backend-domain';
 
 import {
   InMemoryThreadRepository,

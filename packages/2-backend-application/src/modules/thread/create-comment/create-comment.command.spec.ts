@@ -4,7 +4,7 @@ import {
   factories,
   StubDateAdapter,
   StubGeneratorAdapter,
-} from 'backend-domain';
+} from '@shakala/backend-domain';
 
 import { InMemoryCommentRepository, StubEventBus } from '../../../adapters';
 import { AuthenticatedExecutionContext } from '../../../utils';

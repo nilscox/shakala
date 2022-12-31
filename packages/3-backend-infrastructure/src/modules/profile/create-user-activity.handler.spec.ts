@@ -1,5 +1,5 @@
-import { CreateUserActivityCommand, ExecutionContext } from 'backend-application';
-import { factories, UserCreatedEvent } from 'backend-domain';
+import { CreateUserActivityCommand, ExecutionContext } from '@shakala/backend-application';
+import { factories, UserCreatedEvent } from '@shakala/backend-domain';
 
 import { MockCommandBus } from '../../test';
 

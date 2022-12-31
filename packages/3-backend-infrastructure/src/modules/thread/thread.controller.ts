@@ -6,8 +6,8 @@ import {
   GetThreadQueryResult,
   LoggerPort,
   Sort,
-} from 'backend-application';
-import { Thread } from 'backend-domain';
+} from '@shakala/backend-application';
+import { Thread } from '@shakala/backend-domain';
 import {
   createThreadBodySchema,
   getLastThreadsQuerySchema,
@@ -15,7 +15,7 @@ import {
   NotFound,
   ThreadDto,
   ThreadWithCommentsDto,
-} from 'shared';
+} from '@shakala/shared';
 
 import {
   CommandBus,

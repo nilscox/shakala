@@ -1,5 +1,5 @@
 import { Normalized } from '@nilscox/redux-kooltik';
-import { createFactory, randomId } from 'shared';
+import { createFactory, randomId } from '@shakala/shared';
 
 export type User = {
   id: string;

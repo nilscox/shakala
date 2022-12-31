@@ -1,4 +1,4 @@
-import { CryptoPort } from 'backend-domain';
+import { CryptoPort } from '@shakala/backend-domain';
 import * as bcrypt from 'bcrypt';
 
 export class BcryptAdapter implements CryptoPort {

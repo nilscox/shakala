@@ -1,5 +1,5 @@
-import { GetUserByIdQuery } from 'backend-application';
-import { User } from 'backend-domain';
+import { GetUserByIdQuery } from '@shakala/backend-application';
+import { User } from '@shakala/backend-domain';
 
 import { QueryBus } from '../../cqs/query-bus';
 import { Request } from '../../http/request';

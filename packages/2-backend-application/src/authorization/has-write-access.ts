@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthorizationErrorReason, UnexpectedError } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, UnexpectedError } from '@shakala/shared';
 
 import { ExecutionContext } from '../utils';
 

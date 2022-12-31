@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "main": "dist/index.js",
-  "types": "dist/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "lint": "eslint src",
@@ -18,6 +18,8 @@
     "@types/lodash.clonedeep": "^4.5.7"
   },
   "dependencies": {
+    "@shakala/backend-domain": "workspace:*",
+    "@shakala/shared": "workspace:*",
     "lodash.clonedeep": "^4.5.0"
   }
 }

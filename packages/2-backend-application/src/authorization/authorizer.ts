@@ -1,4 +1,4 @@
-import { ClassType } from 'shared';
+import { ClassType } from '@shakala/shared';
 
 import { ExecutionContext } from '../utils';
 

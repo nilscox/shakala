@@ -1,4 +1,4 @@
-import type { Notification } from 'backend-domain';
+import type { Notification } from '@shakala/backend-domain';
 
 import { NotificationRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

@@ -1,6 +1,5 @@
 data
 node_modules
-yarn-error.log
 .env
 
 /packages/*/tsconfig.tsbuildinfo

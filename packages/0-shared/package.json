@@ -2,8 +2,20 @@
   "name": "@shakala/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./test": "./dist/index.test.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ],
+      "test": [
+        "dist/index.test.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc",

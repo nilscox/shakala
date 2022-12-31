@@ -1,6 +1,6 @@
 import { Entity, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { createDomainDependencies, DomainDependencies } from 'backend-domain';
+import { createDomainDependencies, DomainDependencies } from '@shakala/backend-domain';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 

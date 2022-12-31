@@ -1,6 +1,6 @@
-import { Command, CommandResult, ExecutionContext } from 'backend-application';
-import { User } from 'backend-domain';
-import { ClassType } from 'shared';
+import { Command, CommandResult, ExecutionContext } from '@shakala/backend-application';
+import { User } from '@shakala/backend-domain';
+import { ClassType } from '@shakala/shared';
 
 import { CommandBus } from '../infrastructure';
 

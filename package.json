@@ -2,27 +2,17 @@
   "name": "shakala",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/0-shared",
-    "packages/1-backend-domain",
-    "packages/2-backend-application",
-    "packages/3-backend-infrastructure",
-    "packages/4-frontend-domain",
-    "packages/5-frontend-client",
-    "packages/6-e2e"
-  ],
+  "packageManager": "pnpm@7.18.2",
   "scripts": {
-    "clean": "yarn workspaces run clean",
-    "test": "yarn workspaces run test",
-    "lint": "yarn workspaces run lint",
+    "run-one": "pnpm --stream --filter",
+    "run-all": "pnpm --stream --filter './packages/*'",
+    "clean": "pnpm run-all clean",
+    "test": "pnpm run-all test",
+    "lint": "pnpm run-all lint",
+    "typecheck": "tsc -b",
     "spellcheck": "cspell --locale en,fr 'packages/*/src/**'",
-    "build:shared": "yarn workspace @shakala/shared build",
-    "build:backend": "yarn workspace @shakala/backend-infrastructure build",
-    "build:frontend": "yarn workspace @shakala/shared build && yarn workspace @shakala/frontend-client build",
-    "build": "yarn build:shared && yarn build:backend && yarn build:frontend",
-    "typecheck": "yarn build:backend && yarn workspace @shakala/frontend-client tsc -b",
-    "start:backend": "yarn workspace @shakala/backend-infrastructure start",
-    "start:frontend": "yarn workspace @shakala/frontend-client dev"
+    "start:backend": "pnpm run-one @shakala/backend-infrastructure start",
+    "start:frontend": "pnpm run-one @shakala/frontend-client dev"
   },
   "devDependencies": {
     "@nilscox/expect": "^0.2.4",
@@ -41,7 +31,6 @@
     "prettier": "^2.8.1",
     "sinon": "^15.0.1",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.1",
     "typescript": "^4.9.4"
   }
 }

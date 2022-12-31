@@ -14,7 +14,7 @@ koyeb service create frontend \
   --app "$app_name" \
   --git "$rep" \
   --git-branch "$branch" \
-  --git-build-command 'VERSION=$(git rev-parse HEAD) yarn build:frontend' \
+  --git-build-command 'VERSION=$(git rev-parse HEAD) pnpm build:frontend' \
   --git-run-command 'npx http-server-spa packages/5-frontend-client/dist' \
   --instance-type 'nano' \
   --min-scale 2 \

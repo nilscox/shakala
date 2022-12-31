@@ -1,6 +1,6 @@
-import { GetThreadQueryResult } from 'backend-application';
-import { Author, Comment, ReactionsCount, ReactionType, Thread } from 'backend-domain';
-import { CommentDto, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto, UserDto } from 'shared';
+import { GetThreadQueryResult } from '@shakala/backend-application';
+import { Author, Comment, ReactionsCount, ReactionType, Thread } from '@shakala/backend-domain';
+import { CommentDto, ReactionTypeDto, ThreadDto, ThreadWithCommentsDto, UserDto } from '@shakala/shared';
 
 import { UserPresenter } from '../user/user.presenter';
 

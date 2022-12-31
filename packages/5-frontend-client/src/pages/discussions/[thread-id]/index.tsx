@@ -1,4 +1,4 @@
-import { threadActions, threadSelectors } from 'frontend-domain';
+import { threadActions, threadSelectors } from '@shakala/frontend-domain';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 

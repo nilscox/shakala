@@ -5,7 +5,7 @@ import {
   formatDate,
   threadSelectors,
   User,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import Head from 'next/head';
 import { useEffect } from 'react';
 

@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { commentSelectors } from 'frontend-domain';
+import { commentSelectors } from '@shakala/frontend-domain';
 import { useState } from 'react';
 
 import { Markdown } from '~/elements/markdown';

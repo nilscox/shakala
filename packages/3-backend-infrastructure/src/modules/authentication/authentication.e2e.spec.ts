@@ -1,5 +1,5 @@
-import { InMemoryEmailSenderAdapter } from 'backend-application';
-import { LoginBodyDto, SignupBodyDto } from 'shared';
+import { InMemoryEmailSenderAdapter } from '@shakala/backend-application';
+import { LoginBodyDto, SignupBodyDto } from '@shakala/shared';
 
 import { StubConfigAdapter } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

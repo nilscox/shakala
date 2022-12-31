@@ -1,4 +1,4 @@
-import { InvalidImageFormat } from 'shared';
+import { InvalidImageFormat } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { userProfileActions } from '../user-profile.actions';

@@ -1,4 +1,4 @@
-import { ProfileActivityType } from 'shared';
+import { ProfileActivityType } from '@shakala/shared';
 
 import IconValidateEmail from '~/icons/validate-email.svg';
 

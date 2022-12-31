@@ -5,10 +5,10 @@ import {
   GetThreadQuery,
   GetThreadQueryResult,
   Sort,
-} from 'backend-application';
-import { factories } from 'backend-domain';
-import { NotFound } from 'shared';
-import { mockResolve } from 'shared/test';
+} from '@shakala/backend-application';
+import { factories } from '@shakala/backend-domain';
+import { NotFound } from '@shakala/shared';
+import { mockResolve } from '@shakala/shared/test';
 
 import { StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

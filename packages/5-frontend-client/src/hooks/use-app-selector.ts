@@ -1,4 +1,4 @@
-import { AppState } from 'frontend-domain';
+import { AppState } from '@shakala/frontend-domain';
 // eslint-disable-next-line no-restricted-imports
 import { useSelector } from 'react-redux';
 

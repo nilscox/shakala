@@ -1,5 +1,5 @@
 import { BlobType, Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { ProfileImageType } from 'backend-domain';
+import { ProfileImageType } from '@shakala/backend-domain';
 
 import { SqlUser } from './sql-user.entity';
 

@@ -14,7 +14,7 @@ import {
   ApplicationDependencies,
   InMemoryNotificationRepository,
   InMemoryCommentSubscriptionRepository,
-} from 'backend-application';
+} from '@shakala/backend-application';
 import {
   CommentCreatedEvent,
   CommentEditedEvent,
@@ -29,8 +29,8 @@ import {
   UserAuthenticationFailedEvent,
   UserCreatedEvent,
   UserSignedOutEvent,
-} from 'backend-domain';
-import { ClassType } from 'shared';
+} from '@shakala/backend-domain';
+import { ClassType } from '@shakala/shared';
 
 import {
   BcryptAdapter,

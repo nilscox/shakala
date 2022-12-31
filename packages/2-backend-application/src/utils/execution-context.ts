@@ -1,4 +1,4 @@
-import { User } from 'backend-domain';
+import { User } from '@shakala/backend-domain';
 
 export class ExecutionContext {
   constructor(public readonly user: User | undefined) {}

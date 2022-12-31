@@ -1,5 +1,5 @@
-import { EmailAddressValidatedEvent, factories, User } from 'backend-domain';
-import { EmailValidationFailed, EmailValidationFailedReason } from 'shared';
+import { EmailAddressValidatedEvent, factories, User } from '@shakala/backend-domain';
+import { EmailValidationFailed, EmailValidationFailedReason } from '@shakala/shared';
 
 import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

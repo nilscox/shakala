@@ -1,4 +1,4 @@
-import { CannotSetReactionOnOwnCommentError, CannotReportOwnCommentError } from 'shared';
+import { CannotSetReactionOnOwnCommentError, CannotReportOwnCommentError } from '@shakala/shared';
 
 import { CommentReport } from '../entities/comment-report.entity';
 import { Comment } from '../entities/comment.entity';

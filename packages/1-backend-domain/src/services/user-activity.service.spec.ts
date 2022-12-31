@@ -1,4 +1,9 @@
-import { AuthenticationMethod, ReactionTypeDto, UserActivityPayload, UserActivityType } from 'shared';
+import {
+  AuthenticationMethod,
+  ReactionTypeDto,
+  UserActivityPayload,
+  UserActivityType,
+} from '@shakala/shared';
 
 import { DomainEvent } from '../ddd/domain-event';
 import { ReactionType } from '../entities/reaction.entity';

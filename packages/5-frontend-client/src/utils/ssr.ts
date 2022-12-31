@@ -9,9 +9,9 @@ import {
   routerActions,
   userProfileActions,
   userProfileSelectors,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { BaseError } from 'shared';
+import { BaseError } from '@shakala/shared';
 
 import { getServerConfig } from '~/utils/config';
 import { productionDependencies } from '~/utils/production-dependencies';

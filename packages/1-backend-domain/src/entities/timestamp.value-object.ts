@@ -1,4 +1,4 @@
-import { InvalidDateError } from 'shared';
+import { InvalidDateError } from '@shakala/shared';
 
 import { ValueObject } from '../ddd/value-object';
 import type { DatePort } from '../interfaces/date.interface';

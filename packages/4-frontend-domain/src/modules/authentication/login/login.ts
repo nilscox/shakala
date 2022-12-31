@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthorizationErrorReason, InvalidCredentials } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason, InvalidCredentials } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { ValidationErrors } from '../../../utils/validation-error';

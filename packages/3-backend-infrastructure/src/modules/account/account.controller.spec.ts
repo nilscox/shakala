@@ -4,9 +4,9 @@ import {
   InMemoryNotificationRepository,
   MarkNotificationAsSeenCommand,
   UpdateUserCommand,
-} from 'backend-application';
-import { factories, Notification, ProfileImageType } from 'backend-domain';
-import { InvalidImageFormat, NotificationType } from 'shared';
+} from '@shakala/backend-application';
+import { factories, Notification, ProfileImageType } from '@shakala/backend-domain';
+import { InvalidImageFormat, NotificationType } from '@shakala/shared';
 
 import { RequestFile, StubConfigAdapter, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

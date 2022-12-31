@@ -1,4 +1,4 @@
-import { threadActions, threadSelectors } from 'frontend-domain';
+import { threadActions, threadSelectors } from '@shakala/frontend-domain';
 
 import { useEmailValidationNotification } from '~/app/authentication/email-validation/use-email-validation-notification';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';

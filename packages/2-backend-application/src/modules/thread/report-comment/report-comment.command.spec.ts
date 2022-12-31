@@ -1,5 +1,5 @@
-import { CommentService, factories, StubGeneratorAdapter, CommentReportedEvent } from 'backend-domain';
-import { CommentAlreadyReportedError, CannotReportOwnCommentError } from 'shared';
+import { CommentService, factories, StubGeneratorAdapter, CommentReportedEvent } from '@shakala/backend-domain';
+import { CommentAlreadyReportedError, CannotReportOwnCommentError } from '@shakala/shared';
 
 import { InMemoryCommentRepository, InMemoryCommentReportRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

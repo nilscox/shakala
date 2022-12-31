@@ -4,7 +4,7 @@ import {
   EmailValidationFailedReason,
   InvalidCredentials,
   UnexpectedError,
-} from 'shared';
+} from '@shakala/shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';

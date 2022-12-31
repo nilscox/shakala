@@ -1,4 +1,4 @@
-import { EmailCompilerPort, EmailPayload, EmailRenderer, FilesystemPort } from 'backend-application';
+import { EmailCompilerPort, EmailPayload, EmailRenderer, FilesystemPort } from '@shakala/backend-application';
 import Handlebars from 'handlebars';
 import mjml2html from 'mjml';
 

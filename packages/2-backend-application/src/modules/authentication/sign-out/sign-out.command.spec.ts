@@ -1,4 +1,4 @@
-import { factories, UserSignedOutEvent } from 'backend-domain';
+import { factories, UserSignedOutEvent } from '@shakala/backend-domain';
 
 import { StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

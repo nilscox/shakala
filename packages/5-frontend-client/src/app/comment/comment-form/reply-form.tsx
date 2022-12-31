@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { commentActions, commentSelectors } from 'frontend-domain';
+import { commentActions, commentSelectors } from '@shakala/frontend-domain';
 import { useEffect, useState } from 'react';
 
 import { Avatar } from '~/elements/avatar/avatar';

@@ -1,4 +1,4 @@
-import { userProfileSelectors } from 'frontend-domain';
+import { userProfileSelectors } from '@shakala/frontend-domain';
 
 import { useAppSelector } from './use-app-selector';
 

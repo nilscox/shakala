@@ -1,4 +1,4 @@
-import { AuthenticationActivityType, AuthenticationMethod } from 'shared';
+import { AuthenticationActivityType, AuthenticationMethod } from '@shakala/shared';
 
 import IconSignIn from '~/icons/sign-in.svg';
 

@@ -1,4 +1,4 @@
-import { ProfileImageData } from 'backend-domain';
+import { ProfileImageData } from '@shakala/backend-domain';
 
 import { Authorize, IsAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

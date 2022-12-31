@@ -1,4 +1,4 @@
-import type { UserActivity } from 'backend-domain';
+import type { UserActivity } from '@shakala/backend-domain';
 
 import { UserActivityRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

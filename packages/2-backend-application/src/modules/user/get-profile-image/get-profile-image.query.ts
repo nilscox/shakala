@@ -1,4 +1,4 @@
-import { ProfileImage, ProfileImageData, ProfileImageStorePort } from 'backend-domain';
+import { ProfileImage, ProfileImageData, ProfileImageStorePort } from '@shakala/backend-domain';
 
 import { Query, QueryHandler } from '../../../cqs';
 

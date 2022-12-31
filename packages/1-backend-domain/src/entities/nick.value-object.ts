@@ -1,4 +1,4 @@
-import { NickTooShortError } from 'shared';
+import { NickTooShortError } from '@shakala/shared';
 
 import { ValueObject } from '../ddd/value-object';
 

@@ -1,4 +1,4 @@
-import { ThreadActivityType } from 'shared';
+import { ThreadActivityType } from '@shakala/shared';
 
 import IconThread from '~/icons/thread.svg';
 

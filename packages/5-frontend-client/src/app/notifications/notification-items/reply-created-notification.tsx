@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { NotificationType } from 'shared';
+import { NotificationType } from '@shakala/shared';
 
 import { ThreadLink } from '~/elements/link';
 

@@ -7,7 +7,7 @@ import {
   createUser,
   routerActions,
   TestStore,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 

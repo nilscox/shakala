@@ -1,5 +1,5 @@
 import { Normalized } from '@nilscox/redux-kooltik';
-import { createFactory, randomId } from 'shared';
+import { createFactory, randomId } from '@shakala/shared';
 
 import { createDate } from '../../utils/date-utils';
 import { Comment } from '../comment';

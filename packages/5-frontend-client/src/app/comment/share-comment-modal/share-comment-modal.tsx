@@ -1,4 +1,4 @@
-import { commentSelectors } from 'frontend-domain';
+import { commentSelectors } from '@shakala/frontend-domain';
 import { ReactNode } from 'react';
 
 import { PageTitle } from '~/app/page-title';

@@ -1,4 +1,4 @@
-import { User } from 'backend-domain';
+import { User } from '@shakala/backend-domain';
 
 import { Request } from '../../http/request';
 

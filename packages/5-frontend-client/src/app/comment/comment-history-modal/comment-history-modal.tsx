@@ -1,6 +1,6 @@
-import { commentSelectors, DateFormat, formatDate, User } from 'frontend-domain';
+import { commentSelectors, DateFormat, formatDate, User } from '@shakala/frontend-domain';
 import { useState } from 'react';
-import { MessageDto } from 'shared';
+import { MessageDto } from '@shakala/shared';
 
 import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';

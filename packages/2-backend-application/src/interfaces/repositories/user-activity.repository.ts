@@ -1,4 +1,4 @@
-import type { UserActivity } from 'backend-domain';
+import type { UserActivity } from '@shakala/backend-domain';
 
 import { Paginated, Pagination } from '../../utils/pagination';
 import { Repository } from '../repository';

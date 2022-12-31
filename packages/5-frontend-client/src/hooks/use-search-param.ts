@@ -1,4 +1,4 @@
-import { routerActions, routerSelectors } from 'frontend-domain';
+import { routerActions, routerSelectors } from '@shakala/frontend-domain';
 import { useCallback } from 'react';
 
 import { useAppDispatch } from './use-app-dispatch';

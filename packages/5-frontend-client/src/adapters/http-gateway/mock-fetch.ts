@@ -1,4 +1,4 @@
-import { mockResolve } from 'shared/test';
+import { mockResolve } from '@shakala/shared/test';
 
 export const mockFetch = (overrides?: Partial<Response>) => {
   return mockResolve<Response>({

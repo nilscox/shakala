@@ -1,4 +1,4 @@
-import { InvalidCredentials } from 'shared';
+import { InvalidCredentials } from '@shakala/shared';
 
 import { Authorize, IsNotAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

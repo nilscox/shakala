@@ -1,4 +1,4 @@
-import { DatePort } from 'backend-domain';
+import { DatePort } from '@shakala/backend-domain';
 
 export class RealDateAdapter implements DatePort {
   now(): Date {

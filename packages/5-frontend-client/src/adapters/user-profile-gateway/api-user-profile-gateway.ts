@@ -1,5 +1,5 @@
-import { Paginated, UserActivity, UserProfileGateway } from 'frontend-domain';
-import { UserActivityDto, UserActivityType } from 'shared';
+import { Paginated, UserActivity, UserProfileGateway } from '@shakala/frontend-domain';
+import { UserActivityDto, UserActivityType } from '@shakala/shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 

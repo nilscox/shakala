@@ -34,27 +34,20 @@ jobs:
         image: maildev/maildev
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
-
-      - name: Install node dependencies
-        run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/setup.yml
 
       - name: Build packages
-        run: yarn tsc -b
+        run: pnpm tsc -b
         working-directory: packages/6-e2e
 
       - name: Install playwright dependencies
-        run: yarn playwright install-deps && yarn playwright install chromium
+        run: pnpm playwright install-deps && pnpm playwright install chromium
         working-directory: packages/6-e2e
 
       - name: Start backend
         run: |
-          yarn build
-          yarn db:migrate
+          npm build
+          npm db:migrate
           node -r ./register-aliases.js ./dist/main.js > ./backend.stdout 2> ./backend.stderr &
         working-directory: packages/3-backend-infrastructure
         env:
@@ -84,8 +77,8 @@ jobs:
 
       - name: Start frontend
         run: |
-          yarn build
-          yarn start > ./frontend.stdout 2> ./frontend.stderr &
+          pnpm build
+          pnpm start > ./frontend.stdout 2> ./frontend.stderr &
         working-directory: packages/5-frontend-client
         env:
           VERSION: e2e
@@ -97,7 +90,7 @@ jobs:
       #     npx wait-on -v -l http://127.0.0.1:8080
 
       - name: Run end-to-end tests
-        run: yarn e2e
+        run: pnpm e2e
         working-directory: packages/6-e2e
         env:
           NODE_ENV: test

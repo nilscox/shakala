@@ -6,7 +6,7 @@ import {
   StubGeneratorAdapter,
   StubProfileImageStoreAdapter,
   User,
-} from 'backend-domain';
+} from '@shakala/backend-domain';
 
 import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

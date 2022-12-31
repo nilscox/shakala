@@ -1,4 +1,4 @@
-import { getIds } from 'shared';
+import { getIds } from '@shakala/shared';
 
 import { AppState, AppThunk } from '../../../store';
 import { threadActions } from '../thread.actions';

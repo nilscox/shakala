@@ -1,4 +1,4 @@
-import { DatePort, Timestamp } from 'backend-domain';
+import { DatePort, Timestamp } from '@shakala/backend-domain';
 
 import { Command, CommandHandler } from '../../../cqs';
 import { NotificationRepository } from '../../../interfaces';

@@ -9,14 +9,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true,
-    "baseUrl": "..",
-    "paths": {
-      "shared": ["0-shared/src"],
-      "shared/test": ["0-shared/src/index.test.ts"],
-      "backend-domain": ["1-backend-domain/src"],
-      "backend-application": ["2-backend-application/src"]
-    }
+    "composite": true
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

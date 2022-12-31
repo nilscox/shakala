@@ -1,5 +1,5 @@
-import { CommentService, DomainDependencies, UserActivityService } from 'backend-domain';
-import { ClassType } from 'shared';
+import { CommentService, DomainDependencies, UserActivityService } from '@shakala/backend-domain';
+import { ClassType } from '@shakala/shared';
 
 // prettier-ignore
 import { Command, CommandHandler, CommandResult, IEventBus, Query, QueryHandler } from './cqs';

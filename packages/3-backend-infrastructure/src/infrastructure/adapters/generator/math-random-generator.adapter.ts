@@ -1,4 +1,4 @@
-import { GeneratorPort } from 'backend-domain';
+import { GeneratorPort } from '@shakala/backend-domain';
 
 export class MathRandomGeneratorAdapter implements GeneratorPort {
   async generateId(): Promise<string> {

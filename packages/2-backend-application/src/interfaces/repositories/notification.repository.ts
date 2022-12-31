@@ -1,4 +1,4 @@
-import { Notification } from 'backend-domain';
+import { Notification } from '@shakala/backend-domain';
 
 import { Paginated, Pagination } from '../../utils/pagination';
 import { Repository } from '../repository';

@@ -4,9 +4,9 @@ import {
   LoggerPort,
   GetUserActivitiesQuery,
   Paginated,
-} from 'backend-application';
-import { ProfileImageData, User, UserActivity } from 'backend-domain';
-import { AuthorizationError, AuthorizationErrorReason, NotFound, UserDto } from 'shared';
+} from '@shakala/backend-application';
+import { ProfileImageData, User, UserActivity } from '@shakala/backend-domain';
+import { AuthorizationError, AuthorizationErrorReason, NotFound, UserDto } from '@shakala/shared';
 
 import {
   Controller,

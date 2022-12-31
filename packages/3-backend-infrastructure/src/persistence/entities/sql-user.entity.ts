@@ -1,6 +1,6 @@
 import { Entity, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { DomainDependencies, Nick, ProfileImage, Timestamp, User } from 'backend-domain';
+import { DomainDependencies, Nick, ProfileImage, Timestamp, User } from '@shakala/backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

@@ -6,9 +6,9 @@ import {
   GetUserByIdQuery,
   SignupCommand,
   ValidateEmailAddressCommand,
-} from 'backend-application';
-import { User } from 'backend-domain';
-import { LoginBodyDto } from 'shared';
+} from '@shakala/backend-application';
+import { User } from '@shakala/backend-domain';
+import { LoginBodyDto } from '@shakala/shared';
 import { agent, SuperAgentTest } from 'supertest';
 
 import { resetDatabase } from '../persistence/mikro-orm/create-database-connection';

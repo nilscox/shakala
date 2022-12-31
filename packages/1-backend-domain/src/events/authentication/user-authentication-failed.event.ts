@@ -1,4 +1,4 @@
-import { AuthenticationMethod } from 'shared';
+import { AuthenticationMethod } from '@shakala/shared';
 
 import { DomainEvent } from '../../ddd/domain-event';
 

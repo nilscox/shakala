@@ -1,4 +1,4 @@
-import { NotificationType } from 'shared';
+import { NotificationType } from '@shakala/shared';
 
 import { Link } from '~/elements/link';
 import { Markdown } from '~/elements/markdown';

@@ -1,5 +1,5 @@
-import { GetProfileImageQuery, GetUserByIdQuery } from 'backend-application';
-import { factories, ProfileImageType } from 'backend-domain';
+import { GetProfileImageQuery, GetUserByIdQuery } from '@shakala/backend-application';
+import { factories, ProfileImageType } from '@shakala/backend-domain';
 
 import { StubConfigAdapter, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

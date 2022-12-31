@@ -1,5 +1,9 @@
-import { CreateCommentReplyNotificationsCommand, EventHandler, ExecutionContext } from 'backend-application';
-import { CommentReplyCreatedEvent } from 'backend-domain';
+import {
+  CreateCommentReplyNotificationsCommand,
+  EventHandler,
+  ExecutionContext,
+} from '@shakala/backend-application';
+import { CommentReplyCreatedEvent } from '@shakala/backend-domain';
 
 import { CommandBus } from '../../infrastructure';
 

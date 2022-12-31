@@ -15,7 +15,7 @@
     "db:migrate": "mikro-orm migration:up",
     "db:clear": "mikro-orm migration:fresh",
     "db:seed": "ts-node src/persistence/utils/seed-db",
-    "db:reset": "yarn db:clear && yarn db:seed"
+    "db:reset": "pnpm db:clear && pnpm db:seed"
   },
   "mikro-orm": {
     "useTsNode": true,
@@ -32,17 +32,21 @@
     "@mikro-orm/core": "^5.6.3",
     "@mikro-orm/postgresql": "^5.6.3",
     "@mikro-orm/reflection": "^5.6.3",
+    "@shakala/backend-application": "workspace:*",
+    "@shakala/backend-domain": "workspace:*",
+    "@shakala/shared": "workspace:*",
     "bcrypt": "^5.1.0",
     "connect-pg-simple": "^8.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "express": "^4.18.2",
     "handlebars": "^4.7.7",
     "mjml": "^4.13.0",
     "module-alias": "^2.2.2",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.8.0"
+    "nodemailer": "^6.8.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@mikro-orm/cli": "^5.6.3",

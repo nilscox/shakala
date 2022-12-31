@@ -6,9 +6,9 @@ import {
   SetReactionCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
-} from 'backend-application';
-import { ReactionType, User } from 'backend-domain';
-import { wait } from 'shared';
+} from '@shakala/backend-application';
+import { ReactionType, User } from '@shakala/backend-domain';
+import { wait } from '@shakala/shared';
 
 import { Application } from '../../application';
 

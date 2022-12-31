@@ -4,8 +4,8 @@ import {
   AuthenticationFormType,
   createAuthUser,
   ValidationErrors,
-} from 'frontend-domain';
-import { InvalidCredentials } from 'shared';
+} from '@shakala/frontend-domain';
+import { InvalidCredentials } from '@shakala/shared';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 

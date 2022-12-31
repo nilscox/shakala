@@ -4,8 +4,8 @@ import {
   ExecutionContext,
   SendEmailCommand,
   UserRepository,
-} from 'backend-application';
-import { UserCreatedEvent } from 'backend-domain';
+} from '@shakala/backend-application';
+import { UserCreatedEvent } from '@shakala/backend-domain';
 
 import { CommandBus, ConfigPort } from '../../infrastructure';
 

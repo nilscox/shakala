@@ -1,10 +1,10 @@
 import fs from 'fs/promises';
 
 import { Browser, BrowserContext, Page } from '@playwright/test';
-import { ExecutionContext, LoggerPort, SignupCommand } from 'backend-application';
-import { Application, ClearDatabaseCommand, EnvConfigAdapter } from 'backend-infrastructure';
-import { Dependencies } from 'frontend-domain';
-import { AuthUserDto } from 'shared';
+import { ExecutionContext, LoggerPort, SignupCommand } from '@shakala/backend-application';
+import { Application, ClearDatabaseCommand, EnvConfigAdapter } from '@shakala/backend-infrastructure';
+import { Dependencies } from '@shakala/frontend-domain';
+import { AuthUserDto } from '@shakala/shared';
 
 import { AppAccessors } from './app-accessors';
 import { Emails } from './emails';

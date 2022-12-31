@@ -1,5 +1,5 @@
-import { Notification, NotificationGateway, Paginated } from 'frontend-domain';
-import { PaginationQueryDto } from 'shared';
+import { Notification, NotificationGateway, Paginated } from '@shakala/frontend-domain';
+import { PaginationQueryDto } from '@shakala/shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 

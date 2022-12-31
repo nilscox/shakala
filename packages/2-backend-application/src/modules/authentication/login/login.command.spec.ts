@@ -3,8 +3,8 @@ import {
   StubDateAdapter,
   UserAuthenticatedEvent,
   UserAuthenticationFailedEvent,
-} from 'backend-domain';
-import { AuthenticationMethod, InvalidCredentials } from 'shared';
+} from '@shakala/backend-domain';
+import { AuthenticationMethod, InvalidCredentials } from '@shakala/shared';
 
 import { InMemoryUserRepository, StubEventBus } from '../../../adapters';
 import { ExecutionContext } from '../../../utils';

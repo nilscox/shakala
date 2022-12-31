@@ -1,6 +1,6 @@
-import { UserActivity, userActivityActions, userActivitySelectors } from 'frontend-domain';
+import { UserActivity, userActivityActions, userActivitySelectors } from '@shakala/frontend-domain';
 import { useEffect, useState } from 'react';
-import { UserActivityType } from 'shared';
+import { UserActivityType } from '@shakala/shared';
 
 import { InfiniteScroll } from '~/elements/infinite-scroll/infinite-scroll';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';

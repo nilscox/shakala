@@ -1,4 +1,4 @@
-import { getIds } from 'shared';
+import { getIds } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { notificationActions } from '../notification.actions';

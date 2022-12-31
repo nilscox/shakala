@@ -1,7 +1,7 @@
 import { QueryOrder } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { NotificationRepository, Paginated, Pagination } from 'backend-application';
-import { DomainDependencies, Notification } from 'backend-domain';
+import { NotificationRepository, Paginated, Pagination } from '@shakala/backend-application';
+import { DomainDependencies, Notification } from '@shakala/backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
 import { SqlNotification } from '../entities/sql-notification.entity';

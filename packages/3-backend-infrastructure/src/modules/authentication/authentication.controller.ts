@@ -5,8 +5,8 @@ import {
   SignOutCommand,
   SignupCommand,
   ValidateEmailAddressCommand,
-} from 'backend-application';
-import { User } from 'backend-domain';
+} from '@shakala/backend-application';
+import { User } from '@shakala/backend-domain';
 import {
   AuthorizationError,
   AuthorizationErrorReason,
@@ -18,7 +18,7 @@ import {
   NickAlreadyExistsError,
   NotImplemented,
   signupBodySchema,
-} from 'shared';
+} from '@shakala/shared';
 
 import {
   CommandBus,

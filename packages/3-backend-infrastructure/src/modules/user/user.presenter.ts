@@ -1,5 +1,5 @@
-import { Author, User } from 'backend-domain';
-import { AuthUserDto, UserDto } from 'shared';
+import { Author, User } from '@shakala/backend-domain';
+import { AuthUserDto, UserDto } from '@shakala/shared';
 
 import { ConfigPort } from '../../infrastructure';
 

@@ -1,5 +1,10 @@
-import { InMemoryEmailSenderAdapter } from 'backend-application';
-import { CreateCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto, SetReactionBodyDto } from 'shared';
+import { InMemoryEmailSenderAdapter } from '@shakala/backend-application';
+import {
+  CreateCommentBodyDto,
+  ReactionTypeDto,
+  ReportCommentBodyDto,
+  SetReactionBodyDto,
+} from '@shakala/shared';
 import { SuperAgentTest } from 'supertest';
 
 import { StubConfigAdapter } from '../../infrastructure';

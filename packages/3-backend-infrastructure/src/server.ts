@@ -4,9 +4,9 @@ import { promisify } from 'util';
 import { RequestContext } from '@mikro-orm/core';
 import connectPgSimple, { PGStore } from 'connect-pg-simple';
 import cors from 'cors';
-import express, { json } from 'express';
+import express, { Express, json } from 'express';
 import session from 'express-session';
-import { pick } from 'shared';
+import { pick } from '@shakala/shared';
 
 import { Application } from './application';
 import { ExpressSessionAdapter, ValidationService } from './infrastructure';
@@ -22,7 +22,7 @@ import { UserPresenter } from './modules/user/user.presenter';
 const PgSession = connectPgSimple(session);
 
 export class Server extends Application {
-  protected app = express();
+  protected app: Express = express();
   protected server?: HttpServer;
   protected sessionStore?: PGStore;
 

@@ -1,4 +1,4 @@
-import { Query } from 'backend-application';
+import { Query } from '@shakala/backend-application';
 
 import { QueryBus } from '../infrastructure';
 

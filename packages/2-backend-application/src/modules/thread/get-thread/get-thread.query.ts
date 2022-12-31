@@ -1,5 +1,5 @@
-import { Comment, ReactionsCount, ReactionType, Thread } from 'backend-domain';
-import { getIds } from 'shared';
+import { Comment, ReactionsCount, ReactionType, Thread } from '@shakala/backend-domain';
+import { getIds } from '@shakala/shared';
 
 import { Query, QueryHandler } from '../../../cqs';
 import {

@@ -7,8 +7,8 @@ import {
   ReportCommentCommand,
   SetCommentSubscriptionCommand,
   SetReactionCommand,
-} from 'backend-application';
-import { ReactionType } from 'backend-domain';
+} from '@shakala/backend-application';
+import { ReactionType } from '@shakala/backend-domain';
 import {
   createCommentBodySchema,
   createReplyBodySchema,
@@ -16,7 +16,7 @@ import {
   NotFound,
   reportCommentBodySchema,
   setReactionBodySchema,
-} from 'shared';
+} from '@shakala/shared';
 
 import {
   CommandBus,

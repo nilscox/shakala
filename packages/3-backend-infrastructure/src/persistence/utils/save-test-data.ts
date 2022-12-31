@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Repository } from 'backend-application';
+import { Repository } from '@shakala/backend-application';
 import {
   Comment,
   createDomainDependencies,
@@ -8,8 +8,8 @@ import {
   Thread,
   User,
   UserActivity,
-} from 'backend-domain';
-import { first } from 'shared';
+} from '@shakala/backend-domain';
+import { first } from '@shakala/shared';
 
 import { MathRandomGeneratorAdapter, RealDateAdapter } from '../../infrastructure';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';

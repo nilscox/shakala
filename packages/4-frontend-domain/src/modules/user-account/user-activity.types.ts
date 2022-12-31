@@ -1,4 +1,4 @@
-import { randomId, UserActivityDto, UserActivityPayload, UserActivityType } from 'shared';
+import { randomId, UserActivityDto, UserActivityPayload, UserActivityType } from '@shakala/shared';
 
 export type UserActivity<Type extends UserActivityType = UserActivityType> = UserActivityDto<Type>;
 

@@ -1,7 +1,7 @@
 import { Collection, Entity, ManyToOne, OneToMany } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Author, Comment, DomainDependencies, Nick, ProfileImage } from 'backend-domain';
-import { last } from 'shared';
+import { Author, Comment, DomainDependencies, Nick, ProfileImage } from '@shakala/backend-domain';
+import { last } from '@shakala/shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

@@ -1,5 +1,5 @@
 import { Meta } from '@storybook/react';
-import { createAuthUser, userProfileActions } from 'frontend-domain';
+import { createAuthUser, userProfileActions } from '@shakala/frontend-domain';
 
 import { maxWidthDecorator, reduxDecorator, ReduxStory } from '../../utils/storybook';
 

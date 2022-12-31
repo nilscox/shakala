@@ -1,5 +1,5 @@
-import { UserActivity } from 'backend-domain';
-import { UserActivityDto, UserActivityType } from 'shared';
+import { UserActivity } from '@shakala/backend-domain';
+import { UserActivityDto, UserActivityType } from '@shakala/shared';
 
 export class UserActivityPresenter {
   static transform = <Type extends UserActivityType>(

@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { ThreadRepository } from 'backend-application';
-import { DomainDependencies, Thread } from 'backend-domain';
+import { ThreadRepository } from '@shakala/backend-application';
+import { DomainDependencies, Thread } from '@shakala/backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
 import { SqlThread } from '../entities/sql-thread.entity';

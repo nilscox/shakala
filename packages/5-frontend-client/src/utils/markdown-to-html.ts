@@ -8,12 +8,12 @@ import remarkGemoji from 'remark-gemoji';
 import remarkGmf from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import { last } from 'shared';
+import { last } from '@shakala/shared';
 import { Plugin, unified } from 'unified';
 import { Node as UnistNode, Parent } from 'unist';
 import { visitParents } from 'unist-util-visit-parents';
 
-// mdast-build plz export dis
+// mdast plz export dis
 function normalizeChildren(children?: Children): UnistNode[] {
   if (Array.isArray(children)) {
     return children;

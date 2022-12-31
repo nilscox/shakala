@@ -1,4 +1,4 @@
-import { AuthenticationFormType } from 'frontend-domain';
+import { AuthenticationFormType } from '@shakala/frontend-domain';
 
 import { SearchParamLink } from '~/elements/search-param-link';
 

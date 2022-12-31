@@ -4,7 +4,7 @@ import {
   ReactionTypeDto,
   UserActivityPayload,
   UserActivityType,
-} from 'shared';
+} from '@shakala/shared';
 
 import { DomainEvent } from '../ddd/domain-event';
 import { Comment } from '../entities/comment.entity';

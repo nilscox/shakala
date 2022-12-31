@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
-import { threadActions } from 'frontend-domain';
+import { threadActions } from '@shakala/frontend-domain';
 import { FormEventHandler, useCallback } from 'react';
-import { isSort, Sort } from 'shared';
+import { isSort, Sort } from '@shakala/shared';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '~/elements/input';

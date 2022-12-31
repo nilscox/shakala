@@ -1,4 +1,4 @@
-import { SnackbarGateway } from 'frontend-domain';
+import { SnackbarGateway } from '@shakala/frontend-domain';
 
 export class ConsoleLogSnackbarGateway implements SnackbarGateway {
   success = console.log;

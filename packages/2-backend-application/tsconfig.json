@@ -5,11 +5,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true,
-    "baseUrl": "..",
-    "paths": {
-      "shared": ["0-shared/src"],
-      "backend-domain": ["1-backend-domain/src"]
-    }
+    "composite": true
   }
 }

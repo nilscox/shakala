@@ -1,7 +1,7 @@
 import assert from 'assert';
 
-import { createDomainDependencies, factories } from 'backend-domain';
-import { getIds } from 'shared';
+import { createDomainDependencies, factories } from '@shakala/backend-domain';
+import { getIds } from '@shakala/shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 

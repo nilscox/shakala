@@ -1,4 +1,4 @@
-import { TimerGateway } from 'frontend-domain';
+import { TimerGateway } from '@shakala/frontend-domain';
 
 export class RealTimerGateway implements TimerGateway {
   setTimeout = this.timerMethod(setTimeout);

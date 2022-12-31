@@ -1,5 +1,5 @@
-import { ReactionType, Reaction, ReactionsCount } from 'backend-domain';
-import { createMap } from 'shared';
+import { ReactionType, Reaction, ReactionsCount } from '@shakala/backend-domain';
+import { createMap } from '@shakala/shared';
 
 import { ReactionRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

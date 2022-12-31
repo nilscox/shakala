@@ -17,13 +17,8 @@ jobs:
     name: Types check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: yarn typecheck
+      - uses: ./.github/actions/setup.yml
+      - run: pnpm typecheck
 
   test:
     name: Tests
@@ -42,9 +37,8 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+      - uses: .github/actions/setup.yml
+      - run: pnpm test
         env:
           SESSION_SECRET: secret
           DATABASE_HOST: postgres
@@ -56,23 +50,14 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
+      - uses: ./.github/actions/setup.yml
+      - run: pnpm lint
 
   spellcheck:
     name: Spell check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn global add cspell @cspell/dict-fr-fr
+      - uses: ./.github/actions/setup.yml
+      - run: pnpm add -g cspell @cspell/dict-fr-fr
       - run: cspell link add @cspell/dict-fr-fr
-      - run: yarn spellcheck
+      - run: pnpm spellcheck

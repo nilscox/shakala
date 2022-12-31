@@ -1,5 +1,5 @@
-import { createDomainDependencies, factories, Thread } from 'backend-domain';
-import { array } from 'shared';
+import { createDomainDependencies, factories, Thread } from '@shakala/backend-domain';
+import { array } from '@shakala/shared';
 
 import { setupTestDatabase } from '../mikro-orm/create-database-connection';
 

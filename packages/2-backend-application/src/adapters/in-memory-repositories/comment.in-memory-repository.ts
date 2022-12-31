@@ -1,5 +1,5 @@
-import { Comment } from 'backend-domain';
-import { getIds, Sort } from 'shared';
+import { Comment } from '@shakala/backend-domain';
+import { getIds, Sort } from '@shakala/shared';
 
 import { CommentRepository, ReactionRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

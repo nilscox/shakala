@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
-import { commentActions, createComment, createUser, routerActions } from 'frontend-domain';
-import { CommentAlreadyReportedError } from 'shared';
+import { commentActions, createComment, createUser, routerActions } from '@shakala/frontend-domain';
+import { CommentAlreadyReportedError } from '@shakala/shared';
 
 import { controls, reduxDecorator, ReduxStory } from '~/utils/storybook';
 

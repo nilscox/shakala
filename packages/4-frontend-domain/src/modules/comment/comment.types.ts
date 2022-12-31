@@ -1,5 +1,5 @@
 import { Normalized } from '@nilscox/redux-kooltik';
-import { createFactory, omit, randomId, ReactionTypeDto } from 'shared';
+import { createFactory, omit, randomId, ReactionTypeDto } from '@shakala/shared';
 
 import { createUser, User } from '../user';
 

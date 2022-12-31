@@ -1,5 +1,5 @@
-import { Comment, CommentSubscription, GeneratorPort, User } from 'backend-domain';
-import { CommentNotSubscribedError, CommentAlreadySubscribedError } from 'shared';
+import { Comment, CommentSubscription, GeneratorPort, User } from '@shakala/backend-domain';
+import { CommentNotSubscribedError, CommentAlreadySubscribedError } from '@shakala/shared';
 
 import { CommandHandler, IEventBus } from '../../../cqs';
 import { CommentRepository, CommentSubscriptionRepository, UserRepository } from '../../../interfaces';

@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Author, DomainDependencies, Markdown, Message, Timestamp } from 'backend-domain';
+import { Author, DomainDependencies, Markdown, Message, Timestamp } from '@shakala/backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

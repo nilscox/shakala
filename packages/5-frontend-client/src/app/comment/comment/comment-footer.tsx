@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { commentSelectors, ReactionType } from 'frontend-domain';
+import { commentSelectors, ReactionType } from '@shakala/frontend-domain';
 
 import { useAppSelector } from '~/hooks/use-app-selector';
 import HorizontalDotsIcon from '~/icons/horizontal-dots.svg';

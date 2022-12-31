@@ -1,5 +1,5 @@
 import { MikroORM } from '@mikro-orm/core';
-import { Command, CommandHandler } from 'backend-application';
+import { Command, CommandHandler } from '@shakala/backend-application';
 
 export class ClearDatabaseCommand implements Command {}
 

@@ -1,5 +1,5 @@
-import { factories, Nick, ProfileImage, Timestamp } from 'backend-domain';
-import { createAuthUserDto } from 'shared';
+import { factories, Nick, ProfileImage, Timestamp } from '@shakala/backend-domain';
+import { createAuthUserDto } from '@shakala/shared';
 
 import { StubConfigAdapter } from '../../infrastructure';
 

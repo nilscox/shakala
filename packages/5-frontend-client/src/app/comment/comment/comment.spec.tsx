@@ -1,5 +1,11 @@
 import { screen } from '@testing-library/react';
-import { commentActions, createComment, createTestStore, createUser, TestStore } from 'frontend-domain';
+import {
+  commentActions,
+  createComment,
+  createTestStore,
+  createUser,
+  TestStore,
+} from '@shakala/frontend-domain';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';
 

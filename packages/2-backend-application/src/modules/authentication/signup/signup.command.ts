@@ -1,5 +1,5 @@
-import { CryptoPort, DatePort, GeneratorPort, Nick, ProfileImageStorePort, User } from 'backend-domain';
-import { EmailAlreadyExistsError, NickAlreadyExistsError } from 'shared';
+import { CryptoPort, DatePort, GeneratorPort, Nick, ProfileImageStorePort, User } from '@shakala/backend-domain';
+import { EmailAlreadyExistsError, NickAlreadyExistsError } from '@shakala/shared';
 
 import { Authorize, IsNotAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Timestamp, Notification } from 'backend-domain';
-import { NotificationType, NotificationPayloadMap } from 'shared';
+import { Timestamp, Notification } from '@shakala/backend-domain';
+import { NotificationType, NotificationPayloadMap } from '@shakala/shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

@@ -1,4 +1,4 @@
-import { HttpErrorBody, last, NotFound, parseError } from 'shared';
+import { HttpErrorBody, last, NotFound, parseError } from '@shakala/shared';
 
 import { HttpError, HttpGateway, ReadRequestOptions, Response, WriteRequestOptions } from './http.gateway';
 

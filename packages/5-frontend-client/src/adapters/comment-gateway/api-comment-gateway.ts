@@ -1,5 +1,10 @@
-import { CommentGateway } from 'frontend-domain';
-import { CreateReplyBodyDto, EditCommentBodyDto, ReactionTypeDto, ReportCommentBodyDto } from 'shared';
+import { CommentGateway } from '@shakala/frontend-domain';
+import {
+  CreateReplyBodyDto,
+  EditCommentBodyDto,
+  ReactionTypeDto,
+  ReportCommentBodyDto,
+} from '@shakala/shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 

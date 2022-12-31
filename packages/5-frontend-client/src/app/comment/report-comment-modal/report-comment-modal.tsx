@@ -1,4 +1,4 @@
-import { commentActions, commentSelectors } from 'frontend-domain';
+import { commentActions, commentSelectors } from '@shakala/frontend-domain';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

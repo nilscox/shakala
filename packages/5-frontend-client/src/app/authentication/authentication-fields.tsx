@@ -3,7 +3,7 @@ import {
   AuthenticationFormType,
   AuthenticationForm,
   authenticationSelectors,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import { Controller } from 'react-hook-form';
 
 import { FormField } from '~/elements/form-field';

@@ -1,4 +1,4 @@
-import { ReactionType } from 'frontend-domain';
+import { ReactionType } from '@shakala/frontend-domain';
 
 import { StubHttpGateway, StubResponse } from '../http-gateway/stub-http.gateway';
 

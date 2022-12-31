@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { LoggerPort } from 'backend-application';
+import { LoggerPort } from '@shakala/backend-application';
 
 import { ConfigPort, Controller, Response } from '../../infrastructure';
 

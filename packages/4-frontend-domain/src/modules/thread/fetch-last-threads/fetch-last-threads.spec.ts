@@ -1,4 +1,4 @@
-import { array } from 'shared';
+import { array } from '@shakala/shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 import { threadActions } from '../thread.actions';

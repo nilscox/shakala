@@ -1,5 +1,5 @@
-import { ValidationErrors } from 'frontend-domain';
-import { BaseError, HttpErrorBody, parseError } from 'shared';
+import { ValidationErrors } from '@shakala/frontend-domain';
+import { BaseError, HttpErrorBody, parseError } from '@shakala/shared';
 import * as yup from 'yup';
 
 import { FetchHttpGateway } from './fetch-http.gateway';

@@ -1,4 +1,4 @@
-import { DraftCommentKind, ThreadDraftsComments } from 'frontend-domain';
+import { DraftCommentKind, ThreadDraftsComments } from '@shakala/frontend-domain';
 import { useCallback, useEffect, useState } from 'react';
 
 import { ProfileTitle } from '~/app/profile/profile-title';

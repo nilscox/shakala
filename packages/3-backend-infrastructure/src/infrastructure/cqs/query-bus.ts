@@ -1,5 +1,5 @@
-import { Query, QueryHandler } from 'backend-application';
-import { ClassType } from 'shared';
+import { Query, QueryHandler } from '@shakala/backend-application';
+import { ClassType } from '@shakala/shared';
 
 export interface QueryBus {
   execute<T>(query: Query): T | Promise<T>;

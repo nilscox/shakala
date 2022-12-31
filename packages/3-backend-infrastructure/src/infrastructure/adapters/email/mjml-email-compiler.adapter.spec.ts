@@ -1,4 +1,4 @@
-import { InMemoryFilesystemAdapter } from 'backend-application';
+import { InMemoryFilesystemAdapter } from '@shakala/backend-application';
 
 import { MjmlEmailCompilerAdapter } from './mjml-email-compiler.adapter';
 

@@ -1,6 +1,6 @@
-import { GetThreadQueryResult } from 'backend-application';
-import { factories, ReactionType } from 'backend-domain';
-import { CommentDto, ReactionTypeDto, ThreadWithCommentsDto } from 'shared';
+import { GetThreadQueryResult } from '@shakala/backend-application';
+import { factories, ReactionType } from '@shakala/backend-domain';
+import { CommentDto, ReactionTypeDto, ThreadWithCommentsDto } from '@shakala/shared';
 
 import { StubConfigAdapter } from '../../infrastructure';
 import { UserPresenter } from '../user/user.presenter';

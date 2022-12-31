@@ -11,13 +11,13 @@ import {
   StubNotificationGateway,
   StubThreadGateway,
   StubUserProfileGateway,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { Provider } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { EnumType } from 'shared';
+import { EnumType } from '@shakala/shared';
 
 import { RealDateGateway } from '~/adapters/date-gateway/real-date-gateway';
 import { ConsoleLoggerGateway } from '~/adapters/logger-gateway/console-logger.gateway';
@@ -95,7 +95,7 @@ export type SetupRedux<TArgs = Args> = ThunkAction<
 export type ReduxStory<TArgs = Args> = StoryFn<TArgs & { setup: SetupRedux<TArgs> }>;
 
 export const reduxDecorator = () => {
-  const StoryFnbookReduxProvider: Decorator = (Story, context: { args: Args }) => {
+  const StorybookReduxProvider: Decorator = (Story, context: { args: Args }) => {
     const snackbar = useSnackbar();
 
     const dependencies = useMemo<StorybookDependencies>(
@@ -133,5 +133,5 @@ export const reduxDecorator = () => {
     );
   };
 
-  return StoryFnbookReduxProvider;
+  return StorybookReduxProvider;
 };

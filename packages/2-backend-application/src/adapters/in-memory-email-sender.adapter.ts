@@ -1,4 +1,4 @@
-import { last } from 'shared';
+import { last } from '@shakala/shared';
 
 import { Email, EmailSenderPort } from '../interfaces';
 

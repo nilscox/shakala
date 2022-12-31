@@ -1,4 +1,4 @@
-import { Thread } from 'backend-domain';
+import { Thread } from '@shakala/backend-domain';
 
 import { ThreadRepository } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

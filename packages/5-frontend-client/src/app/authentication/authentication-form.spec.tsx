@@ -6,8 +6,8 @@ import {
   createTestStore,
   TestStore,
   userProfileSelectors,
-} from 'frontend-domain';
-import { mockFn } from 'shared/test';
+} from '@shakala/frontend-domain';
+import { mockFn } from '@shakala/shared/test';
 
 import { AuthenticationForm } from '~/app/authentication/authentication-form';
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';

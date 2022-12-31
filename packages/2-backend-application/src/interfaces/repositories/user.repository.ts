@@ -1,4 +1,4 @@
-import type { Nick, User } from 'backend-domain';
+import type { Nick, User } from '@shakala/backend-domain';
 
 import { Repository } from '../repository';
 

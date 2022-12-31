@@ -1,4 +1,4 @@
-import { isEmptyObject } from 'shared';
+import { isEmptyObject } from '@shakala/shared';
 
 import { DraftCommentKind, ThreadDraftsComments } from '../gateways/drafts.gateway';
 

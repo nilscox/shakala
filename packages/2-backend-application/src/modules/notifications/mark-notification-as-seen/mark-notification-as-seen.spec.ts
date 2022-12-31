@@ -1,5 +1,5 @@
-import { Notification, StubDateAdapter, Timestamp } from 'backend-domain';
-import { NotificationType } from 'shared';
+import { Notification, StubDateAdapter, Timestamp } from '@shakala/backend-domain';
+import { NotificationType } from '@shakala/shared';
 
 import { InMemoryNotificationRepository } from '../../../adapters/in-memory-repositories/notification.in-memory-repository';
 

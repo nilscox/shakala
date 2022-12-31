@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthorizationErrorReason } from 'shared';
+import { AuthorizationError, AuthorizationErrorReason } from '@shakala/shared';
 
 import { createTestStore, TestStore } from '../../../test-store';
 

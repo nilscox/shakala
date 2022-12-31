@@ -1,4 +1,4 @@
-import { first, UserMustBeAuthorError } from 'shared';
+import { first, UserMustBeAuthorError } from '@shakala/shared';
 
 import { AggregateRoot } from '../ddd/aggregate-root';
 import { EntityProps } from '../ddd/entity';

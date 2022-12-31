@@ -1,4 +1,4 @@
-import { userActivityActions } from 'frontend-domain';
+import { userActivityActions } from '@shakala/frontend-domain';
 
 import { ProfileTitle } from '~/app/profile/profile-title';
 import { UserActivities } from '~/app/user-activities/user-activities';

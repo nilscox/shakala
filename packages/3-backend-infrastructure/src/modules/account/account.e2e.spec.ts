@@ -1,5 +1,5 @@
-import { InMemoryEmailSenderAdapter } from 'backend-application';
-import { UserDto } from 'shared';
+import { InMemoryEmailSenderAdapter } from '@shakala/backend-application';
+import { UserDto } from '@shakala/shared';
 import { SuperAgentTest } from 'supertest';
 
 import { StubConfigAdapter } from '../../infrastructure';

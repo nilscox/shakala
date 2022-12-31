@@ -1,4 +1,4 @@
-import { AuthenticationFormType } from 'frontend-domain';
+import { AuthenticationFormType } from '@shakala/frontend-domain';
 
 import { Link } from '~/elements/link';
 

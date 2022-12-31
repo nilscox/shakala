@@ -1,4 +1,4 @@
-import { threadActions, ThreadForm as ThreadFormType } from 'frontend-domain';
+import { threadActions, ThreadForm as ThreadFormType } from '@shakala/frontend-domain';
 import { useForm } from 'react-hook-form';
 
 import { SubmitButton } from '~/elements/button';

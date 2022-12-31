@@ -4,8 +4,8 @@ import {
   formatDateRelativeOrAbsolute,
   Notification as TNotification,
   notificationActions,
-} from 'frontend-domain';
-import { NotificationType } from 'shared';
+} from '@shakala/frontend-domain';
+import { NotificationType } from '@shakala/shared';
 
 import { IconButton } from '~/elements/icon-button';
 import { useAppDispatch } from '~/hooks/use-app-dispatch';

@@ -1,4 +1,4 @@
-import { BaseError, get, wait } from 'shared';
+import { BaseError, get, wait } from '@shakala/shared';
 
 import {
   HttpError,

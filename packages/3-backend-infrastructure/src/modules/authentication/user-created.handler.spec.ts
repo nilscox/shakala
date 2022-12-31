@@ -1,5 +1,10 @@
-import { EmailKind, ExecutionContext, InMemoryUserRepository, SendEmailCommand } from 'backend-application';
-import { factories, Nick, UserCreatedEvent } from 'backend-domain';
+import {
+  EmailKind,
+  ExecutionContext,
+  InMemoryUserRepository,
+  SendEmailCommand,
+} from '@shakala/backend-application';
+import { factories, Nick, UserCreatedEvent } from '@shakala/backend-domain';
 
 import { StubConfigAdapter } from '../../infrastructure';
 import { MockCommandBus } from '../../test';

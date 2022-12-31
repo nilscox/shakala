@@ -5,8 +5,7 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "./dist",
-    "composite": true,
-    "declaration": true,
+    "declaration": false,
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
@@ -17,9 +16,6 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": "src",
     "paths": {
-      "shared": ["../../0-shared/src"],
-      "shared/test": ["../../0-shared/src/index.test.ts"],
-      "frontend-domain": ["../../4-frontend-domain/src"],
       "~/*": ["./*"]
     }
   }

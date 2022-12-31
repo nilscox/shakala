@@ -1,4 +1,4 @@
-import { authenticationActions, authenticationSelectors } from 'frontend-domain';
+import { authenticationActions, authenticationSelectors } from '@shakala/frontend-domain';
 import { useCallback } from 'react';
 
 import { Modal } from '~/elements/modal';

@@ -9,7 +9,7 @@ import {
   createUser,
   TestStore,
   threadActions,
-} from 'frontend-domain';
+} from '@shakala/frontend-domain';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';
 

@@ -1,4 +1,4 @@
-import { ProfileActivityType } from 'shared';
+import { ProfileActivityType } from '@shakala/shared';
 
 import IconCamera from '~/icons/camera.svg';
 

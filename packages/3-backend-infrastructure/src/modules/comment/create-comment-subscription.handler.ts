@@ -3,9 +3,9 @@ import {
   SetCommentSubscriptionCommand,
   EventHandler,
   ExecutionContext,
-} from 'backend-application';
-import { CommentCreatedEvent } from 'backend-domain';
-import { CommentAlreadySubscribedError } from 'shared';
+} from '@shakala/backend-application';
+import { CommentCreatedEvent } from '@shakala/backend-domain';
+import { CommentAlreadySubscribedError } from '@shakala/shared';
 
 import { CommandBus } from '../../infrastructure';
 

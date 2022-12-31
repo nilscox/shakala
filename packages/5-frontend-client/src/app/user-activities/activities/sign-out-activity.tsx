@@ -1,4 +1,4 @@
-import { AuthenticationActivityType } from 'shared';
+import { AuthenticationActivityType } from '@shakala/shared';
 
 import IconSignOut from '~/icons/sign-out.svg';
 

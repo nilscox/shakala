@@ -1,5 +1,5 @@
-import { factories, StubDateAdapter, StubGeneratorAdapter, Timestamp } from 'backend-domain';
-import { NotificationType, UnexpectedError } from 'shared';
+import { factories, StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/backend-domain';
+import { NotificationType, UnexpectedError } from '@shakala/shared';
 
 import {
   InMemoryCommentRepository,

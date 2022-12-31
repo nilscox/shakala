@@ -1,4 +1,4 @@
-import { CommentReport } from 'backend-domain';
+import { CommentReport } from '@shakala/backend-domain';
 
 import { CommentReportRepository, FindCommentReportOptions } from '../../interfaces';
 import { InMemoryRepository } from '../../utils';

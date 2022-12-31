@@ -7,8 +7,8 @@ import {
   Notification,
   Thread,
   Timestamp,
-} from 'backend-domain';
-import { isDefined, NotificationType, UnexpectedError } from 'shared';
+} from '@shakala/backend-domain';
+import { isDefined, NotificationType, UnexpectedError } from '@shakala/shared';
 
 import { Command, CommandHandler } from '../../../cqs';
 import {

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { wait } from 'shared';
+import { wait } from '@shakala/shared';
 
 import { AppContext } from '../utils/app-context';
 

@@ -1,4 +1,4 @@
-import { ValidationErrors } from 'frontend-domain';
+import { ValidationErrors } from '@shakala/frontend-domain';
 
 import { HttpError } from '~/adapters/http-gateway/http.gateway';
 

@@ -1,5 +1,5 @@
 import expect, { AssertionFailed } from '@nilscox/expect';
-import { DomainEvent } from 'backend-domain';
+import { DomainEvent } from '@shakala/backend-domain';
 import { RootHookObject } from 'mocha';
 
 import { type StubEventBus } from './adapters';

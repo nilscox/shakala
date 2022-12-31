@@ -1,4 +1,4 @@
-import type { Thread } from 'backend-domain';
+import type { Thread } from '@shakala/backend-domain';
 
 import { Repository } from '../repository';
 

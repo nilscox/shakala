@@ -7,9 +7,16 @@
     "lint": "exit 0",
     "test": "exit 0",
     "playwright": "node -r tsconfig-paths/register ./node_modules/.bin/playwright",
-    "e2e": "yarn playwright test"
+    "e2e": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.27.1"
+  },
+  "dependencies": {
+    "@shakala/backend-application": "workspace:*",
+    "@shakala/backend-domain": "workspace:*",
+    "@shakala/backend-infrastructure": "workspace:*",
+    "@shakala/frontend-domain": "workspace:*",
+    "@shakala/shared": "workspace:*"
   }
 }

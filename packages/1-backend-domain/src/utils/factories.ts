@@ -1,4 +1,4 @@
-import { Factory, randomId } from 'shared';
+import { Factory, randomId } from '@shakala/shared';
 
 import { Entity, EntityProps } from '../ddd/entity';
 import { ValueObject } from '../ddd/value-object';

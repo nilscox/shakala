@@ -1,5 +1,5 @@
-import { DatePort, GeneratorPort, Notification, Timestamp } from 'backend-domain';
-import { NotificationPayloadMap, NotificationType } from 'shared';
+import { DatePort, GeneratorPort, Notification, Timestamp } from '@shakala/backend-domain';
+import { NotificationPayloadMap, NotificationType } from '@shakala/shared';
 
 import { Command, CommandHandler } from '../../../cqs';
 import { NotificationRepository } from '../../../interfaces';

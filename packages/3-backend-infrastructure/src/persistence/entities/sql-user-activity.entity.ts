@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Timestamp, UserActivity } from 'backend-domain';
-import { UserActivityType, UserActivityPayload } from 'shared';
+import { Timestamp, UserActivity } from '@shakala/backend-domain';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

@@ -1,5 +1,5 @@
-import { AuthenticatedUser, AuthenticationGateway } from 'frontend-domain';
-import { AuthUserDto, LoginBodyDto, SignupBodyDto } from 'shared';
+import { AuthenticatedUser, AuthenticationGateway } from '@shakala/frontend-domain';
+import { AuthUserDto, LoginBodyDto, SignupBodyDto } from '@shakala/shared';
 
 import { HttpGateway } from '../http-gateway/http.gateway';
 

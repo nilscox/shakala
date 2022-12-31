@@ -1,5 +1,11 @@
-import { Authorizer, Command, CommandHandler, CommandResult, ExecutionContext } from 'backend-application';
-import { ClassType } from 'shared';
+import {
+  Authorizer,
+  Command,
+  CommandHandler,
+  CommandResult,
+  ExecutionContext,
+} from '@shakala/backend-application';
+import { ClassType } from '@shakala/shared';
 
 export interface CommandBus {
   execute<Result extends CommandResult>(command: Command, ctx: ExecutionContext): Promise<Result>;

@@ -1,5 +1,5 @@
-import { StubDateAdapter } from 'backend-domain';
-import { mockObject } from 'shared/test';
+import { StubDateAdapter } from '@shakala/backend-domain';
+import { mockObject } from '@shakala/shared/test';
 
 import { ConsoleLoggerAdapter } from './console-logger.adapter';
 

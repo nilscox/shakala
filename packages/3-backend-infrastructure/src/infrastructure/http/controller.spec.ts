@@ -1,6 +1,6 @@
 import express, { RequestHandler as ExpressRequestHandler } from 'express';
-import { AuthorizationError, AuthorizationErrorReason, NotFound } from 'shared';
-import { mockImpl } from 'shared/test';
+import { AuthorizationError, AuthorizationErrorReason, NotFound } from '@shakala/shared';
+import { mockImpl } from '@shakala/shared/test';
 import supertest from 'supertest';
 
 import { MockLoggerAdapter } from '../test';

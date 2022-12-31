@@ -1,5 +1,5 @@
-import { CommentService } from 'backend-domain';
-import { CommentAlreadyReportedError } from 'shared';
+import { CommentService } from '@shakala/backend-domain';
+import { CommentAlreadyReportedError } from '@shakala/shared';
 
 import { Authorize, HasWriteAccess, IsAuthenticated } from '../../../authorization';
 import { Command, CommandHandler, IEventBus } from '../../../cqs';

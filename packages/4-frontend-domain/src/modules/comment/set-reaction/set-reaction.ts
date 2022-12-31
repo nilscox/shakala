@@ -1,4 +1,4 @@
-import { pick, UnexpectedError } from 'shared';
+import { pick, UnexpectedError } from '@shakala/shared';
 
 import { AppThunk } from '../../../store';
 import { authenticationActions } from '../../authentication';

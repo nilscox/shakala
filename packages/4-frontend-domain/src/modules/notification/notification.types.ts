@@ -1,4 +1,4 @@
-import { NotificationDto, NotificationPayloadMap, NotificationType, randomId } from 'shared';
+import { NotificationDto, NotificationPayloadMap, NotificationType, randomId } from '@shakala/shared';
 
 export type Notification<Type extends NotificationType = NotificationType> = NotificationDto<Type>;
 

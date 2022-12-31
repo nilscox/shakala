@@ -11,7 +11,7 @@ koyeb service create storybook \
   --app "$app_name" \
   --git "$repo" \
   --git-branch "$branch" \
-  --git-build-command 'yarn workspace @shakala/frontend-client build-storybook' \
+  --git-build-command 'pnpm workspace @shakala/frontend-client build-storybook' \
   --git-run-command 'npx http-server packages/5-frontend-client/storybook-static' \
   --instance-type 'nano' \
   --min-scale 1 \

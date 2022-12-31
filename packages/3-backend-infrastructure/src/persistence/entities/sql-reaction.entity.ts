@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Reaction, ReactionType } from 'backend-domain';
+import { Reaction, ReactionType } from '@shakala/backend-domain';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
 

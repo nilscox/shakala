@@ -1,4 +1,4 @@
-import { mockFn } from 'shared/test';
+import { mockFn } from '@shakala/shared/test';
 import { SinonSpy } from 'sinon';
 
 import { CommandBus } from '../infrastructure';

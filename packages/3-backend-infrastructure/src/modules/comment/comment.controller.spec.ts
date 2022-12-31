@@ -6,10 +6,10 @@ import {
   ReportCommentCommand,
   SetCommentSubscriptionCommand,
   SetReactionCommand,
-} from 'backend-application';
-import { factories, ReactionType } from 'backend-domain';
-import { CreateCommentBodyDto, CreateReplyBodyDto, EditCommentBodyDto, NotFound } from 'shared';
-import { mockResolve } from 'shared/test';
+} from '@shakala/backend-application';
+import { factories, ReactionType } from '@shakala/backend-domain';
+import { CreateCommentBodyDto, CreateReplyBodyDto, EditCommentBodyDto, NotFound } from '@shakala/shared';
+import { mockResolve } from '@shakala/shared/test';
 
 import { ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';

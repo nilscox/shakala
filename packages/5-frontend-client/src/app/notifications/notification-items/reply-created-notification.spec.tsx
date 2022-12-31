@@ -6,8 +6,8 @@ import {
   createTestStore,
   createUser,
   TestStore,
-} from 'frontend-domain';
-import { createFactory, NotificationPayloadMap, NotificationType, randomId } from 'shared';
+} from '@shakala/frontend-domain';
+import { createFactory, NotificationPayloadMap, NotificationType, randomId } from '@shakala/shared';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';
 

@@ -1,4 +1,4 @@
-import { DeepPartial, get } from 'shared';
+import { DeepPartial, get } from '@shakala/shared';
 
 import {
   ConfigPort,

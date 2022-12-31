@@ -1,6 +1,6 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { CommentSubscriptionRepository } from 'backend-application';
-import { CommentSubscription, DomainDependencies } from 'backend-domain';
+import { CommentSubscriptionRepository } from '@shakala/backend-application';
+import { CommentSubscription, DomainDependencies } from '@shakala/backend-domain';
 
 import { BaseSqlRepository } from '../base-classes/base-sql-repository';
 import { SqlCommentSubscription } from '../entities/sql-comment-subscription.entity';

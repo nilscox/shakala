@@ -1,4 +1,4 @@
-import { Sort } from 'shared';
+import { Sort } from '@shakala/shared';
 
 import { Comment } from '../modules/comment';
 import { Thread } from '../modules/thread';

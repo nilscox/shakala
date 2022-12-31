@@ -1,8 +1,8 @@
 import EventEmitter from 'events';
 
-import { EventHandler, IEventBus } from 'backend-application';
-import { DomainEvent } from 'backend-domain';
-import { ClassType } from 'shared';
+import { EventHandler, IEventBus } from '@shakala/backend-application';
+import { DomainEvent } from '@shakala/backend-domain';
+import { ClassType } from '@shakala/shared';
 
 export class EventBus extends EventEmitter implements IEventBus {
   subscribe<Event extends DomainEvent>(eventClass: ClassType<Event>, handler: EventHandler<Event>) {
