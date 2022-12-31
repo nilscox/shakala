@@ -42,7 +42,7 @@ const NickForm = () => {
         description="Le nom sous lequel vous apparaissez"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.nick} placeholder="pseudo" className="flex-1 max-w-1" />
+        <Input defaultValue={user?.nick} placeholder="pseudo" className="max-w-1 flex-1" />
       </ProfileFormField>
     </form>
   );
@@ -58,7 +58,7 @@ const EmailForm = () => {
         description="L'adresse que vous utilisez pour vous connecter"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.email} placeholder="votre@adresse.email" className="flex-1 max-w-1" />
+        <Input defaultValue={user?.email} placeholder="votre@adresse.email" className="max-w-1 flex-1" />
       </ProfileFormField>
     </form>
   );
@@ -81,7 +81,7 @@ const ProfileImageForm = () => {
   return (
     <form ref={formRef} onSubmit={withPreventDefault(handleSubmit)}>
       <ProfileFormField label="Image de profile">
-        <Button primary className="bg-muted self-start" onClick={() => inputRef.current?.click()}>
+        <Button primary className="self-start bg-muted" onClick={() => inputRef.current?.click()}>
           Choisir un fichier...
         </Button>
       </ProfileFormField>
@@ -106,7 +106,7 @@ const BioForm = () => {
         <TextAreaAutoResize rows={3} className="w-full rounded border p-1" />
       </ProfileFormField>
 
-      <p className="text-xs text-muted my-0">La première ligne sera affichée sous votre pseudo</p>
+      <p className="my-0 text-xs text-muted">La première ligne sera affichée sous votre pseudo</p>
 
       <SubmitButton primary className="self-end bg-muted">
         Changer

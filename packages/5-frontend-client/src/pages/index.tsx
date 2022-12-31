@@ -80,7 +80,7 @@ const LastThreads = () => {
     <>
       <Heading id="dernières-discussions">Dernières discussions</Heading>
 
-      <div className="my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="my-5 grid grid-cols-1 gap-5 md:grid-cols-3">
         {threads.map((thread) => (
           <div key={thread.id} className="card relative overflow-hidden p-4">
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
@@ -146,7 +146,7 @@ type KeyFeatureProps = {
 const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
   <div className="max-w-1 flex-1">
     <div>
-      <img src={image} className="py-2 opacity-80 max-h-1 mx-auto" alt={name} />
+      <img src={image} className="mx-auto max-h-1 py-2 opacity-80" alt={name} />
     </div>
     <div className="text-center text-lg font-bold">{name}</div>
     <div className="mt-1 text-xs">{children}</div>

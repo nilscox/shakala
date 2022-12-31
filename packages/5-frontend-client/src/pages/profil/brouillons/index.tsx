@@ -104,7 +104,7 @@ type DraftProps = {
 };
 
 const Draft = ({ text, link, onClear }: DraftProps) => (
-  <div className="card p-2 relative pr-8">
+  <div className="card relative p-2 pr-8">
     <Markdown markdown={text} />
     <Link href={link} className="absolute inset-0" />
     <IconButton

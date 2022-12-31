@@ -28,7 +28,7 @@ export const Header = ({ className }: HeaderProps): JSX.Element => (
 
 const Heading = () => (
   <Link href="/" className="row mt-4 items-end gap-4">
-    <Logo className="text-inverted aspect-auto" width={64} height={undefined} />
+    <Logo className="aspect-auto text-inverted" width={64} height={undefined} />
     <div>
       <div className="text-xxl font-bold leading-10">Shakala</div>
       <div className="leading-3">Échanges critiques</div>

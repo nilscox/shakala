@@ -51,7 +51,7 @@ export const ReplyCreatedNotification: NotificationItem<NotificationType.replyCr
     >
       <div>
         <div>{getMessage()}</div>
-        <div className="relative pl-2 border-l-4 my-4">
+        <div className="relative my-4 border-l-4 pl-2">
           <Markdown markdown={text} className="line-clamp-3" />
           <ThreadLink className="absolute inset-0" threadId={threadId} commentId={replyId} />
         </div>
