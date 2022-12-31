@@ -51,7 +51,7 @@ export class Server extends Application {
     this.logger.log('closing server');
 
     if (this.server) {
-      await promisify<void>(cb => this.server?.close(cb))();
+      await promisify<void>((cb) => this.server?.close(cb))();
     }
 
     await this.sessionStore?.close();
@@ -82,7 +82,7 @@ export class Server extends Application {
       cors({
         origin: corsConfig.reflectOrigin,
         credentials: true,
-        exposedHeaders: 'Pagination-Total'
+        exposedHeaders: 'Pagination-Total',
       }),
     );
 
@@ -121,8 +121,9 @@ export class Server extends Application {
     const userPresenter = new UserPresenter(config);
     const threadPresenter = new ThreadPresenter(userPresenter);
 
-    const { notificationRepository} = this.repositories;
+    const { notificationRepository } = this.repositories;
 
+    // prettier-ignore
     const controllers = [
       new HealthcheckController(logger, config, em),
       new AuthenticationController(logger, config, validationService, session, queryBus, commandBus, userPresenter),

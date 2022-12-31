@@ -8,6 +8,7 @@ import {
   ValidateEmailAddressCommand,
 } from 'backend-application';
 import { ReactionType, User } from 'backend-domain';
+import { wait } from 'shared';
 
 import { Application } from '../../application';
 
@@ -72,7 +73,7 @@ const seed = async () => {
     });
 
     // wait for all events to finish
-    await new Promise(r => setTimeout(r, 200));
+    await wait(200);
   } finally {
     await app.close();
   }

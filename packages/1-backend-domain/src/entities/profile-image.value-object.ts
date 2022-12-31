@@ -15,7 +15,7 @@ export enum ProfileImageType {
 type ProfileImageDataProps = {
   type: ProfileImageType;
   data: Buffer;
-}
+};
 
 export class ProfileImageData extends ValueObject<ProfileImageDataProps> {
   get type() {
