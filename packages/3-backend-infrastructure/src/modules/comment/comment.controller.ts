@@ -116,6 +116,7 @@ export class CommentController extends Controller {
     const user = await this.session.getUser(req);
 
     await execute(this.commandBus)
+      // todo
       .command(new SetCommentSubscriptionCommand(user!.id, commentId, true))
       .asUser(user)
       .run();
@@ -128,6 +129,7 @@ export class CommentController extends Controller {
     const user = await this.session.getUser(req);
 
     await execute(this.commandBus)
+      // todo
       .command(new SetCommentSubscriptionCommand(user!.id, commentId, false))
       .asUser(user)
       .run();

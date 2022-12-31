@@ -1,7 +1,9 @@
 import { commentActions, commentSelectors } from 'frontend-domain';
+
 import { useAppDispatch } from '~/hooks/use-app-dispatch';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import ReplyIcon from '~/icons/reply.svg';
+
 import { FooterButton } from '../components/footer-button';
 
 type ReplyButtonProps = {
