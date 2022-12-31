@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@nilscox/redux-kooltik": "^0.1.5",
-    "@nilscox/redux-query": "^0.1.9",
     "@redux-devtools/extension": "^3.2.3",
     "immer": "^9.0.16",
     "normalizr": "^3.6.2",
