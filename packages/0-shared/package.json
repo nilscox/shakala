@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "exports": {
-    ".": "./dist/index.js",
-    "./test": "./dist/index.test.js"
+    ".": "./src/index.ts",
+    "./test": "./src/index.test.ts"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "dist/index.d.ts"
+        "src/index.ts"
       ],
       "test": [
-        "dist/index.test.d.ts"
+        "src/index.test.ts"
       ]
     }
   },
