@@ -77,7 +77,8 @@ const ReportComment = ({ commentId, onClose }: ReportCommentProps) => {
 
       <Markdown markdown={comment.text} className="my-5 border-l-4 border-warning pl-2" />
 
-      <form onSubmit={void form.handleSubmit(handleSubmit)}>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <textarea
           placeholder="Précisez le motif du signalement si nécessaire"
           rows={2}

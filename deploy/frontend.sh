@@ -15,7 +15,7 @@ koyeb service create frontend \
   --git "$rep" \
   --git-branch "$branch" \
   --git-build-command 'VERSION=$(git rev-parse HEAD) pnpm run-one @shakala/frontend-client build' \
-  --git-run-command 'npx http-server-spa packages/5-frontend-client/dist' \
+  --git-run-command 'pnpm run-one @shakala/frontend-client start' \
   --instance-type 'nano' \
   --min-scale 2 \
   --max-scale 2 \

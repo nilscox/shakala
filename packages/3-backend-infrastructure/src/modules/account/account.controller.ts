@@ -130,7 +130,7 @@ export class AccountController extends Controller {
       return Response.noContent();
     }
 
-    const userDto = await this.userPresenter.transformUser(updatedUser);
+    const userDto = this.userPresenter.transformUser(updatedUser);
 
     return Response.ok(userDto.profileImage);
   }

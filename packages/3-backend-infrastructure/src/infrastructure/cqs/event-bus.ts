@@ -6,7 +6,9 @@ import { ClassType } from '@shakala/shared';
 
 export class EventBus extends EventEmitter implements IEventBus {
   subscribe<Event extends DomainEvent>(eventClass: ClassType<Event>, handler: EventHandler<Event>) {
-    this.addListener(eventClass.name, handler.handle.bind(handler));
+    this.addListener(eventClass.name, (event) => {
+      void handler.handle(event);
+    });
   }
 
   publish(event: DomainEvent) {

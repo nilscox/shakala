@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 
 export const useFormSubmit = <Form extends FieldValues>(
-  submit: (form: Form) => unknown,
+  submit: (form: Form) => Promise<void>,
   setError: UseFormSetError<Form>,
   onUnhandled?: (error: unknown) => void,
   deps: React.DependencyList = [],
@@ -29,7 +29,7 @@ export const useFormSubmit = <Form extends FieldValues>(
   return useCallback(
     async (form: Form) => {
       try {
-        submit(form);
+        await submit(form);
       } catch (error) {
         handleError(error);
       }

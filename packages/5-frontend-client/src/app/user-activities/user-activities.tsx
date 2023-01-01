@@ -17,6 +17,7 @@ export const UserActivities = () => {
   const hasMoreActivities = useAppSelector(userActivitySelectors.hasMore);
 
   const renderActivity = <Type extends UserActivityType>(activity: UserActivity<Type>, index: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const Component = activityComponentMap[activity.type] as ActivityItem<Type>;
 
     return <Component key={index} activity={activity} />;

@@ -18,7 +18,7 @@ describe('AuthenticationForm', () => {
 
   beforeEach(() => {
     store = createTestStore();
-    render = createTestRenderer().withConfig({ isDevelopment: false }).withStore(store);
+    render = createTestRenderer().withConfig().withStore(store);
   });
 
   it('fills and submits the login form', async () => {

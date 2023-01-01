@@ -11,7 +11,7 @@ export const handleAuthorizationError = (
       return false;
     }
 
-    const prefix = messages[error.details.reason as keyof typeof messages] ?? fallback;
+    const prefix = messages[error.details.reason] ?? fallback;
     snackbarGateway.error(`${prefix} ${action}.`);
 
     return true;

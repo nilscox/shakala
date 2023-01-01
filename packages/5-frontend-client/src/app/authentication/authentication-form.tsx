@@ -71,7 +71,8 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
 
       <AuthenticationMessage />
 
-      <form onSubmit={void form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setInvalidCredentials(false)}>
         <fieldset className="flex flex-col gap-2" disabled={form.formState.isSubmitting}>
           <AuthenticationNavigation />
 

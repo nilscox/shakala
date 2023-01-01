@@ -49,9 +49,9 @@ jobs:
 
       - name: Start backend
         run: |
-          npm build
-          npm db:migrate
-          node -r ./register-aliases.js ./dist/main.js > ./backend.stdout 2> ./backend.stderr &
+          pnpm build
+          pnpm db:migrate
+          node ./dist/main.js > ./backend.stdout 2> ./backend.stderr &
         working-directory: packages/3-backend-infrastructure
         env:
           NODE_ENV: test

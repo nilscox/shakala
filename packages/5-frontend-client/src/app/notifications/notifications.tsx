@@ -22,6 +22,7 @@ export const Notifications = () => {
     notification: Notification<Type>,
     index: number,
   ) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const Component = notificationComponentMap[notification.type] as NotificationItem<Type>;
 
     return <Component key={index} notification={notification} />;

@@ -116,7 +116,7 @@ export const reduxDecorator = () => {
 
     useEffect(() => {
       if (setup) {
-        setup(store.dispatch, store.getState, { ...dependencies, args: context.args });
+        setup(store.dispatch, store.getState.bind(store), { ...dependencies, args: context.args });
       }
 
       setReady(true);

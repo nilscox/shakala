@@ -52,7 +52,8 @@ export const CommentForm = ({
   const error = form.formState.errors.text;
 
   return (
-    <form onSubmit={void form.handleSubmit(handleSubmit)}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form onSubmit={form.handleSubmit(handleSubmit)}>
       <MarkdownPreviewInput
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autofocus}

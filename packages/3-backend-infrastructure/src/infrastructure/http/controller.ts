@@ -59,11 +59,13 @@ export abstract class Controller {
       const handleResponse = this.createResponseHandler(res);
       const handleError = this.createdErrorHandler(res);
 
-      try {
-        void Promise.resolve(handler(new RequestAdapter(req))).then(handleResponse);
-      } catch (error) {
-        handleError(error);
-      }
+      void (async () => {
+        try {
+          handleResponse(await handler(new RequestAdapter(req)));
+        } catch (error) {
+          handleError(error);
+        }
+      })();
     };
 
     this.router[method](path, ...middlewares.concat(expressHandler));

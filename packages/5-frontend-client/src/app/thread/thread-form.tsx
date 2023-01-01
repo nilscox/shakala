@@ -22,7 +22,8 @@ export const ThreadForm = () => {
   const handleSubmit = useFormSubmit((data) => dispatch(threadActions.createThread(data)), form.setError);
 
   return (
-    <form className="col gap-2" onSubmit={void form.handleSubmit(handleSubmit)}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form className="col gap-2" onSubmit={form.handleSubmit(handleSubmit)}>
       <FormField
         name="description"
         label="Description"
