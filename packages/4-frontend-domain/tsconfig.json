@@ -7,7 +7,6 @@
     "outDir": "./dist",
     "composite": true,
     "declaration": true,
-    "target": "esnext",
     "noEmit": false,
     "lib": ["DOM"]
   }

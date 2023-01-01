@@ -2,7 +2,8 @@
   "name": "@shakala/frontend-domain",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b",
@@ -10,7 +11,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "@nilscox/redux-kooltik": "^0.1.5",
+    "@nilscox/redux-kooltik": "^0.1.6",
     "@redux-devtools/extension": "^3.2.3",
     "@shakala/shared": "workspace:*",
     "date-fns": "^2.29.3",

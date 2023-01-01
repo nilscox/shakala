@@ -138,7 +138,7 @@ importers:
 
   packages/4-frontend-domain:
     specifiers:
-      '@nilscox/redux-kooltik': ^0.1.5
+      '@nilscox/redux-kooltik': ^0.1.6
       '@redux-devtools/extension': ^3.2.3
       '@shakala/shared': workspace:*
       date-fns: ^2.29.3
@@ -149,7 +149,7 @@ importers:
       reselect: ^4.1.7
       yup: ^0.32.11
     dependencies:
-      '@nilscox/redux-kooltik': 0.1.5
+      '@nilscox/redux-kooltik': 0.1.6
       '@redux-devtools/extension': 3.2.3_redux@4.2.0
       '@shakala/shared': link:../0-shared
       date-fns: 2.29.3
@@ -225,7 +225,6 @@ importers:
       storybook: ^7.0.0-beta.17
       style-loader: ^3.3.1
       tailwindcss: ^3.2.4
-      tsconfig-paths-webpack-plugin: ^4.0.0
       unified: ^10.1.2
       unist-util-visit-parents: ^5.1.1
       use-debounce: ^9.0.2
@@ -301,7 +300,6 @@ importers:
       storybook: 7.0.0-beta.17
       style-loader: 3.3.1_webpack@5.75.0
       tailwindcss: 3.2.4_postcss@8.4.20
-      tsconfig-paths-webpack-plugin: 4.0.0
       webpack: 5.75.0
       webpackbar: 5.0.2_webpack@5.75.0
 
@@ -313,14 +311,15 @@ importers:
       '@shakala/backend-infrastructure': workspace:*
       '@shakala/frontend-domain': workspace:*
       '@shakala/shared': workspace:*
+      dotenv: ^16.0.3
     dependencies:
+      '@playwright/test': 1.27.1
       '@shakala/backend-application': link:../2-backend-application
       '@shakala/backend-domain': link:../1-backend-domain
       '@shakala/backend-infrastructure': link:../3-backend-infrastructure
       '@shakala/frontend-domain': link:../4-frontend-domain
       '@shakala/shared': link:../0-shared
-    devDependencies:
-      '@playwright/test': 1.29.1
+      dotenv: 16.0.3
 
 packages:
 
@@ -2608,8 +2607,8 @@ packages:
     resolution: {integrity: sha512-mrAxyAQoQ+VftGyHMIIekIEPZPZd6NY3gEk4AHa+NCPBrSycXFWnB18UjWXKOxH5xsusF375Y2RrRrhOKZF/qw==, tarball: download/@nilscox/expect/0.2.4/c706f50ef021b9f1b62c2ca6eadac6e03276e6e8}
     dev: true
 
-  /@nilscox/redux-kooltik/0.1.5:
-    resolution: {integrity: sha512-O4NeQEcQMVhqI+J7PqbP2hbKVrNw7/KWkq1jyvJW4WVKUywfsgDKyXAmwd6xZ+ILZSdueXLvWKMXTdNGPOYm3g==, tarball: download/@nilscox/redux-kooltik/0.1.5/ebc9a407f8803ea864a9bd730ba9c32fd0cb12bd}
+  /@nilscox/redux-kooltik/0.1.6:
+    resolution: {integrity: sha512-EIZ0lJhbwMvx6kwFzmmIgrwmGqkQgZDIkCnzY8iSRRAHD4xdXmqakGjokk/R1lGI8l/ThijefvS97WwWz9NMiA==, tarball: download/@nilscox/redux-kooltik/0.1.6/33a60a7387d37a1027b7db3aafeeb89ec7ffb50f}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -2642,14 +2641,14 @@ packages:
       tslib: 2.4.1
     dev: true
 
-  /@playwright/test/1.29.1:
-    resolution: {integrity: sha512-iQxk2DX5U9wOGV3+/Jh9OHPsw5H3mleUL2S4BgQuwtlAfK3PnKvn38m4Rg9zIViGHVW24opSm99HQm/UFLEy6w==}
+  /@playwright/test/1.27.1:
+    resolution: {integrity: sha512-mrL2q0an/7tVqniQQF6RBL2saskjljXzqNcCOVMUjRIgE6Y38nCNaP+Dc2FBW06bcpD3tqIws/HT9qiMHbNU0A==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
       '@types/node': 18.11.18
-      playwright-core: 1.29.1
-    dev: true
+      playwright-core: 1.27.1
+    dev: false
 
   /@pmmmwh/react-refresh-webpack-plugin/0.5.10_ohj47mxwagpoxvu7nhhwxzphqm:
     resolution: {integrity: sha512-j0Ya0hCFZPd4x40qLzbhGsh9TMtdb+CJQiso+WxLOPNasohq9cc5SNUcwsZaRH6++Xh91Xkm/xHCkuIiIu0LUA==}
@@ -10925,11 +10924,11 @@ packages:
       find-up: 6.3.0
     dev: true
 
-  /playwright-core/1.29.1:
-    resolution: {integrity: sha512-20Ai3d+lMkWpI9YZYlxk8gxatfgax5STW8GaMozAHwigLiyiKQrdkt7gaoT9UQR8FIVDg6qVXs9IoZUQrDjIIg==}
+  /playwright-core/1.27.1:
+    resolution: {integrity: sha512-9EmeXDncC2Pmp/z+teoVYlvmPWUC6ejSSYZUln7YaP89Z6lpAaiaAnqroUt/BoLo8tn7WYShcfaCh+xofZa44Q==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
+    dev: false
 
   /pnp-webpack-plugin/1.7.0:
     resolution: {integrity: sha512-2Rb3vm+EXble/sMXNSu6eoBx8e79gKqhNq9F5ZWW6ERNCTE/Q0wQNne5541tE5vKjfM8hpNCYL+LGc1YTfI0dg==}
@@ -12784,15 +12783,6 @@ packages:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       tsconfig-paths: 3.14.1
-    dev: true
-
-  /tsconfig-paths-webpack-plugin/4.0.0:
-    resolution: {integrity: sha512-fw/7265mIWukrSHd0i+wSwx64kYUSAKPfxRDksjKIYTxSAp9W9/xcZVBF4Kl0eqQd5eBpAQ/oQrc5RyM/0c1GQ==}
-    engines: {node: '>=10.13.0'}
-    dependencies:
-      chalk: 4.1.2
-      enhanced-resolve: 5.12.0
-      tsconfig-paths: 4.1.1
     dev: true
 
   /tsconfig-paths/3.14.1:

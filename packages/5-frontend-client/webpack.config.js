@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-const TSConfigPathsWebpackPlugin = require('tsconfig-paths-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
 const tsconfig = require('./tsconfig.json');
@@ -18,7 +15,6 @@ module.exports = {
 
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
-    plugins: [new TSConfigPathsWebpackPlugin({ logInfoToStdOut: true })],
   },
 
   plugins: [new WebpackBar()],

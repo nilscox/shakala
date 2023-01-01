@@ -2,6 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "files": ["global.d.ts"],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "esModuleInterop": true,

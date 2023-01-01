@@ -24,8 +24,8 @@ koyeb service create backend \
   --app "$app_name" \
   --git "$repo" \
   --git-branch "$branch" \
-  --git-build-command 'pnpm build:backend' \
-  --git-run-command 'VERSION=$(git rev-parse HEAD) node -r ./packages/3-backend-infrastructure/register-aliases.js ./packages/3-backend-infrastructure/dist/main.js' \
+  --git-build-command 'pnpm run-one @shakala/backend-infrastructure build' \
+  --git-run-command 'VERSION=$(git rev-parse HEAD) node ./packages/3-backend-infrastructure/dist/main.js' \
   --instance-type 'micro' \
   --min-scale 2 \
   --max-scale 2 \
