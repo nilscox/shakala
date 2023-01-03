@@ -2,10 +2,9 @@ import {
   authenticationActions,
   AuthenticationFormType,
   createAuthUser,
-  createTestStore,
-  TestStore,
   userProfileSelectors,
 } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { mockFn } from '@shakala/shared/test';
 import { screen, waitFor } from '@testing-library/react';
 

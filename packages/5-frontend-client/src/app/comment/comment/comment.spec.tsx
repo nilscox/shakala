@@ -1,10 +1,5 @@
-import {
-  commentActions,
-  createComment,
-  createTestStore,
-  createUser,
-  TestStore,
-} from '@shakala/frontend-domain';
+import { commentActions, createComment, createUser } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { screen } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';

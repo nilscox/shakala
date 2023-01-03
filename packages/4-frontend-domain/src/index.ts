@@ -1,7 +1,6 @@
 export * from './gateways';
 export * from './store';
 export * from './stubs';
-export * from './test-store';
 
 export * from './utils/abstract-drafts-gateway';
 export * from './utils/create-stub-function';

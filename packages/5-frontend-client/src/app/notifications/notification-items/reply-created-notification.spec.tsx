@@ -1,11 +1,5 @@
-import {
-  createAuthUser,
-  createDate,
-  createNotification,
-  createTestStore,
-  createUser,
-  TestStore,
-} from '@shakala/frontend-domain';
+import { createAuthUser, createDate, createNotification, createUser } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { createFactory, NotificationPayloadMap, NotificationType, randomId } from '@shakala/shared';
 import { screen } from '@testing-library/react';
 

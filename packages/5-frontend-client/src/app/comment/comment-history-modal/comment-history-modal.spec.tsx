@@ -2,11 +2,10 @@ import {
   commentActions,
   createComment,
   createDate,
-  createTestStore,
   createUser,
   routerActions,
-  TestStore,
 } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { screen } from '@testing-library/dom';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';

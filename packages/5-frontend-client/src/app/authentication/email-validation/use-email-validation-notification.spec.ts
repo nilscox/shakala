@@ -1,5 +1,5 @@
-import { createTestStore, routerActions, routerSelectors, TestStore } from '@shakala/frontend-domain';
-import { createStubFunction } from '~/../../4-frontend-domain/src/utils/create-stub-function';
+import { createStubFunction, routerActions, routerSelectors } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';
 

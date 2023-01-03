@@ -1,3 +1,4 @@
+import { Replace } from '@shakala/shared';
 import { Middleware } from 'redux';
 import Sinon from 'sinon';
 
@@ -10,7 +11,9 @@ export class MockLoggerGateway implements LoggerGateway {
   error = Sinon.mock();
 }
 
-export interface TestStore extends StubDependencies, AppStore {
+type TestDependencies = Replace<StubDependencies, { loggerGateway: MockLoggerGateway }>;
+
+export interface TestStore extends TestDependencies, AppStore {
   select<Params extends unknown[], Result>(selector: AppSelector<Params, Result>, ...params: Params): Result;
   testLoadingState(thunk: AppThunk<Promise<unknown>>, selector: AppSelector<[], boolean>): Promise<void>;
   logActions(log?: boolean): void;
@@ -19,7 +22,10 @@ export interface TestStore extends StubDependencies, AppStore {
 }
 
 export const createTestStore = (): TestStore => {
-  const deps = createStubDependencies();
+  const deps = {
+    ...createStubDependencies(),
+    loggerGateway: new MockLoggerGateway(),
+  };
 
   let logActions = false;
 

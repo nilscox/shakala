@@ -1,10 +1,5 @@
-import {
-  createAuthUser,
-  createTestStore,
-  TestStore,
-  threadSelectors,
-  ValidationErrors,
-} from '@shakala/frontend-domain';
+import { createAuthUser, threadSelectors, ValidationErrors } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { screen, waitFor } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '~/utils/test-renderer';

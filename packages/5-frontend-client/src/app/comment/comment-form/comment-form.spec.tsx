@@ -3,12 +3,11 @@ import {
   commentSelectors,
   createAuthUser,
   createComment,
-  createTestStore,
   createThread,
   createUser,
-  TestStore,
   threadActions,
 } from '@shakala/frontend-domain';
+import { TestStore, createTestStore } from '@shakala/frontend-domain/test';
 import { screen } from '@testing-library/react';
 
 import { createTestRenderer, TestRenderer } from '../../../utils/test-renderer';

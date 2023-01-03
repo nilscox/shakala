@@ -1,10 +1,10 @@
 import { Dependencies } from '../store';
-import { MockLoggerGateway } from '../test-store';
 
 import { StubAuthenticationGateway } from './stub-authentication-gateway';
 import { StubCommentGateway } from './stub-comment-gateway';
 import { StubDateGateway } from './stub-date-gateway';
 import { StubDraftsGateway } from './stub-drafts-gateway';
+import { StubLoggerGateway } from './stub-logger-gateway';
 import { StubNotificationGateway } from './stub-notification-gateway';
 import { StubSnackbarGateway } from './stub-snackbar-gateway';
 import { StubThreadGateway } from './stub-thread-gateway';
@@ -26,7 +26,7 @@ export interface StubDependencies extends Dependencies {
   commentGateway: StubCommentGateway;
   dateGateway: StubDateGateway;
   draftsGateway: StubDraftsGateway;
-  loggerGateway: MockLoggerGateway;
+  loggerGateway: StubLoggerGateway;
   notificationGateway: StubNotificationGateway;
   snackbarGateway: StubSnackbarGateway;
   timerGateway: StubTimerGateway;
@@ -39,7 +39,7 @@ export const createStubDependencies = (): StubDependencies => ({
   dateGateway: new StubDateGateway(),
   commentGateway: new StubCommentGateway(),
   draftsGateway: new StubDraftsGateway(),
-  loggerGateway: new MockLoggerGateway(),
+  loggerGateway: new StubLoggerGateway(),
   notificationGateway: new StubNotificationGateway(),
   snackbarGateway: new StubSnackbarGateway(),
   timerGateway: new StubTimerGateway(),
