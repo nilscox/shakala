@@ -29,6 +29,8 @@ jobs:
           tags: |
             ghcr.io/nilscox/shakala-backend:${{ github.sha }}
             ghcr.io/nilscox/shakala-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           file: packages/3-backend-infrastructure/Dockerfile
           build-args: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
@@ -55,6 +57,8 @@ jobs:
           tags: |
             ghcr.io/nilscox/shakala-frontend:${{ github.sha }}
             ghcr.io/nilscox/shakala-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           file: packages/5-frontend-client/Dockerfile
           build-args: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
