@@ -25,7 +25,7 @@ koyeb service create backend \
   --git "$repo" \
   --git-branch "$branch" \
   --git-build-command 'pnpm run-one @shakala/backend-infrastructure build' \
-  --git-run-command 'VERSION=$(git rev-parse HEAD) node ./packages/3-backend-infrastructure/dist/main.js' \
+  --git-run-command 'node ./packages/3-backend-infrastructure/dist/main.js' \
   --instance-type 'micro' \
   --min-scale 2 \
   --max-scale 2 \

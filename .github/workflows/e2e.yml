@@ -55,7 +55,6 @@ jobs:
         working-directory: packages/3-backend-infrastructure
         env:
           NODE_ENV: test
-          VERSION: e2e
 
           API_BASE_URL: http://localhost:3000
           APP_BASE_URL: http://localhost:8080
@@ -83,8 +82,6 @@ jobs:
           pnpm build
           pnpm start > ./frontend.stdout 2> ./frontend.stderr &
         working-directory: packages/5-frontend-client
-        env:
-          VERSION: e2e
 
       # - name: Wait for everything to be up
       #   timeout-minutes: 1
@@ -97,7 +94,6 @@ jobs:
         working-directory: packages/6-e2e
         env:
           NODE_ENV: test
-          VERSION: e2e
 
           API_BASE_URL: http://localhost:3000
           APP_BASE_URL: http://localhost:8080

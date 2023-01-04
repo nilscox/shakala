@@ -3,7 +3,6 @@ FROM node:18
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
 ARG GITHUB_TOKEN
-ARG VERSION
 WORKDIR /app
 EXPOSE 8080
 
