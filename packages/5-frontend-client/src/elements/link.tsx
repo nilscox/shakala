@@ -10,7 +10,7 @@ type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
 };
 
 export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
-  <NextLink prefetch={false} shallow={true} href={href}>
+  <NextLink shallow href={href}>
     <a target={openInNewTab ? '_blank' : undefined} {...props}>
       {children}
     </a>
