@@ -1,14 +1,14 @@
 # cspell:disable
 
-name: Build frontend image
+name: Build backend image
 
 on:
   push:
   workflow_dispatch:
 
 jobs:
-  build-frontend-image:
-    name: Build frontend docker image
+  build-backend-image:
+    name: Build backend docker image
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +22,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
 
+      - name: Get version
+        id: get-version
+        shell: bash
+        run: echo "VERSION=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ghcr.io/nilscox/shakala-frontend:latest
-          file: packages/5-frontend-client/Dockerfile
+          tags: ghcr.io/nilscox/shakala-backend:latest
+          file: packages/3-backend-infrastructure/Dockerfile
           build-args: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            VERSION=${{ steps.get-version.outputs.VERSION }}

@@ -5,11 +5,25 @@
 !./pnpm-lock.yaml
 !./pnpm-workspace.yaml
 !./tsconfig.base.json
+!./tsconfig.backend.json
 !./global.d.ts
 
 !./packages/0-shared/package.json
 !./packages/0-shared/tsconfig.json
 !./packages/0-shared/src
+
+!./packages/1-backend-domain/package.json
+!./packages/1-backend-domain/tsconfig.json
+!./packages/1-backend-domain/src
+
+!./packages/2-backend-application/package.json
+!./packages/2-backend-application/tsconfig.json
+!./packages/2-backend-application/src
+
+!./packages/3-backend-infrastructure/package.json
+!./packages/3-backend-infrastructure/tsconfig.json
+!./packages/3-backend-infrastructure/src
+!./packages/3-backend-infrastructure/email-templates
 
 !./packages/4-frontend-domain/package.json
 !./packages/4-frontend-domain/tsconfig.json
