@@ -5,7 +5,7 @@ import { RequestContext } from '@mikro-orm/core';
 import { pick } from '@shakala/shared';
 import connectPgSimple, { PGStore } from 'connect-pg-simple';
 import cors from 'cors';
-import express, { Express, json } from 'express';
+import express, { ErrorRequestHandler, Express, json } from 'express';
 import session from 'express-session';
 
 import { Application } from './application';
@@ -42,6 +42,9 @@ export class Server extends Application {
 
     this.logger.log('configuring controllers');
     this.configureControllers();
+
+    this.logger.log('configuring fallback error handler');
+    this.configureFallbackErrorHandler();
 
     this.logger.info('server initialized');
     this.logger.log('configuration', JSON.stringify(this.config.dump()));
@@ -136,5 +139,14 @@ export class Server extends Application {
     for (const controller of controllers) {
       controller.configure(this.app);
     }
+  }
+
+  private configureFallbackErrorHandler() {
+    const fallbackErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+      console.error(err);
+      res.status(500).json(err);
+    };
+
+    this.app.use(fallbackErrorHandler);
   }
 }

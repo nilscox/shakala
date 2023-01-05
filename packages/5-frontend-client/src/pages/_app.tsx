@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { Layout } from '~/app/layout/layout';
 import { ProfileLayout } from '~/app/layout/profile-layout';
@@ -25,6 +25,12 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
   const PageLayout = pathname.startsWith('/profil') ? ProfileLayout : Fragment;
 
   const { state, error } = pageProps;
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
 
   return (
     <Layout preloadedState={state}>

@@ -91,19 +91,19 @@ type SsrError = {
 };
 
 const serializeError = (error: unknown): SsrError => {
-  if (error instanceof BaseError) {
-    return { name: 'BaseError', ...error.serialize() };
-  }
-
   if (error instanceof HttpError) {
     return {
       name: 'HttpError',
-      status: error.status,
-      message: error.message,
+      status: error.details.response.status,
+      message: error.body.message ?? error.message,
       details: {
         body: error.body,
       },
     };
+  }
+
+  if (error instanceof BaseError) {
+    return { name: 'BaseError', ...error.serialize() };
   }
 
   let serialized: object | null;
