@@ -1,4 +1,4 @@
-import { AuthorizationError, AuthorizationErrorReason, NotFound } from '@shakala/shared';
+import { NotFound } from '@shakala/shared';
 import { mockImpl } from '@shakala/shared/test';
 import express, { RequestHandler as ExpressRequestHandler } from 'express';
 import supertest from 'supertest';
@@ -53,7 +53,7 @@ describe('Controller', () => {
 
   it('handles errors extending BaseError', async () => {
     const controller = TestController.create(() => {
-      throw new AuthorizationError(AuthorizationErrorReason.unauthenticated);
+      throw new NotFound('this does not exist', { id: '42' });
     });
 
     const app = express();
@@ -62,8 +62,14 @@ describe('Controller', () => {
 
     const response = await supertest(app).get('/');
 
-    expect(response.statusCode).toEqual(403);
-    expect(response.body).toHaveProperty('details.reason', AuthorizationErrorReason.unauthenticated);
+    expect(response.status).toEqual(404);
+    expect(response.body).toEqual({
+      code: 'NotFound',
+      message: 'this does not exist',
+      details: {
+        id: '42',
+      },
+    });
   });
 
   it('logs an error when the error could not be handled', async () => {
@@ -110,27 +116,6 @@ describe('Controller', () => {
 
     expect(response.get('Content-Type')).toEqual('application/octet-stream');
     expect(response.body).toEqual(Buffer.from('test'));
-  });
-
-  it('handles known errors, instances of HttpError', async () => {
-    const controller = TestController.create(() => {
-      throw new NotFound('this does not exist', { id: '42' });
-    });
-
-    const app = express();
-
-    controller.configure(app);
-
-    const response = await supertest(app).get('/');
-
-    expect(response.status).toEqual(404);
-    expect(response.body).toEqual({
-      code: 'NotFound',
-      message: 'this does not exist',
-      details: {
-        id: '42',
-      },
-    });
   });
 
   it('returns an internal server error when the error is not known', async () => {
