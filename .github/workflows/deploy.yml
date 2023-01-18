@@ -22,13 +22,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
 
+      - name: Set tag "latest"
+        if: github.ref == 'refs/heads/master'
+        run: echo 'TAG=latest' >> "$GITHUB_ENV"
+
+      - name: Set tag "staging"
+        if: github.ref == 'refs/heads/dev'
+        run: echo 'TAG=staging' >> "$GITHUB_ENV"
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
             ghcr.io/nilscox/shakala-backend:${{ github.sha }}
-            ghcr.io/nilscox/shakala-backend:latest
+            ghcr.io/nilscox/shakala-backend:${{ env.TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: packages/3-backend-infrastructure/Dockerfile
@@ -50,13 +58,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
 
+      - name: Set tag "latest"
+        if: github.ref == 'refs/heads/master'
+        run: echo 'TAG=latest' >> "$GITHUB_ENV"
+
+      - name: Set tag "staging"
+        if: github.ref == 'refs/heads/dev'
+        run: echo 'TAG=staging' >> "$GITHUB_ENV"
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
             ghcr.io/nilscox/shakala-frontend:${{ github.sha }}
-            ghcr.io/nilscox/shakala-frontend:latest
+            ghcr.io/nilscox/shakala-frontend:${{ env.TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: packages/5-frontend-client/Dockerfile
@@ -79,7 +95,7 @@ jobs:
         run: echo 'APP_NAME=shakala' >> "$GITHUB_ENV"
 
       - name: Set koyeb staging app name
-        if: github.ref == 'refs/heads/next'
+        if: github.ref == 'refs/heads/dev'
         run: echo 'APP_NAME=shakala-staging' >> "$GITHUB_ENV"
 
       - name: Re-deploy backend
