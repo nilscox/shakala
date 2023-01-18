@@ -1,6 +1,13 @@
-import { Collection, Entity, ManyToOne, OneToMany } from '@mikro-orm/core';
+import { Collection, Entity, Formula, ManyToOne, OneToMany } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Author, Comment, DomainDependencies, Nick, ProfileImage } from '@shakala/backend-domain';
+import {
+  Author,
+  Comment,
+  DomainDependencies,
+  Nick,
+  ProfileImage,
+  ReactionType,
+} from '@shakala/backend-domain';
 import { last } from '@shakala/shared';
 
 import { BaseSqlEntity } from '../base-classes/base-sql-entity';
@@ -23,10 +30,26 @@ export class SqlComment extends BaseSqlEntity<Comment> {
   @OneToMany(() => SqlMessage, (message) => message.comment, { eager: true })
   history = new Collection<SqlMessage>(this);
 
+  @OneToMany(() => SqlComment, (comment) => comment.parent)
+  replies = new Collection<SqlComment>(this);
+
+  @Formula(
+    (alias) =>
+      `(select count(*) from "reaction" where comment_id = ${alias}.id and type = '${ReactionType.upvote}')`,
+  )
+  upvotes!: number;
+
+  @Formula(
+    (alias) =>
+      `(select count(*) from "reaction" where comment_id = ${alias}.id and type = '${ReactionType.downvote}')`,
+  )
+  downvotes!: number;
+
   assignFromDomain(em: EntityManager, comment: Comment) {
     this.id = comment.id;
     this.thread = em.getReference(SqlThread, comment.threadId);
     this.author = em.getReference(SqlUser, comment.author.id);
+    // this.createdAt = comment.creationDate.toDate();
 
     if (comment.parentId) {
       this.parent = em.getReference(SqlComment, comment.parentId);

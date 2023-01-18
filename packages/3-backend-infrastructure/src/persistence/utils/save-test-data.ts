@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Repository } from '@shakala/backend-application';
 import {
   Comment,
+  CommentSubscription,
   createDomainDependencies,
   Notification,
   Reaction,
@@ -12,6 +13,7 @@ import {
 import { first } from '@shakala/shared';
 
 import { MathRandomGeneratorAdapter, RealDateAdapter } from '../../infrastructure';
+import { SqlCommentSubscriptionRepository } from '../repositories/sql-comment-subscription.repository';
 import { SqlCommentRepository } from '../repositories/sql-comment.repository';
 import { SqlNotificationRepository } from '../repositories/sql-notification.repository';
 import { SqlReactionRepository } from '../repositories/sql-reaction.repository';
@@ -35,11 +37,14 @@ export const createDatabaseSaver = (getEntityManager: () => EntityManager) => {
       date: new RealDateAdapter(),
     });
 
+    const commentRepository = new SqlCommentRepository(em, deps);
+
     const repositoryMap = new Map<unknown, Repository<unknown>>([
-      [Comment, new SqlCommentRepository(em, deps)],
+      [Comment, commentRepository],
+      [CommentSubscription, new SqlCommentSubscriptionRepository(em, deps)],
       [Notification, new SqlNotificationRepository(em, deps)],
       [Reaction, new SqlReactionRepository(em, deps)],
-      [Thread, new SqlThreadRepository(em, deps)],
+      [Thread, new SqlThreadRepository(em, deps, commentRepository)],
       [User, new SqlUserRepository(em, deps)],
       [UserActivity, new SqlUserActivityRepository(em, deps)],
     ]);

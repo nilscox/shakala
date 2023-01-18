@@ -1,6 +1,7 @@
 import { QueryBuilder } from '@mikro-orm/postgresql';
 import { format } from 'sql-formatter';
 
-export const logQueryBuilder = (qb: QueryBuilder<Partial<unknown>>) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const logQueryBuilder = (qb: QueryBuilder<any>) => {
   console.log(format(qb.getFormattedQuery()));
 };

@@ -17,7 +17,7 @@ describe('SetReactionCommand', () => {
   const eventBus = new StubEventBus();
   const generator = new StubGeneratorAdapter();
   const reactionRepository = new InMemoryReactionRepository();
-  const commentRepository = new InMemoryCommentRepository(reactionRepository);
+  const commentRepository = new InMemoryCommentRepository();
   const commentService = new CommentService(generator);
 
   const handler = new SetReactionCommandHandler(

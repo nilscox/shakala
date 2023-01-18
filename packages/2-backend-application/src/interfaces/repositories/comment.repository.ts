@@ -1,4 +1,5 @@
 import { Comment } from '@shakala/backend-domain';
+import { CommentDto } from '@shakala/shared';
 
 import { Repository } from '../repository';
 
@@ -9,6 +10,5 @@ export enum Sort {
 }
 
 export interface CommentRepository extends Repository<Comment> {
-  findRoots(threadId: string, sort: Sort, search?: string): Promise<Comment[]>;
-  findReplies(parentIds: string[]): Promise<Map<string, Comment[]>>;
+  findThreadComments(threadId: string, sort: Sort, search?: string, userId?: string): Promise<CommentDto[]>;
 }

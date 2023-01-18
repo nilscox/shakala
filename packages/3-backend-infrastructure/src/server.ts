@@ -15,7 +15,6 @@ import { AuthenticationController } from './modules/authentication/authenticatio
 import { CommentController } from './modules/comment/comment.controller';
 import { HealthcheckController } from './modules/healthcheck/healthcheck.controller';
 import { ThreadController } from './modules/thread/thread.controller';
-import { ThreadPresenter } from './modules/thread/thread.presenter';
 import { UserController } from './modules/user/user.controller';
 import { UserPresenter } from './modules/user/user.presenter';
 
@@ -122,7 +121,6 @@ export class Server extends Application {
     const session = new ExpressSessionAdapter(queryBus);
 
     const userPresenter = new UserPresenter(config);
-    const threadPresenter = new ThreadPresenter(userPresenter);
 
     const { notificationRepository } = this.repositories;
 
@@ -132,7 +130,7 @@ export class Server extends Application {
       new AuthenticationController(logger, config, validationService, session, queryBus, commandBus, userPresenter),
       new AccountController(logger, commandBus, queryBus, notificationRepository, session, validationService, userPresenter),
       new UserController(logger, queryBus, validationService, userPresenter),
-      new ThreadController(logger, queryBus, commandBus, session, validationService, threadPresenter),
+      new ThreadController(logger, queryBus, commandBus, session, validationService),
       new CommentController(logger, queryBus, commandBus, session, validationService),
     ];
 

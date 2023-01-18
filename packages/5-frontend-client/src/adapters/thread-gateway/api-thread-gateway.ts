@@ -6,6 +6,7 @@ import {
   GetLastThreadsQueryDto,
   GetThreadQueryDto,
   NotFound,
+  ReplyDto,
   ThreadDto,
   ThreadWithCommentsDto,
 } from '@shakala/shared';
@@ -30,7 +31,7 @@ export class ApiThreadGateway implements ThreadGateway {
     };
   };
 
-  private transformReplyDto = (replyDto: CommentDto): Reply => {
+  private transformReplyDto = (replyDto: ReplyDto): Reply => {
     return {
       ...replyDto,
       editing: false,

@@ -3,11 +3,9 @@ import {
   ExecutionContext,
   GetLastThreadsQuery,
   GetThreadQuery,
-  GetThreadQueryResult,
   LoggerPort,
   Sort,
 } from '@shakala/backend-application';
-import { Thread } from '@shakala/backend-domain';
 import {
   createThreadBodySchema,
   getLastThreadsQuerySchema,
@@ -27,8 +25,6 @@ import {
   ValidationService,
 } from '../../infrastructure';
 
-import { ThreadPresenter } from './thread.presenter';
-
 export class ThreadController extends Controller {
   constructor(
     logger: LoggerPort,
@@ -36,7 +32,6 @@ export class ThreadController extends Controller {
     private readonly commandBus: CommandBus,
     private readonly session: SessionPort,
     private readonly validationService: ValidationService,
-    private readonly threadPresenter: ThreadPresenter,
   ) {
     super(logger, '/thread');
   }
@@ -53,9 +48,9 @@ export class ThreadController extends Controller {
 
   async getLastThreads(req: Request): Promise<Response<ThreadDto[]>> {
     const query = await this.validationService.query(req, getLastThreadsQuerySchema);
-    const lastThreads = await this.queryBus.execute<Thread[]>(new GetLastThreadsQuery(query.count));
+    const lastThreads = await this.queryBus.execute<ThreadDto[]>(new GetLastThreadsQuery(query.count));
 
-    return Response.ok(lastThreads.map(this.threadPresenter.transformThreadSummary));
+    return Response.ok(lastThreads);
   }
 
   async getThread(req: Request): Promise<Response<ThreadWithCommentsDto>> {
@@ -63,7 +58,7 @@ export class ThreadController extends Controller {
     const query = await this.validationService.query(req, getThreadQuerySchema);
     const user = await this.session.getUser(req);
 
-    const result = await this.queryBus.execute<GetThreadQueryResult>(
+    const result = await this.queryBus.execute<ThreadWithCommentsDto | undefined>(
       new GetThreadQuery(threadId, query.sort as Sort, query.search, user?.id),
     );
 
@@ -71,7 +66,7 @@ export class ThreadController extends Controller {
       throw new NotFound('thread not found', { threadId });
     }
 
-    return Response.ok(this.threadPresenter.transformThread(result));
+    return Response.ok(result);
   }
 
   async createThread(req: Request): Promise<Response<{ id: string }>> {

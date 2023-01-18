@@ -46,8 +46,10 @@ export type CommentDto = {
   downvotes: number;
   userReaction?: ReactionTypeDto;
   isSubscribed?: boolean;
-  replies?: CommentDto[];
+  replies: ReplyDto[];
 };
+
+export type ReplyDto = Omit<CommentDto, 'replies'>;
 
 export const createCommentDto = createFactory<CommentDto>(() => ({
   id: randomId(),

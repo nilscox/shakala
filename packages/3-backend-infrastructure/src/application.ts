@@ -109,28 +109,28 @@ export class Application {
 
       const em = this.em;
 
+      const commentRepository = new SqlCommentRepository(em, this.adapters);
+
       this.repositories = {
         userRepository: new SqlUserRepository(em, this.adapters),
         userActivityRepository: new SqlUserActivityRepository(em, this.adapters),
         notificationRepository: new SqlNotificationRepository(em, this.adapters),
-        threadRepository: new SqlThreadRepository(em, this.adapters),
+        threadRepository: new SqlThreadRepository(em, this.adapters, commentRepository),
         reactionRepository: new SqlReactionRepository(em, this.adapters),
-        commentRepository: new SqlCommentRepository(em, this.adapters),
+        commentRepository,
         commentReportRepository: new SqlCommentReportRepository(em, this.adapters),
         commentSubscriptionRepository: new SqlCommentSubscriptionRepository(em, this.adapters),
       };
     } else {
       this.logger.log('instantiating in-memory repositories');
 
-      const reactionRepository = new InMemoryReactionRepository();
-
       this.repositories = {
         userRepository: new InMemoryUserRepository(),
         userActivityRepository: new InMemoryUserActivityRepository(),
         notificationRepository: new InMemoryNotificationRepository(),
         threadRepository: new InMemoryThreadRepository(),
-        reactionRepository,
-        commentRepository: new InMemoryCommentRepository(reactionRepository),
+        reactionRepository: new InMemoryReactionRepository(),
+        commentRepository: new InMemoryCommentRepository(),
         commentReportRepository: new InMemoryCommentReportRepository(),
         commentSubscriptionRepository: new InMemoryCommentSubscriptionRepository(),
       };

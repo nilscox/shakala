@@ -3,27 +3,23 @@ import {
   ExecutionContext,
   GetLastThreadsQuery,
   GetThreadQuery,
-  GetThreadQueryResult,
   Sort,
 } from '@shakala/backend-application';
 import { factories } from '@shakala/backend-domain';
-import { NotFound } from '@shakala/shared';
+import { createThreadDto, NotFound, ThreadDto } from '@shakala/shared';
 import { mockResolve } from '@shakala/shared/test';
 
-import { StubConfigAdapter, ValidationError, ValidationService } from '../../infrastructure';
+import { ValidationError, ValidationService } from '../../infrastructure';
 import { MockLoggerAdapter } from '../../infrastructure/test';
 import { MockCommandBus, MockQueryBus, MockRequest, StubSessionAdapter } from '../../test';
-import { UserPresenter } from '../user/user.presenter';
 
 import { ThreadController } from './thread.controller';
-import { ThreadPresenter } from './thread.presenter';
 
 describe('ThreadController', () => {
   const queryBus = new MockQueryBus();
   const commandBus = new MockCommandBus();
   const session = new StubSessionAdapter();
   const validationService = new ValidationService();
-  const threadPresenter = new ThreadPresenter(new UserPresenter(new StubConfigAdapter()));
 
   const controller = new ThreadController(
     new MockLoggerAdapter(),
@@ -31,7 +27,6 @@ describe('ThreadController', () => {
     commandBus,
     session,
     validationService,
-    threadPresenter,
   );
 
   const create = factories();
@@ -68,17 +63,10 @@ describe('ThreadController', () => {
 
   describe('getThread', () => {
     const threadId = 'threadId';
-    const thread = create.thread({ id: threadId });
+    const thread = createThreadDto({ id: threadId });
 
     beforeEach(() => {
-      queryBus.for(GetThreadQuery).return<GetThreadQueryResult>({
-        thread,
-        comments: [],
-        replies: new Map(),
-        reactionsCounts: new Map(),
-        userReactions: new Map(),
-        userSubscriptions: new Map(),
-      });
+      queryBus.for(GetThreadQuery).return<ThreadDto>(thread);
     });
 
     it('retrieves a thread', async () => {

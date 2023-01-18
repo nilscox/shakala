@@ -87,9 +87,7 @@ describe('CommentController', () => {
     });
 
     it('creates a new reply', async () => {
-      queryBus.for(GetCommentQuery).return({
-        comment: create.comment({ id: parentId, threadId }),
-      });
+      queryBus.for(GetCommentQuery).return(create.comment({ id: parentId, threadId }));
 
       await controller.createReply(request);
 

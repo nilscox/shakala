@@ -77,7 +77,7 @@ export const registerHandlers = (
 
   // thread
   registerQuery(GetLastThreadsQuery, new GetLastThreadsHandler(threadRepository));
-  registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository, commentRepository, reactionRepository, commentSubscriptionRepository));
+  registerQuery(GetThreadQuery, new GetThreadHandler(threadRepository));
   registerCommand(CreateThreadCommand, new CreateThreadHandler(eventBus, generator, date, threadRepository));
 
   // comment

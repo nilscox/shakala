@@ -2,13 +2,12 @@ import {
   CreateCommentCommand,
   EditCommentCommand,
   GetCommentQuery,
-  GetCommentQueryResult,
   LoggerPort,
   ReportCommentCommand,
   SetCommentSubscriptionCommand,
   SetReactionCommand,
 } from '@shakala/backend-application';
-import { ReactionType } from '@shakala/backend-domain';
+import { Comment, ReactionType } from '@shakala/backend-domain';
 import {
   createCommentBodySchema,
   createReplyBodySchema,
@@ -82,15 +81,11 @@ export class CommentController extends Controller {
     const user = await this.session.getUser(req);
     const body = await this.validation.body(req, createReplyBodySchema);
 
-    const result = await this.queryBus.execute<GetCommentQueryResult | undefined>(
-      new GetCommentQuery(parentId),
-    );
+    const parent = await this.queryBus.execute<Comment | undefined>(new GetCommentQuery(parentId));
 
-    if (!result) {
+    if (!parent) {
       throw new NotFound('comment not found', { parentId });
     }
-
-    const { comment: parent } = result;
 
     const commentId = await execute<string>(this.commandBus)
       .command(new CreateCommentCommand(parent.threadId, parentId, body.text))
