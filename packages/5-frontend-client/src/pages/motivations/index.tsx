@@ -1,3 +1,7 @@
+import { ssr } from '~/utils/ssr';
+
+export const getServerSideProps = ssr();
+
 const MotivationsPage = () => (
   <>
     {/* <PageTitle>Motivations</PageTitle> */}
