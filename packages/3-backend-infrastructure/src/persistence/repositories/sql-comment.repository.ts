@@ -148,6 +148,7 @@ export class SqlCommentRepository
       replies: replies.map((reply) => this.replyToDto(reply)),
       upvotes: Number(comment.upvotes),
       downvotes: Number(comment.downvotes),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       userReaction: comment.user_reaction as ReactionTypeDto | undefined,
       isSubscribed: comment.user_subscribed ? true : undefined,
     };
