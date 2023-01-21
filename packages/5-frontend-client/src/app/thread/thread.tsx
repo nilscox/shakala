@@ -49,7 +49,7 @@ export const Thread = ({ threadId }: ThreadProps) => {
 
       <div className="my-5 md:my-10">
         <div className="row mb-2 flex-wrap items-center justify-between gap-4">
-          <AvatarNick size="medium" {...author} />
+          <AvatarNick size="medium" nick={author.nick} image={author.profileImage} />
           <div className="text-muted">
             <time dateTime={date}>{formatDate(date, DateFormat.full)}</time>, {comments.length} commentaires
           </div>

@@ -1,6 +1,10 @@
 import { clsx } from 'clsx';
 
+import { getPublicConfig } from '~/utils/config';
+
 import defaultAvatar from './default-avatar.png';
+
+const { apiBaseUrl } = getPublicConfig();
 
 type AvatarProps = {
   loading?: boolean;
@@ -12,7 +16,7 @@ type AvatarProps = {
 export const Avatar = ({ loading, size = 'small', image, className }: AvatarProps) => {
   const img = (
     <img
-      src={image ?? defaultAvatar}
+      src={image ? `${apiBaseUrl}/user/profile-image/${image}` : defaultAvatar}
       className={clsx(
         'rounded-full border bg-neutral object-cover',
         {

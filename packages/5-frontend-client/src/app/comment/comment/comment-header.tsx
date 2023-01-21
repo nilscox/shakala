@@ -18,7 +18,7 @@ export const CommentHeader = ({ commentId, className }: CommentHeaderProps) => {
 
   return (
     <div className={clsx('row items-center gap-2', className)}>
-      <AvatarNick {...author} />
+      <AvatarNick nick={author.nick} image={author.profileImage} />
       <div>{bullet}</div>
       <Link
         href={`#${commentId}`}
