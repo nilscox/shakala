@@ -1,0 +1,4 @@
+{
+  "eslint.workingDirectories": ["packages/api", "packages/common", "packages/shared", "packages/user"],
+  "eslint.runtime": "node"
+}
