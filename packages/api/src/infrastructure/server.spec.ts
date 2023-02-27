@@ -1,6 +1,5 @@
-import { describe, it } from 'node:test';
-
 import expect from '@nilscox/expect';
+import { describe, it } from 'vitest';
 
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';

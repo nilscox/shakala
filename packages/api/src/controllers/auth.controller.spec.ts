@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { afterEach, beforeEach, describe, it } from 'node:test';
 
 import { expect, stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
@@ -10,6 +9,7 @@ import {
   USER_TOKENS,
 } from '@shakala/user';
 import * as request from 'supertest';
+import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';

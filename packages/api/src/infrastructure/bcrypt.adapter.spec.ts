@@ -1,6 +1,5 @@
-import { describe, it } from 'node:test';
-
 import { expect } from '@shakala/common';
+import { describe, it } from 'vitest';
 
 import { BcryptAdapter } from './bcrypt.adapter';
 

@@ -1,9 +1,8 @@
-import { describe, it } from 'node:test';
-
 import cookieParser from 'cookie-parser';
 import { millisecondsToSeconds } from 'date-fns';
 import express, { RequestHandler } from 'express';
 import request from 'supertest';
+import { describe, it } from 'vitest';
 
 import { jwt } from '../utils/jwt';
 

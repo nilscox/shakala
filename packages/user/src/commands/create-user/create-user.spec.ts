@@ -1,6 +1,5 @@
-import { beforeEach, describe, it } from 'node:test';
-
 import { expect, StubCryptoAdapter, StubEventPublisher } from '@shakala/common';
+import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';

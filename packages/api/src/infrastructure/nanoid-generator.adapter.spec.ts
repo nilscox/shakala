@@ -1,6 +1,5 @@
-import { beforeEach, describe, it } from 'node:test';
-
 import { expect } from '@shakala/common';
+import { beforeEach, describe, it } from 'vitest';
 
 import { NanoidGeneratorAdapter } from './nanoid-generator.adapter';
 
