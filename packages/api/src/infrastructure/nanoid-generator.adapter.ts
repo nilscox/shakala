@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import { GeneratorPort } from '@shakala/common';
 import { customAlphabet } from 'nanoid';
 
@@ -8,7 +10,7 @@ export class NanoidGeneratorAdapter implements GeneratorPort {
     return nanoid();
   }
 
-  generateToken(): Promise<string> {
-    throw new Error('Method not implemented.');
+  async generateToken(): Promise<string> {
+    return randomUUID();
   }
 }

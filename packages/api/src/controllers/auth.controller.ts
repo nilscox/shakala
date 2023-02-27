@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 import { GeneratorPort, TOKENS } from '@shakala/common';
 import { signInBodySchema, signUpBodySchema } from '@shakala/shared';
 import {
@@ -5,6 +7,7 @@ import {
   CreateUserCommand,
   CreateUserHandler,
   InvalidCredentialsError,
+  UserRepository,
   USER_TOKENS,
 } from '@shakala/user';
 import { injected } from 'brandi';
@@ -21,6 +24,8 @@ export class AuthController {
 
   constructor(
     private readonly generator: GeneratorPort,
+    // todo: remove
+    private readonly userRepository: UserRepository,
     private readonly createUserHandler: CreateUserHandler,
     private readonly checkUserPasswordHandler: CheckUserPasswordHandler
   ) {
@@ -41,7 +46,7 @@ export class AuthController {
     await this.createUserHandler.handle(command);
 
     res.status(201);
-    res.set('Set-Cookie', this.setToken('user'));
+    res.set('Set-Cookie', this.setToken(id));
     res.send(id);
   };
 
@@ -58,8 +63,11 @@ export class AuthController {
       throw error;
     }
 
+    const user = await this.userRepository.findByEmail(body.email);
+    assert(user);
+
     res.status(204);
-    res.set('Set-Cookie', this.setToken('user'));
+    res.set('Set-Cookie', this.setToken(user.id));
     res.end();
   };
 
@@ -98,6 +106,7 @@ export class AuthController {
 injected(
   AuthController,
   TOKENS.generator,
+  USER_TOKENS.userRepository,
   USER_TOKENS.createUserHandler,
   USER_TOKENS.checkUserPasswordHandler
 );

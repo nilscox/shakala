@@ -7,8 +7,8 @@ export const jwt = {
     return jsonwebtoken.sign(payload, 'secret');
   },
 
-  decode(value: string): object {
+  decode<Payload extends object>(value: string): Payload {
     // eslint-disable-next-line import/no-named-as-default-member
-    return jsonwebtoken.verify(value, 'secret') as object;
+    return jsonwebtoken.verify(value, 'secret') as Payload;
   },
 };

@@ -42,4 +42,8 @@ export abstract class IntegrationTest {
   get agent() {
     return this.server.agent;
   }
+
+  get as() {
+    return this.server.as.bind(this.server);
+  }
 }

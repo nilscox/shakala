@@ -4,26 +4,30 @@ import { expect, stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
   CheckUserPasswordHandler,
+  create,
   CreateUserHandler,
+  InMemoryUserRepository,
   InvalidCredentialsError,
   USER_TOKENS,
 } from '@shakala/user';
 import * as request from 'supertest';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
+import { container } from '../container';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
-describe('[intg] auth controller', () => {
+describe('[intg] AuthController', () => {
+  let test: Test;
+
+  beforeEach(() => {
+    test = new Test();
+  });
+
+  afterEach(() => test.cleanup());
+
   describe('/auth/sign-up', () => {
     const route = '/auth/sign-up';
-    let test: Test;
-
-    beforeEach(() => {
-      test = new Test();
-    });
-
-    afterEach(() => test.cleanup());
 
     const payload: SignUpBody = {
       nick: 'mano',
@@ -31,9 +35,11 @@ describe('[intg] auth controller', () => {
       password: 'password',
     };
 
-    it('invokes the createUser command', async () => {
+    beforeEach(() => {
       test.generator.nextId = 'userId';
+    });
 
+    it('invokes the createUser command', async () => {
       await test.agent.post(route).send(payload).expect(201);
 
       expect(test.stubCreateUser).calledWith({
@@ -45,8 +51,6 @@ describe('[intg] auth controller', () => {
     });
 
     it("returns the created user's id", async () => {
-      test.generator.nextId = 'userId';
-
       const response = await test.agent.post(route).send(payload).expect(201);
 
       expect(response.text).toEqual('userId');
@@ -64,7 +68,7 @@ describe('[intg] auth controller', () => {
       expect(cookie).toHaveProperty('Secure');
       expect(cookie).toHaveProperty('HttpOnly');
 
-      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'user');
+      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'userId');
     });
 
     it('fails with status 400 when the payload is invalid', async () => {
@@ -79,13 +83,10 @@ describe('[intg] auth controller', () => {
 
   describe('/auth/sign-in', () => {
     const route = '/auth/sign-in';
-    let test: Test;
 
     beforeEach(() => {
-      test = new Test();
+      test.userRepository.add(create.user({ id: 'userId', email: payload.email }));
     });
-
-    afterEach(() => test.cleanup());
 
     const payload: SignInBody = {
       email: 'mano@domain.tld',
@@ -104,7 +105,7 @@ describe('[intg] auth controller', () => {
     it('sets a cookie with the authentication token', async () => {
       const response = await test.agent.post(route).send(payload).expect(204);
 
-      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'user');
+      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'userId');
     });
 
     it('fails with status 401 when the password check fails', async () => {
@@ -125,13 +126,6 @@ describe('[intg] auth controller', () => {
 
   describe('/auth/sign-out', () => {
     const route = '/auth/sign-out';
-    let test: Test;
-
-    beforeEach(() => {
-      test = new Test();
-    });
-
-    afterEach(() => test.cleanup());
 
     it('sets the authentication token cookie as expired', async () => {
       const agent = test.server.as('userId');
@@ -149,11 +143,15 @@ describe('[intg] auth controller', () => {
 });
 
 class Test extends IntegrationTest {
+  public readonly userRepository = new InMemoryUserRepository();
+
   public readonly stubCreateUser = stub<CreateUserHandler['handle']>();
   public readonly stubCheckUserPassword = stub<CheckUserPasswordHandler['handle']>();
 
   constructor() {
     super();
+
+    container.bind(USER_TOKENS.userRepository).toConstant(this.userRepository);
 
     this.bindHandler(USER_TOKENS.createUserHandler, this.stubCreateUser);
     this.bindHandler(USER_TOKENS.checkUserPasswordHandler, this.stubCheckUserPassword);

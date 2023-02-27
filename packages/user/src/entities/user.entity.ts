@@ -25,4 +25,8 @@ export class User extends Entity<UserProps> {
   get emailValidationToken() {
     return this.props.emailValidationToken;
   }
+
+  setEmailValidated() {
+    delete this.props.emailValidationToken;
+  }
 }

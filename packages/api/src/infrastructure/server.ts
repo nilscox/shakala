@@ -22,6 +22,7 @@ export class Server {
     this.app.use(bodyParser.json());
 
     this.app.use('/auth', container.get(API_TOKENS.authController).router);
+    this.app.use('/user', container.get(API_TOKENS.userController).router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);
