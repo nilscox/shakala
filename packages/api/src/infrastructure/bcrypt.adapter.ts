@@ -6,7 +6,7 @@ export class BcryptAdapter implements CryptoPort {
     return bcrypt.hash(input, 12);
   }
 
-  async compare(input: string, hashed: string): Promise<boolean> {
+  async compare(hashed: string, input: string): Promise<boolean> {
     return bcrypt.compare(input, hashed);
   }
 }

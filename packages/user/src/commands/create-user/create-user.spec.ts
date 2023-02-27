@@ -1,42 +1,34 @@
 import { beforeEach, describe, it } from 'node:test';
 
-import {
-  CommandHandlerCommand,
-  CommandHandlerDependencies,
-  expect,
-  StubCryptoAdapter,
-  StubEventPublisher,
-} from '@shakala/common';
+import { expect, StubCryptoAdapter, StubEventPublisher } from '@shakala/common';
 
 import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
 
-import { createUser, UserCreatedEvent } from './create-user';
-
-type Command = CommandHandlerCommand<typeof createUser>;
+import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 
 describe('createUser', () => {
   let crypto: StubCryptoAdapter;
   let publisher: StubEventPublisher;
   let userRepository: InMemoryUserRepository;
-  let deps: CommandHandlerDependencies<typeof createUser>;
+  let handler: CreateUserHandler;
 
   beforeEach(() => {
     crypto = new StubCryptoAdapter();
     publisher = new StubEventPublisher();
     userRepository = new InMemoryUserRepository();
-    deps = { userRepository, publisher, crypto };
+    handler = new CreateUserHandler(crypto, publisher, userRepository);
   });
 
   it('creates a new user', async () => {
-    const command: Command = {
+    const command: CreateUserCommand = {
       id: 'id',
       nick: 'nils',
       email: 'email',
       password: 'password',
     };
 
-    await expect(createUser(deps, command)).toResolve();
+    await expect(handler.handle(command)).toResolve();
 
     const user = userRepository.get('id');
 
@@ -48,14 +40,14 @@ describe('createUser', () => {
   });
 
   it('publishes a UserCreatedEvent', async () => {
-    const command: Command = {
+    const command: CreateUserCommand = {
       id: 'id',
       nick: 'nils',
       email: 'email',
       password: 'password',
     };
 
-    await expect(createUser(deps, command)).toResolve();
+    await expect(handler.handle(command)).toResolve();
 
     expect(publisher).toHavePublished(new UserCreatedEvent('id'));
   });

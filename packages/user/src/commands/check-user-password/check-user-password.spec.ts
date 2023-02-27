@@ -1,24 +1,26 @@
 import { beforeEach, describe, it } from 'node:test';
 
 import expect from '@nilscox/expect';
-import { CommandHandlerCommand, CommandHandlerDependencies, StubCryptoAdapter } from '@shakala/common';
+import { StubCryptoAdapter } from '@shakala/common';
 
 import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
 
-import { checkUserPassword, InvalidCredentialsError } from './check-user-password';
-
-type Command = CommandHandlerCommand<typeof checkUserPassword>;
+import {
+  CheckUserPasswordCommand,
+  CheckUserPasswordHandler,
+  InvalidCredentialsError,
+} from './check-user-password';
 
 describe('checkUserPassword', () => {
   let crypto: StubCryptoAdapter;
   let userRepository: InMemoryUserRepository;
-  let deps: CommandHandlerDependencies<typeof checkUserPassword>;
+  let handler: CheckUserPasswordHandler;
 
   beforeEach(() => {
     crypto = new StubCryptoAdapter();
     userRepository = new InMemoryUserRepository();
-    deps = { userRepository, crypto };
+    handler = new CheckUserPasswordHandler(crypto, userRepository);
   });
 
   it("asserts that an input matches the user's password", async () => {
@@ -29,21 +31,21 @@ describe('checkUserPassword', () => {
 
     userRepository.add(user);
 
-    const command: Command = {
+    const command: CheckUserPasswordCommand = {
       email: 'email',
       password: 'password',
     };
 
-    await expect(checkUserPassword(deps, command)).toResolve();
+    await expect(handler.handle(command)).toResolve();
   });
 
   it('throws an error when the user does not exist', async () => {
-    const command: Command = {
+    const command: CheckUserPasswordCommand = {
       email: 'email',
       password: 'password',
     };
 
-    await expect(checkUserPassword(deps, command)).toRejectWith(InvalidCredentialsError);
+    await expect(handler.handle(command)).toRejectWith(InvalidCredentialsError);
   });
 
   it('throws an error when the password does not match', async () => {
@@ -54,11 +56,11 @@ describe('checkUserPassword', () => {
 
     userRepository.add(user);
 
-    const command: Command = {
+    const command: CheckUserPasswordCommand = {
       email: 'email',
       password: 'banana',
     };
 
-    await expect(checkUserPassword(deps, command)).toRejectWith(InvalidCredentialsError);
+    await expect(handler.handle(command)).toRejectWith(InvalidCredentialsError);
   });
 });

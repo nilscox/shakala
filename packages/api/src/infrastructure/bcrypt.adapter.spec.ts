@@ -18,12 +18,12 @@ describe('[intg] BcryptAdapter', function () {
   });
 
   it('compares a string', async () => {
-    expect(await crypto.compare(input, hash)).toBe(true);
-    expect(await crypto.compare('nope', hash)).toBe(false);
-    expect(await crypto.compare(input, invalidHash)).toBe(false);
+    expect(await crypto.compare(hash, input)).toBe(true);
+    expect(await crypto.compare(hash, 'nope')).toBe(false);
+    expect(await crypto.compare(invalidHash, input)).toBe(false);
   });
 
   it('hash and compare', async () => {
-    expect(await crypto.compare(input, await crypto.hash(input))).toBe(true);
+    expect(await crypto.compare(await crypto.hash(input), input)).toBe(true);
   });
 });

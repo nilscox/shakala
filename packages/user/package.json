@@ -14,7 +14,8 @@
     "test:watch": "pnpm run ts-node --watch --test-reporter spec"
   },
   "dependencies": {
-    "@shakala/common": "workspace:*"
+    "@shakala/common": "workspace:*",
+    "brandi": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.14.1",

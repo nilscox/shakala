@@ -1,26 +1,27 @@
 import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
-import { BaseError, CommandBus, GeneratorPort } from '@shakala/common';
+import { BaseError } from '@shakala/common';
 import bodyParser from 'body-parser';
+import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
 import express, { ErrorRequestHandler, Express } from 'express';
 import * as yup from 'yup';
 
-import { authController } from '../controllers/auth.controller';
-import { Dependencies } from '../dependencies';
+import { AuthController } from '../controllers/auth.controller';
+import { API_TOKENS } from '../tokens';
 
 export class Server {
   protected app: Express;
   protected server?: HttpServer;
 
-  constructor(generator: GeneratorPort, commandBus: CommandBus<Dependencies>) {
+  constructor(private readonly authController: AuthController) {
     this.app = express();
 
     this.app.use(cookieParser('secret'));
     this.app.use(bodyParser.json());
 
-    this.app.use('/auth', authController(generator, commandBus));
+    this.app.use('/auth', this.authController.router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);
@@ -88,3 +89,5 @@ export class Server {
     res.status(500).send(body).end();
   };
 }
+
+injected(Server, API_TOKENS.authController);

@@ -1,25 +1,26 @@
 import assert from 'assert';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { StubOf, stub, expect, StubGeneratorAdapter } from '@shakala/common';
-import { SignUpBody, SignInBody } from '@shakala/shared';
-import { checkUserPassword, createUser, InvalidCredentialsError } from '@shakala/user';
+import { expect, stub } from '@shakala/common';
+import { SignInBody, SignUpBody } from '@shakala/shared';
+import {
+  CheckUserPasswordHandler,
+  CreateUserHandler,
+  InvalidCredentialsError,
+  USER_TOKENS,
+} from '@shakala/user';
 import * as request from 'supertest';
 
-import { StubCommandBus } from '../tests/stub-command-bus';
-import { TestServer } from '../tests/test-server';
+import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
 describe('[intg] auth controller', () => {
   describe('/auth/sign-up', () => {
     const route = '/auth/sign-up';
     let test: Test;
-    let stubCreateUser: StubOf<typeof createUser>;
 
     beforeEach(() => {
       test = new Test();
-      stubCreateUser = stub<typeof createUser>();
-      test.commandBus.set(createUser, stubCreateUser);
       test.generator.nextId = 'id';
     });
 
@@ -32,9 +33,12 @@ describe('[intg] auth controller', () => {
     };
 
     it('invokes the createUser command', async () => {
+      test.generator.nextId = 'generated-id';
+
       await test.agent.post(route).send(payload).expect(201);
 
-      expect(stubCreateUser).calledWith({
+      expect(test.stubCreateUser).calledWith({
+        id: 'generated-id',
         nick: 'mano',
         email: 'mano@domain.tld',
         password: 'password',
@@ -44,13 +48,9 @@ describe('[intg] auth controller', () => {
     it("returns the created user's id", async () => {
       test.generator.nextId = 'generated-id';
 
-      await test.agent.post(route).send(payload).expect(201).expect('generated-id');
+      const response = await test.agent.post(route).send(payload).expect(201);
 
-      expect(stubCreateUser).calledWith({
-        nick: 'mano',
-        email: 'mano@domain.tld',
-        password: 'password',
-      });
+      expect(response.text).toEqual('generated-id');
     });
 
     it('sets a cookie with the authentication token', async () => {
@@ -81,12 +81,9 @@ describe('[intg] auth controller', () => {
   describe('/auth/sign-in', () => {
     const route = '/auth/sign-in';
     let test: Test;
-    let stubCheckUserPassword: StubOf<typeof checkUserPassword>;
 
     beforeEach(() => {
       test = new Test();
-      stubCheckUserPassword = stub<typeof checkUserPassword>();
-      test.commandBus.set(checkUserPassword, stubCheckUserPassword);
     });
 
     afterEach(() => test.cleanup());
@@ -99,7 +96,7 @@ describe('[intg] auth controller', () => {
     it('succeeds when the checkUserPassword command succeeds', async () => {
       await test.agent.post(route).send(payload).expect(204);
 
-      expect(stubCheckUserPassword).calledWith({
+      expect(test.stubCheckUserPassword).calledWith({
         email: 'mano@domain.tld',
         password: 'password',
       });
@@ -112,7 +109,7 @@ describe('[intg] auth controller', () => {
     });
 
     it('fails with status 401 when the password check fails', async () => {
-      stubCheckUserPassword.reject(new InvalidCredentialsError());
+      test.stubCheckUserPassword.reject(new InvalidCredentialsError());
 
       await test.agent.post(route).send(payload).expect(401);
     });
@@ -152,14 +149,15 @@ describe('[intg] auth controller', () => {
   });
 });
 
-class Test {
-  generator = new StubGeneratorAdapter();
-  commandBus = new StubCommandBus();
-  server = new TestServer(this.generator, this.commandBus);
-  agent = this.server.agent;
+class Test extends IntegrationTest {
+  public readonly stubCreateUser = stub<CreateUserHandler['handle']>();
+  public readonly stubCheckUserPassword = stub<CheckUserPasswordHandler['handle']>();
 
-  async cleanup() {
-    await this.server.close();
+  constructor() {
+    super();
+
+    this.bindHandler(USER_TOKENS.createUserHandler, this.stubCreateUser);
+    this.bindHandler(USER_TOKENS.checkUserPasswordHandler, this.stubCheckUserPassword);
   }
 
   parseCookie(cookieStr: string) {

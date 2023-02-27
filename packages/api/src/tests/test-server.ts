@@ -1,6 +1,8 @@
+import { injected } from 'brandi';
 import * as request from 'supertest';
 
 import { Server } from '../infrastructure/server';
+import { API_TOKENS } from '../tokens';
 import { jwt } from '../utils/jwt';
 
 export class TestServer extends Server {
@@ -17,3 +19,5 @@ export class TestServer extends Server {
     return agent;
   }
 }
+
+injected(TestServer, API_TOKENS.authController);

@@ -2,11 +2,11 @@ import clone from 'lodash.clonedeep';
 
 import { Entity } from '../ddd/entity';
 
-export abstract class InMemoryRepository<Item extends Entity<unknown>> {
+export abstract class InMemoryRepository<Item extends Entity> {
   private items: Map<string, Item>;
 
   constructor(items: Item[] = []) {
-    this.items = new Map(items.map((item) => [item.identifier, item]));
+    this.items = new Map(items.map((item) => [item.id, item]));
   }
 
   async save(item: Item): Promise<void> {
@@ -26,7 +26,7 @@ export abstract class InMemoryRepository<Item extends Entity<unknown>> {
   }
 
   add(item: Item) {
-    return clone(this.items.set(item.identifier, clone(item)));
+    return clone(this.items.set(item.id, clone(item)));
   }
 
   find(predicate: (item: Item) => boolean) {

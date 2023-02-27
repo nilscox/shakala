@@ -1,11 +1,9 @@
 import { describe, it } from 'node:test';
 
 import expect from '@nilscox/expect';
-import { StubGeneratorAdapter } from '@shakala/common';
 
-import { StubCommandBus } from '../tests/stub-command-bus';
-
-import { Server } from './server';
+import { container } from '../container';
+import { API_TOKENS } from '../tokens';
 
 declare global {
   const fetch: (url: string) => Promise<unknown>;
@@ -13,7 +11,7 @@ declare global {
 
 describe('[intg] Server', () => {
   it('starts an HTTP server on a given host and port', async () => {
-    const server = new Server(new StubGeneratorAdapter(), new StubCommandBus());
+    const server = container.get(API_TOKENS.server);
 
     await server.listen('localhost', 4242);
 
