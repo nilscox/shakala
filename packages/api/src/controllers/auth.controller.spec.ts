@@ -127,6 +127,10 @@ describe('[intg] AuthController', () => {
   describe('/auth/sign-out', () => {
     const route = '/auth/sign-out';
 
+    beforeEach(() => {
+      test.userRepository.add(create.user({ id: 'userId' }));
+    });
+
     it('sets the authentication token cookie as expired', async () => {
       const agent = test.server.as('userId');
       const response = await agent.post(route).expect(204);

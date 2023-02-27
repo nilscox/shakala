@@ -9,7 +9,6 @@ import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { isAuthenticated } from '../infrastructure/guards';
-import { jwt } from '../utils/jwt';
 
 export class UserController {
   public readonly router: Router = Router();
@@ -23,10 +22,7 @@ export class UserController {
   }
 
   getUserProfile: RequestHandler = async (req, res) => {
-    const cookies = req.cookies as Record<string, string>;
-    const { uid: userId } = jwt.decode<{ uid: string }>(cookies.token);
-
-    const user = await this.userRepository.findByIdOrFail(userId);
+    const user = await this.userRepository.findByIdOrFail(req.userId);
 
     // todo: query
     res.json({
@@ -38,10 +34,7 @@ export class UserController {
   };
 
   validateEmail: RequestHandler<{ token: string }> = async (req, res) => {
-    const cookies = req.cookies as Record<string, string>;
-    const { uid: userId } = jwt.decode<{ uid: string }>(cookies.token);
-
-    const user = await this.userRepository.findByIdOrFail(userId);
+    const user = await this.userRepository.findByIdOrFail(req.userId);
 
     const command: ValidateUserEmailCommand = {
       userId: user.id,
