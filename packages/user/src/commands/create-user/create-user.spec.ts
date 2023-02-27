@@ -1,4 +1,4 @@
-import { expect, StubCryptoAdapter, StubEventPublisher } from '@shakala/common';
+import { expect, StubCryptoAdapter, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -7,19 +7,23 @@ import { InMemoryUserRepository } from '../../repositories/in-memory-user.reposi
 import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 
 describe('createUser', () => {
+  let generator: StubGeneratorAdapter;
   let crypto: StubCryptoAdapter;
   let publisher: StubEventPublisher;
   let userRepository: InMemoryUserRepository;
   let handler: CreateUserHandler;
 
   beforeEach(() => {
+    generator = new StubGeneratorAdapter();
     crypto = new StubCryptoAdapter();
     publisher = new StubEventPublisher();
     userRepository = new InMemoryUserRepository();
-    handler = new CreateUserHandler(crypto, publisher, userRepository);
+    handler = new CreateUserHandler(generator, crypto, publisher, userRepository);
   });
 
   it('creates a new user', async () => {
+    generator.nextToken = 'token';
+
     const command: CreateUserCommand = {
       id: 'id',
       nick: 'nils',
@@ -36,6 +40,7 @@ describe('createUser', () => {
     expect(user).toHaveProperty('nick', create.nick('nils'));
     expect(user).toHaveProperty('email', 'email');
     expect(user).toHaveProperty('hashedPassword', '#password#');
+    expect(user).toHaveProperty('emailValidationToken', 'token');
   });
 
   it('publishes a UserCreatedEvent', async () => {

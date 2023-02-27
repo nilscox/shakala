@@ -1,4 +1,5 @@
 import expect from '@nilscox/expect';
+import { StubConfigAdapter, TOKENS } from '@shakala/common';
 import { describe, it } from 'vitest';
 
 import { container } from '../container';
@@ -10,14 +11,18 @@ declare global {
 
 describe('[intg] Server', () => {
   it('starts an HTTP server on a given host and port', async () => {
+    const config = new StubConfigAdapter({
+      app: { host: 'localhost', port: 4242 },
+    });
+
+    container.bind(TOKENS.config).toConstant(config);
+
     const server = container.get(API_TOKENS.server);
 
-    await server.listen('localhost', 4242);
-
+    await server.listen();
     await expect(fetch('http://localhost:4242')).toResolve();
 
     await server.close();
-
     await expect(fetch('http://localhost:4242')).toReject();
   });
 });

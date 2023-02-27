@@ -1,34 +1,36 @@
 import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
-import { BaseError } from '@shakala/common';
+import { BaseError, ConfigPort, TOKENS } from '@shakala/common';
 import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
 import express, { ErrorRequestHandler, Express } from 'express';
 import * as yup from 'yup';
 
-import { AuthController } from '../controllers/auth.controller';
+import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
 export class Server {
   protected app: Express;
   protected server?: HttpServer;
 
-  constructor(private readonly authController: AuthController) {
+  constructor(private readonly config: ConfigPort) {
     this.app = express();
 
     this.app.use(cookieParser('secret'));
     this.app.use(bodyParser.json());
 
-    this.app.use('/auth', this.authController.router);
+    this.app.use('/auth', container.get(API_TOKENS.authController).router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);
     this.app.use(this.fallbackErrorHandler);
   }
 
-  async listen(host: string, port: number) {
+  async listen() {
+    const { host, port } = this.config.app;
+
     await new Promise<void>((resolve, reject) => {
       try {
         this.server = this.app.listen(port, host, resolve);
@@ -36,6 +38,8 @@ export class Server {
         reject(error);
       }
     });
+
+    console.log(`Server listening on ${host}:${port}`);
   }
 
   async close() {
@@ -90,4 +94,4 @@ export class Server {
   };
 }
 
-injected(Server, API_TOKENS.authController);
+injected(Server, TOKENS.config);

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@shakala/common": "workspace:*",
+    "@shakala/email": "workspace:*",
     "brandi": "^5.0.0"
   },
   "devDependencies": {

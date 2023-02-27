@@ -9,6 +9,7 @@
     "lib": ["ESNext"],
     "skipLibCheck": true,
     "strict": true,
+    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false

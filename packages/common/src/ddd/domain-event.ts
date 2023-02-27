@@ -1,3 +1,3 @@
 export class DomainEvent {
-  constructor(public readonly aggregate: string, public readonly identifier: string) {}
+  constructor(public readonly aggregate: string, public readonly id: string) {}
 }

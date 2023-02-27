@@ -1,4 +1,11 @@
-import { CommandHandler, CryptoPort, DomainEvent, EventPublisher, TOKENS } from '@shakala/common';
+import {
+  CommandHandler,
+  CryptoPort,
+  DomainEvent,
+  EventPublisher,
+  GeneratorPort,
+  TOKENS,
+} from '@shakala/common';
 import { injected } from 'brandi';
 
 import { Nick } from '../../entities/nick.value-object';
@@ -15,6 +22,7 @@ export type CreateUserCommand = {
 
 export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
   constructor(
+    private readonly generator: GeneratorPort,
     private readonly crypto: CryptoPort,
     private readonly publisher: EventPublisher,
     private readonly userRepository: UserRepository
@@ -26,6 +34,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
       nick: new Nick(command.nick),
       email: command.email,
       hashedPassword: await this.crypto.hash(command.password),
+      emailValidationToken: await this.generator.generateToken(),
     });
 
     await this.userRepository.save(user);
@@ -34,7 +43,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
   }
 }
 
-injected(CreateUserHandler, TOKENS.crypto, TOKENS.publisher, USER_TOKENS.userRepository);
+injected(CreateUserHandler, TOKENS.generator, TOKENS.crypto, TOKENS.publisher, USER_TOKENS.userRepository);
 
 export class UserCreatedEvent extends DomainEvent {
   constructor(id: string) {

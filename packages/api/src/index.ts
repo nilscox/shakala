@@ -1,15 +1,31 @@
+import { TOKENS } from '@shakala/common';
+import { EMAIL_TOKENS } from '@shakala/email';
+import { setupUserListeners } from '@shakala/user';
+
 import { container } from './container';
+import { EmitterEventPublisher } from './infrastructure/emitter-event-publisher';
 import { API_TOKENS } from './tokens';
 
 Error.stackTraceLimit = Infinity;
 
-const { HOST: host = 'localhost', PORT: port = '4242' } = process.env;
-
 startServer().catch(console.error);
 
 async function startServer() {
-  const server = container.get(API_TOKENS.server);
+  const publisher = container.get(TOKENS.publisher) as EmitterEventPublisher;
 
-  await server.listen(host, Number(port));
-  console.log(`Server listening on ${host}:${port}`);
+  setupUserListeners((EventClass, token) => {
+    publisher.on(EventClass.name, (event) => {
+      container
+        .get(token)
+        .handle(event)
+        .catch((error) => {
+          // todo: report error
+          console.log(error);
+        });
+    });
+  });
+
+  await container.get(TOKENS.config).init?.();
+  await container.get(EMAIL_TOKENS.sendEmailHandler).init();
+  await container.get(API_TOKENS.server).listen();
 }

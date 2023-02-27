@@ -8,13 +8,7 @@ export class StubGeneratorAdapter implements GeneratorPort {
   }
 
   async generateId(): Promise<string> {
-    const nextId = this.nextIds.shift();
-
-    if (!nextId) {
-      throw new Error('StubGeneratorAdapter: no next id');
-    }
-
-    return nextId;
+    return this.nextIds.shift() ?? '<generated-id>';
   }
 
   public nextTokens = new Array<string>();
@@ -24,12 +18,6 @@ export class StubGeneratorAdapter implements GeneratorPort {
   }
 
   async generateToken(): Promise<string> {
-    const nextToken = this.nextTokens.shift();
-
-    if (!nextToken) {
-      throw new Error('StubGeneratorAdapter: no next id');
-    }
-
-    return nextToken;
+    return this.nextTokens.shift() ?? '<generated-token>';
   }
 }

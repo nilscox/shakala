@@ -1,0 +1,52 @@
+<mjml>
+  <mj-head>
+    <mj-preview>Connexion par email sur Shakala</mj-preview>
+    <mj-include path="./common/attributes.mjml" />
+  </mj-head>
+
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-spacer height="40px" />
+      </mj-column>
+    </mj-section>
+
+    <mj-wrapper>
+      <mj-include path="./common/header.mjml" />
+
+      <mj-section padding-bottom="25px">
+        <mj-column>
+          <mj-text font-size="22px" line-height="22px">Connexion par email</mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section>
+        <mj-column>
+          <mj-text>Vous avez fait une demande de connexion par email sur Shakala.</mj-text>
+          <mj-text>Cliquez sur ce bouton pour vous connecter :</mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding="40px 0">
+        <mj-column>
+          <mj-button href="{{emailLoginLink}}">Je me connecte</mj-button>
+        </mj-column>
+      </mj-section>
+
+      <mj-section>
+        <mj-column>
+          <mj-text>Une fois connecté·e, vous pourrez changer votre mot de passe depuis <a href="{{appBaseUrl}}/profil">votre page de profil</a>. Si vous n'êtes pas à l'origine de cette action, vous pouvez ignorer ce message.</mj-text>
+          <mj-text padding-top="16px">A bientôt !</mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-include path="./common/footer.mjml" />
+    </mj-wrapper>
+
+    <mj-section>
+      <mj-column>
+        <mj-spacer height="40px" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

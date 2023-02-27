@@ -21,7 +21,6 @@ describe('[intg] auth controller', () => {
 
     beforeEach(() => {
       test = new Test();
-      test.generator.nextId = 'id';
     });
 
     afterEach(() => test.cleanup());
@@ -33,12 +32,12 @@ describe('[intg] auth controller', () => {
     };
 
     it('invokes the createUser command', async () => {
-      test.generator.nextId = 'generated-id';
+      test.generator.nextId = 'userId';
 
       await test.agent.post(route).send(payload).expect(201);
 
       expect(test.stubCreateUser).calledWith({
-        id: 'generated-id',
+        id: 'userId',
         nick: 'mano',
         email: 'mano@domain.tld',
         password: 'password',
@@ -46,11 +45,11 @@ describe('[intg] auth controller', () => {
     });
 
     it("returns the created user's id", async () => {
-      test.generator.nextId = 'generated-id';
+      test.generator.nextId = 'userId';
 
       const response = await test.agent.post(route).send(payload).expect(201);
 
-      expect(response.text).toEqual('generated-id');
+      expect(response.text).toEqual('userId');
     });
 
     it('sets a cookie with the authentication token', async () => {

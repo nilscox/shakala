@@ -6,6 +6,7 @@ type UserProps = EntityProps<{
   nick: Nick;
   email: string;
   hashedPassword: string;
+  emailValidationToken?: string;
 }>;
 
 export class User extends Entity<UserProps> {
@@ -19,5 +20,9 @@ export class User extends Entity<UserProps> {
 
   get hashedPassword() {
     return this.props.hashedPassword;
+  }
+
+  get emailValidationToken() {
+    return this.props.emailValidationToken;
   }
 }
