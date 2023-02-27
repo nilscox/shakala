@@ -1,6 +1,6 @@
 import { AssertionError } from 'assert';
 
-import { AppConfig, expect, stub, StubConfigAdapter, StubOf } from '@shakala/common';
+import { AppConfig, EntityNotFoundError, expect, stub, StubConfigAdapter, StubOf } from '@shakala/common';
 import { EmailKind, SendEmailHandler } from '@shakala/email';
 import { beforeEach, describe, it } from 'vitest';
 
@@ -57,9 +57,7 @@ describe('SendEmailToCreatedUserHandler', () => {
   });
 
   it('fails when the user does not exist', async () => {
-    const error = await expect(handler.handle(new UserCreatedEvent('userId'))).toRejectWith(AssertionError);
-
-    expect(error.message).toEqual('expected user to exist');
+    await expect(handler.handle(new UserCreatedEvent('userId'))).toRejectWith(EntityNotFoundError);
   });
 
   it('fails when the user has no email validation token', async () => {

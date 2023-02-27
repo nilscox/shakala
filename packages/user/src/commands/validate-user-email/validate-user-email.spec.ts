@@ -1,6 +1,4 @@
-import { AssertionError } from 'assert';
-
-import { expect, StubEventPublisher } from '@shakala/common';
+import { EntityNotFoundError, expect, StubEventPublisher } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -79,8 +77,6 @@ describe('ValidateUserEmail', () => {
       emailValidationToken: 'token',
     };
 
-    const error = await expect(handler.handle(command)).toRejectWith(AssertionError);
-
-    expect(error.message).toEqual('expected user to exist');
+    await expect(handler.handle(command)).toRejectWith(EntityNotFoundError);
   });
 });

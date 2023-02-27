@@ -1,5 +1,3 @@
-import assert from 'assert';
-
 import { BaseError, CommandHandler, DomainEvent, EventPublisher, TOKENS } from '@shakala/common';
 import { injected } from 'brandi';
 
@@ -16,9 +14,7 @@ export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmai
 
   async handle(command: ValidateUserEmailCommand): Promise<void> {
     const { userId, emailValidationToken } = command;
-    const user = await this.userRepository.findById(userId);
-
-    assert(user, 'expected user to exist');
+    const user = await this.userRepository.findByIdOrFail(userId);
 
     if (!user.emailValidationToken) {
       throw new EmailAlreadyValidatedError(user.email);

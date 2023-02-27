@@ -16,9 +16,8 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
   ) {}
 
   async handle(event: UserCreatedEvent): Promise<void> {
-    const user = await this.userRepository.findById(event.id);
+    const user = await this.userRepository.findByIdOrFail(event.id);
 
-    assert(user, 'expected user to exist');
     assert(user.emailValidationToken, 'user has no email validation token');
 
     const { apiBaseUrl, appBaseUrl } = this.config.app;

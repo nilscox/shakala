@@ -1,12 +1,31 @@
+import { ClassType } from '@shakala/shared';
 import clone from 'lodash.clonedeep';
 
 import { Entity } from '../ddd/entity';
 
+import { EntityNotFoundError } from './entity-not-found-error';
+
 export abstract class InMemoryRepository<Item extends Entity> {
   private items: Map<string, Item>;
 
+  abstract readonly entity: ClassType<Item>;
+
   constructor(items: Item[] = []) {
     this.items = new Map(items.map((item) => [item.id, item]));
+  }
+
+  async findById(id: string): Promise<Item | undefined> {
+    return this.find((item) => item.id === id);
+  }
+
+  async findByIdOrFail(id: string): Promise<Item> {
+    const item = await this.findById(id);
+
+    if (!item) {
+      throw new EntityNotFoundError(this.entity.name);
+    }
+
+    return item;
   }
 
   async save(item: Item): Promise<void> {

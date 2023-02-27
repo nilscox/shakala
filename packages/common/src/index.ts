@@ -26,6 +26,7 @@ export * from './tokens';
 export * from './types/class-type';
 export * from './types/factory';
 
+export * from './utils/entity-not-found-error';
 export * from './utils/base-error';
 export * from './utils/setup-listeners';
 export * from './utils/in-memory-repository';

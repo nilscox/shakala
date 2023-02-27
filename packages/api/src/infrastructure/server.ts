@@ -65,7 +65,8 @@ export class Server {
       })),
     };
 
-    res.status(400).send(body).end();
+    res.status(400);
+    res.json(body);
   };
 
   private baseErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
@@ -74,10 +75,8 @@ export class Server {
       return;
     }
 
-    res
-      .status(error.status ?? 500)
-      .send(error.serialize())
-      .end();
+    res.status(error.status ?? 500);
+    res.send(error.serialize());
   };
 
   private fallbackErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
@@ -91,7 +90,8 @@ export class Server {
 
     console.error(error);
 
-    res.status(500).send(body).end();
+    res.status(500);
+    res.send(body);
   };
 }
 

@@ -64,7 +64,7 @@ export class AuthController {
     }
 
     const user = await this.userRepository.findByEmail(body.email);
-    assert(user);
+    assert(user, 'expected user to exist');
 
     res.status(204);
     res.set('Set-Cookie', this.setToken(user.id));

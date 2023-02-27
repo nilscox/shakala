@@ -1,11 +1,9 @@
-import assert from 'assert';
-
 import {
   InvalidEmailValidationTokenError,
+  UserRepository,
   USER_TOKENS,
   ValidateUserEmailCommand,
   ValidateUserEmailHandler,
-  UserRepository,
 } from '@shakala/user';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
@@ -28,10 +26,7 @@ export class UserController {
     const cookies = req.cookies as Record<string, string>;
     const { uid: userId } = jwt.decode<{ uid: string }>(cookies.token);
 
-    const user = await this.userRepository.findById(userId);
-
-    // todo: handle not found errors
-    assert(user, 'expected user to exist');
+    const user = await this.userRepository.findByIdOrFail(userId);
 
     // todo: query
     res.json({
@@ -46,10 +41,7 @@ export class UserController {
     const cookies = req.cookies as Record<string, string>;
     const { uid: userId } = jwt.decode<{ uid: string }>(cookies.token);
 
-    const user = await this.userRepository.findById(userId);
-
-    // todo: handle not found errors
-    assert(user, 'expected user to exist');
+    const user = await this.userRepository.findByIdOrFail(userId);
 
     const command: ValidateUserEmailCommand = {
       userId: user.id,
