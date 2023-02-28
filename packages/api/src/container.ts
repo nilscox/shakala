@@ -20,6 +20,7 @@ import { UserController } from './controllers/user.controller';
 import { BcryptAdapter } from './infrastructure/bcrypt.adapter';
 import { EmitterEventPublisher } from './infrastructure/emitter-event-publisher';
 import { NanoidGeneratorAdapter } from './infrastructure/nanoid-generator.adapter';
+import { RealCommandBus } from './infrastructure/real-command-bus';
 import { Server } from './infrastructure/server';
 import { API_TOKENS } from './tokens';
 
@@ -30,6 +31,7 @@ bind(TOKENS.filesystem, RealFilesystemAdapter);
 bind(TOKENS.generator, NanoidGeneratorAdapter);
 bind(TOKENS.crypto, BcryptAdapter);
 bind(TOKENS.publisher, EmitterEventPublisher);
+bind(TOKENS.commandBus, RealCommandBus);
 
 bind(EMAIL_TOKENS.sendEmailHandler, SendEmailHandler);
 bind(EMAIL_TOKENS.emailCompiler, MjmlEmailCompilerAdapter);

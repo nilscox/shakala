@@ -4,7 +4,7 @@ import { beforeEach, describe, it } from 'vitest';
 import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
 
-import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
+import { createUser, CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 
 describe('[unit] CreateUser', () => {
   let test: Test;
@@ -47,12 +47,12 @@ class Test {
     return this.userRepository.get('id');
   }
 
-  static readonly defaultCommand: CreateUserCommand = {
+  static readonly defaultCommand = createUser({
     id: 'id',
     nick: 'nick',
     email: 'email',
     password: 'password',
-  };
+  });
 
   act(overrides?: Partial<CreateUserCommand>) {
     return this.handler.handle({ ...Test.defaultCommand, ...overrides });

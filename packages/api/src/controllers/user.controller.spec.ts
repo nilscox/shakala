@@ -4,7 +4,7 @@ import {
   InMemoryUserRepository,
   InvalidEmailValidationTokenError,
   USER_TOKENS,
-  ValidateUserEmailHandler,
+  validateUserEmail,
 } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
@@ -38,17 +38,22 @@ describe('[intg] UserController', () => {
   describe('/user/validate-email/:token', () => {
     const route = (token: string) => `/user/validate-email/${token}`;
 
-    it('invokes the ValidateUserEmail command', async () => {
+    it('invokes the validateUserEmail command', async () => {
       await test.asUser.get(route('token')).expect(200);
 
-      expect(test.stubValidateUserEmail).calledWith({
-        userId: 'userId',
-        emailValidationToken: 'token',
-      });
+      expect(test.commandBus).toInclude(
+        validateUserEmail({
+          userId: 'userId',
+          emailValidationToken: 'token',
+        })
+      );
     });
 
     it('fails with status 400 when the token is invalid', async () => {
-      test.stubValidateUserEmail.reject(new InvalidEmailValidationTokenError('user@email.tld', 'token'));
+      test.commandBus.register(
+        validateUserEmail,
+        stub().reject(new InvalidEmailValidationTokenError('user@email.tld', 'token'))
+      );
 
       const response = await test.asUser.get(route('token')).expect(400);
 
@@ -70,15 +75,11 @@ describe('[intg] UserController', () => {
 
 class Test extends IntegrationTest {
   public readonly user = create.user({ id: 'userId' });
-
   public readonly userRepository = new InMemoryUserRepository([this.user]);
-  public readonly stubValidateUserEmail = stub<ValidateUserEmailHandler['handle']>();
 
   constructor() {
     super();
-
     container.bind(USER_TOKENS.userRepository).toConstant(this.userRepository);
-    this.bindHandler(USER_TOKENS.validateUserEmailHandler, this.stubValidateUserEmail);
   }
 
   get asUser() {

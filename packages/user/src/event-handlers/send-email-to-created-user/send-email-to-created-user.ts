@@ -1,7 +1,7 @@
 import assert from 'assert';
 
-import { ConfigPort, EventHandler, TOKENS } from '@shakala/common';
-import { EmailKind, EMAIL_TOKENS, SendEmailHandler } from '@shakala/email';
+import { CommandBus, ConfigPort, EventHandler, TOKENS } from '@shakala/common';
+import { EmailKind, sendEmail } from '@shakala/email';
 import { injected } from 'brandi';
 
 import { UserCreatedEvent } from '../../commands/create-user/create-user';
@@ -12,7 +12,7 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
   constructor(
     private readonly config: ConfigPort,
     private readonly userRepository: UserRepository,
-    private readonly sendEmailHandler: SendEmailHandler
+    private readonly commandBus: CommandBus
   ) {}
 
   async handle(event: UserCreatedEvent): Promise<void> {
@@ -23,7 +23,7 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
     const { apiBaseUrl, appBaseUrl } = this.config.app;
     const emailValidationLink = `${apiBaseUrl}/user/validate-email/${user.emailValidationToken}`;
 
-    await this.sendEmailHandler.handle({
+    const command = sendEmail({
       kind: EmailKind.welcome,
       to: user.email,
       payload: {
@@ -32,12 +32,9 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
         nick: user.nick.toString(),
       },
     });
+
+    await this.commandBus.execute(command);
   }
 }
 
-injected(
-  SendEmailToCreatedUserHandler,
-  TOKENS.config,
-  USER_TOKENS.userRepository,
-  EMAIL_TOKENS.sendEmailHandler
-);
+injected(SendEmailToCreatedUserHandler, TOKENS.config, USER_TOKENS.userRepository, TOKENS.commandBus);

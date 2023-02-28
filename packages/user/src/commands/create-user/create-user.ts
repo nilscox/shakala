@@ -1,4 +1,5 @@
 import {
+  commandCreator,
   CommandHandler,
   CryptoPort,
   DomainEvent,
@@ -20,7 +21,12 @@ export type CreateUserCommand = {
   password: string;
 };
 
+const symbol = Symbol('CreateUserCommand');
+export const createUser = commandCreator<CreateUserCommand>(symbol);
+
 export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
+  symbol = symbol;
+
   constructor(
     private readonly generator: GeneratorPort,
     private readonly crypto: CryptoPort,

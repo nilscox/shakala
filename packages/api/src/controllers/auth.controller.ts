@@ -1,11 +1,10 @@
 import assert from 'assert';
 
-import { GeneratorPort, TOKENS } from '@shakala/common';
+import { CommandBus, GeneratorPort, TOKENS } from '@shakala/common';
 import { signInBodySchema, signUpBodySchema } from '@shakala/shared';
 import {
-  CheckUserPasswordHandler,
-  CreateUserCommand,
-  CreateUserHandler,
+  checkUserPassword,
+  createUser,
   InvalidCredentialsError,
   UserRepository,
   USER_TOKENS,
@@ -26,8 +25,7 @@ export class AuthController {
     private readonly generator: GeneratorPort,
     // todo: remove
     private readonly userRepository: UserRepository,
-    private readonly createUserHandler: CreateUserHandler,
-    private readonly checkUserPasswordHandler: CheckUserPasswordHandler
+    private readonly commandBus: CommandBus
   ) {
     this.router.post('/sign-up', isUnauthenticated, this.signUp);
     this.router.post('/sign-in', isUnauthenticated, this.signIn);
@@ -38,12 +36,7 @@ export class AuthController {
     const body = await validateRequestBody(req, signUpBodySchema);
     const id = await this.generator.generateId();
 
-    const command: CreateUserCommand = {
-      id,
-      ...body,
-    };
-
-    await this.createUserHandler.handle(command);
+    await this.commandBus.execute(createUser({ id, ...body }));
 
     res.status(201);
     res.set('Set-Cookie', this.setToken(id));
@@ -54,7 +47,7 @@ export class AuthController {
     const body = await validateRequestBody(req, signInBodySchema);
 
     try {
-      await this.checkUserPasswordHandler.handle(body);
+      await this.commandBus.execute(checkUserPassword(body));
     } catch (error) {
       if (error instanceof InvalidCredentialsError) {
         error.status = 401;
@@ -103,10 +96,4 @@ export class AuthController {
   }
 }
 
-injected(
-  AuthController,
-  TOKENS.generator,
-  USER_TOKENS.userRepository,
-  USER_TOKENS.createUserHandler,
-  USER_TOKENS.checkUserPasswordHandler
-);
+injected(AuthController, TOKENS.generator, USER_TOKENS.userRepository, TOKENS.commandBus);

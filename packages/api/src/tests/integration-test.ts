@@ -1,11 +1,10 @@
 import {
-  CommandHandler,
+  StubCommandBus,
   StubCryptoAdapter,
   StubEventPublisher,
   StubGeneratorAdapter,
   TOKENS,
 } from '@shakala/common';
-import { Token } from 'brandi';
 
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
@@ -16,6 +15,7 @@ export abstract class IntegrationTest {
   public readonly generator = new StubGeneratorAdapter();
   public readonly crypto = new StubCryptoAdapter();
   public readonly publisher = new StubEventPublisher();
+  public readonly commandBus = new StubCommandBus();
 
   constructor() {
     container.capture?.();
@@ -23,16 +23,13 @@ export abstract class IntegrationTest {
     container.bind(TOKENS.generator).toConstant(this.generator);
     container.bind(TOKENS.crypto).toConstant(this.crypto);
     container.bind(TOKENS.publisher).toConstant(this.publisher);
+    container.bind(TOKENS.commandBus).toConstant(this.commandBus);
 
     container.bind(API_TOKENS.testServer).toInstance(TestServer).inContainerScope();
   }
 
   cleanup() {
     container.restore?.();
-  }
-
-  bindHandler<Command, Cls extends CommandHandler<Command>>(token: Token<Cls>, handle: Cls['handle']) {
-    container.bind(token).toConstant({ handle } as never);
   }
 
   get server() {

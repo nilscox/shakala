@@ -1,4 +1,11 @@
-import { BaseError, CommandHandler, DomainEvent, EventPublisher, TOKENS } from '@shakala/common';
+import {
+  BaseError,
+  commandCreator,
+  CommandHandler,
+  DomainEvent,
+  EventPublisher,
+  TOKENS,
+} from '@shakala/common';
 import { injected } from 'brandi';
 
 import { UserRepository } from '../../repositories/user.repository';
@@ -9,7 +16,12 @@ export type ValidateUserEmailCommand = {
   emailValidationToken: string;
 };
 
+const symbol = Symbol('ValidateUserEmailCommand');
+export const validateUserEmail = commandCreator<ValidateUserEmailCommand>(symbol);
+
 export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmailCommand> {
+  symbol = symbol;
+
   constructor(private readonly publisher: EventPublisher, private readonly userRepository: UserRepository) {}
 
   async handle(command: ValidateUserEmailCommand): Promise<void> {

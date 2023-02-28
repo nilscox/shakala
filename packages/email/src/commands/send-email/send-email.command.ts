@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { CommandHandler, ConfigPort, FilesystemPort, TOKENS } from '@shakala/common';
+import { commandCreator, CommandHandler, ConfigPort, FilesystemPort, TOKENS } from '@shakala/common';
 import { injected } from 'brandi';
 
 import { EmailRenderer } from '../../entities/email';
@@ -26,7 +26,12 @@ export type SendEmailCommand<Kind extends EmailKind> = {
   payload: EmailPayloadMap[Kind];
 };
 
+const symbol = Symbol('SendEmailCommand');
+export const sendEmail = commandCreator<SendEmailCommand<EmailKind>>(symbol);
+
 export class SendEmailHandler implements CommandHandler<SendEmailCommand<EmailKind>> {
+  symbol = symbol;
+
   private renderers = new Map<EmailKind, EmailRenderer>();
 
   constructor(

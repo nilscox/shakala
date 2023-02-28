@@ -1,6 +1,10 @@
+export * from './cqs/command';
 export * from './cqs/command-handler';
 export * from './cqs/event-handler';
 export * from './cqs/event-publisher';
+
+export * from './ports/command-bus/command-bus.port';
+export * from './ports/command-bus/stub-command-bus.adapter';
 
 export * from './ports/config/config.port';
 export * from './ports/config/env-config.adapter';

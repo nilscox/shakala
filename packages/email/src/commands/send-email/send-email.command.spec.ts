@@ -8,27 +8,11 @@ import { StubEmailSenderAdapter } from '../../ports/email-sender/stub-email-send
 import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
 
 describe('[unit] SendEmailCommand', () => {
-  let emailCompiler: FakeEmailCompilerAdapter;
-  let emailSender: StubEmailSenderAdapter;
-  let handler: SendEmailHandler;
+  let test: Test;
 
   beforeEach(async () => {
-    const fs = {
-      '/templates/welcome.txt': 'Welcome {nick}',
-      '/templates/welcome.mjml': '<p>Welcome {nick}</p>',
-    };
-
-    emailCompiler = new FakeEmailCompilerAdapter();
-    emailSender = new StubEmailSenderAdapter();
-
-    handler = new SendEmailHandler(
-      new StubConfigAdapter({ email: { templatesPath: '/templates' } }),
-      new StubFilesystemAdapter(fs),
-      emailCompiler,
-      emailSender
-    );
-
-    await handler.init();
+    test = new Test();
+    await test.arrange();
   });
 
   it('sends a welcome email to a user', async () => {
@@ -42,7 +26,7 @@ describe('[unit] SendEmailCommand', () => {
       },
     };
 
-    await handler.handle(command);
+    await expect(test.act(command)).toResolve();
 
     const expected: Email = {
       to: 'user@domain.tld',
@@ -53,6 +37,29 @@ describe('[unit] SendEmailCommand', () => {
       },
     };
 
-    expect(emailSender.lastSentEmail).toEqual(expected);
+    expect(test.emailSender.lastSentEmail).toEqual(expected);
   });
 });
+
+class Test {
+  fs = {
+    '/templates/welcome.txt': 'Welcome {nick}',
+    '/templates/welcome.mjml': '<p>Welcome {nick}</p>',
+  };
+
+  emailCompiler = new FakeEmailCompilerAdapter();
+  emailSender = new StubEmailSenderAdapter();
+
+  handler = new SendEmailHandler(
+    new StubConfigAdapter({ email: { templatesPath: '/templates' } }),
+    new StubFilesystemAdapter(this.fs),
+    this.emailCompiler,
+    this.emailSender
+  );
+
+  async arrange() {
+    await this.handler.init();
+  }
+
+  act = this.handler.handle.bind(this.handler);
+}

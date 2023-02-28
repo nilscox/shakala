@@ -1,6 +1,7 @@
 import { token } from 'brandi';
 
 import { EventPublisher } from './cqs/event-publisher';
+import { CommandBus } from './ports/command-bus/command-bus.port';
 import { ConfigPort } from './ports/config/config.port';
 import { CryptoPort } from './ports/crypto/crypto.port';
 import { FilesystemPort } from './ports/filesystem/filesystem.port';
@@ -12,4 +13,5 @@ export const TOKENS = {
   generator: token<GeneratorPort>('generator'),
   crypto: token<CryptoPort>('crypto'),
   publisher: token<EventPublisher>('publisher'),
+  commandBus: token<CommandBus>('commandBus'),
 };

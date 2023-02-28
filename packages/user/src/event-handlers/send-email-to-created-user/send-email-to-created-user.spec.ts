@@ -1,7 +1,7 @@
 import { AssertionError } from 'assert';
 
-import { AppConfig, EntityNotFoundError, expect, stub, StubConfigAdapter, StubOf } from '@shakala/common';
-import { EmailKind, SendEmailHandler } from '@shakala/email';
+import { EntityNotFoundError, expect, StubCommandBus, StubConfigAdapter } from '@shakala/common';
+import { EmailKind, sendEmail } from '@shakala/email';
 import { beforeEach, describe, it } from 'vitest';
 
 import { UserCreatedEvent } from '../../commands/create-user/create-user';
@@ -11,65 +11,72 @@ import { InMemoryUserRepository } from '../../repositories/in-memory-user.reposi
 import { SendEmailToCreatedUserHandler } from './send-email-to-created-user';
 
 describe('[unit] SendEmailToCreatedUserHandler', () => {
-  let config: StubConfigAdapter;
-  let userRepository: InMemoryUserRepository;
-
-  // todo: command bus
-  let sendEmail: StubOf<SendEmailHandler['handle']>;
-  let sendEmailHandler: SendEmailHandler;
-
-  let handler: SendEmailToCreatedUserHandler;
+  let test: Test;
 
   beforeEach(() => {
-    const app: Partial<AppConfig> = {
-      apiBaseUrl: 'https://api.url',
-      appBaseUrl: 'https://app.url',
-    };
-
-    config = new StubConfigAdapter({ app });
-    userRepository = new InMemoryUserRepository();
-    sendEmail = stub<SendEmailHandler['handle']>();
-    sendEmailHandler = { handle: sendEmail } as never;
-    handler = new SendEmailToCreatedUserHandler(config, userRepository, sendEmailHandler);
+    test = new Test();
+    test.arrange();
   });
 
   it('triggers the SendEmail command handler', async () => {
-    userRepository.add(
-      create.user({
-        id: 'userId',
-        email: 'mano@domain.tld',
-        nick: create.nick('mano'),
-        emailValidationToken: 'token',
+    await expect(test.act()).toResolve();
+
+    expect(test.commandBus).toInclude(
+      sendEmail({
+        kind: EmailKind.welcome,
+        to: 'mano@domain.tld',
+        payload: {
+          appBaseUrl: 'https://app.url',
+          emailValidationLink: 'https://api.url/user/validate-email/token',
+          nick: 'mano',
+        },
       })
     );
-
-    await handler.handle(new UserCreatedEvent('userId'));
-
-    expect(sendEmail).calledWith({
-      kind: EmailKind.welcome,
-      to: 'mano@domain.tld',
-      payload: {
-        appBaseUrl: 'https://app.url',
-        emailValidationLink: 'https://api.url/user/validate-email/token',
-        nick: 'mano',
-      },
-    });
   });
 
   it('fails when the user does not exist', async () => {
-    await expect(handler.handle(new UserCreatedEvent('userId'))).toRejectWith(EntityNotFoundError);
+    await expect(test.act('notUserId')).toRejectWith(EntityNotFoundError);
   });
 
   it('fails when the user has no email validation token', async () => {
-    userRepository.add(
+    test.userRepository.add(
       create.user({
         id: 'userId',
         emailValidationToken: undefined,
       })
     );
 
-    const error = await expect(handler.handle(new UserCreatedEvent('userId'))).toRejectWith(AssertionError);
+    const error = await expect(test.act()).toRejectWith(AssertionError);
 
     expect(error.message).toEqual('user has no email validation token');
   });
 });
+
+class Test {
+  config = new StubConfigAdapter({
+    app: {
+      apiBaseUrl: 'https://api.url',
+      appBaseUrl: 'https://app.url',
+    },
+  });
+
+  userRepository = new InMemoryUserRepository();
+  commandBus = new StubCommandBus();
+
+  handler = new SendEmailToCreatedUserHandler(this.config, this.userRepository, this.commandBus);
+
+  arrange() {
+    const user = create.user({
+      id: 'userId',
+      email: 'mano@domain.tld',
+      nick: create.nick('mano'),
+      emailValidationToken: 'token',
+    });
+
+    this.userRepository.add(user);
+  }
+
+  async act(userId = 'userId') {
+    await this.handler.handle(new UserCreatedEvent(userId));
+  }
+}

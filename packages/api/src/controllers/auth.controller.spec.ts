@@ -3,9 +3,9 @@ import assert from 'assert';
 import { expect, stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
-  CheckUserPasswordHandler,
+  checkUserPassword,
   create,
-  CreateUserHandler,
+  createUser,
   InMemoryUserRepository,
   InvalidCredentialsError,
   USER_TOKENS,
@@ -42,12 +42,14 @@ describe('[intg] AuthController', () => {
     it('invokes the createUser command', async () => {
       await test.agent.post(route).send(payload).expect(201);
 
-      expect(test.stubCreateUser).calledWith({
-        id: 'userId',
-        nick: 'mano',
-        email: 'mano@domain.tld',
-        password: 'password',
-      });
+      expect(test.commandBus).toInclude(
+        createUser({
+          id: 'userId',
+          nick: 'mano',
+          email: 'mano@domain.tld',
+          password: 'password',
+        })
+      );
     });
 
     it("returns the created user's id", async () => {
@@ -96,10 +98,12 @@ describe('[intg] AuthController', () => {
     it('succeeds when the checkUserPassword command succeeds', async () => {
       await test.agent.post(route).send(payload).expect(204);
 
-      expect(test.stubCheckUserPassword).calledWith({
-        email: 'mano@domain.tld',
-        password: 'password',
-      });
+      expect(test.commandBus).toInclude(
+        checkUserPassword({
+          email: 'mano@domain.tld',
+          password: 'password',
+        })
+      );
     });
 
     it('sets a cookie with the authentication token', async () => {
@@ -109,7 +113,7 @@ describe('[intg] AuthController', () => {
     });
 
     it('fails with status 401 when the password check fails', async () => {
-      test.stubCheckUserPassword.reject(new InvalidCredentialsError());
+      test.commandBus.register(checkUserPassword, stub().reject(new InvalidCredentialsError()));
 
       await test.agent.post(route).send(payload).expect(401);
     });
@@ -149,16 +153,9 @@ describe('[intg] AuthController', () => {
 class Test extends IntegrationTest {
   public readonly userRepository = new InMemoryUserRepository();
 
-  public readonly stubCreateUser = stub<CreateUserHandler['handle']>();
-  public readonly stubCheckUserPassword = stub<CheckUserPasswordHandler['handle']>();
-
   constructor() {
     super();
-
     container.bind(USER_TOKENS.userRepository).toConstant(this.userRepository);
-
-    this.bindHandler(USER_TOKENS.createUserHandler, this.stubCreateUser);
-    this.bindHandler(USER_TOKENS.checkUserPasswordHandler, this.stubCheckUserPassword);
   }
 
   parseCookie(cookieStr: string) {
