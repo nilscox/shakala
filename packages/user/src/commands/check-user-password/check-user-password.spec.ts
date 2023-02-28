@@ -12,54 +12,51 @@ import {
 } from './check-user-password';
 
 describe('[unit] CheckUserPassword', () => {
-  let crypto: StubCryptoAdapter;
-  let userRepository: InMemoryUserRepository;
-  let handler: CheckUserPasswordHandler;
+  let test: Test;
 
-  beforeEach(() => {
-    crypto = new StubCryptoAdapter();
-    userRepository = new InMemoryUserRepository();
-    handler = new CheckUserPasswordHandler(crypto, userRepository);
+  beforeEach(async () => {
+    test = new Test();
+    await test.arrange();
   });
 
   it("asserts that an input matches the user's password", async () => {
-    const user = create.user({
-      email: 'email',
-      hashedPassword: await crypto.hash('password'),
-    });
-
-    userRepository.add(user);
-
-    const command: CheckUserPasswordCommand = {
-      email: 'email',
-      password: 'password',
-    };
-
-    await expect(handler.handle(command)).toResolve();
+    await expect(test.act()).toResolve();
   });
 
   it('throws an error when the user does not exist', async () => {
-    const command: CheckUserPasswordCommand = {
-      email: 'email',
-      password: 'password',
-    };
-
-    await expect(handler.handle(command)).toRejectWith(InvalidCredentialsError);
+    await expect(test.act({ email: 'nope' })).toRejectWith(InvalidCredentialsError);
   });
 
   it('throws an error when the password does not match', async () => {
-    const user = create.user({
-      email: 'email',
-      hashedPassword: await crypto.hash('password'),
-    });
-
-    userRepository.add(user);
-
-    const command: CheckUserPasswordCommand = {
-      email: 'email',
-      password: 'banana',
-    };
-
-    await expect(handler.handle(command)).toRejectWith(InvalidCredentialsError);
+    await expect(test.act({ password: 'banana' })).toRejectWith(InvalidCredentialsError);
   });
 });
+
+class Test {
+  crypto = new StubCryptoAdapter();
+  userRepository = new InMemoryUserRepository();
+
+  handler = new CheckUserPasswordHandler(this.crypto, this.userRepository);
+
+  get user() {
+    return this.userRepository.get('id');
+  }
+
+  async arrange() {
+    const user = create.user({
+      email: 'email',
+      hashedPassword: await this.crypto.hash('password'),
+    });
+
+    this.userRepository.add(user);
+  }
+
+  static readonly defaultCommand: CheckUserPasswordCommand = {
+    email: 'email',
+    password: 'password',
+  };
+
+  act(overrides?: Partial<CheckUserPasswordCommand>) {
+    return this.handler.handle({ ...Test.defaultCommand, ...overrides });
+  }
+}

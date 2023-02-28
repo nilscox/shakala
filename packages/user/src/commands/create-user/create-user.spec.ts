@@ -7,52 +7,54 @@ import { InMemoryUserRepository } from '../../repositories/in-memory-user.reposi
 import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 
 describe('[unit] CreateUser', () => {
-  let generator: StubGeneratorAdapter;
-  let crypto: StubCryptoAdapter;
-  let publisher: StubEventPublisher;
-  let userRepository: InMemoryUserRepository;
-  let handler: CreateUserHandler;
+  let test: Test;
 
   beforeEach(() => {
-    generator = new StubGeneratorAdapter();
-    crypto = new StubCryptoAdapter();
-    publisher = new StubEventPublisher();
-    userRepository = new InMemoryUserRepository();
-    handler = new CreateUserHandler(generator, crypto, publisher, userRepository);
+    test = new Test();
   });
 
   it('creates a new user', async () => {
-    generator.nextToken = 'token';
+    test.generator.nextToken = 'token';
 
-    const command: CreateUserCommand = {
-      id: 'id',
-      nick: 'nils',
-      email: 'email',
-      password: 'password',
-    };
+    await expect(test.act()).toResolve();
 
-    await expect(handler.handle(command)).toResolve();
-
-    const user = userRepository.get('id');
+    const user = test.user;
 
     expect(user).toBeDefined();
     expect(user).toHaveProperty('id', 'id');
-    expect(user).toHaveProperty('nick', create.nick('nils'));
+    expect(user).toHaveProperty('nick', create.nick('nick'));
     expect(user).toHaveProperty('email', 'email');
     expect(user).toHaveProperty('hashedPassword', '#password#');
     expect(user).toHaveProperty('emailValidationToken', 'token');
   });
 
   it('publishes a UserCreatedEvent', async () => {
-    const command: CreateUserCommand = {
-      id: 'id',
-      nick: 'nils',
-      email: 'email',
-      password: 'password',
-    };
+    await expect(test.act()).toResolve();
 
-    await expect(handler.handle(command)).toResolve();
-
-    expect(publisher).toHavePublished(new UserCreatedEvent('id'));
+    expect(test.publisher).toHavePublished(new UserCreatedEvent('id'));
   });
 });
+
+class Test {
+  generator = new StubGeneratorAdapter();
+  crypto = new StubCryptoAdapter();
+  publisher = new StubEventPublisher();
+  userRepository = new InMemoryUserRepository();
+
+  handler = new CreateUserHandler(this.generator, this.crypto, this.publisher, this.userRepository);
+
+  get user() {
+    return this.userRepository.get('id');
+  }
+
+  static readonly defaultCommand: CreateUserCommand = {
+    id: 'id',
+    nick: 'nick',
+    email: 'email',
+    password: 'password',
+  };
+
+  act(overrides?: Partial<CreateUserCommand>) {
+    return this.handler.handle({ ...Test.defaultCommand, ...overrides });
+  }
+}

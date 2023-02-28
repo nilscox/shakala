@@ -13,70 +13,67 @@ import {
 } from './validate-user-email';
 
 describe('[unit] ValidateUserEmail', () => {
-  let publisher: StubEventPublisher;
-  let userRepository: InMemoryUserRepository;
-  let handler: ValidateUserEmailHandler;
+  let test: Test;
 
-  beforeEach(() => {
-    publisher = new StubEventPublisher();
-    userRepository = new InMemoryUserRepository();
-    handler = new ValidateUserEmailHandler(publisher, userRepository);
+  beforeEach(async () => {
+    test = new Test();
+    test.arrange();
   });
 
   it("validates a user's email", async () => {
-    const command: ValidateUserEmailCommand = {
-      userId: 'userId',
-      emailValidationToken: 'token',
-    };
+    await expect(test.act()).toResolve();
 
-    userRepository.add(create.user({ id: 'userId', emailValidationToken: 'token' }));
-
-    await expect(handler.handle(command)).toResolve();
-
-    expect(userRepository.get('userId')).toHaveProperty('emailValidationToken', undefined);
+    expect(test.user).toHaveProperty('emailValidationToken', undefined);
   });
 
   it('publishes a UserEmailValidatedEvent', async () => {
-    const command: ValidateUserEmailCommand = {
-      userId: 'userId',
-      emailValidationToken: 'token',
-    };
+    await expect(test.act()).toResolve();
 
-    userRepository.add(create.user({ id: 'userId', emailValidationToken: 'token' }));
-
-    await expect(handler.handle(command)).toResolve();
-
-    expect(publisher).toHavePublished(new UserEmailValidatedEvent('userId'));
+    expect(test.publisher).toHavePublished(new UserEmailValidatedEvent('userId'));
   });
 
   it("throws a EmailAlreadyValidatedError when user's email was already validated", async () => {
-    const command: ValidateUserEmailCommand = {
-      userId: 'userId',
-      emailValidationToken: 'token',
-    };
+    test.userRepository.add(create.user({ id: 'userId' }));
 
-    userRepository.add(create.user({ id: 'userId' }));
-
-    await expect(handler.handle(command)).toRejectWith(EmailAlreadyValidatedError);
+    await expect(test.act()).toRejectWith(EmailAlreadyValidatedError);
   });
 
   it('throws a InvalidEmailValidationTokenError when the token is not valid', async () => {
-    const command: ValidateUserEmailCommand = {
-      userId: 'userId',
-      emailValidationToken: 'token',
-    };
+    test.userRepository.add(create.user({ id: 'userId', emailValidationToken: 'not-the-token' }));
 
-    userRepository.add(create.user({ id: 'userId', emailValidationToken: 'not-the-token' }));
-
-    await expect(handler.handle(command)).toRejectWith(InvalidEmailValidationTokenError);
+    await expect(test.act()).toRejectWith(InvalidEmailValidationTokenError);
   });
 
   it('fails when the user does not exist', async () => {
-    const command: ValidateUserEmailCommand = {
-      userId: 'userId',
-      emailValidationToken: 'token',
-    };
-
-    await expect(handler.handle(command)).toRejectWith(EntityNotFoundError);
+    await expect(test.act({ userId: 'anotherUserId' })).toRejectWith(EntityNotFoundError);
   });
 });
+
+class Test {
+  publisher = new StubEventPublisher();
+  userRepository = new InMemoryUserRepository();
+
+  handler = new ValidateUserEmailHandler(this.publisher, this.userRepository);
+
+  get user() {
+    return this.userRepository.get('userId');
+  }
+
+  arrange() {
+    const user = create.user({
+      id: 'userId',
+      emailValidationToken: 'token',
+    });
+
+    this.userRepository.add(user);
+  }
+
+  static readonly defaultCommand: ValidateUserEmailCommand = {
+    userId: 'userId',
+    emailValidationToken: 'token',
+  };
+
+  act(overrides?: Partial<ValidateUserEmailCommand>) {
+    return this.handler.handle({ ...Test.defaultCommand, ...overrides });
+  }
+}
