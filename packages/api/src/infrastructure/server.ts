@@ -1,7 +1,7 @@
 import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
-import { BaseError, ConfigPort, TOKENS } from '@shakala/common';
+import { BaseError, ConfigPort, LoggerPort, TOKENS } from '@shakala/common';
 import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
@@ -15,7 +15,7 @@ export class Server {
   protected app: Express;
   protected server?: HttpServer;
 
-  constructor(private readonly config: ConfigPort) {
+  constructor(private readonly logger: LoggerPort, private readonly config: ConfigPort) {
     this.app = express();
 
     this.app.use(cookieParser('secret'));
@@ -40,7 +40,7 @@ export class Server {
       }
     });
 
-    console.log(`Server listening on ${host}:${port}`);
+    this.logger.info(`Server listening on ${host}:${port}`);
   }
 
   async close() {
@@ -95,4 +95,4 @@ export class Server {
   };
 }
 
-injected(Server, TOKENS.config);
+injected(Server, TOKENS.logger, TOKENS.config);

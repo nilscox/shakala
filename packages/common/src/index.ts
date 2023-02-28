@@ -20,6 +20,10 @@ export * from './ports/filesystem/stub-filesystem.adapter';
 export * from './ports/generator/generator.port';
 export * from './ports/generator/stub-generator.adapter';
 
+export * from './ports/logger/console-logger.adapter';
+export * from './ports/logger/logger.port';
+export * from './ports/logger/stub-logger.port';
+
 export * from './ddd/domain-event';
 export * from './ddd/entity';
 export * from './ddd/value-object';

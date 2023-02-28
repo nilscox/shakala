@@ -20,4 +20,4 @@ export class TestServer extends Server {
   }
 }
 
-injected(TestServer, TOKENS.config);
+injected(TestServer, TOKENS.logger, TOKENS.config);

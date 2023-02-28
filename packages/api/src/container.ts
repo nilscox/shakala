@@ -1,4 +1,10 @@
-import { ClassType, EnvConfigAdapter, RealFilesystemAdapter, TOKENS } from '@shakala/common';
+import {
+  ClassType,
+  EnvConfigAdapter,
+  RealFilesystemAdapter,
+  TOKENS,
+  ConsoleLoggerAdapter,
+} from '@shakala/common';
 import {
   EMAIL_TOKENS,
   MjmlEmailCompilerAdapter,
@@ -26,12 +32,14 @@ import { API_TOKENS } from './tokens';
 
 export const container = new Container();
 
+container.bind(TOKENS.logger).toInstance(ConsoleLoggerAdapter).inTransientScope();
+
+bind(TOKENS.commandBus, RealCommandBus);
 bind(TOKENS.config, EnvConfigAdapter);
+bind(TOKENS.crypto, BcryptAdapter);
 bind(TOKENS.filesystem, RealFilesystemAdapter);
 bind(TOKENS.generator, NanoidGeneratorAdapter);
-bind(TOKENS.crypto, BcryptAdapter);
 bind(TOKENS.publisher, EmitterEventPublisher);
-bind(TOKENS.commandBus, RealCommandBus);
 
 bind(EMAIL_TOKENS.sendEmailHandler, SendEmailHandler);
 bind(EMAIL_TOKENS.emailCompiler, MjmlEmailCompilerAdapter);

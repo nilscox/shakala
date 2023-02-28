@@ -1,5 +1,5 @@
 import expect from '@nilscox/expect';
-import { StubConfigAdapter, TOKENS } from '@shakala/common';
+import { StubConfigAdapter, StubLoggerAdapter, TOKENS } from '@shakala/common';
 import { describe, it } from 'vitest';
 
 import { container } from '../container';
@@ -15,7 +15,10 @@ describe('[intg] Server', () => {
       app: { host: 'localhost', port: 4242 },
     });
 
+    const logger = new StubLoggerAdapter();
+
     container.bind(TOKENS.config).toConstant(config);
+    container.bind(TOKENS.logger).toConstant(logger);
 
     const server = container.get(API_TOKENS.server);
 
