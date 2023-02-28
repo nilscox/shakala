@@ -1,4 +1,4 @@
-import { TOKENS } from '@shakala/common';
+import { EventHandler, TOKENS } from '@shakala/common';
 import { EMAIL_TOKENS } from '@shakala/email';
 import { setupUserListeners } from '@shakala/user';
 
@@ -14,14 +14,14 @@ async function startServer() {
   const publisher = container.get(TOKENS.publisher) as EmitterEventPublisher;
 
   setupUserListeners((EventClass, token) => {
-    publisher.on(EventClass.name, (event) => {
-      container
-        .get(token)
-        .handle(event)
-        .catch((error) => {
-          // todo: report error
-          console.log(error);
-        });
+    const handler = container.get(token);
+    type Event = typeof handler extends EventHandler<infer E> ? E : never;
+
+    publisher.on(EventClass.name, (event: Event) => {
+      handler.handle(event).catch((error) => {
+        // todo: report error
+        console.log(error);
+      });
     });
   });
 

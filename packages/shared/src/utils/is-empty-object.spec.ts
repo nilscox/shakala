@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { isEmptyObject } from './is-empty-object';
 
-describe('isEmptyObject', () => {
+describe('[unit] isEmptyObject', () => {
   it('returns true when the object has no key', () => {
     expect(isEmptyObject({})).toBe(true);
   });

@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { merge } from './merge';
 
-describe('merge', () => {
+describe('[unit] merge', () => {
   it('merges two objects', () => {
     expect(merge({}, {})).toEqual({});
     expect(merge({ foo: 'bar' }, {})).toEqual({ foo: 'bar' });

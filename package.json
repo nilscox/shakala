@@ -2,7 +2,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "pnpm run -r clean",
-    "lint": "pnpm run -r lint",
+    "lint": "pnpm --no-bail run -r lint",
     "test": "pnpm --workspace-concurrency=1 run -r test "
   },
   "devDependencies": {

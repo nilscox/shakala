@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { last } from './last';
 
-describe('last', () => {
+describe('[unit] last', () => {
   it("returns an array's last element", () => {
     expect(last([1, 2])).toEqual(2);
   });

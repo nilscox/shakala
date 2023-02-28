@@ -8,6 +8,7 @@ export const merge = <T extends object>(left: T, right: DeepPartial<T>): T => {
   }
 
   return Object.entries(left).reduce(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     (obj, [key, value]) => ({ ...obj, [key]: merge(value, get(right, key)) }),
     {} as T
   );

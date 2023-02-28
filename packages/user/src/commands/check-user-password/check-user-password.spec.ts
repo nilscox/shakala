@@ -11,7 +11,7 @@ import {
   InvalidCredentialsError,
 } from './check-user-password';
 
-describe('checkUserPassword', () => {
+describe('[unit] CheckUserPassword', () => {
   let crypto: StubCryptoAdapter;
   let userRepository: InMemoryUserRepository;
   let handler: CheckUserPasswordHandler;

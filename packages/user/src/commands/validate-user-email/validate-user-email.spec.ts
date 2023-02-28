@@ -12,7 +12,7 @@ import {
   ValidateUserEmailHandler,
 } from './validate-user-email';
 
-describe('ValidateUserEmail', () => {
+describe('[unit] ValidateUserEmail', () => {
   let publisher: StubEventPublisher;
   let userRepository: InMemoryUserRepository;
   let handler: ValidateUserEmailHandler;

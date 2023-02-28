@@ -7,7 +7,7 @@ import { StubEmailSenderAdapter } from '../../ports/email-sender/stub-email-send
 
 import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
 
-describe('SendEmailCommand', () => {
+describe('[unit] SendEmailCommand', () => {
   let emailCompiler: FakeEmailCompilerAdapter;
   let emailSender: StubEmailSenderAdapter;
   let handler: SendEmailHandler;

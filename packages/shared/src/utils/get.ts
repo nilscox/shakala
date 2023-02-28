@@ -1,13 +1,12 @@
 export const get = (object: unknown, ...path: string[]): unknown => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let current: any = object;
+  let current = object;
 
   for (const key of path) {
     if (!current) {
       return;
     }
 
-    current = current[key];
+    current = current[key as keyof typeof current];
   }
 
   return current;

@@ -24,7 +24,7 @@ export class EnvConfigAdapter implements ConfigPort {
   async init() {
     const packageJsonPath = path.resolve('..', '..', '..', 'package.json');
     const pkg = await fs.readFile(new URL(packageJsonPath, import.meta.url));
-    const { version } = JSON.parse(String(pkg));
+    const { version } = JSON.parse(String(pkg)) as { version: string };
 
     this.version = version;
   }

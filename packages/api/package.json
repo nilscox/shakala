@@ -5,7 +5,7 @@
   "scripts": {
     "start": "pnpm ts-node src/index.ts",
     "dev": "pnpm nodemon -x 'pnpm start'",
-    "lint": "eslint src",
+    "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 vitest"
   },
   "nodemonConfig": {

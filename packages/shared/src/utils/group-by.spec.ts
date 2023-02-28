@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { groupBy } from './group-by';
 
-describe('groupBy', () => {
+describe('[unit] groupBy', () => {
   type Item = {
     id: number;
     prop: string;

@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { randomId } from './random-id';
 
-describe('randomId', () => {
+describe('[unit] randomId', () => {
   it('generates a random string of 4 characters', () => {
     const id = randomId();
 

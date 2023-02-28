@@ -6,7 +6,7 @@ import { InMemoryUserRepository } from '../../repositories/in-memory-user.reposi
 
 import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 
-describe('createUser', () => {
+describe('[unit] CreateUser', () => {
   let generator: StubGeneratorAdapter;
   let crypto: StubCryptoAdapter;
   let publisher: StubEventPublisher;

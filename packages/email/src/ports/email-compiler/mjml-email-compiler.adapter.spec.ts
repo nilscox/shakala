@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { MjmlEmailCompilerAdapter } from './mjml-email-compiler.adapter';
 
-describe('MjmlEmailCompilerAdapter', () => {
+describe('[unit] MjmlEmailCompilerAdapter', () => {
   it('compiles an email template with MJML', () => {
     const emailCompiler = new MjmlEmailCompilerAdapter(new StubConfigAdapter());
 

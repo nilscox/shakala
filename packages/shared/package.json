@@ -8,8 +8,8 @@
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc",
-    "test": "NODE_NO_WARNINGS=1 vitest",
-    "lint": "eslint src"
+    "lint": "eslint --config ../../.eslintrc.ci.js src",
+    "test": "NODE_NO_WARNINGS=1 vitest"
   },
   "devDependencies": {
     "@types/node": "^18.14.0",

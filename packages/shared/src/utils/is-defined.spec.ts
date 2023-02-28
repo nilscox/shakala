@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { isDefined } from './is-defined';
 
-describe('isDefined', () => {
+describe('[unit] isDefined', () => {
   it('returns true when the value is defined', () => {
     expect(isDefined(42)).toBe(true);
   });

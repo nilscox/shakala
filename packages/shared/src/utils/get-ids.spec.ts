@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { getIds } from './get-ids';
 
-describe('getIds', () => {
+describe('[unit] getIds', () => {
   it('returns the set of ids from a set of entities', () => {
     expect(getIds([{ id: 'id1' }, { id: 'id2' }])).toEqual(['id1', 'id2']);
   });

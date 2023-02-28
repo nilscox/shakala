@@ -52,7 +52,7 @@ describe('[intg] UserController', () => {
 
       const response = await test.asUser.get(route('token')).expect(400);
 
-      expect<object>(response.body).toEqual({
+      expect<unknown>(response.body).toEqual({
         code: 'InvalidEmailValidationTokenError',
         message: expect.any(String),
         details: {

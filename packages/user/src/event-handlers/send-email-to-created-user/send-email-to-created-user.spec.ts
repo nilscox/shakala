@@ -10,7 +10,7 @@ import { InMemoryUserRepository } from '../../repositories/in-memory-user.reposi
 
 import { SendEmailToCreatedUserHandler } from './send-email-to-created-user';
 
-describe('SendEmailToCreatedUserHandler', () => {
+describe('[unit] SendEmailToCreatedUserHandler', () => {
   let config: StubConfigAdapter;
   let userRepository: InMemoryUserRepository;
 

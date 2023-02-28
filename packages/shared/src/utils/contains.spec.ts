@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { contains } from './contains';
 
-describe('contains', () => {
+describe('[unit] contains', () => {
   it('returns true when an array contains a given element', () => {
     expect(contains([1, 2], 1)).toBe(true);
     expect(contains([1, 2], 2)).toBe(true);

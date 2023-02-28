@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { get } from './get';
 
-describe('get', () => {
+describe('[unit] get', () => {
   it('returns the input when no path is provided', () => {
     expect(get(51)).toEqual(51);
   });

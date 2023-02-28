@@ -13,7 +13,7 @@ export class FilesystemUserRepository extends InMemoryUserRepository implements 
 
   override async save(user: User): Promise<void> {
     await super.save(user);
-    this.filesystem.writeJSONFile('users.json', this.all());
+    await this.filesystem.writeJSONFile('users.json', this.all());
   }
 }
 

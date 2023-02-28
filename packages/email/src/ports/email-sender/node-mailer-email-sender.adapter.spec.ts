@@ -3,7 +3,7 @@ import { describe, it } from 'vitest';
 
 import { NodeMailerEmailSenderAdapter } from './node-mailer-email-sender.adapter';
 
-describe('NodeMailerEmailSenderAdapter', () => {
+describe('[unit] NodeMailerEmailSenderAdapter', () => {
   it('sends an email', async () => {
     const emailConfig: EmailConfig = {
       host: 'host',

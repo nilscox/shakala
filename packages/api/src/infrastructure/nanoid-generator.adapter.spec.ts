@@ -3,7 +3,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { NanoidGeneratorAdapter } from './nanoid-generator.adapter';
 
-describe('NanoidGeneratorAdapter', () => {
+describe('[unit] NanoidGeneratorAdapter', () => {
   let generator: NanoidGeneratorAdapter;
 
   beforeEach(() => {
