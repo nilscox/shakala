@@ -1,14 +1,7 @@
 import { expect, stub } from '@shakala/common';
-import {
-  create,
-  InMemoryUserRepository,
-  InvalidEmailValidationTokenError,
-  USER_TOKENS,
-  validateUserEmail,
-} from '@shakala/user';
+import { InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { container } from '../container';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] UserController', () => {
@@ -23,8 +16,8 @@ describe('[intg] UserController', () => {
   describe('/user', () => {
     const route = '/user';
 
-    it("retrieves the currently authenticated user's profile", async () => {
-      test.userRepository.add(create.user({ id: 'userId', email: 'user@domain.tld' }));
+    it("retrieves the authenticated user's profile", async () => {
+      test.user = { id: 'userId', email: 'user@domain.tld' };
 
       const response = await test.asUser.get(route).expect(200);
 
@@ -37,6 +30,10 @@ describe('[intg] UserController', () => {
 
   describe('/user/validate-email/:token', () => {
     const route = (token: string) => `/user/validate-email/${token}`;
+
+    beforeEach(() => {
+      test.user = { id: 'userId' };
+    });
 
     it('invokes the validateUserEmail command', async () => {
       await test.asUser.get(route('token')).expect(200);
@@ -74,15 +71,7 @@ describe('[intg] UserController', () => {
 });
 
 class Test extends IntegrationTest {
-  public readonly user = create.user({ id: 'userId' });
-  public readonly userRepository = new InMemoryUserRepository([this.user]);
-
-  constructor() {
-    super();
-    container.bind(USER_TOKENS.userRepository).toConstant(this.userRepository);
-  }
-
   get asUser() {
-    return this.as(this.user.id);
+    return this.as('userId');
   }
 }

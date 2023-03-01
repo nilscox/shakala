@@ -4,16 +4,14 @@ import { expect, stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
   checkUserPassword,
-  create,
   createUser,
-  InMemoryUserRepository,
+  getUser,
+  GetUserResult,
   InvalidCredentialsError,
-  USER_TOKENS,
 } from '@shakala/user';
 import * as request from 'supertest';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { container } from '../container';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
@@ -30,8 +28,8 @@ describe('[intg] AuthController', () => {
     const route = '/auth/sign-up';
 
     const payload: SignUpBody = {
-      nick: 'mano',
-      email: 'mano@domain.tld',
+      nick: 'user',
+      email: 'user@domain.tld',
       password: 'password',
     };
 
@@ -45,8 +43,8 @@ describe('[intg] AuthController', () => {
       expect(test.commandBus).toInclude(
         createUser({
           id: 'userId',
-          nick: 'mano',
-          email: 'mano@domain.tld',
+          nick: 'user',
+          email: 'user@domain.tld',
           password: 'password',
         })
       );
@@ -87,11 +85,14 @@ describe('[intg] AuthController', () => {
     const route = '/auth/sign-in';
 
     beforeEach(() => {
-      test.userRepository.add(create.user({ id: 'userId', email: payload.email }));
+      const user: GetUserResult = { id: 'userId', email: 'user@domain.tld' };
+
+      test.user = user;
+      test.queryBus.register(getUser({ email: 'user@domain.tld' }), user);
     });
 
     const payload: SignInBody = {
-      email: 'mano@domain.tld',
+      email: 'user@domain.tld',
       password: 'password',
     };
 
@@ -100,7 +101,7 @@ describe('[intg] AuthController', () => {
 
       expect(test.commandBus).toInclude(
         checkUserPassword({
-          email: 'mano@domain.tld',
+          email: 'user@domain.tld',
           password: 'password',
         })
       );
@@ -132,7 +133,7 @@ describe('[intg] AuthController', () => {
     const route = '/auth/sign-out';
 
     beforeEach(() => {
-      test.userRepository.add(create.user({ id: 'userId' }));
+      test.user = { id: 'userId' };
     });
 
     it('sets the authentication token cookie as expired', async () => {
@@ -151,13 +152,6 @@ describe('[intg] AuthController', () => {
 });
 
 class Test extends IntegrationTest {
-  public readonly userRepository = new InMemoryUserRepository();
-
-  constructor() {
-    super();
-    container.bind(USER_TOKENS.userRepository).toConstant(this.userRepository);
-  }
-
   parseCookie(cookieStr: string) {
     return cookieStr
       .split(';')

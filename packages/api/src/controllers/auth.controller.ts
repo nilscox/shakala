@@ -1,14 +1,8 @@
 import assert from 'assert';
 
-import { CommandBus, GeneratorPort, TOKENS } from '@shakala/common';
+import { CommandBus, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
 import { signInBodySchema, signUpBodySchema } from '@shakala/shared';
-import {
-  checkUserPassword,
-  createUser,
-  InvalidCredentialsError,
-  UserRepository,
-  USER_TOKENS,
-} from '@shakala/user';
+import { checkUserPassword, createUser, getUser, InvalidCredentialsError } from '@shakala/user';
 import { injected } from 'brandi';
 import { millisecondsToSeconds } from 'date-fns';
 import { secondsInMonth } from 'date-fns/constants';
@@ -23,8 +17,7 @@ export class AuthController {
 
   constructor(
     private readonly generator: GeneratorPort,
-    // todo: remove
-    private readonly userRepository: UserRepository,
+    private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus
   ) {
     this.router.post('/sign-up', isUnauthenticated, this.signUp);
@@ -56,7 +49,7 @@ export class AuthController {
       throw error;
     }
 
-    const user = await this.userRepository.findByEmail(body.email);
+    const user = await this.queryBus.execute(getUser({ email: body.email }));
     assert(user, 'expected user to exist');
 
     res.status(204);
@@ -96,4 +89,4 @@ export class AuthController {
   }
 }
 
-injected(AuthController, TOKENS.generator, USER_TOKENS.userRepository, TOKENS.commandBus);
+injected(AuthController, TOKENS.generator, TOKENS.queryBus, TOKENS.commandBus);

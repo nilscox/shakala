@@ -1,15 +1,15 @@
-export * from './commands/check-user-password/check-user-password';
-export * from './commands/create-user/create-user';
-export * from './commands/validate-user-email/validate-user-email';
+export {
+  checkUserPassword,
+  InvalidCredentialsError,
+} from './commands/check-user-password/check-user-password';
 
-export * from './event-handlers/send-email-to-created-user/send-email-to-created-user';
+export { createUser } from './commands/create-user/create-user';
 
-export * from './factories';
-export * from './listeners';
-export * from './tokens';
+export {
+  validateUserEmail,
+  InvalidEmailValidationTokenError,
+} from './commands/validate-user-email/validate-user-email';
 
-export * from './entities/user.entity';
+export { getUser, GetUserResult } from './queries/get-user.query';
 
-export * from './repositories/file-system-user.repository';
-export * from './repositories/in-memory-user.repository';
-export * from './repositories/user.repository';
+export { UserModule } from './user.module';

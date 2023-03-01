@@ -1,9 +1,13 @@
 import assert from 'assert';
 
-import { Command, CommandBus, CommandHandler } from '@shakala/common';
 import { injected } from 'brandi';
 
-export class RealCommandBus implements CommandBus {
+import { Command } from '../../cqs/command';
+import { CommandHandler } from '../../cqs/command-handler';
+
+import { CommandBus } from './command-bus.port';
+
+export class LocalCommandBus implements CommandBus {
   private handlers = new Map<symbol, CommandHandler<unknown>>();
 
   register(handler: CommandHandler<unknown>) {
@@ -19,4 +23,4 @@ export class RealCommandBus implements CommandBus {
   }
 }
 
-injected(RealCommandBus);
+injected(LocalCommandBus);

@@ -7,6 +7,7 @@ import { CryptoPort } from './ports/crypto/crypto.port';
 import { FilesystemPort } from './ports/filesystem/filesystem.port';
 import { GeneratorPort } from './ports/generator/generator.port';
 import { LoggerPort } from './ports/logger/logger.port';
+import { QueryBus } from './ports/query-bus/query-bus.port';
 
 export const TOKENS = {
   commandBus: token<CommandBus>('commandBus'),
@@ -16,4 +17,5 @@ export const TOKENS = {
   generator: token<GeneratorPort>('generator'),
   logger: token<LoggerPort>('logger'),
   publisher: token<EventPublisher>('publisher'),
+  queryBus: token<QueryBus>('queryBus'),
 };

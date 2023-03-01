@@ -1,5 +1,6 @@
 import expect from '@nilscox/expect';
-import { create, InMemoryUserRepository, USER_TOKENS } from '@shakala/user';
+import { StubQueryBus, TOKENS } from '@shakala/common';
+import { getUser } from '@shakala/user';
 import cookieParser from 'cookie-parser';
 import { millisecondsToSeconds } from 'date-fns';
 import express, { RequestHandler } from 'express';
@@ -24,10 +25,12 @@ describe('[intg] guards', () => {
   };
 
   beforeEach(() => {
-    const userRepository = new InMemoryUserRepository([create.user({ id: 'userId' })]);
+    const queryBus = new StubQueryBus();
+
+    queryBus.register(getUser({ id: 'userId' }), { id: 'userId', email: '' });
 
     container.capture?.();
-    container.bind(USER_TOKENS.userRepository).toConstant(userRepository);
+    container.bind(TOKENS.queryBus).toConstant(queryBus);
   });
 
   afterEach(() => {

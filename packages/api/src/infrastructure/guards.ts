@@ -2,7 +2,8 @@
 
 import assert from 'assert';
 
-import { USER_TOKENS } from '@shakala/user';
+import { TOKENS } from '@shakala/common';
+import { getUser } from '@shakala/user';
 import { RequestHandler } from 'express';
 
 import { container } from '../container';
@@ -17,7 +18,7 @@ declare global {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  const userRepository = container.get(USER_TOKENS.userRepository);
+  const queryBus = container.get(TOKENS.queryBus);
 
   const cookies = req.cookies as Record<string, string> | undefined;
   const token = cookies?.token;
@@ -28,7 +29,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     const { uid: userId } = jwt.decode<{ uid: string }>(token);
 
     assert(userId);
-    const user = await userRepository.findById(userId);
+    const user = await queryBus.execute(getUser({ id: userId }));
 
     if (!user) {
       res.status(500);
