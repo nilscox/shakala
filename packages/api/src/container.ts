@@ -33,10 +33,11 @@ bind(TOKENS.generator, NanoidGeneratorAdapter);
 bind(TOKENS.publisher, EmitterEventPublisher);
 bind(TOKENS.queryBus, LocalQueryBus);
 
-bind(API_TOKENS.authController, AuthController);
-bind(API_TOKENS.userController, UserController);
-bind(API_TOKENS.threadController, ThreadController);
-bind(API_TOKENS.commentController, CommentController);
+bind(API_TOKENS.controllers.authController, AuthController);
+bind(API_TOKENS.controllers.userController, UserController);
+bind(API_TOKENS.controllers.threadController, ThreadController);
+bind(API_TOKENS.controllers.commentController, CommentController);
+
 bind(API_TOKENS.server, Server);
 
 function bind<Cls>(token: Token<Cls>, Instance: ClassType<Cls>) {

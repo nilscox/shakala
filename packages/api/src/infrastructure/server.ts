@@ -25,10 +25,10 @@ export class Server {
     this.app.use(cookieParser('secret'));
     this.app.use(bodyParser.json());
 
-    this.app.use('/auth', container.get(API_TOKENS.authController).router);
-    this.app.use('/user', container.get(API_TOKENS.userController).router);
-    this.app.use('/thread', container.get(API_TOKENS.threadController).router);
-    this.app.use('/comment', container.get(API_TOKENS.commentController).router);
+    this.app.use('/auth', container.get(API_TOKENS.controllers.authController).router);
+    this.app.use('/user', container.get(API_TOKENS.controllers.userController).router);
+    this.app.use('/thread', container.get(API_TOKENS.controllers.threadController).router);
+    this.app.use('/comment', container.get(API_TOKENS.controllers.commentController).router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);

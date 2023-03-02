@@ -50,7 +50,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> 
   }
 }
 
-injected(CreateThreadHandler, TOKENS.date, TOKENS.publisher, THREAD_TOKENS.threadRepository);
+injected(CreateThreadHandler, TOKENS.date, TOKENS.publisher, THREAD_TOKENS.repositories.threadRepository);
 
 export class ThreadCreatedEvent extends DomainEvent {
   constructor(threadId: string) {

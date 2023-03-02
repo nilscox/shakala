@@ -8,10 +8,12 @@ import { Server } from './infrastructure/server';
 import { TestServer } from './tests/test-server';
 
 export const API_TOKENS = {
-  authController: token<AuthController>('authController'),
-  userController: token<UserController>('userController'),
-  threadController: token<ThreadController>('threadController'),
-  commentController: token<CommentController>('commentController'),
+  controllers: {
+    authController: token<AuthController>('authController'),
+    userController: token<UserController>('userController'),
+    threadController: token<ThreadController>('threadController'),
+    commentController: token<CommentController>('commentController'),
+  },
   server: token<Server>('server'),
   testServer: token<TestServer>('testServer'),
 };

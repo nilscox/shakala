@@ -6,7 +6,7 @@ export type GetLastThreadsQuery = {
   count: number;
 };
 
-export type GetLastThreadsQueryResult = Array<{
+export type GetLastThreadsResult = Array<{
   id: string;
   author: {
     id: string;
@@ -20,16 +20,14 @@ export type GetLastThreadsQueryResult = Array<{
 }>;
 
 const symbol = Symbol('GetLastThreads');
-export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsQueryResult>(symbol);
+export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsResult>(symbol);
 
-export class GetLastThreadsQueryHandler
-  implements QueryHandler<GetLastThreadsQuery, GetLastThreadsQueryResult>
-{
+export class GetLastThreadsHandler implements QueryHandler<GetLastThreadsQuery, GetLastThreadsResult> {
   symbol = symbol;
 
   constructor(private readonly threadRepository: ThreadRepository) {}
 
-  async handle(query: GetLastThreadsQuery): Promise<GetLastThreadsQueryResult> {
+  async handle(query: GetLastThreadsQuery): Promise<GetLastThreadsResult> {
     return this.threadRepository.getLastThreads(query.count);
   }
 }

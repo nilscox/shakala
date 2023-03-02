@@ -31,7 +31,7 @@ export type GetCommentResult = {
 const symbol = Symbol('GetComment');
 export const getComment = queryCreator<GetCommentQuery, GetCommentResult>(symbol);
 
-export class GetCommentQueryHandler implements QueryHandler<GetCommentQuery, GetCommentResult | undefined> {
+export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetCommentResult | undefined> {
   symbol = symbol;
 
   constructor(private readonly commentRepository: CommentRepository) {}

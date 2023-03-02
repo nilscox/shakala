@@ -82,8 +82,8 @@ injected(
   SetCommentSubscriptionHandler,
   TOKENS.generator,
   TOKENS.publisher,
-  THREAD_TOKENS.commentRepository,
-  THREAD_TOKENS.commentSubscriptionRepository
+  THREAD_TOKENS.repositories.commentRepository,
+  THREAD_TOKENS.repositories.commentSubscriptionRepository
 );
 
 export class CommentSubscriptionCreatedEvent extends DomainEvent {

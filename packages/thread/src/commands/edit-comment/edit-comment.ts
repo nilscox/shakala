@@ -61,7 +61,7 @@ injected(
   TOKENS.generator,
   TOKENS.date,
   TOKENS.publisher,
-  THREAD_TOKENS.commentRepository
+  THREAD_TOKENS.repositories.commentRepository
 );
 
 export class UserMustBeAuthorError extends BaseError<{ userId: string; commentId: string }> {

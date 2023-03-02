@@ -3,25 +3,25 @@ import { queryCreator, QueryHandler } from '@shakala/common';
 import { ThreadRepository } from '../repositories/thread/thread.repository';
 
 import { GetCommentResult } from './get-comment';
-import { GetLastThreadsQueryResult } from './get-last-threads';
+import { GetLastThreadsResult } from './get-last-threads';
 
 export type GetThreadQuery = {
   threadId: string;
 };
 
-export type GetThreadQueryResult = GetLastThreadsQueryResult[number] & {
+export type GetThreadResult = GetLastThreadsResult[number] & {
   comments: GetCommentResult[];
 };
 
 const symbol = Symbol('GetThread');
-export const getThread = queryCreator<GetThreadQuery, GetThreadQueryResult>(symbol);
+export const getThread = queryCreator<GetThreadQuery, GetThreadResult>(symbol);
 
-export class GetThreadQueryHandler implements QueryHandler<GetThreadQuery, GetThreadQueryResult | undefined> {
+export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadResult | undefined> {
   symbol = symbol;
 
   constructor(private readonly threadRepository: ThreadRepository) {}
 
-  async handle(query: GetThreadQuery): Promise<GetThreadQueryResult | undefined> {
+  async handle(query: GetThreadQuery): Promise<GetThreadResult | undefined> {
     return this.threadRepository.getThread(query.threadId);
   }
 }

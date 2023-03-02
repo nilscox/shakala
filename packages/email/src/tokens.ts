@@ -5,7 +5,11 @@ import { EmailSenderPort } from './adapters/email-sender/email-sender.port';
 import { SendEmailHandler } from './commands/send-email/send-email';
 
 export const EMAIL_TOKENS = {
-  emailCompiler: token<EmailCompilerPort>('emailCompiler'),
-  emailSender: token<EmailSenderPort>('emailSender'),
-  sendEmailHandler: token<SendEmailHandler>('sendEmailHandler'),
+  adapters: {
+    emailCompiler: token<EmailCompilerPort>('emailCompiler'),
+    emailSender: token<EmailSenderPort>('emailSender'),
+  },
+  commands: {
+    sendEmailHandler: token<SendEmailHandler>('sendEmailHandler'),
+  },
 };

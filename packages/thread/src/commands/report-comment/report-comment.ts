@@ -68,8 +68,8 @@ injected(
   ReportCommentHandler,
   TOKENS.generator,
   TOKENS.publisher,
-  THREAD_TOKENS.commentRepository,
-  THREAD_TOKENS.commentReportRepository
+  THREAD_TOKENS.repositories.commentRepository,
+  THREAD_TOKENS.repositories.commentReportRepository
 );
 
 export class CommentReportedEvent extends DomainEvent {

@@ -70,7 +70,7 @@ injected(
   TOKENS.publisher,
   TOKENS.generator,
   TOKENS.date,
-  THREAD_TOKENS.commentRepository
+  THREAD_TOKENS.repositories.commentRepository
 );
 
 export class CommentCreatedEvent extends DomainEvent {

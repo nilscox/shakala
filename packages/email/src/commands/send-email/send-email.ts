@@ -80,6 +80,6 @@ injected(
   SendEmailHandler,
   TOKENS.config,
   TOKENS.filesystem,
-  EMAIL_TOKENS.emailCompiler,
-  EMAIL_TOKENS.emailSender
+  EMAIL_TOKENS.adapters.emailCompiler,
+  EMAIL_TOKENS.adapters.emailSender
 );
