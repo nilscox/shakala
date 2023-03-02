@@ -2,7 +2,7 @@ import { Module } from '@shakala/common';
 
 import { MjmlEmailCompilerAdapter } from './adapters/email-compiler/mjml-email-compiler.adapter';
 import { NodeMailerEmailSenderAdapter } from './adapters/email-sender/node-mailer-email-sender.adapter';
-import { SendEmailHandler } from './commands/send-email/send-email.command';
+import { SendEmailHandler } from './commands/send-email/send-email';
 import { EMAIL_TOKENS } from './tokens';
 
 export class EmailModule extends Module {

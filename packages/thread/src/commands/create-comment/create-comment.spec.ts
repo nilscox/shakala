@@ -10,7 +10,7 @@ import {
   createComment,
   CreateCommentHandler,
   ReplyCreatedEvent,
-} from './create-comment.command';
+} from './create-comment';
 
 describe('createComment', () => {
   let test: Test;

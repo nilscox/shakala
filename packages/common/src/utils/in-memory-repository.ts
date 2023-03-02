@@ -1,3 +1,5 @@
+import util from 'node:util';
+
 import { ClassType } from '@shakala/shared';
 import clone from 'lodash.clonedeep';
 
@@ -58,5 +60,12 @@ export abstract class InMemoryRepository<Item extends Entity> {
 
   filter(predicate: (item: Item) => boolean) {
     return this.all().filter(predicate);
+  }
+
+  [util.inspect.custom]() {
+    const formatItem = (item: Item) => util.inspect(item, { breakLength: 80, colors: true, depth: null });
+    const items = this.all().map(formatItem).join('\n').split('\n').join('\n  ');
+
+    return `InMemoryRepository<${this.entity.name}> {\n  ${items}\n}`;
   }
 }

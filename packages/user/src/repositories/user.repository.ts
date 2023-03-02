@@ -1,5 +1,5 @@
 import { User } from '../entities/user.entity';
-import { GetUserResult } from '../queries/get-user.query';
+import { GetUserResult } from '../queries/get-user';
 
 export interface UserRepository {
   getUser(where: Partial<{ id: string; email: string }>): Promise<GetUserResult | undefined>;

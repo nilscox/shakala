@@ -4,7 +4,7 @@ import { CheckUserPasswordHandler } from './commands/check-user-password/check-u
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
-import { GetUserHandler } from './queries/get-user.query';
+import { GetUserHandler } from './queries/get-user';
 import { UserRepository } from './repositories/user.repository';
 
 export const USER_TOKENS = {

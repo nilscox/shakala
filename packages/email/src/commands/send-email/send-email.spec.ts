@@ -5,7 +5,7 @@ import { FakeEmailCompilerAdapter } from '../../adapters/email-compiler/fake-ema
 import { StubEmailSenderAdapter } from '../../adapters/email-sender/stub-email-sender.adapter';
 import { Email } from '../../entities/email';
 
-import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
+import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email';
 
 describe('[unit] SendEmailCommand', () => {
   let test: Test;

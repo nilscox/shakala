@@ -1,6 +1,7 @@
 import { Repository } from '@shakala/common';
 
 import { Comment } from '../../entities/comment.entity';
+import { GetCommentResult } from '../../queries/get-comment';
 
 // todo: rename to CommentSort
 export enum Sort {
@@ -9,4 +10,6 @@ export enum Sort {
   relevance = 'relevance',
 }
 
-export interface CommentRepository extends Repository<Comment> {}
+export interface CommentRepository extends Repository<Comment> {
+  getComment(id: string): Promise<GetCommentResult | undefined>;
+}

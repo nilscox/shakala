@@ -1,5 +1,7 @@
 import { EntityFactory, randomId, Timestamp, ValueObjectFactory } from '@shakala/common';
 
+import { CommentReport } from './entities/comment-report.entity';
+import { CommentSubscription } from './entities/comment-subscription.entity';
 import { Comment } from './entities/comment.entity';
 import { Markdown } from './entities/markdown.value-object';
 import { Message } from './entities/message.entity';
@@ -10,6 +12,8 @@ type Factories = {
   message: EntityFactory<Message>;
   comment: EntityFactory<Comment>;
   reaction: EntityFactory<Reaction>;
+  commentReport: EntityFactory<CommentReport>;
+  commentSubscription: EntityFactory<CommentSubscription>;
 };
 
 export const create: Factories = {
@@ -43,6 +47,24 @@ export const create: Factories = {
       commentId: '',
       userId: '',
       type: ReactionType.upvote,
+      ...props,
+    });
+  },
+
+  commentReport(props) {
+    return new CommentReport({
+      id: randomId(),
+      commentId: '',
+      reportedById: '',
+      ...props,
+    });
+  },
+
+  commentSubscription(props) {
+    return new CommentSubscription({
+      id: randomId(),
+      commentId: '',
+      userId: '',
       ...props,
     });
   },
