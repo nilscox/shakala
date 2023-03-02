@@ -1,13 +1,13 @@
 import { token } from 'brandi';
 
+import { CommandBus } from './adapters/command-bus/command-bus.port';
+import { ConfigPort } from './adapters/config/config.port';
+import { CryptoPort } from './adapters/crypto/crypto.port';
+import { FilesystemPort } from './adapters/filesystem/filesystem.port';
+import { GeneratorPort } from './adapters/generator/generator.port';
+import { LoggerPort } from './adapters/logger/logger.port';
+import { QueryBus } from './adapters/query-bus/query-bus.port';
 import { EventPublisher } from './cqs/event-publisher';
-import { CommandBus } from './ports/command-bus/command-bus.port';
-import { ConfigPort } from './ports/config/config.port';
-import { CryptoPort } from './ports/crypto/crypto.port';
-import { FilesystemPort } from './ports/filesystem/filesystem.port';
-import { GeneratorPort } from './ports/generator/generator.port';
-import { LoggerPort } from './ports/logger/logger.port';
-import { QueryBus } from './ports/query-bus/query-bus.port';
 
 export const TOKENS = {
   commandBus: token<CommandBus>('commandBus'),

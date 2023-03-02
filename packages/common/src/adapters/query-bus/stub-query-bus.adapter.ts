@@ -12,6 +12,6 @@ export class StubQueryBus extends Array<Query> implements QueryBus {
 
   async execute<Q extends Query>(query: Q): Promise<QueryResult<Q>> {
     this.push(query);
-    return this.results.get(JSON.stringify(query));
+    return this.results.get(JSON.stringify(query)) as QueryResult<Q>;
   }
 }

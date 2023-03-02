@@ -1,5 +1,6 @@
-import { expect } from '@shakala/common';
 import { describe, it } from 'vitest';
+
+import { expect } from '../../expect';
 
 import { BcryptAdapter } from './bcrypt.adapter';
 

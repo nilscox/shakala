@@ -3,9 +3,9 @@ import path from 'path';
 import { commandCreator, CommandHandler, ConfigPort, FilesystemPort, TOKENS } from '@shakala/common';
 import { injected } from 'brandi';
 
+import { EmailCompilerPort } from '../../adapters/email-compiler/email-compiler.port';
+import { EmailSenderPort } from '../../adapters/email-sender/email-sender.port';
 import { EmailRenderer } from '../../entities/email';
-import { EmailCompilerPort } from '../../ports/email-compiler/email-compiler.port';
-import { EmailSenderPort } from '../../ports/email-sender/email-sender.port';
 import { EMAIL_TOKENS } from '../../tokens';
 
 export enum EmailKind {

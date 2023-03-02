@@ -17,18 +17,15 @@
     "@shakala/email": "workspace:*",
     "@shakala/shared": "workspace:*",
     "@shakala/user": "workspace:*",
-    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "brandi": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "date-fns": "^2.29.3",
     "express": "5.0.0-beta.1",
-    "nanoid": "^4.0.1",
     "tough-cookie": "^4.1.2",
     "yup": "^1.0.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
     "@types/body-parser": "^1.19.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",

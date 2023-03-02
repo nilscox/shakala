@@ -1,5 +1,6 @@
-import { CryptoPort } from '@shakala/common';
 import * as bcrypt from 'bcrypt';
+
+import { CryptoPort } from './crypto.port';
 
 export class BcryptAdapter implements CryptoPort {
   async hash(input: string): Promise<string> {

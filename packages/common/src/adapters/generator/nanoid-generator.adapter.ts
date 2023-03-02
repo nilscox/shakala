@@ -1,7 +1,8 @@
 import { randomUUID } from 'crypto';
 
-import { GeneratorPort } from '@shakala/common';
 import { customAlphabet } from 'nanoid';
+
+import { GeneratorPort } from './generator.port';
 
 const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 12);
 

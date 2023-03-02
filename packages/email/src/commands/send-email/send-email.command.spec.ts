@@ -1,9 +1,9 @@
 import { expect, StubConfigAdapter, StubFilesystemAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
+import { FakeEmailCompilerAdapter } from '../../adapters/email-compiler/fake-email-compiler.adapter';
+import { StubEmailSenderAdapter } from '../../adapters/email-sender/stub-email-sender.adapter';
 import { Email } from '../../entities/email';
-import { FakeEmailCompilerAdapter } from '../../ports/email-compiler/fake-email-compiler.adapter';
-import { StubEmailSenderAdapter } from '../../ports/email-sender/stub-email-sender.adapter';
 
 import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email.command';
 
