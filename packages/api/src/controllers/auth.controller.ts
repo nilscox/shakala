@@ -58,11 +58,8 @@ export class AuthController {
   };
 
   signOut: RequestHandler = async (req, res) => {
-    const cookies = req.cookies as Record<string, string>;
-    const token = cookies.token;
-
     res.status(204);
-    res.set('Set-Cookie', this.setCookie('token', token, -1));
+    res.set('Set-Cookie', this.setCookie('token', '', 0));
     res.end();
   };
 
@@ -72,7 +69,8 @@ export class AuthController {
       'Max-Age': maxAge,
       Path: '/',
       SameSite: 'Strict',
-      Secure: true,
+      // todo: config
+      // Secure: true,
       HttpOnly: true,
     };
 

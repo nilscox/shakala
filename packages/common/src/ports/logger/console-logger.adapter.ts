@@ -46,8 +46,8 @@ export class ConsoleLoggerAdapter implements LoggerPort {
 
   tag?: string;
 
-  debug(...args: unknown[]): void {
-    this.log('debug', ...args);
+  verbose(...args: unknown[]): void {
+    this.log('verbose', ...args);
   }
 
   info(...args: unknown[]): void {

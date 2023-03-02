@@ -9,7 +9,8 @@
   "include": ["src/**/*.ts"],
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": ["DOM"]
   },
   "ts-node": {
     "esm": true,

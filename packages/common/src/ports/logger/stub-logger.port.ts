@@ -1,8 +1,8 @@
 import { LoggerPort } from './logger.port';
 
 export class StubLoggerAdapter extends Array<[string, unknown[]]> implements LoggerPort {
-  debug(...args: unknown[]): void {
-    this.push(['debug', args]);
+  verbose(...args: unknown[]): void {
+    this.push(['verbose', args]);
   }
 
   info(...args: unknown[]): void {

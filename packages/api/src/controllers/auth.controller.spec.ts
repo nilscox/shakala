@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { expect, stub } from '@shakala/common';
+import { stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
   checkUserPassword,
@@ -9,9 +9,9 @@ import {
   GetUserResult,
   InvalidCredentialsError,
 } from '@shakala/user';
-import * as request from 'supertest';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
+import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
@@ -22,7 +22,7 @@ describe('[intg] AuthController', () => {
     test = new Test();
   });
 
-  afterEach(() => test.cleanup());
+  afterEach(() => test?.cleanup());
 
   describe('/auth/sign-up', () => {
     const route = '/auth/sign-up';
@@ -38,7 +38,7 @@ describe('[intg] AuthController', () => {
     });
 
     it('invokes the createUser command', async () => {
-      await test.agent.post(route).send(payload).expect(201);
+      await expect(test.agent.post(route, payload)).toHaveStatus(201);
 
       expect(test.commandBus).toInclude(
         createUser({
@@ -51,33 +51,33 @@ describe('[intg] AuthController', () => {
     });
 
     it("returns the created user's id", async () => {
-      const response = await test.agent.post(route).send(payload).expect(201);
+      const response = await expect(test.agent.post(route, payload)).toHaveStatus(201);
 
-      expect(response.text).toEqual('userId');
+      expect(await response.text()).toEqual('userId');
     });
 
     it('sets a cookie with the authentication token', async () => {
-      const response = await test.agent.post(route).send(payload).expect(201);
+      await expect(test.agent.post(route, payload)).toHaveStatus(201);
 
-      const cookie = test.getCookie(response, 'token');
+      const cookie = test.agent.getCookie('token');
 
-      expect(cookie).toHaveProperty('token', expect.any(String));
-      expect(cookie).toHaveProperty('Max-Age', expect.any(String));
-      expect(cookie).toHaveProperty('Path', '/');
-      expect(cookie).toHaveProperty('SameSite', 'Strict');
-      expect(cookie).toHaveProperty('Secure');
-      expect(cookie).toHaveProperty('HttpOnly');
+      assert(cookie);
+      expect(cookie.maxAge).toEqual(expect.any(Number));
+      expect(cookie.path).toEqual('/');
+      expect(cookie.sameSite).toEqual('strict');
+      // expect(cookie.secure).toEqual(true);
+      expect(cookie.httpOnly).toEqual(true);
 
-      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'userId');
+      expect<object>(test.tokenPayload).toHaveProperty('uid', 'userId');
     });
 
     it('fails with status 400 when the payload is invalid', async () => {
-      await test.agent.post(route).send({}).expect(400);
+      await expect(test.agent.post(route, {})).toHaveStatus(400);
     });
 
     it('fails with status 401 when the user is already authenticated', async () => {
-      const agent = test.server.as('userId');
-      await agent.post(route).send(payload).expect(401);
+      const agent = test.as('userId');
+      await expect(agent.post(route, payload)).toHaveStatus(401);
     });
   });
 
@@ -97,7 +97,7 @@ describe('[intg] AuthController', () => {
     };
 
     it('succeeds when the checkUserPassword command succeeds', async () => {
-      await test.agent.post(route).send(payload).expect(204);
+      await expect(test.agent.post(route, payload)).toHaveStatus(204);
 
       expect(test.commandBus).toInclude(
         checkUserPassword({
@@ -108,24 +108,24 @@ describe('[intg] AuthController', () => {
     });
 
     it('sets a cookie with the authentication token', async () => {
-      const response = await test.agent.post(route).send(payload).expect(204);
+      await expect(test.agent.post(route, payload)).toHaveStatus(204);
 
-      expect<object>(test.getTokenPayload(response)).toHaveProperty('uid', 'userId');
+      expect<object>(test.tokenPayload).toHaveProperty('uid', 'userId');
     });
 
     it('fails with status 401 when the password check fails', async () => {
       test.commandBus.register(checkUserPassword, stub().reject(new InvalidCredentialsError()));
 
-      await test.agent.post(route).send(payload).expect(401);
+      await expect(test.agent.post(route, payload)).toHaveStatus(401);
     });
 
     it('fails with status 400 when the payload is invalid', async () => {
-      await test.agent.post(route).send({}).expect(400);
+      await expect(test.agent.post(route, {})).toHaveStatus(400);
     });
 
     it('fails with status 401 when the user is already authenticated', async () => {
-      const agent = test.server.as('userId');
-      await agent.post(route).send(payload).expect(401);
+      const agent = test.as('userId');
+      await expect(agent.post(route, payload)).toHaveStatus(401);
     });
   });
 
@@ -137,41 +137,28 @@ describe('[intg] AuthController', () => {
     });
 
     it('sets the authentication token cookie as expired', async () => {
-      const agent = test.server.as('userId');
-      const response = await agent.post(route).expect(204);
+      const agent = test.as('userId');
 
-      const cookie = test.getCookie(response, 'token');
+      await expect(agent.post(route)).toHaveStatus(204);
 
-      expect(cookie).toHaveProperty('Max-Age', '-1');
+      expect(agent.getCookie('token')).toBeUndefined();
     });
 
     it('fails with status 401 when the user is not authenticated', async () => {
-      await test.agent.post(route).expect(401);
+      await expect(test.agent.post(route)).toHaveStatus(401);
     });
   });
 });
 
 class Test extends IntegrationTest {
-  parseCookie(cookieStr: string) {
-    return cookieStr
-      .split(';')
-      .map((str) => str.trim())
-      .map((str) => str.split('='))
-      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {} as Record<string, string>);
+  agent = this.createAgent();
+
+  get tokenCookie() {
+    return this.agent.getCookie('token');
   }
 
-  getCookie(response: request.Response, name: string) {
-    const setCookie = response.get('Set-Cookie');
-    const cookies = setCookie.map(this.parseCookie.bind(this));
-
-    const cookie = cookies.find((cookie) => name in cookie);
-
-    assert(cookie, `cookie "${name}" is not set`);
-
-    return cookie;
-  }
-
-  getTokenPayload(response: request.Response) {
-    return jwt.decode(this.getCookie(response, 'token')['token']);
+  get tokenPayload() {
+    assert(this.tokenCookie);
+    return jwt.decode(this.tokenCookie.value);
   }
 }

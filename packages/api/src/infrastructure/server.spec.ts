@@ -5,10 +5,6 @@ import { describe, it } from 'vitest';
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
-declare global {
-  const fetch: (url: string) => Promise<unknown>;
-}
-
 describe('[intg] Server', () => {
   it('starts an HTTP server on a given host and port', async () => {
     const config = new StubConfigAdapter({

@@ -1,6 +1,8 @@
 import { queryCreator, QueryHandler } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { UserRepository } from '../repositories/user.repository';
+import { USER_TOKENS } from '../tokens';
 
 export type GetUserQuery = { id: string } | { email: string };
 
@@ -21,3 +23,5 @@ export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult 
     return this.userRepository.getUser(query);
   }
 }
+
+injected(GetUserHandler, USER_TOKENS.userRepository);

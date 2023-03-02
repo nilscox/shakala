@@ -23,31 +23,39 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const cookies = req.cookies as Record<string, string> | undefined;
   const token = cookies?.token;
 
+  if (!token) {
+    res.status(401).end();
+    return;
+  }
+
+  let userId;
+
   try {
-    assert(token);
+    const result = jwt.decode<{ uid: string }>(token);
 
-    const { uid: userId } = jwt.decode<{ uid: string }>(token);
-
-    assert(userId);
-    const user = await queryBus.execute(getUser({ id: userId }));
-
-    if (!user) {
-      res.status(500);
-      res.json({
-        code: 'InternalServerError',
-        message: 'No user found for this token',
-        details: { userId },
-      });
-
-      return;
-    }
-
-    req.userId = userId;
-
-    next();
+    assert(result.uid);
+    userId = result.uid;
   } catch {
     res.status(401).end();
+    return;
   }
+
+  const user = await queryBus.execute(getUser({ id: userId }));
+
+  if (!user) {
+    res.status(500);
+    res.json({
+      code: 'InternalServerError',
+      message: 'No user found for this token',
+      details: { userId },
+    });
+
+    return;
+  }
+
+  req.userId = userId;
+
+  next();
 };
 
 export const isUnauthenticated: RequestHandler = async (req, res, next) => {

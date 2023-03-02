@@ -36,16 +36,16 @@ export abstract class IntegrationTest {
     container.restore?.();
   }
 
-  get server() {
+  private get server() {
     return container.get(API_TOKENS.testServer);
   }
 
-  get agent() {
-    return this.server.agent;
+  createAgent() {
+    return this.server.agent();
   }
 
-  get as() {
-    return this.server.as.bind(this.server);
+  as(userId: string) {
+    return this.server.as(userId);
   }
 
   set user(user: { id: string; email?: string }) {

@@ -1,89 +1,61 @@
-import expect from '@nilscox/expect';
 import { StubQueryBus, TOKENS } from '@shakala/common';
 import { getUser } from '@shakala/user';
 import cookieParser from 'cookie-parser';
 import { millisecondsToSeconds } from 'date-fns';
 import express, { RequestHandler } from 'express';
-import request from 'supertest';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { container } from '../container';
+import { expect } from '../tests/expect';
+import { FetchAgent } from '../tests/fetch-agent';
 import { jwt } from '../utils/jwt';
 
 import { isAuthenticated, isUnauthenticated } from './guards';
 
 describe('[intg] guards', () => {
-  const createApp = (middleware: RequestHandler) => {
-    const app = express();
+  describe('isAuthenticated', () => {
+    let test: Test;
 
-    app.use(cookieParser());
-    app.use(middleware, (req, res) => {
-      res.end();
+    beforeEach(() => {
+      test = new Test(isAuthenticated);
     });
 
-    return app;
-  };
+    afterEach(() => {
+      container.restore?.();
+    });
 
-  beforeEach(() => {
-    const queryBus = new StubQueryBus();
-
-    queryBus.register(getUser({ id: 'userId' }), { id: 'userId', email: '' });
-
-    container.capture?.();
-    container.bind(TOKENS.queryBus).toConstant(queryBus);
-  });
-
-  afterEach(() => {
-    container.restore?.();
-  });
-
-  describe('isAuthenticated', () => {
     it('allows a request including a valid token', async () => {
       const token = jwt.encode({ uid: 'userId' });
-      const app = createApp(isAuthenticated);
+      const headers = new Headers({ cookie: `token=${token}` });
 
-      await request(app)
-        .get('/')
-        .set({ cookie: `token=${token}` })
-        .expect(200);
+      await expect(test.agent().get('/', { headers })).toHaveStatus(200);
     });
 
     it('denies a request including an invalid token', async () => {
       const token = jwt.encode({});
-      const app = createApp(isAuthenticated);
+      const headers = new Headers({ cookie: `token=${token}` });
 
-      await request(app)
-        .get('/')
-        .set({ cookie: `token=${token}` })
-        .expect(401);
+      await expect(test.agent().get('/', { headers })).toHaveStatus(401);
     });
 
     it('denies a request not including a cookie header', async () => {
-      const app = createApp(isAuthenticated);
-
-      await request(app).get('/').expect(401);
+      await expect(test.agent().get('/')).toHaveStatus(401);
     });
 
     it('denies a request including an expired token', async () => {
       const token = jwt.encode({ exp: millisecondsToSeconds(Date.now()) - 1 });
-      const app = createApp(isAuthenticated);
+      const headers = new Headers({ cookie: `token=${token}` });
 
-      await request(app)
-        .get('/')
-        .set({ cookie: `token=${token}` })
-        .expect(401);
+      await expect(test.agent().get('/', { headers })).toHaveStatus(401);
     });
 
     it('fails when the user does not exist', async () => {
       const token = jwt.encode({ uid: 'notUserId' });
-      const app = createApp(isAuthenticated);
+      const headers = { cookie: `token=${token}` };
 
-      const response = await request(app)
-        .get('/')
-        .set({ cookie: `token=${token}` })
-        .expect(500);
+      const response = await expect(test.agent().get('/', { headers })).toHaveStatus(500);
 
-      expect(response.body).toEqual({
+      expect(await response.json()).toEqual({
         code: 'InternalServerError',
         message: 'No user found for this token',
         details: {
@@ -94,20 +66,51 @@ describe('[intg] guards', () => {
   });
 
   describe('isUnauthenticated', () => {
-    it('allows a request not including a token', async () => {
-      const app = createApp(isUnauthenticated);
+    let test: Test;
 
-      await request(app).get('/').expect(200);
+    beforeEach(() => {
+      test = new Test(isUnauthenticated);
+    });
+
+    afterEach(() => {
+      container.restore?.();
+    });
+
+    it('allows a request not including a token', async () => {
+      await expect(test.agent().get('/')).toHaveStatus(200);
     });
 
     it('denies a request including valid token', async () => {
       const token = jwt.encode({});
-      const app = createApp(isUnauthenticated);
+      const headers = new Headers({ cookie: `token=${token}` });
 
-      await request(app)
-        .get('/')
-        .set({ cookie: `token=${token}` })
-        .expect(401);
+      await expect(test.agent().get('/', { headers })).toHaveStatus(401);
     });
   });
 });
+
+class Test {
+  private queryBus = new StubQueryBus();
+  private app = express();
+
+  constructor(guard: RequestHandler) {
+    this.app.use(cookieParser());
+
+    this.app.use(guard, (req, res) => {
+      res.end();
+    });
+
+    this.queryBus.register(getUser({ id: 'userId' }), { id: 'userId', email: '' });
+
+    container.capture?.();
+    container.bind(TOKENS.queryBus).toConstant(this.queryBus);
+  }
+
+  cleanup() {
+    container.restore?.();
+  }
+
+  agent() {
+    return new FetchAgent(this.app);
+  }
+}

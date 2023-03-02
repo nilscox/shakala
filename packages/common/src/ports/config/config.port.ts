@@ -1,6 +1,4 @@
 export interface ConfigPort {
-  init?(): Promise<void>;
-
   app: AppConfig;
   cors: CorsConfig;
   session: SessionConfig;

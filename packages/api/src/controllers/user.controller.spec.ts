@@ -1,7 +1,8 @@
-import { expect, stub } from '@shakala/common';
-import { InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
+import { stub } from '@shakala/common';
+import { GetUserResult, InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
+import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] UserController', () => {
@@ -11,7 +12,7 @@ describe('[intg] UserController', () => {
     test = new Test();
   });
 
-  afterEach(() => test.cleanup());
+  afterEach(() => test?.cleanup());
 
   describe('/user', () => {
     const route = '/user';
@@ -19,9 +20,9 @@ describe('[intg] UserController', () => {
     it("retrieves the authenticated user's profile", async () => {
       test.user = { id: 'userId', email: 'user@domain.tld' };
 
-      const response = await test.asUser.get(route).expect(200);
+      const response = await expect(test.asUser.get(route)).toHaveStatus(200);
 
-      expect(response.body).toEqual({
+      expect<GetUserResult>(await response.json()).toEqual({
         id: 'userId',
         email: 'user@domain.tld',
       });
@@ -36,7 +37,7 @@ describe('[intg] UserController', () => {
     });
 
     it('invokes the validateUserEmail command', async () => {
-      await test.asUser.get(route('token')).expect(200);
+      await expect(test.asUser.get(route('token'))).toHaveStatus(200);
 
       expect(test.commandBus).toInclude(
         validateUserEmail({
@@ -52,9 +53,9 @@ describe('[intg] UserController', () => {
         stub().reject(new InvalidEmailValidationTokenError('user@email.tld', 'token'))
       );
 
-      const response = await test.asUser.get(route('token')).expect(400);
+      const response = await expect(test.asUser.get(route('token'))).toHaveStatus(400);
 
-      expect<unknown>(response.body).toEqual({
+      expect(await response.json()).toEqual({
         code: 'InvalidEmailValidationTokenError',
         message: expect.any(String),
         details: {
@@ -65,13 +66,11 @@ describe('[intg] UserController', () => {
     });
 
     it('fails with status 401 when the user is not authenticated', async () => {
-      await test.agent.get(route('token')).expect(401);
+      await expect(test.createAgent().get(route('token'))).toHaveStatus(401);
     });
   });
 });
 
 class Test extends IntegrationTest {
-  get asUser() {
-    return this.as('userId');
-  }
+  asUser = this.as('userId');
 }

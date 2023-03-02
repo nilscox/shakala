@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { injected } from 'brandi';
@@ -15,18 +15,10 @@ import {
 } from './config.port';
 
 export class EnvConfigAdapter implements ConfigPort {
-  private version!: string;
+  private version = getPackageVersion();
 
   constructor() {
     dotenv.config();
-  }
-
-  async init() {
-    const packageJsonPath = path.resolve('..', '..', '..', 'package.json');
-    const pkg = await fs.readFile(new URL(packageJsonPath, import.meta.url));
-    const { version } = JSON.parse(String(pkg)) as { version: string };
-
-    this.version = version;
   }
 
   private get(key: string, type?: 'string'): string;
@@ -117,3 +109,11 @@ export class EnvConfigAdapter implements ConfigPort {
 }
 
 injected(EnvConfigAdapter);
+
+const getPackageVersion = () => {
+  const packageJsonPath = path.resolve('..', '..', '..', 'package.json');
+  const pkg = fs.readFileSync(new URL(packageJsonPath, import.meta.url));
+  const { version } = JSON.parse(String(pkg)) as { version: string };
+
+  return version;
+};

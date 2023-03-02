@@ -3,16 +3,10 @@ import {
   ConsoleLoggerAdapter,
   EnvConfigAdapter,
   LocalCommandBus,
-  RealFilesystemAdapter,
   LocalQueryBus,
+  RealFilesystemAdapter,
   TOKENS,
 } from '@shakala/common';
-import {
-  EMAIL_TOKENS,
-  MjmlEmailCompilerAdapter,
-  NodeMailerEmailSenderAdapter,
-  SendEmailHandler,
-} from '@shakala/email';
 import { Container, Token } from 'brandi';
 
 import { AuthController } from './controllers/auth.controller';
@@ -34,10 +28,6 @@ bind(TOKENS.filesystem, RealFilesystemAdapter);
 bind(TOKENS.generator, NanoidGeneratorAdapter);
 bind(TOKENS.publisher, EmitterEventPublisher);
 bind(TOKENS.queryBus, LocalQueryBus);
-
-bind(EMAIL_TOKENS.sendEmailHandler, SendEmailHandler);
-bind(EMAIL_TOKENS.emailCompiler, MjmlEmailCompilerAdapter);
-bind(EMAIL_TOKENS.emailSender, NodeMailerEmailSenderAdapter);
 
 bind(API_TOKENS.authController, AuthController);
 bind(API_TOKENS.userController, UserController);
