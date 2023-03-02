@@ -5,11 +5,14 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  TOKENS,
 } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { CommentReport } from '../../entities/comment-report.entity';
 import { CommentRepository } from '../../repositories/comment/comment.repository';
 import { CommentReportRepository } from '../../repositories/comment-report/comment-report.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 export type ReportCommentCommand = {
   commentId: string;
@@ -60,6 +63,14 @@ export class ReportCommentHandler implements CommandHandler<ReportCommentCommand
     this.publisher.publish(new CommentReportedEvent(commentId, userId, reason));
   }
 }
+
+injected(
+  ReportCommentHandler,
+  TOKENS.generator,
+  TOKENS.publisher,
+  THREAD_TOKENS.commentRepository,
+  THREAD_TOKENS.commentReportRepository
+);
 
 export class CommentReportedEvent extends DomainEvent {
   constructor(

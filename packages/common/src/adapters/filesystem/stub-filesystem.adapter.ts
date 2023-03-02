@@ -14,4 +14,6 @@ export class StubFilesystemAdapter implements FilesystemPort {
   async writeJSONFile(path: string, content: unknown): Promise<void> {
     this.files[path] = JSON.stringify(content, null, 2);
   }
+
+  dumpRepository = () => Promise.resolve();
 }

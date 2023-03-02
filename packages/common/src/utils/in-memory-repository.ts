@@ -32,11 +32,15 @@ export abstract class InMemoryRepository<Item extends Entity> {
 
   async save(item: Item): Promise<void> {
     this.add(item);
+    await this.dump?.();
   }
 
   async delete(item: Item): Promise<void> {
     this.items.delete(item.id);
+    await this.dump?.();
   }
+
+  dump?(): Promise<void>;
 
   clear() {
     this.items.clear();

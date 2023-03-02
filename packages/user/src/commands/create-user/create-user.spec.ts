@@ -48,7 +48,7 @@ class Test {
   }
 
   static readonly defaultCommand = createUser({
-    id: 'id',
+    userId: 'id',
     nick: 'nick',
     email: 'email',
     password: 'password',

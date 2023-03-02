@@ -3,6 +3,7 @@ import {
   StubCryptoAdapter,
   StubEventPublisher,
   StubGeneratorAdapter,
+  StubLoggerAdapter,
   StubQueryBus,
   TOKENS,
 } from '@shakala/common';
@@ -22,6 +23,8 @@ export abstract class IntegrationTest {
 
   constructor() {
     container.capture?.();
+
+    container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inSingletonScope();
 
     container.bind(TOKENS.commandBus).toConstant(this.commandBus);
     container.bind(TOKENS.crypto).toConstant(this.crypto);

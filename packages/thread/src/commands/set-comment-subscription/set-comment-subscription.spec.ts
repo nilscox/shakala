@@ -10,7 +10,7 @@ import {
   CommentAlreadySubscribedError,
   CommentNotSubscribedError,
   setCommentSubscription,
-  SetCommentSubscriptionCommandHandler,
+  SetCommentSubscriptionHandler,
 } from './set-comment-subscription';
 
 describe('SetCommentSubscriptionCommand', () => {
@@ -94,7 +94,7 @@ class Test {
   commentRepository = new InMemoryCommentRepository([this.comment, this.reply]);
   commentSubscriptionRepository = new InMemoryCommentSubscriptionRepository();
 
-  handler = new SetCommentSubscriptionCommandHandler(
+  handler = new SetCommentSubscriptionHandler(
     this.generator,
     this.publisher,
     this.commentRepository,

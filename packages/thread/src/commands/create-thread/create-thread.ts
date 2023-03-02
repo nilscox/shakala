@@ -1,8 +1,17 @@
-import { commandCreator, CommandHandler, DatePort, DomainEvent, EventPublisher } from '@shakala/common';
+import {
+  commandCreator,
+  CommandHandler,
+  DatePort,
+  DomainEvent,
+  EventPublisher,
+  TOKENS,
+} from '@shakala/common';
+import { injected } from 'brandi';
 
 import { Markdown } from '../../entities/markdown.value-object';
 import { Thread } from '../../entities/thread.entity';
 import { ThreadRepository } from '../../repositories/thread/thread.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 export type CreateThreadCommand = {
   threadId: string;
@@ -13,7 +22,7 @@ export type CreateThreadCommand = {
 };
 
 const symbol = Symbol('CreateThreadCommand');
-export const createComment = commandCreator<CreateThreadCommand>(symbol);
+export const createThread = commandCreator<CreateThreadCommand>(symbol);
 
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> {
   symbol = symbol;
@@ -40,6 +49,8 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> 
     this.publisher.publish(new ThreadCreatedEvent(thread.id));
   }
 }
+
+injected(CreateThreadHandler, TOKENS.date, TOKENS.publisher, THREAD_TOKENS.threadRepository);
 
 export class ThreadCreatedEvent extends DomainEvent {
   constructor(threadId: string) {

@@ -16,6 +16,7 @@
     "@shakala/common": "workspace:*",
     "@shakala/email": "workspace:*",
     "@shakala/shared": "workspace:*",
+    "@shakala/thread": "workspace:*",
     "@shakala/user": "workspace:*",
     "body-parser": "^1.20.1",
     "brandi": "^5.0.0",

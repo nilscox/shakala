@@ -5,12 +5,15 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  TOKENS,
 } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { Comment } from '../../entities/comment.entity';
 import { Markdown } from '../../entities/markdown.value-object';
 import { Message } from '../../entities/message.entity';
 import { CommentRepository } from '../../repositories/comment/comment.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 type CreateCommentCommand = {
   commentId: string;
@@ -61,6 +64,14 @@ export class CreateCommentHandler implements CommandHandler<CreateCommentCommand
     }
   }
 }
+
+injected(
+  CreateCommentHandler,
+  TOKENS.publisher,
+  TOKENS.generator,
+  TOKENS.date,
+  THREAD_TOKENS.commentRepository
+);
 
 export class CommentCreatedEvent extends DomainEvent {
   constructor(commentId: string) {

@@ -5,11 +5,14 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  TOKENS,
 } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { CommentSubscription } from '../../entities/comment-subscription.entity';
 import { CommentRepository } from '../../repositories/comment/comment.repository';
 import { CommentSubscriptionRepository } from '../../repositories/comment-subscription/comment-subscription.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 export type SetCommentSubscriptionCommand = {
   commentId: string;
@@ -20,7 +23,7 @@ export type SetCommentSubscriptionCommand = {
 const symbol = Symbol('SetCommentSubscriptionCommand');
 export const setCommentSubscription = commandCreator<SetCommentSubscriptionCommand>(symbol);
 
-export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetCommentSubscriptionCommand> {
+export class SetCommentSubscriptionHandler implements CommandHandler<SetCommentSubscriptionCommand> {
   symbol = symbol;
 
   constructor(
@@ -74,6 +77,14 @@ export class SetCommentSubscriptionCommandHandler implements CommandHandler<SetC
     this.publisher.publish(new CommentSubscriptionDeletedEvent(subscription.id));
   }
 }
+
+injected(
+  SetCommentSubscriptionHandler,
+  TOKENS.generator,
+  TOKENS.publisher,
+  THREAD_TOKENS.commentRepository,
+  THREAD_TOKENS.commentSubscriptionRepository
+);
 
 export class CommentSubscriptionCreatedEvent extends DomainEvent {
   constructor(subscriptionId: string) {

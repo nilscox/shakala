@@ -27,13 +27,13 @@ export class AuthController {
 
   signUp: RequestHandler = async (req, res) => {
     const body = await validateRequestBody(req, signUpBodySchema);
-    const id = await this.generator.generateId();
+    const userId = await this.generator.generateId();
 
-    await this.commandBus.execute(createUser({ id, ...body }));
+    await this.commandBus.execute(createUser({ userId, ...body }));
 
     res.status(201);
-    res.set('Set-Cookie', this.setToken(id));
-    res.send(id);
+    res.set('Set-Cookie', this.setToken(userId));
+    res.send(userId);
   };
 
   signIn: RequestHandler = async (req, res) => {

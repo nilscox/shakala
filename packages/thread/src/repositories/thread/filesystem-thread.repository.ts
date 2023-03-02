@@ -1,4 +1,5 @@
-import { FilesystemPort } from '@shakala/common';
+import { FilesystemPort, TOKENS } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { Thread } from '../../entities/thread.entity';
 
@@ -12,8 +13,7 @@ export class FilesystemThreadRepository extends InMemoryThreadRepository impleme
     super();
   }
 
-  override async save(thread: Thread): Promise<void> {
-    await super.save(thread);
-    await this.filesystem.writeJSONFile('threads.json', this.all());
-  }
+  dump = () => this.filesystem.dumpRepository(this);
 }
+
+injected(FilesystemThreadRepository, TOKENS.filesystem);

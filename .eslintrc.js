@@ -35,6 +35,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-argument': 'off',
 
+    '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/require-await': 'off',

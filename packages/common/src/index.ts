@@ -22,7 +22,7 @@ export * from './adapters/date/native-date.adapter';
 export * from './adapters/date/stub-date.adapter';
 
 export * from './adapters/filesystem/filesystem.port';
-export * from './adapters/filesystem/real-filesystem.adapter';
+export * from './adapters/filesystem/local-filesystem.adapter';
 export * from './adapters/filesystem/stub-filesystem.adapter';
 
 export * from './adapters/generator/generator.port';

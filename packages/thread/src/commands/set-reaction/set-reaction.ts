@@ -5,11 +5,14 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  TOKENS,
 } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { ReactionType, Reaction } from '../../entities/reaction.entity';
 import { CommentRepository } from '../../repositories/comment/comment.repository';
 import { ReactionRepository } from '../../repositories/reaction/reaction.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 export type SetReactionCommand = {
   commentId: string;
@@ -20,7 +23,7 @@ export type SetReactionCommand = {
 const symbol = Symbol('SetReactionCommand');
 export const setReaction = commandCreator<SetReactionCommand>(symbol);
 
-export class SetReactionCommandHandler implements CommandHandler<SetReactionCommand> {
+export class SetReactionHandler implements CommandHandler<SetReactionCommand> {
   symbol = symbol;
 
   constructor(
@@ -65,6 +68,14 @@ export class SetReactionCommandHandler implements CommandHandler<SetReactionComm
     );
   }
 }
+
+injected(
+  SetReactionHandler,
+  TOKENS.generator,
+  TOKENS.publisher,
+  THREAD_TOKENS.commentRepository,
+  THREAD_TOKENS.reactionRepository
+);
 
 export class CannotSetReactionOnOwnCommentError extends BaseError<{ commentId: string }> {
   status = 400;

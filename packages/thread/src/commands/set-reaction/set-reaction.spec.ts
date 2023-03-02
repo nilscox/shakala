@@ -10,7 +10,7 @@ import {
   CannotSetReactionOnOwnCommentError,
   CommentReactionChangedEvent,
   setReaction,
-  SetReactionCommandHandler,
+  SetReactionHandler,
 } from './set-reaction';
 
 describe('SetReactionCommand', () => {
@@ -94,7 +94,7 @@ class Test {
   commentRepository = new InMemoryCommentRepository([this.comment]);
   reactionRepository = new InMemoryReactionRepository();
 
-  handler = new SetReactionCommandHandler(
+  handler = new SetReactionHandler(
     this.generator,
     this.publisher,
     this.commentRepository,

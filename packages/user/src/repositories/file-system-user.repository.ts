@@ -1,8 +1,6 @@
 import { FilesystemPort, TOKENS } from '@shakala/common';
 import { injected } from 'brandi';
 
-import { User } from '../entities/user.entity';
-
 import { InMemoryUserRepository } from './in-memory-user.repository';
 import { UserRepository } from './user.repository';
 
@@ -11,10 +9,7 @@ export class FilesystemUserRepository extends InMemoryUserRepository implements 
     super();
   }
 
-  override async save(user: User): Promise<void> {
-    await super.save(user);
-    await this.filesystem.writeJSONFile('users.json', this.all());
-  }
+  override dump = () => this.filesystem.dumpRepository(this);
 }
 
 injected(FilesystemUserRepository, TOKENS.filesystem);

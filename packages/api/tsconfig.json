@@ -4,6 +4,7 @@
     { "path": "../common/tsconfig.json" },
     { "path": "../email/tsconfig.json" },
     { "path": "../shared/tsconfig.json" },
+    { "path": "../thread/tsconfig.json" },
     { "path": "../user/tsconfig.json" }
   ],
   "include": ["src/**/*.ts"],

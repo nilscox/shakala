@@ -35,8 +35,16 @@ export class FetchAgent {
   }
 
   post(url: string, body?: unknown, options: RequestInit = {}) {
+    return this.mutation('POST', url, body, options);
+  }
+
+  put(url: string, body?: unknown, options: RequestInit = {}) {
+    return this.mutation('PUT', url, body, options);
+  }
+
+  private mutation(method: string, url: string, body?: unknown, options: RequestInit = {}) {
     return this.fetch(url, {
-      method: 'POST',
+      method,
       body: JSON.stringify(body),
       ...options,
       headers: {

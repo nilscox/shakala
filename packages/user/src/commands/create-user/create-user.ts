@@ -15,7 +15,7 @@ import { UserRepository } from '../../repositories/user.repository';
 import { USER_TOKENS } from '../../tokens';
 
 export type CreateUserCommand = {
-  id: string;
+  userId: string;
   nick: string;
   email: string;
   password: string;
@@ -36,7 +36,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
 
   async handle(command: CreateUserCommand): Promise<void> {
     const user = new User({
-      id: command.id,
+      id: command.userId,
       nick: new Nick(command.nick),
       email: command.email,
       hashedPassword: await this.crypto.hash(command.password),

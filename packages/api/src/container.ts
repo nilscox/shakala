@@ -6,12 +6,15 @@ import {
   LocalCommandBus,
   LocalQueryBus,
   NanoidGeneratorAdapter,
-  RealFilesystemAdapter,
+  NativeDateAdapter,
+  LocalFilesystemAdapter,
   TOKENS,
 } from '@shakala/common';
 import { Container, Token } from 'brandi';
 
 import { AuthController } from './controllers/auth.controller';
+import { CommentController } from './controllers/comment.controller';
+import { ThreadController } from './controllers/thread.controller';
 import { UserController } from './controllers/user.controller';
 import { EmitterEventPublisher } from './infrastructure/emitter-event-publisher';
 import { Server } from './infrastructure/server';
@@ -24,13 +27,16 @@ container.bind(TOKENS.logger).toInstance(ConsoleLoggerAdapter).inTransientScope(
 bind(TOKENS.commandBus, LocalCommandBus);
 bind(TOKENS.config, EnvConfigAdapter);
 bind(TOKENS.crypto, BcryptAdapter);
-bind(TOKENS.filesystem, RealFilesystemAdapter);
+bind(TOKENS.date, NativeDateAdapter);
+bind(TOKENS.filesystem, LocalFilesystemAdapter);
 bind(TOKENS.generator, NanoidGeneratorAdapter);
 bind(TOKENS.publisher, EmitterEventPublisher);
 bind(TOKENS.queryBus, LocalQueryBus);
 
 bind(API_TOKENS.authController, AuthController);
 bind(API_TOKENS.userController, UserController);
+bind(API_TOKENS.threadController, ThreadController);
+bind(API_TOKENS.commentController, CommentController);
 bind(API_TOKENS.server, Server);
 
 function bind<Cls>(token: Token<Cls>, Instance: ClassType<Cls>) {

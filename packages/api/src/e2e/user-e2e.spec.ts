@@ -8,7 +8,7 @@ import { TestServer } from '../tests/test-server';
 import { API_TOKENS } from '../tokens';
 
 describe('[e2e] user', () => {
-  test('As a user, I can sign up, sign out and sign back in', async () => {
+  test('As a future user, I can sign up, sign out and sign back in', async () => {
     container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inContainerScope();
     container.bind(API_TOKENS.testServer).toInstance(TestServer).inContainerScope();
 

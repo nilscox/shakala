@@ -27,3 +27,5 @@ export class UserModule extends Module {
     this.bindEventListener(UserCreatedEvent, USER_TOKENS.sendEmailToCreatedUserHandler);
   }
 }
+
+export class TestUserModule extends UserModule {}

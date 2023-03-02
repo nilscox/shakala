@@ -12,7 +12,7 @@ import { Message } from '../../entities/message.entity';
 import { create } from '../../factories';
 import { InMemoryCommentRepository } from '../../repositories/comment/in-memory-comment.repository';
 
-import { CommentEditedEvent, editComment, EditCommentCommandHandler } from './edit-comment';
+import { CommentEditedEvent, editComment, EditCommentHandler } from './edit-comment';
 
 describe('editComment', () => {
   let test: Test;
@@ -63,12 +63,7 @@ class Test {
   publisher = new StubEventPublisher();
   commentRepository = new InMemoryCommentRepository([this.comment]);
 
-  handler = new EditCommentCommandHandler(
-    this.generator,
-    this.dateAdapter,
-    this.publisher,
-    this.commentRepository
-  );
+  handler = new EditCommentHandler(this.generator, this.dateAdapter, this.publisher, this.commentRepository);
 
   constructor() {
     this.generator.nextId = 'messageId';

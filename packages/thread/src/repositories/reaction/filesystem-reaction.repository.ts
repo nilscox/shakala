@@ -1,4 +1,5 @@
-import { FilesystemPort } from '@shakala/common';
+import { FilesystemPort, TOKENS } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { Reaction } from '../../entities/reaction.entity';
 
@@ -12,8 +13,7 @@ export class FilesystemReactionRepository extends InMemoryReactionRepository imp
     super();
   }
 
-  override async save(reaction: Reaction): Promise<void> {
-    await super.save(reaction);
-    await this.filesystem.writeJSONFile('reactions.json', this.all());
-  }
+  override dump = () => this.filesystem.dumpRepository(this);
 }
+
+injected(FilesystemReactionRepository, TOKENS.filesystem);

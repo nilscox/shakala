@@ -1,8 +1,6 @@
 import { FilesystemPort, TOKENS } from '@shakala/common';
 import { injected } from 'brandi';
 
-import { CommentSubscription } from '../../entities/comment-subscription.entity';
-
 import { CommentSubscriptionRepository } from './comment-subscription.repository';
 import { InMemoryCommentSubscriptionRepository } from './in-memory-comment-subscription.repository';
 
@@ -14,10 +12,7 @@ export class FilesystemCommentSubscriptionRepository
     super();
   }
 
-  override async save(comment: CommentSubscription): Promise<void> {
-    await super.save(comment);
-    await this.filesystem.writeJSONFile('comment-subscriptions.json', this.all());
-  }
+  override dump = () => this.filesystem.dumpRepository(this);
 }
 
 injected(FilesystemCommentSubscriptionRepository, TOKENS.filesystem);

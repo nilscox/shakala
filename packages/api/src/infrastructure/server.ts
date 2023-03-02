@@ -5,19 +5,19 @@ import { BaseError, ConfigPort, LoggerPort, TOKENS } from '@shakala/common';
 import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
-import express, { ErrorRequestHandler, Express } from 'express';
+import express, { ErrorRequestHandler, Express, RequestHandler } from 'express';
 import * as yup from 'yup';
 
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
-import { Application } from './application';
+import { Application, ProductionApplication } from './application';
 
 export class Server {
   protected app: Express;
   protected server?: HttpServer;
 
-  protected application = new Application();
+  protected application: Application = new ProductionApplication();
 
   constructor(private readonly logger: LoggerPort, private readonly config: ConfigPort) {
     this.app = express();
@@ -27,10 +27,13 @@ export class Server {
 
     this.app.use('/auth', container.get(API_TOKENS.authController).router);
     this.app.use('/user', container.get(API_TOKENS.userController).router);
+    this.app.use('/thread', container.get(API_TOKENS.threadController).router);
+    this.app.use('/comment', container.get(API_TOKENS.commentController).router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);
     this.app.use(this.fallbackErrorHandler);
+    this.app.use(this.notFoundHandler);
   }
 
   async init() {
@@ -102,6 +105,11 @@ export class Server {
 
     res.status(500);
     res.send(body);
+  };
+
+  private notFoundHandler: RequestHandler = (req, res) => {
+    res.status(404);
+    res.end();
   };
 }
 

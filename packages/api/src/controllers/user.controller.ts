@@ -16,8 +16,8 @@ export class UserController {
   getUserProfile: RequestHandler = async (req, res) => {
     const result = await this.queryBus.execute(getUser({ id: req.userId }));
 
+    res.status(200);
     res.json(result);
-    res.end();
   };
 
   validateEmail: RequestHandler<{ token: string }> = async (req, res) => {

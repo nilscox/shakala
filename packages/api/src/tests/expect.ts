@@ -26,15 +26,17 @@ expect.addAssertion({
 
   async prepareAsync(promise, expectedStatus) {
     const response = await promise;
-    const clone = response.clone();
 
     return {
       actual: response.status,
       expected: expectedStatus,
       meta: {
         response,
-        text: await clone.text(),
-        json: await clone.json().catch(() => undefined),
+        text: await response.clone().text(),
+        json: await response
+          .clone()
+          .json()
+          .catch(() => undefined),
       },
     };
   },
@@ -58,6 +60,16 @@ expect.addAssertion({
       body: error.meta.json ?? error.meta.text,
     };
 
-    return this.formatter.expected(response).append('to have status').value(error.expected).result();
+    return (
+      this.formatter
+        // todo: allow to pass options to formatter.expected
+        // todo: allow depth: null
+        // .expected(response, { depth: null })
+        .append('expected')
+        .value(response, { depth: 10 })
+        .append('to have status')
+        .value(error.expected)
+        .result()
+    );
   },
 });

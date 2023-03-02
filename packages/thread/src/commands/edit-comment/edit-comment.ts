@@ -6,11 +6,14 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  TOKENS,
 } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { Markdown } from '../../entities/markdown.value-object';
 import { Message } from '../../entities/message.entity';
 import { CommentRepository } from '../../repositories/comment/comment.repository';
+import { THREAD_TOKENS } from '../../tokens';
 
 export type EditCommentCommand = {
   commentId: string;
@@ -21,7 +24,7 @@ export type EditCommentCommand = {
 const symbol = Symbol('EditCommentCommand');
 export const editComment = commandCreator<EditCommentCommand>(symbol);
 
-export class EditCommentCommandHandler implements CommandHandler<EditCommentCommand> {
+export class EditCommentHandler implements CommandHandler<EditCommentCommand> {
   symbol = symbol;
 
   constructor(
@@ -52,6 +55,14 @@ export class EditCommentCommandHandler implements CommandHandler<EditCommentComm
     this.publisher.publish(new CommentEditedEvent(comment.id));
   }
 }
+
+injected(
+  EditCommentHandler,
+  TOKENS.generator,
+  TOKENS.date,
+  TOKENS.publisher,
+  THREAD_TOKENS.commentRepository
+);
 
 export class UserMustBeAuthorError extends BaseError<{ userId: string; commentId: string }> {
   constructor(userId: string, commentId: string) {

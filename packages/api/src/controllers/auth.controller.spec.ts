@@ -42,7 +42,7 @@ describe('[intg] AuthController', () => {
 
       expect(test.commandBus).toInclude(
         createUser({
-          id: 'userId',
+          userId: 'userId',
           nick: 'user',
           email: 'user@domain.tld',
           password: 'password',
