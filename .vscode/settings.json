@@ -4,6 +4,7 @@
     "packages/common",
     "packages/email",
     "packages/shared",
+    "packages/thread",
     "packages/user"
   ],
   "eslint.runtime": "node"
