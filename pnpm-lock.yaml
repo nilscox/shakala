@@ -136,6 +136,25 @@ importers:
       typescript: 4.9.5
       vitest: 0.29.1
 
+  packages/thread:
+    specifiers:
+      '@shakala/common': workspace:*
+      '@shakala/shared': workspace:*
+      '@types/node': ^18.14.1
+      brandi: ^5.0.0
+      ts-node: ^10.9.1
+      typescript: ^4.9.5
+      vitest: ^0.29.1
+    dependencies:
+      '@shakala/common': link:../common
+      '@shakala/shared': link:../shared
+      brandi: 5.0.0
+    devDependencies:
+      '@types/node': 18.14.2
+      ts-node: 10.9.1_ellgaeuoqnti3hful2ny2iugba
+      typescript: 4.9.5
+      vitest: 0.29.2
+
   packages/user:
     specifiers:
       '@shakala/common': workspace:*
@@ -520,7 +539,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 18.14.1
+      '@types/node': 18.14.2
     dev: true
 
   /@types/cookie-parser/1.4.3:
@@ -532,7 +551,7 @@ packages:
   /@types/express-serve-static-core/4.17.33:
     resolution: {integrity: sha512-TPBqmR/HRYI3eC2E5hmiivIzv+bidAfXofM+sbonAGvyDhySGw9/PQZFt2BLOrjUUR++4eJVpx6KnLQK1Fk9tA==}
     dependencies:
-      '@types/node': 18.14.1
+      '@types/node': 18.14.2
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
     dev: true
@@ -614,7 +633,7 @@ packages:
     resolution: {integrity: sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 18.14.1
+      '@types/node': 18.14.2
     dev: true
 
   /@types/tough-cookie/4.0.2:
@@ -3537,14 +3556,6 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rollup/3.18.0:
-    resolution: {integrity: sha512-J8C6VfEBjkvYPESMQYxKHxNOh4A5a3FlP+0BETGo34HEcE4eTlgCrO2+eWzlu2a/sHs2QUkZco+wscH7jhhgWg==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /router/2.0.0-beta.1:
     resolution: {integrity: sha512-GLoYgkhAGAiwVda5nt6Qd4+5RAPuQ4WIYLlZ+mxfYICI+22gnIB3eCfmhgV8+uJNPS1/39DOYi/vdrrz0/ouKA==}
     engines: {node: '>= 0.10'}
@@ -3874,6 +3885,37 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: false
 
+  /ts-node/10.9.1_ellgaeuoqnti3hful2ny2iugba:
+    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.9
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.3
+      '@types/node': 18.14.2
+      acorn: 8.8.2
+      acorn-walk: 8.2.0
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.5
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    dev: true
+
   /ts-node/10.9.1_tncu2ai53lzgmizdedur7lbibe:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
@@ -4171,7 +4213,7 @@ packages:
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
-      rollup: 3.18.0
+      rollup: 3.17.3
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

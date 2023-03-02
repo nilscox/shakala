@@ -107,6 +107,11 @@ expect.addAssertion({
 
   assert(events, _, { event: expected }) {
     for (const event of events) {
+      // todo: check in this.compare
+      if (event.constructor !== expected.constructor) {
+        continue;
+      }
+
       if (this.compare(event, expected)) {
         return event;
       }

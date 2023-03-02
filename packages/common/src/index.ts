@@ -17,6 +17,10 @@ export * from './adapters/crypto/bcrypt.adapter';
 export * from './adapters/crypto/crypto.port';
 export * from './adapters/crypto/stub-crypto.adapter';
 
+export * from './adapters/date/date.port';
+export * from './adapters/date/native-date.adapter';
+export * from './adapters/date/stub-date.adapter';
+
 export * from './adapters/filesystem/filesystem.port';
 export * from './adapters/filesystem/real-filesystem.adapter';
 export * from './adapters/filesystem/stub-filesystem.adapter';
@@ -37,6 +41,8 @@ export * from './ddd/domain-event';
 export * from './ddd/entity';
 export * from './ddd/value-object';
 
+export * from './entities/timestamp.value-object';
+
 export * from './expect';
 export * from './tokens';
 
@@ -48,5 +54,6 @@ export * from './utils/entity-not-found-error';
 export * from './utils/in-memory-repository';
 export * from './utils/module';
 export * from './utils/random-id';
+export * from './utils/repository';
 export * from './utils/stub-event-publisher';
 export * from './utils/stub';

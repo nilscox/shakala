@@ -9,7 +9,7 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
-    "test": "NODE_NO_WARNINGs=1 vitest --pass-with-no-tests"
+    "test": "NODE_NO_WARNINGSs=1 vitest --pass-with-no-tests"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
