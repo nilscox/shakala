@@ -5,7 +5,6 @@ import { CommentController } from './controllers/comment.controller';
 import { ThreadController } from './controllers/thread.controller';
 import { UserController } from './controllers/user.controller';
 import { Server } from './infrastructure/server';
-import { TestServer } from './tests/test-server';
 
 export const API_TOKENS = {
   controllers: {
@@ -15,5 +14,4 @@ export const API_TOKENS = {
     commentController: token<CommentController>('commentController'),
   },
   server: token<Server>('server'),
-  testServer: token<TestServer>('testServer'),
 };

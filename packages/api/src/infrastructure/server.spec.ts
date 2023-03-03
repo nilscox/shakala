@@ -1,20 +1,27 @@
 import expect from '@nilscox/expect';
-import { StubConfigAdapter, StubLoggerAdapter, TOKENS } from '@shakala/common';
+import { StubConfigAdapter, TOKENS } from '@shakala/common';
 import { describe, it } from 'vitest';
 
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
+import { Application } from './application';
+
 describe('[intg] Server', () => {
   it('starts an HTTP server on a given host and port', async () => {
+    await new Application().init({
+      common: { logger: 'stub' },
+      email: { emailSender: 'stub' },
+      thread: { repositories: 'memory' },
+      user: { repositories: 'memory' },
+      api: { server: 'prod' },
+    });
+
     const config = new StubConfigAdapter({
       app: { host: 'localhost', port: 4242 },
     });
 
-    const logger = new StubLoggerAdapter();
-
     container.bind(TOKENS.config).toConstant(config);
-    container.bind(TOKENS.logger).toConstant(logger);
 
     const server = container.get(API_TOKENS.server);
 

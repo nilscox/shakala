@@ -5,7 +5,6 @@ import { ClassType } from '@shakala/shared';
 import { Container, DependencyModule, Token } from 'brandi';
 
 import { LocalCommandBus } from '../adapters/command-bus/local-command-bus';
-import { LoggerPort } from '../adapters/logger/logger.port';
 import { LocalQueryBus } from '../adapters/query-bus/local-query-bus.adapter';
 import { CommandHandler } from '../cqs/command-handler';
 import { EventHandler } from '../cqs/event-handler';
@@ -13,16 +12,30 @@ import { QueryHandler } from '../cqs/query-handler';
 import { DomainEvent } from '../ddd/domain-event';
 import { TOKENS } from '../tokens';
 
+export type ModuleConfig<M extends Module> = M extends { configure(config: infer Config): void }
+  ? Config
+  : never;
+
+export interface Module {
+  configure(config?: unknown): void;
+  init?(): Promise<void>;
+}
+
 export abstract class Module extends DependencyModule {
-  logger: LoggerPort;
+  private name: string;
 
   constructor(protected readonly container: Container) {
     super();
-    this.logger = container.get(TOKENS.logger);
-    this.logger.tag = new.target.name;
+    this.name = new.target.name;
   }
 
-  abstract init(): Promise<void>;
+  get logger() {
+    const logger = this.container.get(TOKENS.logger);
+
+    logger.tag = this.name;
+
+    return logger;
+  }
 
   get commandBus() {
     const commandBus = this.container.get(TOKENS.commandBus);
@@ -40,14 +53,24 @@ export abstract class Module extends DependencyModule {
     return queryBus;
   }
 
-  protected registerCommandHandler(token: Token<CommandHandler<unknown>>) {
+  protected registerCommandHandler(
+    token: Token<CommandHandler<unknown>>,
+    Instance: ClassType<CommandHandler<unknown>>
+  ) {
+    this.bindToken(token, Instance);
+
     const handler = this.container.get(token);
 
     this.logger.verbose('registering command', handler.constructor.name);
     this.commandBus.register(handler);
   }
 
-  protected registerQueryHandler(token: Token<QueryHandler<unknown, unknown>>) {
+  protected registerQueryHandler(
+    token: Token<QueryHandler<unknown, unknown>>,
+    Instance: ClassType<QueryHandler<unknown, unknown>>
+  ) {
+    this.bindToken(token, Instance);
+
     const handler = this.container.get(token);
 
     this.logger.verbose('registering query', handler.constructor.name);

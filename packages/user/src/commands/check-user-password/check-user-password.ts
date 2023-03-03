@@ -34,7 +34,7 @@ export class CheckUserPasswordHandler implements CommandHandler<CheckUserPasswor
   }
 }
 
-injected(CheckUserPasswordHandler, TOKENS.crypto, USER_TOKENS.userRepository);
+injected(CheckUserPasswordHandler, TOKENS.crypto, USER_TOKENS.repositories.userRepository);
 
 export class InvalidCredentialsError extends BaseError {
   constructor() {

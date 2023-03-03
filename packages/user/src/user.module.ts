@@ -6,26 +6,28 @@ import { ValidateUserEmailHandler } from './commands/validate-user-email/validat
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
 import { GetUserHandler } from './queries/get-user';
 import { FilesystemUserRepository } from './repositories/file-system-user.repository';
+import { InMemoryUserRepository } from './repositories/in-memory-user.repository';
 import { USER_TOKENS } from './tokens';
 
+type ThreadModuleConfig = {
+  repositories: 'memory' | 'filesystem';
+};
+
 export class UserModule extends Module {
-  async init() {
-    this.bindToken(USER_TOKENS.userRepository, FilesystemUserRepository);
-    // this.bindToken(USER_TOKENS.userRepository, InMemoryUserRepository);
-    this.bindToken(USER_TOKENS.createUserHandler, CreateUserHandler);
-    this.bindToken(USER_TOKENS.checkUserPasswordHandler, CheckUserPasswordHandler);
-    this.bindToken(USER_TOKENS.validateUserEmailHandler, ValidateUserEmailHandler);
-    this.bindToken(USER_TOKENS.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
-    this.bindToken(USER_TOKENS.getUserHandler, GetUserHandler);
+  configure(config: ThreadModuleConfig) {
+    if (config.repositories === 'memory') {
+      this.bindToken(USER_TOKENS.repositories.userRepository, InMemoryUserRepository);
+    } else {
+      this.bindToken(USER_TOKENS.repositories.userRepository, FilesystemUserRepository);
+    }
 
-    this.registerCommandHandler(USER_TOKENS.checkUserPasswordHandler);
-    this.registerCommandHandler(USER_TOKENS.createUserHandler);
-    this.registerCommandHandler(USER_TOKENS.validateUserEmailHandler);
+    this.registerCommandHandler(USER_TOKENS.commands.createUserHandler, CreateUserHandler);
+    this.registerCommandHandler(USER_TOKENS.commands.checkUserPasswordHandler, CheckUserPasswordHandler);
+    this.registerCommandHandler(USER_TOKENS.commands.validateUserEmailHandler, ValidateUserEmailHandler);
 
-    this.registerQueryHandler(USER_TOKENS.getUserHandler);
+    this.registerQueryHandler(USER_TOKENS.queries.getUserHandler, GetUserHandler);
 
-    this.bindEventListener(UserCreatedEvent, USER_TOKENS.sendEmailToCreatedUserHandler);
+    this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
+    this.bindEventListener(UserCreatedEvent, USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler);
   }
 }
-
-export class TestUserModule extends UserModule {}

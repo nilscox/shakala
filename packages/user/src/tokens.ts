@@ -8,10 +8,18 @@ import { GetUserHandler } from './queries/get-user';
 import { UserRepository } from './repositories/user.repository';
 
 export const USER_TOKENS = {
-  userRepository: token<UserRepository>('userRepository'),
-  createUserHandler: token<CreateUserHandler>('createUserHandler'),
-  checkUserPasswordHandler: token<CheckUserPasswordHandler>('checkUserPasswordHandler'),
-  validateUserEmailHandler: token<ValidateUserEmailHandler>('validateUserEmailHandler'),
-  sendEmailToCreatedUserHandler: token<SendEmailToCreatedUserHandler>('sendEmailToCreatedUserHandler'),
-  getUserHandler: token<GetUserHandler>('getUserHandler'),
+  repositories: {
+    userRepository: token<UserRepository>('userRepository'),
+  },
+  commands: {
+    createUserHandler: token<CreateUserHandler>('createUserHandler'),
+    checkUserPasswordHandler: token<CheckUserPasswordHandler>('checkUserPasswordHandler'),
+    validateUserEmailHandler: token<ValidateUserEmailHandler>('validateUserEmailHandler'),
+  },
+  queries: {
+    getUserHandler: token<GetUserHandler>('getUserHandler'),
+  },
+  eventHandlers: {
+    sendEmailToCreatedUserHandler: token<SendEmailToCreatedUserHandler>('sendEmailToCreatedUserHandler'),
+  },
 };

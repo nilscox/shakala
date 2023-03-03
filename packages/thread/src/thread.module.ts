@@ -10,43 +10,45 @@ import { GetCommentHandler } from './queries/get-comment';
 import { GetLastThreadsHandler } from './queries/get-last-threads';
 import { GetThreadHandler } from './queries/get-thread';
 import { FilesystemCommentRepository } from './repositories/comment/filesystem-comment.repository';
+import { InMemoryCommentRepository } from './repositories/comment/in-memory-comment.repository';
 import { FilesystemCommentReportRepository } from './repositories/comment-report/filesystem-comment-report.repository';
 import { FilesystemCommentSubscriptionRepository } from './repositories/comment-subscription/filesystem-comment-subscription.repository';
 import { FilesystemReactionRepository } from './repositories/reaction/filesystem-reaction.repository';
+import { InMemoryReactionRepository } from './repositories/reaction/in-memory-reaction.repository';
 import { FilesystemThreadRepository } from './repositories/thread/filesystem-thread.repository';
+import { InMemoryThreadRepository } from './repositories/thread/in-memory-thread.repository';
 import { THREAD_TOKENS } from './tokens';
 
+type ThreadModuleConfig = {
+  repositories: 'memory' | 'filesystem';
+};
+
 export class ThreadModule extends Module {
-  async init() {
-    this.bindToken(THREAD_TOKENS.repositories.threadRepository, FilesystemThreadRepository);
-    this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository);
-    this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository);
+  configure(config: ThreadModuleConfig) {
+    if (config.repositories === 'memory') {
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, InMemoryThreadRepository);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, InMemoryCommentRepository);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, InMemoryReactionRepository);
+    } else {
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, FilesystemThreadRepository);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository);
+    }
+
     // prettier-ignore
     this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository);
     this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository);
 
-    this.bindToken(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
-    this.bindToken(THREAD_TOKENS.commands.createCommentHandler, CreateCommentHandler);
-    this.bindToken(THREAD_TOKENS.commands.editCommentHandler, EditCommentHandler);
-    this.bindToken(THREAD_TOKENS.commands.setReactionHandler, SetReactionHandler);
-    this.bindToken(THREAD_TOKENS.commands.setCommentSubscriptionHandler, SetCommentSubscriptionHandler);
-    this.bindToken(THREAD_TOKENS.commands.reportCommentHandler, ReportCommentHandler);
+    this.registerCommandHandler(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
+    this.registerCommandHandler(THREAD_TOKENS.commands.createCommentHandler, CreateCommentHandler);
+    this.registerCommandHandler(THREAD_TOKENS.commands.editCommentHandler, EditCommentHandler);
+    this.registerCommandHandler(THREAD_TOKENS.commands.setReactionHandler, SetReactionHandler);
+    // prettier-ignore
+    this.registerCommandHandler(THREAD_TOKENS.commands.setCommentSubscriptionHandler, SetCommentSubscriptionHandler);
+    this.registerCommandHandler(THREAD_TOKENS.commands.reportCommentHandler, ReportCommentHandler);
 
-    this.bindToken(THREAD_TOKENS.queries.getLastThreadsHandler, GetLastThreadsHandler);
-    this.bindToken(THREAD_TOKENS.queries.getThreadHandler, GetThreadHandler);
-    this.bindToken(THREAD_TOKENS.queries.getCommentHandler, GetCommentHandler);
-
-    this.registerCommandHandler(THREAD_TOKENS.commands.createThreadHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.createCommentHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.editCommentHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.setReactionHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.setCommentSubscriptionHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.reportCommentHandler);
-
-    this.registerQueryHandler(THREAD_TOKENS.queries.getLastThreadsHandler);
-    this.registerQueryHandler(THREAD_TOKENS.queries.getThreadHandler);
-    this.registerQueryHandler(THREAD_TOKENS.queries.getCommentHandler);
+    this.registerQueryHandler(THREAD_TOKENS.queries.getLastThreadsHandler, GetLastThreadsHandler);
+    this.registerQueryHandler(THREAD_TOKENS.queries.getThreadHandler, GetThreadHandler);
+    this.registerQueryHandler(THREAD_TOKENS.queries.getCommentHandler, GetCommentHandler);
   }
 }
-
-export class TestThreadModule extends ThreadModule {}

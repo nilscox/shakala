@@ -3,15 +3,14 @@ import { GetUserResult, InvalidEmailValidationTokenError, validateUserEmail } fr
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
+import { FetchAgent } from '../tests/fetch-agent';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] UserController', () => {
   let test: Test;
 
-  beforeEach(() => {
-    test = new Test();
-  });
-
+  beforeEach(() => void (test = new Test()));
+  beforeEach(() => test?.setup());
   afterEach(() => test?.cleanup());
 
   describe('/user', () => {
@@ -72,5 +71,10 @@ describe('[intg] UserController', () => {
 });
 
 class Test extends IntegrationTest {
-  asUser = this.as('userId');
+  asUser!: FetchAgent;
+
+  arrange() {
+    this.user = { id: 'userId' };
+    this.asUser = this.as('userId');
+  }
 }

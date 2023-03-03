@@ -1,21 +1,18 @@
-import { StubLoggerAdapter, TOKENS } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
-import { describe, test } from 'vitest';
+import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { container } from '../container';
+import { E2ETest } from '../tests/e2e-test';
 import { expect } from '../tests/expect';
-import { TestServer } from '../tests/test-server';
-import { API_TOKENS } from '../tokens';
 
 describe('[e2e] user', () => {
-  test('As a future user, I can sign up, sign out and sign back in', async () => {
-    container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inContainerScope();
-    container.bind(API_TOKENS.testServer).toInstance(TestServer).inContainerScope();
+  let test: Test;
 
-    const server = container.get(API_TOKENS.testServer);
-    const agent = server.agent();
+  beforeEach(() => void (test = new Test()));
+  beforeEach(() => test.setup());
+  afterEach(() => test.cleanup());
 
-    await server.init();
+  it('As a future user, I can sign up, sign out and sign back in', async () => {
+    const agent = test.server.agent();
 
     await expect(
       agent.post('/auth/sign-up', {
@@ -38,3 +35,5 @@ describe('[e2e] user', () => {
     await expect(agent.get('/user')).toHaveStatus(200);
   });
 });
+
+class Test extends E2ETest {}

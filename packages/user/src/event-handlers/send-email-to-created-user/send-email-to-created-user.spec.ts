@@ -63,7 +63,7 @@ class Test {
   userRepository = new InMemoryUserRepository();
   commandBus = new StubCommandBus();
 
-  handler = new SendEmailToCreatedUserHandler(this.config, this.userRepository, this.commandBus);
+  handler = new SendEmailToCreatedUserHandler(this.config, this.commandBus, this.userRepository);
 
   arrange() {
     const user = create.user({

@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 
-import { DomainEvent, EventPublisher } from '@shakala/common';
+import { EventPublisher } from '../../cqs/event-publisher';
+import { DomainEvent } from '../../ddd/domain-event';
 
 export class EmitterEventPublisher extends EventEmitter implements EventPublisher {
   publish(event: DomainEvent): void {

@@ -11,13 +11,9 @@ import * as yup from 'yup';
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
-import { Application, ProductionApplication } from './application';
-
 export class Server {
   protected app: Express;
   protected server?: HttpServer;
-
-  protected application: Application = new ProductionApplication();
 
   constructor(private readonly logger: LoggerPort, private readonly config: ConfigPort) {
     this.app = express();
@@ -36,10 +32,6 @@ export class Server {
     this.app.use(this.notFoundHandler);
   }
 
-  async init() {
-    await this.application.init();
-  }
-
   async listen() {
     const { host, port } = this.config.app;
 
@@ -55,8 +47,6 @@ export class Server {
   }
 
   async close() {
-    await this.application.close();
-
     if (this.server) {
       await promisify<void>(this.server.close.bind(this.server))();
     }

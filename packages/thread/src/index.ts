@@ -9,4 +9,4 @@ export { getComment } from './queries/get-comment';
 export { getLastThreads } from './queries/get-last-threads';
 export { getThread } from './queries/get-thread';
 
-export { ThreadModule, TestThreadModule } from './thread.module';
+export { ThreadModule } from './thread.module';

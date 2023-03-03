@@ -24,4 +24,4 @@ export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult 
   }
 }
 
-injected(GetUserHandler, USER_TOKENS.userRepository);
+injected(GetUserHandler, USER_TOKENS.repositories.userRepository);

@@ -11,8 +11,8 @@ import { USER_TOKENS } from '../../tokens';
 export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEvent> {
   constructor(
     private readonly config: ConfigPort,
-    private readonly userRepository: UserRepository,
-    private readonly commandBus: CommandBus
+    private readonly commandBus: CommandBus,
+    private readonly userRepository: UserRepository
   ) {}
 
   async handle(event: UserCreatedEvent): Promise<void> {
@@ -37,4 +37,9 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
   }
 }
 
-injected(SendEmailToCreatedUserHandler, TOKENS.config, USER_TOKENS.userRepository, TOKENS.commandBus);
+injected(
+  SendEmailToCreatedUserHandler,
+  TOKENS.config,
+  TOKENS.commandBus,
+  USER_TOKENS.repositories.userRepository
+);

@@ -1,4 +1,3 @@
-import { StubLoggerAdapter, TOKENS } from '@shakala/common';
 import {
   CreateCommentBody,
   CreateThreadBody,
@@ -9,21 +8,18 @@ import {
 import { createComment, createThread } from '@shakala/thread';
 import { ReactionType } from '@shakala/thread/src/entities/reaction.entity';
 import { createUser } from '@shakala/user';
-import { beforeEach, describe, it } from 'vitest';
+import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { container } from '../container';
+import { E2ETest } from '../tests/e2e-test';
 import { expect } from '../tests/expect';
 import { FetchAgent } from '../tests/fetch-agent';
-import { TestServer } from '../tests/test-server';
-import { API_TOKENS } from '../tokens';
 
 describe('[e2e] thread', () => {
   let test: Test;
 
-  beforeEach(async () => {
-    test = new Test();
-    await test.server.init();
-  });
+  beforeEach(() => void (test = new Test()));
+  beforeEach(() => test.setup());
+  afterEach(() => test.cleanup());
 
   it('As a user, I can create a thread post a comment and edit it', async () => {
     const agent = test.agent;
@@ -122,21 +118,11 @@ describe('[e2e] thread', () => {
   });
 });
 
-class Test {
-  agent: FetchAgent;
+class Test extends E2ETest {
+  agent!: FetchAgent;
 
-  constructor() {
-    container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inSingletonScope();
-    container.bind(API_TOKENS.testServer).toInstance(TestServer).inContainerScope();
+  arrange() {
     this.agent = this.server.as('userId');
-  }
-
-  get server() {
-    return container.get(API_TOKENS.testServer);
-  }
-
-  get commandBus() {
-    return container.get(TOKENS.commandBus);
   }
 
   async createUser() {

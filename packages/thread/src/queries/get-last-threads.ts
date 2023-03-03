@@ -1,6 +1,8 @@
 import { queryCreator, QueryHandler } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { ThreadRepository } from '../repositories/thread/thread.repository';
+import { THREAD_TOKENS } from '../tokens';
 
 export type GetLastThreadsQuery = {
   count: number;
@@ -31,3 +33,5 @@ export class GetLastThreadsHandler implements QueryHandler<GetLastThreadsQuery, 
     return this.threadRepository.getLastThreads(query.count);
   }
 }
+
+injected(GetLastThreadsHandler, THREAD_TOKENS.repositories.threadRepository);

@@ -3,15 +3,14 @@ import { editComment, reportComment, setCommentSubscription, setReaction } from 
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
+import { FetchAgent } from '../tests/fetch-agent';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] CommentController', () => {
   let test: Test;
 
-  beforeEach(() => {
-    test = new Test();
-  });
-
+  beforeEach(() => void (test = new Test()));
+  beforeEach(() => test?.setup());
   afterEach(() => test?.cleanup());
 
   describe('PUT /:commentId', () => {
@@ -140,10 +139,10 @@ describe('[intg] CommentController', () => {
 });
 
 class Test extends IntegrationTest {
-  constructor() {
-    super();
-    this.user = { id: 'userId' };
-  }
+  asUser!: FetchAgent;
 
-  asUser = this.as('userId');
+  arrange() {
+    this.user = { id: 'userId' };
+    this.asUser = this.as('userId');
+  }
 }

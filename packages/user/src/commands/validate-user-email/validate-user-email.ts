@@ -44,7 +44,7 @@ export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmai
   }
 }
 
-injected(ValidateUserEmailHandler, TOKENS.publisher, USER_TOKENS.userRepository);
+injected(ValidateUserEmailHandler, TOKENS.publisher, USER_TOKENS.repositories.userRepository);
 
 export class EmailAlreadyValidatedError extends BaseError<{ email: string }> {
   constructor(email: string) {

@@ -1,23 +1,40 @@
+import { CommonModule, Module, ModuleConfig } from '@shakala/common';
 import { EmailModule } from '@shakala/email';
 import { ThreadModule } from '@shakala/thread';
 import { UserModule } from '@shakala/user';
 
+import { ApiModule } from '../api.module';
 import { container } from '../container';
 
-export interface Application {
-  init(): Promise<void>;
-  close(): Promise<void>;
-}
+type Modules = {
+  common: CommonModule;
+  user: UserModule;
+  email: EmailModule;
+  thread: ThreadModule;
+  api: ApiModule;
+};
 
-export class ProductionApplication implements Application {
-  private emailModule = new EmailModule(container);
-  private userModule = new UserModule(container);
-  private threadModule = new ThreadModule(container);
+export type ApplicationConfig = {
+  [Key in keyof Modules]: ModuleConfig<Modules[Key]>;
+};
 
-  async init() {
-    await this.emailModule.init();
-    await this.userModule.init();
-    await this.threadModule.init();
+export class Application {
+  private modules: Modules = {
+    common: new CommonModule(container),
+    user: new UserModule(container),
+    email: new EmailModule(container),
+    thread: new ThreadModule(container),
+    api: new ApiModule(container),
+  };
+
+  async init(config: ApplicationConfig) {
+    for (const [key, module] of Object.entries<Module>(this.modules)) {
+      module.configure(config[key as keyof Modules]);
+    }
+
+    for (const module of Object.values<Module>(this.modules)) {
+      await module.init?.();
+    }
   }
 
   async close() {}

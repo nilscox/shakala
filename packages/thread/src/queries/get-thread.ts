@@ -1,6 +1,8 @@
 import { queryCreator, QueryHandler } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { ThreadRepository } from '../repositories/thread/thread.repository';
+import { THREAD_TOKENS } from '../tokens';
 
 import { GetCommentResult } from './get-comment';
 import { GetLastThreadsResult } from './get-last-threads';
@@ -25,3 +27,5 @@ export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadR
     return this.threadRepository.getThread(query.threadId);
   }
 }
+
+injected(GetThreadHandler, THREAD_TOKENS.repositories.threadRepository);

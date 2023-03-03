@@ -12,4 +12,4 @@ export {
 
 export { getUser, GetUserResult } from './queries/get-user';
 
-export { UserModule, TestUserModule } from './user.module';
+export { UserModule } from './user.module';

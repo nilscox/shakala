@@ -3,28 +3,42 @@ import {
   StubCryptoAdapter,
   StubEventPublisher,
   StubGeneratorAdapter,
-  StubLoggerAdapter,
   StubQueryBus,
   TOKENS,
 } from '@shakala/common';
 import { getUser } from '@shakala/user';
 
 import { container } from '../container';
+import { Application } from '../infrastructure/application';
 import { API_TOKENS } from '../tokens';
 
 import { TestServer } from './test-server';
 
+Error.stackTraceLimit = Infinity;
+
+export interface IntegrationTest {
+  arrange?(): void | Promise<void>;
+}
+
 export abstract class IntegrationTest {
+  public readonly application = new Application();
+
   public readonly commandBus = new StubCommandBus();
   public readonly crypto = new StubCryptoAdapter();
   public readonly generator = new StubGeneratorAdapter();
   public readonly publisher = new StubEventPublisher();
   public readonly queryBus = new StubQueryBus();
 
-  constructor() {
+  async setup() {
     container.capture?.();
 
-    container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inSingletonScope();
+    await this.application.init({
+      common: { logger: 'stub' },
+      email: { emailSender: 'stub' },
+      thread: { repositories: 'filesystem' },
+      user: { repositories: 'filesystem' },
+      api: { server: 'test' },
+    });
 
     container.bind(TOKENS.commandBus).toConstant(this.commandBus);
     container.bind(TOKENS.crypto).toConstant(this.crypto);
@@ -32,7 +46,7 @@ export abstract class IntegrationTest {
     container.bind(TOKENS.publisher).toConstant(this.publisher);
     container.bind(TOKENS.queryBus).toConstant(this.queryBus);
 
-    container.bind(API_TOKENS.testServer).toInstance(TestServer).inContainerScope();
+    await this.arrange?.();
   }
 
   cleanup() {
@@ -40,7 +54,7 @@ export abstract class IntegrationTest {
   }
 
   private get server() {
-    return container.get(API_TOKENS.testServer);
+    return container.get(API_TOKENS.server) as TestServer;
   }
 
   createAgent() {

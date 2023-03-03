@@ -49,7 +49,13 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
   }
 }
 
-injected(CreateUserHandler, TOKENS.generator, TOKENS.crypto, TOKENS.publisher, USER_TOKENS.userRepository);
+injected(
+  CreateUserHandler,
+  TOKENS.generator,
+  TOKENS.crypto,
+  TOKENS.publisher,
+  USER_TOKENS.repositories.userRepository
+);
 
 export class UserCreatedEvent extends DomainEvent {
   constructor(id: string) {

@@ -1,6 +1,8 @@
 import { queryCreator, QueryHandler } from '@shakala/common';
+import { injected } from 'brandi';
 
 import { CommentRepository } from '../repositories/comment/comment.repository';
+import { THREAD_TOKENS } from '../tokens';
 
 export type GetCommentQuery = {
   commentId: string;
@@ -40,3 +42,5 @@ export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetComme
     return this.commentRepository.getComment(query.commentId);
   }
 }
+
+injected(GetCommentHandler, THREAD_TOKENS.repositories.commentRepository);

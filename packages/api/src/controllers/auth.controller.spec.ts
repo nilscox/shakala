@@ -12,16 +12,15 @@ import {
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
+import { FetchAgent } from '../tests/fetch-agent';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
 describe('[intg] AuthController', () => {
   let test: Test;
 
-  beforeEach(() => {
-    test = new Test();
-  });
-
+  beforeEach(() => void (test = new Test()));
+  beforeEach(() => test?.setup());
   afterEach(() => test?.cleanup());
 
   describe('/auth/sign-up', () => {
@@ -87,7 +86,7 @@ describe('[intg] AuthController', () => {
     beforeEach(() => {
       const user: GetUserResult = { id: 'userId', email: 'user@domain.tld' };
 
-      test.user = user;
+      test.queryBus.register(getUser({ id: 'userId' }), user);
       test.queryBus.register(getUser({ email: 'user@domain.tld' }), user);
     });
 
@@ -151,7 +150,11 @@ describe('[intg] AuthController', () => {
 });
 
 class Test extends IntegrationTest {
-  agent = this.createAgent();
+  agent!: FetchAgent;
+
+  arrange() {
+    this.agent = this.createAgent();
+  }
 
   get tokenCookie() {
     return this.agent.getCookie('token');
