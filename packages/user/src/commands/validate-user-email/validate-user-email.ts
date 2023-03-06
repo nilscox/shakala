@@ -4,6 +4,7 @@ import {
   CommandHandler,
   DomainEvent,
   EventPublisher,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -16,12 +17,9 @@ export type ValidateUserEmailCommand = {
   emailValidationToken: string;
 };
 
-const symbol = Symbol('ValidateUserEmailCommand');
-export const validateUserEmail = commandCreator<ValidateUserEmailCommand>(symbol);
+export const validateUserEmail = commandCreator<ValidateUserEmailCommand>('validateUserEmail');
 
 export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmailCommand> {
-  symbol = symbol;
-
   constructor(private readonly publisher: EventPublisher, private readonly userRepository: UserRepository) {}
 
   async handle(command: ValidateUserEmailCommand): Promise<void> {
@@ -45,6 +43,7 @@ export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmai
 }
 
 injected(ValidateUserEmailHandler, TOKENS.publisher, USER_TOKENS.repositories.userRepository);
+registerCommand(validateUserEmail, USER_TOKENS.commands.validateUserEmailHandler);
 
 export class EmailAlreadyValidatedError extends BaseError<{ email: string }> {
   constructor(email: string) {

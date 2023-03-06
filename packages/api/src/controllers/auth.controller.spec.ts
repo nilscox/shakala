@@ -1,6 +1,5 @@
 import assert from 'assert';
 
-import { stub } from '@shakala/common';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
   checkUserPassword,
@@ -86,8 +85,8 @@ describe('[intg] AuthController', () => {
     beforeEach(() => {
       const user: GetUserResult = { id: 'userId', email: 'user@domain.tld' };
 
-      test.queryBus.register(getUser({ id: 'userId' }), user);
-      test.queryBus.register(getUser({ email: 'user@domain.tld' }), user);
+      test.queryBus.on(getUser({ id: 'userId' })).return(user);
+      test.queryBus.on(getUser({ email: 'user@domain.tld' })).return(user);
     });
 
     const payload: SignInBody = {
@@ -113,7 +112,7 @@ describe('[intg] AuthController', () => {
     });
 
     it('fails with status 401 when the password check fails', async () => {
-      test.commandBus.register(checkUserPassword, stub().reject(new InvalidCredentialsError()));
+      test.commandBus.on(checkUserPassword).throw(new InvalidCredentialsError());
 
       await expect(test.agent.post(route, payload)).toHaveStatus(401);
     });

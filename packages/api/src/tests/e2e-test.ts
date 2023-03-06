@@ -17,7 +17,7 @@ export abstract class E2ETest {
 
   async setup() {
     await this.application.init({
-      common: { logger: 'stub' },
+      common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
       email: { emailSender: 'stub' },
       thread: { repositories: 'filesystem' },
       user: { repositories: 'filesystem' },

@@ -1,10 +1,21 @@
-export type Command<T = unknown> = T & {
-  __symbol: symbol;
+export const commandCreator = <T>(name?: string): CommandCreator<T> => {
+  const symbol = Symbol(name);
+  const createCommand = (command: T) => ({
+    symbol,
+    command,
+  });
+
+  createCommand.symbol = symbol;
+
+  return createCommand;
 };
 
-export const commandCreator = <T>(symbol: symbol) => {
-  return (command: T): Command<T> => ({
-    __symbol: symbol,
-    ...command,
-  });
+export interface CommandCreator<T> {
+  (command: T): ExecutableCommand<T>;
+  symbol: symbol;
+}
+
+export type ExecutableCommand<T> = {
+  symbol: symbol;
+  command: T;
 };

@@ -6,7 +6,6 @@ import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
 
 import {
-  checkUserPassword,
   CheckUserPasswordCommand,
   CheckUserPasswordHandler,
   InvalidCredentialsError,
@@ -52,10 +51,10 @@ class Test {
     this.userRepository.add(user);
   }
 
-  static readonly defaultCommand = checkUserPassword({
+  static readonly defaultCommand: CheckUserPasswordCommand = {
     email: 'email',
     password: 'password',
-  });
+  };
 
   act(overrides?: Partial<CheckUserPasswordCommand>) {
     return this.handler.handle({ ...Test.defaultCommand, ...overrides });

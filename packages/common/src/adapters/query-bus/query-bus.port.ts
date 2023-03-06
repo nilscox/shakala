@@ -1,5 +1,5 @@
-import { Query, QueryResult } from '../../cqs/query';
+import { ExecutableQuery, QueryResult } from '../../cqs/query';
 
 export interface QueryBus {
-  execute<Q extends Query>(query: Q): Promise<QueryResult<Q>>;
+  execute<Q extends ExecutableQuery<unknown, unknown>>(query: Q): Promise<QueryResult<Q>>;
 }

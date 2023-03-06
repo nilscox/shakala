@@ -1,4 +1,3 @@
-import { stub } from '@shakala/common';
 import { GetUserResult, InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
@@ -47,10 +46,9 @@ describe('[intg] UserController', () => {
     });
 
     it('fails with status 400 when the token is invalid', async () => {
-      test.commandBus.register(
-        validateUserEmail,
-        stub().reject(new InvalidEmailValidationTokenError('user@email.tld', 'token'))
-      );
+      test.commandBus
+        .on(validateUserEmail)
+        .throw(new InvalidEmailValidationTokenError('user@email.tld', 'token'));
 
       const response = await expect(test.asUser.get(route('token'))).toHaveStatus(400);
 

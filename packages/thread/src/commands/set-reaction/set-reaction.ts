@@ -5,6 +5,7 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -20,11 +21,10 @@ export type SetReactionCommand = {
   reactionType: ReactionType | null;
 };
 
-const symbol = Symbol('SetReactionCommand');
-export const setReaction = commandCreator<SetReactionCommand>(symbol);
+export const setReaction = commandCreator<SetReactionCommand>('setReaction');
 
 export class SetReactionHandler implements CommandHandler<SetReactionCommand> {
-  symbol = symbol;
+  creator = setReaction;
 
   constructor(
     private readonly generator: GeneratorPort,
@@ -76,6 +76,8 @@ injected(
   THREAD_TOKENS.repositories.commentRepository,
   THREAD_TOKENS.repositories.reactionRepository
 );
+
+registerCommand(setReaction, THREAD_TOKENS.commands.setReactionHandler);
 
 export class CannotSetReactionOnOwnCommentError extends BaseError<{ commentId: string }> {
   status = 400;

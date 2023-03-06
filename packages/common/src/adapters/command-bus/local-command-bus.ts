@@ -1,26 +1,17 @@
-import assert from 'assert';
+import { Container, injected } from 'brandi';
 
-import { injected } from 'brandi';
-
-import { Command } from '../../cqs/command';
-import { CommandHandler } from '../../cqs/command-handler';
+import { ExecutableCommand } from '../../cqs/command';
+import { TOKENS } from '../../tokens';
 
 import { CommandBus } from './command-bus.port';
+import { getCommandHandlerToken } from './register-command';
 
 export class LocalCommandBus implements CommandBus {
-  private handlers = new Map<symbol, CommandHandler<unknown>>();
+  constructor(private readonly container: Container) {}
 
-  register(handler: CommandHandler<unknown>) {
-    this.handlers.set(handler.symbol, handler);
-  }
-
-  async execute({ __symbol, ...command }: Command<unknown>): Promise<void> {
-    const handler = this.handlers.get(__symbol);
-
-    assert(handler, `No handler found for command ${String(__symbol)}`);
-
-    await handler.handle(command);
+  async execute({ symbol, command }: ExecutableCommand<unknown>): Promise<void> {
+    await this.container.get(getCommandHandlerToken(symbol)).handle(command);
   }
 }
 
-injected(LocalCommandBus);
+injected(LocalCommandBus, TOKENS.container);

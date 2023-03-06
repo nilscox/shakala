@@ -1,4 +1,4 @@
-import { CommonModule, Module, ModuleConfig } from '@shakala/common';
+import { CommonModule, Module, ModuleConfig, TOKENS } from '@shakala/common';
 import { EmailModule } from '@shakala/email';
 import { ThreadModule } from '@shakala/thread';
 import { UserModule } from '@shakala/user';
@@ -28,6 +28,8 @@ export class Application {
   };
 
   async init(config: ApplicationConfig) {
+    container.bind(TOKENS.container).toConstant(container);
+
     for (const [key, module] of Object.entries<Module>(this.modules)) {
       module.configure(config[key as keyof Modules]);
     }

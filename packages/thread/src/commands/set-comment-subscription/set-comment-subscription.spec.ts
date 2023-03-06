@@ -9,7 +9,6 @@ import { InMemoryCommentSubscriptionRepository } from '../../repositories/commen
 import {
   CommentAlreadySubscribedError,
   CommentNotSubscribedError,
-  setCommentSubscription,
   SetCommentSubscriptionHandler,
 } from './set-comment-subscription';
 
@@ -114,12 +113,10 @@ class Test {
   }
 
   async act(commentId: string, subscribed: boolean) {
-    await this.handler.handle(
-      setCommentSubscription({
-        commentId,
-        userId: 'userId',
-        subscribed,
-      })
-    );
+    await this.handler.handle({
+      commentId,
+      userId: 'userId',
+      subscribed,
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { queryCreator, QueryHandler } from '@shakala/common';
+import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
 import { injected } from 'brandi';
 
 import { CommentRepository } from '../repositories/comment/comment.repository';
@@ -30,12 +30,9 @@ export type GetCommentResult = {
   replies: Array<Omit<GetCommentResult, 'replies'>>;
 };
 
-const symbol = Symbol('GetComment');
-export const getComment = queryCreator<GetCommentQuery, GetCommentResult>(symbol);
+export const getComment = queryCreator<GetCommentQuery, GetCommentResult | undefined>('getComment');
 
 export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetCommentResult | undefined> {
-  symbol = symbol;
-
   constructor(private readonly commentRepository: CommentRepository) {}
 
   async handle(query: GetCommentQuery): Promise<GetCommentResult | undefined> {
@@ -44,3 +41,4 @@ export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetComme
 }
 
 injected(GetCommentHandler, THREAD_TOKENS.repositories.commentRepository);
+registerQuery(getComment, THREAD_TOKENS.queries.getCommentHandler);

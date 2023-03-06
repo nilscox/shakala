@@ -1,4 +1,4 @@
-import { queryCreator, QueryHandler } from '@shakala/common';
+import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
 import { injected } from 'brandi';
 
 import { ThreadRepository } from '../repositories/thread/thread.repository';
@@ -21,12 +21,9 @@ export type GetLastThreadsResult = Array<{
   date: string;
 }>;
 
-const symbol = Symbol('GetLastThreads');
-export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsResult>(symbol);
+export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsResult>('getLastThreads');
 
 export class GetLastThreadsHandler implements QueryHandler<GetLastThreadsQuery, GetLastThreadsResult> {
-  symbol = symbol;
-
   constructor(private readonly threadRepository: ThreadRepository) {}
 
   async handle(query: GetLastThreadsQuery): Promise<GetLastThreadsResult> {
@@ -35,3 +32,4 @@ export class GetLastThreadsHandler implements QueryHandler<GetLastThreadsQuery, 
 }
 
 injected(GetLastThreadsHandler, THREAD_TOKENS.repositories.threadRepository);
+registerQuery(getLastThreads, THREAD_TOKENS.queries.getLastThreadsHandler);

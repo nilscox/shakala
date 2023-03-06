@@ -2,11 +2,11 @@ import {
   CreateCommentBody,
   CreateThreadBody,
   EditCommentBody,
+  ReactionType,
   ReportCommentBody,
   SetReactionBody,
 } from '@shakala/shared';
 import { createComment, createThread } from '@shakala/thread';
-import { ReactionType } from '@shakala/thread/src/entities/reaction.entity';
 import { createUser } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 

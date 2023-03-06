@@ -1,5 +1,5 @@
-import { Command } from '../../cqs/command';
+import { ExecutableCommand } from '../../cqs/command';
 
 export interface CommandBus {
-  execute(command: Command<unknown>): Promise<void>;
+  execute(command: ExecutableCommand<unknown>): Promise<void>;
 }

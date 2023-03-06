@@ -7,6 +7,7 @@ export * from './cqs/query-handler';
 
 export * from './adapters/command-bus/command-bus.port';
 export * from './adapters/command-bus/local-command-bus';
+export * from './adapters/command-bus/register-command';
 export * from './adapters/command-bus/stub-command-bus.adapter';
 
 export * from './adapters/config/config.port';
@@ -33,9 +34,10 @@ export * from './adapters/logger/console-logger.adapter';
 export * from './adapters/logger/logger.port';
 export * from './adapters/logger/stub-logger.port';
 
-export * from './adapters/query-bus/query-bus.port';
-export * from './adapters/query-bus/stub-query-bus.adapter';
 export * from './adapters/query-bus/local-query-bus.adapter';
+export * from './adapters/query-bus/query-bus.port';
+export * from './adapters/query-bus/register-query';
+export * from './adapters/query-bus/stub-query-bus.adapter';
 
 export * from './ddd/domain-event';
 export * from './ddd/entity';

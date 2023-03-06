@@ -8,7 +8,6 @@ import {
   EmailAlreadyValidatedError,
   InvalidEmailValidationTokenError,
   UserEmailValidatedEvent,
-  validateUserEmail,
   ValidateUserEmailCommand,
   ValidateUserEmailHandler,
 } from './validate-user-email';
@@ -69,10 +68,10 @@ class Test {
     this.userRepository.add(user);
   }
 
-  static readonly defaultCommand = validateUserEmail({
+  static readonly defaultCommand: ValidateUserEmailCommand = {
     userId: 'userId',
     emailValidationToken: 'token',
-  });
+  };
 
   act(overrides?: Partial<ValidateUserEmailCommand>) {
     return this.handler.handle({ ...Test.defaultCommand, ...overrides });

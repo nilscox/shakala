@@ -10,7 +10,7 @@ async function main() {
   const application = new Application();
 
   await application.init({
-    common: { logger: 'console' },
+    common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailSender: 'nodemailer' },
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },

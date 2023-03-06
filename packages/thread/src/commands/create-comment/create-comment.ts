@@ -5,6 +5,7 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -23,12 +24,9 @@ type CreateCommentCommand = {
   text: string;
 };
 
-const symbol = Symbol('CreateCommentCommand');
-export const createComment = commandCreator<CreateCommentCommand>(symbol);
+export const createComment = commandCreator<CreateCommentCommand>('createComment');
 
 export class CreateCommentHandler implements CommandHandler<CreateCommentCommand> {
-  symbol = symbol;
-
   constructor(
     private readonly publisher: EventPublisher,
     private readonly generator: GeneratorPort,
@@ -72,6 +70,8 @@ injected(
   TOKENS.date,
   THREAD_TOKENS.repositories.commentRepository
 );
+
+registerCommand(createComment, THREAD_TOKENS.commands.createCommentHandler);
 
 export class CommentCreatedEvent extends DomainEvent {
   constructor(commentId: string) {

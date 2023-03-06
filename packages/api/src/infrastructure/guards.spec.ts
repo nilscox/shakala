@@ -53,6 +53,8 @@ describe('[intg] guards', () => {
       const token = jwt.encode({ uid: 'notUserId' });
       const headers = { cookie: `token=${token}` };
 
+      test.queryBus.on(getUser({ id: 'notUserId' })).return(undefined);
+
       const response = await expect(test.agent().get('/', { headers })).toHaveStatus(500);
 
       expect(await response.json()).toEqual({
@@ -90,8 +92,8 @@ describe('[intg] guards', () => {
 });
 
 class Test {
-  private queryBus = new StubQueryBus();
-  private app = express();
+  readonly queryBus = new StubQueryBus();
+  private readonly app = express();
 
   constructor(guard: RequestHandler) {
     this.app.use(cookieParser());
@@ -100,7 +102,7 @@ class Test {
       res.end();
     });
 
-    this.queryBus.register(getUser({ id: 'userId' }), { id: 'userId', email: '' });
+    this.queryBus.on(getUser({ id: 'userId' })).return({ id: 'userId', email: '' });
 
     container.capture?.();
     container.bind(TOKENS.queryBus).toConstant(this.queryBus);

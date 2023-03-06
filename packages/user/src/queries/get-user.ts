@@ -1,4 +1,4 @@
-import { queryCreator, QueryHandler } from '@shakala/common';
+import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
 import { injected } from 'brandi';
 
 import { UserRepository } from '../repositories/user.repository';
@@ -11,12 +11,9 @@ export type GetUserResult = {
   email: string;
 };
 
-const symbol = Symbol('GetUser');
-export const getUser = queryCreator<GetUserQuery, GetUserResult>(symbol);
+export const getUser = queryCreator<GetUserQuery, GetUserResult | undefined>('getUser');
 
 export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult | undefined> {
-  symbol = symbol;
-
   constructor(private readonly userRepository: UserRepository) {}
 
   async handle(query: GetUserQuery): Promise<GetUserResult | undefined> {
@@ -25,3 +22,4 @@ export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult 
 }
 
 injected(GetUserHandler, USER_TOKENS.repositories.userRepository);
+registerQuery(getUser, USER_TOKENS.queries.getUserHandler);

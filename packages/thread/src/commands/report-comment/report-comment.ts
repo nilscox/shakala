@@ -5,6 +5,7 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -20,12 +21,9 @@ export type ReportCommentCommand = {
   reason?: string;
 };
 
-const symbol = Symbol('ReportCommentCommand');
-export const reportComment = commandCreator<ReportCommentCommand>(symbol);
+export const reportComment = commandCreator<ReportCommentCommand>('reportComment');
 
 export class ReportCommentHandler implements CommandHandler<ReportCommentCommand> {
-  symbol = symbol;
-
   constructor(
     private readonly generator: GeneratorPort,
     private readonly publisher: EventPublisher,
@@ -71,6 +69,8 @@ injected(
   THREAD_TOKENS.repositories.commentRepository,
   THREAD_TOKENS.repositories.commentReportRepository
 );
+
+registerCommand(reportComment, THREAD_TOKENS.commands.reportCommentHandler);
 
 export class CommentReportedEvent extends DomainEvent {
   constructor(

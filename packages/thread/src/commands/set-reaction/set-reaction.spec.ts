@@ -9,7 +9,6 @@ import { InMemoryReactionRepository } from '../../repositories/reaction/in-memor
 import {
   CannotSetReactionOnOwnCommentError,
   CommentReactionChangedEvent,
-  setReaction,
   SetReactionHandler,
 } from './set-reaction';
 
@@ -119,12 +118,10 @@ class Test {
   }
 
   async act(type: ReactionType | null, userId = 'userId') {
-    await this.handler.handle(
-      setReaction({
-        commentId: 'commentId',
-        userId,
-        reactionType: type,
-      })
-    );
+    await this.handler.handle({
+      commentId: 'commentId',
+      userId,
+      reactionType: type,
+    });
   }
 }

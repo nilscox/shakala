@@ -20,7 +20,7 @@ export class EmailModule extends Module {
 
     this.bindToken(EMAIL_TOKENS.adapters.emailCompiler, MjmlEmailCompilerAdapter);
 
-    this.registerCommandHandler(EMAIL_TOKENS.commands.sendEmailHandler, SendEmailHandler);
+    this.bindToken(EMAIL_TOKENS.commands.sendEmailHandler, SendEmailHandler);
   }
 
   async init() {

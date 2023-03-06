@@ -5,6 +5,7 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -20,12 +21,9 @@ export type SetCommentSubscriptionCommand = {
   subscribed: boolean;
 };
 
-const symbol = Symbol('SetCommentSubscriptionCommand');
-export const setCommentSubscription = commandCreator<SetCommentSubscriptionCommand>(symbol);
+export const setCommentSubscription = commandCreator<SetCommentSubscriptionCommand>('setCommentSubscription');
 
 export class SetCommentSubscriptionHandler implements CommandHandler<SetCommentSubscriptionCommand> {
-  symbol = symbol;
-
   constructor(
     private readonly generator: GeneratorPort,
     private readonly publisher: EventPublisher,
@@ -85,6 +83,8 @@ injected(
   THREAD_TOKENS.repositories.commentRepository,
   THREAD_TOKENS.repositories.commentSubscriptionRepository
 );
+
+registerCommand(setCommentSubscription, THREAD_TOKENS.commands.setCommentSubscriptionHandler);
 
 export class CommentSubscriptionCreatedEvent extends DomainEvent {
   constructor(subscriptionId: string) {

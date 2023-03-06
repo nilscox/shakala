@@ -1,4 +1,11 @@
-import { BaseError, commandCreator, CommandHandler, CryptoPort, TOKENS } from '@shakala/common';
+import {
+  BaseError,
+  commandCreator,
+  CommandHandler,
+  CryptoPort,
+  registerCommand,
+  TOKENS,
+} from '@shakala/common';
 import { injected } from 'brandi';
 
 import { UserRepository } from '../../repositories/user.repository';
@@ -9,12 +16,9 @@ export type CheckUserPasswordCommand = {
   password: string;
 };
 
-const symbol = Symbol('CheckUserPasswordCommand');
-export const checkUserPassword = commandCreator<CheckUserPasswordCommand>(symbol);
+export const checkUserPassword = commandCreator<CheckUserPasswordCommand>('checkUserPassword');
 
 export class CheckUserPasswordHandler implements CommandHandler<CheckUserPasswordCommand> {
-  symbol = symbol;
-
   constructor(private readonly crypto: CryptoPort, private readonly userRepository: UserRepository) {}
 
   async handle(command: CheckUserPasswordCommand): Promise<void> {
@@ -35,6 +39,7 @@ export class CheckUserPasswordHandler implements CommandHandler<CheckUserPasswor
 }
 
 injected(CheckUserPasswordHandler, TOKENS.crypto, USER_TOKENS.repositories.userRepository);
+registerCommand(checkUserPassword, USER_TOKENS.commands.checkUserPasswordHandler);
 
 export class InvalidCredentialsError extends BaseError {
   constructor() {

@@ -1,17 +1,36 @@
-import { Query, QueryResult } from '../../cqs/query';
+import assert from 'assert';
+
+import { ExecutableQuery, QueryResult } from '../../cqs/query';
 
 import { QueryBus } from './query-bus.port';
 
-export class StubQueryBus extends Array<Query> implements QueryBus {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private results = new Map<string, any>();
+export class StubQueryBus extends Array<unknown> implements QueryBus {
+  private results = new Map<symbol, Map<string, unknown>>();
 
-  register<Q extends Query>(query: Q, result: QueryResult<Q>) {
-    this.results.set(JSON.stringify(query), result);
+  on<Query extends ExecutableQuery>({ symbol, query }: Query) {
+    const queryResults = this.results.get(symbol) ?? new Map();
+
+    if (!this.results.has(symbol)) {
+      this.results.set(symbol, queryResults);
+    }
+
+    return {
+      return(result: QueryResult<Query>) {
+        queryResults.set(JSON.stringify(query), result);
+      },
+    };
   }
 
-  async execute<Q extends Query>(query: Q): Promise<QueryResult<Q>> {
+  async execute<Q extends ExecutableQuery>({ symbol, query }: Q): Promise<QueryResult<Q>> {
     this.push(query);
-    return this.results.get(JSON.stringify(query)) as QueryResult<Q>;
+
+    const queryResults = this.results.get(symbol);
+
+    assert(
+      queryResults && queryResults.has(JSON.stringify(query)),
+      `No result found for query ${String(symbol)}`
+    );
+
+    return queryResults.get(JSON.stringify(query)) as QueryResult<Q>;
   }
 }

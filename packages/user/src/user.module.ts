@@ -21,11 +21,11 @@ export class UserModule extends Module {
       this.bindToken(USER_TOKENS.repositories.userRepository, FilesystemUserRepository);
     }
 
-    this.registerCommandHandler(USER_TOKENS.commands.createUserHandler, CreateUserHandler);
-    this.registerCommandHandler(USER_TOKENS.commands.checkUserPasswordHandler, CheckUserPasswordHandler);
-    this.registerCommandHandler(USER_TOKENS.commands.validateUserEmailHandler, ValidateUserEmailHandler);
+    this.bindToken(USER_TOKENS.commands.createUserHandler, CreateUserHandler);
+    this.bindToken(USER_TOKENS.commands.checkUserPasswordHandler, CheckUserPasswordHandler);
+    this.bindToken(USER_TOKENS.commands.validateUserEmailHandler, ValidateUserEmailHandler);
 
-    this.registerQueryHandler(USER_TOKENS.queries.getUserHandler, GetUserHandler);
+    this.bindToken(USER_TOKENS.queries.getUserHandler, GetUserHandler);
 
     this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
     this.bindEventListener(UserCreatedEvent, USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler);

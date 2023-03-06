@@ -12,7 +12,7 @@ import { Message } from '../../entities/message.entity';
 import { create } from '../../factories';
 import { InMemoryCommentRepository } from '../../repositories/comment/in-memory-comment.repository';
 
-import { CommentEditedEvent, editComment, EditCommentHandler } from './edit-comment';
+import { CommentEditedEvent, EditCommentHandler } from './edit-comment';
 
 describe('editComment', () => {
   let test: Test;
@@ -74,12 +74,10 @@ class Test {
   }
 
   async act() {
-    await this.handler.handle(
-      editComment({
-        commentId: 'commentId',
-        authorId: 'authorId',
-        text: 'Edited!',
-      })
-    );
+    await this.handler.handle({
+      commentId: 'commentId',
+      authorId: 'authorId',
+      text: 'Edited!',
+    });
   }
 }

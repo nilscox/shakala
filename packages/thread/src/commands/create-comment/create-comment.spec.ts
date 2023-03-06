@@ -5,12 +5,7 @@ import { beforeEach, describe, it } from 'vitest';
 import { Markdown } from '../../entities/markdown.value-object';
 import { InMemoryCommentRepository } from '../../repositories/comment/in-memory-comment.repository';
 
-import {
-  CommentCreatedEvent,
-  createComment,
-  CreateCommentHandler,
-  ReplyCreatedEvent,
-} from './create-comment';
+import { CommentCreatedEvent, CreateCommentHandler, ReplyCreatedEvent } from './create-comment';
 
 describe('createComment', () => {
   let test: Test;
@@ -82,14 +77,12 @@ class Test {
   }
 
   async act(parentId?: string) {
-    await this.handler.handle(
-      createComment({
-        commentId: 'commentId',
-        authorId: 'authorId',
-        threadId: 'threadId',
-        parentId,
-        text: 'Hello!',
-      })
-    );
+    await this.handler.handle({
+      commentId: 'commentId',
+      authorId: 'authorId',
+      threadId: 'threadId',
+      parentId,
+      text: 'Hello!',
+    });
   }
 }

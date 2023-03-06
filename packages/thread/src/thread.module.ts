@@ -39,16 +39,15 @@ export class ThreadModule extends Module {
     this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository);
     this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository);
 
-    this.registerCommandHandler(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.createCommentHandler, CreateCommentHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.editCommentHandler, EditCommentHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.setReactionHandler, SetReactionHandler);
-    // prettier-ignore
-    this.registerCommandHandler(THREAD_TOKENS.commands.setCommentSubscriptionHandler, SetCommentSubscriptionHandler);
-    this.registerCommandHandler(THREAD_TOKENS.commands.reportCommentHandler, ReportCommentHandler);
+    this.bindToken(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
+    this.bindToken(THREAD_TOKENS.commands.createCommentHandler, CreateCommentHandler);
+    this.bindToken(THREAD_TOKENS.commands.editCommentHandler, EditCommentHandler);
+    this.bindToken(THREAD_TOKENS.commands.setReactionHandler, SetReactionHandler);
+    this.bindToken(THREAD_TOKENS.commands.setCommentSubscriptionHandler, SetCommentSubscriptionHandler);
+    this.bindToken(THREAD_TOKENS.commands.reportCommentHandler, ReportCommentHandler);
 
-    this.registerQueryHandler(THREAD_TOKENS.queries.getLastThreadsHandler, GetLastThreadsHandler);
-    this.registerQueryHandler(THREAD_TOKENS.queries.getThreadHandler, GetThreadHandler);
-    this.registerQueryHandler(THREAD_TOKENS.queries.getCommentHandler, GetCommentHandler);
+    this.bindToken(THREAD_TOKENS.queries.getLastThreadsHandler, GetLastThreadsHandler);
+    this.bindToken(THREAD_TOKENS.queries.getThreadHandler, GetThreadHandler);
+    this.bindToken(THREAD_TOKENS.queries.getCommentHandler, GetCommentHandler);
   }
 }

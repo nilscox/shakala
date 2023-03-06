@@ -4,6 +4,7 @@ import {
   DatePort,
   DomainEvent,
   EventPublisher,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -21,12 +22,9 @@ export type CreateThreadCommand = {
   keywords: string[];
 };
 
-const symbol = Symbol('CreateThreadCommand');
-export const createThread = commandCreator<CreateThreadCommand>(symbol);
+export const createThread = commandCreator<CreateThreadCommand>('createThread');
 
 export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> {
-  symbol = symbol;
-
   constructor(
     private readonly dateAdapter: DatePort,
     private readonly publisher: EventPublisher,
@@ -51,6 +49,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> 
 }
 
 injected(CreateThreadHandler, TOKENS.date, TOKENS.publisher, THREAD_TOKENS.repositories.threadRepository);
+registerCommand(createThread, THREAD_TOKENS.commands.createThreadHandler);
 
 export class ThreadCreatedEvent extends DomainEvent {
   constructor(threadId: string) {

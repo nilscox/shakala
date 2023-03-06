@@ -5,6 +5,7 @@ import {
   DomainEvent,
   EventPublisher,
   GeneratorPort,
+  registerCommand,
   TOKENS,
 } from '@shakala/common';
 import { injected } from 'brandi';
@@ -21,12 +22,9 @@ export type CreateUserCommand = {
   password: string;
 };
 
-const symbol = Symbol('CreateUserCommand');
-export const createUser = commandCreator<CreateUserCommand>(symbol);
+export const createUser = commandCreator<CreateUserCommand>('createUser');
 
 export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
-  symbol = symbol;
-
   constructor(
     private readonly generator: GeneratorPort,
     private readonly crypto: CryptoPort,
@@ -56,6 +54,8 @@ injected(
   TOKENS.publisher,
   USER_TOKENS.repositories.userRepository
 );
+
+registerCommand(createUser, USER_TOKENS.commands.createUserHandler);
 
 export class UserCreatedEvent extends DomainEvent {
   constructor(id: string) {
