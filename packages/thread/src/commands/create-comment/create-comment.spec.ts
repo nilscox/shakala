@@ -1,5 +1,10 @@
-import { expect, StubDateAdapter, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
-import { Timestamp } from '@shakala/common/src/entities/timestamp.value-object';
+import {
+  expect,
+  StubDateAdapter,
+  StubEventPublisher,
+  StubGeneratorAdapter,
+  Timestamp,
+} from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { Markdown } from '../../entities/markdown.value-object';

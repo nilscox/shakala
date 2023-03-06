@@ -8,7 +8,7 @@ export class StubQueryBus extends Array<unknown> implements QueryBus {
   private results = new Map<symbol, Map<string, unknown>>();
 
   on<Query extends ExecutableQuery>({ symbol, query }: Query) {
-    const queryResults = this.results.get(symbol) ?? new Map();
+    const queryResults = this.results.get(symbol) ?? new Map<string, unknown>();
 
     if (!this.results.has(symbol)) {
       this.results.set(symbol, queryResults);
