@@ -1,0 +1,24 @@
+{
+  "name": "@shakala/notification",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "build": "tsc -b",
+    "lint": "eslint --config ../../.eslintrc.ci.js src",
+    "test": "NODE_NO_WARNINGS=1 vitest"
+  },
+  "dependencies": {
+    "@shakala/common": "workspace:*",
+    "brandi": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
+    "vitest": "^0.29.1"
+  }
+}
