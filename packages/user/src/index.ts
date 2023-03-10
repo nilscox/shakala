@@ -10,6 +10,7 @@ export {
   InvalidEmailValidationTokenError,
 } from './commands/validate-user-email/validate-user-email';
 
+export { listUsers } from './queries/list-users';
 export { getUser, GetUserResult } from './queries/get-user';
 
 export { UserModule } from './user.module';

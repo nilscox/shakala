@@ -23,6 +23,7 @@ describe('[intg] UserController', () => {
       expect<GetUserResult>(await response.json()).toEqual({
         id: 'userId',
         email: 'user@domain.tld',
+        nick: '',
       });
     });
   });

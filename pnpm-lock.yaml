@@ -127,7 +127,7 @@ importers:
       typescript: 4.9.5
       vitest: 0.29.1
 
-  packages/notifications:
+  packages/notification:
     specifiers:
       '@shakala/common': workspace:*
       '@types/node': ^18.14.1
@@ -160,7 +160,9 @@ importers:
   packages/thread:
     specifiers:
       '@shakala/common': workspace:*
+      '@shakala/notification': workspace:*
       '@shakala/shared': workspace:*
+      '@shakala/user': workspace:*
       '@types/node': ^18.14.1
       brandi: ^5.0.0
       ts-node: ^10.9.1
@@ -168,7 +170,9 @@ importers:
       vitest: ^0.29.1
     dependencies:
       '@shakala/common': link:../common
+      '@shakala/notification': link:../notification
       '@shakala/shared': link:../shared
+      '@shakala/user': link:../user
       brandi: 5.0.0
     devDependencies:
       '@types/node': 18.14.2

@@ -1,4 +1,4 @@
-import { expect, StubDateAdapter, Timestamp } from '@shakala/common';
+import { expect, StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { NotificationType } from '../entities/notification.entity';
@@ -31,10 +31,15 @@ describe('CreateNotificationCommand', () => {
 class Test {
   now = new Timestamp('2022-01-01');
 
+  generator = new StubGeneratorAdapter();
   dateAdapter = new StubDateAdapter(this.now);
   notificationRepository = new InMemoryNotificationRepository();
 
-  handler = new CreateNotificationHandler(this.dateAdapter, this.notificationRepository);
+  handler = new CreateNotificationHandler(this.generator, this.dateAdapter, this.notificationRepository);
+
+  constructor() {
+    this.generator.nextId = 'notificationId';
+  }
 
   getNotification() {
     return this.notificationRepository.get('notificationId');
@@ -42,7 +47,6 @@ class Test {
 
   async act() {
     await this.handler.handle({
-      notificationId: 'notificationId',
       type: NotificationType.rulesUpdated,
       userId: 'userId',
       payload: {

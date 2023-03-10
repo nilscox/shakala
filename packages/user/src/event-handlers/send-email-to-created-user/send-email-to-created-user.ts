@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { CommandBus, ConfigPort, EventHandler, TOKENS } from '@shakala/common';
+import { CommandBus, ConfigPort, EventHandler, registerEventHandler, TOKENS } from '@shakala/common';
 import { EmailKind, sendEmail } from '@shakala/email';
 import { injected } from 'brandi';
 
@@ -43,3 +43,5 @@ injected(
   TOKENS.commandBus,
   USER_TOKENS.repositories.userRepository
 );
+
+registerEventHandler(UserCreatedEvent, USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler);

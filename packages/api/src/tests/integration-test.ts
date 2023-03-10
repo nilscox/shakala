@@ -58,7 +58,7 @@ export abstract class IntegrationTest {
     return this.server.as(userId);
   }
 
-  set user(user: { id: string; email?: string }) {
-    this.queryBus.on(getUser({ id: user.id })).return({ email: '', ...user });
+  set user(user: { id: string; email?: string; nick?: string }) {
+    this.queryBus.on(getUser({ id: user.id })).return({ email: '', nick: '', ...user });
   }
 }

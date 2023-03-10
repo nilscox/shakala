@@ -1,4 +1,11 @@
-import { commandCreator, CommandHandler, DatePort, registerCommand, TOKENS } from '@shakala/common';
+import {
+  commandCreator,
+  CommandHandler,
+  DatePort,
+  GeneratorPort,
+  registerCommand,
+  TOKENS,
+} from '@shakala/common';
 import { injected } from 'brandi';
 
 import { Notification, NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
@@ -6,7 +13,6 @@ import { NotificationRepository } from '../repositories/notification.repository'
 import { NOTIFICATION_TOKENS } from '../tokens';
 
 export type CreateNotificationCommand<Type extends NotificationType> = {
-  notificationId: string;
   userId: string;
   type: Type;
   payload: NotificationPayloadMap[Type];
@@ -19,6 +25,7 @@ export class CreateNotificationHandler
   implements CommandHandler<CreateNotificationCommand<NotificationType>>
 {
   constructor(
+    private readonly generator: GeneratorPort,
     private readonly dateAdapter: DatePort,
     private readonly notificationRepository: NotificationRepository
   ) {}
@@ -28,7 +35,7 @@ export class CreateNotificationHandler
 
     await this.notificationRepository.save(
       new Notification({
-        id: command.notificationId,
+        id: await this.generator.generateId(),
         date: this.dateAdapter.now(),
         userId,
         type,
@@ -38,5 +45,11 @@ export class CreateNotificationHandler
   }
 }
 
-injected(CreateNotificationHandler, TOKENS.date, NOTIFICATION_TOKENS.repositories.notificationRepository);
+injected(
+  CreateNotificationHandler,
+  TOKENS.generator,
+  TOKENS.date,
+  NOTIFICATION_TOKENS.repositories.notificationRepository
+);
+
 registerCommand(createNotification, NOTIFICATION_TOKENS.commands.createNotificationHandler);

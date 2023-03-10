@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@shakala/common": "workspace:*",
+    "@shakala/notification": "workspace:*",
     "@shakala/shared": "workspace:*",
+    "@shakala/user": "workspace:*",
     "brandi": "^5.0.0"
   },
   "devDependencies": {

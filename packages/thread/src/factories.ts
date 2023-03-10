@@ -6,8 +6,10 @@ import { Comment } from './entities/comment.entity';
 import { Markdown } from './entities/markdown.value-object';
 import { Message } from './entities/message.entity';
 import { Reaction, ReactionType } from './entities/reaction.entity';
+import { Thread } from './entities/thread.entity';
 
 type Factories = {
+  thread: EntityFactory<Thread>;
   markdown: ValueObjectFactory<Markdown>;
   message: EntityFactory<Message>;
   comment: EntityFactory<Comment>;
@@ -17,6 +19,18 @@ type Factories = {
 };
 
 export const create: Factories = {
+  thread(props) {
+    return new Thread({
+      id: randomId(),
+      authorId: '',
+      created: new Timestamp(0),
+      keywords: [],
+      description: '',
+      text: create.markdown(),
+      ...props,
+    });
+  },
+
   markdown(value = '') {
     return new Markdown(value);
   },

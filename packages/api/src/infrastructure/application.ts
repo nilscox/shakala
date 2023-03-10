@@ -1,4 +1,6 @@
-import { CommonModule, Module, ModuleConfig, TOKENS } from '@shakala/common';
+import EventEmitter from 'events';
+
+import { CommonModule, DomainEvent, getEventHandlers, Module, ModuleConfig, TOKENS } from '@shakala/common';
 import { EmailModule } from '@shakala/email';
 import { ThreadModule } from '@shakala/thread';
 import { UserModule } from '@shakala/user';
@@ -37,7 +39,30 @@ export class Application {
     for (const module of Object.values<Module>(this.modules)) {
       await module.init?.();
     }
+
+    this.configureEventHandlers();
   }
 
   async close() {}
+
+  private configureEventHandlers() {
+    const publisher = container.get(TOKENS.publisher);
+
+    if (!(publisher instanceof EventEmitter)) {
+      return;
+    }
+
+    for (const [EventClass, handlerTokens] of getEventHandlers()) {
+      for (const token of handlerTokens) {
+        const handler = container.get(token);
+
+        publisher.on(EventClass.name, (event: DomainEvent) => {
+          handler.handle(event).catch((error) => {
+            // todo: report error
+            console.log(error);
+          });
+        });
+      }
+    }
+  }
 }

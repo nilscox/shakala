@@ -9,6 +9,8 @@ export type GetUserQuery = { id: string } | { email: string };
 export type GetUserResult = {
   id: string;
   email: string;
+  nick: string;
+  profileImage?: string;
 };
 
 export const getUser = queryCreator<GetUserQuery, GetUserResult | undefined>('getUser');

@@ -13,6 +13,7 @@ export default defineConfig({
     alias: {
       '@shakala/common': packageSource('common'),
       '@shakala/email': packageSource('email'),
+      '@shakala/notification': packageSource('notification'),
       '@shakala/shared': packageSource('shared'),
       '@shakala/thread': packageSource('thread'),
       '@shakala/user': packageSource('user'),

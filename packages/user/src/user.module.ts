@@ -1,7 +1,7 @@
 import { Module } from '@shakala/common';
 
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
-import { CreateUserHandler, UserCreatedEvent } from './commands/create-user/create-user';
+import { CreateUserHandler } from './commands/create-user/create-user';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
 import { GetUserHandler } from './queries/get-user';
@@ -28,6 +28,5 @@ export class UserModule extends Module {
     this.bindToken(USER_TOKENS.queries.getUserHandler, GetUserHandler);
 
     this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
-    this.bindEventListener(UserCreatedEvent, USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler);
   }
 }

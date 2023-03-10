@@ -34,6 +34,8 @@ export * from './adapters/logger/console-logger.adapter';
 export * from './adapters/logger/logger.port';
 export * from './adapters/logger/stub-logger.port';
 
+export * from './adapters/publisher/register-event-handler';
+
 export * from './adapters/query-bus/local-query-bus.adapter';
 export * from './adapters/query-bus/query-bus.port';
 export * from './adapters/query-bus/register-query';

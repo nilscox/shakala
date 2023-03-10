@@ -8,6 +8,10 @@ import { UserRepository } from './user.repository';
 export class InMemoryUserRepository extends InMemoryRepository<User> implements UserRepository {
   entity = User;
 
+  async listUsers(): Promise<{ id: string }[]> {
+    return this.all().map((user) => ({ id: user.id }));
+  }
+
   async getUser(where: Partial<{ id: string; email: string }>): Promise<GetUserResult | undefined> {
     const user = this.find((user) => {
       return where.id === user.id || where.email === user.email;
@@ -20,6 +24,7 @@ export class InMemoryUserRepository extends InMemoryRepository<User> implements 
     return {
       id: user.id,
       email: user.email,
+      nick: user.nick.toString(),
     };
   }
 

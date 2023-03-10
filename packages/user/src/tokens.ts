@@ -5,6 +5,7 @@ import { CreateUserHandler } from './commands/create-user/create-user';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
 import { GetUserHandler } from './queries/get-user';
+import { ListUsersHandler } from './queries/list-users';
 import { UserRepository } from './repositories/user.repository';
 
 export const USER_TOKENS = {
@@ -17,6 +18,7 @@ export const USER_TOKENS = {
     validateUserEmailHandler: token<ValidateUserEmailHandler>('validateUserEmailHandler'),
   },
   queries: {
+    listUsersHandler: token<ListUsersHandler>('listUsersHandler'),
     getUserHandler: token<GetUserHandler>('getUserHandler'),
   },
   eventHandlers: {

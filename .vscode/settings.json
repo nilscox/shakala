@@ -3,6 +3,7 @@
     "packages/api",
     "packages/common",
     "packages/email",
+    "packages/notifications",
     "packages/shared",
     "packages/thread",
     "packages/user"
