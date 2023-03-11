@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
 import { listUserNotifications, markNotificationAsSeen } from '@shakala/notification';
 import { injected } from 'brandi';
@@ -14,12 +16,15 @@ export class NotificationController {
   }
 
   listNotifications: RequestHandler = async (req, res) => {
+    assert(req.userId);
+
     const notifications = await this.queryBus.execute(listUserNotifications({ userId: req.userId }));
 
     res.status(200);
     res.json(notifications);
   };
 
+  // todo: assert user has notification
   markNotificationAsSeen: RequestHandler<{ notificationId: string }> = async (req, res) => {
     const { notificationId } = req.params;
 

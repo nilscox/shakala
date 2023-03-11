@@ -1,5 +1,12 @@
 import { CreateCommentBody, CreateThreadBody } from '@shakala/shared';
-import { createComment, createThread } from '@shakala/thread';
+import {
+  createComment,
+  createThread,
+  getLastThreads,
+  GetLastThreadsResult,
+  getThread,
+  GetThreadResult,
+} from '@shakala/thread';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
@@ -11,6 +18,57 @@ describe('[intg] ThreadController', () => {
   beforeEach(() => void (test = new Test()));
   beforeEach(() => test?.setup());
   afterEach(() => test?.cleanup());
+
+  describe('GET /', () => {
+    const route = '/thread';
+
+    const result: GetLastThreadsResult = [
+      {
+        id: 'threadId',
+        author: { id: 'authorId', nick: 'author' },
+        description: 'description',
+        keywords: ['key', 'word'],
+        date: 'date',
+        text: 'text',
+      },
+    ];
+
+    it('retrieves the last 3 threads', async () => {
+      test.queryBus.on(getLastThreads({ count: 3 })).return(result);
+
+      const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
+
+      expect(await response.json()).toEqual(result);
+    });
+  });
+
+  describe('GET /:threadId', () => {
+    const route = '/thread/threadId';
+
+    const result: GetThreadResult = {
+      id: 'threadId',
+      author: { id: 'authorId', nick: 'author' },
+      description: 'description',
+      keywords: ['key', 'word'],
+      date: 'date',
+      text: 'text',
+      comments: [],
+    };
+
+    it('retrieves a thread from its id', async () => {
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
+
+      const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
+
+      expect(await response.json()).toEqual(result);
+    });
+
+    it('retrieves a thread an an authenticated user', async () => {
+      test.queryBus.on(getThread({ threadId: 'threadId', userId: 'userId' })).return(result);
+
+      await expect(test.as('userId').get(route)).toHaveStatus(200);
+    });
+  });
 
   describe('POST /thread', () => {
     const route = '/thread';

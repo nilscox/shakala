@@ -1,6 +1,8 @@
-import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
+import assert from 'assert';
+
+import { CommandBus, EntityNotFoundError, QueryBus, TOKENS } from '@shakala/common';
 import { editCommentBodySchema, reportCommentBodySchema, setReactionBodySchema } from '@shakala/shared';
-import { editComment, reportComment, setCommentSubscription, setReaction } from '@shakala/thread';
+import { editComment, getComment, reportComment, setCommentSubscription, setReaction } from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -13,6 +15,7 @@ export class CommentController {
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
     const guards = [isAuthenticated, hasWriteAccess];
 
+    this.router.get('/:commentId', this.getComment);
     this.router.put('/:commentId', guards, this.editComment);
     this.router.post('/:commentId/reaction', guards, this.setReaction);
     this.router.post('/:commentId/report', guards, this.report);
@@ -20,7 +23,22 @@ export class CommentController {
     this.router.post('/:commentId/unsubscribe', guards, this.unsubscribe);
   }
 
+  getComment: RequestHandler<{ commentId: string }> = async (req, res) => {
+    const result = await this.queryBus.execute(
+      getComment({ commentId: req.params.commentId, userId: req.userId })
+    );
+
+    if (!result) {
+      throw new EntityNotFoundError('Comment', { id: req.params.commentId });
+    }
+
+    res.status(200);
+    res.json(result);
+  };
+
   editComment: RequestHandler<{ commentId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const body = await validateRequestBody(req, editCommentBodySchema);
     const commentId = req.params.commentId;
     const authorId = req.userId;
@@ -32,6 +50,8 @@ export class CommentController {
   };
 
   setReaction: RequestHandler<{ commentId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const body = await validateRequestBody(req, setReactionBodySchema);
     const commentId = req.params.commentId;
     const userId = req.userId;
@@ -43,6 +63,8 @@ export class CommentController {
   };
 
   report: RequestHandler<{ commentId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const body = await validateRequestBody(req, reportCommentBodySchema);
     const commentId = req.params.commentId;
     const userId = req.userId;
@@ -54,6 +76,8 @@ export class CommentController {
   };
 
   subscribe: RequestHandler<{ commentId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const commentId = req.params.commentId;
     const userId = req.userId;
 
@@ -64,6 +88,8 @@ export class CommentController {
   };
 
   unsubscribe: RequestHandler<{ commentId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const commentId = req.params.commentId;
     const userId = req.userId;
 

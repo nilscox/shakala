@@ -6,6 +6,7 @@ export * from './types/class-type';
 export * from './types/deep-partial';
 export * from './types/enum-type';
 export * from './types/instance-of';
+export * from './types/maybe';
 export * from './types/replace';
 
 export * from './utils/array';

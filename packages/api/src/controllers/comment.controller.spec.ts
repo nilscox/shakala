@@ -1,5 +1,12 @@
 import { EditCommentBody, ReactionType, ReportCommentBody, SetReactionBody } from '@shakala/shared';
-import { editComment, reportComment, setCommentSubscription, setReaction } from '@shakala/thread';
+import {
+  editComment,
+  reportComment,
+  setCommentSubscription,
+  setReaction,
+  getComment,
+  GetCommentResult,
+} from '@shakala/thread';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
@@ -11,6 +18,44 @@ describe('[intg] CommentController', () => {
   beforeEach(() => void (test = new Test()));
   beforeEach(() => test?.setup());
   afterEach(() => test?.cleanup());
+
+  describe('GET /:commentId', () => {
+    const route = '/comment/commentId';
+
+    const result: GetCommentResult = {
+      id: 'commentId',
+      author: { id: 'authorId', nick: 'author' },
+      text: 'text',
+      date: 'date',
+      edited: false,
+      history: [],
+      upvotes: 0,
+      downvotes: 0,
+      replies: [],
+    };
+
+    it('retrieves a comment from its id', async () => {
+      test.queryBus.on(getComment({ commentId: 'commentId' })).return(result);
+
+      const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
+
+      expect(await response.json()).toEqual(result);
+    });
+
+    it('retrieves a comment as an authenticated user', async () => {
+      test.queryBus.on(getComment({ commentId: 'commentId', userId: 'userId' })).return(result);
+
+      const response = await expect(test.as('userId').get(route)).toHaveStatus(200);
+
+      expect(await response.json()).toEqual(result);
+    });
+
+    it('fails with status 404 when the comment does not exist', async () => {
+      test.queryBus.on(getComment({ commentId: 'commentId' })).return(undefined);
+
+      await expect(test.createAgent().get(route)).toHaveStatus(404);
+    });
+  });
 
   describe('PUT /:commentId', () => {
     const route = '/comment/commentId';

@@ -11,5 +11,5 @@ export enum Sort {
 }
 
 export interface CommentRepository extends Repository<Comment> {
-  getComment(id: string): Promise<GetCommentResult | undefined>;
+  getComment(id: string, userId?: string): Promise<GetCommentResult>;
 }

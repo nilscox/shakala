@@ -73,8 +73,8 @@ describe('[intg] AuthController', () => {
     });
 
     it('fails with status 401 when the user is already authenticated', async () => {
-      const agent = test.as('userId');
-      await expect(agent.post(route, payload)).toHaveStatus(401);
+      test.user = { id: 'userId' };
+      await expect(test.as('userId').post(route, payload)).toHaveStatus(401);
     });
   });
 

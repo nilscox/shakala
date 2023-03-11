@@ -1,4 +1,5 @@
 import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
+import { Maybe } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { CommentRepository } from '../repositories/comment/comment.repository';
@@ -9,7 +10,7 @@ export type GetCommentQuery = {
   userId?: string;
 };
 
-export type GetCommentResult = {
+export type GetCommentResult = Maybe<{
   id: string;
   author: {
     id: string;
@@ -28,15 +29,15 @@ export type GetCommentResult = {
   userReaction?: 'upvote' | 'downvote';
   isSubscribed?: boolean;
   replies: Array<Omit<GetCommentResult, 'replies'>>;
-};
+}>;
 
-export const getComment = queryCreator<GetCommentQuery, GetCommentResult | undefined>('getComment');
+export const getComment = queryCreator<GetCommentQuery, GetCommentResult>('getComment');
 
-export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetCommentResult | undefined> {
+export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetCommentResult> {
   constructor(private readonly commentRepository: CommentRepository) {}
 
-  async handle(query: GetCommentQuery): Promise<GetCommentResult | undefined> {
-    return this.commentRepository.getComment(query.commentId);
+  async handle(query: GetCommentQuery): Promise<GetCommentResult> {
+    return this.commentRepository.getComment(query.commentId, query.userId);
   }
 }
 

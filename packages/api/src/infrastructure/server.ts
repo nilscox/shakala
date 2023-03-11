@@ -11,6 +11,8 @@ import * as yup from 'yup';
 import { container } from '../container';
 import { API_TOKENS } from '../tokens';
 
+import { storeUserId } from './guards';
+
 export class Server {
   protected app: Express;
   protected server?: HttpServer;
@@ -22,6 +24,7 @@ export class Server {
 
     this.app.use(cookieParser('secret'));
     this.app.use(bodyParser.json());
+    this.app.use(storeUserId);
 
     this.app.use('/auth', container.get(API_TOKENS.controllers.authController).router);
     this.app.use('/user', container.get(API_TOKENS.controllers.userController).router);

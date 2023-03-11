@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
 import { getUser, InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
 import { injected } from 'brandi';
@@ -14,6 +16,8 @@ export class UserController {
   }
 
   getUserProfile: RequestHandler = async (req, res) => {
+    assert(req.userId);
+
     const result = await this.queryBus.execute(getUser({ id: req.userId }));
 
     res.status(200);
@@ -21,6 +25,8 @@ export class UserController {
   };
 
   validateEmail: RequestHandler<{ token: string }> = async (req, res) => {
+    assert(req.userId);
+
     try {
       await this.commandBus.execute(
         validateUserEmail({

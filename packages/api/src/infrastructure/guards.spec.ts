@@ -10,7 +10,7 @@ import { expect } from '../tests/expect';
 import { FetchAgent } from '../tests/fetch-agent';
 import { jwt } from '../utils/jwt';
 
-import { hasWriteAccess, isAuthenticated, isUnauthenticated } from './guards';
+import { hasWriteAccess, isAuthenticated, isUnauthenticated, storeUserId } from './guards';
 
 describe('[intg] guards', () => {
   describe('isAuthenticated', () => {
@@ -121,6 +121,8 @@ class Test {
 
   constructor(...guards: RequestHandler[]) {
     this.app.use(cookieParser());
+
+    this.app.use(storeUserId);
 
     this.app.use(...guards, (req, res) => {
       res.end();

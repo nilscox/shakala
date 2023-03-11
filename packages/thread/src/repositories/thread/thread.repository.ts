@@ -6,5 +6,5 @@ import { GetThreadResult } from '../../queries/get-thread';
 
 export interface ThreadRepository extends Repository<Thread> {
   getLastThreads(count: number): Promise<GetLastThreadsResult>;
-  getThread(threadId: string): Promise<GetThreadResult | undefined>;
+  getThread(threadId: string, userId?: string): Promise<GetThreadResult | undefined>;
 }

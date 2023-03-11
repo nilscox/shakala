@@ -12,20 +12,20 @@ import { jwt } from '../utils/jwt';
 declare global {
   namespace Express {
     export interface Request {
-      userId: string;
-      user: GetUserResult;
+      userId?: string;
+      user?: GetUserResult;
     }
   }
 }
 
-export const isAuthenticated: RequestHandler = async (req, res, next) => {
+export const storeUserId: RequestHandler = async (req, res, next) => {
   const queryBus = container.get(TOKENS.queryBus);
 
   const cookies = req.cookies as Record<string, string> | undefined;
   const token = cookies?.token;
 
   if (!token) {
-    res.status(401).end();
+    next();
     return;
   }
 
@@ -60,21 +60,22 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   next();
 };
 
-export const isUnauthenticated: RequestHandler = async (req, res, next) => {
-  const cookies = req.cookies as Record<string, string> | undefined;
-  const token = cookies?.token;
-
-  if (token === undefined) {
-    next();
+export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (!req.userId) {
+    res.status(401).end();
     return;
   }
 
-  try {
-    jwt.decode(token);
+  next();
+};
+
+export const isUnauthenticated: RequestHandler = async (req, res, next) => {
+  if (req.userId) {
     res.status(401).end();
-  } catch {
-    next();
+    return;
   }
+
+  next();
 };
 
 export const hasWriteAccess: RequestHandler = async (req, res, next) => {
