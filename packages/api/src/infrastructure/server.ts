@@ -54,9 +54,13 @@ export class Server {
   }
 
   async close() {
+    this.logger.verbose('closing server');
+
     if (this.server) {
       await promisify<void>(this.server.close.bind(this.server))();
     }
+
+    this.logger.verbose('server closed');
   }
 
   private validationErrorHandler: ErrorRequestHandler = (error, req, res, next) => {

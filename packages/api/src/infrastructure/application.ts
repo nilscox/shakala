@@ -1,6 +1,14 @@
 import EventEmitter from 'events';
 
-import { CommonModule, DomainEvent, getEventHandlers, Module, ModuleConfig, TOKENS } from '@shakala/common';
+import {
+  CommonModule,
+  DomainEvent,
+  getEventHandlers,
+  LoggerPort,
+  Module,
+  ModuleConfig,
+  TOKENS,
+} from '@shakala/common';
 import { EmailModule } from '@shakala/email';
 import { NotificationModule } from '@shakala/notification';
 import { ThreadModule } from '@shakala/thread';
@@ -32,12 +40,17 @@ export class Application {
     api: new ApiModule(container),
   };
 
+  private logger: LoggerPort;
+
   constructor(config: ApplicationConfig) {
     container.bind(TOKENS.container).toConstant(container);
 
     for (const [key, module] of Object.entries<Module>(this.modules)) {
       module.configure(config[key as keyof Modules]);
     }
+
+    this.logger = container.get(TOKENS.logger);
+    this.logger.tag = Application.name;
   }
 
   async init() {
@@ -48,23 +61,22 @@ export class Application {
     this.configureEventHandlers();
   }
 
-  async close() {}
+  async close() {
+    this.logger.info('application closed');
+  }
 
   private configureEventHandlers() {
-    const logger = container.get(TOKENS.logger);
     const publisher = container.get(TOKENS.publisher);
 
     if (!(publisher instanceof EventEmitter)) {
       return;
     }
 
-    logger.tag = Application.name;
-
     for (const [EventClass, handlerTokens] of getEventHandlers()) {
       for (const token of handlerTokens) {
         const handler = container.get(token);
 
-        logger.verbose('registering', handler.constructor.name, 'on', EventClass.name);
+        this.logger.verbose('registering', handler.constructor.name, 'on', EventClass.name);
 
         publisher.on(EventClass.name, (event: DomainEvent) => {
           handler.handle(event).catch((error) => {
