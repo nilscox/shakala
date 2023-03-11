@@ -10,7 +10,7 @@ import { expect } from '../tests/expect';
 import { FetchAgent } from '../tests/fetch-agent';
 import { jwt } from '../utils/jwt';
 
-import { isAuthenticated, isUnauthenticated } from './guards';
+import { hasWriteAccess, isAuthenticated, isUnauthenticated } from './guards';
 
 describe('[intg] guards', () => {
   describe('isAuthenticated', () => {
@@ -89,16 +89,40 @@ describe('[intg] guards', () => {
       await expect(test.agent().get('/', { headers })).toHaveStatus(401);
     });
   });
+
+  describe('hasWriteAccess', () => {
+    let test: Test;
+
+    beforeEach(() => {
+      test = new Test(isAuthenticated, hasWriteAccess);
+    });
+
+    afterEach(() => {
+      container.restore?.();
+    });
+
+    it('allows a request from a valid user', async () => {
+      await expect(test.as('userId').get('/')).toHaveStatus(200);
+    });
+
+    it('denies a request from a user whose email is not validated', async () => {
+      test.queryBus
+        .on(getUser({ id: 'userId' }))
+        .return({ id: 'userId', email: '', nick: '', emailValidated: false });
+
+      await expect(test.as('userId').get('/')).toHaveStatus(403);
+    });
+  });
 });
 
 class Test {
   readonly queryBus = new StubQueryBus();
   private readonly app = express();
 
-  constructor(guard: RequestHandler) {
+  constructor(...guards: RequestHandler[]) {
     this.app.use(cookieParser());
 
-    this.app.use(guard, (req, res) => {
+    this.app.use(...guards, (req, res) => {
       res.end();
     });
 
@@ -108,6 +132,15 @@ class Test {
 
     container.capture?.();
     container.bind(TOKENS.queryBus).toConstant(this.queryBus);
+  }
+
+  as(userId: string): FetchAgent {
+    const agent = this.agent();
+
+    const token = jwt.encode({ uid: userId });
+    agent.setHeader('Cookie', `token=${token}`);
+
+    return agent;
   }
 
   cleanup() {

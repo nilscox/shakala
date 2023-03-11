@@ -4,7 +4,7 @@ import { createComment, createThread } from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
-import { isAuthenticated } from '../infrastructure/guards';
+import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
 import { validateRequestBody } from '../infrastructure/validate-request-body';
 
 export class ThreadController {
@@ -15,8 +15,10 @@ export class ThreadController {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus
   ) {
-    this.router.post('/', isAuthenticated, this.createThread);
-    this.router.post('/:threadId/comment', isAuthenticated, this.createComment);
+    const guards = [isAuthenticated, hasWriteAccess];
+
+    this.router.post('/', guards, this.createThread);
+    this.router.post('/:threadId/comment', guards, this.createComment);
   }
 
   createThread: RequestHandler = async (req, res) => {

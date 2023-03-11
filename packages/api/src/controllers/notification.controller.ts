@@ -3,14 +3,14 @@ import { listUserNotifications, markNotificationAsSeen } from '@shakala/notifica
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
-import { isAuthenticated } from '../infrastructure/guards';
+import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
 
 export class NotificationController {
   public readonly router: Router = Router();
 
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
     this.router.get('/', isAuthenticated, this.listNotifications);
-    this.router.put('/:notificationId/seen', isAuthenticated, this.markNotificationAsSeen);
+    this.router.put('/:notificationId/seen', [isAuthenticated, hasWriteAccess], this.markNotificationAsSeen);
   }
 
   listNotifications: RequestHandler = async (req, res) => {

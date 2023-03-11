@@ -4,18 +4,20 @@ import { editComment, reportComment, setCommentSubscription, setReaction } from 
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
-import { isAuthenticated } from '../infrastructure/guards';
+import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
 import { validateRequestBody } from '../infrastructure/validate-request-body';
 
 export class CommentController {
   public readonly router: Router = Router();
 
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
-    this.router.put('/:commentId', isAuthenticated, this.editComment);
-    this.router.post('/:commentId/reaction', isAuthenticated, this.setReaction);
-    this.router.post('/:commentId/report', isAuthenticated, this.report);
-    this.router.post('/:commentId/subscribe', isAuthenticated, this.subscribe);
-    this.router.post('/:commentId/unsubscribe', isAuthenticated, this.unsubscribe);
+    const guards = [isAuthenticated, hasWriteAccess];
+
+    this.router.put('/:commentId', guards, this.editComment);
+    this.router.post('/:commentId/reaction', guards, this.setReaction);
+    this.router.post('/:commentId/report', guards, this.report);
+    this.router.post('/:commentId/subscribe', guards, this.subscribe);
+    this.router.post('/:commentId/unsubscribe', guards, this.unsubscribe);
   }
 
   editComment: RequestHandler<{ commentId: string }> = async (req, res) => {

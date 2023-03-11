@@ -3,7 +3,7 @@
 import assert from 'assert';
 
 import { TOKENS } from '@shakala/common';
-import { getUser } from '@shakala/user';
+import { getUser, GetUserResult } from '@shakala/user';
 import { RequestHandler } from 'express';
 
 import { container } from '../container';
@@ -13,6 +13,7 @@ declare global {
   namespace Express {
     export interface Request {
       userId: string;
+      user: GetUserResult;
     }
   }
 }
@@ -54,6 +55,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   }
 
   req.userId = userId;
+  req.user = user;
 
   next();
 };
@@ -73,4 +75,21 @@ export const isUnauthenticated: RequestHandler = async (req, res, next) => {
   } catch {
     next();
   }
+};
+
+export const hasWriteAccess: RequestHandler = async (req, res, next) => {
+  assert(req.user, 'hasWriteAccess: req.user is undefined');
+
+  if (!req.user.emailValidated) {
+    res.status(403);
+    res.json({
+      code: 'EmailNotValidated',
+      message: 'user email must be validated to perform this action',
+      details: { userId: req.userId },
+    });
+
+    return;
+  }
+
+  next();
 };
