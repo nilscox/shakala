@@ -6,6 +6,7 @@ import { EditCommentHandler } from './commands/edit-comment/edit-comment';
 import { ReportCommentHandler } from './commands/report-comment/report-comment';
 import { SetCommentSubscriptionHandler } from './commands/set-comment-subscription/set-comment-subscription';
 import { SetReactionHandler } from './commands/set-reaction/set-reaction';
+import { CreateReplyCreatedNotificationsHandler } from './event-handlers/create-reply-created-notification/create-comment-reply-notification';
 import { CreateThreadCreatedNotificationsHandler } from './event-handlers/create-thread-created-notifications/create-thread-created-notifications';
 import { GetCommentHandler } from './queries/get-comment';
 import { GetLastThreadsHandler } from './queries/get-last-threads';
@@ -54,6 +55,11 @@ export class ThreadModule extends Module {
     this.bindToken(
       THREAD_TOKENS.eventHandlers.createThreadCreatedNotificationsHandler,
       CreateThreadCreatedNotificationsHandler
+    );
+
+    this.bindToken(
+      THREAD_TOKENS.eventHandlers.createReplyCreatedNotificationsHandler,
+      CreateReplyCreatedNotificationsHandler
     );
   }
 }

@@ -1,3 +1,4 @@
+import { listUserNotifications, NotificationType } from '@shakala/notification';
 import {
   CreateCommentBody,
   CreateThreadBody,
@@ -5,9 +6,10 @@ import {
   ReactionType,
   ReportCommentBody,
   SetReactionBody,
+  waitFor,
 } from '@shakala/shared';
 import { createComment, createThread } from '@shakala/thread';
-import { createUser } from '@shakala/user';
+import { createUser, validateUserEmail } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { E2ETest } from '../tests/e2e-test';
@@ -21,7 +23,7 @@ describe('[e2e] thread', () => {
     await test.setup();
   });
 
-  afterEach(() => test.cleanup());
+  afterEach(() => test?.cleanup());
 
   it('As a user, I can create a thread post a comment and edit it', async () => {
     const agent = test.agent;
@@ -118,6 +120,27 @@ describe('[e2e] thread', () => {
       await expect(agent.post(`/comment/${commentId}/unsubscribe`)).toHaveStatus(204);
     }
   });
+
+  it('As a user, I receive a notification when a reply is created', async () => {
+    const agent = test.agent;
+
+    await test.createUser();
+    await test.createThread();
+    await test.createComment();
+    await subscribe('commentId');
+    await test.createReply();
+
+    await waitFor(async () => {
+      const notifications = await test.getNotifications();
+
+      expect(notifications).toHaveLength(2);
+      expect(notifications).toHaveProperty('1.type', NotificationType.replyCreated);
+    });
+
+    async function subscribe(commentId: string) {
+      await expect(agent.post(`/comment/${commentId}/subscribe`)).toHaveStatus(204);
+    }
+  });
 });
 
 class Test extends E2ETest {
@@ -130,6 +153,12 @@ class Test extends E2ETest {
         nick: 'nick',
         email: 'user@email.tld',
         password: '',
+      })
+    );
+
+    await this.commandBus.execute(
+      validateUserEmail({
+        userId: 'userId',
       })
     );
   }
@@ -164,5 +193,21 @@ class Test extends E2ETest {
         text: '',
       })
     );
+  }
+
+  async createReply() {
+    await this.commandBus.execute(
+      createComment({
+        commentId: 'replyId',
+        threadId: 'threadId',
+        parentId: 'commentId',
+        authorId: 'authorId',
+        text: '',
+      })
+    );
+  }
+
+  async getNotifications() {
+    return this.queryBus.execute(listUserNotifications({ userId: 'userId' }));
   }
 }

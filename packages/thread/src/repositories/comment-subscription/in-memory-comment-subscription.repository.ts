@@ -10,6 +10,10 @@ export class InMemoryCommentSubscriptionRepository
 {
   entity = CommentSubscription;
 
+  async findForComment(commentId: string): Promise<CommentSubscription[]> {
+    return this.filter((subscription) => subscription.commentId === commentId);
+  }
+
   async findForUserAndComment(userId: string, commentId: string): Promise<CommentSubscription | undefined> {
     return this.find(
       (subscription) => subscription.userId === userId && subscription.commentId === commentId

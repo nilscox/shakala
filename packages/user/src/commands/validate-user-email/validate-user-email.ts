@@ -14,7 +14,7 @@ import { USER_TOKENS } from '../../tokens';
 
 export type ValidateUserEmailCommand = {
   userId: string;
-  emailValidationToken: string;
+  emailValidationToken?: string;
 };
 
 export const validateUserEmail = commandCreator<ValidateUserEmailCommand>('validateUserEmail');
@@ -26,11 +26,11 @@ export class ValidateUserEmailHandler implements CommandHandler<ValidateUserEmai
     const { userId, emailValidationToken } = command;
     const user = await this.userRepository.findByIdOrFail(userId);
 
-    if (!user.emailValidationToken) {
+    if (user.emailValidationToken === undefined) {
       throw new EmailAlreadyValidatedError(user.email);
     }
 
-    if (emailValidationToken !== user.emailValidationToken) {
+    if (emailValidationToken !== undefined && emailValidationToken !== user.emailValidationToken) {
       throw new InvalidEmailValidationTokenError(user.email, emailValidationToken);
     }
 

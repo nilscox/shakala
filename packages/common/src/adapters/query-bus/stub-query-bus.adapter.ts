@@ -28,7 +28,7 @@ export class StubQueryBus extends Array<unknown> implements QueryBus {
 
     assert(
       queryResults && queryResults.has(JSON.stringify(query)),
-      `No result found for query ${String(symbol)}`
+      `No result found for query ${String(symbol)} ${JSON.stringify(query)}`
     );
 
     return queryResults.get(JSON.stringify(query)) as QueryResult<Q>;

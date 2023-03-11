@@ -26,6 +26,12 @@ describe('[unit] ValidateUserEmail', () => {
     expect(test.user).toHaveProperty('emailValidationToken', undefined);
   });
 
+  it("mark user's email as validated", async () => {
+    await expect(test.act({ emailValidationToken: undefined })).toResolve();
+
+    expect(test.user).toHaveProperty('emailValidationToken', undefined);
+  });
+
   it('publishes a UserEmailValidatedEvent', async () => {
     await expect(test.act()).toResolve();
 

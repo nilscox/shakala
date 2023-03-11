@@ -12,7 +12,7 @@ export const waitFor = async <T>(cb: () => Promise<T>): Promise<T> => {
     }
 
     await wait(10);
-  } while (error && Date.now() - start < 2000);
+  } while (error && Date.now() - start < 1000);
 
   throw error;
 };
