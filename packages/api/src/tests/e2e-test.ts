@@ -4,6 +4,7 @@ import { container } from '../container';
 import { Application } from '../infrastructure/application';
 import { API_TOKENS } from '../tokens';
 
+import { MailDevAdapter } from './maildev.adapter';
 import { TestServer } from './test-server';
 
 Error.stackTraceLimit = Infinity;
@@ -14,11 +15,12 @@ export interface E2ETest {
 
 export abstract class E2ETest {
   application = new Application();
+  emails = new MailDevAdapter();
 
   async setup() {
     await this.application.init({
       common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
-      email: { emailSender: 'stub' },
+      email: { emailSender: 'nodemailer' },
       thread: { repositories: 'filesystem' },
       user: { repositories: 'filesystem' },
       api: { server: 'test' },
@@ -29,13 +31,20 @@ export abstract class E2ETest {
 
   async cleanup() {
     await this.server.close();
+    await this.emails.clear();
   }
 
+  get = container.get.bind(container);
+
   get server() {
-    return container.get(API_TOKENS.server) as TestServer;
+    return this.get(API_TOKENS.server) as TestServer;
   }
 
   get commandBus() {
-    return container.get(TOKENS.commandBus);
+    return this.get(TOKENS.commandBus);
+  }
+
+  get queryBus() {
+    return this.get(TOKENS.queryBus);
   }
 }

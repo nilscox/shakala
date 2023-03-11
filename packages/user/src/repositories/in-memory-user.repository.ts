@@ -24,6 +24,7 @@ export class InMemoryUserRepository extends InMemoryRepository<User> implements 
     return {
       id: user.id,
       email: user.email,
+      emailValidated: user.emailValidationToken === undefined,
       nick: user.nick.toString(),
     };
   }

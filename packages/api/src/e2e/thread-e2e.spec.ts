@@ -17,8 +17,11 @@ import { FetchAgent } from '../tests/fetch-agent';
 describe('[e2e] thread', () => {
   let test: Test;
 
-  beforeEach(() => void (test = new Test()));
-  beforeEach(() => test.setup());
+  beforeEach(async () => {
+    test = new Test();
+    await test.setup();
+  });
+
   afterEach(() => test.cleanup());
 
   it('As a user, I can create a thread post a comment and edit it', async () => {
@@ -130,7 +133,7 @@ class Test extends E2ETest {
       createUser({
         userId: 'userId',
         nick: 'nick',
-        email: '',
+        email: 'user@email.tld',
         password: '',
       })
     );

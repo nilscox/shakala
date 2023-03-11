@@ -26,4 +26,5 @@ export * from './utils/omit';
 export * from './utils/pick';
 export * from './utils/random-id';
 export * from './utils/to-kebab-case';
+export * from './utils/wait-for';
 export * from './utils/wait';

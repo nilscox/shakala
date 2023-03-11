@@ -14,7 +14,7 @@ export class FetchAgent {
   private currentUrl = 'http://localhost';
   private jar = new CookieJar();
 
-  constructor(private readonly app: Express) {
+  constructor(app: Express) {
     this.server = createServer(app);
   }
 
@@ -73,7 +73,8 @@ export class FetchAgent {
 
     Object.entries(this.headers).forEach(([key, value]) => headers.set(key, value));
 
-    const response = await fetch(this.baseUrl + path, options);
+    const url = this.baseUrl + path;
+    const response = await fetch(url, options);
     const setCookie = response.headers.get('set-cookie');
 
     if (setCookie) {

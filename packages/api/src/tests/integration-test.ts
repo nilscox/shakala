@@ -30,7 +30,8 @@ export abstract class IntegrationTest {
     await this.arrange?.();
   }
 
-  cleanup() {
+  async cleanup() {
+    await this.server.close();
     container.restore?.();
   }
 
@@ -59,6 +60,6 @@ export abstract class IntegrationTest {
   }
 
   set user(user: { id: string; email?: string; nick?: string }) {
-    this.queryBus.on(getUser({ id: user.id })).return({ email: '', nick: '', ...user });
+    this.queryBus.on(getUser({ id: user.id })).return({ email: '', nick: '', emailValidated: true, ...user });
   }
 }

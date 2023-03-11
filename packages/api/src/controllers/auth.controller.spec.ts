@@ -83,7 +83,7 @@ describe('[intg] AuthController', () => {
     const route = '/auth/sign-in';
 
     beforeEach(() => {
-      const user: GetUserResult = { id: 'userId', email: 'user@domain.tld', nick: '' };
+      const user: GetUserResult = { id: 'userId', email: 'user@domain.tld', emailValidated: true, nick: '' };
 
       test.queryBus.on(getUser({ id: 'userId' })).return(user);
       test.queryBus.on(getUser({ email: 'user@domain.tld' })).return(user);

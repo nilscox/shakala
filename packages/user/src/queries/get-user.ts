@@ -9,6 +9,7 @@ export type GetUserQuery = { id: string } | { email: string };
 export type GetUserResult = {
   id: string;
   email: string;
+  emailValidated: boolean;
   nick: string;
   profileImage?: string;
 };

@@ -7,8 +7,14 @@ import { jwt } from '../utils/jwt';
 import { FetchAgent } from './fetch-agent';
 
 export class TestServer extends Server {
+  private agents = new Set<FetchAgent>();
+
   agent() {
-    return new FetchAgent(this.app);
+    const agent = new FetchAgent(this.app);
+
+    this.agents.add(agent);
+
+    return agent;
   }
 
   as(userId: string): FetchAgent {
@@ -18,6 +24,14 @@ export class TestServer extends Server {
     agent.setHeader('Cookie', `token=${token}`);
 
     return agent;
+  }
+
+  override async close() {
+    for (const agent of this.agents) {
+      await agent.closeServer();
+    }
+
+    await super.close();
   }
 }
 

@@ -102,7 +102,9 @@ class Test {
       res.end();
     });
 
-    this.queryBus.on(getUser({ id: 'userId' })).return({ id: 'userId', email: '', nick: '' });
+    this.queryBus
+      .on(getUser({ id: 'userId' }))
+      .return({ id: 'userId', email: '', nick: '', emailValidated: true });
 
     container.capture?.();
     container.bind(TOKENS.queryBus).toConstant(this.queryBus);

@@ -51,6 +51,7 @@ class Test {
     this.queryBus.on(getUser({ id: 'authorId' })).return({
       id: 'authorId',
       email: 'author@domain.tld',
+      emailValidated: true,
       nick: 'author',
     });
 
