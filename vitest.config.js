@@ -9,6 +9,7 @@ const packageSource = (pkg) => {
 export default defineConfig({
   test: {
     watch: false,
+    testTimeout: 2000,
     reporters: ['verbose'],
     alias: {
       '@shakala/common': packageSource('common'),

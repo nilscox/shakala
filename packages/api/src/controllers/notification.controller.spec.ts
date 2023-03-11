@@ -1,4 +1,4 @@
-import { listUserNotifications, NotificationType } from '@shakala/notification';
+import { listUserNotifications, markNotificationAsSeen, NotificationType } from '@shakala/notification';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
@@ -39,6 +39,24 @@ describe('[intg] NotificationController', () => {
 
     it('fails with status 401 when the user is not authenticated', async () => {
       await expect(test.createAgent().get(route)).toHaveStatus(401);
+    });
+  });
+
+  describe('PUT /notification/:notificationId/seen', () => {
+    const route = '/notification/notificationId/seen';
+
+    it('invokes the markNotificationAsSeen command', async () => {
+      await expect(test.asUser.put(route)).toHaveStatus(204);
+
+      expect(test.commandBus).toInclude(
+        markNotificationAsSeen({
+          notificationId: 'notificationId',
+        })
+      );
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().put(route)).toHaveStatus(401);
     });
   });
 });

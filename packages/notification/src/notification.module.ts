@@ -1,6 +1,7 @@
 import { Module } from '@shakala/common';
 
-import { CreateNotificationHandler } from './commands/create-notification';
+import { CreateNotificationHandler } from './commands/create-notification/create-notification';
+import { MarkNotificationAsSeenHandler } from './commands/mark-notification-as-seen/mark-notification-as-seen';
 import { ListUserNotificationsHandler } from './queries/list-user-notifications';
 import { FilesystemNotificationRepository } from './repositories/file-system-notification.repository';
 import { InMemoryNotificationRepository } from './repositories/in-memory-notification.repository';
@@ -21,7 +22,9 @@ export class NotificationModule extends Module {
       );
     }
 
+    this.bindToken(NOTIFICATION_TOKENS.commands.markNotificationAsSeenHandler, MarkNotificationAsSeenHandler);
     this.bindToken(NOTIFICATION_TOKENS.commands.createNotificationHandler, CreateNotificationHandler);
+
     this.bindToken(NOTIFICATION_TOKENS.queries.listUserNotificationsHandler, ListUserNotificationsHandler);
   }
 }

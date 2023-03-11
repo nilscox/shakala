@@ -8,9 +8,9 @@ import {
 } from '@shakala/common';
 import { injected } from 'brandi';
 
-import { Notification, NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
-import { NotificationRepository } from '../repositories/notification.repository';
-import { NOTIFICATION_TOKENS } from '../tokens';
+import { Notification, NotificationPayloadMap, NotificationType } from '../../entities/notification.entity';
+import { NotificationRepository } from '../../repositories/notification.repository';
+import { NOTIFICATION_TOKENS } from '../../tokens';
 
 export type CreateNotificationCommand<Type extends NotificationType> = {
   userId: string;
