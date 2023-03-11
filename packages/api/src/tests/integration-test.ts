@@ -16,7 +16,7 @@ export interface IntegrationTest {
 export abstract class IntegrationTest {
   public readonly application = new Application({
     common: { logger: 'stub', buses: 'stub', generator: 'stub' },
-    email: { emailSender: 'stub' },
+    email: { emailCompiler: 'fake', emailSender: 'stub' },
     notification: { repositories: 'filesystem' },
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },
@@ -36,20 +36,22 @@ export abstract class IntegrationTest {
     container.restore?.();
   }
 
+  get = container.get.bind(container);
+
   get commandBus() {
-    return container.get(TOKENS.commandBus) as StubCommandBus;
+    return this.get(TOKENS.commandBus) as StubCommandBus;
   }
 
   get queryBus() {
-    return container.get(TOKENS.queryBus) as StubQueryBus;
+    return this.get(TOKENS.queryBus) as StubQueryBus;
   }
 
   get generator() {
-    return container.get(TOKENS.generator) as StubGeneratorAdapter;
+    return this.get(TOKENS.generator) as StubGeneratorAdapter;
   }
 
   get server() {
-    return container.get(API_TOKENS.server) as TestServer;
+    return this.get(API_TOKENS.server) as TestServer;
   }
 
   createAgent() {

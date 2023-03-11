@@ -16,7 +16,7 @@ export interface E2ETest {
 export abstract class E2ETest {
   application = new Application({
     common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
-    email: { emailSender: 'nodemailer' },
+    email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },

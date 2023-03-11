@@ -26,6 +26,7 @@ export class Server {
     this.app.use(bodyParser.json());
     this.app.use(storeUserId);
 
+    this.app.use(container.get(API_TOKENS.controllers.healthcheckController).router);
     this.app.use('/auth', container.get(API_TOKENS.controllers.authController).router);
     this.app.use('/user', container.get(API_TOKENS.controllers.userController).router);
     this.app.use('/thread', container.get(API_TOKENS.controllers.threadController).router);

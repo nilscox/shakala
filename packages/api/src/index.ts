@@ -9,7 +9,7 @@ main().catch(console.error);
 async function main() {
   const application = new Application({
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
-    email: { emailSender: 'nodemailer' },
+    email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },
