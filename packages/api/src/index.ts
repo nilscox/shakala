@@ -7,9 +7,7 @@ Error.stackTraceLimit = Infinity;
 main().catch(console.error);
 
 async function main() {
-  const application = new Application();
-
-  await application.init({
+  const application = new Application({
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
@@ -18,5 +16,6 @@ async function main() {
     api: { server: 'prod' },
   });
 
+  await application.init();
   await container.get(API_TOKENS.server).listen();
 }

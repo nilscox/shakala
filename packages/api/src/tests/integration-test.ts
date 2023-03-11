@@ -14,19 +14,19 @@ export interface IntegrationTest {
 }
 
 export abstract class IntegrationTest {
-  public readonly application = new Application();
+  public readonly application = new Application({
+    common: { logger: 'stub', buses: 'stub', generator: 'stub' },
+    email: { emailSender: 'stub' },
+    notification: { repositories: 'filesystem' },
+    thread: { repositories: 'filesystem' },
+    user: { repositories: 'filesystem' },
+    api: { server: 'test' },
+  });
 
   async setup() {
     container.capture?.();
 
-    await this.application.init({
-      common: { logger: 'stub', buses: 'stub', generator: 'stub' },
-      email: { emailSender: 'stub' },
-      notification: { repositories: 'filesystem' },
-      thread: { repositories: 'filesystem' },
-      user: { repositories: 'filesystem' },
-      api: { server: 'test' },
-    });
+    await this.application.init();
 
     await this.arrange?.();
   }

@@ -11,7 +11,6 @@ import {
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
-import { FetchAgent } from '../tests/fetch-agent';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
@@ -149,11 +148,7 @@ describe('[intg] AuthController', () => {
 });
 
 class Test extends IntegrationTest {
-  agent!: FetchAgent;
-
-  arrange() {
-    this.agent = this.createAgent();
-  }
+  agent = this.createAgent();
 
   get tokenCookie() {
     return this.agent.getCookie('token');

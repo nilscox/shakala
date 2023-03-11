@@ -14,18 +14,19 @@ export interface E2ETest {
 }
 
 export abstract class E2ETest {
-  application = new Application();
+  application = new Application({
+    common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
+    email: { emailSender: 'nodemailer' },
+    notification: { repositories: 'filesystem' },
+    thread: { repositories: 'filesystem' },
+    user: { repositories: 'filesystem' },
+    api: { server: 'test' },
+  });
+
   emails = new MailDevAdapter();
 
   async setup() {
-    await this.application.init({
-      common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
-      email: { emailSender: 'nodemailer' },
-      notification: { repositories: 'filesystem' },
-      thread: { repositories: 'filesystem' },
-      user: { repositories: 'filesystem' },
-      api: { server: 'test' },
-    });
+    await this.application.init();
 
     await this.arrange?.();
   }

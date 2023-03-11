@@ -9,14 +9,14 @@ import { Application } from './application';
 
 describe('[intg] Server', () => {
   it('starts an HTTP server on a given host and port', async () => {
-    await new Application().init({
+    await new Application({
       common: { logger: 'stub', buses: 'stub', generator: 'stub' },
       email: { emailSender: 'stub' },
       notification: { repositories: 'memory' },
       thread: { repositories: 'memory' },
       user: { repositories: 'memory' },
       api: { server: 'prod' },
-    });
+    }).init();
 
     const config = new StubConfigAdapter({
       app: { host: 'localhost', port: 4242 },

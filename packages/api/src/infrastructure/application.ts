@@ -32,13 +32,15 @@ export class Application {
     api: new ApiModule(container),
   };
 
-  async init(config: ApplicationConfig) {
+  constructor(config: ApplicationConfig) {
     container.bind(TOKENS.container).toConstant(container);
 
     for (const [key, module] of Object.entries<Module>(this.modules)) {
       module.configure(config[key as keyof Modules]);
     }
+  }
 
+  async init() {
     for (const module of Object.values<Module>(this.modules)) {
       await module.init?.();
     }

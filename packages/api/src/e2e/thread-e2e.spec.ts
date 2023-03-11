@@ -12,7 +12,6 @@ import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { E2ETest } from '../tests/e2e-test';
 import { expect } from '../tests/expect';
-import { FetchAgent } from '../tests/fetch-agent';
 
 describe('[e2e] thread', () => {
   let test: Test;
@@ -122,11 +121,7 @@ describe('[e2e] thread', () => {
 });
 
 class Test extends E2ETest {
-  agent!: FetchAgent;
-
-  arrange() {
-    this.agent = this.server.as('userId');
-  }
+  agent = this.server.as('userId');
 
   async createUser() {
     await this.commandBus.execute(
@@ -140,6 +135,15 @@ class Test extends E2ETest {
   }
 
   async createThread() {
+    await this.commandBus.execute(
+      createUser({
+        userId: 'authorId',
+        nick: 'author',
+        email: 'author@domain.tld',
+        password: '',
+      })
+    );
+
     await this.commandBus.execute(
       createThread({
         threadId: 'threadId',

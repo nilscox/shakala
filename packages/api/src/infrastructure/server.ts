@@ -16,6 +16,8 @@ export class Server {
   protected server?: HttpServer;
 
   constructor(private readonly logger: LoggerPort, private readonly config: ConfigPort) {
+    this.logger.tag = Server.name;
+
     this.app = express();
 
     this.app.use(cookieParser('secret'));
@@ -44,7 +46,7 @@ export class Server {
       }
     });
 
-    this.logger.info(`Server listening on ${host}:${port}`);
+    this.logger.info(`listening on ${host}:${port}`);
   }
 
   async close() {

@@ -2,7 +2,6 @@ import { GetUserResult, InvalidEmailValidationTokenError, validateUserEmail } fr
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
-import { FetchAgent } from '../tests/fetch-agent';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] UserController', () => {
@@ -71,10 +70,9 @@ describe('[intg] UserController', () => {
 });
 
 class Test extends IntegrationTest {
-  asUser!: FetchAgent;
+  asUser = this.as('userId');
 
   arrange() {
     this.user = { id: 'userId' };
-    this.asUser = this.as('userId');
   }
 }
