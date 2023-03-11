@@ -57,6 +57,7 @@ export * from './utils/base-error';
 export * from './utils/entity-not-found-error';
 export * from './utils/in-memory-repository';
 export * from './utils/module';
+export * from './utils/pagination';
 export * from './utils/random-id';
 export * from './utils/repository';
 export * from './utils/stub-event-publisher';

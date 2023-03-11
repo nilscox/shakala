@@ -131,8 +131,8 @@ describe('[e2e] thread', () => {
     await waitFor(async () => {
       const notifications = await test.getNotifications();
 
-      expect(notifications).toHaveLength(2);
-      expect(notifications).toHaveProperty('1.type', NotificationType.replyCreated);
+      expect(notifications).toHaveProperty('total', 2);
+      expect(notifications).toHaveProperty('items.1.type', NotificationType.replyCreated);
     });
   });
 });
@@ -202,6 +202,6 @@ class Test extends E2ETest {
   }
 
   async getNotifications() {
-    return this.queryBus.execute(listUserNotifications({ userId: 'userId' }));
+    return this.queryBus.execute(listUserNotifications({ userId: 'userId', page: 1, pageSize: 10 }));
   }
 }

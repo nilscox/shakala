@@ -1,3 +1,4 @@
+import { paginationQuerySchema } from '@shakala/shared';
 import { Request } from 'express';
 import * as yup from 'yup';
 
@@ -11,5 +12,9 @@ export const validateRequest = (request: Request) => {
   return {
     query: validate(request.query),
     body: validate(request.body),
+
+    pagination() {
+      return this.query(paginationQuerySchema);
+    },
   };
 };

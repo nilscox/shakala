@@ -6,6 +6,7 @@ import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
+import { validateRequest } from '../infrastructure/validation';
 
 export class NotificationController {
   public readonly router: Router = Router();
@@ -18,8 +19,13 @@ export class NotificationController {
   listNotifications: RequestHandler = async (req, res) => {
     assert(req.userId);
 
-    const notifications = await this.queryBus.execute(listUserNotifications({ userId: req.userId }));
+    const pagination = await validateRequest(req).pagination();
 
+    const { total, items: notifications } = await this.queryBus.execute(
+      listUserNotifications({ userId: req.userId, ...pagination })
+    );
+
+    res.set('pagination-total', String(total));
     res.status(200);
     res.json(notifications);
   };

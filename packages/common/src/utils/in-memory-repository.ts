@@ -6,6 +6,7 @@ import clone from 'lodash.clonedeep';
 import { Entity } from '../ddd/entity';
 
 import { EntityNotFoundError } from './entity-not-found-error';
+import { Paginated, Pagination } from './pagination';
 
 export abstract class InMemoryRepository<Item extends Entity> {
   private items: Map<string, Item>;
@@ -64,6 +65,13 @@ export abstract class InMemoryRepository<Item extends Entity> {
 
   filter(predicate: (item: Item) => boolean) {
     return this.all().filter(predicate);
+  }
+
+  paginate<T>(items: T[], { offset, limit }: Pagination): Paginated<T> {
+    return {
+      items: items.slice(offset, offset + limit),
+      total: items.length,
+    };
   }
 
   [util.inspect.custom]() {

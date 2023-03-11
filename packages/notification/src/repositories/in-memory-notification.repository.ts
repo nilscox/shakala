@@ -1,4 +1,4 @@
-import { InMemoryRepository } from '@shakala/common';
+import { InMemoryRepository, PaginatedItem, Pagination } from '@shakala/common';
 
 import { Notification } from '../entities/notification.entity';
 import { ListUserNotificationsResult } from '../queries/list-user-notifications';
@@ -11,13 +11,17 @@ export class InMemoryNotificationRepository
 {
   entity = Notification;
 
-  async getUserNotifications(userId: string): Promise<ListUserNotificationsResult> {
-    return this.filter((notification) => notification.userId === userId).map((notification) => ({
+  async getUserNotifications(userId: string, pagination: Pagination): Promise<ListUserNotificationsResult> {
+    const notifications = this.filter((notification) => notification.userId === userId);
+
+    const results: Array<PaginatedItem<ListUserNotificationsResult>> = notifications.map((notification) => ({
       id: notification.id,
       type: notification.type,
       created: notification.date.toString(),
       seen: notification.seenDate?.toString() ?? false,
       payload: notification.payload,
     }));
+
+    return this.paginate(results, pagination);
   }
 }

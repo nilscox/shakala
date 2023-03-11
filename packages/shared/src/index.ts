@@ -1,5 +1,6 @@
 export * from './schemas/authentication';
 export * from './schemas/comment';
+export * from './schemas/common';
 export * from './schemas/thread';
 
 export * from './types/class-type';

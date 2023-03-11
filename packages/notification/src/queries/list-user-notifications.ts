@@ -1,4 +1,4 @@
-import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
+import { Paginated, Pagination, queryCreator, QueryHandler, registerQuery } from '@shakala/common';
 import { injected } from 'brandi';
 
 import { NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
@@ -7,9 +7,11 @@ import { NOTIFICATION_TOKENS } from '../tokens';
 
 type ListUserNotificationsQuery = {
   userId: string;
+  page: number;
+  pageSize: number;
 };
 
-export type ListUserNotificationsResult = Array<{
+export type ListUserNotificationsResult = Paginated<{
   id: string;
   type: NotificationType;
   created: string;
@@ -27,7 +29,7 @@ export class ListUserNotificationsHandler
   constructor(private readonly notificationRepository: NotificationRepository) {}
 
   async handle(query: ListUserNotificationsQuery): Promise<ListUserNotificationsResult> {
-    return this.notificationRepository.getUserNotifications(query.userId);
+    return this.notificationRepository.getUserNotifications(query.userId, Pagination.from(query));
   }
 }
 

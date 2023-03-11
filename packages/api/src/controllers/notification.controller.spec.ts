@@ -17,24 +17,41 @@ describe('[intg] NotificationController', () => {
   describe('GET /notification', () => {
     const route = '/notification';
 
-    it('invokes the listUserNotifications query', async () => {
-      test.queryBus.on(listUserNotifications({ userId: 'userId' })).return([
-        {
-          id: 'notificationId',
-          type: NotificationType.rulesUpdated,
-          created: new Date().toISOString(),
-          seen: false,
-          payload: {
-            version: '6.8',
-            changes: 'more bugs',
+    it("retrieves the list of user's notifications", async () => {
+      test.queryBus.on(listUserNotifications({ userId: 'userId', pageSize: 10, page: 1 })).return({
+        total: 1,
+        items: [
+          {
+            id: 'notificationId',
+            type: NotificationType.rulesUpdated,
+            created: new Date().toISOString(),
+            seen: false,
+            payload: {
+              version: '6.8',
+              changes: 'more bugs',
+            },
           },
-        },
-      ]);
+        ],
+      });
 
       const response = await expect(test.asUser.get(route)).toHaveStatus(200);
       const body = await response.json();
 
       expect<object>(body).toHaveProperty('0.id', 'notificationId');
+      expect(response.headers.get('pagination-total')).toEqual('1');
+    });
+
+    it('retrieves the notifications on the second page', async () => {
+      test.queryBus
+        .on(listUserNotifications({ userId: 'userId', pageSize: 1, page: 2 }))
+        .return({ total: 0, items: [] });
+
+      const searchParams = new URLSearchParams({
+        pageSize: '1',
+        page: '2',
+      });
+
+      await expect(test.asUser.get(`${route}?${searchParams}`)).toHaveStatus(200);
     });
 
     it('fails with status 401 when the user is not authenticated', async () => {
