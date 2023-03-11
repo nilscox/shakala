@@ -1,6 +1,7 @@
 import { token } from 'brandi';
 
 import { CreateNotificationHandler } from './commands/create-notification';
+import { ListUserNotificationsHandler } from './queries/list-user-notifications';
 import { NotificationRepository } from './repositories/notification.repository';
 
 export const NOTIFICATION_TOKENS = {
@@ -9,5 +10,8 @@ export const NOTIFICATION_TOKENS = {
   },
   commands: {
     createNotificationHandler: token<CreateNotificationHandler>('createNotificationHandler'),
+  },
+  queries: {
+    listUserNotificationsHandler: token<ListUserNotificationsHandler>('listUserNotificationsHandler'),
   },
 };

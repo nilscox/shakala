@@ -15,6 +15,7 @@
   "dependencies": {
     "@shakala/common": "workspace:*",
     "@shakala/email": "workspace:*",
+    "@shakala/notification": "workspace:*",
     "@shakala/shared": "workspace:*",
     "@shakala/thread": "workspace:*",
     "@shakala/user": "workspace:*",

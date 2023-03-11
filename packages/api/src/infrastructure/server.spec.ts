@@ -12,6 +12,7 @@ describe('[intg] Server', () => {
     await new Application().init({
       common: { logger: 'stub', buses: 'stub', generator: 'stub' },
       email: { emailSender: 'stub' },
+      notification: { repositories: 'memory' },
       thread: { repositories: 'memory' },
       user: { repositories: 'memory' },
       api: { server: 'prod' },

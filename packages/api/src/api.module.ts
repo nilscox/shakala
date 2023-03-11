@@ -2,6 +2,7 @@ import { Module } from '@shakala/common';
 
 import { AuthController } from './controllers/auth.controller';
 import { CommentController } from './controllers/comment.controller';
+import { NotificationController } from './controllers/notification.controller';
 import { ThreadController } from './controllers/thread.controller';
 import { UserController } from './controllers/user.controller';
 import { Server } from './infrastructure/server';
@@ -18,6 +19,7 @@ export class ApiModule extends Module {
     this.bindToken(API_TOKENS.controllers.userController, UserController);
     this.bindToken(API_TOKENS.controllers.threadController, ThreadController);
     this.bindToken(API_TOKENS.controllers.commentController, CommentController);
+    this.bindToken(API_TOKENS.controllers.notificationController, NotificationController);
 
     if (config.server === 'test') {
       this.bindToken(API_TOKENS.server, TestServer);

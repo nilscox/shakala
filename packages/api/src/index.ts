@@ -12,6 +12,7 @@ async function main() {
   await application.init({
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailSender: 'nodemailer' },
+    notification: { repositories: 'filesystem' },
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },
     api: { server: 'prod' },

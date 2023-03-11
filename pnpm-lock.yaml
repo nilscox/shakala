@@ -26,6 +26,7 @@ importers:
     specifiers:
       '@shakala/common': workspace:*
       '@shakala/email': workspace:*
+      '@shakala/notification': workspace:*
       '@shakala/shared': workspace:*
       '@shakala/thread': workspace:*
       '@shakala/user': workspace:*
@@ -49,6 +50,7 @@ importers:
     dependencies:
       '@shakala/common': link:../common
       '@shakala/email': link:../email
+      '@shakala/notification': link:../notification
       '@shakala/shared': link:../shared
       '@shakala/thread': link:../thread
       '@shakala/user': link:../user

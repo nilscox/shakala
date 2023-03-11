@@ -22,6 +22,7 @@ export abstract class IntegrationTest {
     await this.application.init({
       common: { logger: 'stub', buses: 'stub', generator: 'stub' },
       email: { emailSender: 'stub' },
+      notification: { repositories: 'filesystem' },
       thread: { repositories: 'filesystem' },
       user: { repositories: 'filesystem' },
       api: { server: 'test' },
