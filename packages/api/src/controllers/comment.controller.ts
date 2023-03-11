@@ -7,7 +7,7 @@ import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
-import { validateRequestBody } from '../infrastructure/validate-request-body';
+import { validateRequestBody } from '../infrastructure/validation';
 
 export class CommentController {
   public readonly router: Router = Router();

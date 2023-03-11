@@ -9,7 +9,7 @@ import { secondsInMonth } from 'date-fns/constants';
 import { RequestHandler, Router } from 'express';
 
 import { isAuthenticated, isUnauthenticated } from '../infrastructure/guards';
-import { validateRequestBody } from '../infrastructure/validate-request-body';
+import { validateRequestBody } from '../infrastructure/validation';
 import { jwt } from '../utils/jwt';
 
 export class AuthController {

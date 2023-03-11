@@ -1,11 +1,18 @@
+import assert from 'assert';
+
 import { CommandBus, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
-import { createCommentBodySchema, createThreadBodySchema } from '@shakala/shared';
+import {
+  createCommentBodySchema,
+  createThreadBodySchema,
+  getLastThreadsQuerySchema,
+  getThreadQuerySchema,
+} from '@shakala/shared';
 import { createComment, createThread, getLastThreads, getThread } from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
-import { validateRequestBody } from '../infrastructure/validate-request-body';
+import { validateRequestBody, validateRequestQuery } from '../infrastructure/validation';
 
 export class ThreadController {
   public readonly router: Router = Router();
@@ -24,15 +31,18 @@ export class ThreadController {
   }
 
   getLastThreads: RequestHandler = async (req, res) => {
-    const results = await this.queryBus.execute(getLastThreads({ count: Number(req.query.count) || 3 }));
+    const query = await validateRequestQuery(req, getLastThreadsQuerySchema);
+    const results = await this.queryBus.execute(getLastThreads(query));
 
     res.status(200);
     res.send(results);
   };
 
   getThread: RequestHandler<{ threadId: string }> = async (req, res) => {
+    const query = await validateRequestQuery(req, getThreadQuerySchema);
+
     const results = await this.queryBus.execute(
-      getThread({ threadId: req.params.threadId, userId: req.userId })
+      getThread({ threadId: req.params.threadId, userId: req.userId, ...query })
     );
 
     res.status(200);
@@ -40,6 +50,8 @@ export class ThreadController {
   };
 
   createThread: RequestHandler = async (req, res) => {
+    assert(req.userId);
+
     const body = await validateRequestBody(req, createThreadBodySchema);
     const threadId = await this.generator.generateId();
     const authorId = req.userId;
@@ -51,6 +63,8 @@ export class ThreadController {
   };
 
   createComment: RequestHandler<{ threadId: string }> = async (req, res) => {
+    assert(req.userId);
+
     const body = await validateRequestBody(req, createCommentBodySchema);
     const commentId = await this.generator.generateId();
     const authorId = req.userId;

@@ -1,4 +1,4 @@
-import { CreateCommentBody, CreateThreadBody } from '@shakala/shared';
+import { CommentSort, CreateCommentBody, CreateThreadBody } from '@shakala/shared';
 import {
   createComment,
   createThread,
@@ -33,12 +33,17 @@ describe('[intg] ThreadController', () => {
       },
     ];
 
-    it('retrieves the last 3 threads', async () => {
-      test.queryBus.on(getLastThreads({ count: 3 })).return(result);
+    it('retrieves the last 10 threads', async () => {
+      test.queryBus.on(getLastThreads({ count: 10 })).return(result);
 
       const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
 
       expect(await response.json()).toEqual(result);
+    });
+
+    it('fails with status 400 when the query params are invalid', async () => {
+      const searchParams = new URLSearchParams({ count: 'salut' });
+      await expect(test.createAgent().get(`${route}?${searchParams}`)).toHaveStatus(400);
     });
   });
 
@@ -56,7 +61,7 @@ describe('[intg] ThreadController', () => {
     };
 
     it('retrieves a thread from its id', async () => {
-      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
+      test.queryBus.on(getThread({ threadId: 'threadId', sort: CommentSort.relevance })).return(result);
 
       const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
 
@@ -64,9 +69,32 @@ describe('[intg] ThreadController', () => {
     });
 
     it('retrieves a thread an an authenticated user', async () => {
-      test.queryBus.on(getThread({ threadId: 'threadId', userId: 'userId' })).return(result);
+      test.queryBus
+        .on(getThread({ threadId: 'threadId', userId: 'userId', sort: CommentSort.relevance }))
+        .return(result);
 
       await expect(test.as('userId').get(route)).toHaveStatus(200);
+    });
+
+    it('retrieves a thread with custom search and sort', async () => {
+      const searchParams = new URLSearchParams({
+        sort: CommentSort.dateDesc,
+        search: 'search',
+      });
+
+      test.queryBus
+        .on(getThread({ threadId: 'threadId', sort: CommentSort.dateDesc, search: 'search' }))
+        .return(result);
+
+      await expect(test.createAgent().get(`${route}?${searchParams}`)).toHaveStatus(200);
+    });
+
+    it('fails with status 400 when the query params are invalid', async () => {
+      const searchParams = new URLSearchParams({
+        sort: 'best',
+      });
+
+      await expect(test.createAgent().get(`${route}?${searchParams}`)).toHaveStatus(400);
     });
   });
 

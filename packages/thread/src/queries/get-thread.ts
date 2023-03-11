@@ -1,5 +1,5 @@
 import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
-import { Maybe } from '@shakala/shared';
+import { CommentSort, Maybe } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { ThreadRepository } from '../repositories/thread/thread.repository';
@@ -11,6 +11,8 @@ import { GetLastThreadsResult } from './get-last-threads';
 export type GetThreadQuery = {
   threadId: string;
   userId?: string;
+  sort: CommentSort;
+  search?: string;
 };
 
 export type GetThreadResult = Maybe<GetLastThreadsResult[number] & { comments: GetCommentResult[] }>;
@@ -21,7 +23,10 @@ export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadR
   constructor(private readonly threadRepository: ThreadRepository) {}
 
   async handle(query: GetThreadQuery): Promise<GetThreadResult> {
-    return this.threadRepository.getThread(query.threadId, query.userId);
+    return this.threadRepository.getThread(query.threadId, {
+      userId: query.userId,
+      ...query,
+    });
   }
 }
 
