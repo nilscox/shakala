@@ -121,13 +121,11 @@ describe('[e2e] thread', () => {
     }
   });
 
-  it('As a user, I receive a notification when a reply is created', async () => {
-    const agent = test.agent;
-
+  it('As a user, I receive a notification when I get a reply', async () => {
     await test.createUser();
     await test.createThread();
-    await test.createComment();
-    await subscribe('commentId');
+    await test.createComment('userId');
+    await new Promise((r) => setTimeout(r, 500));
     await test.createReply();
 
     await waitFor(async () => {
@@ -136,10 +134,6 @@ describe('[e2e] thread', () => {
       expect(notifications).toHaveLength(2);
       expect(notifications).toHaveProperty('1.type', NotificationType.replyCreated);
     });
-
-    async function subscribe(commentId: string) {
-      await expect(agent.post(`/comment/${commentId}/subscribe`)).toHaveStatus(204);
-    }
   });
 });
 
@@ -184,12 +178,12 @@ class Test extends E2ETest {
     );
   }
 
-  async createComment() {
+  async createComment(authorId = 'authorId') {
     await this.commandBus.execute(
       createComment({
         commentId: 'commentId',
         threadId: 'threadId',
-        authorId: 'authorId',
+        authorId,
         text: '',
       })
     );

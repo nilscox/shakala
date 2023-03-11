@@ -6,6 +6,7 @@ import { EditCommentHandler } from './commands/edit-comment/edit-comment';
 import { ReportCommentHandler } from './commands/report-comment/report-comment';
 import { SetCommentSubscriptionHandler } from './commands/set-comment-subscription/set-comment-subscription';
 import { SetReactionHandler } from './commands/set-reaction/set-reaction';
+import { CreateCommentCreatedSubscriptionHandler } from './event-handlers/comment-created-create-subscription/comment-created-create-subscription';
 import { CreateReplyCreatedNotificationsHandler } from './event-handlers/create-reply-created-notification/create-comment-reply-notification';
 import { CreateThreadCreatedNotificationsHandler } from './event-handlers/create-thread-created-notifications/create-thread-created-notifications';
 import { GetCommentHandler } from './queries/get-comment';
@@ -38,10 +39,10 @@ export const THREAD_TOKENS = {
     getThreadHandler: token<GetThreadHandler>('getThreadHandler'),
     getCommentHandler: token<GetCommentHandler>('getCommentHandler'),
   },
+  // prettier-ignore
   eventHandlers: {
-    // prettier-ignore
+    createCommentCreatedSubscriptionHandler: token<CreateCommentCreatedSubscriptionHandler>('createCommentCreatedSubscriptionHandler'),
     createThreadCreatedNotificationsHandler: token<CreateThreadCreatedNotificationsHandler>('createThreadCreatedNotificationsHandler'),
-    // prettier-ignore
     createReplyCreatedNotificationsHandler: token<CreateReplyCreatedNotificationsHandler>('createReplyCreatedNotificationsHandler'),
   },
 };

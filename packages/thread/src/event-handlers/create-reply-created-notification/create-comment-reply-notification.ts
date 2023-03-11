@@ -55,7 +55,7 @@ export class CreateReplyCreatedNotificationsHandler implements EventHandler<Repl
     const subscriptions = await this.commentSubscriptionRepository.findForComment(payload.parentId);
 
     for (const subscription of subscriptions) {
-      if (subscription.userId === payload.parentAuthor.id) {
+      if (subscription.userId === payload.replyAuthor.id) {
         continue;
       }
 

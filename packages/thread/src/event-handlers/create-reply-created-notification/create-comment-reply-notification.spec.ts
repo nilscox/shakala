@@ -46,7 +46,7 @@ describe('CreateReplyCreatedNotificationsHandler', () => {
     );
   });
 
-  it.only('does not send a notification when answering own comment', async () => {
+  it('does not send a notification when answering own comment', async () => {
     test.queryBus.on(getUser({ id: 'userId' })).return({
       id: 'userId',
       email: '',
@@ -56,8 +56,9 @@ describe('CreateReplyCreatedNotificationsHandler', () => {
 
     test.commentRepository.add(
       create.comment({
-        id: 'parentId',
+        id: 'replyId',
         threadId: 'threadId',
+        parentId: 'parentId',
         authorId: 'userId',
       })
     );
