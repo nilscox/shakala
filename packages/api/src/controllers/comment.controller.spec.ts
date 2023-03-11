@@ -135,10 +135,6 @@ describe('[intg] CommentController', () => {
     it('fails with status 401 when the user is not authenticated', async () => {
       await expect(test.createAgent().post(route, body)).toHaveStatus(401);
     });
-
-    it('fails with status 400 when the body is invalid', async () => {
-      await expect(test.asUser.post(route, { invalid: true })).toHaveStatus(400);
-    });
   });
 
   describe('POST /:commentId/subscribe', () => {

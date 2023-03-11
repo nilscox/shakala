@@ -9,7 +9,7 @@ import { secondsInMonth } from 'date-fns/constants';
 import { RequestHandler, Router } from 'express';
 
 import { isAuthenticated, isUnauthenticated } from '../infrastructure/guards';
-import { validateRequestBody } from '../infrastructure/validation';
+import { validateRequest } from '../infrastructure/validation';
 import { jwt } from '../utils/jwt';
 
 export class AuthController {
@@ -26,7 +26,7 @@ export class AuthController {
   }
 
   signUp: RequestHandler = async (req, res) => {
-    const body = await validateRequestBody(req, signUpBodySchema);
+    const body = await validateRequest(req).body(signUpBodySchema);
     const userId = await this.generator.generateId();
 
     await this.commandBus.execute(createUser({ userId, ...body }));
@@ -37,7 +37,7 @@ export class AuthController {
   };
 
   signIn: RequestHandler = async (req, res) => {
-    const body = await validateRequestBody(req, signInBodySchema);
+    const body = await validateRequest(req).body(signInBodySchema);
 
     try {
       await this.commandBus.execute(checkUserPassword(body));

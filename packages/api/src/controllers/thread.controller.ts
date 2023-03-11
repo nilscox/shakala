@@ -12,7 +12,7 @@ import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
-import { validateRequestBody, validateRequestQuery } from '../infrastructure/validation';
+import { validateRequest } from '../infrastructure/validation';
 
 export class ThreadController {
   public readonly router: Router = Router();
@@ -31,7 +31,7 @@ export class ThreadController {
   }
 
   getLastThreads: RequestHandler = async (req, res) => {
-    const query = await validateRequestQuery(req, getLastThreadsQuerySchema);
+    const query = await validateRequest(req).query(getLastThreadsQuerySchema);
     const results = await this.queryBus.execute(getLastThreads(query));
 
     res.status(200);
@@ -39,7 +39,7 @@ export class ThreadController {
   };
 
   getThread: RequestHandler<{ threadId: string }> = async (req, res) => {
-    const query = await validateRequestQuery(req, getThreadQuerySchema);
+    const query = await validateRequest(req).query(getThreadQuerySchema);
 
     const results = await this.queryBus.execute(
       getThread({ threadId: req.params.threadId, userId: req.userId, ...query })
@@ -52,7 +52,7 @@ export class ThreadController {
   createThread: RequestHandler = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequestBody(req, createThreadBodySchema);
+    const body = await validateRequest(req).body(createThreadBodySchema);
     const threadId = await this.generator.generateId();
     const authorId = req.userId;
 
@@ -65,7 +65,7 @@ export class ThreadController {
   createComment: RequestHandler<{ threadId: string }> = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequestBody(req, createCommentBodySchema);
+    const body = await validateRequest(req).body(createCommentBodySchema);
     const commentId = await this.generator.generateId();
     const authorId = req.userId;
     const threadId = req.params.threadId;

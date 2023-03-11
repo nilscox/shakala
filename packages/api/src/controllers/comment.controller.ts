@@ -7,7 +7,7 @@ import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
 import { hasWriteAccess, isAuthenticated } from '../infrastructure/guards';
-import { validateRequestBody } from '../infrastructure/validation';
+import { validateRequest } from '../infrastructure/validation';
 
 export class CommentController {
   public readonly router: Router = Router();
@@ -39,7 +39,7 @@ export class CommentController {
   editComment: RequestHandler<{ commentId: string }> = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequestBody(req, editCommentBodySchema);
+    const body = await validateRequest(req).body(editCommentBodySchema);
     const commentId = req.params.commentId;
     const authorId = req.userId;
 
@@ -52,7 +52,7 @@ export class CommentController {
   setReaction: RequestHandler<{ commentId: string }> = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequestBody(req, setReactionBodySchema);
+    const body = await validateRequest(req).body(setReactionBodySchema);
     const commentId = req.params.commentId;
     const userId = req.userId;
 
@@ -65,7 +65,7 @@ export class CommentController {
   report: RequestHandler<{ commentId: string }> = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequestBody(req, reportCommentBodySchema);
+    const body = await validateRequest(req).body(reportCommentBodySchema);
     const commentId = req.params.commentId;
     const userId = req.userId;
 
