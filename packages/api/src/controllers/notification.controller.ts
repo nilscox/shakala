@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
-import { listUserNotifications, markNotificationAsSeen } from '@shakala/notification';
+import { getNotificationsCount, listUserNotifications, markNotificationAsSeen } from '@shakala/notification';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -13,8 +13,23 @@ export class NotificationController {
 
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
     this.router.get('/', isAuthenticated, this.listNotifications);
+    this.router.get('/count', isAuthenticated, this.getUnreadNotificationsCount);
     this.router.put('/:notificationId/seen', [isAuthenticated, hasWriteAccess], this.markNotificationAsSeen);
   }
+
+  getUnreadNotificationsCount: RequestHandler = async (req, res) => {
+    assert(req.userId);
+
+    const count = await this.queryBus.execute(
+      getNotificationsCount({
+        userId: req.userId,
+        unseen: true,
+      })
+    );
+
+    res.status(200);
+    res.json(count);
+  };
 
   listNotifications: RequestHandler = async (req, res) => {
     assert(req.userId);

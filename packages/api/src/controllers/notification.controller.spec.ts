@@ -1,4 +1,9 @@
-import { listUserNotifications, markNotificationAsSeen, NotificationType } from '@shakala/notification';
+import {
+  getNotificationsCount,
+  listUserNotifications,
+  markNotificationAsSeen,
+  NotificationType,
+} from '@shakala/notification';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
@@ -13,6 +18,23 @@ describe('[intg] NotificationController', () => {
   });
 
   afterEach(() => test?.cleanup());
+
+  describe('GET /notification/count', () => {
+    const route = '/notification/count';
+
+    it("retrieves the user's number of unseen notifications", async () => {
+      test.queryBus.on(getNotificationsCount({ userId: 'userId', unseen: true })).return(42);
+
+      const response = await expect(test.asUser.get(route)).toHaveStatus(200);
+      const body = await response.json();
+
+      expect(body).toEqual(42);
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().get(route)).toHaveStatus(401);
+    });
+  });
 
   describe('GET /notification', () => {
     const route = '/notification';
