@@ -1,4 +1,5 @@
 import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
+import { Maybe } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { UserRepository } from '../repositories/user/user.repository';
@@ -6,20 +7,21 @@ import { USER_TOKENS } from '../tokens';
 
 export type GetUserQuery = { id: string } | { email: string };
 
-export type GetUserResult = {
+export type GetUserResult = Maybe<{
   id: string;
   email: string;
   emailValidated: boolean;
   nick: string;
   profileImage?: string;
-};
+  signupDate: string;
+}>;
 
-export const getUser = queryCreator<GetUserQuery, GetUserResult | undefined>('getUser');
+export const getUser = queryCreator<GetUserQuery, GetUserResult>('getUser');
 
-export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult | undefined> {
+export class GetUserHandler implements QueryHandler<GetUserQuery, GetUserResult> {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async handle(query: GetUserQuery): Promise<GetUserResult | undefined> {
+  async handle(query: GetUserQuery): Promise<GetUserResult> {
     return this.userRepository.getUser(query);
   }
 }

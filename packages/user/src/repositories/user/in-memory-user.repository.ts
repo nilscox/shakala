@@ -12,7 +12,7 @@ export class InMemoryUserRepository extends InMemoryRepository<User> implements 
     return this.all().map((user) => ({ id: user.id }));
   }
 
-  async getUser(where: Partial<{ id: string; email: string }>): Promise<GetUserResult | undefined> {
+  async getUser(where: Partial<{ id: string; email: string }>): Promise<GetUserResult> {
     const user = this.find((user) => {
       return where.id === user.id || where.email === user.email;
     });
@@ -26,6 +26,7 @@ export class InMemoryUserRepository extends InMemoryRepository<User> implements 
       email: user.email,
       emailValidated: user.emailValidationToken === undefined,
       nick: user.nick.toString(),
+      signupDate: user.signupDate.toString(),
     };
   }
 

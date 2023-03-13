@@ -1,4 +1,11 @@
-import { expect, StubCryptoAdapter, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
+import {
+  expect,
+  StubCryptoAdapter,
+  StubDateAdapter,
+  StubEventPublisher,
+  StubGeneratorAdapter,
+  Timestamp,
+} from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -36,12 +43,21 @@ describe('[unit] CreateUser', () => {
 });
 
 class Test {
+  now = new Timestamp('2022-01-01');
+
   generator = new StubGeneratorAdapter();
+  dateAdapter = new StubDateAdapter(this.now);
   crypto = new StubCryptoAdapter();
   publisher = new StubEventPublisher();
   userRepository = new InMemoryUserRepository();
 
-  handler = new CreateUserHandler(this.generator, this.crypto, this.publisher, this.userRepository);
+  handler = new CreateUserHandler(
+    this.generator,
+    this.dateAdapter,
+    this.crypto,
+    this.publisher,
+    this.userRepository
+  );
 
   get user() {
     return this.userRepository.get('id');

@@ -2,6 +2,7 @@ import {
   commandCreator,
   CommandHandler,
   CryptoPort,
+  DatePort,
   DomainEvent,
   EventPublisher,
   GeneratorPort,
@@ -27,6 +28,7 @@ export const createUser = commandCreator<CreateUserCommand>('createUser');
 export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
   constructor(
     private readonly generator: GeneratorPort,
+    private readonly dateAdapter: DatePort,
     private readonly crypto: CryptoPort,
     private readonly publisher: EventPublisher,
     private readonly userRepository: UserRepository
@@ -38,6 +40,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
       nick: new Nick(command.nick),
       email: command.email,
       hashedPassword: await this.crypto.hash(command.password),
+      signupDate: this.dateAdapter.now(),
       emailValidationToken: await this.generator.generateToken(),
     });
 
@@ -50,6 +53,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
 injected(
   CreateUserHandler,
   TOKENS.generator,
+  TOKENS.date,
   TOKENS.crypto,
   TOKENS.publisher,
   USER_TOKENS.repositories.userRepository

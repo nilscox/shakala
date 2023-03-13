@@ -1,4 +1,4 @@
-import { EntityFactory, randomId, ValueObjectFactory } from '@shakala/common';
+import { EntityFactory, randomId, Timestamp, ValueObjectFactory } from '@shakala/common';
 
 import { Nick } from './entities/nick.value-object';
 import { User } from './entities/user.entity';
@@ -19,6 +19,7 @@ export const create: Factories = {
       email: '',
       hashedPassword: '',
       nick: this.nick(),
+      signupDate: new Timestamp(0),
       ...props,
     });
   },
