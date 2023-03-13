@@ -96,6 +96,12 @@ describe('[intg] ThreadController', () => {
 
       await expect(test.createAgent().get(`${route}?${searchParams}`)).toHaveStatus(400);
     });
+
+    it('fails with status 404 when the thread does not exist', async () => {
+      test.queryBus.on(getThread({ threadId: 'threadId', sort: CommentSort.relevance })).return(undefined);
+
+      await expect(test.createAgent().get(route)).toHaveStatus(404);
+    });
   });
 
   describe('POST /thread', () => {

@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { CommandBus, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
+import { CommandBus, EntityNotFoundError, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
 import {
   createCommentBodySchema,
   createThreadBodySchema,
@@ -41,12 +41,16 @@ export class ThreadController {
   getThread: RequestHandler<{ threadId: string }> = async (req, res) => {
     const query = await validateRequest(req).query(getThreadQuerySchema);
 
-    const results = await this.queryBus.execute(
+    const result = await this.queryBus.execute(
       getThread({ threadId: req.params.threadId, userId: req.userId, ...query })
     );
 
+    if (!result) {
+      throw new EntityNotFoundError('Thread', { id: req.params.threadId });
+    }
+
     res.status(200);
-    res.send(results);
+    res.send(result);
   };
 
   createThread: RequestHandler = async (req, res) => {
