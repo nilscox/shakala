@@ -186,6 +186,7 @@ importers:
     specifiers:
       '@shakala/common': workspace:*
       '@shakala/email': workspace:*
+      '@shakala/shared': workspace:*
       '@types/node': ^18.14.1
       brandi: ^5.0.0
       ts-node: ^10.9.1
@@ -194,6 +195,7 @@ importers:
     dependencies:
       '@shakala/common': link:../common
       '@shakala/email': link:../email
+      '@shakala/shared': link:../shared
       brandi: 5.0.0
     devDependencies:
       '@types/node': 18.14.1

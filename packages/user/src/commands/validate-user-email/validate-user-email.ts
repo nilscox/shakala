@@ -9,7 +9,7 @@ import {
 } from '@shakala/common';
 import { injected } from 'brandi';
 
-import { UserRepository } from '../../repositories/user.repository';
+import { UserRepository } from '../../repositories/user/user.repository';
 import { USER_TOKENS } from '../../tokens';
 
 export type ValidateUserEmailCommand = {

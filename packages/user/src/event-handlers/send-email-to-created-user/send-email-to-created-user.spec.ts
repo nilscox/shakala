@@ -6,7 +6,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { UserCreatedEvent } from '../../commands/create-user/create-user';
 import { create } from '../../factories';
-import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
+import { InMemoryUserRepository } from '../../repositories/user/in-memory-user.repository';
 
 import { SendEmailToCreatedUserHandler } from './send-email-to-created-user';
 

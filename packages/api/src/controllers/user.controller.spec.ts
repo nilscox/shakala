@@ -1,4 +1,9 @@
-import { GetUserResult, InvalidEmailValidationTokenError, validateUserEmail } from '@shakala/user';
+import {
+  GetUserResult,
+  InvalidEmailValidationTokenError,
+  validateUserEmail,
+  listUserActivities,
+} from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
@@ -7,8 +12,11 @@ import { IntegrationTest } from '../tests/integration-test';
 describe('[intg] UserController', () => {
   let test: Test;
 
-  beforeEach(() => void (test = new Test()));
-  beforeEach(() => test?.setup());
+  beforeEach(async () => {
+    test = new Test();
+    await test.setup();
+  });
+
   afterEach(() => test?.cleanup());
 
   describe('/user', () => {
@@ -25,6 +33,39 @@ describe('[intg] UserController', () => {
         emailValidated: true,
         nick: '',
       });
+    });
+  });
+
+  describe('/user/activities', () => {
+    const route = '/user/activities';
+
+    it("retrieves the authenticated user's activities", async () => {
+      test.queryBus.on(listUserActivities({ userId: 'userId', pageSize: 10, page: 1 })).return({
+        total: 1,
+        items: ['activity'],
+      });
+
+      const response = await expect(test.asUser.get(route)).toHaveStatus(200);
+
+      expect(response.headers.get('pagination-total')).toEqual('1');
+      expect(await response.json()).toEqual(['activity']);
+    });
+
+    it("retrieves the user's activities with pagination params", async () => {
+      test.queryBus
+        .on(listUserActivities({ userId: 'userId', pageSize: 5, page: 2 }))
+        .return({ total: 0, items: [] });
+
+      const params = new URLSearchParams({
+        page: '2',
+        pageSize: '5',
+      });
+
+      await expect(test.asUser.get(`${route}?${params}`)).toHaveStatus(200);
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().get(route)).toHaveStatus(401);
     });
   });
 
@@ -74,5 +115,6 @@ class Test extends IntegrationTest {
 
   arrange() {
     this.user = { id: 'userId' };
+    this.generator.nextId = 'activityId';
   }
 }

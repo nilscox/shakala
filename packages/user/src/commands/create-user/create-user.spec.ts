@@ -2,7 +2,7 @@ import { expect, StubCryptoAdapter, StubEventPublisher, StubGeneratorAdapter } f
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
-import { InMemoryUserRepository } from '../../repositories/in-memory-user.repository';
+import { InMemoryUserRepository } from '../../repositories/user/in-memory-user.repository';
 
 import { CreateUserCommand, CreateUserHandler, UserCreatedEvent } from './create-user';
 

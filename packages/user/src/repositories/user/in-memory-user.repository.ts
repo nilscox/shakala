@@ -1,7 +1,7 @@
 import { InMemoryRepository } from '@shakala/common';
 
-import { User } from '../entities/user.entity';
-import { GetUserResult } from '../queries/get-user';
+import { User } from '../../entities/user.entity';
+import { GetUserResult } from '../../queries/get-user';
 
 import { UserRepository } from './user.repository';
 

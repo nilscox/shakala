@@ -15,7 +15,7 @@ export class StubQueryBus extends Array<unknown> implements QueryBus {
     }
 
     return {
-      return(result: QueryResult<Query>) {
+      return(result: QueryResult<Query> | unknown) {
         queryResults.set(JSON.stringify(query), result);
       },
     };

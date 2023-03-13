@@ -5,7 +5,7 @@ import { EmailKind, sendEmail } from '@shakala/email';
 import { injected } from 'brandi';
 
 import { UserCreatedEvent } from '../../commands/create-user/create-user';
-import { UserRepository } from '../../repositories/user.repository';
+import { UserRepository } from '../../repositories/user/user.repository';
 import { USER_TOKENS } from '../../tokens';
 
 export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEvent> {

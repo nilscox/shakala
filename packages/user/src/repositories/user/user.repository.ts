@@ -1,5 +1,5 @@
-import { User } from '../entities/user.entity';
-import { GetUserResult } from '../queries/get-user';
+import { User } from '../../entities/user.entity';
+import { GetUserResult } from '../../queries/get-user';
 
 export interface UserRepository {
   listUsers(): Promise<Array<{ id: string }>>;

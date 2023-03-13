@@ -25,8 +25,8 @@ export class NotificationController {
       listUserNotifications({ userId: req.userId, ...pagination })
     );
 
-    res.set('pagination-total', String(total));
     res.status(200);
+    res.set('pagination-total', String(total));
     res.json(notifications);
   };
 

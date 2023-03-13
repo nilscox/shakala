@@ -9,6 +9,7 @@ import { SetReactionHandler } from './commands/set-reaction/set-reaction';
 import { CreateCommentCreatedSubscriptionHandler } from './event-handlers/comment-created-create-subscription/comment-created-create-subscription';
 import { CreateReplyCreatedNotificationsHandler } from './event-handlers/create-reply-created-notification/create-comment-reply-notification';
 import { CreateThreadCreatedNotificationsHandler } from './event-handlers/create-thread-created-notifications/create-thread-created-notifications';
+import { ThreadUserActivitiesHandler } from './event-handlers/thread-user-activities/thread-user-activities';
 import { GetCommentHandler } from './queries/get-comment';
 import { GetLastThreadsHandler } from './queries/get-last-threads';
 import { GetThreadHandler } from './queries/get-thread';
@@ -44,5 +45,6 @@ export const THREAD_TOKENS = {
     createCommentCreatedSubscriptionHandler: token<CreateCommentCreatedSubscriptionHandler>('createCommentCreatedSubscriptionHandler'),
     createThreadCreatedNotificationsHandler: token<CreateThreadCreatedNotificationsHandler>('createThreadCreatedNotificationsHandler'),
     createReplyCreatedNotificationsHandler: token<CreateReplyCreatedNotificationsHandler>('createReplyCreatedNotificationsHandler'),
+    threadUserActivitiesHandler: token<ThreadUserActivitiesHandler>('createUserActivityHandler'),
   },
 };

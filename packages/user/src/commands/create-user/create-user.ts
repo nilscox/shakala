@@ -12,7 +12,7 @@ import { injected } from 'brandi';
 
 import { Nick } from '../../entities/nick.value-object';
 import { User } from '../../entities/user.entity';
-import { UserRepository } from '../../repositories/user.repository';
+import { UserRepository } from '../../repositories/user/user.repository';
 import { USER_TOKENS } from '../../tokens';
 
 export type CreateUserCommand = {
@@ -58,6 +58,18 @@ injected(
 registerCommand(createUser, USER_TOKENS.commands.createUserHandler);
 
 export class UserCreatedEvent extends DomainEvent {
+  constructor(id: string) {
+    super('User', id);
+  }
+}
+
+export class SessionCreatedEvent extends DomainEvent {
+  constructor(id: string) {
+    super('User', id);
+  }
+}
+
+export class SessionDeletedEvent extends DomainEvent {
   constructor(id: string) {
     super('User', id);
   }
