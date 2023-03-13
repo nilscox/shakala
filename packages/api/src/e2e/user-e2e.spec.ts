@@ -28,17 +28,17 @@ describe('[e2e] user', () => {
       } satisfies SignUpBody)
     ).toHaveStatus(201);
 
-    await expect(agent.get('/user')).toHaveStatus(200);
+    await expect(agent.get('/account')).toHaveStatus(200);
 
     await expect(agent.post('/auth/sign-out')).toHaveStatus(204);
 
-    await expect(agent.get('/user')).toHaveStatus(401);
+    await expect(agent.get('/account')).toHaveStatus(401);
 
     await expect(
       agent.post('/auth/sign-in', { email: 'user@domain.tld', password: 'password' } satisfies SignInBody)
     ).toHaveStatus(204);
 
-    await expect(agent.get('/user')).toHaveStatus(200);
+    await expect(agent.get('/account')).toHaveStatus(200);
   });
 
   it('As a new user, I can validate my email address', async () => {
@@ -59,7 +59,7 @@ describe('[e2e] user', () => {
     expect(user).toHaveProperty('emailValidated', true);
 
     async function getUser(): Promise<GetUserResult> {
-      const response = await expect(agent.get('/user')).toHaveStatus(200);
+      const response = await expect(agent.get('/account')).toHaveStatus(200);
       return response.json();
     }
   });

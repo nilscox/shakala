@@ -13,16 +13,16 @@ import { RequestHandler, Router } from 'express';
 import { isAuthenticated } from '../infrastructure/guards';
 import { validateRequest } from '../infrastructure/validation';
 
-export class UserController {
+export class AccountController {
   public readonly router: Router = Router();
 
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
-    this.router.get('/', isAuthenticated, this.getUserProfile);
-    this.router.get('/activities', isAuthenticated, this.listUserActivities);
+    this.router.get('/', isAuthenticated, this.getProfile);
+    this.router.get('/activities', isAuthenticated, this.listActivities);
     this.router.get('/validate-email/:token', isAuthenticated, this.validateEmail);
   }
 
-  getUserProfile: RequestHandler = async (req, res) => {
+  getProfile: RequestHandler = async (req, res) => {
     assert(req.userId);
 
     const result = await this.queryBus.execute(getUser({ id: req.userId }));
@@ -31,7 +31,7 @@ export class UserController {
     res.json(result);
   };
 
-  listUserActivities: RequestHandler = async (req, res) => {
+  listActivities: RequestHandler = async (req, res) => {
     assert(req.userId);
 
     const pagination = await validateRequest(req).pagination();
@@ -71,4 +71,4 @@ export class UserController {
   };
 }
 
-injected(UserController, TOKENS.queryBus, TOKENS.commandBus);
+injected(AccountController, TOKENS.queryBus, TOKENS.commandBus);

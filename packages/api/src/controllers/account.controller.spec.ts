@@ -1,15 +1,15 @@
 import {
-  GetUserResult,
+  getUser,
   InvalidEmailValidationTokenError,
-  validateUserEmail,
   listUserActivities,
+  validateUserEmail,
 } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
-describe('[intg] UserController', () => {
+describe('[intg] AccountController', () => {
   let test: Test;
 
   beforeEach(async () => {
@@ -19,25 +19,20 @@ describe('[intg] UserController', () => {
 
   afterEach(() => test?.cleanup());
 
-  describe('/user', () => {
-    const route = '/user';
+  describe('/account', () => {
+    const route = '/account';
 
     it("retrieves the authenticated user's profile", async () => {
-      test.user = { id: 'userId', email: 'user@domain.tld' };
+      test.queryBus.on(getUser({ id: 'userId' })).return('user');
 
       const response = await expect(test.asUser.get(route)).toHaveStatus(200);
 
-      expect<GetUserResult>(await response.json()).toEqual({
-        id: 'userId',
-        email: 'user@domain.tld',
-        emailValidated: true,
-        nick: '',
-      });
+      expect(await response.json()).toEqual('user');
     });
   });
 
-  describe('/user/activities', () => {
-    const route = '/user/activities';
+  describe('/account/activities', () => {
+    const route = '/account/activities';
 
     it("retrieves the authenticated user's activities", async () => {
       test.queryBus.on(listUserActivities({ userId: 'userId', pageSize: 10, page: 1 })).return({
@@ -69,8 +64,8 @@ describe('[intg] UserController', () => {
     });
   });
 
-  describe('/user/validate-email/:token', () => {
-    const route = (token: string) => `/user/validate-email/${token}`;
+  describe('/account/validate-email/:token', () => {
+    const route = (token: string) => `/account/validate-email/${token}`;
 
     beforeEach(() => {
       test.user = { id: 'userId' };
