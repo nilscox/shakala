@@ -15,15 +15,15 @@ type EmailModuleConfig = {
 export class EmailModule extends Module {
   configure(config: EmailModuleConfig) {
     if (config.emailSender === 'nodemailer') {
-      this.bindToken(EMAIL_TOKENS.adapters.emailSender, NodeMailerEmailSenderAdapter);
+      this.bindToken(EMAIL_TOKENS.adapters.emailSender, NodeMailerEmailSenderAdapter, false);
     } else {
-      this.bindToken(EMAIL_TOKENS.adapters.emailSender, StubEmailSenderAdapter);
+      this.bindToken(EMAIL_TOKENS.adapters.emailSender, StubEmailSenderAdapter, false);
     }
 
     if (config.emailCompiler === 'mjml') {
-      this.bindToken(EMAIL_TOKENS.adapters.emailCompiler, MjmlEmailCompilerAdapter);
+      this.bindToken(EMAIL_TOKENS.adapters.emailCompiler, MjmlEmailCompilerAdapter, false);
     } else {
-      this.bindToken(EMAIL_TOKENS.adapters.emailCompiler, FakeEmailCompilerAdapter);
+      this.bindToken(EMAIL_TOKENS.adapters.emailCompiler, FakeEmailCompilerAdapter, false);
     }
 
     this.bindToken(EMAIL_TOKENS.commands.sendEmailHandler, SendEmailHandler);

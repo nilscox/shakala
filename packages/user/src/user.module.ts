@@ -17,9 +17,9 @@ type ThreadModuleConfig = {
 export class UserModule extends Module {
   configure(config: ThreadModuleConfig) {
     if (config.repositories === 'memory') {
-      this.bindToken(USER_TOKENS.repositories.userRepository, InMemoryUserRepository);
+      this.bindToken(USER_TOKENS.repositories.userRepository, InMemoryUserRepository, false);
     } else {
-      this.bindToken(USER_TOKENS.repositories.userRepository, FilesystemUserRepository);
+      this.bindToken(USER_TOKENS.repositories.userRepository, FilesystemUserRepository, false);
     }
 
     this.bindToken(USER_TOKENS.commands.createUserHandler, CreateUserHandler);

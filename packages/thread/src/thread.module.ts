@@ -15,7 +15,9 @@ import { GetThreadHandler } from './queries/get-thread';
 import { FilesystemCommentRepository } from './repositories/comment/filesystem-comment.repository';
 import { InMemoryCommentRepository } from './repositories/comment/in-memory-comment.repository';
 import { FilesystemCommentReportRepository } from './repositories/comment-report/filesystem-comment-report.repository';
+import { InMemoryCommentReportRepository } from './repositories/comment-report/in-memory-comment-report.repository';
 import { FilesystemCommentSubscriptionRepository } from './repositories/comment-subscription/filesystem-comment-subscription.repository';
+import { InMemoryCommentSubscriptionRepository } from './repositories/comment-subscription/in-memory-comment-subscription.repository';
 import { FilesystemReactionRepository } from './repositories/reaction/filesystem-reaction.repository';
 import { InMemoryReactionRepository } from './repositories/reaction/in-memory-reaction.repository';
 import { FilesystemThreadRepository } from './repositories/thread/filesystem-thread.repository';
@@ -28,19 +30,20 @@ type ThreadModuleConfig = {
 
 export class ThreadModule extends Module {
   configure(config: ThreadModuleConfig) {
-    if (config.repositories === 'memory') {
-      this.bindToken(THREAD_TOKENS.repositories.threadRepository, InMemoryThreadRepository);
-      this.bindToken(THREAD_TOKENS.repositories.commentRepository, InMemoryCommentRepository);
-      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, InMemoryReactionRepository);
-    } else {
-      this.bindToken(THREAD_TOKENS.repositories.threadRepository, FilesystemThreadRepository);
-      this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository);
-      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository);
-    }
-
     // prettier-ignore
-    this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository);
-    this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository);
+    if (config.repositories === 'memory') {
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, InMemoryThreadRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, InMemoryCommentRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, InMemoryReactionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, InMemoryCommentSubscriptionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, InMemoryCommentReportRepository, false);
+    } else {
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, FilesystemThreadRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository, false);
+    }
 
     this.bindToken(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
     this.bindToken(THREAD_TOKENS.commands.createCommentHandler, CreateCommentHandler);

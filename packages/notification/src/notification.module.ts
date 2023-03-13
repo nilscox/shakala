@@ -14,11 +14,16 @@ type NotificationModuleConfig = {
 export class NotificationModule extends Module {
   configure(config: NotificationModuleConfig): void {
     if (config.repositories === 'memory') {
-      this.bindToken(NOTIFICATION_TOKENS.repositories.notificationRepository, InMemoryNotificationRepository);
+      this.bindToken(
+        NOTIFICATION_TOKENS.repositories.notificationRepository,
+        InMemoryNotificationRepository,
+        false
+      );
     } else {
       this.bindToken(
         NOTIFICATION_TOKENS.repositories.notificationRepository,
-        FilesystemNotificationRepository
+        FilesystemNotificationRepository,
+        false
       );
     }
 

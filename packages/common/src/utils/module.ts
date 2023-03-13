@@ -39,9 +39,12 @@ export abstract class Module extends DependencyModule {
     return this.container.get(TOKENS.queryBus);
   }
 
-  protected bindToken<Cls>(token: Token<Cls>, Instance: ClassType<Cls>) {
+  protected bindToken<Cls>(token: Token<Cls>, Instance: ClassType<Cls>, expose = true) {
     this.logger.verbose('binding', Instance.name);
     this.bind(token).toInstance(Instance).inContainerScope();
-    this.container.use(token).from(this);
+
+    if (expose) {
+      this.container.use(token).from(this);
+    }
   }
 }
