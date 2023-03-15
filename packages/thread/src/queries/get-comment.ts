@@ -1,5 +1,5 @@
 import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
-import { Maybe } from '@shakala/shared';
+import { Maybe, ReactionType } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { CommentRepository } from '../repositories/comment/comment.repository';
@@ -26,7 +26,7 @@ export type GetCommentResult = Maybe<{
   }>;
   upvotes: number;
   downvotes: number;
-  userReaction?: 'upvote' | 'downvote';
+  userReaction?: ReactionType;
   isSubscribed?: boolean;
   replies: Array<Omit<GetCommentResult, 'replies'>>;
 }>;

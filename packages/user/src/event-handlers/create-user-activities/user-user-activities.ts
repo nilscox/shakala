@@ -28,7 +28,7 @@ export class UserUserActivitiesHandler implements EventHandler<DomainEvent> {
     }
 
     if (event instanceof UserEmailValidatedEvent) {
-      await this.createActivity(UserActivityType.emailValidated, event);
+      await this.createActivity(UserActivityType.emailAddressValidated, event);
     }
   }
 

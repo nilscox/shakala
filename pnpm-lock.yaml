@@ -35,6 +35,7 @@ importers:
       '@types/express': ^4.17.17
       '@types/jsonwebtoken': ^9.0.1
       '@types/node': ^18.14.0
+      '@types/on-finished': ^2.3.1
       '@types/tough-cookie': ^4.0.2
       body-parser: ^1.20.1
       brandi: ^5.0.0
@@ -42,6 +43,7 @@ importers:
       date-fns: ^2.29.3
       express: 5.0.0-beta.1
       jsonwebtoken: ^9.0.0
+      on-finished: ^2.4.1
       tough-cookie: ^4.1.2
       ts-node: ^10.9.1
       typescript: ^4.9.5
@@ -54,11 +56,13 @@ importers:
       '@shakala/shared': link:../shared
       '@shakala/thread': link:../thread
       '@shakala/user': link:../user
+      '@types/on-finished': 2.3.1
       body-parser: 1.20.1
       brandi: 5.0.0
       cookie-parser: 1.4.6
       date-fns: 2.29.3
       express: 5.0.0-beta.1
+      on-finished: 2.4.1
       tough-cookie: 4.1.2
       yup: 1.0.0
     devDependencies:
@@ -638,13 +642,18 @@ packages:
 
   /@types/node/18.14.2:
     resolution: {integrity: sha512-1uEQxww3DaghA0RxqHx0O0ppVlo43pJhepY51OxuQIKHpjbnYLA7vcdwioNPzIqmC2u3I/dmylcqjlh0e7AyUA==}
-    dev: true
 
   /@types/nodemailer/6.4.7:
     resolution: {integrity: sha512-f5qCBGAn/f0qtRcd4SEn88c8Fp3Swct1731X4ryPKqS61/A3LmmzN8zaEz7hneJvpjFbUUgY7lru/B/7ODTazg==}
     dependencies:
       '@types/node': 18.14.1
     dev: true
+
+  /@types/on-finished/2.3.1:
+    resolution: {integrity: sha512-mzVYaYcFs5Jd2n/O6uYIRUsFRR1cHyZLRvkLCU0E7+G5WhY0qBDAR5fUCeZbvecYOSh9ikhlesyi2UfI8B9ckQ==}
+    dependencies:
+      '@types/node': 18.14.2
+    dev: false
 
   /@types/qs/6.9.7:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}

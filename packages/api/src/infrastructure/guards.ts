@@ -2,7 +2,7 @@
 
 import assert from 'assert';
 
-import { TOKENS } from '@shakala/common';
+import { BaseError, TOKENS } from '@shakala/common';
 import { getUser, GetUserResult } from '@shakala/user';
 import { RequestHandler } from 'express';
 
@@ -60,10 +60,17 @@ export const storeUserId: RequestHandler = async (req, res, next) => {
   next();
 };
 
+class UnauthorizedError extends BaseError {
+  status = 401;
+
+  constructor(isAuthenticated: boolean) {
+    super(isAuthenticated ? 'Request must not be authenticated' : 'Request must be authenticated');
+  }
+}
+
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   if (!req.userId) {
-    res.status(401).end();
-    return;
+    throw new UnauthorizedError(false);
   }
 
   next();
@@ -71,8 +78,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
 
 export const isUnauthenticated: RequestHandler = async (req, res, next) => {
   if (req.userId) {
-    res.status(401).end();
-    return;
+    throw new UnauthorizedError(true);
   }
 
   next();

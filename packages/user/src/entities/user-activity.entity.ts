@@ -5,7 +5,7 @@ export enum UserActivityType {
   signUp = 'signUp',
   signIn = 'signIn',
   signOut = 'signOut',
-  emailValidated = 'emailValidated',
+  emailAddressValidated = 'emailAddressValidated',
   // profileImageChanged = 'profileImageChanged',
   threadCreated = 'threadCreated',
   rootCommentCreated = 'rootCommentCreated',
@@ -32,7 +32,7 @@ export type UserActivityPayload = {
   [UserActivityType.signUp]: undefined;
   [UserActivityType.signIn]: undefined;
   [UserActivityType.signOut]: undefined;
-  [UserActivityType.emailValidated]: undefined;
+  [UserActivityType.emailAddressValidated]: undefined;
 
   [UserActivityType.threadCreated]: ThreadActivityPayload;
 
