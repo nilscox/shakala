@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
 import express, { ErrorRequestHandler, Express, RequestHandler } from 'express';
+import onFinished from 'on-finished';
 import * as yup from 'yup';
 
 import { container } from '../container';
@@ -22,6 +23,7 @@ export class Server {
 
     this.app = express();
 
+    this.app.use(this.logRequestHandler);
     this.app.use(cookieParser('secret'));
     this.app.use(bodyParser.json());
     this.app.use(storeUserId);
@@ -62,6 +64,17 @@ export class Server {
 
     this.logger.verbose('server closed');
   }
+
+  private logRequestHandler: RequestHandler = (req, res, next) => {
+    const start = Date.now();
+
+    onFinished(res, (err, res) => {
+      const elapsed = Date.now() - start;
+      this.logger.verbose(req.method, req.originalUrl, res.statusCode, `(${elapsed}ms)`);
+    });
+
+    next();
+  };
 
   private validationErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     if (!yup.ValidationError.isError(error)) {
