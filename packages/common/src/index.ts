@@ -61,6 +61,5 @@ export * from './utils/pagination';
 export * from './utils/random-id';
 export * from './utils/repository';
 export * from './utils/stub-event-publisher';
-export * from './utils/stub';
 
 export { CommonModule } from './common.module';

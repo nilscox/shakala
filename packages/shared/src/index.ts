@@ -1,3 +1,6 @@
+export * from './dtos/thread.dto';
+export * from './dtos/user.dto';
+
 export * from './schemas/authentication';
 export * from './schemas/comment';
 export * from './schemas/common';
@@ -8,6 +11,7 @@ export * from './types/deep-partial';
 export * from './types/enum-type';
 export * from './types/instance-of';
 export * from './types/maybe';
+export * from './types/methods';
 export * from './types/replace';
 
 export * from './utils/array';
@@ -27,6 +31,7 @@ export * from './utils/merge';
 export * from './utils/omit';
 export * from './utils/pick';
 export * from './utils/random-id';
+export * from './utils/stub';
 export * from './utils/to-kebab-case';
 export * from './utils/wait-for';
 export * from './utils/wait';

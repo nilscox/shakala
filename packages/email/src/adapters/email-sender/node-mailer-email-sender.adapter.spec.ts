@@ -1,4 +1,5 @@
-import { EmailConfig, expect, stub, StubConfigAdapter } from '@shakala/common';
+import { EmailConfig, expect, StubConfigAdapter } from '@shakala/common';
+import { stub } from '@shakala/shared';
 import { describe, it } from 'vitest';
 
 import { NodeMailerEmailSenderAdapter } from './node-mailer-email-sender.adapter';

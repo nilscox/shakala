@@ -1,8 +1,8 @@
-import { StubQueryBus, TOKENS } from '@shakala/common';
+import { BaseError, StubQueryBus, TOKENS } from '@shakala/common';
 import { getUser } from '@shakala/user';
 import cookieParser from 'cookie-parser';
 import { millisecondsToSeconds } from 'date-fns';
-import express, { RequestHandler } from 'express';
+import express, { NextFunction, Request, RequestHandler, Response } from 'express';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { container } from '../container';
@@ -124,8 +124,15 @@ class Test {
 
     this.app.use(storeUserId);
 
-    this.app.use(...guards, (req, res) => {
-      res.end();
+    this.app.use(...guards, (req, res) => res.end());
+
+    this.app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+      if (err instanceof BaseError) {
+        res
+          .status(err.status ?? 500)
+          .json(err.serialize())
+          .end();
+      }
     });
 
     this.queryBus

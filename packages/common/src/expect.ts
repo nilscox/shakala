@@ -1,9 +1,9 @@
 import assert from 'assert';
 
 import expect, { assertion, AssertionFailed } from '@nilscox/expect';
+import { Stub } from '@shakala/shared';
 
 import { DomainEvent } from './ddd/domain-event';
-import { Stub } from './utils/stub';
 import { StubEventPublisher } from './utils/stub-event-publisher';
 
 declare global {
