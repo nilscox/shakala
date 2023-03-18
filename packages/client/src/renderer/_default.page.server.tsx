@@ -2,15 +2,22 @@ import * as ReactDOMServer from 'react-dom/server';
 import { dehydrate, Hydrate } from 'react-query';
 import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
 
-import { AppProviders } from '../app-providers';
-import type { PageContextServer } from '../types';
-
-import { Layout } from './layout';
+import { AppProviders } from '../app/app-providers';
+import { Layout } from '../app/layout/layout';
+import type { PageContextServer } from '../app/page-context';
+import { di } from '../di';
+import { prefetchQuery } from '../utils/prefetch-query';
 
 export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
 
+const commonQueries = [prefetchQuery(di.authentication, 'getAuthenticatedUser')];
+
 export async function render(pageContext: PageContextServer) {
-  const { Page, pageProps, queryClient } = pageContext;
+  const { Page, pageProps, exports, queryClient } = pageContext;
+  const queries = [...commonQueries, ...(exports.queries ?? [])];
+
+  await Promise.all(queries.map((query) => query(queryClient)));
+
   const dehydratedState = dehydrate(queryClient);
 
   const html = ReactDOMServer.renderToString(

@@ -9,6 +9,9 @@ type PageContextCustom = {
   Page: Page;
   pageProps?: PageProps;
   routeParams: Record<string, string>;
+  exports: {
+    queries?: Array<(queryClient: QueryClient) => Promise<void>>;
+  };
 };
 
 type ServerContext = {

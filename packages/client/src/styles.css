@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply text-base-mobile md:text-base;
+  }
+
+  body {
+    @apply text;
+    background-color: #fbfbfd;
+  }
+
+  strong {
+    @apply strong;
+  }
+
+  a {
+    @apply text-link;
+  }
+
+  p {
+    @apply my-2;
+  }
+
+  h1 {
+    @apply pt-6 pb-4 text-xxl font-medium;
+  }
+
+  h2 {
+    @apply pt-5 pb-2 text-xl font-semibold text-muted;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
+  *:focus-visible {
+    outline: solid 1px;
+    @apply outline-inverted/30;
+  }
+
+  *:active {
+    outline: none;
+  }
+}
+
+@layer components {
+  .button {
+    @apply font-semibold py-0.5 px-2 cursor-pointer transition-colors rounded;
+    @apply outline-2 outline-offset-2;
+    @apply disabled:cursor-default;
+  }
+
+  .button-primary {
+    @apply bg-primary text-white;
+    @apply hover:bg-primary/95;
+    @apply disabled:bg-primary/60;
+  }
+
+  .button-secondary {
+    @apply text-muted;
+    @apply disabled:text-muted/60;
+    @apply hover:text-primary hover:disabled:text-muted/60;
+  }
+
+  .card {
+    @apply bg-neutral rounded shadow;
+  }
+}
+
+@layer utilities {
+  .col {
+    @apply flex flex-col;
+  }
+
+  .row {
+    @apply flex flex-row;
+  }
+
+  .strong {
+    @apply text-DEFAULT/75 font-bold;
+  }
+
+  .links-nocolor a {
+    @apply text-inherit;
+  }
+
+  .links-underline a {
+    @apply underline decoration-muted/80;
+  }
+
+  .hide-scrollbars::-webkit-scrollbar {
+    display: none;
+  }
+
+  avoid eslint warnings .notification {
+  }
+  .comment {
+  }
+}

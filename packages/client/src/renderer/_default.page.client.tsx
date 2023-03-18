@@ -1,10 +1,9 @@
 import * as ReactDOM from 'react-dom/client';
 import { Hydrate } from 'react-query';
 
-import { AppProviders } from '../app-providers';
-import { PageContextClient } from '../types';
-
-import { Layout } from './layout';
+import { AppProviders } from '../app/app-providers';
+import { Layout } from '../app/layout/layout';
+import { PageContextClient } from '../app/page-context';
 
 import '@fontsource/open-sans/variable.css';
 import '../styles.css';

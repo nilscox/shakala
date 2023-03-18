@@ -20,6 +20,7 @@
     "@types/no-scroll": "^2.1.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/react-helmet": "^6.1.6",
     "@types/react-modal": "^3.13.1",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
@@ -33,16 +34,23 @@
     "postcss": "^8.4.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-hook-form": "^7.43.5",
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
     "tailwindcss": "^3.2.7",
     "use-debounce": "^9.0.3",
     "vite": "^4.1.4",
-    "vite-plugin-ssr": "^0.4.94"
+    "vite-plugin-ssr": "^0.4.94",
+    "vite-plugin-svgr": "^2.4.0",
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.14.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-tailwindcss": "^3.10.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "vitest": "^0.29.1"
