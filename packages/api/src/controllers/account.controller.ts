@@ -1,6 +1,7 @@
 import assert from 'assert';
 
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
+import { UserDto } from '@shakala/shared';
 import {
   getUser,
   InvalidEmailValidationTokenError,
@@ -22,7 +23,7 @@ export class AccountController {
     this.router.get('/validate-email/:token', isAuthenticated, this.validateEmail);
   }
 
-  getProfile: RequestHandler = async (req, res) => {
+  getProfile: RequestHandler<unknown, UserDto> = async (req, res) => {
     assert(req.userId);
 
     const result = await this.queryBus.execute(getUser({ id: req.userId }));

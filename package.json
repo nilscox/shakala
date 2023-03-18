@@ -3,9 +3,10 @@
     "build": "tsc -b",
     "clean": "pnpm run -r clean",
     "lint": "pnpm --no-bail run -r lint",
-    "test": "pnpm --workspace-concurrency=1 run -r test "
+    "test": "pnpm --workspace-concurrency=1 run --no-bail -r test "
   },
   "devDependencies": {
+    "@nilscox/expect": "^0.2.4",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "eslint": "^8.35.0",

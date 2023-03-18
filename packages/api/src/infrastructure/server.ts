@@ -5,6 +5,7 @@ import { BaseError, ConfigPort, LoggerPort, TOKENS } from '@shakala/common';
 import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { ErrorRequestHandler, Express, RequestHandler } from 'express';
 import onFinished from 'on-finished';
 import * as yup from 'yup';
@@ -25,6 +26,7 @@ export class Server {
 
     this.app.use(this.logRequestHandler);
     this.app.use(cookieParser('secret'));
+    this.app.use(cors({ origin: true }));
     this.app.use(bodyParser.json());
     this.app.use(storeUserId);
 

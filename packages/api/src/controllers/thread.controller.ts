@@ -6,6 +6,7 @@ import {
   createThreadBodySchema,
   getLastThreadsQuerySchema,
   getThreadQuerySchema,
+  ThreadDto,
 } from '@shakala/shared';
 import { createComment, createThread, getLastThreads, getThread } from '@shakala/thread';
 import { injected } from 'brandi';
@@ -30,7 +31,7 @@ export class ThreadController {
     this.router.post('/:threadId/comment', guards, this.createComment);
   }
 
-  getLastThreads: RequestHandler = async (req, res) => {
+  getLastThreads: RequestHandler<unknown, ThreadDto[]> = async (req, res) => {
     const query = await validateRequest(req).query(getLastThreadsQuerySchema);
     const results = await this.queryBus.execute(getLastThreads(query));
 
@@ -38,7 +39,7 @@ export class ThreadController {
     res.send(results);
   };
 
-  getThread: RequestHandler<{ threadId: string }> = async (req, res) => {
+  getThread: RequestHandler<{ threadId: string }, ThreadDto> = async (req, res) => {
     const query = await validateRequest(req).query(getThreadQuerySchema);
 
     const result = await this.queryBus.execute(

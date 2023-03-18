@@ -25,7 +25,7 @@ describe('[intg] ThreadController', () => {
     const result: GetLastThreadsResult = [
       {
         id: 'threadId',
-        author: { id: 'authorId', nick: 'author' },
+        author: { id: 'authorId', nick: 'author', profileImage: '' },
         description: 'description',
         keywords: ['key', 'word'],
         date: 'date',
@@ -52,7 +52,7 @@ describe('[intg] ThreadController', () => {
 
     const result: GetThreadResult = {
       id: 'threadId',
-      author: { id: 'authorId', nick: 'author' },
+      author: { id: 'authorId', nick: 'author', profileImage: '' },
       description: 'description',
       keywords: ['key', 'word'],
       date: 'date',

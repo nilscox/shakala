@@ -27,7 +27,7 @@ describe('[unit] SendEmailToCreatedUserHandler', () => {
         to: 'mano@domain.tld',
         payload: {
           appBaseUrl: 'https://app.url',
-          emailValidationLink: 'https://api.url/user/validate-email/token',
+          emailValidationLink: 'https://api.url/account/validate-email/token',
           nick: 'mano',
         },
       })

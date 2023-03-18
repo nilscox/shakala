@@ -13,7 +13,7 @@ export type GetLastThreadsResult = Array<{
   author: {
     id: string;
     nick: string;
-    profileImage?: string;
+    profileImage: string;
   };
   description: string;
   keywords: string[];
