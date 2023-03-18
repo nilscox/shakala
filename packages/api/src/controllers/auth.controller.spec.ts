@@ -85,6 +85,7 @@ describe('[intg] AuthController', () => {
       const user: GetUserResult = {
         id: 'userId',
         email: 'user@domain.tld',
+        profileImage: '',
         emailValidated: true,
         nick: '',
         signupDate: '',

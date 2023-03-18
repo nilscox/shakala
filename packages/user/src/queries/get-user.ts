@@ -12,7 +12,7 @@ export type GetUserResult = Maybe<{
   email: string;
   emailValidated: boolean;
   nick: string;
-  profileImage?: string;
+  profileImage: string;
   signupDate: string;
 }>;
 

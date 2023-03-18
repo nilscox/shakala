@@ -1,5 +1,6 @@
 import { Module } from '@shakala/common';
 
+import { GravatarProfileImageAdapter } from './adapters/gravatar-profile-image.adapter';
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
@@ -29,6 +30,8 @@ export class UserModule extends Module {
       // prettier-ignore
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
     }
+
+    this.bindToken(USER_TOKENS.adapters.profileImage, GravatarProfileImageAdapter);
 
     this.bindToken(USER_TOKENS.commands.createUserHandler, CreateUserHandler);
     this.bindToken(USER_TOKENS.commands.createUserActivityHandler, CreateUserActivityHandler);

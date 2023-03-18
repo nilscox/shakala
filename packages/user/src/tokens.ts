@@ -1,5 +1,6 @@
 import { token } from 'brandi';
 
+import { ProfileImagePort } from './adapters/profile-image.port';
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
@@ -16,6 +17,9 @@ export const USER_TOKENS = {
   repositories: {
     userRepository: token<UserRepository>('userRepository'),
     userActivityRepository: token<UserActivityRepository>('userActivityRepository'),
+  },
+  adapters: {
+    profileImage: token<ProfileImagePort>('profileImage'),
   },
   commands: {
     createUserHandler: token<CreateUserHandler>('createUserHandler'),
