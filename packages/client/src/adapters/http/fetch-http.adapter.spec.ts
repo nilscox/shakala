@@ -2,6 +2,8 @@ import expect from '@nilscox/expect';
 import { stub } from '@shakala/shared';
 import { describe, it } from 'vitest';
 
+import { assert } from '../../utils/assert';
+
 import { FetchHttpAdapter } from './fetch-http.adapter';
 import { HttpError } from './http.port';
 
@@ -111,5 +113,17 @@ describe('FetchHttpAdapter', () => {
     const response = await expect(adapter.get('/', { onError })).toResolve();
 
     expect(response.body).toEqual('result');
+  });
+
+  it('clones the http adapter instance with a given token', async () => {
+    const fetch = mockFetch();
+    const adapter = new FetchHttpAdapter(undefined, fetch).withToken('value');
+
+    await expect(adapter.get('/')).toResolve();
+
+    const headers = fetch.lastCall?.[1]?.headers;
+
+    assert(headers instanceof Headers);
+    expect(headers.get('cookie')).toEqual('token=value');
   });
 });

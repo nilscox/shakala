@@ -15,7 +15,7 @@ type DI = {
 };
 
 const config: Config = {
-  apiBaseUrl: 'http://localhost:3000',
+  apiBaseUrl: 'http://localhost:8000/api',
 };
 
 const http = new FetchHttpAdapter(config.apiBaseUrl);
@@ -25,3 +25,10 @@ export const di: DI = {
   authentication: new ApiAuthenticationAdapter(http),
   thread: new ApiThreadAdapter(http),
 };
+
+declare global {
+  // eslint-disable-next-line no-var
+  var di: DI;
+}
+
+globalThis.di = di;

@@ -1,5 +1,7 @@
 import { UserDto } from '@shakala/shared';
 
-export interface AuthenticationPort {
+import { ApiAdapter } from '../api-adapter';
+
+export interface AuthenticationPort extends ApiAdapter {
   getAuthenticatedUser(): Promise<UserDto | undefined>;
 }

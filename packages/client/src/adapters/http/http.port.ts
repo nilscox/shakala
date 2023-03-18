@@ -26,24 +26,26 @@ export class HttpError extends Error {
 }
 
 export interface HttpPort {
-  get<ResponseBody>(
+  withToken(token: string | undefined): HttpPort;
+
+  get<ResponseBody = unknown>(
     path: string,
     options?: RequestOptions<ResponseBody>
   ): Promise<HttpResponse<ResponseBody>>;
 
-  post<RequestBody, ResponseBody>(
+  post<RequestBody = unknown, ResponseBody = unknown>(
     path: string,
     body?: RequestBody,
     option?: RequestOptions<ResponseBody>
   ): Promise<HttpResponse<ResponseBody>>;
 
-  put<RequestBody, ResponseBody>(
+  put<RequestBody = unknown, ResponseBody = unknown>(
     path: string,
     body?: RequestBody,
     option?: RequestOptions<ResponseBody>
   ): Promise<HttpResponse<ResponseBody>>;
 
-  delete<RequestBody, ResponseBody>(
+  delete<RequestBody = unknown, ResponseBody = unknown>(
     path: string,
     body?: RequestBody,
     option?: RequestOptions<ResponseBody>

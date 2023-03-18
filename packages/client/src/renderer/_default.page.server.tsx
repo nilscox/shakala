@@ -13,10 +13,10 @@ export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
 const commonQueries = [prefetchQuery(di.authentication, 'getAuthenticatedUser')];
 
 export async function render(pageContext: PageContextServer) {
-  const { Page, pageProps, exports, queryClient } = pageContext;
+  const { Page, pageProps, exports, queryClient, token } = pageContext;
   const queries = [...commonQueries, ...(exports.queries ?? [])];
 
-  await Promise.all(queries.map((query) => query(queryClient)));
+  await Promise.all(queries.map((query) => query(queryClient, token)));
 
   const dehydratedState = dehydrate(queryClient);
 

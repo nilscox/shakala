@@ -1,5 +1,7 @@
 import { ThreadDto } from '@shakala/shared';
 
-export interface ThreadPort {
+import { ApiAdapter } from '../api-adapter';
+
+export interface ThreadPort extends ApiAdapter {
   getLastThreads(count: number): Promise<ThreadDto[]>;
 }

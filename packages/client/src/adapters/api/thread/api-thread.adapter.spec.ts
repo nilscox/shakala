@@ -13,7 +13,7 @@ describe('ApiThreadAdapter', () => {
     const http = new StubHttpAdapter();
     adapter = new ApiThreadAdapter(http);
 
-    mockResponse = http.mock('GET', '/api/account');
+    mockResponse = http.mock('GET', '/thread?count=3');
   });
 
   it('fetches the last threads', async () => {

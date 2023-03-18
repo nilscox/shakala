@@ -1,7 +1,19 @@
 import { HttpError, HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
 
 export class FetchHttpAdapter implements HttpPort {
+  private headers = new Headers();
+
   constructor(private readonly baseUrl = '', private readonly fetch = globalThis.fetch.bind(globalThis)) {}
+
+  withToken(token: string | undefined): HttpPort {
+    const http = new FetchHttpAdapter(this.baseUrl, this.fetch);
+
+    if (token) {
+      http.headers.set('cookie', `token=${token}`);
+    }
+
+    return http;
+  }
 
   async get<ResponseBody>(
     path: string,
@@ -26,7 +38,7 @@ export class FetchHttpAdapter implements HttpPort {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async request(request: HttpRequest, options?: RequestOptions): Promise<HttpResponse<any>> {
-    const headers = new Headers();
+    const headers = new Headers(this.headers);
 
     const init: RequestInit = {
       method: request.method,

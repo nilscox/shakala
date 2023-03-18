@@ -2,7 +2,9 @@ import path from 'node:path';
 import url from 'node:url';
 
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import express, { RequestHandler } from 'express';
+import proxy from 'express-http-proxy';
 import { QueryClient } from 'react-query';
 import { renderPage } from 'vite-plugin-ssr';
 
@@ -18,6 +20,7 @@ async function main() {
   const app = express();
 
   app.use(compression());
+  app.use(cookieParser());
 
   if (prod) {
     app.use(express.static(path.join(root, 'dist', 'client')));
@@ -31,6 +34,7 @@ async function main() {
     });
 
     app.use(viteDevServer.middlewares);
+    app.use('/api', proxy('http://localhost:3000'));
   }
 
   app.get(/.*/, handleRequest);
@@ -46,7 +50,7 @@ const handleRequest: RequestHandler = async (req, res, next) => {
 
   const { httpResponse } = await renderPage({
     urlOriginal: req.originalUrl,
-    cookie: req.headers.cookie,
+    token: req.cookies.token,
     queryClient,
   });
 

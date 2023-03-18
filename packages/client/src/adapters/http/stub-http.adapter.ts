@@ -7,8 +7,12 @@ export type MockHttpResponse = (response: Partial<HttpResponse>) => void;
 export class StubHttpAdapter implements HttpPort {
   private responses = new Map<Partial<HttpRequest>, Partial<HttpResponse>>();
 
-  mock(method: HttpMethod, url: string): MockHttpResponse {
-    return (response) => this.responses.set({ method, url }, response);
+  withToken(): HttpPort {
+    throw new Error('Method not implemented.');
+  }
+
+  mock(method: HttpMethod, url: string, options?: { body?: unknown }): MockHttpResponse {
+    return (response) => this.responses.set({ method, url, body: options?.body }, response);
   }
 
   async get<ResponseBody>(
@@ -68,7 +72,7 @@ export class StubHttpAdapter implements HttpPort {
       return false;
     }
 
-    if (body && body !== request.body) {
+    if (body && JSON.stringify(body) !== JSON.stringify(request.body)) {
       return false;
     }
 
