@@ -18,6 +18,7 @@ export abstract class IntegrationTest {
     common: { logger: 'stub', buses: 'stub', generator: 'stub' },
     email: { emailCompiler: 'fake', emailSender: 'stub' },
     notification: { repositories: 'filesystem' },
+    persistence: {},
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },
     api: { server: 'test' },

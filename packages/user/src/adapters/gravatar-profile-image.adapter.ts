@@ -1,15 +1,13 @@
 import crypto from 'node:crypto';
 
-import { User } from '../entities/user.entity';
-
 import { ProfileImagePort } from './profile-image.port';
 
 export class GravatarProfileImageAdapter implements ProfileImagePort {
   static gravatarBaseUrl = 'https://www.gravatar.com/avatar/';
   static params = new URLSearchParams({ default: 'mp' });
 
-  async getProfileImageUrl(user: User): Promise<string> {
-    return this.getGravatarUrl(user.email);
+  async getProfileImageUrl(email: string): Promise<string> {
+    return this.getGravatarUrl(email);
   }
 
   private getGravatarUrl(email: string) {

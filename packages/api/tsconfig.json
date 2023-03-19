@@ -3,6 +3,7 @@
   "references": [
     { "path": "../common/tsconfig.json" },
     { "path": "../email/tsconfig.json" },
+    { "path": "../persistence/tsconfig.json" },
     { "path": "../shared/tsconfig.json" },
     { "path": "../thread/tsconfig.json" },
     { "path": "../user/tsconfig.json" }

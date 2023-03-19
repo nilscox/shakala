@@ -1,4 +1,5 @@
 import { TOKENS } from '@shakala/common';
+import dotenv from 'dotenv';
 
 import { container } from './container';
 import { Application } from './infrastructure/application';
@@ -6,15 +7,21 @@ import { API_TOKENS } from './tokens';
 
 Error.stackTraceLimit = Infinity;
 
-main().catch(console.error);
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+
+dotenv.config();
 
 async function main() {
   const application = new Application({
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
+    persistence: {},
     thread: { repositories: 'filesystem' },
-    user: { repositories: 'filesystem' },
+    user: { repositories: 'sql' },
     api: { server: 'prod' },
   });
 

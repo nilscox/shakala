@@ -6,6 +6,6 @@ export class EntityNotFoundError extends BaseError<{ entity: string; where?: Whe
   status = 404;
 
   constructor(entity: string, where?: Where) {
-    super(`${entity} not found (where ${JSON.stringify(where)})`, { entity, where });
+    super(`${entity} not found`, { entity, where });
   }
 }

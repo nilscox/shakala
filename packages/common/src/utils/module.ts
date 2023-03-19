@@ -40,7 +40,9 @@ export abstract class Module extends DependencyModule {
   }
 
   protected bindToken<Cls>(token: Token<Cls>, Instance: ClassType<Cls>, expose = true) {
-    this.logger.verbose('binding', Instance.name);
+    const tokenStr = token.__s.toString().replace(/^Symbol\((.*)\)$/, '$1');
+
+    this.logger.verbose('binding', tokenStr, '->', Instance.name);
     this.bind(token).toInstance(Instance).inContainerScope();
 
     if (expose) {

@@ -13,6 +13,7 @@ describe('[intg] Server', () => {
       common: { logger: 'stub', buses: 'stub', generator: 'stub' },
       email: { emailCompiler: 'fake', emailSender: 'stub' },
       notification: { repositories: 'memory' },
+      persistence: {},
       thread: { repositories: 'memory' },
       user: { repositories: 'memory' },
       api: { server: 'prod' },

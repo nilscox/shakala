@@ -18,6 +18,7 @@ export abstract class E2ETest {
     common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
     email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
+    persistence: {},
     thread: { repositories: 'filesystem' },
     user: { repositories: 'filesystem' },
     api: { server: 'test' },

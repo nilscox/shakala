@@ -6,6 +6,7 @@ export * from './schemas/comment';
 export * from './schemas/common';
 export * from './schemas/thread';
 
+export * from './types/any-function';
 export * from './types/class-type';
 export * from './types/deep-partial';
 export * from './types/enum-type';

@@ -4,6 +4,7 @@
     "packages/common",
     "packages/email",
     "packages/notifications",
+    "packages/persistence",
     "packages/shared",
     "packages/thread",
     "packages/user"

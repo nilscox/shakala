@@ -1,0 +1,37 @@
+{
+  "name": "@shakala/persistence",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "build": "tsc -b",
+    "lint": "eslint --config ../../.eslintrc.ci.js src",
+    "mikro-orm": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--loader ts-node/esm' yarn mikro-orm-esm",
+    "db:migrate": "yarn mikro-orm migration:up",
+    "db:reset": "yarn mikro-orm migration:fresh"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./mikro-orm.config.ts"
+    ]
+  },
+  "dependencies": {
+    "@mikro-orm/cli": "^5.6.15",
+    "@mikro-orm/core": "^5.6.15",
+    "@mikro-orm/migrations": "^5.6.15",
+    "@mikro-orm/postgresql": "^5.6.15",
+    "@mikro-orm/reflection": "^5.6.15",
+    "@shakala/common": "workspace:*",
+    "@shakala/shared": "workspace:*",
+    "@types/node": "^18.15.3",
+    "brandi": "^5.0.0",
+    "dotenv": "^16.0.3",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

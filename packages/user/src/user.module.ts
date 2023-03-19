@@ -12,12 +12,13 @@ import { ListUserActivitiesHandler } from './queries/list-user-activities';
 import { ListUsersHandler } from './queries/list-users';
 import { FilesystemUserRepository } from './repositories/user/file-system-user.repository';
 import { InMemoryUserRepository } from './repositories/user/in-memory-user.repository';
+import { SqlUserRepository } from './repositories/user/sql-user.repository';
 import { FilesystemUserActivityRepository } from './repositories/user-activity/file-system-user-activity.repository';
 import { InMemoryUserActivityRepository } from './repositories/user-activity/in-memory-user-activity.repository';
 import { USER_TOKENS } from './tokens';
 
 type ThreadModuleConfig = {
-  repositories: 'memory' | 'filesystem';
+  repositories: 'memory' | 'filesystem' | 'sql';
 };
 
 export class UserModule extends Module {
@@ -25,8 +26,12 @@ export class UserModule extends Module {
     if (config.repositories === 'memory') {
       this.bindToken(USER_TOKENS.repositories.userRepository, InMemoryUserRepository, false);
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, InMemoryUserActivityRepository, false);
-    } else {
+    } else if (config.repositories === 'filesystem') {
       this.bindToken(USER_TOKENS.repositories.userRepository, FilesystemUserRepository, false);
+      // prettier-ignore
+      this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
+    } else {
+      this.bindToken(USER_TOKENS.repositories.userRepository, SqlUserRepository, true);
       // prettier-ignore
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
     }
@@ -44,5 +49,13 @@ export class UserModule extends Module {
 
     this.bindToken(USER_TOKENS.eventHandlers.userUserActivitiesHandler, UserUserActivitiesHandler);
     this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
+  }
+
+  async init() {
+    const userRepository = this.container.get(USER_TOKENS.repositories.userRepository);
+
+    if (userRepository instanceof SqlUserRepository) {
+      await userRepository.init();
+    }
   }
 }

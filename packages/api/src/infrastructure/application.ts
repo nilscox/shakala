@@ -11,6 +11,7 @@ import {
 } from '@shakala/common';
 import { EmailModule } from '@shakala/email';
 import { NotificationModule } from '@shakala/notification';
+import { PersistenceModule } from '@shakala/persistence';
 import { ThreadModule } from '@shakala/thread';
 import { UserModule } from '@shakala/user';
 
@@ -22,6 +23,7 @@ type Modules = {
   user: UserModule;
   email: EmailModule;
   notification: NotificationModule;
+  persistence: PersistenceModule;
   thread: ThreadModule;
   api: ApiModule;
 };
@@ -36,6 +38,7 @@ export class Application {
     user: new UserModule(container),
     email: new EmailModule(container),
     notification: new NotificationModule(container),
+    persistence: new PersistenceModule(container),
     thread: new ThreadModule(container),
     api: new ApiModule(container),
   };
@@ -55,7 +58,12 @@ export class Application {
 
   async init() {
     for (const module of Object.values<Module>(this.modules)) {
-      await module.init?.();
+      if (!module.init) {
+        continue;
+      }
+
+      this.logger.verbose(`initializing ${module.constructor.name}`);
+      await module.init();
     }
 
     this.configureEventHandlers();

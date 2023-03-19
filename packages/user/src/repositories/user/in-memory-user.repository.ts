@@ -34,7 +34,7 @@ export class InMemoryUserRepository extends InMemoryRepository<User> implements 
       id: user.id,
       email: user.email,
       emailValidated: user.emailValidationToken === undefined,
-      profileImage: await this.profileImageAdapter.getProfileImageUrl(user),
+      profileImage: await this.profileImageAdapter.getProfileImageUrl(user.email),
       nick: user.nick.toString(),
       signupDate: user.signupDate.toString(),
     };
