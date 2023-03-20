@@ -7,18 +7,12 @@ import { ClassType } from '@shakala/shared';
 import { Orm } from './create-orm';
 
 export abstract class SqlRepository<Entity, SqlEntity extends object> {
-  protected orm?: Orm;
-
-  constructor(private readonly getOrm: () => Promise<Orm>) {}
+  constructor(protected readonly orm: Orm) {}
 
   protected abstract SqlEntity: ClassType<SqlEntity>;
 
   protected abstract toEntity(sqlEntity: SqlEntity): Entity;
   protected abstract toSql(entity: Entity): SqlEntity;
-
-  async init() {
-    this.orm = await this.getOrm();
-  }
 
   get em() {
     assert(this.orm, `Repository<${this.SqlEntity.name}> is not initialized`);

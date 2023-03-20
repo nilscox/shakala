@@ -6,19 +6,22 @@ import { PERSISTENCE_TOKENS } from './tokens';
 
 export class PersistenceModule extends Module {
   configure(): void {
-    this.bind(PERSISTENCE_TOKENS.orm).toFactory(
+    this.bind(PERSISTENCE_TOKENS.ormFactory).toFactory(
       () => createOrm(),
       (orm) => this.initOrm(orm)
     );
 
     this.bind(PERSISTENCE_TOKENS.ormContext).toInstance(OrmContext).inContainerScope();
 
-    this.container.use(PERSISTENCE_TOKENS.orm).from(this);
+    this.container.use(PERSISTENCE_TOKENS.ormFactory).from(this);
     this.container.use(PERSISTENCE_TOKENS.ormContext).from(this);
   }
 
   async init(): Promise<void> {
-    await this.container.get(PERSISTENCE_TOKENS.ormContext).init();
+    const orm = await this.container.get(PERSISTENCE_TOKENS.ormFactory)();
+
+    this.bind(PERSISTENCE_TOKENS.orm).toConstant(orm);
+    this.container.use(PERSISTENCE_TOKENS.orm).from(this);
   }
 
   private async initOrm(orm: Orm) {

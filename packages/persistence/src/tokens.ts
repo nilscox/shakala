@@ -4,6 +4,7 @@ import { Orm } from './create-orm';
 import { OrmContext } from './orm-context';
 
 export const PERSISTENCE_TOKENS = {
-  orm: token<AsyncFactory<Orm>>('AsyncFactory<orm>'),
+  ormFactory: token<AsyncFactory<Orm>>('AsyncFactory<orm>'),
+  orm: token<Orm>('orm'),
   ormContext: token<OrmContext>('ormContext'),
 };

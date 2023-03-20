@@ -13,8 +13,8 @@ import { UserRepository } from './user.repository';
 export class SqlUserRepository extends SqlRepository<User, SqlUser> implements UserRepository {
   protected SqlEntity = SqlUser;
 
-  constructor(getOrm: () => Promise<Orm>, private readonly profileImageAdapter: ProfileImagePort) {
-    super(getOrm);
+  constructor(orm: Orm, private readonly profileImageAdapter: ProfileImagePort) {
+    super(orm);
   }
 
   protected toEntity(sqlUser: SqlUser): User {

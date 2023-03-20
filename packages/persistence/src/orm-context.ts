@@ -6,13 +6,7 @@ import { Orm } from './create-orm';
 import { PERSISTENCE_TOKENS } from './tokens';
 
 export class OrmContext {
-  orm?: Orm;
-
-  constructor(private readonly getOrm: () => Promise<Orm>) {}
-
-  async init() {
-    this.orm = await this.getOrm();
-  }
+  constructor(private readonly orm: Orm) {}
 
   public middleware(next: () => void) {
     RequestContext.create(this.orm?.em as EntityManager, next);

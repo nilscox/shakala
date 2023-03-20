@@ -50,12 +50,4 @@ export class UserModule extends Module {
     this.bindToken(USER_TOKENS.eventHandlers.userUserActivitiesHandler, UserUserActivitiesHandler);
     this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);
   }
-
-  async init() {
-    const userRepository = this.container.get(USER_TOKENS.repositories.userRepository);
-
-    if (userRepository instanceof SqlUserRepository) {
-      await userRepository.init();
-    }
-  }
 }

@@ -48,6 +48,6 @@ describe('SqlUserRepository', () => {
 
 class Test extends RepositoryTest {
   get repository() {
-    return new SqlUserRepository(() => Promise.resolve(this.orm), new StubProfileImageAdapter());
+    return new SqlUserRepository(this.orm, new StubProfileImageAdapter());
   }
 }
