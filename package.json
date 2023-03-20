@@ -3,7 +3,7 @@
     "build": "tsc -b",
     "clean": "pnpm run -r clean",
     "lint": "pnpm --no-bail run -r lint",
-    "test": "pnpm --no-bail --workspace-concurrency=1 run -r test "
+    "test": "pnpm --no-bail --workspace-concurrency=1 run -r test"
   },
   "devDependencies": {
     "@nilscox/expect": "^0.2.4",
