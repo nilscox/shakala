@@ -10,6 +10,8 @@ export default defineConfig({
   },
   test: {
     reporters: ['verbose'],
+    environment: 'happy-dom',
+    setupFiles: ['./src/utils/expect.ts'],
     watch: false,
     deps: {
       registerNodeLoader: true,

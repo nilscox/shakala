@@ -1,18 +1,14 @@
-import { Methods } from '@shakala/shared';
+import { AnyFunction, Methods } from '@shakala/shared';
 
 import { ApiAdapter } from '../adapters/api/api-adapter';
 import { Query } from '../app/page-context';
 
 import { assert } from './assert';
 
-export type PrefetchQuery = <
-  Adapter extends ApiAdapter,
-  AdapterMethods extends Methods<Adapter>,
-  Method extends keyof AdapterMethods
->(
+export type PrefetchQuery = <Adapter extends ApiAdapter, Method extends keyof Methods<Adapter>>(
   adapter: Adapter,
   method: Method,
-  ...params: Parameters<AdapterMethods[Method]>
+  ...params: Adapter[Method] extends AnyFunction ? Parameters<Adapter[Method]> : never
 ) => Query;
 
 export const prefetchQuery: PrefetchQuery = (adapter, method, ...params) => {
