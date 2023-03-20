@@ -332,6 +332,7 @@ importers:
     specifiers:
       '@shakala/common': workspace:*
       '@shakala/notification': workspace:*
+      '@shakala/persistence': workspace:*
       '@shakala/shared': workspace:*
       '@shakala/user': workspace:*
       '@types/node': ^18.14.1
@@ -342,6 +343,7 @@ importers:
     dependencies:
       '@shakala/common': link:../common
       '@shakala/notification': link:../notification
+      '@shakala/persistence': link:../persistence
       '@shakala/shared': link:../shared
       '@shakala/user': link:../user
       brandi: 5.0.0

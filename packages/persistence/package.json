@@ -8,7 +8,7 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
-    "mikro-orm": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--loader ts-node/esm' yarn mikro-orm-esm",
+    "mikro-orm": "yarn mikro-orm-esm",
     "db:migrate": "yarn mikro-orm migration:up",
     "db:reset": "yarn mikro-orm migration:fresh"
   },

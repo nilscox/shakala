@@ -1,4 +1,4 @@
-export * from './entities/sql-user.entity';
+export * from './entities';
 
 export * from './create-orm';
 export * from './orm-context';

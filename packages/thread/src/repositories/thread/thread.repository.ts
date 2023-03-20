@@ -5,7 +5,7 @@ import { Thread } from '../../entities/thread.entity';
 import { GetLastThreadsResult } from '../../queries/get-last-threads';
 import { GetThreadResult } from '../../queries/get-thread';
 
-type GetThreadOptions = {
+export type GetThreadOptions = {
   userId?: string;
   sort: CommentSort;
   search?: string;

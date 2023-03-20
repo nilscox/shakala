@@ -2,6 +2,8 @@ import path from 'node:path';
 
 import { defineConfig } from 'vitest/config';
 
+process.env.TZ = 'UTC';
+
 const packageSource = (pkg) => {
   return path.resolve(__dirname, 'packages', pkg, 'src');
 };

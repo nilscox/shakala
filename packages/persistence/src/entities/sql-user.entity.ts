@@ -1,10 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Property } from '@mikro-orm/core';
 
-@Entity()
-export class SqlUser {
-  @PrimaryKey()
-  id!: string;
+import { BaseSqlEntity } from '../base-sql-entity';
 
+@Entity({ tableName: 'user' })
+export class SqlUser extends BaseSqlEntity {
   @Property()
   nick!: string;
 
@@ -16,10 +15,4 @@ export class SqlUser {
 
   @Property()
   emailValidationToken!: string | null;
-
-  @Property()
-  createdAt = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt = new Date();
 }

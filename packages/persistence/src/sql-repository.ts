@@ -44,4 +44,8 @@ export abstract class SqlRepository<Entity, SqlEntity extends object> {
   async save(entity: Entity): Promise<void> {
     await this.repository.upsert(this.toSql(entity));
   }
+
+  async delete(entity: Entity): Promise<void> {
+    await this.repository.nativeDelete(this.toSql(entity));
+  }
 }

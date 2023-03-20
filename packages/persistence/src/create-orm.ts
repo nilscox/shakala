@@ -8,3 +8,4 @@ export async function createOrm(overrides?: Partial<Options<PostgreSqlDriver>>) 
 }
 
 export type Orm = Awaited<ReturnType<typeof createOrm>>;
+export type EM = Orm['em'];

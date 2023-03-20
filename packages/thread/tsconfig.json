@@ -3,6 +3,8 @@
   "references": [
     { "path": "../common/tsconfig.json" },
     { "path": "../notification/tsconfig.json" },
+    { "path": "../persistence/tsconfig.json" },
+    { "path": "../shared/tsconfig.json" },
     { "path": "../user/tsconfig.json" }
   ],
   "include": ["src/**/*.ts"],

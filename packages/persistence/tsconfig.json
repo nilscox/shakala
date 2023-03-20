@@ -6,5 +6,11 @@
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist"
+  },
+
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }
