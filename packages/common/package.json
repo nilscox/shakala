@@ -2,12 +2,10 @@
   "name": "@shakala/common",
   "private": true,
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
-    "build": "tsc",
+    "build": "tsc -b",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 vitest --pass-with-no-tests"
   },

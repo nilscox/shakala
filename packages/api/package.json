@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "pnpm ts-node src/index.ts",
-    "dev": "pnpm nodemon -w src -e ts -x 'pnpm start'",
+    "dev": "pnpm nodemon -w '../*/src/**/*' -e ts -x 'pnpm start'",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 vitest"
   },
