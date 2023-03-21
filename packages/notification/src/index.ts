@@ -4,6 +4,6 @@ export { markNotificationAsSeen } from './commands/mark-notification-as-seen/mar
 export { getNotificationsCount } from './queries/get-notifications-count';
 export { listUserNotifications } from './queries/list-user-notifications';
 
-export { NotificationPayloadMap, NotificationType } from './entities/notification.entity';
+export { type NotificationPayloadMap, NotificationType } from './entities/notification.entity';
 
 export { NotificationModule } from './notification.module';

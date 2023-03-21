@@ -1,8 +1,9 @@
 import assert from 'assert';
 
 import { Timestamp } from '@shakala/common';
-import { SqlComment, SqlRepository, SqlThread, SqlUser } from '@shakala/persistence';
+import { PERSISTENCE_TOKENS, SqlComment, SqlRepository, SqlThread, SqlUser } from '@shakala/persistence';
 import { CommentSort, last, omit } from '@shakala/shared';
+import { injected } from 'brandi';
 
 import { Markdown } from '../../entities/markdown.value-object';
 import { Thread } from '../../entities/thread.entity';
@@ -39,8 +40,10 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     } as SqlThread);
   }
 
-  async getLastThreads(): Promise<GetLastThreadsResult> {
-    return [];
+  async getLastThreads(count: number): Promise<GetLastThreadsResult> {
+    const sqlThreads = await this.repository.findAll({ populate: ['author'], limit: count });
+
+    return sqlThreads.map((sqlThread) => this.getThreadResult(sqlThread));
   }
 
   async getThread(threadId: string, options: GetThreadOptions): Promise<GetThreadResult> {
@@ -80,12 +83,15 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       return;
     }
 
-    return this.getThreadResult(sqlThread);
-  }
-
-  private getThreadResult(sqlThread: SqlThread): GetThreadResult {
     const comments = sqlThread.comments.getItems();
 
+    return {
+      ...this.getThreadResult(sqlThread),
+      comments: comments.map((comment) => this.getCommentResult(comment)),
+    };
+  }
+
+  private getThreadResult(sqlThread: SqlThread): GetLastThreadsResult[number] {
     return {
       id: sqlThread.id,
       author: {
@@ -97,7 +103,6 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       keywords: sqlThread.keywords,
       text: sqlThread.text,
       date: sqlThread.createdAt.toISOString(),
-      comments: comments.map((comment) => this.getCommentResult(comment)),
     };
   }
 
@@ -128,3 +133,5 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     };
   }
 }
+
+injected(SqlThreadRepository, PERSISTENCE_TOKENS.orm);

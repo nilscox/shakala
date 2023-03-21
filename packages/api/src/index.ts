@@ -20,7 +20,7 @@ async function main() {
     email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
     persistence: {},
-    thread: { repositories: 'filesystem' },
+    thread: { repositories: 'sql' },
     user: { repositories: 'sql' },
     api: { server: 'prod' },
   });

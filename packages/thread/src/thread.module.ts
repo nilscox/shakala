@@ -23,10 +23,11 @@ import { FilesystemReactionRepository } from './repositories/reaction/filesystem
 import { InMemoryReactionRepository } from './repositories/reaction/in-memory-reaction.repository';
 import { FilesystemThreadRepository } from './repositories/thread/filesystem-thread.repository';
 import { InMemoryThreadRepository } from './repositories/thread/in-memory-thread.repository';
+import { SqlThreadRepository } from './repositories/thread/sql-thread.repository';
 import { THREAD_TOKENS } from './tokens';
 
 type ThreadModuleConfig = {
-  repositories: 'memory' | 'filesystem';
+  repositories: 'memory' | 'filesystem' | 'sql';
 };
 
 export class ThreadModule extends Module {
@@ -38,8 +39,14 @@ export class ThreadModule extends Module {
       this.bindToken(THREAD_TOKENS.repositories.reactionRepository, InMemoryReactionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, InMemoryCommentSubscriptionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, InMemoryCommentReportRepository, false);
-    } else {
+    } else if (config.repositories === 'filesystem') {
       this.bindToken(THREAD_TOKENS.repositories.threadRepository, FilesystemThreadRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository, false);
+    } else {
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, SqlThreadRepository, true);
       this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);

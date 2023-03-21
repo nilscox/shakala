@@ -13,6 +13,27 @@ describe('SqlThreadRepository', () => {
     await test.setup();
   });
 
+  describe('getLastThreads', () => {
+    it('retrieves the last threads', async () => {
+      const { thread, author } = await test.createThread();
+
+      expect(await test.repository.getLastThreads(1)).toEqual([
+        {
+          id: thread.id,
+          date: thread.createdAt.toISOString(),
+          author: {
+            id: author.id,
+            nick: author.nick,
+            profileImage: '',
+          },
+          description: thread.description,
+          keywords: thread.keywords,
+          text: thread.text,
+        },
+      ]);
+    });
+  });
+
   describe('getThread', () => {
     it('retrieves a thread from its id', async () => {
       const { thread, author } = await test.createThread();
