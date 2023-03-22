@@ -4,22 +4,13 @@ import { injected } from 'brandi';
 import { ThreadRepository } from '../repositories/thread/thread.repository';
 import { THREAD_TOKENS } from '../tokens';
 
+import { GetThreadResult } from './get-thread';
+
 export type GetLastThreadsQuery = {
   count: number;
 };
 
-export type GetLastThreadsResult = Array<{
-  id: string;
-  author: {
-    id: string;
-    nick: string;
-    profileImage: string;
-  };
-  description: string;
-  keywords: string[];
-  text: string;
-  date: string;
-}>;
+export type GetLastThreadsResult = Array<Omit<GetThreadResult, 'comments'>>;
 
 export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsResult>('getLastThreads');
 

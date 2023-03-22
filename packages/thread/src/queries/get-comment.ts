@@ -15,7 +15,7 @@ export type GetCommentResult = Maybe<{
   author: {
     id: string;
     nick: string;
-    profileImage?: string;
+    profileImage: string;
   };
   text: string;
   date: string;

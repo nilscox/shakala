@@ -6,7 +6,6 @@ import { ThreadRepository } from '../repositories/thread/thread.repository';
 import { THREAD_TOKENS } from '../tokens';
 
 import { GetCommentResult } from './get-comment';
-import { GetLastThreadsResult } from './get-last-threads';
 
 export type GetThreadQuery = {
   threadId: string;
@@ -15,18 +14,27 @@ export type GetThreadQuery = {
   search?: string;
 };
 
-export type GetThreadResult = Maybe<GetLastThreadsResult[number] & { comments: GetCommentResult[] }>;
+export type GetThreadResult = {
+  id: string;
+  author: {
+    id: string;
+    nick: string;
+    profileImage: string;
+  };
+  description: string;
+  keywords: string[];
+  text: string;
+  date: string;
+  comments: GetCommentResult[];
+};
 
-export const getThread = queryCreator<GetThreadQuery, GetThreadResult>('getThread');
+export const getThread = queryCreator<GetThreadQuery, Maybe<GetThreadResult>>('getThread');
 
-export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadResult> {
+export class GetThreadHandler implements QueryHandler<GetThreadQuery, Maybe<GetThreadResult>> {
   constructor(private readonly threadRepository: ThreadRepository) {}
 
-  async handle(query: GetThreadQuery): Promise<GetThreadResult> {
-    return this.threadRepository.getThread(query.threadId, {
-      userId: query.userId,
-      ...query,
-    });
+  async handle(query: GetThreadQuery): Promise<Maybe<GetThreadResult>> {
+    return this.threadRepository.getThread(query.threadId, query);
   }
 }
 

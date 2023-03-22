@@ -2,7 +2,7 @@ import assert from 'assert';
 
 import { Timestamp } from '@shakala/common';
 import { PERSISTENCE_TOKENS, SqlComment, SqlRepository, SqlThread, SqlUser } from '@shakala/persistence';
-import { CommentSort, last, omit } from '@shakala/shared';
+import { CommentSort, last, Maybe, omit } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { Markdown } from '../../entities/markdown.value-object';
@@ -46,7 +46,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     return sqlThreads.map((sqlThread) => this.getThreadResult(sqlThread));
   }
 
-  async getThread(threadId: string, options: GetThreadOptions): Promise<GetThreadResult> {
+  async getThread(threadId: string, options: GetThreadOptions): Promise<Maybe<GetThreadResult>> {
     const qb = this.em.createQueryBuilder(SqlThread, 'thread');
 
     void qb.select('*').where({ id: threadId });
@@ -80,7 +80,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     const sqlThread = await qb.getSingleResult();
 
     if (!sqlThread) {
-      return;
+      return undefined;
     }
 
     const comments = sqlThread.comments.getItems();

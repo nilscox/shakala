@@ -24,7 +24,7 @@ describe('[intg] CommentController', () => {
 
     const result: GetCommentResult = {
       id: 'commentId',
-      author: { id: 'authorId', nick: 'author' },
+      author: { id: 'authorId', nick: 'author', profileImage: 'profileImage' },
       text: 'text',
       date: 'date',
       edited: false,
