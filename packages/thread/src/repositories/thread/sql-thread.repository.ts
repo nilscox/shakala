@@ -97,7 +97,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       author: {
         id: sqlThread.author.id,
         nick: sqlThread.author.nick,
-        profileImage: '',
+        profileImage: `/user/${sqlThread.author.id}/profile-image`,
       },
       description: sqlThread.description,
       keywords: sqlThread.keywords,
@@ -118,7 +118,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       author: {
         id: sqlComment.author.id,
         nick: sqlComment.author.nick,
-        profileImage: '',
+        profileImage: `/user/${sqlComment.author.id}/profile-image`,
       },
       text: lastMessage.text,
       date: sqlComment.createdAt.toISOString(),

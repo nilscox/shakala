@@ -1,12 +1,13 @@
 import { token } from 'brandi';
 
-import { ProfileImagePort } from './adapters/profile-image.port';
+import { ProfileImagePort } from './adapters/profile-image/profile-image.port';
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { UserUserActivitiesHandler } from './event-handlers/create-user-activities/user-user-activities';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
+import { GetProfileImageHandler } from './queries/get-profile-image';
 import { GetUserHandler } from './queries/get-user';
 import { ListUserActivitiesHandler } from './queries/list-user-activities';
 import { ListUsersHandler } from './queries/list-users';
@@ -31,6 +32,7 @@ export const USER_TOKENS = {
     listUsersHandler: token<ListUsersHandler>('listUsersHandler'),
     listUserActivitiesHandler: token<ListUserActivitiesHandler>('listUserActivitiesHandler'),
     getUserHandler: token<GetUserHandler>('getUserHandler'),
+    getProfileImageHandler: token<GetProfileImageHandler>('getProfileImageHandler'),
   },
   eventHandlers: {
     userUserActivitiesHandler: token<UserUserActivitiesHandler>('createUserActivitiesHandler'),

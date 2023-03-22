@@ -20,7 +20,7 @@ export abstract class E2ETest {
     notification: { repositories: 'filesystem' },
     persistence: {},
     thread: { repositories: 'filesystem' },
-    user: { repositories: 'filesystem' },
+    user: { repositories: 'filesystem', profileImage: 'gravatar' },
     api: { server: 'test' },
   });
 

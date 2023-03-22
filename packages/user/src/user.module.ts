@@ -1,12 +1,14 @@
 import { Module } from '@shakala/common';
 
-import { GravatarProfileImageAdapter } from './adapters/gravatar-profile-image.adapter';
+import { GravatarProfileImageAdapter } from './adapters/profile-image/gravatar-profile-image.adapter';
+import { StubProfileImageAdapter } from './adapters/profile-image/stub-profile-image.adapter';
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { UserUserActivitiesHandler } from './event-handlers/create-user-activities/user-user-activities';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
+import { GetProfileImageHandler } from './queries/get-profile-image';
 import { GetUserHandler } from './queries/get-user';
 import { ListUserActivitiesHandler } from './queries/list-user-activities';
 import { ListUsersHandler } from './queries/list-users';
@@ -19,6 +21,7 @@ import { USER_TOKENS } from './tokens';
 
 type ThreadModuleConfig = {
   repositories: 'memory' | 'filesystem' | 'sql';
+  profileImage: 'stub' | 'gravatar';
 };
 
 export class UserModule extends Module {
@@ -36,7 +39,11 @@ export class UserModule extends Module {
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
     }
 
-    this.bindToken(USER_TOKENS.adapters.profileImage, GravatarProfileImageAdapter);
+    if (config.profileImage === 'stub') {
+      this.bindToken(USER_TOKENS.adapters.profileImage, StubProfileImageAdapter);
+    } else {
+      this.bindToken(USER_TOKENS.adapters.profileImage, GravatarProfileImageAdapter);
+    }
 
     this.bindToken(USER_TOKENS.commands.createUserHandler, CreateUserHandler);
     this.bindToken(USER_TOKENS.commands.createUserActivityHandler, CreateUserActivityHandler);
@@ -46,6 +53,7 @@ export class UserModule extends Module {
     this.bindToken(USER_TOKENS.queries.listUsersHandler, ListUsersHandler);
     this.bindToken(USER_TOKENS.queries.listUserActivitiesHandler, ListUserActivitiesHandler);
     this.bindToken(USER_TOKENS.queries.getUserHandler, GetUserHandler);
+    this.bindToken(USER_TOKENS.queries.getProfileImageHandler, GetProfileImageHandler);
 
     this.bindToken(USER_TOKENS.eventHandlers.userUserActivitiesHandler, UserUserActivitiesHandler);
     this.bindToken(USER_TOKENS.eventHandlers.sendEmailToCreatedUserHandler, SendEmailToCreatedUserHandler);

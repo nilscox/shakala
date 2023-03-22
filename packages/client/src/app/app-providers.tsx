@@ -8,7 +8,11 @@ import { PageContext } from './page-context';
 
 const clientQueryClient = new QueryClient({
   defaultOptions: {
-    queries: { suspense: true, refetchOnMount: false },
+    queries: {
+      suspense: true,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    },
   },
 });
 

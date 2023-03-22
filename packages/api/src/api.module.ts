@@ -6,6 +6,7 @@ import { CommentController } from './controllers/comment.controller';
 import { HealthcheckController } from './controllers/healthcheck.controller';
 import { NotificationController } from './controllers/notification.controller';
 import { ThreadController } from './controllers/thread.controller';
+import { UserController } from './controllers/user.controller';
 import { Server } from './infrastructure/server';
 import { TestServer } from './tests/test-server';
 import { API_TOKENS } from './tokens';
@@ -20,6 +21,7 @@ export class ApiModule extends Module {
     this.bindToken(API_TOKENS.controllers.authController, AuthController);
     this.bindToken(API_TOKENS.controllers.accountController, AccountController);
     this.bindToken(API_TOKENS.controllers.threadController, ThreadController);
+    this.bindToken(API_TOKENS.controllers.userController, UserController);
     this.bindToken(API_TOKENS.controllers.commentController, CommentController);
     this.bindToken(API_TOKENS.controllers.notificationController, NotificationController);
 

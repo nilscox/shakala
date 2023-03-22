@@ -20,7 +20,7 @@ export abstract class IntegrationTest {
     notification: { repositories: 'filesystem' },
     persistence: {},
     thread: { repositories: 'filesystem' },
-    user: { repositories: 'filesystem' },
+    user: { repositories: 'filesystem', profileImage: 'stub' },
     api: { server: 'test' },
   });
 

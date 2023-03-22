@@ -3,7 +3,6 @@ import { Timestamp } from '@shakala/common';
 import { RepositoryTest } from '@shakala/persistence';
 import { beforeEach, describe, it } from 'vitest';
 
-import { StubProfileImageAdapter } from '../../adapters/stub-profile-image.adapter';
 import { create } from '../../factories';
 
 import { SqlUserRepository } from './sql-user.repository';
@@ -40,7 +39,7 @@ describe('SqlUserRepository', () => {
       nick: 'nick',
       email: 'email',
       emailValidated: false,
-      profileImage: 'email.png',
+      profileImage: '/user/userId/profile-image',
       signupDate: '1970-01-01T00:00:00.000Z',
     });
   });
@@ -48,6 +47,6 @@ describe('SqlUserRepository', () => {
 
 class Test extends RepositoryTest {
   get repository() {
-    return new SqlUserRepository(this.orm, new StubProfileImageAdapter());
+    return new SqlUserRepository(this.orm);
   }
 }

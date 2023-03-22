@@ -21,7 +21,7 @@ async function main() {
     notification: { repositories: 'filesystem' },
     persistence: {},
     thread: { repositories: 'sql' },
-    user: { repositories: 'sql' },
+    user: { repositories: 'sql', profileImage: 'gravatar' },
     api: { server: 'prod' },
   });
 

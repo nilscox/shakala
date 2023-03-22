@@ -37,6 +37,7 @@ importers:
       '@types/cookie-parser': ^1.4.3
       '@types/cors': ^2.8.13
       '@types/express': ^4.17.17
+      '@types/http-proxy': ^1.17.10
       '@types/jsonwebtoken': ^9.0.1
       '@types/node': ^18.14.0
       '@types/on-finished': ^2.3.1
@@ -48,6 +49,7 @@ importers:
       date-fns: ^2.29.3
       dotenv: ^16.0.3
       express: 5.0.0-beta.1
+      http-proxy: ^1.18.1
       jsonwebtoken: ^9.0.0
       on-finished: ^2.4.1
       tough-cookie: ^4.1.2
@@ -71,6 +73,7 @@ importers:
       date-fns: 2.29.3
       dotenv: 16.0.3
       express: 5.0.0-beta.1
+      http-proxy: 1.18.1
       on-finished: 2.4.1
       tough-cookie: 4.1.2
       yup: 1.0.0
@@ -79,6 +82,7 @@ importers:
       '@types/cookie-parser': 1.4.3
       '@types/cors': 2.8.13
       '@types/express': 4.17.17
+      '@types/http-proxy': 1.17.10
       '@types/jsonwebtoken': 9.0.1
       '@types/node': 18.14.0
       '@types/tough-cookie': 4.0.2
@@ -3965,6 +3969,12 @@ packages:
       '@types/node': 18.15.3
     dev: true
 
+  /@types/http-proxy/1.17.10:
+    resolution: {integrity: sha512-Qs5aULi+zV1bwKAg5z1PWnDXWmsn+LxIvUGv6E2+OOMYhclZMO+OXd9pYVf2gLykf2I7IV2u7oTHwChPNsvJ7g==}
+    dependencies:
+      '@types/node': 18.15.3
+    dev: true
+
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
 
@@ -6257,6 +6267,10 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  /eventemitter3/4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+    dev: false
+
   /execa/5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
     engines: {node: '>=10'}
@@ -6541,6 +6555,16 @@ packages:
     resolution: {integrity: sha512-ZiXxSIXK3zPmY3zrzCofFonM2T+/3Jz5QZKJyPVtUERQEJUnYkXBQ+0H3FzyqiyJs+VXqb/UNU6/K6sziVYdxw==}
     engines: {node: '>=0.4.0'}
     dev: true
+
+  /follow-redirects/1.15.2:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -7006,6 +7030,17 @@ packages:
       setprototypeof: 1.2.0
       statuses: 2.0.1
       toidentifier: 1.0.1
+
+  /http-proxy/1.18.1:
+    resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      eventemitter3: 4.0.7
+      follow-redirects: 1.15.2
+      requires-port: 1.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /https-proxy-agent/4.0.0:
     resolution: {integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==}

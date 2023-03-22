@@ -42,6 +42,7 @@ export class Server {
     this.app.use('/comment', container.get(API_TOKENS.controllers.commentController).router);
     this.app.use('/notification', container.get(API_TOKENS.controllers.notificationController).router);
     this.app.use('/thread', container.get(API_TOKENS.controllers.threadController).router);
+    this.app.use('/user', container.get(API_TOKENS.controllers.userController).router);
 
     this.app.use(this.validationErrorHandler);
     this.app.use(this.baseErrorHandler);

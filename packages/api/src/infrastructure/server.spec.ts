@@ -15,7 +15,7 @@ describe('[intg] Server', () => {
       notification: { repositories: 'memory' },
       persistence: {},
       thread: { repositories: 'memory' },
-      user: { repositories: 'memory' },
+      user: { repositories: 'memory', profileImage: 'stub' },
       api: { server: 'prod' },
     }).init();
 

@@ -19,6 +19,13 @@ main().catch(console.error);
 async function main() {
   const app = express();
 
+  app.use('/api', proxy('http://localhost:3000'));
+
+  app.use(
+    '/user/:userId/profile-image',
+    proxy('http://localhost:3000', { proxyReqPathResolver: (req) => req.originalUrl })
+  );
+
   app.use(compression());
   app.use(cookieParser());
 
@@ -34,7 +41,6 @@ async function main() {
     });
 
     app.use(viteDevServer.middlewares);
-    app.use('/api', proxy('http://localhost:3000'));
   }
 
   app.get(/.*/, handleRequest);

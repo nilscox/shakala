@@ -1,21 +1,15 @@
 import { EntityNotFoundError, Timestamp } from '@shakala/common';
-import { Orm, PERSISTENCE_TOKENS, SqlRepository, SqlUser } from '@shakala/persistence';
+import { PERSISTENCE_TOKENS, SqlRepository, SqlUser } from '@shakala/persistence';
 import { injected } from 'brandi';
 
-import { ProfileImagePort } from '../../adapters/profile-image.port';
 import { Nick } from '../../entities/nick.value-object';
 import { User } from '../../entities/user.entity';
 import { GetUserResult } from '../../queries/get-user';
-import { USER_TOKENS } from '../../tokens';
 
 import { UserRepository } from './user.repository';
 
 export class SqlUserRepository extends SqlRepository<User, SqlUser> implements UserRepository {
   protected SqlEntity = SqlUser;
-
-  constructor(orm: Orm, private readonly profileImageAdapter: ProfileImagePort) {
-    super(orm);
-  }
 
   protected toEntity(sqlUser: SqlUser): User {
     return new User({
@@ -54,7 +48,7 @@ export class SqlUserRepository extends SqlRepository<User, SqlUser> implements U
       id: user.id,
       nick: user.nick.toString(),
       email: user.email,
-      profileImage: await this.profileImageAdapter.getProfileImageUrl(user.email),
+      profileImage: `/user/${user.id}/profile-image`,
       emailValidated: !user.emailValidationToken,
       signupDate: user.createdAt.toISOString(),
     };
@@ -69,4 +63,4 @@ export class SqlUserRepository extends SqlRepository<User, SqlUser> implements U
   }
 }
 
-injected(SqlUserRepository, PERSISTENCE_TOKENS.orm, USER_TOKENS.adapters.profileImage);
+injected(SqlUserRepository, PERSISTENCE_TOKENS.orm);

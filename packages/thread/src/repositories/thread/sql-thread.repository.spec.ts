@@ -24,7 +24,7 @@ describe('SqlThreadRepository', () => {
           author: {
             id: author.id,
             nick: author.nick,
-            profileImage: '',
+            profileImage: `/user/${author.id}/profile-image`,
           },
           description: thread.description,
           keywords: thread.keywords,
@@ -44,7 +44,7 @@ describe('SqlThreadRepository', () => {
         author: {
           id: author.id,
           nick: author.nick,
-          profileImage: '',
+          profileImage: `/user/${author.id}/profile-image`,
         },
         description: thread.description,
         keywords: thread.keywords,
@@ -58,6 +58,8 @@ describe('SqlThreadRepository', () => {
       const { comment1, comment2, reply1, reply2 } = await test.createComments(thread);
 
       const retrieved = await test.repository.getThread('threadId', { sort: CommentSort.dateAsc });
+
+      expect(retrieved).toBeDefined();
 
       expect(retrieved).toHaveProperty('comments.0.id', comment1.id);
       expect(retrieved).toHaveProperty('comments.1.id', comment2.id);
