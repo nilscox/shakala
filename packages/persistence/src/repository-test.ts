@@ -1,7 +1,7 @@
-import { ClassType, DeepPartial, randomId } from '@shakala/shared';
+import { ClassType, DeepPartial, randomId, ReactionType } from '@shakala/shared';
 
 import { createOrm, EM, Orm } from './create-orm';
-import { SqlUser, SqlThread, SqlComment, SqlMessage } from './entities';
+import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser } from './entities';
 
 export interface RepositoryTest {
   arrange?(): Promise<void>;
@@ -93,5 +93,9 @@ export class SqlFactories {
 
   message = this.factory(SqlMessage, {
     text: '',
+  });
+
+  reaction = this.factory(SqlReaction, {
+    type: ReactionType.upvote,
   });
 }

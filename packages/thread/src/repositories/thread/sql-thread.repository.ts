@@ -1,7 +1,14 @@
 import assert from 'assert';
 
 import { Timestamp } from '@shakala/common';
-import { PERSISTENCE_TOKENS, SqlComment, SqlRepository, SqlThread, SqlUser } from '@shakala/persistence';
+import {
+  PERSISTENCE_TOKENS,
+  SqlComment,
+  SqlReaction,
+  SqlRepository,
+  SqlThread,
+  SqlUser,
+} from '@shakala/persistence';
 import { CommentSort, last, Maybe, omit } from '@shakala/shared';
 import { injected } from 'brandi';
 
@@ -84,10 +91,24 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     }
 
     const comments = sqlThread.comments.getItems();
+    const userReactions = new Map<SqlComment, SqlReaction>();
+
+    if (options.userId) {
+      const allComments = comments.flatMap((comment) => [
+        comment,
+        ...comment.replies.getItems().map((reply) => reply),
+      ]);
+
+      const reactions = await this.em.find(SqlReaction, { comment: { $in: allComments } });
+
+      for (const reaction of reactions) {
+        userReactions.set(reaction.comment, reaction);
+      }
+    }
 
     return {
       ...this.getThreadResult(sqlThread),
-      comments: comments.map((comment) => this.getCommentResult(comment)),
+      comments: comments.map((comment) => this.getCommentResult(comment, userReactions)),
     };
   }
 
@@ -106,7 +127,10 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
     };
   }
 
-  private getCommentResult(sqlComment: SqlComment): Defined<GetCommentResult> {
+  private getCommentResult(
+    sqlComment: SqlComment,
+    userReactions: Map<SqlComment, SqlReaction>
+  ): Defined<GetCommentResult> {
     const history = sqlComment.history.getItems();
     const lastMessage = last(history);
     const replies = sqlComment.replies.isInitialized() ? sqlComment.replies.getItems() : [];
@@ -127,9 +151,10 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
         date: message.createdAt.toISOString(),
         text: message.text,
       })),
-      upvotes: sqlComment.upvotes,
-      downvotes: sqlComment.downvotes,
-      replies: replies.map((reply) => omit(this.getCommentResult(reply), 'replies')),
+      upvotes: Number(sqlComment.upvotes),
+      downvotes: Number(sqlComment.downvotes),
+      userReaction: userReactions.get(sqlComment)?.type,
+      replies: replies.map((reply) => omit(this.getCommentResult(reply, userReactions), 'replies')),
     };
   }
 }

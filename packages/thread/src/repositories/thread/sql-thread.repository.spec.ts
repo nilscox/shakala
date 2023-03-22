@@ -1,6 +1,6 @@
 import expect from '@nilscox/expect';
 import { RepositoryTest, SqlThread } from '@shakala/persistence';
-import { CommentSort } from '@shakala/shared';
+import { CommentSort, ReactionType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
 import { SqlThreadRepository } from './sql-thread.repository';
@@ -104,6 +104,24 @@ describe('SqlThreadRepository', () => {
 
       expect(retrieved).toHaveProperty('comments.0.replies.0.id', reply1.id);
       expect(retrieved?.comments[0]?.replies).toHaveLength(1);
+    });
+
+    it("includes information from the user's context", async () => {
+      const user = await test.create.user();
+      const { thread } = await test.createThread();
+      const { comment1, reply1 } = await test.createComments(thread);
+
+      await test.create.reaction({ comment: comment1, user, type: ReactionType.upvote });
+      await test.create.reaction({ comment: reply1, user, type: ReactionType.downvote });
+
+      const retrieved = await test.repository.getThread('threadId', {
+        sort: CommentSort.dateAsc,
+        userId: user.id,
+      });
+
+      expect(retrieved).toHaveProperty('comments.0.upvotes', 1);
+      expect(retrieved).toHaveProperty('comments.0.userReaction', ReactionType.upvote);
+      expect(retrieved).toHaveProperty('comments.0.replies.0.userReaction', ReactionType.downvote);
     });
   });
 });
