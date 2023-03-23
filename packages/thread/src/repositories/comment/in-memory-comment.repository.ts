@@ -8,7 +8,11 @@ import { CommentRepository } from './comment.repository';
 export class InMemoryCommentRepository extends InMemoryRepository<Comment> implements CommentRepository {
   entity = Comment;
 
-  getComment(): Promise<GetCommentResult | undefined> {
+  findThreadComments(): Promise<GetCommentResult[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  findComment(): Promise<GetCommentResult | undefined> {
     throw new Error('Method not implemented.');
   }
 }

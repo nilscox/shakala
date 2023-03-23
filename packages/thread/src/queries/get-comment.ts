@@ -10,7 +10,7 @@ export type GetCommentQuery = {
   userId?: string;
 };
 
-export type GetCommentResult = Maybe<{
+export type GetCommentResult = {
   id: string;
   author: {
     id: string;
@@ -29,15 +29,15 @@ export type GetCommentResult = Maybe<{
   userReaction?: ReactionType;
   isSubscribed?: boolean;
   replies: Array<Omit<GetCommentResult, 'replies'>>;
-}>;
+};
 
 export const getComment = queryCreator<GetCommentQuery, GetCommentResult>('getComment');
 
-export class GetCommentHandler implements QueryHandler<GetCommentQuery, GetCommentResult> {
+export class GetCommentHandler implements QueryHandler<GetCommentQuery, Maybe<GetCommentResult>> {
   constructor(private readonly commentRepository: CommentRepository) {}
 
-  async handle(query: GetCommentQuery): Promise<GetCommentResult> {
-    return this.commentRepository.getComment(query.commentId, query.userId);
+  async handle(query: GetCommentQuery): Promise<Maybe<GetCommentResult>> {
+    return this.commentRepository.findComment(query.commentId, query.userId);
   }
 }
 

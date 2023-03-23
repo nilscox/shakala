@@ -10,6 +10,10 @@ export type MessageProps = EntityProps<{
 }>;
 
 export class Message extends Entity<MessageProps> {
+  get authorId() {
+    return this.props.authorId;
+  }
+
   get date() {
     return this.props.date;
   }

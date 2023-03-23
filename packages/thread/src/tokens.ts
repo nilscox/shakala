@@ -13,6 +13,7 @@ import { ThreadUserActivitiesHandler } from './event-handlers/thread-user-activi
 import { GetCommentHandler } from './queries/get-comment';
 import { GetLastThreadsHandler } from './queries/get-last-threads';
 import { GetThreadHandler } from './queries/get-thread';
+import { GetThreadCommentsHandler } from './queries/get-thread-comments';
 import { CommentRepository } from './repositories/comment/comment.repository';
 import { CommentReportRepository } from './repositories/comment-report/comment-report.repository';
 import { CommentSubscriptionRepository } from './repositories/comment-subscription/comment-subscription.repository';
@@ -39,6 +40,7 @@ export const THREAD_TOKENS = {
     getLastThreadsHandler: token<GetLastThreadsHandler>('getLastThreadsHandler'),
     getThreadHandler: token<GetThreadHandler>('getThreadHandler'),
     getCommentHandler: token<GetCommentHandler>('getCommentHandler'),
+    getThreadCommentsHandler: token<GetThreadCommentsHandler>('getThreadCommentsHandler'),
   },
   // prettier-ignore
   eventHandlers: {

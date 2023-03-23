@@ -23,6 +23,9 @@ export class SqlComment extends BaseSqlEntity {
   @OneToMany(() => SqlComment, (comment) => comment.parent)
   replies = new Collection<SqlComment>(this);
 
+  @Property({ persist: false })
+  userReaction!: ReactionType | null;
+
   @Formula(
     (alias) =>
       `(select count(*) from "reaction" where comment_id = ${alias}.id and type = '${ReactionType.upvote}')`
@@ -38,6 +41,9 @@ export class SqlComment extends BaseSqlEntity {
 
 @Entity({ tableName: 'message' })
 export class SqlMessage extends BaseSqlEntity {
+  @ManyToOne({ eager: true })
+  author!: SqlUser;
+
   @ManyToOne()
   comment!: SqlComment;
 
