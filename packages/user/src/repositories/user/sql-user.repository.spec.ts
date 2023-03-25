@@ -1,6 +1,6 @@
 import expect from '@nilscox/expect';
 import { Timestamp } from '@shakala/common';
-import { RepositoryTest } from '@shakala/persistence';
+import { createRepositoryTest, RepositoryTest } from '@shakala/persistence';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -8,11 +8,11 @@ import { create } from '../../factories';
 import { SqlUserRepository } from './sql-user.repository';
 
 describe('SqlUserRepository', () => {
+  const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+  beforeEach(() => {
+    test = getTest();
   });
 
   it('persists a user', async () => {

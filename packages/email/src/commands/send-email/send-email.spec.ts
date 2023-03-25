@@ -1,4 +1,5 @@
-import { expect, StubConfigAdapter, StubFilesystemAdapter } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubConfigAdapter, StubFilesystemAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { FakeEmailCompilerAdapter } from '../../adapters/email-compiler/fake-email-compiler.adapter';

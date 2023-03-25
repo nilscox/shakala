@@ -6,7 +6,7 @@ import express, { NextFunction, Request, RequestHandler, Response } from 'expres
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { container } from '../container';
-import { expect } from '../tests/expect';
+import expect from '@nilscox/expect';
 import { FetchAgent } from '../tests/fetch-agent';
 import { jwt } from '../utils/jwt';
 

@@ -1,4 +1,5 @@
-import { expect, StubDateAdapter, StubEventPublisher, Timestamp } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubDateAdapter, StubEventPublisher, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -22,7 +23,7 @@ describe('MarkNotificationAsSeenCommand', () => {
 
     const notification = test.getNotification();
 
-    expect(notification).toBeDefined();
+    expect.assert(notification);
     expect(notification).toHaveProperty('seenDate', test.now);
   });
 

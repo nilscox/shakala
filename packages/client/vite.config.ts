@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import react from '@vitejs/plugin-react';
 import { PluginOption } from 'vite';
 import ssr from 'vite-plugin-ssr/plugin';
@@ -18,7 +20,7 @@ export default defineConfig({
   test: {
     reporters: ['verbose'],
     environment: 'happy-dom',
-    setupFiles: ['./src/utils/expect.ts'],
+    setupFiles: [path.join('src', 'utils', 'vitest.setup.ts')],
     watch: false,
     deps: {
       registerNodeLoader: true,

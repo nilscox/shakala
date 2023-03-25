@@ -1,3 +1,5 @@
+import './expect.d';
+
 export * from './cqs/command';
 export * from './cqs/command-handler';
 export * from './cqs/event-handler';
@@ -47,7 +49,6 @@ export * from './ddd/value-object';
 
 export * from './entities/timestamp.value-object';
 
-export * from './expect';
 export * from './tokens';
 
 export * from './types/class-type';

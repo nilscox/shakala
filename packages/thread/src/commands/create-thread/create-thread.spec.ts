@@ -1,10 +1,5 @@
-import {
-  expect,
-  StubDateAdapter,
-  StubEventPublisher,
-  StubGeneratorAdapter,
-  Timestamp,
-} from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubDateAdapter, StubEventPublisher, StubGeneratorAdapter, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { Markdown } from '../../entities/markdown.value-object';
@@ -24,7 +19,7 @@ describe('createThread', () => {
 
     const created = test.getThread();
 
-    expect(created).toBeDefined();
+    expect.assert(created);
     expect(created).toHaveProperty('authorId', 'authorId');
     expect(created).toHaveProperty('description', 'description');
     expect(created).toHaveProperty('text', new Markdown('Hello!'));

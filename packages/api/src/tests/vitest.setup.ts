@@ -1,7 +1,5 @@
 import expect, { assertion } from '@nilscox/expect';
 
-export { expect };
-
 declare global {
   namespace Expect {
     export interface ResponseAssertions extends PromiseAssertions<Promise<Response>> {
@@ -15,6 +13,9 @@ declare global {
     }
   }
 }
+
+const assertions: Record<string, unknown> = expect._assertions;
+delete assertions.toHaveStatus;
 
 expect.addAssertion({
   name: 'toHaveStatus',

@@ -1,6 +1,7 @@
 import { AssertionError } from 'assert';
 
-import { EntityNotFoundError, expect, StubCommandBus, StubConfigAdapter } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { EntityNotFoundError, StubCommandBus, StubConfigAdapter } from '@shakala/common';
 import { EmailKind, sendEmail } from '@shakala/email';
 import { beforeEach, describe, it } from 'vitest';
 

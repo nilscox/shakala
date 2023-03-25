@@ -1,4 +1,5 @@
-import { expect, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';

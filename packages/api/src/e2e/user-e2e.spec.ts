@@ -5,7 +5,7 @@ import { GetUserResult } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { E2ETest } from '../tests/e2e-test';
-import { expect } from '../tests/expect';
+import expect from '@nilscox/expect';
 
 describe('[e2e] user', () => {
   let test: Test;

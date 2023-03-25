@@ -1,3 +1,4 @@
+import expect from '@nilscox/expect';
 import { CommentSort, CreateCommentBody, CreateThreadBody } from '@shakala/shared';
 import {
   createComment,
@@ -5,18 +6,21 @@ import {
   getLastThreads,
   GetLastThreadsResult,
   getThread,
+  getThreadComments,
   GetThreadResult,
 } from '@shakala/thread';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] ThreadController', () => {
   let test: Test;
 
-  beforeEach(() => void (test = new Test()));
-  beforeEach(() => test?.setup());
+  beforeEach(async () => {
+    test = new Test();
+    await test.setup();
+  });
+
   afterEach(() => test?.cleanup());
 
   describe('GET /', () => {
@@ -57,11 +61,11 @@ describe('[intg] ThreadController', () => {
       keywords: ['key', 'word'],
       date: 'date',
       text: 'text',
-      comments: [],
     };
 
     it('retrieves a thread from its id', async () => {
-      test.queryBus.on(getThread({ threadId: 'threadId', sort: CommentSort.relevance })).return(result);
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
+      test.queryBus.on(getThreadComments({ threadId: 'threadId', sort: CommentSort.relevance })).return([]);
 
       const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
 
@@ -69,9 +73,10 @@ describe('[intg] ThreadController', () => {
     });
 
     it('retrieves a thread an an authenticated user', async () => {
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
       test.queryBus
-        .on(getThread({ threadId: 'threadId', userId: 'userId', sort: CommentSort.relevance }))
-        .return(result);
+        .on(getThreadComments({ threadId: 'threadId', userId: 'userId', sort: CommentSort.relevance }))
+        .return([]);
 
       await expect(test.as('userId').get(route)).toHaveStatus(200);
     });
@@ -82,9 +87,10 @@ describe('[intg] ThreadController', () => {
         search: 'search',
       });
 
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
       test.queryBus
-        .on(getThread({ threadId: 'threadId', sort: CommentSort.dateDesc, search: 'search' }))
-        .return(result);
+        .on(getThreadComments({ threadId: 'threadId', sort: CommentSort.dateDesc, search: 'search' }))
+        .return([]);
 
       await expect(test.createAgent().get(`${route}?${searchParams}`)).toHaveStatus(200);
     });
@@ -98,7 +104,7 @@ describe('[intg] ThreadController', () => {
     });
 
     it('fails with status 404 when the thread does not exist', async () => {
-      test.queryBus.on(getThread({ threadId: 'threadId', sort: CommentSort.relevance })).return(undefined);
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(undefined);
 
       await expect(test.createAgent().get(route)).toHaveStatus(404);
     });

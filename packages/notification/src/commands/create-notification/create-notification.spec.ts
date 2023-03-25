@@ -1,4 +1,5 @@
-import { expect, StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { NotificationType } from '../../entities/notification.entity';
@@ -18,7 +19,7 @@ describe('CreateNotificationCommand', () => {
 
     const notification = test.getNotification();
 
-    expect(notification).toBeDefined();
+    expect.assert(notification);
     expect(notification).toHaveProperty('id', 'notificationId');
     expect(notification).toHaveProperty('date', test.now);
     expect(notification).toHaveProperty('userId', 'userId');

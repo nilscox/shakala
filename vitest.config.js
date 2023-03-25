@@ -4,14 +4,16 @@ import { defineConfig } from 'vitest/config';
 
 process.env.TZ = 'UTC';
 
-const packageSource = (pkg) => {
-  return path.resolve(__dirname, 'packages', pkg, 'src');
+const packageSource = (pkg, ...rest) => {
+  return path.resolve(__dirname, 'packages', pkg, 'src', ...rest);
 };
 
 export default defineConfig({
   test: {
     watch: false,
     testTimeout: 2000,
+    threads: false,
+    setupFiles: packageSource('common', 'vitest.setup.ts'),
     reporters: ['verbose'],
     alias: {
       '@shakala/common': packageSource('common'),

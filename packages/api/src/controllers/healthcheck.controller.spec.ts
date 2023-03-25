@@ -1,6 +1,6 @@
+import expect from '@nilscox/expect';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] HealthcheckController', () => {
@@ -8,7 +8,7 @@ describe('[intg] HealthcheckController', () => {
 
   beforeEach(async () => {
     test = new Test();
-    await test.setup?.();
+    await test.setup();
   });
 
   afterEach(() => test?.cleanup());

@@ -8,5 +8,6 @@ export { setReaction } from './commands/set-reaction/set-reaction';
 export { getComment, type GetCommentResult } from './queries/get-comment';
 export { getLastThreads, type GetLastThreadsResult } from './queries/get-last-threads';
 export { getThread, type GetThreadResult } from './queries/get-thread';
+export { getThreadComments } from './queries/get-thread-comments';
 
 export { ThreadModule } from './thread.module';

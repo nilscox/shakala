@@ -1,5 +1,5 @@
 import expect from '@nilscox/expect';
-import { RepositoryTest, SqlThread } from '@shakala/persistence';
+import { createRepositoryTest, RepositoryTest, SqlThread } from '@shakala/persistence';
 import { CommentSort, first, ReactionType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
@@ -8,11 +8,11 @@ import { create } from '../../factories';
 import { SqlCommentRepository } from './sql-comment.repository';
 
 describe('SqlCommentRepository', () => {
+  const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+  beforeEach(() => {
+    test = getTest();
   });
 
   it('saves and finds a comment entity', async () => {

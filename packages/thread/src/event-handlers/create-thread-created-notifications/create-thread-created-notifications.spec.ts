@@ -1,4 +1,5 @@
-import { expect, StubCommandBus, StubQueryBus } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubCommandBus, StubQueryBus } from '@shakala/common';
 import { createNotification, NotificationPayloadMap, NotificationType } from '@shakala/notification';
 import { getUser, listUsers } from '@shakala/user';
 import { beforeEach, describe, it } from 'vitest';

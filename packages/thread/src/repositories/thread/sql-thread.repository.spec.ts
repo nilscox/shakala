@@ -1,15 +1,15 @@
 import expect from '@nilscox/expect';
-import { RepositoryTest } from '@shakala/persistence';
+import { createRepositoryTest, RepositoryTest } from '@shakala/persistence';
 import { beforeEach, describe, it } from 'vitest';
 
 import { SqlThreadRepository } from './sql-thread.repository';
 
 describe('SqlThreadRepository', () => {
+  const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+  beforeEach(() => {
+    test = getTest();
   });
 
   describe('getLastThreads', () => {

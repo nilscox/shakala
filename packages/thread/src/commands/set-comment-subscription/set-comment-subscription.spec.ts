@@ -1,4 +1,5 @@
-import { EntityNotFoundError, expect, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { EntityNotFoundError, StubEventPublisher, StubGeneratorAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { CommentSubscription } from '../../entities/comment-subscription.entity';
@@ -24,7 +25,7 @@ describe('SetCommentSubscriptionCommand', () => {
 
     const subscription = await test.getSubscription('commentId');
 
-    expect(subscription).toBeDefined();
+    expect.assert(subscription);
     expect(subscription).toHaveProperty('userId', 'userId');
     expect(subscription).toHaveProperty('commentId', 'commentId');
   });
@@ -34,7 +35,7 @@ describe('SetCommentSubscriptionCommand', () => {
 
     const subscription = await test.getSubscription('commentId');
 
-    expect(subscription).toBeDefined();
+    expect.assert(subscription);
     expect(subscription).toHaveProperty('userId', 'userId');
     expect(subscription).toHaveProperty('commentId', 'commentId');
   });

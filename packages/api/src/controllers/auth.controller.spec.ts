@@ -1,5 +1,6 @@
 import assert from 'assert';
 
+import expect from '@nilscox/expect';
 import { SignInBody, SignUpBody } from '@shakala/shared';
 import {
   checkUserPassword,
@@ -10,15 +11,17 @@ import {
 } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 import { jwt } from '../utils/jwt';
 
 describe('[intg] AuthController', () => {
   let test: Test;
 
-  beforeEach(() => void (test = new Test()));
-  beforeEach(() => test?.setup());
+  beforeEach(async () => {
+    test = new Test();
+    await test.setup();
+  });
+
   afterEach(() => test?.cleanup());
 
   describe('/auth/sign-up', () => {

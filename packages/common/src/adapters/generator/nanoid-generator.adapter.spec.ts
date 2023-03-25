@@ -1,6 +1,5 @@
+import expect from '@nilscox/expect';
 import { beforeEach, describe, it } from 'vitest';
-
-import { expect } from '../../expect';
 
 import { NanoidGeneratorAdapter } from './nanoid-generator.adapter';
 

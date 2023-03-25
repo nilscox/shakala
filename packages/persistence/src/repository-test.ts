@@ -1,14 +1,46 @@
 import { ClassType, DeepPartial, randomId, ReactionType } from '@shakala/shared';
+import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
 
 import { createOrm, EM, Orm } from './create-orm';
 import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser } from './entities';
 
+export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: ClassType<Test>) => {
+  let orm: Orm;
+  let test: Test;
+
+  beforeAll(async () => {
+    orm = await createOrm({
+      dbName: 'tests',
+      allowGlobalContext: true,
+    });
+
+    test = new TestClass(orm);
+    await test.configureOrm();
+  });
+
+  beforeEach(async () => {
+    await test.resetDatabase();
+    await test?.arrange?.();
+  });
+
+  afterEach(async () => {
+    await test?.cleanup?.();
+  });
+
+  afterAll(async () => {
+    await orm?.close(true);
+  });
+
+  return () => test;
+};
+
 export interface RepositoryTest {
   arrange?(): Promise<void>;
+  cleanup?(): Promise<void>;
 }
 
 export class RepositoryTest {
-  protected orm!: Orm;
+  constructor(protected readonly orm: Orm) {}
 
   get em() {
     return this.orm.em.fork();
@@ -18,27 +50,11 @@ export class RepositoryTest {
     return new SqlFactories(this.em);
   }
 
-  async setup() {
-    this.orm = await createOrm({
-      dbName: 'tests',
-      allowGlobalContext: true,
-    });
-
-    await this.configureOrm();
-    await this.resetDatabase();
-
-    await this.arrange?.();
-  }
-
-  async cleanup() {
-    await this.orm?.close(true);
-  }
-
-  private async configureOrm() {
+  async configureOrm() {
     this.orm.config.getLogger().setDebugMode(false);
   }
 
-  private async resetDatabase() {
+  async resetDatabase() {
     const schemaGenerator = this.orm.getSchemaGenerator();
 
     await schemaGenerator.refreshDatabase();

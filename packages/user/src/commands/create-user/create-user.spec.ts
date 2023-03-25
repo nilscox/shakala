@@ -1,5 +1,5 @@
+import expect from '@nilscox/expect';
 import {
-  expect,
   StubCryptoAdapter,
   StubDateAdapter,
   StubEventPublisher,
@@ -27,7 +27,7 @@ describe('[unit] CreateUser', () => {
 
     const user = test.user;
 
-    expect(user).toBeDefined();
+    expect.assert(user);
     expect(user).toHaveProperty('id', 'id');
     expect(user).toHaveProperty('nick', create.nick('nick'));
     expect(user).toHaveProperty('email', 'email');

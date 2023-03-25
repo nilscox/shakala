@@ -1,4 +1,5 @@
-import { expect, StubConfigAdapter } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubConfigAdapter } from '@shakala/common';
 import { describe, it } from 'vitest';
 
 import { MjmlEmailCompilerAdapter } from './mjml-email-compiler.adapter';

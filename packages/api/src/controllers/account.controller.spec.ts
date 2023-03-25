@@ -1,3 +1,4 @@
+import expect from '@nilscox/expect';
 import {
   getUser,
   InvalidEmailValidationTokenError,
@@ -6,7 +7,6 @@ import {
 } from '@shakala/user';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] AccountController', () => {

@@ -2,11 +2,11 @@ import { Server } from 'http';
 import { AddressInfo } from 'net';
 import { promisify } from 'util';
 
+import expect from '@nilscox/expect';
 import { getProfileImage } from '@shakala/user';
 import express from 'express';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] UserController', () => {
@@ -14,7 +14,7 @@ describe('[intg] UserController', () => {
 
   beforeEach(async () => {
     test = new Test();
-    await test?.setup();
+    await test.setup();
   });
 
   afterEach(() => test?.cleanup());

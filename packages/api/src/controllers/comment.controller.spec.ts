@@ -1,3 +1,4 @@
+import expect from '@nilscox/expect';
 import { EditCommentBody, ReactionType, ReportCommentBody, SetReactionBody } from '@shakala/shared';
 import {
   editComment,
@@ -9,14 +10,16 @@ import {
 } from '@shakala/thread';
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { expect } from '../tests/expect';
 import { IntegrationTest } from '../tests/integration-test';
 
 describe('[intg] CommentController', () => {
   let test: Test;
 
-  beforeEach(() => void (test = new Test()));
-  beforeEach(() => test?.setup());
+  beforeEach(async () => {
+    test = new Test();
+    await test.setup();
+  });
+
   afterEach(() => test?.cleanup());
 
   describe('GET /:commentId', () => {

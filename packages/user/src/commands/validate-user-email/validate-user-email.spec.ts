@@ -1,4 +1,5 @@
-import { EntityNotFoundError, expect, StubEventPublisher } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { EntityNotFoundError, StubEventPublisher } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
@@ -23,12 +24,14 @@ describe('[unit] ValidateUserEmail', () => {
   it("validates a user's email", async () => {
     await expect(test.act()).toResolve();
 
+    expect.assert(test.user);
     expect(test.user).toHaveProperty('emailValidationToken', undefined);
   });
 
   it("mark user's email as validated", async () => {
     await expect(test.act({ emailValidationToken: undefined })).toResolve();
 
+    expect.assert(test.user);
     expect(test.user).toHaveProperty('emailValidationToken', undefined);
   });
 

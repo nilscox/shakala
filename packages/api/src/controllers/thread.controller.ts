@@ -8,7 +8,7 @@ import {
   getThreadQuerySchema,
   ThreadDto,
 } from '@shakala/shared';
-import { createComment, createThread, getLastThreads, getThread } from '@shakala/thread';
+import { getThreadComments, createComment, createThread, getLastThreads, getThread } from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -31,7 +31,7 @@ export class ThreadController {
     this.router.post('/:threadId/comment', guards, this.createComment);
   }
 
-  getLastThreads: RequestHandler<unknown, ThreadDto[]> = async (req, res) => {
+  getLastThreads: RequestHandler<unknown, Array<Omit<ThreadDto, 'comments'>>> = async (req, res) => {
     const query = await validateRequest(req).query(getLastThreadsQuerySchema);
     const results = await this.queryBus.execute(getLastThreads(query));
 
@@ -42,16 +42,18 @@ export class ThreadController {
   getThread: RequestHandler<{ threadId: string }, ThreadDto> = async (req, res) => {
     const query = await validateRequest(req).query(getThreadQuerySchema);
 
-    const result = await this.queryBus.execute(
-      getThread({ threadId: req.params.threadId, userId: req.userId, ...query })
-    );
+    const thread = await this.queryBus.execute(getThread({ threadId: req.params.threadId }));
 
-    if (!result) {
+    if (!thread) {
       throw new EntityNotFoundError('Thread', { id: req.params.threadId });
     }
 
+    const comments = await this.queryBus.execute(
+      getThreadComments({ threadId: req.params.threadId, userId: req.userId, ...query })
+    );
+
     res.status(200);
-    res.send(result);
+    res.send({ ...thread, comments });
   };
 
   createThread: RequestHandler = async (req, res) => {

@@ -1,4 +1,5 @@
-import { expect, StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { UserActivityPayload, UserActivityType } from '../../entities/user-activity.entity';
@@ -21,7 +22,7 @@ describe('[unit] CreateUserActivity', () => {
 
     const activity = test.activity;
 
-    expect(activity).toBeDefined();
+    expect.assert(activity);
     expect(activity).toHaveProperty('id', 'activityId');
     expect(activity).toHaveProperty('type', UserActivityType.threadCreated);
     expect(activity).toHaveProperty('date', test.now);

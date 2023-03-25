@@ -1,10 +1,5 @@
-import {
-  expect,
-  StubDateAdapter,
-  StubEventPublisher,
-  StubGeneratorAdapter,
-  Timestamp,
-} from '@shakala/common';
+import expect from '@nilscox/expect';
+import { StubDateAdapter, StubEventPublisher, StubGeneratorAdapter, Timestamp } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
 import { Markdown } from '../../entities/markdown.value-object';
@@ -33,6 +28,7 @@ describe('editComment', () => {
       text: new Markdown('Edited!'),
     });
 
+    expect.assert(edited);
     expect(edited).toHaveProperty('message', newMessage);
     expect(edited).toHaveProperty('edited', test.now);
     expect(edited).toHaveProperty('history', [test.initialMessage]);

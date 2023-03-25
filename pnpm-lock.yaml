@@ -4,7 +4,7 @@ importers:
 
   .:
     specifiers:
-      '@nilscox/expect': ^0.2.4
+      '@nilscox/expect': ^0.3.3
       '@typescript-eslint/eslint-plugin': ^5.54.0
       '@typescript-eslint/parser': ^5.54.0
       eslint: ^8.35.0
@@ -12,9 +12,10 @@ importers:
       eslint-plugin-import: npm:eslint-plugin-i@2.26.0-2
       prettier: ^2.8.4
       typescript: ^4.9.5
+      vite: ^4.1.4
       vitest: ^0.29.2
     devDependencies:
-      '@nilscox/expect': link:../../expect/packages/expect
+      '@nilscox/expect': 0.3.3
       '@typescript-eslint/eslint-plugin': 5.54.0_6mj2wypvdnknez7kws2nfdgupi
       '@typescript-eslint/parser': 5.54.0_ycpbpc6yetojsgtrx3mwntkhsu
       eslint: 8.35.0
@@ -22,6 +23,7 @@ importers:
       eslint-plugin-import: /eslint-plugin-i/2.26.0-2_tqrcrxlenpngfto46ddarus52y
       prettier: 2.8.4
       typescript: 4.9.5
+      vite: 4.1.4
       vitest: 0.29.2
 
   packages/api:
@@ -55,7 +57,6 @@ importers:
       tough-cookie: ^4.1.2
       ts-node: ^10.9.1
       typescript: ^4.9.5
-      vitest: ^0.29.1
       yup: ^1.0.0
     dependencies:
       '@shakala/common': link:../common
@@ -89,13 +90,13 @@ importers:
       jsonwebtoken: 9.0.0
       ts-node: 10.9.1_tncu2ai53lzgmizdedur7lbibe
       typescript: 4.9.5
-      vitest: 0.29.1
 
   packages/client:
     specifiers:
       '@fontsource/open-sans': ^4.5.14
       '@hookform/devtools': ^4.3.1
       '@jonkoops/matomo-tracker-react': ^0.7.0
+      '@nilscox/expect-dom': ^0.3.3
       '@shakala/shared': workspace:*
       '@storybook/addon-actions': 7.0.0-rc.5
       '@storybook/addon-essentials': 7.0.0-rc.5
@@ -150,7 +151,6 @@ importers:
       vite: ^4.1.4
       vite-plugin-ssr: ^0.4.94
       vite-plugin-svgr: ^2.4.0
-      vitest: ^0.29.1
       yup: ^1.0.0
     dependencies:
       '@fontsource/open-sans': 4.5.14
@@ -196,6 +196,7 @@ importers:
       vite-plugin-svgr: 2.4.0_vite@4.1.4
       yup: 1.0.0
     devDependencies:
+      '@nilscox/expect-dom': 0.3.3
       '@storybook/addon-actions': 7.0.0-rc.5_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-essentials': 7.0.0-rc.5_biqbaboplfbrettd7655fr4n2y
       '@storybook/react': 7.0.0-rc.5_ygqkwb4gg3aean7xjfdauovyqq
@@ -212,7 +213,6 @@ importers:
       storybook: 7.0.0-rc.5
       ts-node: 10.9.1_ellgaeuoqnti3hful2ny2iugba
       typescript: 4.9.5
-      vitest: 0.29.2_happy-dom@8.9.0
 
   packages/common:
     specifiers:
@@ -226,7 +226,6 @@ importers:
       lodash.clonedeep: ^4.5.0
       nanoid: ^4.0.1
       typescript: ^4.9.5
-      vitest: ^0.29.2
     dependencies:
       '@shakala/shared': link:../shared
       bcrypt: 5.1.0
@@ -239,7 +238,6 @@ importers:
       '@types/lodash.clonedeep': 4.5.7
       '@types/node': 18.14.2
       typescript: 4.9.5
-      vitest: 0.29.2
 
   packages/email:
     specifiers:
@@ -254,7 +252,6 @@ importers:
       nodemailer: ^6.9.1
       ts-node: ^10.9.1
       typescript: ^4.9.5
-      vitest: ^0.29.1
     dependencies:
       '@shakala/common': link:../common
       '@shakala/shared': link:../shared
@@ -268,7 +265,6 @@ importers:
       '@types/nodemailer': 6.4.7
       ts-node: 10.9.1_uayvamxqnl5yeiojjysxwopmsy
       typescript: 4.9.5
-      vitest: 0.29.1
 
   packages/notification:
     specifiers:
@@ -277,7 +273,6 @@ importers:
       brandi: ^5.0.0
       ts-node: ^10.9.1
       typescript: ^4.9.5
-      vitest: ^0.29.1
     dependencies:
       '@shakala/common': link:../common
       brandi: 5.0.0
@@ -285,7 +280,6 @@ importers:
       '@types/node': 18.14.2
       ts-node: 10.9.1_ellgaeuoqnti3hful2ny2iugba
       typescript: 4.9.5
-      vitest: 0.29.2
 
   packages/persistence:
     specifiers:
@@ -324,14 +318,12 @@ importers:
       typescript: ^4.9.5
       vite: ^4.1.4
       vite-plugin-dts: ^2.1.0
-      vitest: ^0.29.1
       yup: ^1.0.0
     devDependencies:
       '@types/node': 18.14.1
       typescript: 4.9.5
       vite: 4.1.4_@types+node@18.14.1
       vite-plugin-dts: 2.1.0_75ucbpp7logpdg7n5tkyaoxqqm
-      vitest: 0.29.1
       yup: 1.0.0
 
   packages/thread:
@@ -345,7 +337,6 @@ importers:
       brandi: ^5.0.0
       ts-node: ^10.9.1
       typescript: ^4.9.5
-      vitest: ^0.29.1
     dependencies:
       '@shakala/common': link:../common
       '@shakala/notification': link:../notification
@@ -357,7 +348,6 @@ importers:
       '@types/node': 18.14.2
       ts-node: 10.9.1_ellgaeuoqnti3hful2ny2iugba
       typescript: 4.9.5
-      vitest: 0.29.2
 
   packages/user:
     specifiers:
@@ -369,7 +359,6 @@ importers:
       brandi: ^5.0.0
       ts-node: ^10.9.1
       typescript: ^4.9.5
-      vitest: ^0.29.1
     dependencies:
       '@shakala/common': link:../common
       '@shakala/email': link:../email
@@ -380,7 +369,6 @@ importers:
       '@types/node': 18.14.1
       ts-node: 10.9.1_uayvamxqnl5yeiojjysxwopmsy
       typescript: 4.9.5
-      vitest: 0.29.1
 
 packages:
 
@@ -2722,6 +2710,16 @@ packages:
       tar-fs: 2.1.1
     dev: true
 
+  /@nilscox/expect-dom/0.3.3:
+    resolution: {integrity: sha512-0UM21AFcjJCFd1E4Q1vZpmlh8Uvp+wJfFRxIo5oeLLTOLywqUszgSVh+IWDDrBDRHSUlpCduGBli6KWnc13BtQ==, tarball: download/@nilscox/expect-dom/0.3.3/d7bf34e364de43990d90d5bfd8af276dbe289363}
+    peerDependencies:
+      '@nilscox/expect': ^0.1.0
+    dev: true
+
+  /@nilscox/expect/0.3.3:
+    resolution: {integrity: sha512-Djp9j7Hlx8zydMinp/h6VuWSxYq3RO03YiJVcTSDq8MQ8up6x3wXz05QmGDmZuEbAtl7OWUcbGHqod412g0AkQ==, tarball: download/@nilscox/expect/0.3.3/867b1c8dac9952f44a865f3d6870e1ecc7d457ca}
+    dev: true
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -4309,28 +4307,12 @@ packages:
       - supports-color
     dev: false
 
-  /@vitest/expect/0.29.1:
-    resolution: {integrity: sha512-VFt1u34D+/L4pqjLA8VGPdHbdF8dgjX9Nq573L9KG6/7MIAL9jmbEIKpXudmxjoTwcyczOXRyDuUWBQHZafjoA==}
-    dependencies:
-      '@vitest/spy': 0.29.1
-      '@vitest/utils': 0.29.1
-      chai: 4.3.7
-    dev: true
-
   /@vitest/expect/0.29.2:
     resolution: {integrity: sha512-wjrdHB2ANTch3XKRhjWZN0UueFocH0cQbi2tR5Jtq60Nb3YOSmakjdAvUa2JFBu/o8Vjhj5cYbcMXkZxn1NzmA==}
     dependencies:
       '@vitest/spy': 0.29.2
       '@vitest/utils': 0.29.2
       chai: 4.3.7
-    dev: true
-
-  /@vitest/runner/0.29.1:
-    resolution: {integrity: sha512-VZ6D+kWpd/LVJjvxkt79OA29FUpyrI5L/EEwoBxH5m9KmKgs1QWNgobo/CGQtIWdifLQLvZdzYEK7Qj96w/ixQ==}
-    dependencies:
-      '@vitest/utils': 0.29.1
-      p-limit: 4.0.0
-      pathe: 1.1.0
     dev: true
 
   /@vitest/runner/0.29.2:
@@ -4341,26 +4323,10 @@ packages:
       pathe: 1.1.0
     dev: true
 
-  /@vitest/spy/0.29.1:
-    resolution: {integrity: sha512-sRXXK44pPzaizpiZOIQP7YMhxIs80J/b6v1yR3SItpxG952c8tdA7n0O2j4OsVkjiO/ZDrjAYFrXL3gq6hLx6Q==}
-    dependencies:
-      tinyspy: 1.1.1
-    dev: true
-
   /@vitest/spy/0.29.2:
     resolution: {integrity: sha512-Hc44ft5kaAytlGL2PyFwdAsufjbdOvHklwjNy/gy/saRbg9Kfkxfh+PklLm1H2Ib/p586RkQeNFKYuJInUssyw==}
     dependencies:
       tinyspy: 1.1.1
-    dev: true
-
-  /@vitest/utils/0.29.1:
-    resolution: {integrity: sha512-6npOEpmyE6zPS2wsWb7yX5oDpp6WY++cC5BX6/qaaMhGC3ZlPd8BbTz3RtGPi1PfPerPvfs4KqS/JDOIaB6J3w==}
-    dependencies:
-      cli-truncate: 3.1.0
-      diff: 5.1.0
-      loupe: 2.3.6
-      picocolors: 1.0.0
-      pretty-format: 27.5.1
     dev: true
 
   /@vitest/utils/0.29.2:
@@ -4558,6 +4524,13 @@ packages:
       deep-equal: 2.2.0
     dev: true
 
+  /array-buffer-byte-length/1.0.0:
+    resolution: {integrity: sha512-LPuwb2P+NrQw3XhxGc36+XSvuBPopovXYTR9Ew++Du9Yb/bx5AzBfrIsBoj0EZUifjQU+sHL21sseZ3jerWO/A==}
+    dependencies:
+      call-bind: 1.0.2
+      is-array-buffer: 3.0.2
+    dev: true
+
   /array-flatten/1.1.1:
     resolution: {integrity: sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==}
 
@@ -4571,7 +4544,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
       get-intrinsic: 1.2.0
       is-string: 1.0.7
     dev: true
@@ -4586,7 +4559,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
       es-shim-unscopables: 1.0.0
     dev: true
 
@@ -4606,7 +4579,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
       es-array-method-boxes-properly: 1.0.0
       is-string: 1.0.7
     dev: true
@@ -5807,6 +5780,46 @@ packages:
       which-typed-array: 1.1.9
     dev: true
 
+  /es-abstract/1.21.2:
+    resolution: {integrity: sha512-y/B5POM2iBnIxCiernH1G7rC9qQoM77lLIMQLuob0zhp8C56Po81+2Nj0WFKnd0pNReDTnkYryc+zhOzpEIROg==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      array-buffer-byte-length: 1.0.0
+      available-typed-arrays: 1.0.5
+      call-bind: 1.0.2
+      es-set-tostringtag: 2.0.1
+      es-to-primitive: 1.2.1
+      function.prototype.name: 1.1.5
+      get-intrinsic: 1.2.0
+      get-symbol-description: 1.0.0
+      globalthis: 1.0.3
+      gopd: 1.0.1
+      has: 1.0.3
+      has-property-descriptors: 1.0.0
+      has-proto: 1.0.1
+      has-symbols: 1.0.3
+      internal-slot: 1.0.5
+      is-array-buffer: 3.0.2
+      is-callable: 1.2.7
+      is-negative-zero: 2.0.2
+      is-regex: 1.1.4
+      is-shared-array-buffer: 1.0.2
+      is-string: 1.0.7
+      is-typed-array: 1.1.10
+      is-weakref: 1.0.2
+      object-inspect: 1.12.3
+      object-keys: 1.1.1
+      object.assign: 4.1.4
+      regexp.prototype.flags: 1.4.3
+      safe-regex-test: 1.0.0
+      string.prototype.trim: 1.2.7
+      string.prototype.trimend: 1.0.6
+      string.prototype.trimstart: 1.0.6
+      typed-array-length: 1.0.4
+      unbox-primitive: 1.0.2
+      which-typed-array: 1.1.9
+    dev: true
+
   /es-array-method-boxes-properly/1.0.0:
     resolution: {integrity: sha512-wd6JXUmyHmt8T5a2xreUwKcGPq6f1f+WwIJkijUqiGcJz1qqnZgP6XIK+QyIWU5lT7imeNxUll48bziG+TSYcA==}
     dev: true
@@ -6667,7 +6680,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
       functions-have-names: 1.2.3
     dev: true
 
@@ -7168,6 +7181,14 @@ packages:
 
   /is-array-buffer/3.0.1:
     resolution: {integrity: sha512-ASfLknmY8Xa2XtB4wmbz13Wu202baeA18cJBCeCy0wXUHZF0IPyVEXqKEcd+t2fNSLLL1vC6k7lxZEojNbISXQ==}
+    dependencies:
+      call-bind: 1.0.2
+      get-intrinsic: 1.2.0
+      is-typed-array: 1.1.10
+    dev: true
+
+  /is-array-buffer/3.0.2:
+    resolution: {integrity: sha512-y+FyyR/w8vfIRq4eQcM1EYgSTnmHXPqaF+IgzgraytCFq5Xh8lllDVmAZolPJiZttZLeFSINPYMaEJ7/vWUa1w==}
     dependencies:
       call-bind: 1.0.2
       get-intrinsic: 1.2.0
@@ -8708,7 +8729,7 @@ packages:
       array.prototype.reduce: 1.0.5
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
     dev: true
 
   /object.hasown/1.1.2:
@@ -8724,7 +8745,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
     dev: true
 
   /oblivious-set/1.0.0:
@@ -10156,12 +10177,21 @@ packages:
       side-channel: 1.0.4
     dev: true
 
+  /string.prototype.trim/1.2.7:
+    resolution: {integrity: sha512-p6TmeT1T3411M8Cgg9wBTMRtY2q9+PNy9EV1i2lIXUN/btt763oIfxwN3RR8VU6wHX8j/1CFy0L+YuThm6bgOg==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind: 1.0.2
+      define-properties: 1.2.0
+      es-abstract: 1.21.2
+    dev: true
+
   /string.prototype.trimend/1.0.6:
     resolution: {integrity: sha512-JySq+4mrPf9EsDBEDYMOb/lM7XQLulwg5R/m1r0PXEFqrV0qHvl58sdTilSXtKOflCsK2E8jxf+GKC0T07RWwQ==}
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
     dev: true
 
   /string.prototype.trimstart/1.0.6:
@@ -10169,7 +10199,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.1
+      es-abstract: 1.21.2
     dev: true
 
   /string_decoder/1.1.1:
@@ -10924,27 +10954,6 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  /vite-node/0.29.1_@types+node@18.14.1:
-    resolution: {integrity: sha512-Ey9bTlQOQrCxQN0oJ7sTg+GrU4nTMLg44iKTFCKf31ry60csqQz4E+Q04hdWhwE4cTgpxUC+zEB1kHbf5jNkFA==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.4
-      mlly: 1.1.1
-      pathe: 1.1.0
-      picocolors: 1.0.0
-      vite: 4.1.4_@types+node@18.14.1
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
   /vite-node/0.29.2_@types+node@18.15.3:
     resolution: {integrity: sha512-5oe1z6wzI3gkvc4yOBbDBbgpiWiApvuN4P55E8OI131JGrSuo4X3SOZrNmZYo4R8Zkze/dhi572blX0zc+6SdA==}
     engines: {node: '>=v14.16.0'}
@@ -11024,6 +11033,39 @@ packages:
       - rollup
       - supports-color
     dev: false
+
+  /vite/4.1.4:
+    resolution: {integrity: sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.16.17
+      postcss: 8.4.21
+      resolve: 1.22.1
+      rollup: 3.17.3
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
 
   /vite/4.1.4_@types+node@18.14.1:
     resolution: {integrity: sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==}
@@ -11127,61 +11169,6 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.29.1:
-    resolution: {integrity: sha512-iSy6d9VwsIn7pz5I8SjVwdTLDRGKNZCRJVzROwjt0O0cffoymKwazIZ2epyMpRGpeL5tsXAl1cjXiT7agTyVug==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@vitest/browser': '*'
-      '@vitest/ui': '*'
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@types/chai': 4.3.4
-      '@types/chai-subset': 1.3.3
-      '@types/node': 18.14.1
-      '@vitest/expect': 0.29.1
-      '@vitest/runner': 0.29.1
-      '@vitest/spy': 0.29.1
-      '@vitest/utils': 0.29.1
-      acorn: 8.8.2
-      acorn-walk: 8.2.0
-      cac: 6.7.14
-      chai: 4.3.7
-      debug: 4.3.4
-      local-pkg: 0.4.3
-      pathe: 1.1.0
-      picocolors: 1.0.0
-      source-map: 0.6.1
-      std-env: 3.3.2
-      strip-literal: 1.0.1
-      tinybench: 2.3.1
-      tinypool: 0.3.1
-      tinyspy: 1.1.1
-      vite: 4.1.4_@types+node@18.14.1
-      vite-node: 0.29.1_@types+node@18.14.1
-      why-is-node-running: 2.2.2
-    transitivePeerDependencies:
-      - less
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
   /vitest/0.29.2:
     resolution: {integrity: sha512-ydK9IGbAvoY8wkg29DQ4ivcVviCaUi3ivuPKfZEVddMTenFHUfB8EEDXQV8+RasEk1ACFLgMUqAaDuQ/Nk+mQA==}
     engines: {node: '>=v14.16.0'}
@@ -11216,62 +11203,6 @@ packages:
       cac: 6.7.14
       chai: 4.3.7
       debug: 4.3.4
-      local-pkg: 0.4.3
-      pathe: 1.1.0
-      picocolors: 1.0.0
-      source-map: 0.6.1
-      std-env: 3.3.2
-      strip-literal: 1.0.1
-      tinybench: 2.3.1
-      tinypool: 0.3.1
-      tinyspy: 1.1.1
-      vite: 4.1.4_@types+node@18.15.3
-      vite-node: 0.29.2_@types+node@18.15.3
-      why-is-node-running: 2.2.2
-    transitivePeerDependencies:
-      - less
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
-  /vitest/0.29.2_happy-dom@8.9.0:
-    resolution: {integrity: sha512-ydK9IGbAvoY8wkg29DQ4ivcVviCaUi3ivuPKfZEVddMTenFHUfB8EEDXQV8+RasEk1ACFLgMUqAaDuQ/Nk+mQA==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@vitest/browser': '*'
-      '@vitest/ui': '*'
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@types/chai': 4.3.4
-      '@types/chai-subset': 1.3.3
-      '@types/node': 18.15.3
-      '@vitest/expect': 0.29.2
-      '@vitest/runner': 0.29.2
-      '@vitest/spy': 0.29.2
-      '@vitest/utils': 0.29.2
-      acorn: 8.8.2
-      acorn-walk: 8.2.0
-      cac: 6.7.14
-      chai: 4.3.7
-      debug: 4.3.4
-      happy-dom: 8.9.0
       local-pkg: 0.4.3
       pathe: 1.1.0
       picocolors: 1.0.0
