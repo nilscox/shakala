@@ -1,8 +1,20 @@
 {
   "name": "@shakala/persistence",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./test": "./dist/index.test.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/index.ts"
+      ],
+      "test": [
+        "./src/index.test.ts"
+      ]
+    }
+  },
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b",

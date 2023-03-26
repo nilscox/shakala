@@ -8,7 +8,7 @@
     { "path": "../thread/tsconfig.json" },
     { "path": "../user/tsconfig.json" }
   ],
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "composite": false,
     "noEmit": true,

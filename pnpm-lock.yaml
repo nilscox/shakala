@@ -53,9 +53,12 @@ importers:
       express: 5.0.0-beta.1
       http-proxy: ^1.18.1
       jsonwebtoken: ^9.0.0
+      module-alias: ^2.2.2
       on-finished: ^2.4.1
       tough-cookie: ^4.1.2
       ts-node: ^10.9.1
+      ts-paths-esm-loader: ^1.4.1
+      tsconfig-paths: ^4.1.2
       typescript: ^4.9.5
       yup: ^1.0.0
     dependencies:
@@ -75,8 +78,11 @@ importers:
       dotenv: 16.0.3
       express: 5.0.0-beta.1
       http-proxy: 1.18.1
+      module-alias: 2.2.2
       on-finished: 2.4.1
       tough-cookie: 4.1.2
+      ts-paths-esm-loader: 1.4.1_oqblkmemfqkcnei7kwj7q4lvza
+      tsconfig-paths: 4.1.2
       yup: 1.0.0
     devDependencies:
       '@types/body-parser': 1.19.2
@@ -4051,7 +4057,6 @@ packages:
 
   /@types/node/18.14.0:
     resolution: {integrity: sha512-5EWrvLmglK+imbCJY0+INViFWUHg1AHel1sq4ZVSfdcNqGy9Edv3UB9IIzzg+xPaUcAgZYcfVs2fBcwDeZzU0A==}
-    dev: true
 
   /@types/node/18.14.1:
     resolution: {integrity: sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==}
@@ -8493,6 +8498,10 @@ packages:
       ufo: 1.1.1
     dev: true
 
+  /module-alias/2.2.2:
+    resolution: {integrity: sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==}
+    dev: false
+
   /moo/0.5.2:
     resolution: {integrity: sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==}
     dev: false
@@ -10587,7 +10596,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node/10.9.1_uayvamxqnl5yeiojjysxwopmsy:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -10619,6 +10627,16 @@ packages:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
+
+  /ts-paths-esm-loader/1.4.1_oqblkmemfqkcnei7kwj7q4lvza:
+    resolution: {integrity: sha512-5iSx5MLGc2FhOsB3zx3Avt6BZE/P8LBSIEYpAiez35xcI/zoZ29kbcwydkHxISWUslbKhFx0oSEalDykH4opKA==}
+    peerDependencies:
+      ts-node: ^10.4.0
+      tsconfig-paths: ^3.12.0
+    dependencies:
+      ts-node: 10.9.1_tncu2ai53lzgmizdedur7lbibe
+      tsconfig-paths: 4.1.2
+    dev: false
 
   /tsconfig-paths/4.1.2:
     resolution: {integrity: sha512-uhxiMgnXQp1IR622dUXI+9Ehnws7i/y6xvpZB9IbUVOPy0muvdvgXeZOn88UcGPiT98Vp3rJPTa8bFoalZ3Qhw==}

@@ -1,6 +1,6 @@
 import expect from '@nilscox/expect';
 import { Pagination } from '@shakala/common';
-import { createRepositoryTest, RepositoryTest } from '@shakala/persistence';
+import { createRepositoryTest, RepositoryTest } from '@shakala/persistence/test';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../factories';
