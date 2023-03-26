@@ -27,8 +27,12 @@ export const di: DI = {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
-  var di: DI;
+  interface Window {
+    // eslint-disable-next-line no-var
+    di: DI;
+  }
 }
 
-globalThis.di = di;
+if (typeof window !== 'undefined') {
+  window.di = di;
+}

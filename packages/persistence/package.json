@@ -8,10 +8,10 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./src/index.ts"
+        "./dist/index.d.ts"
       ],
       "test": [
-        "./src/index.test.ts"
+        "./dist/index.test.d.ts"
       ]
     }
   },

@@ -13,6 +13,7 @@ import { ThreadUserActivitiesHandler } from './event-handlers/thread-user-activi
 import { GetCommentHandler } from './queries/get-comment';
 import { GetLastThreadsHandler } from './queries/get-last-threads';
 import { GetThreadHandler } from './queries/get-thread';
+import { GetThreadCommentsHandler } from './queries/get-thread-comments';
 import { FilesystemCommentRepository } from './repositories/comment/filesystem-comment.repository';
 import { InMemoryCommentRepository } from './repositories/comment/in-memory-comment.repository';
 import { SqlCommentRepository } from './repositories/comment/sql-comment.repository';
@@ -66,6 +67,7 @@ export class ThreadModule extends Module {
 
     this.bindToken(THREAD_TOKENS.queries.getLastThreadsHandler, GetLastThreadsHandler);
     this.bindToken(THREAD_TOKENS.queries.getThreadHandler, GetThreadHandler);
+    this.bindToken(THREAD_TOKENS.queries.getThreadCommentsHandler, GetThreadCommentsHandler);
     this.bindToken(THREAD_TOKENS.queries.getCommentHandler, GetCommentHandler);
 
     // prettier-ignore
