@@ -5,19 +5,17 @@ import {
   markNotificationAsSeen,
   NotificationType,
 } from '@shakala/notification';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { createControllerTest, ControllerTest } from '../tests/controller-test';
 
 describe('[intg] NotificationController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('GET /notification/count', () => {
     const route = '/notification/count';
@@ -100,10 +98,10 @@ describe('[intg] NotificationController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   asUser = this.as('userId');
 
   arrange() {
-    this.user = { id: 'userId' };
+    this.createUser({ id: 'userId' });
   }
 }

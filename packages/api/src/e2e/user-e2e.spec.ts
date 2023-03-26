@@ -1,21 +1,19 @@
 import assert from 'assert';
 
+import expect from '@nilscox/expect';
 import { SignInBody, SignUpBody, waitFor } from '@shakala/shared';
 import { GetUserResult } from '@shakala/user';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { E2ETest } from '../tests/e2e-test';
-import expect from '@nilscox/expect';
+import { createE2eTest, E2ETest } from '../tests/e2e-test';
 
 describe('[e2e] user', () => {
+  const getTest = createE2eTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   it('As a future user, I can sign up, sign out and sign back in', async () => {
     const agent = test.server.agent();

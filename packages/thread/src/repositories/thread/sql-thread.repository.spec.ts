@@ -8,8 +8,8 @@ describe('SqlThreadRepository', () => {
   const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(() => {
-    test = getTest();
+  beforeEach(async () => {
+    test = await getTest();
   });
 
   describe('getLastThreads', () => {
@@ -55,7 +55,7 @@ describe('SqlThreadRepository', () => {
 
 class Test extends RepositoryTest {
   get repository() {
-    return new SqlThreadRepository(this.orm);
+    return new SqlThreadRepository(this.database);
   }
 
   async createThread() {

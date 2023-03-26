@@ -28,13 +28,13 @@ export class SqlUserRepository extends SqlRepository<User, SqlUser> implements U
       nick: user.nick.toString(),
       email: user.email,
       hashedPassword: user.hashedPassword,
-      emailValidationToken: user.emailValidationToken,
+      emailValidationToken: user.emailValidationToken ?? null,
       createdAt: user.signupDate.toDate(),
     });
   }
 
-  listUsers(): Promise<{ id: string }[]> {
-    throw new Error('Method not implemented.');
+  async listUsers(): Promise<{ id: string }[]> {
+    return this.repository.findAll();
   }
 
   async getUser(where: Partial<{ id: string; email: string }>): Promise<GetUserResult> {
@@ -63,4 +63,4 @@ export class SqlUserRepository extends SqlRepository<User, SqlUser> implements U
   }
 }
 
-injected(SqlUserRepository, PERSISTENCE_TOKENS.orm);
+injected(SqlUserRepository, PERSISTENCE_TOKENS.database);

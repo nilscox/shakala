@@ -9,20 +9,18 @@ import {
   GetUserResult,
   InvalidCredentialsError,
 } from '@shakala/user';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { createControllerTest, ControllerTest } from '../tests/controller-test';
 import { jwt } from '../utils/jwt';
 
 describe('[intg] AuthController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('/auth/sign-up', () => {
     const route = '/auth/sign-up';
@@ -76,7 +74,7 @@ describe('[intg] AuthController', () => {
     });
 
     it('fails with status 401 when the user is already authenticated', async () => {
-      test.user = { id: 'userId' };
+      test.createUser({ id: 'userId' });
       await expect(test.as('userId').post(route, payload)).toHaveStatus(401);
     });
   });
@@ -140,7 +138,7 @@ describe('[intg] AuthController', () => {
     const route = '/auth/sign-out';
 
     beforeEach(() => {
-      test.user = { id: 'userId' };
+      test.createUser({ id: 'userId' });
     });
 
     it('sets the authentication token cookie as expired', async () => {
@@ -157,7 +155,7 @@ describe('[intg] AuthController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   agent = this.createAgent();
 
   get tokenCookie() {

@@ -1,37 +1,32 @@
 import { ClassType, DeepPartial, randomId, ReactionType } from '@shakala/shared';
-import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
+import { afterEach } from 'vitest';
 
 import { createOrm, EM, Orm } from './create-orm';
+import { Database } from './database';
 import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser } from './entities';
 
 export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: ClassType<Test>) => {
   let orm: Orm;
   let test: Test;
 
-  beforeAll(async () => {
+  afterEach(async () => {
+    await test?.cleanup?.();
+    await orm?.close(true);
+  });
+
+  return async () => {
     orm = await createOrm({
       dbName: 'tests',
       allowGlobalContext: true,
     });
 
     test = new TestClass(orm);
-    await test.configureOrm();
-  });
 
-  beforeEach(async () => {
-    await test.resetDatabase();
-    await test?.arrange?.();
-  });
+    await test.init();
+    await test.arrange?.();
 
-  afterEach(async () => {
-    await test?.cleanup?.();
-  });
-
-  afterAll(async () => {
-    await orm?.close(true);
-  });
-
-  return () => test;
+    return test;
+  };
 };
 
 export interface RepositoryTest {
@@ -40,6 +35,8 @@ export interface RepositoryTest {
 }
 
 export class RepositoryTest {
+  database = new Database(async () => this.orm);
+
   constructor(protected readonly orm: Orm) {}
 
   get em() {
@@ -48,6 +45,12 @@ export class RepositoryTest {
 
   get create() {
     return new SqlFactories(this.em);
+  }
+
+  async init() {
+    await this.database.init();
+    await this.configureOrm();
+    await this.resetDatabase();
   }
 
   async configureOrm() {

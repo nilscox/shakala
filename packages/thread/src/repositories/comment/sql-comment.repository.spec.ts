@@ -11,8 +11,8 @@ describe('SqlCommentRepository', () => {
   const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(() => {
-    test = getTest();
+  beforeEach(async () => {
+    test = await getTest();
   });
 
   it('saves and finds a comment entity', async () => {
@@ -108,7 +108,7 @@ describe('SqlCommentRepository', () => {
 
 class Test extends RepositoryTest {
   get repository() {
-    return new SqlCommentRepository(this.orm);
+    return new SqlCommentRepository(this.database);
   }
 
   async createThread() {

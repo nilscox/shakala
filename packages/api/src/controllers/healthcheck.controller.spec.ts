@@ -1,17 +1,15 @@
 import expect from '@nilscox/expect';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { createControllerTest, ControllerTest } from '../tests/controller-test';
 
 describe('[intg] HealthcheckController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('GET /healthcheck', () => {
     const route = '/healthcheck';
@@ -36,6 +34,6 @@ describe('[intg] HealthcheckController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   agent = this.createAgent();
 }

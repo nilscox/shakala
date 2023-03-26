@@ -67,4 +67,4 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
   }
 }
 
-injected(SqlThreadRepository, PERSISTENCE_TOKENS.orm);
+injected(SqlThreadRepository, PERSISTENCE_TOKENS.database);

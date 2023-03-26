@@ -8,10 +8,6 @@ import { UserRepository } from './user.repository';
 export class InMemoryUserRepository extends InMemoryRepository<User> implements UserRepository {
   entity = User;
 
-  constructor(items?: User[]) {
-    super(items);
-  }
-
   async listUsers(): Promise<{ id: string }[]> {
     return this.all().map((user) => ({ id: user.id }));
   }

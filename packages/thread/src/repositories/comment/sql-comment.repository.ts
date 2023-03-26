@@ -170,4 +170,4 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
   }
 }
 
-injected(SqlCommentRepository, PERSISTENCE_TOKENS.orm);
+injected(SqlCommentRepository, PERSISTENCE_TOKENS.database);

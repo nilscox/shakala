@@ -85,8 +85,8 @@ export class Server {
     next();
   };
 
-  private ormContextMiddleware: RequestHandler = (req, res, next) => {
-    this.ormContext.middleware(next);
+  private ormContextMiddleware: RequestHandler = async (req, res, next) => {
+    await this.ormContext.middleware(next);
   };
 
   private validationErrorHandler: ErrorRequestHandler = (error, req, res, next) => {

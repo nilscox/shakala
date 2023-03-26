@@ -1,3 +1,4 @@
+import expect from '@nilscox/expect';
 import { listUserNotifications, NotificationType } from '@shakala/notification';
 import {
   CreateCommentBody,
@@ -10,20 +11,17 @@ import {
 } from '@shakala/shared';
 import { createComment, createThread } from '@shakala/thread';
 import { createUser, validateUserEmail } from '@shakala/user';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { E2ETest } from '../tests/e2e-test';
-import expect from '@nilscox/expect';
+import { createE2eTest, E2ETest } from '../tests/e2e-test';
 
 describe('[e2e] thread', () => {
+  const getTest = createE2eTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   it('As a user, I can create a thread post a comment and edit it', async () => {
     const agent = test.agent;

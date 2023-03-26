@@ -1,13 +1,11 @@
-import assert from 'node:assert';
-
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { EntityNotFoundError } from '@shakala/common';
 import { ClassType } from '@shakala/shared';
 
-import { Orm } from './create-orm';
+import { Database } from './database';
 
 export abstract class SqlRepository<Entity, SqlEntity extends object> {
-  constructor(protected readonly orm: Orm) {}
+  constructor(protected readonly database: Database) {}
 
   protected abstract SqlEntity: ClassType<SqlEntity>;
 
@@ -15,8 +13,7 @@ export abstract class SqlRepository<Entity, SqlEntity extends object> {
   protected abstract toSql(entity: Entity): SqlEntity;
 
   get em() {
-    assert(this.orm, `Repository<${this.SqlEntity.name}> is not initialized`);
-    return this.orm.em;
+    return this.database.em;
   }
 
   get repository(): EntityRepository<SqlEntity> {

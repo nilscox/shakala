@@ -19,7 +19,7 @@ async function main() {
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
     notification: { repositories: 'filesystem' },
-    persistence: {},
+    persistence: { useDatabase: true },
     thread: { repositories: 'sql' },
     user: { repositories: 'sql', profileImage: 'gravatar' },
     api: { server: 'prod' },

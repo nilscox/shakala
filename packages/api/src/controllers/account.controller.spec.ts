@@ -5,19 +5,17 @@ import {
   listUserActivities,
   validateUserEmail,
 } from '@shakala/user';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { ControllerTest, createControllerTest } from '../tests/controller-test';
 
 describe('[intg] AccountController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('/account', () => {
     const route = '/account';
@@ -67,10 +65,6 @@ describe('[intg] AccountController', () => {
   describe('/account/validate-email/:token', () => {
     const route = (token: string) => `/account/validate-email/${token}`;
 
-    beforeEach(() => {
-      test.user = { id: 'userId' };
-    });
-
     it('invokes the validateUserEmail command', async () => {
       await expect(test.asUser.get(route('token'))).toHaveStatus(200);
 
@@ -105,11 +99,10 @@ describe('[intg] AccountController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   asUser = this.as('userId');
 
   arrange() {
-    this.user = { id: 'userId' };
-    this.generator.nextId = 'activityId';
+    this.createUser({ id: 'userId' });
   }
 }

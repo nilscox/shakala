@@ -5,19 +5,17 @@ import { promisify } from 'util';
 import expect from '@nilscox/expect';
 import { getProfileImage } from '@shakala/user';
 import express from 'express';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { createControllerTest, ControllerTest } from '../tests/controller-test';
 
 describe('[intg] UserController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('GET /:userId/profile-image', () => {
     const route = '/user/userId/profile-image';
@@ -33,7 +31,7 @@ describe('[intg] UserController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   app = express();
   httpServer?: Server;
 
@@ -58,8 +56,6 @@ class Test extends IntegrationTest {
   }
 
   async cleanup() {
-    await super.cleanup();
-
     if (this.httpServer) {
       await promisify(this.httpServer.close.bind(this.httpServer))();
     }

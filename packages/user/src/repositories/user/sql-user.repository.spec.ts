@@ -11,8 +11,8 @@ describe('SqlUserRepository', () => {
   const getTest = createRepositoryTest(Test);
   let test: Test;
 
-  beforeEach(() => {
-    test = getTest();
+  beforeEach(async () => {
+    test = await getTest();
   });
 
   it('persists a user', async () => {
@@ -47,6 +47,6 @@ describe('SqlUserRepository', () => {
 
 class Test extends RepositoryTest {
   get repository() {
-    return new SqlUserRepository(this.orm);
+    return new SqlUserRepository(this.database);
   }
 }

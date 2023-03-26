@@ -2,25 +2,23 @@ import expect from '@nilscox/expect';
 import { EditCommentBody, ReactionType, ReportCommentBody, SetReactionBody } from '@shakala/shared';
 import {
   editComment,
+  getComment,
+  GetCommentResult,
   reportComment,
   setCommentSubscription,
   setReaction,
-  getComment,
-  GetCommentResult,
 } from '@shakala/thread';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { IntegrationTest } from '../tests/integration-test';
+import { createControllerTest, ControllerTest } from '../tests/controller-test';
 
 describe('[intg] CommentController', () => {
+  const getTest = createControllerTest(Test);
   let test: Test;
 
   beforeEach(async () => {
-    test = new Test();
-    await test.setup();
+    test = await getTest();
   });
-
-  afterEach(() => test?.cleanup());
 
   describe('GET /:commentId', () => {
     const route = '/comment/commentId';
@@ -181,10 +179,10 @@ describe('[intg] CommentController', () => {
   });
 });
 
-class Test extends IntegrationTest {
+class Test extends ControllerTest {
   asUser = this.as('userId');
 
   arrange() {
-    this.user = { id: 'userId' };
+    this.createUser({ id: 'userId' });
   }
 }

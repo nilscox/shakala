@@ -1,16 +1,17 @@
 import { RequestContext } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
-import { injected } from 'brandi';
+import { AsyncFactory, injected } from 'brandi';
 
 import { Orm } from './create-orm';
 import { PERSISTENCE_TOKENS } from './tokens';
 
 export class OrmContext {
-  constructor(private readonly orm: Orm) {}
+  constructor(private readonly getOrm: AsyncFactory<Orm>) {}
 
-  public middleware(next: () => void) {
-    RequestContext.create(this.orm?.em as EntityManager, next);
+  public async middleware(next: () => void) {
+    const orm = await this.getOrm();
+
+    RequestContext.create(orm.em, next);
   }
 }
 
-injected(OrmContext, PERSISTENCE_TOKENS.orm);
+injected(OrmContext, PERSISTENCE_TOKENS.ormFactory);
