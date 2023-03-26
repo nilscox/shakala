@@ -23,6 +23,7 @@ import { FilesystemCommentSubscriptionRepository } from './repositories/comment-
 import { InMemoryCommentSubscriptionRepository } from './repositories/comment-subscription/in-memory-comment-subscription.repository';
 import { FilesystemReactionRepository } from './repositories/reaction/filesystem-reaction.repository';
 import { InMemoryReactionRepository } from './repositories/reaction/in-memory-reaction.repository';
+import { SqlReactionRepository } from './repositories/reaction/sql-reaction.repository';
 import { FilesystemThreadRepository } from './repositories/thread/filesystem-thread.repository';
 import { InMemoryThreadRepository } from './repositories/thread/in-memory-thread.repository';
 import { SqlThreadRepository } from './repositories/thread/sql-thread.repository';
@@ -50,7 +51,7 @@ export class ThreadModule extends Module {
     } else {
       this.bindToken(THREAD_TOKENS.repositories.threadRepository, SqlThreadRepository);
       this.bindToken(THREAD_TOKENS.repositories.commentRepository, SqlCommentRepository);
-      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.reactionRepository, SqlReactionRepository);
       this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, SqlCommentReportRepository);
     }
