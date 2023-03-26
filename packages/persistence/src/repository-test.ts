@@ -6,6 +6,7 @@ import { Database } from './database';
 import {
   SqlComment,
   SqlCommentReport,
+  SqlCommentSubscription,
   SqlMessage,
   SqlNotification,
   SqlReaction,
@@ -140,4 +141,6 @@ export class SqlFactories {
   reaction = this.factory(SqlReaction, {
     type: ReactionType.upvote,
   });
+
+  commentSubscription = this.factory(SqlCommentSubscription, {});
 }

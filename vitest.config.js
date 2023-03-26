@@ -19,6 +19,7 @@ export default defineConfig({
       '@shakala/common': packageSource('common'),
       '@shakala/email': packageSource('email'),
       '@shakala/notification': packageSource('notification'),
+      '@shakala/persistence/test': packageSource('persistence', 'index.test.ts'),
       '@shakala/persistence': packageSource('persistence'),
       '@shakala/shared': packageSource('shared'),
       '@shakala/thread': packageSource('thread'),
