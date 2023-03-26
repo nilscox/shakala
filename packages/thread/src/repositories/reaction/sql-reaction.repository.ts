@@ -1,4 +1,5 @@
-import { SqlComment, SqlReaction, SqlRepository, SqlUser } from '@shakala/persistence';
+import { PERSISTENCE_TOKENS, SqlComment, SqlReaction, SqlRepository, SqlUser } from '@shakala/persistence';
+import { injected } from 'brandi';
 
 import { Reaction } from '../../entities/reaction.entity';
 
@@ -36,3 +37,5 @@ export class SqlReactionRepository
     }
   }
 }
+
+injected(SqlReactionRepository, PERSISTENCE_TOKENS.database);

@@ -1,3 +1,5 @@
+import { wait } from '@shakala/shared';
+
 type MailDevEmail = {
   id: string;
   time: string;
@@ -13,6 +15,7 @@ export class MailDevAdapter {
   private baseUrl = `http://localhost:1080`;
 
   async clear() {
+    await wait(100);
     await fetch(`${this.baseUrl}/email/all`, { method: 'DELETE' });
   }
 

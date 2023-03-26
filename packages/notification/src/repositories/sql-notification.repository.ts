@@ -1,5 +1,12 @@
 import { Pagination, Timestamp } from '@shakala/common';
-import { FindOptions, SqlNotification, SqlRepository, SqlUser } from '@shakala/persistence';
+import {
+  FindOptions,
+  PERSISTENCE_TOKENS,
+  SqlNotification,
+  SqlRepository,
+  SqlUser,
+} from '@shakala/persistence';
+import { injected } from 'brandi';
 
 import { Notification, NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
 import { GetNotificationsCountResult } from '../queries/get-notifications-count';
@@ -65,3 +72,5 @@ export class SqlNotificationRepository
     };
   }
 }
+
+injected(SqlNotificationRepository, PERSISTENCE_TOKENS.database);

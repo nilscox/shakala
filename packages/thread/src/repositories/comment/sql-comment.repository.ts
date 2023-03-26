@@ -66,6 +66,11 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
     return sqlComment;
   }
 
+  override async save(comment: Comment): Promise<void> {
+    await super.save(comment);
+    await this.em.upsertMany(this.toSql(comment).history.getItems());
+  }
+
   async findComment(commentId: string, userId?: string): Promise<Maybe<GetCommentResult>> {
     const sqlComment = await this.repository.findOne(commentId);
 

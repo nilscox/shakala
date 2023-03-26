@@ -22,6 +22,10 @@ export class Database {
     await this.waitForDatabaseConnection(this.orm);
   }
 
+  async close() {
+    await this.orm?.close(true);
+  }
+
   private async waitForDatabaseConnection(orm: Orm) {
     const start = new Date().getTime();
     const elapsed = () => new Date().getTime() - start;

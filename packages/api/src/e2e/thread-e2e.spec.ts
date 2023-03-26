@@ -123,7 +123,6 @@ describe('[e2e] thread', () => {
     await test.createUser();
     await test.createThread();
     await test.createComment('userId');
-    await new Promise((r) => setTimeout(r, 500));
     await test.createReply();
 
     await waitFor(async () => {
@@ -174,6 +173,8 @@ class Test extends E2ETest {
         keywords: [],
       })
     );
+
+    await new Promise((r) => setTimeout(r, 100));
   }
 
   async createComment(authorId = 'authorId') {
@@ -185,6 +186,8 @@ class Test extends E2ETest {
         text: '',
       })
     );
+
+    await new Promise((r) => setTimeout(r, 100));
   }
 
   async createReply() {
@@ -197,6 +200,8 @@ class Test extends E2ETest {
         text: '',
       })
     );
+
+    await new Promise((r) => setTimeout(r, 100));
   }
 
   async getNotifications() {

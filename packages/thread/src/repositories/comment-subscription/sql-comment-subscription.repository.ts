@@ -1,4 +1,11 @@
-import { SqlComment, SqlCommentSubscription, SqlRepository, SqlUser } from '@shakala/persistence';
+import {
+  PERSISTENCE_TOKENS,
+  SqlComment,
+  SqlCommentSubscription,
+  SqlRepository,
+  SqlUser,
+} from '@shakala/persistence';
+import { injected } from 'brandi';
 
 import { CommentSubscription } from '../../entities/comment-subscription.entity';
 
@@ -40,3 +47,5 @@ export class SqlCommentSubscriptionRepository
     }
   }
 }
+
+injected(SqlCommentSubscriptionRepository, PERSISTENCE_TOKENS.database);

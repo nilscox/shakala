@@ -19,6 +19,7 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
   afterEach(async () => {
     await test?.cleanup?.();
     await test?.server.close();
+    await test?.database.close();
     await test?.emails.clear();
     await application.close();
   });
@@ -34,11 +35,11 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
       api: { server: 'test' },
     });
 
-    await container.get(PERSISTENCE_TOKENS.database).reset();
     await application.init();
 
     test = new TestClass();
 
+    await test.init();
     await test.arrange?.();
 
     return test;
@@ -52,6 +53,11 @@ export interface E2ETest {
 
 export abstract class E2ETest {
   emails = new MailDevAdapter();
+
+  async init() {
+    await this.database.init();
+    await this.database.reset();
+  }
 
   get = container.get.bind(container);
 

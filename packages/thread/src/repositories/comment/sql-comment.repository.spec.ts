@@ -20,8 +20,18 @@ describe('SqlCommentRepository', () => {
     const user = await test.create.user();
     const { thread } = await test.createThread();
 
-    const comment = create.comment({ authorId: user.id, threadId: thread.id });
-    const reply = create.comment({ authorId: user.id, threadId: thread.id, parentId: comment.id });
+    const comment = create.comment({
+      authorId: user.id,
+      threadId: thread.id,
+      messages: [create.message({ authorId: user.id, text: create.markdown('comment') })],
+    });
+
+    const reply = create.comment({
+      authorId: user.id,
+      threadId: thread.id,
+      parentId: comment.id,
+      messages: [create.message({ authorId: user.id, text: create.markdown('reply') })],
+    });
 
     await test.repository.save(comment);
     await test.repository.save(reply);
