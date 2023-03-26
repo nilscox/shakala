@@ -5,6 +5,7 @@ import { createOrm, EM, Orm } from './create-orm';
 import { Database } from './database';
 import {
   SqlComment,
+  SqlCommentReport,
   SqlMessage,
   SqlNotification,
   SqlReaction,
@@ -101,6 +102,14 @@ export class SqlFactories {
     };
   }
 
+  comment = this.factory(SqlComment, {
+    parent: null,
+  });
+
+  commentReport = this.factory(SqlCommentReport, {
+    reason: null,
+  });
+
   user = this.factory(SqlUser, {
     nick: '',
     email: '',
@@ -117,10 +126,6 @@ export class SqlFactories {
     description: '',
     keywords: [],
     text: '',
-  });
-
-  comment = this.factory(SqlComment, {
-    parent: null,
   });
 
   message = this.factory(SqlMessage, {

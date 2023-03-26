@@ -25,7 +25,6 @@ describe('SqlCommentRepository', () => {
     await test.repository.save(comment);
     await test.repository.save(reply);
 
-    await test.repository.findById(comment.id);
     await expect(test.repository.findById(comment.id)).toResolve(comment);
     await expect(test.repository.findById(reply.id)).toResolve(reply);
   });

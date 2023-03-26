@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 
 import {
   SqlComment,
+  SqlCommentReport,
   SqlMessage,
   SqlNotification,
   SqlReaction,
@@ -25,7 +26,16 @@ dotenv.config({
 export default defineConfig<PostgreSqlDriver>({
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
-  entities: [SqlComment, SqlMessage, SqlNotification, SqlReaction, SqlThread, SqlUser, SqlUserActivity],
+  entities: [
+    SqlComment,
+    SqlCommentReport,
+    SqlMessage,
+    SqlNotification,
+    SqlReaction,
+    SqlThread,
+    SqlUser,
+    SqlUserActivity,
+  ],
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

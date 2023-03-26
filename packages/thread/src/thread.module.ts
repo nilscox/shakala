@@ -15,8 +15,10 @@ import { GetLastThreadsHandler } from './queries/get-last-threads';
 import { GetThreadHandler } from './queries/get-thread';
 import { FilesystemCommentRepository } from './repositories/comment/filesystem-comment.repository';
 import { InMemoryCommentRepository } from './repositories/comment/in-memory-comment.repository';
+import { SqlCommentRepository } from './repositories/comment/sql-comment.repository';
 import { FilesystemCommentReportRepository } from './repositories/comment-report/filesystem-comment-report.repository';
 import { InMemoryCommentReportRepository } from './repositories/comment-report/in-memory-comment-report.repository';
+import { SqlCommentReportRepository } from './repositories/comment-report/sql-comment-report.repository';
 import { FilesystemCommentSubscriptionRepository } from './repositories/comment-subscription/filesystem-comment-subscription.repository';
 import { InMemoryCommentSubscriptionRepository } from './repositories/comment-subscription/in-memory-comment-subscription.repository';
 import { FilesystemReactionRepository } from './repositories/reaction/filesystem-reaction.repository';
@@ -46,11 +48,11 @@ export class ThreadModule extends Module {
       this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository, false);
     } else {
-      this.bindToken(THREAD_TOKENS.repositories.threadRepository, SqlThreadRepository, true);
-      this.bindToken(THREAD_TOKENS.repositories.commentRepository, FilesystemCommentRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.threadRepository, SqlThreadRepository);
+      this.bindToken(THREAD_TOKENS.repositories.commentRepository, SqlCommentRepository);
       this.bindToken(THREAD_TOKENS.repositories.reactionRepository, FilesystemReactionRepository, false);
       this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, FilesystemCommentSubscriptionRepository, false);
-      this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, FilesystemCommentReportRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, SqlCommentReportRepository);
     }
 
     this.bindToken(THREAD_TOKENS.commands.createThreadHandler, CreateThreadHandler);
