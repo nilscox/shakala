@@ -6,10 +6,11 @@ import { GetNotificationsCountHandler } from './queries/get-notifications-count'
 import { ListUserNotificationsHandler } from './queries/list-user-notifications';
 import { FilesystemNotificationRepository } from './repositories/file-system-notification.repository';
 import { InMemoryNotificationRepository } from './repositories/in-memory-notification.repository';
+import { SqlNotificationRepository } from './repositories/sql-notification.repository';
 import { NOTIFICATION_TOKENS } from './tokens';
 
 type NotificationModuleConfig = {
-  repositories: 'memory' | 'filesystem';
+  repositories: 'memory' | 'filesystem' | 'sql';
 };
 
 export class NotificationModule extends Module {
@@ -20,12 +21,14 @@ export class NotificationModule extends Module {
         InMemoryNotificationRepository,
         false
       );
-    } else {
+    } else if (config.repositories === 'filesystem') {
       this.bindToken(
         NOTIFICATION_TOKENS.repositories.notificationRepository,
         FilesystemNotificationRepository,
         false
       );
+    } else {
+      this.bindToken(NOTIFICATION_TOKENS.repositories.notificationRepository, SqlNotificationRepository);
     }
 
     this.bindToken(NOTIFICATION_TOKENS.commands.markNotificationAsSeenHandler, MarkNotificationAsSeenHandler);

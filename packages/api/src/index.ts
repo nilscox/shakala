@@ -18,7 +18,7 @@ async function main() {
   const application = new Application({
     common: { logger: 'console', buses: 'local', generator: 'nanoid' },
     email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
-    notification: { repositories: 'filesystem' },
+    notification: { repositories: 'sql' },
     persistence: { useDatabase: true },
     thread: { repositories: 'sql' },
     user: { repositories: 'sql', profileImage: 'gravatar' },

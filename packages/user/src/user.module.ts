@@ -35,8 +35,8 @@ export class UserModule extends Module {
       // prettier-ignore
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
     } else {
-      this.bindToken(USER_TOKENS.repositories.userRepository, SqlUserRepository, true);
-      this.bindToken(USER_TOKENS.repositories.userActivityRepository, SqlUserActivityRepository, false);
+      this.bindToken(USER_TOKENS.repositories.userRepository, SqlUserRepository);
+      this.bindToken(USER_TOKENS.repositories.userActivityRepository, SqlUserActivityRepository);
     }
 
     if (config.profileImage === 'stub') {

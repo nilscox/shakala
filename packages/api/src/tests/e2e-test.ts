@@ -27,7 +27,7 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
     application = new Application({
       common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
       email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
-      notification: { repositories: 'filesystem' },
+      notification: { repositories: 'sql' },
       persistence: { useDatabase: true, allowGlobalContext: true, dbName: 'tests' },
       thread: { repositories: 'sql' },
       user: { repositories: 'sql', profileImage: 'gravatar' },

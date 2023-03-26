@@ -3,7 +3,15 @@ import { afterEach } from 'vitest';
 
 import { createOrm, EM, Orm } from './create-orm';
 import { Database } from './database';
-import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser, SqlUserActivity } from './entities';
+import {
+  SqlComment,
+  SqlMessage,
+  SqlNotification,
+  SqlReaction,
+  SqlThread,
+  SqlUser,
+  SqlUserActivity,
+} from './entities';
 
 export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: ClassType<Test>) => {
   let orm: Orm;
@@ -117,6 +125,11 @@ export class SqlFactories {
 
   message = this.factory(SqlMessage, {
     text: '',
+  });
+
+  notification = this.factory(SqlNotification, {
+    type: '',
+    payload: null,
   });
 
   reaction = this.factory(SqlReaction, {
