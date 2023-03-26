@@ -1,11 +1,13 @@
 import { EntityFactory, randomId, Timestamp, ValueObjectFactory } from '@shakala/common';
 
 import { Nick } from './entities/nick.value-object';
+import { UserActivity, UserActivityType } from './entities/user-activity.entity';
 import { User } from './entities/user.entity';
 
 type Factories = {
   nick: ValueObjectFactory<Nick>;
   user: EntityFactory<User>;
+  userActivity: EntityFactory<UserActivity>;
 };
 
 export const create: Factories = {
@@ -20,6 +22,17 @@ export const create: Factories = {
       hashedPassword: '',
       nick: this.nick(),
       signupDate: new Timestamp(0),
+      ...props,
+    });
+  },
+
+  userActivity(props) {
+    return new UserActivity({
+      id: randomId(),
+      type: UserActivityType.signUp,
+      date: new Timestamp(0),
+      userId: '',
+      payload: undefined,
       ...props,
     });
   },

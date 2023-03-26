@@ -6,7 +6,7 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import dotenv from 'dotenv';
 
-import { SqlComment, SqlMessage, SqlThread, SqlUser, SqlReaction } from './entities';
+import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser, SqlUserActivity } from './entities';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -17,7 +17,7 @@ dotenv.config({
 export default defineConfig<PostgreSqlDriver>({
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
-  entities: [SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser],
+  entities: [SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser, SqlUserActivity],
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

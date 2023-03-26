@@ -17,6 +17,7 @@ import { InMemoryUserRepository } from './repositories/user/in-memory-user.repos
 import { SqlUserRepository } from './repositories/user/sql-user.repository';
 import { FilesystemUserActivityRepository } from './repositories/user-activity/file-system-user-activity.repository';
 import { InMemoryUserActivityRepository } from './repositories/user-activity/in-memory-user-activity.repository';
+import { SqlUserActivityRepository } from './repositories/user-activity/sql-user-activity.repository';
 import { USER_TOKENS } from './tokens';
 
 type ThreadModuleConfig = {
@@ -35,8 +36,7 @@ export class UserModule extends Module {
       this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
     } else {
       this.bindToken(USER_TOKENS.repositories.userRepository, SqlUserRepository, true);
-      // prettier-ignore
-      this.bindToken(USER_TOKENS.repositories.userActivityRepository, FilesystemUserActivityRepository, false);
+      this.bindToken(USER_TOKENS.repositories.userActivityRepository, SqlUserActivityRepository, false);
     }
 
     if (config.profileImage === 'stub') {

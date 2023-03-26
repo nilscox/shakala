@@ -3,7 +3,7 @@ import { afterEach } from 'vitest';
 
 import { createOrm, EM, Orm } from './create-orm';
 import { Database } from './database';
-import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser } from './entities';
+import { SqlComment, SqlMessage, SqlReaction, SqlThread, SqlUser, SqlUserActivity } from './entities';
 
 export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: ClassType<Test>) => {
   let orm: Orm;
@@ -98,6 +98,11 @@ export class SqlFactories {
     email: '',
     hashedPassword: '',
     emailValidationToken: null,
+  });
+
+  userActivity = this.factory(SqlUserActivity, {
+    type: '',
+    payload: null,
   });
 
   thread = this.factory(SqlThread, {

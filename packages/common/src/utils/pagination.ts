@@ -17,6 +17,10 @@ export class Pagination {
     return new Pagination(data.page, data.pageSize);
   }
 
+  static firstPage(pageSize = 10) {
+    return new Pagination(1, pageSize);
+  }
+
   get limit() {
     return this.pageSize;
   }
