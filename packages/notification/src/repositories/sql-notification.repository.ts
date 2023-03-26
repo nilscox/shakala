@@ -1,8 +1,7 @@
 import { Pagination, Timestamp } from '@shakala/common';
 import { FindOptions, SqlNotification, SqlRepository, SqlUser } from '@shakala/persistence';
 
-import { NotificationPayloadMap } from '..';
-import { Notification, NotificationType } from '../entities/notification.entity';
+import { Notification, NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
 import { GetNotificationsCountResult } from '../queries/get-notifications-count';
 import { ListUserNotificationsResult } from '../queries/list-user-notifications';
 

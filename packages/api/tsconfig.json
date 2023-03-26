@@ -10,6 +10,8 @@
   ],
   "include": ["src/**/*.ts"],
   "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
     "rootDir": "./src",
     "outDir": "./dist",
     "lib": ["DOM"]

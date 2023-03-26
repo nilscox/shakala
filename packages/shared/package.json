@@ -4,11 +4,11 @@
   "type": "module",
   "exports": {
     ".": {
-      "node": "./src/index.ts",
+      "node": "./dist/index.js",
       "default": "./lib/index.js"
     }
   },
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf lib dist tsconfig.tsbuildinfo",
     "build": "tsc",

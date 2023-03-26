@@ -1,10 +1,7 @@
 import expect, { assertion, AssertionFailed } from '@nilscox/expect';
 import { Stub } from '@shakala/shared';
-import { assert } from 'vitest';
 
 import { StubEventPublisher } from './utils/stub-event-publisher';
-
-export { expect };
 
 // todo: this doesn't feel right
 const assertions: Record<string, unknown> = expect._assertions;
@@ -106,7 +103,7 @@ expect.addAssertion({
   },
 
   getMessage(error) {
-    assert(Array.isArray(error.actual));
+    expect.assert(Array.isArray(error.actual));
 
     const events = error.actual
       .map((value) => this.formatValue(value))

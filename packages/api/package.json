@@ -3,13 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "tsc -b",
     "start": "pnpm ts-node src/index.ts",
-    "dev": "pnpm nodemon -w '../*/src/**/*' -e ts -x 'pnpm start'",
+    "dev": "pnpm nodemon",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 vitest"
   },
   "nodemonConfig": {
-    "watch": "src",
+    "watch": "..",
     "ext": "ts"
   },
   "dependencies": {
