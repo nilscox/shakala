@@ -18,10 +18,13 @@ export default defineConfig({
     sourcemap: true,
   },
   test: {
+    watch: false,
     reporters: ['verbose'],
     environment: 'happy-dom',
-    setupFiles: [path.join('src', 'utils', 'vitest.setup.ts')],
-    watch: false,
+    setupFiles: [
+      path.join('..', 'shared', 'src', 'vitest.setup.ts'),
+      path.join('src', 'utils', 'vitest.setup.ts'),
+    ],
     deps: {
       registerNodeLoader: true,
     },

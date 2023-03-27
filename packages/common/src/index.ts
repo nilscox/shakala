@@ -1,3 +1,8 @@
+import './expect';
+
+export { CommonModule } from './common.module';
+export * from './tokens';
+
 export * from './cqs/command';
 export * from './cqs/command-handler';
 export * from './cqs/event-handler';
@@ -47,9 +52,6 @@ export * from './ddd/value-object';
 
 export * from './entities/timestamp.value-object';
 
-export * from './expect';
-export * from './tokens';
-
 export * from './types/class-type';
 export * from './types/factory';
 
@@ -61,5 +63,3 @@ export * from './utils/pagination';
 export * from './utils/random-id';
 export * from './utils/repository';
 export * from './utils/stub-event-publisher';
-
-export { CommonModule } from './common.module';

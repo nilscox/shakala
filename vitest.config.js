@@ -13,7 +13,7 @@ export default defineConfig({
     watch: false,
     testTimeout: 2000,
     threads: false,
-    setupFiles: packageSource('common', 'vitest.setup.ts'),
+    setupFiles: [packageSource('shared', 'vitest.setup.ts'), packageSource('common', 'vitest.setup.ts')],
     reporters: ['verbose'],
     alias: {
       '@shakala/common': packageSource('common'),
