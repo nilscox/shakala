@@ -1,14 +1,14 @@
-import { AnyFunction, Methods } from '@shakala/shared';
+import { AnyFunction } from '@shakala/shared';
 
 import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 import { Query } from '../app/page-context';
 
 import { assert } from './assert';
 
-export type PrefetchQuery = <Adapter extends object, Method extends keyof Methods<Adapter>>(
+export type PrefetchQuery = <Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
   adapter: Adapter,
   method: Method,
-  ...params: Adapter[Method] extends AnyFunction ? Parameters<Adapter[Method]> : never
+  ...params: Parameters<Adapter[Method]>
 ) => Query;
 
 export const prefetchQuery: PrefetchQuery = (adapter, method, ...params) => {
