@@ -1,11 +1,13 @@
 import { CreateThreadBody, Maybe, ThreadDto } from '@shakala/shared';
 
 import { ValidationErrors } from '../../../utils/validation-errors';
-import { ApiAdapter } from '../api-adapter';
+import { HttpPort } from '../../http/http.port';
 
 import { ThreadFormFields, ThreadPort } from './thread.port';
 
-export class ApiThreadAdapter extends ApiAdapter implements ThreadPort {
+export class ApiThreadAdapter implements ThreadPort {
+  constructor(protected readonly http: HttpPort) {}
+
   async getLastThreads(count: number): Promise<ThreadDto[]> {
     const response = await this.http.get<ThreadDto[]>('/thread', { search: { count } });
     return response.body;

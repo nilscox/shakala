@@ -5,14 +5,8 @@ export class FetchHttpAdapter implements HttpPort {
 
   constructor(private readonly baseUrl = '', private readonly fetch = globalThis.fetch.bind(globalThis)) {}
 
-  withToken(token: string | undefined): HttpPort {
-    const http = new FetchHttpAdapter(this.baseUrl, this.fetch);
-
-    if (token) {
-      http.headers.set('cookie', `token=${token}`);
-    }
-
-    return http;
+  setToken(token: string) {
+    this.headers.set('cookie', `token=${token}`);
   }
 
   async get<ResponseBody>(

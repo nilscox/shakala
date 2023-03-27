@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node src/server.ts",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
-    "test": "NODE_NO_WARNINGS=1 vitest",
+    "test": "NODE_NO_WARNINGS=1 NODE_ENV=test vitest",
     "storybook": "storybook dev -p 6006 --ci",
     "bulid-storybook": "storybook build"
   },
@@ -60,6 +60,7 @@
     "@storybook/react": "7.0.0-rc.5",
     "@testing-library/dom": "^9.0.1",
     "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/node": "^18.14.1",
     "@types/sinon": "^10.0.13",
     "eslint-plugin-jsx-a11y": "^6.7.1",

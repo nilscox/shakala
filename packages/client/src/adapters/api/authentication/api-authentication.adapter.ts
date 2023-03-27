@@ -1,10 +1,12 @@
 import { SignInBody, SignUpBody, UserDto } from '@shakala/shared';
 
-import { ApiAdapter } from '../api-adapter';
+import { HttpPort } from '../../http/http.port';
 
 import { AuthenticationPort } from './authentication.port';
 
-export class ApiAuthenticationAdapter extends ApiAdapter implements AuthenticationPort {
+export class ApiAuthenticationAdapter implements AuthenticationPort {
+  constructor(protected readonly http: HttpPort) {}
+
   async getAuthenticatedUser(): Promise<UserDto | undefined> {
     const response = await this.http.get<UserDto | undefined>('/account', {
       onError(error) {

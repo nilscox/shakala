@@ -1,11 +1,11 @@
 import { AnyFunction, Methods } from '@shakala/shared';
 
-import { ApiAdapter } from '../adapters/api/api-adapter';
+import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 import { Query } from '../app/page-context';
 
 import { assert } from './assert';
 
-export type PrefetchQuery = <Adapter extends ApiAdapter, Method extends keyof Methods<Adapter>>(
+export type PrefetchQuery = <Adapter extends object, Method extends keyof Methods<Adapter>>(
   adapter: Adapter,
   method: Method,
   ...params: Adapter[Method] extends AnyFunction ? Parameters<Adapter[Method]> : never
@@ -16,12 +16,16 @@ export const prefetchQuery: PrefetchQuery = (adapter, method, ...params) => {
     const key = [adapter.constructor.name, method, params];
 
     await queryClient.prefetchQuery(key, async () => {
-      const adapterWithToken = adapter.withToken(token);
-      const cb = adapterWithToken[method as keyof typeof adapterWithToken];
+      const http = new FetchHttpAdapter('http://localhost:8000/api');
 
+      if (token) {
+        http.setToken(token);
+      }
+
+      const cb = adapter[method];
       assert(typeof cb === 'function');
 
-      return cb.call(adapterWithToken, ...params);
+      return cb.call({ ...adapter, http }, ...params);
     });
   };
 };

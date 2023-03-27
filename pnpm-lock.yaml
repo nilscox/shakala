@@ -112,6 +112,7 @@ importers:
       '@tailwindcss/typography': ^0.5.9
       '@testing-library/dom': ^9.0.1
       '@testing-library/react': ^14.0.0
+      '@testing-library/user-event': ^14.4.3
       '@types/compression': ^1.7.2
       '@types/cookie-parser': ^1.4.3
       '@types/diff': ^5.0.2
@@ -208,6 +209,7 @@ importers:
       '@storybook/react': 7.0.0-rc.5_ygqkwb4gg3aean7xjfdauovyqq
       '@testing-library/dom': 9.0.1
       '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
+      '@testing-library/user-event': 14.4.3_@testing-library+dom@9.0.1
       '@types/node': 18.14.2
       '@types/sinon': 10.0.13
       eslint-plugin-jsx-a11y: 6.7.1
@@ -3811,6 +3813,15 @@ packages:
       '@types/react-dom': 18.0.11
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: true
+
+  /@testing-library/user-event/14.4.3_@testing-library+dom@9.0.1:
+    resolution: {integrity: sha512-kCUc5MEwaEMakkO5x7aoD+DLi02ehmEM2QCGWvNqAS1dV/fAvORWEjnjsEIvml59M7Y5kCkWN6fCCyPOe8OL6Q==}
+    engines: {node: '>=12', npm: '>=6'}
+    peerDependencies:
+      '@testing-library/dom': '>=7.21.4'
+    dependencies:
+      '@testing-library/dom': 9.0.1
     dev: true
 
   /@ts-morph/common/0.18.1:

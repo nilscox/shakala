@@ -26,8 +26,6 @@ export class HttpError extends Error {
 }
 
 export interface HttpPort {
-  withToken(token: string | undefined): HttpPort;
-
   get<ResponseBody = unknown>(
     path: string,
     options?: RequestOptions<ResponseBody>

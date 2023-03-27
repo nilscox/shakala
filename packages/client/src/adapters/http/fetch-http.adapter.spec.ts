@@ -115,9 +115,11 @@ describe('FetchHttpAdapter', () => {
     expect(response.body).toEqual('result');
   });
 
-  it('clones the http adapter instance with a given token', async () => {
+  it('performs an HTTP request with a token', async () => {
     const fetch = mockFetch();
-    const adapter = new FetchHttpAdapter(undefined, fetch).withToken('value');
+    const adapter = new FetchHttpAdapter(undefined, fetch);
+
+    adapter.setToken('value');
 
     await expect(adapter.get('/')).toResolve();
 
