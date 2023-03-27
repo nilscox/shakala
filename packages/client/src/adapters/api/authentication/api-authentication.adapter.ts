@@ -1,4 +1,7 @@
 import { SignInBody, SignUpBody, UserDto } from '@shakala/shared';
+import { injected } from 'brandi';
+
+import { TOKENS } from '~/app/tokens';
 
 import { HttpPort } from '../../http/http.port';
 
@@ -36,3 +39,5 @@ export class ApiAuthenticationAdapter implements AuthenticationPort {
     });
   }
 }
+
+injected(ApiAuthenticationAdapter, TOKENS.http);

@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 
-import { controls } from '../../utils/storybook';
+import { controls } from '~/utils/storybook';
+
 import { Button } from '../button';
 
 type Args = {

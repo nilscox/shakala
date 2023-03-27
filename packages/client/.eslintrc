@@ -1,0 +1,39 @@
+{
+  "root": true,
+
+  "extends": [
+    "../../.eslintrc.js",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+
+  "plugins": ["react", "react-hooks", "jsx-a11y", "tailwindcss"],
+
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "tailwindcss": {
+      "config": "tailwind.config.cjs"
+    }
+  },
+
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "tailwindcss/no-arbitrary-value": "warn",
+    "jsx-a11y/click-events-have-key-events": "off"
+  },
+
+  "overrides": [
+    {
+      "files": ["*.stories.tsx", "src/utils/storybook.tsx"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "off"
+      }
+    }
+  ]
+}

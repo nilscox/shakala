@@ -91,7 +91,7 @@ const getError = (error?: unknown, errorsMap?: Record<string, ReactNode>) => {
 };
 
 type FieldErrorProps = {
-  id: string;
+  id?: string;
   className?: string;
   error: string;
   errorsMap?: Record<string, React.ReactNode>;

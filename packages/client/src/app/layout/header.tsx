@@ -1,11 +1,11 @@
 import { clsx } from 'clsx';
 
-import { di } from '../../di';
 import { Avatar } from '../../elements/avatar/avatar';
 import { Chip } from '../../elements/chip';
 import { Link, NavLink, SearchParamLink } from '../../elements/link';
 import { useQuery } from '../../hooks/use-query';
 import Logo from '../../images/logo.svg';
+import { TOKENS } from '../tokens';
 
 type HeaderProps = {
   className?: string;
@@ -35,7 +35,7 @@ const Heading = () => (
 );
 
 const Authentication = () => {
-  const user = useQuery(di.authentication, 'getAuthenticatedUser');
+  const user = useQuery(TOKENS.authentication, 'getAuthenticatedUser');
 
   const getNick = () => {
     if (!user) {

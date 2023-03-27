@@ -1,4 +1,7 @@
 import { AnyFunction } from '@shakala/shared';
+import { Token } from 'brandi';
+
+import { container } from '~/app/container';
 
 import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 import { Query } from '../app/page-context';
@@ -6,13 +9,14 @@ import { Query } from '../app/page-context';
 import { assert } from './assert';
 
 export type PrefetchQuery = <Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
-  adapter: Adapter,
+  adapterToken: Token<Adapter>,
   method: Method,
   ...params: Parameters<Adapter[Method]>
 ) => Query;
 
-export const prefetchQuery: PrefetchQuery = (adapter, method, ...params) => {
+export const prefetchQuery: PrefetchQuery = (adapterToken, method, ...params) => {
   return async (queryClient, token) => {
+    const adapter = container.get(adapterToken);
     const key = [adapter.constructor.name, method, params];
 
     await queryClient.prefetchQuery(key, async () => {

@@ -1,12 +1,12 @@
+import { useInjection } from 'brandi-react';
 import { useForm } from 'react-hook-form';
-import { navigate } from 'vite-plugin-ssr/client/router';
 
-import { ThreadFormFields } from '../../adapters/api/thread/thread.port';
-import { di } from '../../di';
-import { SubmitButton } from '../../elements/button';
-import { FormField } from '../../elements/form-field';
-import { Input } from '../../elements/input';
-import { useSubmit } from '../../hooks/use-submit';
+import { ThreadFormFields } from '~/adapters/api/thread/thread.port';
+import { TOKENS } from '~/app/tokens';
+import { SubmitButton } from '~/elements/button';
+import { FormField } from '~/elements/form-field';
+import { Input } from '~/elements/input';
+import { useSubmit } from '~/hooks/use-submit';
 
 export const ThreadForm = () => {
   const form = useForm<ThreadFormFields>({
@@ -17,8 +17,11 @@ export const ThreadForm = () => {
     },
   });
 
-  const handleSubmit = useSubmit(form, (data) => di.thread.createThread(data), {
-    onSuccess: (threadId) => void navigate(`/discussions/${threadId}`),
+  const router = useInjection(TOKENS.router);
+  const thread = useInjection(TOKENS.thread);
+
+  const handleSubmit = useSubmit(form, (data) => thread.createThread(data), {
+    onSuccess: (threadId) => router.navigate(`/discussions/${threadId}`),
   });
 
   return (

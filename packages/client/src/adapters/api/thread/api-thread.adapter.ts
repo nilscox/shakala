@@ -1,4 +1,7 @@
 import { CreateThreadBody, Maybe, ThreadDto } from '@shakala/shared';
+import { injected } from 'brandi';
+
+import { TOKENS } from '~/app/tokens';
 
 import { ValidationErrors } from '../../../utils/validation-errors';
 import { HttpPort } from '../../http/http.port';
@@ -42,3 +45,5 @@ export class ApiThreadAdapter implements ThreadPort {
     return response.body;
   }
 }
+
+injected(ApiThreadAdapter, TOKENS.http);

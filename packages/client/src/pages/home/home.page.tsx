@@ -1,4 +1,5 @@
-import { di } from '../../di';
+import { TOKENS } from '~/app/tokens';
+
 import { AvatarNick } from '../../elements/avatar/avatar-nick';
 import { Link } from '../../elements/link';
 import { useSnackbar } from '../../elements/snackbar';
@@ -16,12 +17,13 @@ import imageModeration from '../../images/moderation.png';
 import { prefetchQuery } from '../../utils/prefetch-query';
 import { withSuspense } from '../../utils/with-suspense';
 
-export const queries = [prefetchQuery(di.thread, 'getLastThreads', 3)];
+export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 3)];
 
 export { HomePage as Page };
 
 const HomePage = () => {
   const snackbar = useSnackbar();
+  void snackbar;
 
   // useEmailValidationNotification(snackbar.success, snackbar.error);
 
@@ -68,7 +70,7 @@ const Heading = ({ id, children }: HeadingProps) => (
 );
 
 const LastThreads = withSuspense(() => {
-  const threads = useQuery(di.thread, 'getLastThreads', 3);
+  const threads = useQuery(TOKENS.thread, 'getLastThreads', 3);
 
   if (threads.length === 0) {
     return null;

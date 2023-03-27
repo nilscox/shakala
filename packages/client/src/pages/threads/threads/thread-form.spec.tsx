@@ -1,21 +1,17 @@
 import expect from '@nilscox/expect';
-import { stub, StubOf } from '@shakala/shared';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { navigate } from 'vite-plugin-ssr/client/router';
-import { afterEach, beforeEach, describe, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it } from 'vitest';
 
-import { StubAuthenticationAdapter } from '../../adapters/api/authentication/stub-authentication.adapter';
-import { StubThreadAdapter } from '../../adapters/api/thread/stub-thread.adapter';
-import { di } from '../../di';
-import { ValidationErrors } from '../../utils/validation-errors';
+import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-authentication.adapter';
+import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
+import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
+import { container } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
+import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
-
-vi.mock('vite-plugin-ssr/client/router', () => ({
-  navigate: stub(),
-}));
 
 describe('ThreadForm', () => {
   const fields = {
@@ -25,14 +21,14 @@ describe('ThreadForm', () => {
     submit: () => screen.getByRole('button', { name: 'Créer' }),
   };
 
+  const router = new StubRouterAdapter();
   const authenticationAdapter = new StubAuthenticationAdapter();
   const threadAdapter = new StubThreadAdapter();
 
   beforeEach(() => {
-    Object.assign(di, {
-      authentication: authenticationAdapter,
-      thread: threadAdapter,
-    });
+    container.bind(TOKENS.router).toConstant(router);
+    container.bind(TOKENS.authentication).toConstant(authenticationAdapter);
+    container.bind(TOKENS.thread).toConstant(threadAdapter);
   });
 
   afterEach(() => {
@@ -57,7 +53,7 @@ describe('ThreadForm', () => {
     await user.click(fields.submit());
 
     await waitFor(() => {
-      expect(navigate as StubOf<typeof navigate>).calledWith('/discussions/threadId');
+      expect(router.pathname).toEqual('/discussions/threadId');
     });
   });
 

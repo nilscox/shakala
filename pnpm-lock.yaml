@@ -158,6 +158,7 @@ importers:
       vite: ^4.1.4
       vite-plugin-ssr: ^0.4.94
       vite-plugin-svgr: ^2.4.0
+      vite-tsconfig-paths: ^4.0.7
       yup: ^1.0.0
     dependencies:
       '@fontsource/open-sans': 4.5.14
@@ -201,6 +202,7 @@ importers:
       vite: 4.1.4_@types+node@18.14.2
       vite-plugin-ssr: 0.4.94_vite@4.1.4
       vite-plugin-svgr: 2.4.0_vite@4.1.4
+      vite-tsconfig-paths: 4.0.7_vwvfc4ezh6jlf6pa67auy3eulu
       yup: 1.0.0
     devDependencies:
       '@nilscox/expect-dom': 0.3.3
@@ -6899,7 +6901,6 @@ packages:
 
   /globrex/0.1.2:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
-    dev: true
 
   /gopd/1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -10649,6 +10650,19 @@ packages:
       tsconfig-paths: 4.1.2
     dev: false
 
+  /tsconfck/2.1.1_typescript@4.9.5:
+    resolution: {integrity: sha512-ZPCkJBKASZBmBUNqGHmRhdhM8pJYDdOXp4nRgj/O0JwUwsMq50lCDRQP/M5GBNAA0elPrq4gAeu4dkaVCuKWww==}
+    engines: {node: ^14.13.1 || ^16 || >=18}
+    hasBin: true
+    peerDependencies:
+      typescript: ^4.3.5 || ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 4.9.5
+    dev: false
+
   /tsconfig-paths/4.1.2:
     resolution: {integrity: sha512-uhxiMgnXQp1IR622dUXI+9Ehnws7i/y6xvpZB9IbUVOPy0muvdvgXeZOn88UcGPiT98Vp3rJPTa8bFoalZ3Qhw==}
     engines: {node: '>=6'}
@@ -11063,6 +11077,23 @@ packages:
     transitivePeerDependencies:
       - rollup
       - supports-color
+    dev: false
+
+  /vite-tsconfig-paths/4.0.7_vwvfc4ezh6jlf6pa67auy3eulu:
+    resolution: {integrity: sha512-MwIYaby6kcbQGZqMH+gAK6h0UYQGOkjsuAgw4q6bP/5vWkn8VKvnmLuCQHA2+IzHAJHnE8OFTO4lnJLFMf9+7Q==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      debug: 4.3.4
+      globrex: 0.1.2
+      tsconfck: 2.1.1_typescript@4.9.5
+      vite: 4.1.4_@types+node@18.14.2
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: false
 
   /vite/4.1.4:

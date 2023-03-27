@@ -1,5 +1,13 @@
 import { EnumType } from '@shakala/shared';
+import { action } from '@storybook/addon-actions';
 import { Decorator } from '@storybook/react';
+import { ContainerProvider, useInjection } from 'brandi-react';
+
+import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-authentication.adapter';
+import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
+import { RouterPort } from '~/adapters/router/router.port';
+import { container } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
 
 import { SnackbarProvider } from '../elements/snackbar';
 
@@ -14,6 +22,41 @@ export const snackbarDecorator: Decorator = (Story) => (
     <Story />
   </SnackbarProvider>
 );
+
+class StorybookRouterAdapter implements RouterPort {
+  navigate = action('navigate');
+}
+
+export const containerDecorator: Decorator = (Story) => {
+  container.bind(TOKENS.router).toInstance(StorybookRouterAdapter).inSingletonScope();
+  container.bind(TOKENS.authentication).toInstance(StubAuthenticationAdapter).inSingletonScope();
+  container.bind(TOKENS.thread).toInstance(StubThreadAdapter).inSingletonScope();
+
+  return (
+    <ContainerProvider container={container}>
+      <Story />
+    </ContainerProvider>
+  );
+};
+
+type StubApiAdapters = {
+  authentication: StubAuthenticationAdapter;
+  thread: StubThreadAdapter;
+};
+
+type ConfigureStory = (adapters: StubApiAdapters) => void;
+
+export const configureStory = (configure: ConfigureStory): Decorator => {
+  // eslint-disable-next-line react/display-name
+  return (Story) => {
+    configure({
+      authentication: useInjection(TOKENS.authentication),
+      thread: useInjection(TOKENS.thread),
+    } as StubApiAdapters);
+
+    return <Story />;
+  };
+};
 
 type NumberOptions = Partial<Record<'min' | 'max' | 'step', number>>;
 

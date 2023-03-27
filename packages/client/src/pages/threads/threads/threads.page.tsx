@@ -1,13 +1,15 @@
 import { first } from '@shakala/shared';
 
-import { di } from '../../../di';
+import { TOKENS } from '~/app/tokens';
+
 import { Link } from '../../../elements/link';
 import { useQuery } from '../../../hooks/use-query';
 import { prefetchQuery } from '../../../utils/prefetch-query';
 import { withSuspense } from '../../../utils/with-suspense';
-import { ThreadForm } from '../thread-form';
 
-export const queries = [prefetchQuery(di.thread, 'getLastThreads', 1)];
+import { ThreadForm } from './thread-form';
+
+export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 1)];
 
 export { ThreadsListPage as Page };
 
@@ -37,7 +39,7 @@ const ThreadsListPage = () => {
 };
 
 const ThreadLink = withSuspense(() => {
-  const thread = first(useQuery(di.thread, 'getLastThreads', 1));
+  const thread = first(useQuery(TOKENS.thread, 'getLastThreads', 1));
 
   if (!thread) {
     return null;

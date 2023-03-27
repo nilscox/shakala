@@ -1,6 +1,7 @@
 {
   "references": [{ "path": "../shared/tsconfig.json" }],
   "include": ["src/**/*"],
+  "files": [".storybook/preview.ts"],
 
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -13,7 +14,12 @@
     "sourceMap": true,
     "strict": true,
     "jsx": "react-jsx",
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@shakala/shared": ["../shared/src"],
+      "~/*": ["src/*"]
+    }
   },
 
   "ts-node": {

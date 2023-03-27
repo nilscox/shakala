@@ -2,15 +2,16 @@ import * as ReactDOMServer from 'react-dom/server';
 import { dehydrate, Hydrate } from 'react-query';
 import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
 
+import { TOKENS } from '~/app/tokens';
+
 import { AppProviders } from '../app/app-providers';
 import { Layout } from '../app/layout/layout';
 import type { PageContextServer } from '../app/page-context';
-import { di } from '../di';
 import { prefetchQuery } from '../utils/prefetch-query';
 
 export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
 
-const commonQueries = [prefetchQuery(di.authentication, 'getAuthenticatedUser')];
+const commonQueries = [prefetchQuery(TOKENS.authentication, 'getAuthenticatedUser')];
 
 export async function render(pageContext: PageContextServer) {
   const { Page, pageProps, exports, queryClient, token } = pageContext;

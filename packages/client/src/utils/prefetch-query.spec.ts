@@ -2,6 +2,9 @@ import expect from '@nilscox/expect';
 import { QueryClient } from 'react-query';
 import { describe, it } from 'vitest';
 
+import { container } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
+
 import { ApiThreadAdapter } from '../adapters/api/thread/api-thread.adapter';
 import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 
@@ -14,6 +17,8 @@ describe('prefetchQuery', () => {
     const http = new FetchHttpAdapter();
     const adapter = new ApiThreadAdapter(http);
 
+    container.bind(TOKENS.thread).toConstant(adapter);
+
     let headers: Headers | undefined;
 
     adapter.getThread = async function () {
@@ -22,7 +27,7 @@ describe('prefetchQuery', () => {
       return undefined;
     };
 
-    await prefetchQuery(adapter, 'getThread', '42')(client, 'token');
+    await prefetchQuery(TOKENS.thread, 'getThread', '42')(client, 'token');
 
     expect.assert(headers);
     expect(headers.get('cookie')).toEqual('token=token');
