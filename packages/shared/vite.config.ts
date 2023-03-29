@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: 'lib',
     lib: {
       entry: 'src/index.ts',
-      fileName: 'index.js',
+      fileName: 'index',
       formats: ['es'],
     },
     rollupOptions: {

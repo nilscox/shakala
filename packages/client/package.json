@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "clear": "rm -rf tsconfig.tsbuildinfo",
     "dev": "ts-node src/server.ts",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 NODE_ENV=test vitest",

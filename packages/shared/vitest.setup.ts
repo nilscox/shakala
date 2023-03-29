@@ -1,6 +1,22 @@
 import expect, { assertion, AssertionFailed } from '@nilscox/expect';
 
-import { Stub } from './utils/stub';
+import { Stub } from './src/utils/stub';
+
+declare global {
+  namespace Expect {
+    export interface StubAssertions extends FunctionAssertions<Stub<unknown, unknown[]>> {
+      called(): void;
+      calledWith<Args extends unknown[]>(...args: Args): void;
+    }
+
+    export interface Assertions extends StubAssertions {}
+
+    interface ExpectFunction {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      <Actual extends Stub<any, any[]>>(actual: Actual): ExpectResult<StubAssertions, Actual>;
+    }
+  }
+}
 
 // todo: this doesn't feel right
 const assertions: Record<string, unknown> = expect._assertions;

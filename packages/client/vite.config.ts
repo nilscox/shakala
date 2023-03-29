@@ -13,6 +13,8 @@ const plugins: PluginOption[] = isStorybook
   ? [tsconfigPaths(), svgr({ exportAsDefault: true })]
   : [tsconfigPaths(), react(), ssr(), svgr({ exportAsDefault: true })];
 
+const sharedVitestSetup = path.resolve('..', 'shared', 'vitest.setup.ts');
+
 export default defineConfig({
   plugins,
   build: {
@@ -22,10 +24,10 @@ export default defineConfig({
     watch: false,
     reporters: ['verbose'],
     environment: 'happy-dom',
-    setupFiles: [
-      path.join('..', 'shared', 'src', 'vitest.setup.ts'),
-      path.join('src', 'utils', 'vitest.setup.ts'),
-    ],
+    setupFiles: [sharedVitestSetup, path.join('src', 'utils', 'vitest.setup.ts')],
+    alias: {
+      '@shakala/shared/vitest.setup': sharedVitestSetup,
+    },
     deps: {
       registerNodeLoader: true,
     },

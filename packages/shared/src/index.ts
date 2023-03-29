@@ -1,5 +1,3 @@
-import './expect';
-
 export * from './dtos/thread.dto';
 export * from './dtos/user.dto';
 
