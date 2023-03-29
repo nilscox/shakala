@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 
 export const createCommentBodySchema = yup.object({
-  parentId: yup.string(),
   text: yup.string().required().trim().min(4).max(20000),
 });
 

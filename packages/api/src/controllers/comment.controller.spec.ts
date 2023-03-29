@@ -1,6 +1,13 @@
 import expect from '@nilscox/expect';
-import { EditCommentBody, ReactionType, ReportCommentBody, SetReactionBody } from '@shakala/shared';
 import {
+  CreateCommentBody,
+  EditCommentBody,
+  ReactionType,
+  ReportCommentBody,
+  SetReactionBody,
+} from '@shakala/shared';
+import {
+  createComment,
   editComment,
   getComment,
   GetCommentResult,
@@ -25,6 +32,7 @@ describe('[intg] CommentController', () => {
 
     const result: GetCommentResult = {
       id: 'commentId',
+      threadId: 'threadId',
       author: { id: 'authorId', nick: 'author', profileImage: 'profileImage' },
       text: 'text',
       date: 'date',
@@ -83,6 +91,53 @@ describe('[intg] CommentController', () => {
 
     it('fails with status 400 when the body is invalid', async () => {
       await expect(test.asUser.put(route, {})).toHaveStatus(400);
+    });
+  });
+
+  describe('POST /:commentId/reply', () => {
+    const route = '/comment/parentId/reply';
+
+    const body: CreateCommentBody = {
+      text: 'reply',
+    };
+
+    beforeEach(() => {
+      test.generator.nextId = 'replyId';
+      test.queryBus.on(getComment({ commentId: 'parentId' })).return({ threadId: 'threadId' });
+    });
+
+    it('invokes the createComment command', async () => {
+      await expect(test.asUser.post(route, body)).toHaveStatus(201);
+
+      expect(test.commandBus).toInclude(
+        createComment({
+          commentId: 'replyId',
+          threadId: 'threadId',
+          authorId: 'userId',
+          parentId: 'parentId',
+          text: 'reply',
+        })
+      );
+    });
+
+    it('returns the created id', async () => {
+      const response = await expect(test.asUser.post(route, body)).toHaveStatus(201);
+
+      expect(await response.text()).toEqual('replyId');
+    });
+
+    it('fails with status 404 when the parent comment does not exist', async () => {
+      test.queryBus.on(getComment({ commentId: 'parentId' })).return(undefined);
+
+      await expect(test.asUser.post(route, body)).toHaveStatus(404);
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().post(route, body)).toHaveStatus(401);
+    });
+
+    it('fails with status 400 when the body is invalid', async () => {
+      await expect(test.asUser.post(route, {})).toHaveStatus(400);
     });
   });
 

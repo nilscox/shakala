@@ -71,7 +71,7 @@ describe('[e2e] thread', () => {
     await test.createComment();
 
     await setReaction('commentId', ReactionType.upvote);
-    await createReply('threadId', 'commentId');
+    await createReply('commentId');
     await report('commentId');
 
     async function setReaction(commentId: string, type: ReactionType) {
@@ -82,13 +82,12 @@ describe('[e2e] thread', () => {
       await expect(agent.post(`/comment/${commentId}/reaction`, body)).toHaveStatus(204);
     }
 
-    async function createReply(threadId: string, parentId: string) {
+    async function createReply(parentId: string) {
       const body: CreateCommentBody = {
-        parentId,
         text: 'reply',
       };
 
-      await expect(agent.post(`/thread/${threadId}/comment`, body)).toHaveStatus(201);
+      await expect(agent.post(`/comment/${parentId}/reply`, body)).toHaveStatus(201);
     }
 
     async function report(commentId: string) {

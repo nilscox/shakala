@@ -156,6 +156,7 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
 
     return {
       id: sqlComment.id,
+      threadId: sqlComment.thread.id,
       author: {
         id: sqlComment.author.id,
         nick: sqlComment.author.nick,

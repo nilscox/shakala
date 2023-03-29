@@ -5,6 +5,8 @@ import { describe, it } from 'vitest';
 
 import { NodeMailerEmailSenderAdapter } from './node-mailer-email-sender.adapter';
 
+import '@shakala/shared/vitest.setup';
+
 describe('[unit] NodeMailerEmailSenderAdapter', () => {
   it('sends an email', async () => {
     const emailConfig: EmailConfig = {

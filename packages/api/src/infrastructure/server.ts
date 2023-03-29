@@ -78,8 +78,16 @@ export class Server {
     const start = Date.now();
 
     onFinished(res, (err, res) => {
+      const { userId } = req;
       const elapsed = Date.now() - start;
-      this.logger.verbose(req.method, req.originalUrl, res.statusCode, `(${elapsed}ms)`);
+
+      this.logger.verbose(
+        req.method,
+        req.originalUrl,
+        res.statusCode,
+        userId ? `as ${userId}` : 'unauthenticated',
+        `(${elapsed}ms)`
+      );
     });
 
     next();

@@ -1,8 +1,20 @@
 import assert from 'assert';
 
-import { CommandBus, EntityNotFoundError, QueryBus, TOKENS } from '@shakala/common';
-import { editCommentBodySchema, reportCommentBodySchema, setReactionBodySchema } from '@shakala/shared';
-import { editComment, getComment, reportComment, setCommentSubscription, setReaction } from '@shakala/thread';
+import { CommandBus, EntityNotFoundError, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
+import {
+  createCommentBodySchema,
+  editCommentBodySchema,
+  reportCommentBodySchema,
+  setReactionBodySchema,
+} from '@shakala/shared';
+import {
+  createComment,
+  editComment,
+  getComment,
+  reportComment,
+  setCommentSubscription,
+  setReaction,
+} from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -12,11 +24,16 @@ import { validateRequest } from '../infrastructure/validation';
 export class CommentController {
   public readonly router: Router = Router();
 
-  constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
+  constructor(
+    private readonly generator: GeneratorPort,
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus
+  ) {
     const guards = [isAuthenticated, hasWriteAccess];
 
     this.router.get('/:commentId', this.getComment);
     this.router.put('/:commentId', guards, this.editComment);
+    this.router.post('/:parentId/reply', guards, this.createReply);
     this.router.post('/:commentId/reaction', guards, this.setReaction);
     this.router.post('/:commentId/report', guards, this.report);
     this.router.post('/:commentId/subscribe', guards, this.subscribe);
@@ -47,6 +64,35 @@ export class CommentController {
 
     res.status(204);
     res.end();
+  };
+
+  createReply: RequestHandler<{ parentId: string }> = async (req, res) => {
+    assert(req.userId);
+
+    const body = await validateRequest(req).body(createCommentBodySchema);
+    const parentId = req.params.parentId;
+    const authorId = req.userId;
+
+    const parent = await this.queryBus.execute(getComment({ commentId: parentId }));
+
+    if (!parent) {
+      throw new EntityNotFoundError('Comment', { id: parentId });
+    }
+
+    const replyId = await this.generator.generateId();
+
+    await this.commandBus.execute(
+      createComment({
+        threadId: parent.threadId,
+        commentId: replyId,
+        authorId,
+        parentId,
+        ...body,
+      })
+    );
+
+    res.status(201);
+    res.send(replyId);
   };
 
   setReaction: RequestHandler<{ commentId: string }> = async (req, res) => {
@@ -100,4 +146,4 @@ export class CommentController {
   };
 }
 
-injected(CommentController, TOKENS.queryBus, TOKENS.commandBus);
+injected(CommentController, TOKENS.generator, TOKENS.queryBus, TOKENS.commandBus);

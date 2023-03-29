@@ -1,10 +1,14 @@
 import * as yup from 'yup';
 
+import { isEnumValue } from '../utils/is-enum-value';
+
 export enum CommentSort {
   dateAsc = 'date-asc',
   dateDesc = 'date-desc',
   relevance = 'relevance',
 }
+
+export const isCommentSort = isEnumValue(CommentSort);
 
 export const getLastThreadsQuerySchema = yup.object({
   count: yup.number().min(1).max(50).default(10),
@@ -17,7 +21,7 @@ export const getThreadQuerySchema = yup.object({
   search: yup.string().trim().max(30),
 });
 
-export type GetThreadQuery = yup.InferType<typeof getThreadQuerySchema>;
+export type GetThreadCommentsQuery = yup.InferType<typeof getThreadQuerySchema>;
 
 export const createThreadBodySchema = yup.object({
   description: yup.string().required().trim().min(4).max(60),

@@ -12,6 +12,7 @@ export type GetCommentQuery = {
 
 export type GetCommentResult = {
   id: string;
+  threadId: string;
   author: {
     id: string;
     nick: string;
@@ -31,7 +32,7 @@ export type GetCommentResult = {
   replies: Array<Omit<GetCommentResult, 'replies'>>;
 };
 
-export const getComment = queryCreator<GetCommentQuery, GetCommentResult>('getComment');
+export const getComment = queryCreator<GetCommentQuery, Maybe<GetCommentResult>>('getComment');
 
 export class GetCommentHandler implements QueryHandler<GetCommentQuery, Maybe<GetCommentResult>> {
   constructor(private readonly commentRepository: CommentRepository) {}
