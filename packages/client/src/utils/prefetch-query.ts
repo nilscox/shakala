@@ -2,8 +2,9 @@ import { AnyFunction } from '@shakala/shared';
 import { Token } from 'brandi';
 
 import { container } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
 
-import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
+import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 import { Query } from '../app/page-context';
 
 import { assert } from './assert';
@@ -15,13 +16,15 @@ export type PrefetchQuery = <Adapter extends Record<Method, AnyFunction>, Method
 ) => Query;
 
 export const prefetchQuery: PrefetchQuery = (adapterToken, method, ...params) => {
+  const http = container.get(TOKENS.http);
+
+  assert(http instanceof ApiFetchHttpAdapter, 'expected http to be instance of ApiFetchHttpAdapter');
+
   return async (queryClient, token) => {
     const adapter = container.get(adapterToken);
     const key = [adapter.constructor.name, method, params];
 
     await queryClient.prefetchQuery(key, async () => {
-      const http = new FetchHttpAdapter('http://localhost:8000/api');
-
       if (token) {
         http.setToken(token);
       }

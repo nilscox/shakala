@@ -7,10 +7,6 @@ export type MockHttpResponse = (response: Partial<HttpResponse>) => void;
 export class StubHttpAdapter implements HttpPort {
   private responses = new Map<Partial<HttpRequest>, Partial<HttpResponse>>();
 
-  withToken(): HttpPort {
-    throw new Error('Method not implemented.');
-  }
-
   mock(method: HttpMethod, url: string, options?: { body?: unknown }): MockHttpResponse {
     return (response) => this.responses.set({ method, url, body: options?.body }, response);
   }

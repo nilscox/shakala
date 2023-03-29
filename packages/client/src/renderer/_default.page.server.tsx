@@ -9,7 +9,7 @@ import { Layout } from '../app/layout/layout';
 import type { PageContextServer } from '../app/page-context';
 import { prefetchQuery } from '../utils/prefetch-query';
 
-export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
+export const passToClient = ['pageProps', 'routeParams', 'searchOriginal', 'dehydratedState'];
 
 const commonQueries = [prefetchQuery(TOKENS.authentication, 'getAuthenticatedUser')];
 

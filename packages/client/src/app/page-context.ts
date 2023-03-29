@@ -11,6 +11,7 @@ type PageContextCustom = {
   Page: Page;
   pageProps?: PageProps;
   routeParams: Record<string, string>;
+  searchOriginal: string;
   exports: {
     queries?: Query[];
   };

@@ -33,7 +33,7 @@ describe('FetchHttpAdapter', () => {
 
   it('performs an http request on a specific base url', async () => {
     const fetch = mockFetch();
-    const adapter = new FetchHttpAdapter('https://base.url', fetch);
+    const adapter = new FetchHttpAdapter('https://base.url/', fetch);
 
     await adapter.get('/');
 

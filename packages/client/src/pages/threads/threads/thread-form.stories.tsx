@@ -13,7 +13,6 @@ export const threadForm: StoryFn = () => <ThreadForm />;
 
 threadForm.decorators = [
   configureStory(({ thread }) => {
-    thread.createThread.delay = 1000;
     thread.createThread.resolve('threadId');
   }),
 ];

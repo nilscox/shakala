@@ -21,6 +21,8 @@
   },
 
   "rules": {
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "import/no-named-as-default": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",

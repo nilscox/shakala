@@ -1,4 +1,5 @@
-import { containerDecorator } from '../src/utils/storybook';
+import { containerDecorator, pageContextDecorator, queryClientDecorator } from '../src/utils/storybook';
+
 import '../src/styles.css';
 
-export const decorators = [containerDecorator];
+export const decorators = [containerDecorator, pageContextDecorator, queryClientDecorator];

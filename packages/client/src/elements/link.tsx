@@ -9,6 +9,7 @@ type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
 };
 
 export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
+  // eslint-disable-next-line react/jsx-no-target-blank
   <a href={href} target={openInNewTab ? '_blank' : undefined} {...props}>
     {children}
   </a>

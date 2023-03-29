@@ -1,9 +1,19 @@
+import { wait } from '@shakala/shared';
+import { injected } from 'brandi';
+
+import { AppConfig } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
+
 import { HttpError, HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
 
 export class FetchHttpAdapter implements HttpPort {
+  public delay?: number;
   private headers = new Headers();
 
-  constructor(private readonly baseUrl = '', private readonly fetch = globalThis.fetch.bind(globalThis)) {}
+  constructor(
+    private readonly baseUrl?: string,
+    private readonly fetch = globalThis.fetch.bind(globalThis)
+  ) {}
 
   setToken(token: string) {
     this.headers.set('cookie', `token=${token}`);
@@ -44,7 +54,7 @@ export class FetchHttpAdapter implements HttpPort {
       init.body = JSON.stringify(request.body);
     }
 
-    let url = this.baseUrl + request.url;
+    let url = String(this.baseUrl) + request.url;
 
     if (options?.search) {
       const params = new URLSearchParams();
@@ -59,6 +69,7 @@ export class FetchHttpAdapter implements HttpPort {
     }
 
     const fetchResponse = await this.fetch(url, init);
+    await wait(this.delay ?? 0);
 
     const response: HttpResponse = {
       status: fetchResponse.status,
@@ -85,3 +96,11 @@ export class FetchHttpAdapter implements HttpPort {
     return response;
   }
 }
+
+export class ApiFetchHttpAdapter extends FetchHttpAdapter {
+  constructor(config: AppConfig) {
+    super(config.apiBaseUrl);
+  }
+}
+
+injected(ApiFetchHttpAdapter, TOKENS.config);

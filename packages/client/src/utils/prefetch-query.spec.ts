@@ -6,7 +6,7 @@ import { container } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
 
 import { ApiThreadAdapter } from '../adapters/api/thread/api-thread.adapter';
-import { FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
+import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 
 import { prefetchQuery } from './prefetch-query';
 
@@ -14,7 +14,7 @@ describe('prefetchQuery', () => {
   it('prefetches a query with redux-query as an authenticated user', async () => {
     const client = new QueryClient();
 
-    const http = new FetchHttpAdapter();
+    const http = new ApiFetchHttpAdapter({ apiBaseUrl: '' });
     const adapter = new ApiThreadAdapter(http);
 
     container.bind(TOKENS.thread).toConstant(adapter);

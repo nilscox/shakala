@@ -26,16 +26,18 @@ type AppProvidersProps = {
 
 export const AppProviders = ({ context, queryClient = clientQueryClient, children }: AppProvidersProps) => (
   <ContainerProvider container={container}>
-    <pageContext.Provider value={context}>
+    <PageContextProvider value={context}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         {children}
       </QueryClientProvider>
-    </pageContext.Provider>
+    </PageContextProvider>
   </ContainerProvider>
 );
 
 const pageContext = createContext<PageContext>(null as never);
+
+export const PageContextProvider = pageContext.Provider;
 
 export const usePageContext = () => {
   const context = useContext(pageContext);

@@ -12,18 +12,20 @@ export const Button = ({
   secondary,
   small,
   loading,
+  disabled,
   className,
   children,
   ...props
 }: ButtonProps) => (
   <button
     type="button"
+    disabled={loading ?? disabled}
     className={clsx(
       'button relative',
       primary && 'button-primary',
       secondary && 'button-secondary',
       small && 'text-xs',
-      className,
+      className
     )}
     {...props}
   >
