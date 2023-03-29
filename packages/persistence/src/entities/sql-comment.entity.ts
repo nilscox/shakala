@@ -26,6 +26,9 @@ export class SqlComment extends BaseSqlEntity {
   @Property({ persist: false })
   userReaction!: ReactionType | null;
 
+  @Property({ persist: false })
+  userSubscribed!: true | null;
+
   @Formula(
     (alias) =>
       `(select count(*) from "reaction" where comment_id = ${alias}.id and type = '${ReactionType.upvote}')`

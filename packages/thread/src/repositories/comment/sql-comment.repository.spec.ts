@@ -103,6 +103,8 @@ describe('SqlCommentRepository', () => {
 
       await test.create.reaction({ comment: comment1, user, type: ReactionType.upvote });
       await test.create.reaction({ comment: reply1, user, type: ReactionType.downvote });
+      await test.create.commentSubscription({ comment: comment1, user });
+      await test.create.commentSubscription({ comment: reply1, user });
 
       const results = await test.repository.findThreadComments(thread.id, {
         sort: CommentSort.dateAsc,
@@ -112,6 +114,9 @@ describe('SqlCommentRepository', () => {
       expect(results).toHaveProperty('0.upvotes', 1);
       expect(results).toHaveProperty('0.userReaction', ReactionType.upvote);
       expect(results).toHaveProperty('0.replies.0.userReaction', ReactionType.downvote);
+
+      expect(results).toHaveProperty('0.isSubscribed', true);
+      expect(results).toHaveProperty('0.replies.0.isSubscribed', true);
     });
   });
 });

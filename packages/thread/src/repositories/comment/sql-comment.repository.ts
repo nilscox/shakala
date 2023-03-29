@@ -5,6 +5,7 @@ import {
   FindOptions,
   PERSISTENCE_TOKENS,
   SqlComment,
+  SqlCommentSubscription,
   SqlMessage,
   SqlReaction,
   SqlRepository,
@@ -141,6 +142,15 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
           .getKnexQuery()
           .as('user_reaction')
       );
+
+      void qb.addSelect(
+        this.em
+          .createQueryBuilder(SqlCommentSubscription, 'subscription')
+          .select(qb.raw('true'))
+          .where({ comment: qb.raw('comment.id'), user: options.userId })
+          .getKnexQuery()
+          .as('user_subscribed')
+      );
     }
 
     // logQueryBuilder(qb);
@@ -172,6 +182,7 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
       upvotes: Number(sqlComment.upvotes),
       downvotes: Number(sqlComment.downvotes),
       userReaction: sqlComment.userReaction ?? undefined,
+      isSubscribed: sqlComment.userSubscribed ?? undefined,
     };
   }
 }
