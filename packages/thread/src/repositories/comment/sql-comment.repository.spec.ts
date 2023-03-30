@@ -1,10 +1,11 @@
 import expect from '@nilscox/expect';
-import { SqlThread } from '@shakala/persistence/src';
+import { SqlComment, SqlThread } from '@shakala/persistence/src';
 import { createRepositoryTest, RepositoryTest } from '@shakala/persistence/test';
-import { CommentSort, first, ReactionType } from '@shakala/shared';
+import { CommentSort, createFactory, first, ReactionType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
 import { create } from '../../factories';
+import { GetCommentResult } from '../../queries/get-comment';
 
 import { SqlCommentRepository } from './sql-comment.repository';
 
@@ -40,7 +41,75 @@ describe('SqlCommentRepository', () => {
     await expect(test.repository.findById(reply.id)).toResolve(reply);
   });
 
-  describe('getThreadComments', () => {
+  describe('findComment', () => {
+    const createCommentQueryResult = createFactory<GetCommentResult>(() => ({
+      id: 'commentId',
+      threadId: 'threadId',
+      author: {
+        id: 'authorId',
+        nick: 'nick',
+        profileImage: '/user/authorId/profile-image',
+      },
+      text: 'text',
+      date: test.now,
+      edited: false,
+      history: [],
+      upvotes: 0,
+      downvotes: 0,
+      isSubscribed: undefined,
+      userReaction: undefined,
+      replies: [],
+    }));
+
+    it('retrieves a comment from its id', async () => {
+      const { thread } = await test.createThread({ id: 'threadId' });
+      await test.createComment({ thread });
+
+      const expected = createCommentQueryResult();
+
+      expect(await test.repository.findComment('commentId')).toEqual(expected);
+    });
+
+    it('retrieves an edited comment', async () => {
+      const { thread } = await test.createThread({ id: 'threadId' });
+      const { author, comment } = await test.createComment({ thread });
+
+      await test.create.message({ text: 'edit', author, comment, createdAt: test.now2 });
+
+      const expected = createCommentQueryResult({
+        text: 'edit',
+        edited: test.now2,
+        history: [{ date: test.now, text: 'text' }],
+      });
+
+      expect(await test.repository.findComment('commentId')).toEqual(expected);
+    });
+
+    it("includes information from the user's context", async () => {
+      const user = await test.create.user();
+
+      const { thread, author } = await test.createThread();
+      const { comment: parent } = await test.createComment({ id: 'parentId', thread, author });
+      const { comment: reply } = await test.createComment({ id: 'replyId', thread, author, parent });
+
+      await test.create.reaction({ comment: parent, user, type: ReactionType.upvote });
+      await test.create.commentSubscription({ comment: parent, user });
+
+      await test.create.reaction({ comment: reply, user, type: ReactionType.downvote });
+      await test.create.commentSubscription({ comment: reply, user });
+
+      const result = await test.repository.findComment(parent.id, user.id);
+
+      expect(result).toHaveProperty('upvotes', 1);
+      expect(result).toHaveProperty('userReaction', ReactionType.upvote);
+      expect(result).toHaveProperty('replies.0.userReaction', ReactionType.downvote);
+
+      expect(result).toHaveProperty('isSubscribed', true);
+      expect(result).toHaveProperty('replies.0.isSubscribed', true);
+    });
+  });
+
+  describe('findThreadComments', () => {
     it("retrieves a thread's comments from its id", async () => {
       expect(await test.repository.findThreadComments('threadId', { sort: CommentSort.dateAsc })).toEqual([]);
     });
@@ -95,42 +164,30 @@ describe('SqlCommentRepository', () => {
       expect(first(results)?.replies).toHaveLength(1);
       expect(results).toHaveProperty('0.replies.0.id', reply1.id);
     });
-
-    it("includes information from the user's context", async () => {
-      const user = await test.create.user();
-      const { thread } = await test.createThread();
-      const { comment1, reply1 } = await test.createComments(thread);
-
-      await test.create.reaction({ comment: comment1, user, type: ReactionType.upvote });
-      await test.create.reaction({ comment: reply1, user, type: ReactionType.downvote });
-      await test.create.commentSubscription({ comment: comment1, user });
-      await test.create.commentSubscription({ comment: reply1, user });
-
-      const results = await test.repository.findThreadComments(thread.id, {
-        sort: CommentSort.dateAsc,
-        userId: user.id,
-      });
-
-      expect(results).toHaveProperty('0.upvotes', 1);
-      expect(results).toHaveProperty('0.userReaction', ReactionType.upvote);
-      expect(results).toHaveProperty('0.replies.0.userReaction', ReactionType.downvote);
-
-      expect(results).toHaveProperty('0.isSubscribed', true);
-      expect(results).toHaveProperty('0.replies.0.isSubscribed', true);
-    });
   });
 });
 
 class Test extends RepositoryTest {
+  now = new Date('2022-01-01').toISOString();
+  now2 = new Date('2022-01-02').toISOString();
+
   get repository() {
     return new SqlCommentRepository(this.database);
   }
 
-  async createThread() {
+  async createThread(overrides?: Partial<SqlThread>) {
     const author = await this.create.user();
-    const thread = await this.create.thread({ author });
+    const thread = await this.create.thread({ author, ...overrides });
 
     return { author, thread };
+  }
+
+  async createComment(overrides?: Partial<SqlComment>) {
+    const author = overrides?.author ?? (await this.create.user({ id: 'authorId', nick: 'nick' }));
+    const comment = await this.create.comment({ id: 'commentId', author, createdAt: this.now, ...overrides });
+    await this.create.message({ comment, author, text: 'text', createdAt: this.now });
+
+    return { author, comment };
   }
 
   async createComments(thread: SqlThread) {

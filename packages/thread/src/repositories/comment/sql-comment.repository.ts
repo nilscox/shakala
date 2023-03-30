@@ -73,16 +73,16 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
   }
 
   async findComment(commentId: string, userId?: string): Promise<Maybe<GetCommentResult>> {
-    const sqlComment = await this.repository.findOne(commentId);
+    const sqlComments = await this.findComments({ userId, sort: CommentSort.dateAsc }, { id: commentId });
 
-    if (!sqlComment) {
+    if (sqlComments.length === 0) {
       return undefined;
     }
 
-    const replies = await this.findComments({ sort: CommentSort.dateAsc, userId }, { parent: sqlComment });
+    const replies = await this.findComments({ sort: CommentSort.dateAsc, userId }, { parent: sqlComments });
 
     return {
-      ...this.mapCommentResult(sqlComment),
+      ...this.mapCommentResult(sqlComments[0]),
       replies: replies.map((reply) => this.mapCommentResult(reply)),
     };
   }
@@ -174,8 +174,8 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
       },
       text: lastMessage.text,
       date: sqlComment.createdAt.toISOString(),
-      edited: false,
-      history: history.map((message) => ({
+      edited: history.length > 1 ? lastMessage.createdAt.toISOString() : false,
+      history: history.slice(0, -1).map((message) => ({
         date: message.createdAt.toISOString(),
         text: message.text,
       })),
