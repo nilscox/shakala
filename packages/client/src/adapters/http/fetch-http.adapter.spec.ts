@@ -2,6 +2,8 @@ import expect from '@nilscox/expect';
 import { stub } from '@shakala/shared';
 import { describe, it } from 'vitest';
 
+import { ValidationErrors } from '~/utils/validation-errors';
+
 import { FetchHttpAdapter } from './fetch-http.adapter';
 import { HttpError } from './http-error';
 
@@ -100,6 +102,24 @@ describe('FetchHttpAdapter', () => {
       status: 401,
       body: undefined,
       headers: new Headers(),
+    });
+  });
+
+  it('throws a ValidationError when the request fails with a validation error', async () => {
+    const body = {
+      code: 'ValidationError',
+      fields: [{ path: 'field', type: 'min' }],
+    };
+
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+
+    const fetch = mockFetch({ ok: false, status: 400, headers, json: async () => body });
+    const adapter = new FetchHttpAdapter(undefined, fetch);
+
+    const error = await expect(adapter.get('/')).toRejectWith(ValidationErrors);
+
+    expect(error).toHaveProperty('fieldErrors', {
+      field: 'min',
     });
   });
 

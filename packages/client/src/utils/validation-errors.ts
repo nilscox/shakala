@@ -13,6 +13,10 @@ export class ValidationErrors<Fields extends FieldValues = FieldValues> {
   constructor(private readonly fieldErrors: Partial<Record<keyof Fields, string>>) {}
 
   static from(response: HttpResponse, mapFieldName: FieldNameMapper = (fieldName) => fieldName) {
+    if (response.status !== 400) {
+      return;
+    }
+
     if (!this.isValidationErrorResponseBody(response.body)) {
       return;
     }

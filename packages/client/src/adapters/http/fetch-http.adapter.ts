@@ -3,6 +3,7 @@ import { injected } from 'brandi';
 
 import { AppConfig } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
+import { ValidationErrors } from '~/utils/validation-errors';
 
 import { HttpError } from './http-error';
 import { HttpPort, RequestOptions, HttpResponse, HttpMethod, HttpRequest } from './http.port';
@@ -90,6 +91,12 @@ export class FetchHttpAdapter implements HttpPort {
       if (options?.onError) {
         response.body = options.onError(error);
       } else {
+        const validationError = ValidationErrors.from(error.response);
+
+        if (validationError) {
+          throw validationError;
+        }
+
         throw error;
       }
     }
