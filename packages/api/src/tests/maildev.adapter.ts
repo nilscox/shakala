@@ -15,7 +15,7 @@ export class MailDevAdapter {
   private baseUrl = `http://localhost:1080`;
 
   async clear() {
-    await wait(100);
+    await wait(200);
     await fetch(`${this.baseUrl}/email/all`, { method: 'DELETE' });
   }
 

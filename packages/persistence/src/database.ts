@@ -10,6 +10,10 @@ export class Database {
 
   constructor(private readonly getOrm: AsyncFactory<Orm>) {}
 
+  get initialized() {
+    return this.orm !== undefined;
+  }
+
   get em() {
     assert(this.orm, 'database is not initialized');
     return this.orm.em;
@@ -19,18 +23,18 @@ export class Database {
     this.orm = await this.getOrm();
 
     await this.orm.connect();
-    await this.waitForDatabaseConnection(this.orm);
+    await this.waitForDatabaseConnection();
   }
 
   async close() {
     await this.orm?.close(true);
   }
 
-  private async waitForDatabaseConnection(orm: Orm) {
+  private async waitForDatabaseConnection() {
     const start = new Date().getTime();
     const elapsed = () => new Date().getTime() - start;
 
-    while (!(await orm.isConnected())) {
+    while (!(await this.em.getConnection().isConnected())) {
       await new Promise((r) => setTimeout(r, 100));
 
       if (elapsed() > 2000) {
