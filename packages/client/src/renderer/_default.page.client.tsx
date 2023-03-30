@@ -3,7 +3,8 @@ import { Hydrate } from 'react-query';
 
 import { AppProviders } from '../app/app-providers';
 import { Layout } from '../app/layout/layout';
-import { PageContextClient } from '../app/page-context';
+
+import { PageContextClient } from './page-context';
 
 import '@fontsource/open-sans/variable.css';
 import '../styles.css';

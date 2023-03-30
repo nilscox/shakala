@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useHash } from '~/hooks/use-hash';
+import { isElementInViewport } from '~/utils/is-element-in-viewport';
+
 // delay + animation time
 const unsetHighlightedTimeout = (2 + 2) * 1000;
 
@@ -11,15 +14,15 @@ export const useHighlightComment = (commentId: string) => {
 
     const element = document.getElementById(commentId);
 
-    if (element) {
+    if (element && !isElementInViewport(element)) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [commentId]);
 
-  useEffect(() => {
-    const hash = window.location.hash;
+  const hash = useHash();
 
-    if (hash !== `#${commentId}`) {
+  useEffect(() => {
+    if (hash !== commentId) {
       return;
     }
 
@@ -32,7 +35,7 @@ export const useHighlightComment = (commentId: string) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [commentId, highlight]);
+  }, [commentId, hash, highlight]);
 
   return isHighlighted;
 };

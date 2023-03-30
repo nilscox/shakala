@@ -1,4 +1,4 @@
-import { usePageContext } from '../app/app-providers';
+import { usePageContext } from '~/app/page-context';
 
 export const useRouteParams = () => {
   return usePageContext().routeParams;

@@ -5,13 +5,12 @@ import type { PageContextBuiltInClient } from 'vite-plugin-ssr/client/router';
 type Page = (pageProps: PageProps) => React.ReactElement;
 type PageProps = object;
 
-export type Query = (queryClient: QueryClient, token?: string) => Promise<void>;
+export type Query = (pageContext: PageContextServer, token?: string) => Promise<void>;
 
 type PageContextCustom = {
   Page: Page;
   pageProps?: PageProps;
   routeParams: Record<string, string>;
-  searchOriginal: string;
   exports: {
     queries?: Query[];
   };

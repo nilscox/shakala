@@ -3,6 +3,7 @@ import { stub } from '@shakala/shared';
 import { CommentPort } from './comment.port';
 
 export class StubCommentAdapter implements CommentPort {
+  getComment = stub<CommentPort['getComment']>();
   createComment = stub<CommentPort['createComment']>();
   createReply = stub<CommentPort['createReply']>();
   editComment = stub<CommentPort['editComment']>();

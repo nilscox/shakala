@@ -1,17 +1,12 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { navigate } from 'vite-plugin-ssr/client/router';
 
-import { usePageContext } from '../app/app-providers';
+import { useRouter } from '~/app/router-context';
 
 import { usePathname } from './use-pathname';
 
-// todo: watch search params
 export const useSearchParams = () => {
-  const { searchOriginal } = usePageContext();
-
-  return useMemo(() => {
-    return new URLSearchParams(searchOriginal);
-  }, [searchOriginal]);
+  return useRouter().search;
 };
 
 export const useGetSearchParam = (key: string) => {
@@ -23,14 +18,24 @@ export const useSetSearchParam = (key: string) => {
   const pathname = usePathname();
 
   return useCallback(
-    (value: string) => {
+    (value: string | undefined) => {
       if (params.get(key) === value) {
         return;
       }
 
-      params.set(key, value);
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
 
-      void navigate(`${pathname}?${params}`);
+      let paramsStr = '';
+
+      if (Array.from(params.keys()).length > 0) {
+        paramsStr += '?' + params;
+      }
+
+      void navigate(`${pathname}${paramsStr}`);
     },
     [key, pathname, params]
   );

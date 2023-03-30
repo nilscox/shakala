@@ -16,6 +16,17 @@ describe('ApiCommentAdapter', () => {
     adapter = new ApiCommentAdapter(http);
   });
 
+  describe('getComment', () => {
+    beforeEach(() => {
+      mockResponse = http.mock('GET', '/comment/commentId');
+    });
+
+    it('retrieves an existing comment', async () => {
+      mockResponse({ body: { id: 'commentId' } });
+      await expect(adapter.getComment('commentId')).toResolve(expect.objectWith({ id: 'commentId' }));
+    });
+  });
+
   describe('createComment', () => {
     beforeEach(() => {
       mockResponse = http.mock('POST', '/thread/threadId/comment');

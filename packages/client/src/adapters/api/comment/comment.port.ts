@@ -1,6 +1,7 @@
-import { ReactionType } from '@shakala/shared';
+import { CommentDto, Maybe, ReactionType } from '@shakala/shared';
 
 export interface CommentPort {
+  getComment(commentId: string): Promise<Maybe<CommentDto>>;
   createComment(threadId: string, text: string): Promise<string>;
   createReply(parentId: string, text: string): Promise<string>;
   editComment(commentId: string, text: string): Promise<void>;

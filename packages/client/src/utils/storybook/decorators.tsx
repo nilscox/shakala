@@ -7,8 +7,8 @@ import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-au
 import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter';
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { RouterPort } from '~/adapters/router/router.port';
-import { PageContextProvider } from '~/app/app-providers';
 import { container } from '~/app/container';
+import { PageContextProvider } from '~/app/page-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
 

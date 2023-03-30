@@ -3,28 +3,55 @@ import { Token } from 'brandi';
 
 import { container } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
+import { PageContextServer, Query } from '~/renderer/page-context';
 
 import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
-import { Query } from '../app/page-context';
 
 import { assert } from './assert';
 
-export type PrefetchQuery = <Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+type QueryParameters<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter> = [
   adapterToken: Token<Adapter>,
   method: Method,
   ...params: Parameters<Adapter[Method]>
-) => Query;
+];
 
-export const prefetchQuery: PrefetchQuery = (adapterToken, method, ...params) => {
+export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+  ...parameters: QueryParameters<Adapter, Method>
+): Query;
+
+export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+  getQuery: (pageContext: PageContextServer) => QueryParameters<Adapter, Method> | void
+): Query;
+
+export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+  ...args: unknown[]
+): Query {
   const http = container.get(TOKENS.http);
 
   assert(http instanceof ApiFetchHttpAdapter, 'expected http to be instance of ApiFetchHttpAdapter');
 
-  return async (queryClient, token) => {
-    const adapter = container.get(adapterToken);
-    const key = [adapter.constructor.name, method, params];
+  return async (pageContext, token) => {
+    let adapterToken: Token<Adapter>;
+    let method: Method;
+    let params: Parameters<Adapter[Method]>;
 
-    await queryClient.prefetchQuery(key, async () => {
+    if (args.length === 1) {
+      const getQuery = args[0] as (pageContext: PageContextServer) => QueryParameters<Adapter, Method> | void;
+      const result = getQuery(pageContext);
+
+      if (!result) {
+        return;
+      }
+
+      [adapterToken, method, ...params] = result;
+    } else {
+      [adapterToken, method, ...params] = args as [Token<Adapter>, Method, ...Parameters<Adapter[Method]>];
+    }
+
+    const adapter = container.get(adapterToken);
+    const queryKey = [adapter.constructor.name, method, params];
+
+    await pageContext.queryClient.prefetchQuery(queryKey, async () => {
       if (token) {
         http.setToken(token);
       }
@@ -35,4 +62,4 @@ export const prefetchQuery: PrefetchQuery = (adapterToken, method, ...params) =>
       return cb.call({ ...adapter, http }, ...params);
     });
   };
-};
+}

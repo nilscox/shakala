@@ -8,11 +8,11 @@ import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-au
 import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter';
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
-import { PageContextProvider } from '~/app/app-providers';
 import { container } from '~/app/container';
-import { PageContext } from '~/app/page-context';
+import { PageContextProvider } from '~/app/page-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
+import { PageContext } from '~/renderer/page-context';
 
 export const setupTest = () => {
   let pageContext: PageContext = {} as PageContext;

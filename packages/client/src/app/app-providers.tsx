@@ -1,12 +1,13 @@
 import { ContainerProvider } from 'brandi-react';
-import { createContext, useContext } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import { assert } from '../utils/assert';
+import { SnackbarProvider } from '~/elements/snackbar';
+import { PageContext } from '~/renderer/page-context';
 
 import { container } from './container';
-import { PageContext } from './page-context';
+import { PageContextProvider } from './page-context';
+import { RouterProvider } from './router-context';
 
 const clientQueryClient = new QueryClient({
   defaultOptions: {
@@ -29,20 +30,10 @@ export const AppProviders = ({ context, queryClient = clientQueryClient, childre
     <PageContextProvider value={context}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
-        {children}
+        <RouterProvider>
+          <SnackbarProvider>{children}</SnackbarProvider>
+        </RouterProvider>
       </QueryClientProvider>
     </PageContextProvider>
   </ContainerProvider>
 );
-
-const pageContext = createContext<PageContext>(null as never);
-
-export const PageContextProvider = pageContext.Provider;
-
-export const usePageContext = () => {
-  const context = useContext(pageContext);
-
-  assert(context);
-
-  return context;
-};

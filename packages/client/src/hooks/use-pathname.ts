@@ -1,5 +1,5 @@
-import { usePageContext } from '../app/app-providers';
+import { useRouter } from '~/app/router-context';
 
 export const usePathname = () => {
-  return usePageContext().urlPathname;
+  return useRouter().pathname;
 };

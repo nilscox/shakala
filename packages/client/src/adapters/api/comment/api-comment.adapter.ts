@@ -1,6 +1,8 @@
 import {
+  CommentDto,
   CreateCommentBody,
   EditCommentBody,
+  Maybe,
   ReactionType,
   ReportCommentBody,
   SetReactionBody,
@@ -14,6 +16,11 @@ import { CommentPort } from './comment.port';
 
 export class ApiCommentAdapter implements CommentPort {
   constructor(private readonly http: HttpPort) {}
+
+  async getComment(commentId: string): Promise<Maybe<CommentDto>> {
+    const { body } = await this.http.get<CommentDto>(`/comment/${commentId}`);
+    return body;
+  }
 
   async createComment(threadId: string, text: string): Promise<string> {
     const { body } = await this.http.post<CreateCommentBody, string>(`/thread/${threadId}/comment`, {

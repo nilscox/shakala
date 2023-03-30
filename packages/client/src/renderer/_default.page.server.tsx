@@ -6,10 +6,11 @@ import { TOKENS } from '~/app/tokens';
 
 import { AppProviders } from '../app/app-providers';
 import { Layout } from '../app/layout/layout';
-import type { PageContextServer } from '../app/page-context';
 import { prefetchQuery } from '../utils/prefetch-query';
 
-export const passToClient = ['pageProps', 'routeParams', 'searchOriginal', 'dehydratedState'];
+import type { PageContextServer } from './page-context';
+
+export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
 
 const commonQueries = [prefetchQuery(TOKENS.authentication, 'getAuthenticatedUser')];
 
@@ -17,7 +18,7 @@ export async function render(pageContext: PageContextServer) {
   const { Page, pageProps, exports, queryClient, token } = pageContext;
   const queries = [...commonQueries, ...(exports.queries ?? [])];
 
-  await Promise.all(queries.map((query) => query(queryClient, token)));
+  await Promise.all(queries.map((query) => query(pageContext, token)));
 
   const dehydratedState = dehydrate(queryClient);
 
