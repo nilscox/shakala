@@ -3,7 +3,7 @@ import { createFactory, Factory } from '../utils/create-factory';
 import { omit } from '../utils/omit';
 import { randomId } from '../utils/random-id';
 
-type AuthorDto = {
+export type AuthorDto = {
   id: string;
   nick: string;
   profileImage: string;
@@ -21,15 +21,17 @@ export type RootCommentDto = {
   text: string;
   date: string;
   edited: string | false;
-  history: Array<{
-    date: string;
-    text: string;
-  }>;
+  history: MessageDto[];
   upvotes: number;
   downvotes: number;
   userReaction?: ReactionType;
   isSubscribed?: boolean;
   replies: ReplyDto[];
+};
+
+export type MessageDto = {
+  date: string;
+  text: string;
 };
 
 export const createCommentDto = createFactory<RootCommentDto>(() => ({

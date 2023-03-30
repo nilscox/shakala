@@ -3,6 +3,9 @@ import noScroll from 'no-scroll';
 import { useEffect } from 'react';
 import ReactModal from 'react-modal';
 
+import { useBoolean } from '~/hooks/use-boolean';
+import { useUpdateEffect } from '~/hooks/use-update-effect';
+
 const animationDuration = 200;
 
 if (typeof window !== 'undefined') {
@@ -37,4 +40,21 @@ export const Modal = ({ className, isOpen, onRequestClose, ...props }: ReactModa
       {...props}
     />
   );
+};
+
+export const useModalState = (value: unknown) => {
+  const [isOpen, openModal, closeModal] = useBoolean(Boolean(value));
+
+  useUpdateEffect(() => {
+    if (value) {
+      const timeout = setTimeout(() => openModal(), 0);
+      return () => clearTimeout(timeout);
+    }
+  }, [value, openModal]);
+
+  return {
+    isOpen,
+    closeModal,
+    openModal,
+  };
 };

@@ -4,6 +4,7 @@ import { useQuery } from '../../../hooks/use-query';
 import { useRouteParam } from '../../../hooks/use-route-params';
 import { prefetchQuery } from '../../../utils/prefetch-query';
 
+import { CommentHistoryModal } from './modals/comment-history-modal/comment-history-modal';
 import { ReportCommentModal } from './modals/report-comment-modal/report-comment-modal';
 import { ShareCommentModal } from './modals/share-comment-modal';
 import { Thread } from './thread';
@@ -34,6 +35,7 @@ const ThreadPage = () => {
     <>
       <Thread thread={thread} />
 
+      <CommentHistoryModal />
       <ReportCommentModal />
       <ShareCommentModal />
     </>

@@ -13,7 +13,7 @@ export default {
   parameters: {
     pageContext: {
       urlParsed: {
-        searchOriginal: new URLSearchParams({ report: 'commentId' }).toString(),
+        searchOriginal: new URLSearchParams({ signaler: 'commentId' }).toString(),
       },
     },
   },

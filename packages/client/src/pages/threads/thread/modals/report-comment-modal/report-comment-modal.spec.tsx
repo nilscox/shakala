@@ -17,7 +17,7 @@ describe('ReportCommentModal', () => {
       text: 'you suck.',
     });
 
-    setSearchParam('report', comment.id);
+    setSearchParam('signaler', comment.id);
     commentAdapter.getComment.resolve(comment);
   });
 

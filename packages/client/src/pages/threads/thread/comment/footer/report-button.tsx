@@ -15,7 +15,7 @@ export const ReportButton = ({ comment }: ReportButtonProps) => {
 
   return (
     <FooterButtonLink
-      param="report"
+      param="signaler"
       value={comment.id}
       icon={<ReportIcon className="mr-0.5 h-4 w-4" />}
       disabled={isAuthor}

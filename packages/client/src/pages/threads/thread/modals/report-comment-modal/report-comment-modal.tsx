@@ -13,7 +13,7 @@ import { useSubmit } from '~/hooks/use-submit';
 import { FetchComment } from '../fetch-comment';
 
 export const ReportCommentModal = () => {
-  const [commentId, setReportCommentId] = useSearchParam('report');
+  const [commentId, setReportCommentId] = useSearchParam('signaler');
   const { isOpen, closeModal } = useModalState(commentId);
 
   return (

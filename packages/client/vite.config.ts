@@ -24,6 +24,7 @@ export default defineConfig({
     watch: false,
     reporters: ['verbose'],
     environment: 'happy-dom',
+    globalSetup: [path.join('src', 'utils', 'vitest.global-setup.ts')],
     setupFiles: [sharedVitestSetup, path.join('src', 'utils', 'vitest.setup.ts')],
     alias: {
       '@shakala/shared/vitest.setup': sharedVitestSetup,
