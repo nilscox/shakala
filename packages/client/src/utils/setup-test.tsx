@@ -12,6 +12,7 @@ import { PageContextProvider } from '~/app/app-providers';
 import { container } from '~/app/container';
 import { PageContext } from '~/app/page-context';
 import { TOKENS } from '~/app/tokens';
+import { SnackbarProvider } from '~/elements/snackbar';
 
 export const setupTest = () => {
   let pageContext: PageContext = {} as PageContext;
@@ -57,7 +58,9 @@ export const setupTest = () => {
         return (
           <ContainerProvider container={container}>
             <PageContextProvider value={pageContext}>
-              <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+              <QueryClientProvider client={queryClient}>
+                <SnackbarProvider>{children}</SnackbarProvider>
+              </QueryClientProvider>
             </PageContextProvider>
           </ContainerProvider>
         );

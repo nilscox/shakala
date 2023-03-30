@@ -4,7 +4,7 @@ import { injected } from 'brandi';
 import { AppConfig } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
 
-import { HttpError, HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
+import { HttpPort, RequestOptions, HttpResponse, HttpMethod, HttpRequest, HttpError } from './http.port';
 
 export class FetchHttpAdapter implements HttpPort {
   public delay?: number;
@@ -54,7 +54,7 @@ export class FetchHttpAdapter implements HttpPort {
       init.body = JSON.stringify(request.body);
     }
 
-    let url = String(this.baseUrl) + request.url;
+    let url = (this.baseUrl ?? '') + request.url;
 
     if (options?.search) {
       const params = new URLSearchParams();

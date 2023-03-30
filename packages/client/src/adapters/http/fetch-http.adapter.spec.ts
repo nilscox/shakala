@@ -2,8 +2,6 @@ import expect from '@nilscox/expect';
 import { stub } from '@shakala/shared';
 import { describe, it } from 'vitest';
 
-import { assert } from '../../utils/assert';
-
 import { FetchHttpAdapter } from './fetch-http.adapter';
 import { HttpError } from './http.port';
 
@@ -33,11 +31,11 @@ describe('FetchHttpAdapter', () => {
 
   it('performs an http request on a specific base url', async () => {
     const fetch = mockFetch();
-    const adapter = new FetchHttpAdapter('https://base.url/', fetch);
+    const adapter = new FetchHttpAdapter('https://base.url', fetch);
 
-    await adapter.get('/');
+    await adapter.get('/endpoint');
 
-    expect(fetch.lastCall).toEqual(['https://base.url/', expect.anything()]);
+    expect(fetch.lastCall).toEqual(['https://base.url/endpoint', expect.anything()]);
   });
 
   it('performs an http request with url parameters', async () => {
@@ -125,7 +123,7 @@ describe('FetchHttpAdapter', () => {
 
     const headers = fetch.lastCall?.[1]?.headers;
 
-    assert(headers instanceof Headers);
+    expect.assert(headers instanceof Headers);
     expect(headers.get('cookie')).toEqual('token=value');
   });
 });
