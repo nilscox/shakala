@@ -9,6 +9,7 @@ import { ThreadForm } from './thread-form';
 
 type Args = {
   validationError: boolean;
+  unexpectedError: boolean;
 };
 
 export default {
@@ -16,14 +17,19 @@ export default {
   decorators: [maxWidthDecorator],
   ...controls<Args>(({ boolean }) => ({
     validationError: boolean(false),
+    unexpectedError: boolean(false),
   })),
 } satisfies Meta<Args>;
 
 export const threadForm: StoryFn<Args> = () => <ThreadForm />;
 
 threadForm.decorators = [
-  configureStory(({ thread }, { validationError }) => {
+  configureStory(({ thread }, { validationError, unexpectedError }) => {
     thread.createThread.implement(async (fields) => {
+      if (unexpectedError) {
+        throw new Error('Something went wrong');
+      }
+
       if (validationError) {
         throw new ValidationErrors<ThreadFormFields>({ description: 'min', keywords: 'min', text: 'max' });
       }

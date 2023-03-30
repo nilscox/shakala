@@ -3,6 +3,7 @@ import { useQueryClient } from 'react-query';
 
 import { ValidationErrors } from '../utils/validation-errors';
 
+import { useErrorHandler } from './use-error-handler';
 import { invalidateQuery } from './use-mutate';
 
 type UseSubmitOptions<Result> = {
@@ -16,6 +17,7 @@ export const useSubmit = <Values extends FieldValues, Result>(
   options?: UseSubmitOptions<Result>
 ): SubmitHandler<Values> => {
   const queryClient = useQueryClient();
+  const handleError = useErrorHandler();
 
   return async (values: Values) => {
     try {
@@ -32,8 +34,7 @@ export const useSubmit = <Values extends FieldValues, Result>(
         return;
       }
 
-      // todo: fallback error handling
-      console.error(error);
+      handleError(error);
     }
   };
 };

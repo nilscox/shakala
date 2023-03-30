@@ -8,6 +8,7 @@ import { CommentForm } from './comment-form';
 
 type Args = {
   validationError: boolean;
+  unexpectedError: boolean;
 };
 
 export default {
@@ -27,14 +28,19 @@ export default {
   ],
   ...controls<Args>(({ boolean }) => ({
     validationError: boolean(false),
+    unexpectedError: boolean(false),
   })),
 } satisfies Meta<Args>;
 
-export const commentForm: StoryFn<Args> = ({ validationError }) => (
+export const commentForm: StoryFn<Args> = ({ validationError, unexpectedError }) => (
   <CommentForm
     initialText=""
     onCancel={action('onCancel')}
     onSubmit={async (text) => {
+      if (unexpectedError) {
+        throw new Error('Something went wrong');
+      }
+
       if (validationError) {
         throw new ValidationErrors({ text: "This isn't very interesting" });
       }
