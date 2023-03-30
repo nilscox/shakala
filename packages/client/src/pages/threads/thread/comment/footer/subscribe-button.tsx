@@ -1,9 +1,8 @@
-import { CommentDto } from '@shakala/shared';
+import { CommentDto, isReply } from '@shakala/shared';
 
 import { TOKENS } from '~/app/tokens';
 import { invalidateQuery, useMutate } from '~/hooks/use-mutate';
 import { useRouteParam } from '~/hooks/use-route-params';
-import { useUser } from '~/hooks/use-user';
 import IconSubscribe from '~/icons/subscribe.svg';
 
 import { FooterButton } from './footer-button';
@@ -14,13 +13,12 @@ type SubscribeButtonProps = {
 
 export const SubscribeButton = ({ comment }: SubscribeButtonProps) => {
   const threadId = useRouteParam('threadId');
-  const user = useUser();
 
   const subscribe = useMutate(TOKENS.comment, 'setSubscription', {
     invalidate: invalidateQuery(TOKENS.thread, 'getThread', threadId),
   });
 
-  const canSubscribe = user !== undefined;
+  const canSubscribe = !isReply(comment);
 
   if (!canSubscribe) {
     return null;

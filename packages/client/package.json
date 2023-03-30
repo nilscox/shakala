@@ -59,6 +59,8 @@
     "@nilscox/expect-dom": "^0.3.3",
     "@storybook/addon-actions": "7.0.0-rc.5",
     "@storybook/addon-essentials": "7.0.0-rc.5",
+    "@storybook/addons": "^6.5.16",
+    "@storybook/core-events": "^6.5.16",
     "@storybook/react": "7.0.0-rc.5",
     "@testing-library/dom": "^9.0.1",
     "@testing-library/react": "^14.0.0",

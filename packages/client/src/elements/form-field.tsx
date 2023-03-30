@@ -87,7 +87,7 @@ const getError = (error?: unknown, errorsMap?: Record<string, ReactNode>) => {
     return error;
   }
 
-  return errorsMap[error];
+  return errorsMap[error] ?? error;
 };
 
 type FieldErrorProps = {

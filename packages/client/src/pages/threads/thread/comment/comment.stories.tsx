@@ -1,9 +1,9 @@
-import { createAuthorDto, createCommentDto, createReplyDto, ReactionType } from '@shakala/shared';
+import { CommentDto, createAuthorDto, createCommentDto, createReplyDto, ReactionType } from '@shakala/shared';
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
 
 import { createDate } from '~/utils/date-utils';
-import { configureStory, maxWidthDecorator } from '~/utils/storybook';
+import { configureStory, maxWidthDecorator, rerenderStory } from '~/utils/storybook';
 
 import { Comment } from './comment';
 
@@ -18,11 +18,13 @@ export default {
   decorators: [maxWidthDecorator],
 } satisfies Meta;
 
-export const comment: StoryFn = () => {
-  return <Comment comment={commentFixture} />;
+export const commentStory: StoryFn = () => {
+  return <Comment comment={comment} />;
 };
 
-comment.decorators = [
+commentStory.storyName = 'Comment';
+
+commentStory.decorators = [
   configureStory((adapters) => {
     adapters.comment.createReply.implement(async (parentId, text) => {
       const reply = createReplyDto({
@@ -32,7 +34,7 @@ comment.decorators = [
         isSubscribed: true,
       });
 
-      commentFixture.replies.push(reply);
+      comment.replies.push(reply);
 
       action('createReply')(parentId, text);
 
@@ -40,40 +42,36 @@ comment.decorators = [
     });
 
     adapters.comment.editComment.implement(async (commentId, text) => {
+      const comment = getComment(commentId);
       const now = new Date().toISOString();
 
-      commentFixture.history.push({ date: now, text: commentFixture.text });
-      commentFixture.edited = now;
-      commentFixture.text = text;
+      comment.history.push({ date: now, text: comment.text });
+      comment.edited = now;
+      comment.text = text;
 
       action('editComment')(commentId, text);
     });
 
     adapters.comment.setReaction.implement(async (commentId, reactionType) => {
-      commentFixture.upvotes = 61;
-      commentFixture.downvotes = 25;
+      const comment = getComment(commentId);
 
-      if (commentFixture.userReaction === reactionType) {
-        delete commentFixture.userReaction;
-        action('setReaction')(commentId, undefined);
-        return;
-      }
+      if (comment.userReaction === ReactionType.upvote) comment.upvotes--;
+      if (comment.userReaction === ReactionType.downvote) comment.downvotes--;
 
-      commentFixture.userReaction = reactionType ?? undefined;
-
-      if (reactionType === ReactionType.upvote) {
-        commentFixture.upvotes++;
-      }
-
-      if (reactionType === ReactionType.downvote) {
-        commentFixture.downvotes++;
+      if (comment.userReaction === reactionType) {
+        delete comment.userReaction;
+      } else {
+        comment.userReaction = reactionType ?? undefined;
+        if (reactionType === ReactionType.upvote) comment.upvotes++;
+        if (reactionType === ReactionType.downvote) comment.downvotes++;
       }
 
       action('setReaction')(commentId, reactionType);
+      rerenderStory();
     });
 
     adapters.comment.setSubscription.implement(async (commentId, subscribed) => {
-      commentFixture.isSubscribed = subscribed;
+      comment.isSubscribed = subscribed;
       action('setSubscription')(commentId, subscribed);
     });
 
@@ -83,8 +81,17 @@ comment.decorators = [
   }),
 ];
 
+const reply = createReplyDto({
+  id: 'replyId',
+  author: createAuthorDto({ nick: 'nilscox' }),
+  date: createDate('2022-06-14'),
+  text: "Bien vu, merci pour le lien vers l'article. Notons tout de même que [selon lemonde](https://www.lemonde.fr/pixels/article/2017/02/09/le-daily-mail-n-est-plus-une-source-utilisable-sur-wikipedia_5077027_4408996.html), wikipedia ne fait plus confiance au DailyMail depuis 2017 !",
+  upvotes: 6,
+  downvotes: 2,
+});
+
 // cspell:word bopzor lemonde wikipedia
-const commentFixture = createCommentDto({
+const comment = createCommentDto({
   id: 'commentId',
   author: createAuthorDto({ nick: 'Bopzor' }),
   text: `De ce que j'en comprends, l'objectif de cet article^85 est de dire que la balance bénéfice/risque du vaccin COVID-19 Pfizer/BioNTech est à réévaluer (vers plus de risque).
@@ -105,14 +112,9 @@ Rien ne me permet de dire que la balance bénéfice/risque en est affectée. Pru
   date: createDate('2022-06-12'),
   upvotes: 61,
   downvotes: 25,
-  replies: [
-    createReplyDto({
-      id: 'replyId',
-      author: createAuthorDto({ nick: 'nilscox' }),
-      date: createDate('2022-06-14'),
-      text: "Bien vu, merci pour le lien vers l'article. Notons tout de même que [selon lemonde](https://www.lemonde.fr/pixels/article/2017/02/09/le-daily-mail-n-est-plus-une-source-utilisable-sur-wikipedia_5077027_4408996.html), wikipedia ne fait plus confiance au DailyMail depuis 2017 !",
-      upvotes: 6,
-      downvotes: 2,
-    }),
-  ],
+  replies: [reply],
 });
+
+const getComment = (commentId: string) => {
+  return [comment, ...comment.replies].find((comment) => comment.id === commentId) as CommentDto;
+};

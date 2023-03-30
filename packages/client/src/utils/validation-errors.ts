@@ -1,4 +1,4 @@
-import { UseFormReturn } from 'react-hook-form';
+import { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { HttpResponse } from '../adapters/http/http.port';
 
@@ -9,8 +9,8 @@ type ValidationErrorResponseBody = {
 
 type FieldNameMapper = (fieldName: string) => string;
 
-export class ValidationErrors {
-  constructor(private readonly fieldErrors: Record<string, string>) {}
+export class ValidationErrors<Fields extends FieldValues = FieldValues> {
+  constructor(private readonly fieldErrors: Partial<Record<keyof Fields, string>>) {}
 
   static from(response: HttpResponse, mapFieldName: FieldNameMapper = (fieldName) => fieldName) {
     if (!this.isValidationErrorResponseBody(response.body)) {
@@ -28,9 +28,9 @@ export class ValidationErrors {
     return new ValidationErrors(fieldErrors);
   }
 
-  setFormErrors(form: UseFormReturn<any>) {
+  setFormErrors(form: UseFormReturn<Fields>) {
     for (const [fieldName, message] of Object.entries(this.fieldErrors)) {
-      form.setError(fieldName, { message });
+      form.setError(fieldName as FieldPath<Fields>, { message });
     }
   }
 

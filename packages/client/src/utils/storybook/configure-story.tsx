@@ -12,16 +12,18 @@ type StubApiAdapters = {
   comment: StubCommentAdapter;
 };
 
-type ConfigureStory = (adapters: StubApiAdapters) => unknown;
+type ConfigureStory<Args> = (adapters: StubApiAdapters, args: Args) => unknown;
 
-export const configureStory = (configure: ConfigureStory): Decorator => {
+export const configureStory = <Args,>(configure: ConfigureStory<Args>): Decorator<Args> => {
   // eslint-disable-next-line react/display-name
-  return (Story) => {
-    configure({
+  return (Story, { args }) => {
+    const adapters = {
       authentication: useInjection(TOKENS.authentication),
       thread: useInjection(TOKENS.thread),
       comment: useInjection(TOKENS.comment),
-    } as StubApiAdapters);
+    };
+
+    configure(adapters as StubApiAdapters, args);
 
     return <Story />;
   };

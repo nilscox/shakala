@@ -1,18 +1,36 @@
+import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { configureStory, maxWidthDecorator } from '~/utils/storybook';
+import { ThreadFormFields } from '~/adapters/api/thread/thread.port';
+import { configureStory, controls, maxWidthDecorator } from '~/utils/storybook';
+import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
+
+type Args = {
+  validationError: boolean;
+};
 
 export default {
   title: 'Domain/ThreadForm',
   decorators: [maxWidthDecorator],
-} satisfies Meta;
+  ...controls<Args>(({ boolean }) => ({
+    validationError: boolean(false),
+  })),
+} satisfies Meta<Args>;
 
-export const threadForm: StoryFn = () => <ThreadForm />;
+export const threadForm: StoryFn<Args> = () => <ThreadForm />;
 
 threadForm.decorators = [
-  configureStory(({ thread }) => {
-    thread.createThread.resolve('threadId');
+  configureStory(({ thread }, { validationError }) => {
+    thread.createThread.implement(async (fields) => {
+      if (validationError) {
+        throw new ValidationErrors<ThreadFormFields>({ description: 'min', keywords: 'min', text: 'max' });
+      }
+
+      action('createThread')(fields);
+
+      return 'threadId';
+    });
   }),
 ];
