@@ -31,7 +31,7 @@ export const ReactionButton = ({ comment, reactionType, children }: ReactionButt
       active={comment.userReaction === reactionType}
       onClick={() => setReaction(comment.id, reactionType)}
       disabled={isAuthor}
-      title={isAuthor ? "Vous ne pouvez pas voter pour un commentaire dont vous êtes l'auteur" : undefined}
+      title={isAuthor ? 'Vous ne pouvez pas voter pour vos propres commentaires' : undefined}
     >
       {children}
     </FooterButton>

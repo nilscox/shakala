@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { navigate } from 'vite-plugin-ssr/client/router';
 
 import { useRouter } from '~/app/router-context';
 
+import { useNavigate } from './use-navigate';
 import { usePathname } from './use-pathname';
 
 export const useSearchParams = () => {
@@ -14,6 +14,8 @@ export const useGetSearchParam = (key: string) => {
 };
 
 export const useSetSearchParam = (key: string) => {
+  const navigate = useNavigate();
+
   const params = useSearchParams();
   const pathname = usePathname();
 
@@ -35,9 +37,9 @@ export const useSetSearchParam = (key: string) => {
         paramsStr += '?' + params;
       }
 
-      void navigate(`${pathname}${paramsStr}`);
+      navigate(`${pathname}${paramsStr}`);
     },
-    [key, pathname, params]
+    [key, pathname, params, navigate]
   );
 };
 

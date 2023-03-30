@@ -1,3 +1,5 @@
+import { HttpError } from './http-error';
+
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export interface HttpRequest<Body = unknown> {
@@ -18,12 +20,6 @@ export type RequestOptions<ResponseBody = unknown> = {
   search?: Record<string, string | number>;
   onError?(error: HttpError): ResponseBody;
 };
-
-export class HttpError extends Error {
-  constructor(public readonly request: HttpRequest, public readonly response: HttpResponse) {
-    super(`HTTP ${response.status} Error`);
-  }
-}
 
 export interface HttpPort {
   get<ResponseBody = unknown>(

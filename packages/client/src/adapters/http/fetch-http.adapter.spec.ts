@@ -3,7 +3,7 @@ import { stub } from '@shakala/shared';
 import { describe, it } from 'vitest';
 
 import { FetchHttpAdapter } from './fetch-http.adapter';
-import { HttpError } from './http.port';
+import { HttpError } from './http-error';
 
 const mockFetch = (overrides?: Partial<Response>) => {
   const response = {

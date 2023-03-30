@@ -9,8 +9,9 @@ export const useQuery = <Adapter extends Record<Method, AnyFunction>, Method ext
   ...params: Parameters<Adapter[Method]>
 ) => {
   const adapter = useInjection(adapterToken);
+  const queryKey = [adapter.constructor.name, method, params];
 
-  const { data, error } = useReactQuery([adapter.constructor.name, method, params], () => {
+  const { data, error } = useReactQuery(queryKey, () => {
     return adapter[method](...params);
   });
 

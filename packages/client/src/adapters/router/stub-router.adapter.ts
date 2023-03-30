@@ -1,3 +1,5 @@
+import { stub } from '@shakala/shared';
+
 import { RouterPort } from './router.port';
 
 const baseUrl = 'http://localhost';
@@ -12,4 +14,6 @@ export class StubRouterAdapter implements RouterPort {
   navigate(url: string): void {
     this.url = new URL(url, baseUrl);
   }
+
+  onHashChange = stub();
 }

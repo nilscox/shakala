@@ -10,7 +10,6 @@ import { DateFormat, formatDate } from '~/utils/date-utils';
 
 import { Comment } from './comment/comment';
 import { RootCommentForm } from './comment-form/root-comment-form';
-import { ShareCommentModal } from './modals/share-comment-modal';
 import { ThreadFilters } from './thread-filters';
 
 type ThreadProps = {
@@ -38,8 +37,6 @@ export const Thread = ({ thread }: ThreadProps) => (
     {thread.comments.length > 0 && <ThreadFilters thread={thread} className="mt-10 mb-4" />}
 
     <CommentsList thread={thread} />
-
-    <ShareCommentModal />
   </>
 );
 

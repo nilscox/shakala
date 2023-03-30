@@ -8,8 +8,10 @@ import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-au
 import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter';
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
+import { queryClientConfig } from '~/app/app-providers';
 import { container } from '~/app/container';
 import { PageContextProvider } from '~/app/page-context';
+import { RouterProvider } from '~/app/router-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
 import { PageContext } from '~/renderer/page-context';
@@ -26,8 +28,8 @@ export const setupTest = () => {
   };
 
   beforeEach(() => {
-    pageContext = {} as PageContext;
-    queryClient = new QueryClient();
+    pageContext = { urlParsed: {} } as PageContext;
+    queryClient = new QueryClient(queryClientConfig);
 
     container.bind(TOKENS.router).toConstant(adapters.router);
     container.bind(TOKENS.authentication).toConstant(adapters.authenticationAdapter);
@@ -50,6 +52,20 @@ export const setupTest = () => {
     });
   };
 
+  const setSearchParam = (param: string, value: string) => {
+    const searchParams = new URLSearchParams(pageContext.urlParsed.searchOriginal ?? '');
+
+    searchParams.set(param, value);
+
+    setPageContext({
+      ...pageContext,
+      urlParsed: {
+        ...pageContext.urlParsed,
+        searchOriginal: '?' + searchParams.toString(),
+      },
+    });
+  };
+
   const render = (ui: React.ReactElement) => {
     const user = userEvent.setup();
 
@@ -59,7 +75,9 @@ export const setupTest = () => {
           <ContainerProvider container={container}>
             <PageContextProvider value={pageContext}>
               <QueryClientProvider client={queryClient}>
-                <SnackbarProvider>{children}</SnackbarProvider>
+                <RouterProvider>
+                  <SnackbarProvider>{children}</SnackbarProvider>
+                </RouterProvider>
               </QueryClientProvider>
             </PageContextProvider>
           </ContainerProvider>
@@ -73,6 +91,7 @@ export const setupTest = () => {
   return {
     render,
     setRouteParam,
+    setSearchParam,
     ...adapters,
   };
 };

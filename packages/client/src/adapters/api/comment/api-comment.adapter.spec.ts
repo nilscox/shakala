@@ -94,5 +94,14 @@ describe('ApiCommentAdapter', () => {
       http.mock('POST', '/comment/commentId/report', { body: { reason: 'reason' } })({});
       await expect(adapter.reportComment('commentId', 'reason')).toResolve();
     });
+
+    it('does not fail when the comment was already reported', async () => {
+      http.mock('POST', '/comment/commentId/report', { body: { reason: undefined } })({
+        status: 400,
+        body: { code: 'CommentAlreadyReportedError' },
+      });
+
+      await expect(adapter.reportComment('commentId')).toResolve();
+    });
   });
 });

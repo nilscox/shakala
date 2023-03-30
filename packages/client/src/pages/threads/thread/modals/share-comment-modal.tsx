@@ -1,39 +1,36 @@
+import { CommentDto } from '@shakala/shared';
 import { ReactNode } from 'react';
 
 import { PageTitle } from '~/app/page-title';
 import { Button } from '~/elements/button';
-import { Modal } from '~/elements/modal';
+import { Modal, useModalState } from '~/elements/modal';
 import { useSnackbar } from '~/elements/snackbar';
-import { useBoolean } from '~/hooks/use-boolean';
-import { useQuery } from '~/hooks/use-query';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useSearchParam } from '~/hooks/use-search-params';
-import { useUpdateEffect } from '~/hooks/use-update-effect';
 import facebook from '~/images/logos/facebook-logo.png';
 import link from '~/images/logos/link.png';
 import linkedin from '~/images/logos/linkedin-logo.png';
 import twitter from '~/images/logos/twitter-logo.png';
 import { withSuspense } from '~/utils/with-suspense';
 
+import { FetchComment } from './fetch-comment';
+
 export const ShareCommentModal = () => {
   const [commentId, setShareCommentId] = useSearchParam('share');
-  const [isOpen, openModal, closeModal] = useBoolean(Boolean(commentId));
-
-  useUpdateEffect(() => {
-    if (commentId) {
-      const timeout = setTimeout(() => openModal(), 0);
-      return () => clearTimeout(timeout);
-    }
-  }, [commentId, openModal]);
+  const { isOpen, closeModal } = useModalState(commentId);
 
   return (
     <Modal
       isOpen={isOpen}
+      className="flex max-w-4 flex-col gap-5"
       onRequestClose={closeModal}
       onAfterClose={() => setShareCommentId(undefined)}
-      className="flex max-w-4 flex-col gap-5"
     >
-      {commentId && <ModalContent commentId={commentId} />}
+      {commentId && (
+        <FetchComment commentId={commentId} onNotFound={closeModal}>
+          {(comment) => <ShareComment comment={comment} />}
+        </FetchComment>
+      )}
 
       <Button className="button-secondary self-end" onClick={closeModal}>
         Fermer
@@ -42,16 +39,14 @@ export const ShareCommentModal = () => {
   );
 };
 
-type ModalContentProps = {
-  commentId: string;
+type ShareCommentProps = {
+  comment: CommentDto;
 };
 
-const ModalContent = withSuspense(({ commentId }: ModalContentProps) => {
+const ShareComment = withSuspense(({ comment }: ShareCommentProps) => {
   const snackbar = useSnackbar();
 
-  const comment = useQuery(TOKENS.comment, 'getComment', commentId);
-
-  const permalink = usePermalink(commentId);
+  const permalink = usePermalink(comment.id);
   const copyPermalink = async () => {
     await window.navigator.clipboard.writeText(permalink);
     snackbar.success('Lien copié');
@@ -59,10 +54,10 @@ const ModalContent = withSuspense(({ commentId }: ModalContentProps) => {
 
   return (
     <>
-      <PageTitle>{`Partager le commentaire de ${comment?.author.nick}`}</PageTitle>
+      <PageTitle>{`Partager le commentaire de ${comment.author.nick}`}</PageTitle>
 
       <h2 className="py-0 text-primary">
-        Partager le commentaire de <strong className="text-inherit">{comment?.author.nick}</strong>
+        Partager le commentaire de <strong className="text-inherit">{comment.author.nick}</strong>
       </h2>
 
       <div className="flex flex-row justify-evenly py-4">
@@ -76,7 +71,7 @@ const ModalContent = withSuspense(({ commentId }: ModalContentProps) => {
         <ShareIcon
           title="Partager sur Twitter"
           href={`https://twitter.com/intent/tweet?${new URLSearchParams({
-            text: `Venez découvrir ce que dit ${comment?.author.nick} sur #shakala !\n${permalink}`,
+            text: `Venez découvrir ce que dit ${comment.author.nick} sur #shakala !\n${permalink}`,
           })}`}
         >
           <img src={twitter} alt="Twitter" className="w-full" />

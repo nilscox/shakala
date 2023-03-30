@@ -4,7 +4,8 @@ import { injected } from 'brandi';
 import { AppConfig } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
 
-import { HttpPort, RequestOptions, HttpResponse, HttpMethod, HttpRequest, HttpError } from './http.port';
+import { HttpError } from './http-error';
+import { HttpPort, RequestOptions, HttpResponse, HttpMethod, HttpRequest } from './http.port';
 
 export class FetchHttpAdapter implements HttpPort {
   public delay?: number;

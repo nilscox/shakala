@@ -9,6 +9,7 @@ import {
 } from '@shakala/shared';
 import { injected } from 'brandi';
 
+import { HttpError } from '~/adapters/http/http-error';
 import { HttpPort } from '~/adapters/http/http.port';
 import { TOKENS } from '~/app/tokens';
 
@@ -18,7 +19,16 @@ export class ApiCommentAdapter implements CommentPort {
   constructor(private readonly http: HttpPort) {}
 
   async getComment(commentId: string): Promise<Maybe<CommentDto>> {
-    const { body } = await this.http.get<CommentDto>(`/comment/${commentId}`);
+    const onError = (error: HttpError) => {
+      if (error.response.status === 404) {
+        return undefined;
+      }
+
+      throw error;
+    };
+
+    const { body } = await this.http.get<Maybe<CommentDto>>(`/comment/${commentId}`, { onError });
+
     return body;
   }
 
@@ -26,6 +36,7 @@ export class ApiCommentAdapter implements CommentPort {
     const { body } = await this.http.post<CreateCommentBody, string>(`/thread/${threadId}/comment`, {
       text,
     });
+
     return body;
   }
 
@@ -33,6 +44,7 @@ export class ApiCommentAdapter implements CommentPort {
     const { body } = await this.http.post<CreateCommentBody, string>(`/comment/${parentId}/reply`, {
       text,
     });
+
     return body;
   }
 
@@ -51,7 +63,15 @@ export class ApiCommentAdapter implements CommentPort {
   }
 
   async reportComment(commentId: string, reason?: string): Promise<void> {
-    await this.http.post<ReportCommentBody>(`/comment/${commentId}/report`, { reason });
+    const onError = (error: HttpError) => {
+      if (error.code === 'CommentAlreadyReportedError') {
+        return;
+      }
+
+      throw error;
+    };
+
+    await this.http.post<ReportCommentBody>(`/comment/${commentId}/report`, { reason }, { onError });
   }
 }
 

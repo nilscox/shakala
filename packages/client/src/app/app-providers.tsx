@@ -1,5 +1,5 @@
 import { ContainerProvider } from 'brandi-react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientConfig, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { SnackbarProvider } from '~/elements/snackbar';
@@ -9,7 +9,7 @@ import { container } from './container';
 import { PageContextProvider } from './page-context';
 import { RouterProvider } from './router-context';
 
-const clientQueryClient = new QueryClient({
+export const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
     queries: {
       suspense: true,
@@ -17,7 +17,9 @@ const clientQueryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-});
+};
+
+const clientQueryClient = new QueryClient(queryClientConfig);
 
 type AppProvidersProps = {
   context: PageContext;

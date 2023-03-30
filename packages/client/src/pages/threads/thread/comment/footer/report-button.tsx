@@ -1,24 +1,27 @@
 import { CommentDto } from '@shakala/shared';
 
-import { TOKENS } from '~/app/tokens';
-import { useMutate } from '~/hooks/use-mutate';
+import { useUser } from '~/hooks/use-user';
 import ReportIcon from '~/icons/report.svg';
 
-import { FooterButton } from './footer-button';
+import { FooterButtonLink } from './footer-button';
 
 type ReportButtonProps = {
   comment: CommentDto;
 };
 
 export const ReportButton = ({ comment }: ReportButtonProps) => {
-  const report = useMutate(TOKENS.comment, 'reportComment', {
-    onSuccess: () => console.log('success'), // todo
-  });
+  const user = useUser();
+  const isAuthor = comment.author.id === user?.id;
 
   return (
-    // todo: modal
-    <FooterButton icon={<ReportIcon />} onClick={() => report(comment.id, 'reason')}>
+    <FooterButtonLink
+      param="report"
+      value={comment.id}
+      icon={<ReportIcon className="mr-0.5 h-4 w-4" />}
+      disabled={isAuthor}
+      title={isAuthor ? 'Vous ne pouvez pas signaler vos propres commentaires' : undefined}
+    >
       Signaler
-    </FooterButton>
+    </FooterButtonLink>
   );
 };

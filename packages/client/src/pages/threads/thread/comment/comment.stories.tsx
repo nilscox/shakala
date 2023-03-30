@@ -15,10 +15,14 @@ export default {
       routeParams: { threadId: 'threadId' },
     },
   },
+  args: {
+    authenticated: false,
+  },
   decorators: [maxWidthDecorator],
 } satisfies Meta;
 
-export const commentStory: StoryFn = () => {
+// eslint-disable-next-line no-empty-pattern
+export const commentStory: StoryFn = ({}) => {
   return <Comment comment={comment} />;
 };
 
