@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 
-import { controls } from '../../utils/storybook';
+import { controls } from '~/utils/storybook';
 
 import { Avatar } from './avatar';
 import { AvatarNick } from './avatar-nick';
@@ -13,11 +13,14 @@ type Args = {
 
 export default {
   title: 'Elements/Avatar',
-  ...controls<Args>(({ inlineRadio, boolean, string }) => ({
-    size: inlineRadio(['small', 'medium', 'big'], 'medium'),
-    loading: boolean(false),
-    nick: string(),
-  })),
+  args: {
+    size: 'medium',
+    loading: false,
+  },
+  argTypes: {
+    size: controls.inlineRadio(['small', 'medium', 'big']),
+    nick: controls.string(),
+  },
 } satisfies Meta<Args>;
 
 export const avatar: StoryFn<Args> = ({ nick, ...args }) => {

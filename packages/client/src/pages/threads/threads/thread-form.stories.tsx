@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
 
 import { ThreadFormFields } from '~/adapters/api/thread/thread.port';
-import { configureStory, controls, maxWidthDecorator } from '~/utils/storybook';
+import { configureStory, maxWidthDecorator } from '~/utils/storybook';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
@@ -15,13 +15,14 @@ type Args = {
 export default {
   title: 'Domain/ThreadForm',
   decorators: [maxWidthDecorator],
-  ...controls<Args>(({ boolean }) => ({
-    validationError: boolean(false),
-    unexpectedError: boolean(false),
-  })),
+  args: {
+    validationError: false,
+    unexpectedError: false,
+  },
 } satisfies Meta<Args>;
 
-export const threadForm: StoryFn<Args> = () => <ThreadForm />;
+// eslint-disable-next-line no-empty-pattern
+export const threadForm: StoryFn<Args> = ({}) => <ThreadForm />;
 
 threadForm.decorators = [
   configureStory(({ thread }, { validationError, unexpectedError }) => {

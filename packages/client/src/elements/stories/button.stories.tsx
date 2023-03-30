@@ -5,8 +5,7 @@ import { controls } from '~/utils/storybook';
 import { Button } from '../button';
 
 type Args = {
-  primary: boolean;
-  secondary: boolean;
+  variant: 'primary' | 'secondary';
   small: boolean;
   disabled: boolean;
   loading: boolean;
@@ -14,15 +13,21 @@ type Args = {
 
 export default {
   title: 'Elements/Button',
-  ...controls<Args>(({ boolean }) => ({
-    primary: boolean(true),
-    secondary: boolean(false),
-    small: boolean(false),
-    disabled: boolean(false),
-    loading: boolean(false),
-  })),
+  args: {
+    variant: 'primary',
+    small: false,
+    disabled: false,
+    loading: false,
+  },
+  argTypes: {
+    variant: controls.inlineRadio(['primary', 'secondary']),
+  },
 } satisfies Meta<Args>;
 
-export const button: StoryFn<Args> = (props) => {
-  return <Button {...props}>Click me!</Button>;
+export const button: StoryFn<Args> = ({ variant, ...props }) => {
+  return (
+    <Button primary={variant === 'primary'} secondary={variant === 'secondary'} {...props}>
+      Click me!
+    </Button>
+  );
 };

@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { controls, maxWidthDecorator } from '~/utils/storybook';
+import { maxWidthDecorator } from '~/utils/storybook';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { CommentForm } from './comment-form';
@@ -26,10 +26,10 @@ export default {
     ),
     maxWidthDecorator,
   ],
-  ...controls<Args>(({ boolean }) => ({
-    validationError: boolean(false),
-    unexpectedError: boolean(false),
-  })),
+  args: {
+    validationError: false,
+    unexpectedError: false,
+  },
 } satisfies Meta<Args>;
 
 export const commentForm: StoryFn<Args> = ({ validationError, unexpectedError }) => (
