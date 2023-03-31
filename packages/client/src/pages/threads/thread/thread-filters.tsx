@@ -2,11 +2,12 @@ import { CommentSort, isCommentSort, ThreadDto } from '@shakala/shared';
 import { clsx } from 'clsx';
 import { FormEventHandler, useCallback } from 'react';
 
-import { Input } from '../../../elements/input';
-import { RadioItem, RadiosGroup } from '../../../elements/radio-group';
-import { useSearchParam } from '../../../hooks/use-search-params';
-import IconArrowDown from '../../../icons/arrow-down.svg';
-import IconArrowUp from '../../../icons/arrow-up.svg';
+import { Input } from '~/elements/input';
+import { RadioItem, RadiosGroup } from '~/elements/radio-group';
+import { useSearchParam } from '~/hooks/use-search-params';
+import IconArrowDown from '~/icons/arrow-down.svg';
+import IconArrowUp from '~/icons/arrow-up.svg';
+import IconSearch from '~/icons/search.svg';
 
 export type ThreadFiltersProps = {
   thread: ThreadDto;
@@ -43,6 +44,7 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
         placeholder="Rechercher..."
         className="grow"
         defaultValue={search ?? ''}
+        start={<IconSearch className="fill-muted" />}
       />
 
       <RadiosGroup className="text-muted">

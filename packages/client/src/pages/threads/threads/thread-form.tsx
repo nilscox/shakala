@@ -37,7 +37,7 @@ export const ThreadForm = () => {
           max: 'La description est trop longue',
         }}
       >
-        <Input required className="w-full" {...form.register('description')} />
+        <Input required {...form.register('description')} />
       </FormField>
 
       <FormField
@@ -50,7 +50,7 @@ export const ThreadForm = () => {
           max: 'Un des mots-clés est trop long',
         }}
       >
-        <Input className="w-full" {...form.register('keywords')} />
+        <Input {...form.register('keywords')} />
       </FormField>
 
       <FormField
