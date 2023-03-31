@@ -38,6 +38,10 @@ export class ApiAuthenticationAdapter implements AuthenticationPort {
       password,
     });
   }
+
+  async signOut(): Promise<void> {
+    await this.http.post('/auth/sign-out');
+  }
 }
 
 injected(ApiAuthenticationAdapter, TOKENS.http);

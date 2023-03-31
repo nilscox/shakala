@@ -5,5 +5,6 @@ import { ThreadPort } from './thread.port';
 export class StubThreadAdapter implements ThreadPort {
   getLastThreads = stub<ThreadPort['getLastThreads']>();
   getThread = stub<ThreadPort['getThread']>();
+  getThreadComments = stub<ThreadPort['getThreadComments']>();
   createThread = stub<ThreadPort['createThread']>();
 }

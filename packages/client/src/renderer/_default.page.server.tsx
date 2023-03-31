@@ -2,10 +2,10 @@ import * as ReactDOMServer from 'react-dom/server';
 import { dehydrate, Hydrate } from 'react-query';
 import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
 
+import { Layout } from '~/app/layout/layout';
 import { TOKENS } from '~/app/tokens';
 
 import { AppProviders } from '../app/app-providers';
-import { Layout } from '../app/layout/layout';
 import { prefetchQuery } from '../utils/prefetch-query';
 
 import type { PageContextServer } from './page-context';
@@ -16,6 +16,8 @@ const commonQueries = [prefetchQuery(TOKENS.authentication, 'getAuthenticatedUse
 
 export async function render(pageContext: PageContextServer) {
   const { Page, pageProps, exports, queryClient, token } = pageContext;
+  const PageLayout = exports.Layout ?? (({ children }) => <>{children}</>);
+
   const queries = [...commonQueries, ...(exports.queries ?? [])];
 
   await Promise.all(queries.map((query) => query(pageContext, token)));
@@ -27,7 +29,9 @@ export async function render(pageContext: PageContextServer) {
       <AppProviders context={pageContext} queryClient={pageContext.queryClient}>
         <Hydrate state={dehydratedState}>
           <Layout>
-            <Page {...pageProps} />
+            <PageLayout>
+              <Page {...pageProps} />
+            </PageLayout>
           </Layout>
         </Hydrate>
       </AppProviders>

@@ -6,4 +6,5 @@ export class StubAuthenticationAdapter implements AuthenticationPort {
   getAuthenticatedUser = stub<AuthenticationPort['getAuthenticatedUser']>();
   signUp = stub<AuthenticationPort['signUp']>();
   signIn = stub<AuthenticationPort['signIn']>();
+  signOut = stub<AuthenticationPort['signOut']>();
 }

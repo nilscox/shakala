@@ -15,7 +15,8 @@ export const hydrationCanBeAborted = true;
 let root: ReactDOM.Root;
 
 export function render(pageContext: PageContextClient) {
-  const { Page, pageProps, dehydratedState } = pageContext;
+  const { Page, pageProps, dehydratedState, exports } = pageContext;
+  const PageLayout = exports.Layout ?? (({ children }) => <>{children}</>);
 
   const container = document.getElementById('app') as HTMLElement;
 
@@ -23,7 +24,9 @@ export function render(pageContext: PageContextClient) {
     <AppProviders context={pageContext}>
       <Hydrate state={dehydratedState}>
         <Layout>
-          <Page {...pageProps} />
+          <PageLayout>
+            <Page {...pageProps} />
+          </PageLayout>
         </Layout>
       </Hydrate>
     </AppProviders>

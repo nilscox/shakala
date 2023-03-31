@@ -12,6 +12,7 @@ type PageContextCustom = {
   pageProps?: PageProps;
   routeParams: Record<string, string>;
   exports: {
+    Layout?: React.ComponentType<React.PropsWithChildren>;
     queries?: Query[];
   };
 };
