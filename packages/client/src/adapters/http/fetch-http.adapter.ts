@@ -6,16 +6,25 @@ import { TOKENS } from '~/app/tokens';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { HttpError } from './http-error';
-import { HttpPort, RequestOptions, HttpResponse, HttpMethod, HttpRequest } from './http.port';
+import { HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
 
 export class FetchHttpAdapter implements HttpPort {
   public delay?: number;
-  private headers = new Headers();
+  public headers = new Headers();
 
   constructor(
     private readonly baseUrl?: string,
     private readonly fetch = globalThis.fetch.bind(globalThis)
   ) {}
+
+  clone() {
+    const clone = new FetchHttpAdapter(this.baseUrl, this.fetch);
+
+    clone.delay = this.delay;
+    clone.headers = new Headers(this.headers);
+
+    return clone;
+  }
 
   setToken(token: string) {
     this.headers.set('cookie', `token=${token}`);

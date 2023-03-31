@@ -8,7 +8,7 @@ import { TOKENS } from '~/app/tokens';
 import { PageContextServer } from '~/renderer/page-context';
 
 import { ApiThreadAdapter } from '../adapters/api/thread/api-thread.adapter';
-import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
+import { ApiFetchHttpAdapter, FetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 
 import { prefetchQuery } from './prefetch-query';
 
@@ -22,21 +22,21 @@ describe('prefetchQuery', () => {
 
     container.bind(TOKENS.thread).toConstant(adapter);
 
-    let headers: Headers | undefined;
+    let requestHttp: FetchHttpAdapter | undefined;
 
     adapter.getThread = async function () {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      headers = (this as any).http.headers;
+      requestHttp = (this as any).http;
       return undefined;
     };
 
     await prefetchQuery(TOKENS.thread, 'getThread', '42')(pageContext, 'token');
 
-    expect.assert(headers);
-    expect(headers.get('cookie')).toEqual('token=token');
+    expect(requestHttp).not.toBe(http);
+    expect(requestHttp?.headers).not.toBe(http.headers);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((http as any).headers.get('cookie')).toBe(null);
+    expect(http.headers.get('cookie')).toEqual(null);
+    expect(requestHttp?.headers.get('cookie')).toEqual('token=token');
   });
 
   it('prefetches a query depending on the page context', async () => {

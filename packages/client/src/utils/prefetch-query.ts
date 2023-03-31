@@ -52,14 +52,16 @@ export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Metho
     const queryKey = [adapter.constructor.name, method, params];
 
     await pageContext.queryClient.prefetchQuery(queryKey, async () => {
+      const httpClone = http.clone();
+
       if (token) {
-        http.setToken(token);
+        httpClone.setToken(token);
       }
 
       const cb = adapter[method];
       assert(typeof cb === 'function');
 
-      return cb.call({ ...adapter, http }, ...params);
+      return cb.call({ ...adapter, http: httpClone }, ...params);
     });
   };
 }
