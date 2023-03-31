@@ -1,11 +1,10 @@
 import { first } from '@shakala/shared';
 
 import { TOKENS } from '~/app/tokens';
-
-import { Link } from '../../../elements/link';
-import { useQuery } from '../../../hooks/use-query';
-import { prefetchQuery } from '../../../utils/prefetch-query';
-import { withSuspense } from '../../../utils/with-suspense';
+import { Link } from '~/elements/link';
+import { useQuery } from '~/hooks/use-query';
+import { prefetchQuery } from '~/utils/prefetch-query';
+import { withSuspense } from '~/utils/with-suspense';
 
 import { ThreadForm } from './thread-form';
 

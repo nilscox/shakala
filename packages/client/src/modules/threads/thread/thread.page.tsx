@@ -1,6 +1,7 @@
 import { isCommentSort } from '@shakala/shared';
 
 import { TOKENS } from '~/app/tokens';
+import { withSuspense } from '~/utils/with-suspense';
 
 import { useQuery } from '../../../hooks/use-query';
 import { useRouteParam } from '../../../hooks/use-route-params';
@@ -35,7 +36,7 @@ export const queries = [
 
 export { ThreadPage as Page };
 
-const ThreadPage = () => {
+const ThreadPage = withSuspense(() => {
   const threadId = useRouteParam('threadId');
   const thread = useQuery(TOKENS.thread, 'getThread', threadId);
 
@@ -52,4 +53,4 @@ const ThreadPage = () => {
       <ShareCommentModal />
     </>
   );
-};
+});

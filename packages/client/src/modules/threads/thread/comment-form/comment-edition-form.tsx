@@ -3,7 +3,7 @@ import { useInjection } from 'brandi-react';
 
 import { TOKENS } from '~/app/tokens';
 
-import { CommentForm } from '../comment-form/comment-form';
+import { CommentForm } from './comment-form';
 
 type CommentEditionFormProps = {
   comment: CommentDto | ReplyDto;
