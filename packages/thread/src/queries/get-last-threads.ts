@@ -10,7 +10,7 @@ export type GetLastThreadsQuery = {
   count: number;
 };
 
-export type GetLastThreadsResult = Array<Omit<GetThreadResult, 'comments'>>;
+export type GetLastThreadsResult = GetThreadResult[];
 
 export const getLastThreads = queryCreator<GetLastThreadsQuery, GetLastThreadsResult>('getLastThreads');
 

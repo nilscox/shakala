@@ -44,7 +44,7 @@ describe('FetchHttpAdapter', () => {
     const fetch = mockFetch();
     const adapter = new FetchHttpAdapter(undefined, fetch);
 
-    await adapter.get('/', { search: { id: 42 } });
+    await adapter.get('/', { search: { id: 42, toto: undefined } });
 
     expect(fetch.lastCall).toEqual(['/?id=42', expect.anything()]);
   });

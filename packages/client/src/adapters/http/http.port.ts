@@ -1,11 +1,12 @@
 import { HttpError } from './http-error';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type SearchParams = Record<string, string | number | boolean | undefined>;
 
 export interface HttpRequest<Body = unknown> {
   url: string;
   method: HttpMethod;
-  search?: URLSearchParams;
+  search?: SearchParams;
   headers?: Headers;
   body?: Body;
 }
@@ -17,7 +18,7 @@ export interface HttpResponse<Body = unknown> {
 }
 
 export type RequestOptions<ResponseBody = unknown> = {
-  search?: Record<string, string | number>;
+  search?: SearchParams;
   onError?(error: HttpError): ResponseBody;
 };
 

@@ -1,14 +1,22 @@
 import util from 'node:util';
 
+import { removeUndefinedValues } from '@shakala/shared';
+
+import { HttpError } from './http-error';
 import { HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
 
 export type MockHttpResponse = (response: Partial<HttpResponse>) => void;
 
 export class StubHttpAdapter implements HttpPort {
-  private responses = new Map<Partial<HttpRequest>, Partial<HttpResponse>>();
+  readonly requests = new Array<HttpRequest>();
+  readonly responses = new Array<Partial<HttpResponse> | Partial<HttpError>>();
 
-  mock(method: HttpMethod, url: string, options?: { body?: unknown }): MockHttpResponse {
-    return (response) => this.responses.set({ method, url, body: options?.body }, response);
+  set response(response: Partial<HttpResponse>) {
+    this.responses.push(response);
+  }
+
+  set error(error: Partial<HttpError>) {
+    this.responses.push(error);
   }
 
   async get<ResponseBody>(
@@ -34,44 +42,36 @@ export class StubHttpAdapter implements HttpPort {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async request(request: HttpRequest, options?: RequestOptions): Promise<HttpResponse<any>> {
-    if (options?.search) {
-      request.url += `?${new URLSearchParams(options.search as Record<string, string>)}`;
+    this.requests.push(
+      removeUndefinedValues({
+        search: options?.search,
+        ...request,
+      })
+    );
+
+    const response: HttpResponse = {
+      status: 200,
+      body: undefined,
+      headers: new Headers(),
+    };
+
+    const result = this.responses.pop();
+
+    if (!result) {
+      throw new Error(`StubHttpAdapter: no response for request ${util.inspect(request)}`);
     }
 
-    for (const [match, response] of this.responses.entries()) {
-      if (!this.matchRequest(match, request)) {
-        continue;
+    if (result instanceof HttpError) {
+      if (options?.onError) {
+        response.body = options.onError(result);
+      } else {
+        throw result;
       }
-
-      return {
-        status: 200,
-        body: undefined,
-        headers: new Headers(),
-        ...response,
-      };
     }
 
-    let message = `no match found for request ${util.inspect(request)}\n`;
-    message += Array.from(this.responses.keys()).map((value) => util.inspect(value));
-
-    throw new Error(message);
-  }
-
-  private matchRequest(match: Partial<HttpRequest>, request: HttpRequest) {
-    const { method, url, body } = match;
-
-    if (method && method !== request.method) {
-      return false;
-    }
-
-    if (url && url !== request.url) {
-      return false;
-    }
-
-    if (body && JSON.stringify(body) !== JSON.stringify(request.body)) {
-      return false;
-    }
-
-    return true;
+    return {
+      ...response,
+      ...result,
+    };
   }
 }

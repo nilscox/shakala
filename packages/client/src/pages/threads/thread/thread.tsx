@@ -1,12 +1,14 @@
-import { ThreadDto } from '@shakala/shared';
+import { isCommentSort, ThreadDto } from '@shakala/shared';
 import { Helmet } from 'react-helmet';
 
 import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Fallback } from '~/elements/fallback';
+import { useQuery } from '~/hooks/use-query';
 import { useSearchParam } from '~/hooks/use-search-params';
 import { useUser } from '~/hooks/use-user';
 import { DateFormat, formatDate } from '~/utils/date-utils';
+import { withSuspense } from '~/utils/with-suspense';
 
 import { Comment } from './comment/comment';
 import { RootCommentForm } from './comment-form/root-comment-form';
@@ -21,12 +23,12 @@ export const Thread = ({ thread }: ThreadProps) => (
     <PageTitle>{`${thread.author.nick} : ${thread.text}`}</PageTitle>
     <ThreadMeta {...thread} />
 
-    <div className="my-5 md:mt-10">
+    <div className="my-5 md:my-10">
       <div className="row mb-2 flex-wrap items-center justify-between gap-4">
         <AvatarNick size="medium" nick={thread.author.nick} image={thread.author.profileImage} />
         <div className="text-muted">
           <time dateTime={thread.date}>{formatDate(thread.date, DateFormat.full)}</time>,{' '}
-          {thread.comments.length} commentaires
+          {/* {thread.comments.length} commentaires */}
         </div>
       </div>
 
@@ -34,7 +36,7 @@ export const Thread = ({ thread }: ThreadProps) => (
       <div className="card p-4 sm:p-5">{thread.text}</div>
     </div>
 
-    {thread.comments.length > 0 && <ThreadFilters thread={thread} className="mt-10 mb-4" />}
+    <ThreadFilters thread={thread} className="mb-4" />
 
     <CommentsList thread={thread} />
   </>
@@ -56,16 +58,22 @@ type CommentsListProps = {
   thread: ThreadDto;
 };
 
-const CommentsList = ({ thread }: CommentsListProps) => {
+const CommentsList = withSuspense(({ thread }: CommentsListProps) => {
   const user = useUser();
+
+  const [search] = useSearchParam('search');
+  const [sortParam] = useSearchParam('sort');
+  const sort = isCommentSort(sortParam) ? sortParam : undefined;
+
+  const comments = useQuery(TOKENS.thread, 'getThreadComments', thread.id, { sort, search });
 
   return (
     <div className="flex flex-col gap-4">
-      {thread.comments.map((comment) => (
+      {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
 
-      {thread.comments.length === 0 && <NoCommentFallback />}
+      {comments.length === 0 && <NoCommentFallback />}
 
       <div className="card">
         <div className="flex flex-row items-center gap-4 p-2 pb-0">
@@ -76,7 +84,7 @@ const CommentsList = ({ thread }: CommentsListProps) => {
       </div>
     </div>
   );
-};
+});
 
 const NoCommentFallback = () => {
   const [search] = useSearchParam('search');

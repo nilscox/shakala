@@ -1,3 +1,5 @@
+import { isCommentSort } from '@shakala/shared';
+
 import { TOKENS } from '~/app/tokens';
 
 import { useQuery } from '../../../hooks/use-query';
@@ -10,7 +12,17 @@ import { ShareCommentModal } from './modals/share-comment-modal';
 import { Thread } from './thread';
 
 export const queries = [
-  prefetchQuery(({ routeParams }) => [TOKENS.thread, 'getThread', routeParams.threadId]),
+  prefetchQuery(({ routeParams }) => {
+    return [TOKENS.thread, 'getThread', routeParams.threadId];
+  }),
+  prefetchQuery(({ routeParams, urlParsed }) => {
+    const params = new URLSearchParams(urlParsed.searchOriginal ?? '');
+    const search = params.get('search') ?? undefined;
+    const sortParam = params.get('sort') ?? undefined;
+    const sort = isCommentSort(sortParam) ? sortParam : undefined;
+
+    return [TOKENS.thread, 'getThreadComments', routeParams.threadId, { search, sort }];
+  }),
   prefetchQuery(({ urlParsed }) => {
     const searchParams = new URLSearchParams(urlParsed.searchOriginal ?? '');
     const share = searchParams.get('share');

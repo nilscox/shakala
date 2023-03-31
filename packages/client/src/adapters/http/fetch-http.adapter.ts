@@ -62,7 +62,9 @@ export class FetchHttpAdapter implements HttpPort {
       const params = new URLSearchParams();
 
       for (const [key, value] of Object.entries(options.search)) {
-        params.set(key, String(value));
+        if (value !== undefined) {
+          params.set(key, String(value));
+        }
       }
 
       if (Array.from(params.keys()).length > 0) {

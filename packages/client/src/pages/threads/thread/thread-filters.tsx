@@ -30,7 +30,7 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
       }
 
       setSearch(search);
-      setSort(sort);
+      setSort(sort === CommentSort.relevance ? undefined : sort);
     },
     [setSearch, setSort]
   );

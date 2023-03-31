@@ -10,7 +10,7 @@ export const useSearchParams = () => {
 };
 
 export const useGetSearchParam = (key: string) => {
-  return useSearchParams().get(key);
+  return useSearchParams().get(key) ?? undefined;
 };
 
 export const useSetSearchParam = (key: string) => {

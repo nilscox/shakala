@@ -2,6 +2,7 @@ import assert from 'assert';
 
 import { CommandBus, EntityNotFoundError, GeneratorPort, QueryBus, TOKENS } from '@shakala/common';
 import {
+  CommentDto,
   createCommentBodySchema,
   createThreadBodySchema,
   getLastThreadsQuerySchema,
@@ -27,6 +28,7 @@ export class ThreadController {
 
     this.router.get('/', this.getLastThreads);
     this.router.get('/:threadId', this.getThread);
+    this.router.get('/:threadId/comments', this.getThreadComments);
     this.router.post('/', guards, this.createThread);
     this.router.post('/:threadId/comment', guards, this.createComment);
   }
@@ -40,6 +42,17 @@ export class ThreadController {
   };
 
   getThread: RequestHandler<{ threadId: string }, ThreadDto> = async (req, res) => {
+    const thread = await this.queryBus.execute(getThread({ threadId: req.params.threadId }));
+
+    if (!thread) {
+      throw new EntityNotFoundError('Thread', { id: req.params.threadId });
+    }
+
+    res.status(200);
+    res.send(thread);
+  };
+
+  getThreadComments: RequestHandler<{ threadId: string }, CommentDto[]> = async (req, res) => {
     const query = await validateRequest(req).query(getThreadQuerySchema);
 
     const thread = await this.queryBus.execute(getThread({ threadId: req.params.threadId }));
@@ -53,7 +66,7 @@ export class ThreadController {
     );
 
     res.status(200);
-    res.send({ ...thread, comments });
+    res.send(comments);
   };
 
   createThread: RequestHandler = async (req, res) => {

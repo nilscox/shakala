@@ -63,15 +63,35 @@ describe('[intg] ThreadController', () => {
 
     it('retrieves a thread from its id', async () => {
       test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
+
+      const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
+
+      expect(await response.json()).toEqual(result);
+    });
+
+    it('fails with status 404 when the thread does not exist', async () => {
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return(undefined);
+
+      await expect(test.createAgent().get(route)).toHaveStatus(404);
+    });
+  });
+
+  describe('GET /:threadId/comments', () => {
+    const route = '/thread/threadId/comments';
+
+    beforeEach(() => {
+      test.queryBus.on(getThread({ threadId: 'threadId' })).return({ id: 'threadId' });
+    });
+
+    it("retrieves a thread's comments from its id", async () => {
       test.queryBus.on(getThreadComments({ threadId: 'threadId', sort: CommentSort.relevance })).return([]);
 
       const response = await expect(test.createAgent().get(route)).toHaveStatus(200);
 
-      expect(await response.json()).toEqual({ ...result, comments: [] });
+      expect(await response.json()).toEqual([]);
     });
 
     it('retrieves a thread an an authenticated user', async () => {
-      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
       test.queryBus
         .on(getThreadComments({ threadId: 'threadId', userId: 'userId', sort: CommentSort.relevance }))
         .return([]);
@@ -85,7 +105,6 @@ describe('[intg] ThreadController', () => {
         search: 'search',
       });
 
-      test.queryBus.on(getThread({ threadId: 'threadId' })).return(result);
       test.queryBus
         .on(getThreadComments({ threadId: 'threadId', sort: CommentSort.dateDesc, search: 'search' }))
         .return([]);

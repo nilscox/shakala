@@ -8,6 +8,7 @@ export * from './schemas/thread';
 
 export * from './types/any-function';
 export * from './types/class-type';
+export * from './types/deep-exclude';
 export * from './types/deep-partial';
 export * from './types/enum-type';
 export * from './types/instance-of';
@@ -32,6 +33,7 @@ export * from './utils/merge';
 export * from './utils/omit';
 export * from './utils/pick';
 export * from './utils/random-id';
+export * from './utils/remove-undefined-values';
 export * from './utils/stub';
 export * from './utils/to-kebab-case';
 export * from './utils/wait-for';

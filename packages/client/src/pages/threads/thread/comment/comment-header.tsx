@@ -15,7 +15,7 @@ type CommentHeaderProps = {
 export const CommentHeader = ({ comment, className }: CommentHeaderProps) => (
   <div className={clsx('row items-center gap-2', className)}>
     <AvatarNick nick={comment.author.nick} image={comment.author.profileImage} />
-    <div>{bullet}</div>
+    <div className="text-muted">{bullet}</div>
     <Link
       href={`#${comment.id}`}
       className={clsx('text-xs leading-none text-muted decoration-muted/40 hover:underline', {

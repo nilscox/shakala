@@ -1,4 +1,4 @@
-import { CreateThreadBody, Maybe, ThreadDto } from '@shakala/shared';
+import { CreateThreadBody, Maybe, RootCommentDto, ThreadDto } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { TOKENS } from '~/app/tokens';
@@ -6,7 +6,7 @@ import { TOKENS } from '~/app/tokens';
 import { ValidationErrors } from '../../../utils/validation-errors';
 import { HttpPort } from '../../http/http.port';
 
-import { ThreadFormFields, ThreadPort } from './thread.port';
+import { GetThreadCommentsOptions, ThreadFormFields, ThreadPort } from './thread.port';
 
 export class ApiThreadAdapter implements ThreadPort {
   constructor(protected readonly http: HttpPort) {}
@@ -18,6 +18,14 @@ export class ApiThreadAdapter implements ThreadPort {
 
   async getThread(threadId: string): Promise<Maybe<ThreadDto>> {
     const response = await this.http.get<ThreadDto>(`/thread/${threadId}`);
+    return response.body;
+  }
+
+  async getThreadComments(threadId: string, options?: GetThreadCommentsOptions): Promise<RootCommentDto[]> {
+    const response = await this.http.get<RootCommentDto[]>(`/thread/${threadId}/comments`, {
+      search: options,
+    });
+
     return response.body;
   }
 
