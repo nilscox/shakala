@@ -16,25 +16,34 @@ import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
 import { PageContext } from '~/renderer/page-context';
 
+type StubAdapters = {
+  router: StubRouterAdapter;
+  authentication: StubAuthenticationAdapter;
+  thread: StubThreadAdapter;
+  comment: StubCommentAdapter;
+};
+
 export const setupTest = () => {
   let pageContext: PageContext = {} as PageContext;
   let queryClient: QueryClient;
 
-  const adapters = {
-    router: new StubRouterAdapter(),
-    authenticationAdapter: new StubAuthenticationAdapter(),
-    threadAdapter: new StubThreadAdapter(),
-    commentAdapter: new StubCommentAdapter(),
-  };
+  const adapters = {} as StubAdapters;
 
   beforeEach(() => {
     pageContext = { urlParsed: {} } as PageContext;
     queryClient = new QueryClient(queryClientConfig);
 
+    Object.assign(adapters, {
+      router: new StubRouterAdapter(),
+      authentication: new StubAuthenticationAdapter(),
+      thread: new StubThreadAdapter(),
+      comment: new StubCommentAdapter(),
+    });
+
     container.bind(TOKENS.router).toConstant(adapters.router);
-    container.bind(TOKENS.authentication).toConstant(adapters.authenticationAdapter);
-    container.bind(TOKENS.thread).toConstant(adapters.threadAdapter);
-    container.bind(TOKENS.comment).toConstant(adapters.commentAdapter);
+    container.bind(TOKENS.authentication).toConstant(adapters.authentication);
+    container.bind(TOKENS.thread).toConstant(adapters.thread);
+    container.bind(TOKENS.comment).toConstant(adapters.comment);
   });
 
   const setPageContext = (ctx: Partial<PageContext>) => {
@@ -100,6 +109,6 @@ export const setupTest = () => {
     setRouteParam,
     setSearchParam,
     setQueryData,
-    ...adapters,
+    adapters,
   };
 };

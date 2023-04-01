@@ -10,7 +10,7 @@ import { ReplyForm } from './reply-form';
 import { RootCommentForm } from './root-comment-form';
 
 describe('CommentForm', () => {
-  const { render, setRouteParam, commentAdapter } = setupTest();
+  const { render, setRouteParam, adapters } = setupTest();
 
   const thread = createThreadDto({
     id: 'threadId',
@@ -24,7 +24,7 @@ describe('CommentForm', () => {
   afterEach(cleanup);
 
   it('creates a new root comment', async () => {
-    commentAdapter.createComment.resolve('commentId');
+    adapters.comment.createComment.resolve('commentId');
 
     const user = render(<RootCommentForm thread={thread} />);
 
@@ -33,13 +33,13 @@ describe('CommentForm', () => {
     await user.type(input, 'comment');
     await user.click(screen.getByText('Envoyer'));
 
-    expect(commentAdapter.createComment).calledWith('threadId', expect.stringMatching(/comment/));
+    expect(adapters.comment.createComment).calledWith('threadId', expect.stringMatching(/comment/));
 
     expect(input).toHaveValue('');
   });
 
   it('does clear the value when the comment creation did not complete', async () => {
-    commentAdapter.createComment.reject(new Error());
+    adapters.comment.createComment.reject(new Error());
 
     const user = render(<RootCommentForm thread={thread} />);
 
@@ -54,7 +54,7 @@ describe('CommentForm', () => {
   it('creates a new reply to an existing comment', async () => {
     const parent = createCommentDto({ id: 'parentId' });
 
-    commentAdapter.createReply.resolve('replyId');
+    adapters.comment.createReply.resolve('replyId');
 
     const closeReplyForm = stub();
 
@@ -71,7 +71,7 @@ describe('CommentForm', () => {
   it('edits an existing comment', async () => {
     const comment = createCommentDto({ id: 'commentId', text: 'initial text' });
 
-    commentAdapter.editComment.resolve();
+    adapters.comment.editComment.resolve();
 
     const onClose = stub();
 

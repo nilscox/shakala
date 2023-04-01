@@ -9,7 +9,7 @@ import { setupTest } from '~/utils/setup-test';
 import { CommentHistoryModal } from './comment-history-modal';
 
 describe('CommentHistoryModal', () => {
-  const { render, setSearchParam, commentAdapter } = setupTest();
+  const { render, setSearchParam, adapters } = setupTest();
 
   it("navigates through a comment's edition history", async () => {
     const comment = createCommentDto({
@@ -23,7 +23,7 @@ describe('CommentHistoryModal', () => {
     });
 
     setSearchParam('historique', comment.id);
-    commentAdapter.getComment.resolve(comment);
+    adapters.comment.getComment.resolve(comment);
 
     const user = render(<CommentHistoryModal />);
 

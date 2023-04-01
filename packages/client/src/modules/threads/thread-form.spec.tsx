@@ -8,7 +8,7 @@ import { ValidationErrors } from '~/utils/validation-errors';
 import { ThreadForm } from './thread-form';
 
 describe('ThreadForm', () => {
-  const { render, router, threadAdapter } = setupTest();
+  const { render, adapters } = setupTest();
 
   const fields = {
     description: () => screen.getByLabelText('Description'),
@@ -22,7 +22,7 @@ describe('ThreadForm', () => {
   });
 
   it('fills and submits the form', async () => {
-    threadAdapter.createThread.resolve('threadId');
+    adapters.thread.createThread.resolve('threadId');
 
     const user = render(<ThreadForm />);
 
@@ -32,12 +32,12 @@ describe('ThreadForm', () => {
     await user.click(fields.submit());
 
     await waitFor(() => {
-      expect(router.pathname).toEqual('/discussions/threadId');
+      expect(adapters.router.pathname).toEqual('/discussions/threadId');
     });
   });
 
   it('displays the field errors', async () => {
-    threadAdapter.createThread.reject(
+    adapters.thread.createThread.reject(
       new ValidationErrors({
         description: 'min',
         keywords: 'max',

@@ -10,7 +10,7 @@ import { AuthForm } from './types';
 
 // todo: fix authentication tests
 describe.skip('AuthenticationForm', () => {
-  const { render, setSearchParam, authenticationAdapter, router } = setupTest();
+  const { render, setSearchParam, adapters } = setupTest();
 
   afterEach(cleanup);
 
@@ -25,7 +25,7 @@ describe.skip('AuthenticationForm', () => {
 
     expect(await screen.findByText('Vous êtes maintenant connecté·e')).toBeVisible();
 
-    expect(authenticationAdapter.signIn).calledWith('user@domain.tld', 'password');
+    expect(adapters.authentication.signIn).calledWith('user@domain.tld', 'password');
   });
 
   it('fills and submits the sign up form', async () => {
@@ -42,7 +42,7 @@ describe.skip('AuthenticationForm', () => {
 
     expect(await screen.findByText('Vous êtes maintenant connecté·e')).toBeVisible();
 
-    expect(authenticationAdapter.signUp).calledWith('nick', 'user@domain.tld', 'password');
+    expect(adapters.authentication.signUp).calledWith('nick', 'user@domain.tld', 'password');
   });
 
   it('keeps the form state when changing the form type', async () => {
@@ -67,7 +67,7 @@ describe.skip('AuthenticationForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Connexion' }));
 
-    expect(router.url.pathname).toEqual('/profil');
-    expect(router.url.searchParams.get('next')).toBe(null);
+    expect(adapters.router.url.pathname).toEqual('/profil');
+    expect(adapters.router.url.searchParams.get('next')).toBe(null);
   });
 });

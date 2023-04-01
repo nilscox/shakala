@@ -8,7 +8,7 @@ import { setupTest } from '~/utils/setup-test';
 import { ReportCommentModal } from './report-comment-modal';
 
 describe('ReportCommentModal', () => {
-  const { render, setSearchParam, commentAdapter } = setupTest();
+  const { render, setSearchParam, adapters } = setupTest();
 
   beforeEach(() => {
     const comment = createCommentDto({
@@ -18,7 +18,7 @@ describe('ReportCommentModal', () => {
     });
 
     setSearchParam('signaler', comment.id);
-    commentAdapter.getComment.resolve(comment);
+    adapters.comment.getComment.resolve(comment);
   });
 
   afterEach(cleanup);
@@ -40,7 +40,7 @@ describe('ReportCommentModal', () => {
     await user.type(await screen.findByRole('textbox'), reason);
     await user.click(screen.getByRole('button', { name: 'Signaler' }));
 
-    expect(commentAdapter.reportComment).calledWith('commentId', expect.stringMatching(new RegExp(reason)));
+    expect(adapters.comment.reportComment).calledWith('commentId', expect.stringMatching(new RegExp(reason)));
   });
 
   it('closes the report modal', async () => {
