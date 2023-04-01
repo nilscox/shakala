@@ -1,10 +1,10 @@
 import { navigate } from 'vite-plugin-ssr/client/router';
 
-import { RouterPort } from './router.port';
+import { NavigateOptions, RouterPort } from './router.port';
 
 export class VPSRouterAdapter implements RouterPort {
-  navigate(url: string): void {
-    void navigate(url);
+  navigate(url: string, options?: NavigateOptions): void {
+    void navigate(url, options);
   }
 
   get hash(): string | undefined {

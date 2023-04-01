@@ -28,7 +28,7 @@ export const Modal = ({ className, isOpen, onRequestClose, ...props }: ReactModa
   return (
     <ReactModal
       isOpen={isOpen}
-      overlayClassName="fixed top-0 bottom-0 left-0 right-0 bg-inverted/30 flex flex-col items-center justify-center p-2"
+      overlayClassName="fixed top-0 bottom-0 left-0 right-0 bg-inverted/40 flex flex-col items-center justify-center p-2"
       className={clsx('card w-full rounded-lg border bg-neutral p-4 outline-none', className)}
       closeTimeoutMS={200}
       onRequestClose={(event) => {

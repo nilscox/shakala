@@ -65,7 +65,7 @@ type FooterColumnProps = {
 };
 
 const FooterColumn = ({ className, children }: FooterColumnProps) => (
-  <div className={clsx('col leading-7 text-muted', className)}>{children}</div>
+  <div className={clsx('col items-start leading-7 text-muted', className)}>{children}</div>
 );
 
 type SocialLinkProps = {

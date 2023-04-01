@@ -37,7 +37,7 @@ export const useSetSearchParam = (key: string) => {
         paramsStr += '?' + params;
       }
 
-      navigate(`${pathname}${paramsStr}`);
+      navigate(`${pathname}${paramsStr}`, { keepScrollPosition: true });
     },
     [key, pathname, params, navigate]
   );

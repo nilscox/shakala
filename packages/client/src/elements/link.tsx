@@ -8,11 +8,18 @@ import { usePathname } from '../hooks/use-pathname';
 type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   href: string;
   openInNewTab?: boolean;
+  keepScrollPosition?: boolean;
 };
 
-export const Link = ({ href, openInNewTab, onClick, children, ...props }: LinkProps) => (
+export const Link = ({ href, openInNewTab, onClick, children, keepScrollPosition, ...props }: LinkProps) => (
   // eslint-disable-next-line react/jsx-no-target-blank
-  <a href={href} target={openInNewTab ? '_blank' : undefined} {...props}>
+  <a
+    href={href}
+    target={openInNewTab ? '_blank' : undefined}
+    // eslint-disable-next-line react/no-unknown-property
+    keep-scroll-position={keepScrollPosition ? 'true' : undefined}
+    {...props}
+  >
     {children}
   </a>
 );
@@ -52,11 +59,11 @@ export const SearchParamLink = ({ param, value, disabled, ...props }: SearchPara
 
   searchParams.set(param, value);
 
-  return <Link href={[pathname, searchParams].join('?')} {...props} />;
+  return <Link keepScrollPosition href={[pathname, searchParams].join('?')} {...props} />;
 };
 
 export const ExternalLink = ({ children, ...props }: HTMLProps<HTMLAnchorElement>) => (
-  <a rel="noreferrer" {...props}>
+  <a rel="external noreferrer" {...props}>
     {children}
   </a>
 );
