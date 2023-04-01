@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useSnackbar } from '~/elements/snackbar';
-import { useNavigate } from '~/hooks/use-navigate';
+import { useNavigate } from '~/hooks/use-router';
 import { useGetSearchParam } from '~/hooks/use-search-params';
 import { useSubmit } from '~/hooks/use-submit';
 import { getQueryKey } from '~/utils/query-key';

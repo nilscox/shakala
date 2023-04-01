@@ -14,9 +14,11 @@ export const hydrationCanBeAborted = true;
 
 let root: ReactDOM.Root;
 
+export const NoLayout = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+
 export function render(pageContext: PageContextClient) {
   const { Page, pageProps, dehydratedState, exports } = pageContext;
-  const PageLayout = exports.Layout ?? (({ children }) => <>{children}</>);
+  const PageLayout = exports.Layout ?? NoLayout;
 
   const container = document.getElementById('app') as HTMLElement;
 
@@ -35,10 +37,6 @@ export function render(pageContext: PageContextClient) {
   if (pageContext.isHydration) {
     root = ReactDOM.hydrateRoot(container, page);
   } else {
-    if (!root) {
-      root = ReactDOM.createRoot(container);
-    }
-
     root.render(page);
   }
 }

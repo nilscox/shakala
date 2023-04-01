@@ -53,4 +53,4 @@ const ThreadPage = withSuspense(() => {
       <ShareCommentModal />
     </>
   );
-});
+}, 'ThreadPage');

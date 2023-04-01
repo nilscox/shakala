@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useHash } from '~/hooks/use-hash';
+import { useHash } from '~/hooks/use-router';
 import { isElementInViewport } from '~/utils/is-element-in-viewport';
 
 // delay + animation time

@@ -2,7 +2,7 @@ import { ThreadDto } from '@shakala/shared';
 import { useInjection } from 'brandi-react';
 
 import { TOKENS } from '~/app/tokens';
-import { usePathname } from '~/hooks/use-pathname';
+import { usePathname } from '~/hooks/use-router';
 
 import { CommentForm } from './comment-form';
 

@@ -4,7 +4,7 @@ import { FormEventHandler, useCallback } from 'react';
 
 import { Input } from '~/elements/input';
 import { RadioItem, RadiosGroup } from '~/elements/radio-group';
-import { useSearchParam } from '~/hooks/use-search-params';
+import { useGetSearchParam, useSetSearchParams } from '~/hooks/use-search-params';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconArrowUp from '~/icons/arrow-up.svg';
 import IconSearch from '~/icons/search.svg';
@@ -15,8 +15,10 @@ export type ThreadFiltersProps = {
 };
 
 export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
-  const [search, setSearch] = useSearchParam('search');
-  const [sort, setSort] = useSearchParam('sort');
+  const search = useGetSearchParam('search');
+  const sort = useGetSearchParam('sort');
+
+  const setSearchParams = useSetSearchParams();
 
   const handleChange = useCallback<FormEventHandler<HTMLFormElement>>(
     (event) => {
@@ -30,10 +32,12 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
         return;
       }
 
-      setSearch(search);
-      setSort(sort === CommentSort.relevance ? undefined : sort);
+      setSearchParams({
+        search,
+        sort: sort === CommentSort.relevance ? undefined : sort,
+      });
     },
-    [setSearch, setSort]
+    [setSearchParams]
   );
 
   return (

@@ -5,7 +5,7 @@ import { Chip } from '~/elements/chip';
 import { NavLink } from '~/elements/link';
 import { useSnackbar } from '~/elements/snackbar';
 import { useMutate } from '~/hooks/use-mutate';
-import { useNavigate } from '~/hooks/use-navigate';
+import { useNavigate } from '~/hooks/use-router';
 import { useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import IconEdit from '~/icons/edit.svg';

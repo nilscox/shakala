@@ -97,7 +97,7 @@ const ShareComment = withSuspense(({ comment }: ShareCommentProps) => {
       </div>
     </>
   );
-});
+}, 'ShareComment');
 
 const usePermalink = (commentId: string) => {
   const threadId = useRouteParam('threadId');

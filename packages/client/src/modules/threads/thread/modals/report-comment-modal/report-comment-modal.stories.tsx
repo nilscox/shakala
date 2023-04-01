@@ -12,9 +12,7 @@ export default {
   title: 'Domain/ReportCommentModal',
   parameters: {
     pageContext: {
-      urlParsed: {
-        searchOriginal: new URLSearchParams({ signaler: 'commentId' }).toString(),
-      },
+      searchParams: { signaler: 'commentId' },
     },
   },
 } satisfies Meta;

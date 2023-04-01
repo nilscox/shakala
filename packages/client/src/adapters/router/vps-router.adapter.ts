@@ -7,15 +7,11 @@ export class VPSRouterAdapter implements RouterPort {
     void navigate(url, options);
   }
 
-  get hash(): string | undefined {
-    if (window.location.hash === '') {
-      return undefined;
-    }
-
+  get hash(): string {
     return window.location.hash.replace(/^#/, '');
   }
 
-  onHashChange(cb: (hash: string | undefined) => void) {
+  onHashChange(cb: (hash: string) => void) {
     const listener = () => cb(this.hash);
 
     window.addEventListener('hashchange', listener);

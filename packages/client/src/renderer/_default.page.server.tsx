@@ -9,6 +9,7 @@ import { AuthForm } from '~/modules/authentication/types';
 import { AppProviders } from '../app/app-providers';
 import { prefetchQuery } from '../utils/prefetch-query';
 
+import { NoLayout } from './_default.page.client';
 import type { PageContextServer } from './page-context';
 
 export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
@@ -17,7 +18,7 @@ const commonQueries = [prefetchQuery(TOKENS.authentication, 'getAuthenticatedUse
 
 export async function render(pageContext: PageContextServer) {
   const { Page, pageProps, exports, queryClient, token } = pageContext;
-  const PageLayout = exports.Layout ?? (({ children }) => <>{children}</>);
+  const PageLayout = exports.Layout ?? NoLayout;
 
   const queries = [...commonQueries, ...(exports.queries ?? [])];
 

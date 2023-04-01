@@ -7,7 +7,6 @@ import { PageContext } from '~/renderer/page-context';
 
 import { container } from './container';
 import { PageContextProvider } from './page-context';
-import { RouterProvider } from './router-context';
 
 export const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
@@ -32,9 +31,7 @@ export const AppProviders = ({ context, queryClient = clientQueryClient, childre
     <PageContextProvider value={context}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
-        <RouterProvider>
-          <SnackbarProvider>{children}</SnackbarProvider>
-        </RouterProvider>
+        <SnackbarProvider>{children}</SnackbarProvider>
       </QueryClientProvider>
     </PageContextProvider>
   </ContainerProvider>

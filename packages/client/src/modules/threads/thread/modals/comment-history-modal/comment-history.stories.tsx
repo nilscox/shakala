@@ -9,9 +9,7 @@ export default {
   title: 'Domain/CommentHistoryModal',
   parameters: {
     pageContext: {
-      urlParsed: {
-        searchOriginal: new URLSearchParams({ historique: 'commentId' }).toString(),
-      },
+      searchParams: { historique: 'commentId' },
     },
   },
   args: {

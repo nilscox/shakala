@@ -50,4 +50,4 @@ const ThreadLink = withSuspense(() => {
       <Link href={`/discussions/${thread.id}`}>sur cette page</Link>.
     </p>
   );
-});
+}, 'ThreadLink');

@@ -1,7 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
 
-import { configureStory, controls, useStorybookRouter } from '~/utils/storybook';
+import { useMutatePageContext } from '~/app/stub-page-context';
+import { configureStory, controls } from '~/utils/storybook';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { AuthenticationModal } from './authentication-modal';
@@ -39,7 +40,7 @@ export const authentication: StoryFn<Args> = ({}) => <AuthenticationModal />;
 
 authentication.decorators = [
   configureStory((adapters, args) => {
-    const { setSearchParam } = useStorybookRouter();
+    const { setSearchParam } = useMutatePageContext();
 
     useEffect(() => {
       setSearchParam('auth', args.type);

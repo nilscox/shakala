@@ -1,9 +1,7 @@
 import { clsx } from 'clsx';
 import { ComponentProps, HTMLProps } from 'react';
 
-import { useSearchParams } from '~/hooks/use-search-params';
-
-import { usePathname } from '../hooks/use-pathname';
+import { usePathname, useSearchParams } from '../hooks/use-router';
 
 type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   href: string;

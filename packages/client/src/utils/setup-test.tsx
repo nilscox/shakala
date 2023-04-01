@@ -10,11 +10,9 @@ import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
 import { queryClientConfig } from '~/app/app-providers';
 import { container } from '~/app/container';
-import { PageContextProvider } from '~/app/page-context';
-import { RouterProvider } from '~/app/router-context';
+import { StubPageContext, StubPageContextProvider } from '~/app/stub-page-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
-import { PageContext } from '~/renderer/page-context';
 
 type StubAdapters = {
   router: StubRouterAdapter;
@@ -24,13 +22,13 @@ type StubAdapters = {
 };
 
 export const setupTest = () => {
-  let pageContext: PageContext = {} as PageContext;
+  let pageContext: Partial<StubPageContext>;
   let queryClient: QueryClient;
 
   const adapters = {} as StubAdapters;
 
   beforeEach(() => {
-    pageContext = { urlParsed: {} } as PageContext;
+    pageContext = {};
     queryClient = new QueryClient(queryClientConfig);
 
     Object.assign(adapters, {
@@ -46,33 +44,14 @@ export const setupTest = () => {
     container.bind(TOKENS.comment).toConstant(adapters.comment);
   });
 
-  const setPageContext = (ctx: Partial<PageContext>) => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    pageContext = ctx as PageContext;
-  };
-
   const setRouteParam = (param: string, value: string) => {
-    setPageContext({
-      ...pageContext,
-      routeParams: {
-        ...pageContext.routeParams,
-        [param]: value,
-      },
-    });
+    pageContext.routeParams ??= {};
+    pageContext.routeParams[param] = value;
   };
 
   const setSearchParam = (param: string, value: string) => {
-    const searchParams = new URLSearchParams(pageContext.urlParsed.searchOriginal ?? '');
-
-    searchParams.set(param, value);
-
-    setPageContext({
-      ...pageContext,
-      urlParsed: {
-        ...pageContext.urlParsed,
-        searchOriginal: '?' + searchParams.toString(),
-      },
-    });
+    pageContext.searchParams ??= {};
+    pageContext.searchParams[param] = value;
   };
 
   const setQueryData = (queryKey: QueryKey, data: unknown) => {
@@ -81,13 +60,11 @@ export const setupTest = () => {
 
   const wrapper = ({ children }: { children: JSX.Element }) => (
     <ContainerProvider container={container}>
-      <PageContextProvider value={pageContext}>
+      <StubPageContextProvider {...pageContext}>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider>
-            <SnackbarProvider>{children}</SnackbarProvider>
-          </RouterProvider>
+          <SnackbarProvider>{children}</SnackbarProvider>
         </QueryClientProvider>
-      </PageContextProvider>
+      </StubPageContextProvider>
     </ContainerProvider>
   );
 

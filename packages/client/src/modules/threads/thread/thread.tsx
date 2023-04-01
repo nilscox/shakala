@@ -84,7 +84,7 @@ const CommentsList = withSuspense(({ thread }: CommentsListProps) => {
       </div>
     </div>
   );
-});
+}, 'CommentsList');
 
 const NoCommentFallback = () => {
   const [search] = useSearchParam('search');

@@ -12,8 +12,7 @@ import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { RouterPort } from '~/adapters/router/router.port';
 import { queryClientConfig } from '~/app/app-providers';
 import { container } from '~/app/container';
-import { PageContextProvider } from '~/app/page-context';
-import { RouterContext, RouterProvider, useRouter } from '~/app/router-context';
+import { StubPageContextProvider } from '~/app/stub-page-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
 
@@ -30,15 +29,9 @@ export const snackbarDecorator: Decorator = (Story) => (
 );
 
 export const pageContextDecorator: Decorator = (Story, { parameters }) => (
-  <PageContextProvider
-    value={{
-      urlPathname: '/',
-      urlParsed: {},
-      ...parameters.pageContext,
-    }}
-  >
+  <StubPageContextProvider {...parameters.pageContext}>
     <Story />
-  </PageContextProvider>
+  </StubPageContextProvider>
 );
 
 export const queryClientDecorator: Decorator = (Story) => (
@@ -52,63 +45,6 @@ export const suspenseDecorator: Decorator = (Story) => (
   <Suspense fallback={<>loading..</>}>
     <Story />
   </Suspense>
-);
-
-type StorybookRouterState = RouterContext & {
-  setPathname(pathname: string): void;
-  setSearchParam(key: string, value: string): void;
-  setHash(hash: string | undefined): void;
-};
-
-type StorybookRouterProviderProps = {
-  children: React.ReactNode;
-};
-
-const StorybookRouterProvider = ({ children }: StorybookRouterProviderProps) => {
-  useTrapLinks();
-  return <RouterProvider>{children}</RouterProvider>;
-};
-
-// avoid links to navigate out of the story
-const useTrapLinks = () => {
-  const router = useInjection(TOKENS.router);
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      for (const link of document.getElementsByTagName('a')) {
-        if (link.getAttribute('data-sb-link-trap') === 'true') {
-          return;
-        }
-
-        link.setAttribute('data-sb-link-trap', 'true');
-
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
-
-          const target = event.target as HTMLAnchorElement;
-          const href = target.getAttribute('href');
-
-          if (href) {
-            router.navigate(href);
-          }
-        });
-      }
-    });
-
-    observer.observe(document.body, { subtree: true, childList: true });
-
-    return () => observer.disconnect();
-  }, [router]);
-};
-
-export const useStorybookRouter = () => {
-  return useRouter() as StorybookRouterState;
-};
-
-export const routerDecorator: Decorator = (Story) => (
-  <StorybookRouterProvider>
-    <Story />
-  </StorybookRouterProvider>
 );
 
 export class StorybookRouterAdapter implements RouterPort {
@@ -127,4 +63,46 @@ export const containerDecorator: Decorator = (Story) => {
       <Story />
     </ContainerProvider>
   );
+};
+
+export const trapLinksDecorator: Decorator = (Story) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useTrapLinks();
+  return <Story />;
+};
+
+const trapLinks = (router: RouterPort) => {
+  const observer = new MutationObserver(() => {
+    for (const link of document.getElementsByTagName('a')) {
+      if (link.getAttribute('data-sb-link-trap') === 'true') {
+        return;
+      }
+
+      link.setAttribute('data-sb-link-trap', 'true');
+
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const target = event.target as HTMLAnchorElement;
+        const href = target.getAttribute('href');
+
+        if (href) {
+          router.navigate(href);
+        }
+      });
+    }
+  });
+
+  observer.observe(document.body, { subtree: true, childList: true });
+
+  return () => observer.disconnect();
+};
+
+// avoid links to navigate out of the story
+const useTrapLinks = () => {
+  const router = useInjection(TOKENS.router);
+
+  useEffect(() => {
+    return trapLinks(router);
+  }, [router]);
 };

@@ -1,34 +1,24 @@
 import { useCallback } from 'react';
 
-import { useRouter } from '~/app/router-context';
-
-import { useNavigate } from './use-navigate';
-import { usePathname } from './use-pathname';
-
-export const useSearchParams = () => {
-  return useRouter().searchParams;
-};
+import { useNavigate, usePathname, useSearchParams } from './use-router';
 
 export const useGetSearchParam = (key: string) => {
   return useSearchParams().get(key) ?? undefined;
 };
 
-export const useSetSearchParam = (key: string) => {
+export const useSetSearchParams = () => {
   const navigate = useNavigate();
-
-  const params = useSearchParams();
   const pathname = usePathname();
+  const params = useSearchParams();
 
   return useCallback(
-    (value: string | undefined) => {
-      if (params.get(key) === value) {
-        return;
-      }
-
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
+    (newParams: Record<string, string | number | undefined>) => {
+      for (const [key, value] of Object.entries(newParams)) {
+        if (value) {
+          params.set(key, String(value));
+        } else {
+          params.delete(key);
+        }
       }
 
       let paramsStr = '';
@@ -37,9 +27,25 @@ export const useSetSearchParam = (key: string) => {
         paramsStr += '?' + params;
       }
 
-      navigate(`${pathname}${paramsStr}`, { keepScrollPosition: true });
+      navigate(pathname + paramsStr, { keepScrollPosition: true });
     },
-    [key, pathname, params, navigate]
+    [pathname, params, navigate]
+  );
+};
+
+export const useSetSearchParam = (key: string) => {
+  const params = useSearchParams();
+  const setSearchParams = useSetSearchParams();
+
+  return useCallback(
+    (value: string | number | undefined) => {
+      if (params.get(key) === value) {
+        return;
+      }
+
+      setSearchParams({ [key]: value });
+    },
+    [key, params, setSearchParams]
   );
 };
 
