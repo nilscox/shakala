@@ -44,7 +44,7 @@ export const ThreadFilters = ({ className }: ThreadFiltersProps) => {
         placeholder="Rechercher..."
         className="grow"
         defaultValue={search ?? ''}
-        start={<IconSearch className="fill-muted" />}
+        start={<IconSearch className="my-0.5 ml-1 fill-muted" />}
       />
 
       <RadiosGroup className="text-muted">

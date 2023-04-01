@@ -5,8 +5,8 @@ import { useId } from '../hooks/use-id';
 
 export type FormFieldProps = {
   className?: string;
-  name: string;
-  label: ReactNode;
+  name?: string;
+  label?: ReactNode;
   description?: ReactNode;
   error?: string;
   errorsMap?: Record<string, ReactNode>;

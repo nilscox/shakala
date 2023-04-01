@@ -2,14 +2,13 @@ import expect from '@nilscox/expect';
 import { ReactionType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
-import { MockHttpResponse, StubHttpAdapter } from '../../http/stub-http.adapter';
+import { StubHttpAdapter } from '../../http/stub-http.adapter';
 
 import { ApiCommentAdapter } from './api-comment.adapter';
 
 describe('ApiCommentAdapter', () => {
   let http: StubHttpAdapter;
   let adapter: ApiCommentAdapter;
-  let mockResponse: MockHttpResponse;
 
   beforeEach(() => {
     http = new StubHttpAdapter();
@@ -17,89 +16,138 @@ describe('ApiCommentAdapter', () => {
   });
 
   describe('getComment', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('GET', '/comment/commentId');
-    });
-
     it('retrieves an existing comment', async () => {
-      mockResponse({ body: { id: 'commentId' } });
+      http.response = { body: { id: 'commentId' } };
+
       await expect(adapter.getComment('commentId')).toResolve(expect.objectWith({ id: 'commentId' }));
+
+      expect(http.requests).toInclude({ method: 'GET', url: '/comment/commentId' });
     });
   });
 
   describe('createComment', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('POST', '/thread/threadId/comment');
-    });
-
     it('creates a new comment', async () => {
-      mockResponse({ body: 'commentId' });
+      http.response = { body: 'commentId' };
+
       await expect(adapter.createComment('threadId', 'text')).toResolve('commentId');
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/thread/threadId/comment',
+        body: { text: 'text' },
+      });
     });
   });
 
   describe('createReply', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('POST', '/comment/parentId/reply');
-    });
-
     it('creates a new reply', async () => {
-      mockResponse({ body: 'replyId' });
+      http.response = { body: 'replyId' };
+
       await expect(adapter.createReply('parentId', 'text')).toResolve('replyId');
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/parentId/reply',
+        body: { text: 'text' },
+      });
     });
   });
 
   describe('editComment', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('PUT', '/comment/commentId');
-    });
-
     it('edits a comment', async () => {
-      mockResponse({});
+      http.response = {};
+
       await expect(adapter.editComment('commentId', 'text')).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'PUT',
+        url: '/comment/commentId',
+        body: { text: 'text' },
+      });
     });
   });
 
   describe('setReaction', () => {
+    beforeEach(() => {
+      http.response = {};
+    });
+
     it('sets a reaction to a comment', async () => {
-      http.mock('POST', '/comment/commentId/reaction', { body: { type: ReactionType.downvote } })({});
       await expect(adapter.setReaction('commentId', ReactionType.downvote)).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/reaction',
+        body: { type: ReactionType.downvote },
+      });
     });
 
     it('unsets a reaction to a comment', async () => {
-      http.mock('POST', '/comment/commentId/reaction', { body: { type: null } })({});
+      http.response = { body: { type: null } };
+
       await expect(adapter.setReaction('commentId', null)).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/reaction',
+        body: { type: null },
+      });
     });
   });
 
   describe('setSubscription', () => {
+    beforeEach(() => {
+      http.response = {};
+    });
+
     it('subscribes to a comment', async () => {
-      http.mock('POST', '/comment/commentId/subscribe')({});
       await expect(adapter.setSubscription('commentId', true)).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/subscribe',
+      });
     });
 
     it('removes a subscription to a comment', async () => {
-      http.mock('POST', '/comment/commentId/unsubscribe')({});
       await expect(adapter.setSubscription('commentId', false)).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/unsubscribe',
+      });
     });
   });
 
   describe('reportComment', () => {
+    beforeEach(() => {
+      http.response = {};
+    });
+
     it('reports a comment', async () => {
-      http.mock('POST', '/comment/commentId/report', { body: { reason: undefined } })({});
       await expect(adapter.reportComment('commentId')).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/report',
+        body: {},
+      });
     });
 
     it('reports a comment with a message', async () => {
-      http.mock('POST', '/comment/commentId/report', { body: { reason: 'reason' } })({});
+      http.response = { body: { reason: 'reason' } };
+
       await expect(adapter.reportComment('commentId', 'reason')).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/comment/commentId/report',
+        body: { reason: 'reason' },
+      });
     });
 
     it('does not fail when the comment was already reported', async () => {
-      http.mock('POST', '/comment/commentId/report', { body: { reason: undefined } })({
-        status: 400,
-        body: { code: 'CommentAlreadyReportedError' },
-      });
+      http.error = { code: 'CommentAlreadyReportedError' };
 
       await expect(adapter.reportComment('commentId')).toResolve();
     });

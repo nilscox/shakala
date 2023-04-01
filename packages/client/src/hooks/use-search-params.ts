@@ -6,7 +6,7 @@ import { useNavigate } from './use-navigate';
 import { usePathname } from './use-pathname';
 
 export const useSearchParams = () => {
-  return useRouter().search;
+  return useRouter().searchParams;
 };
 
 export const useGetSearchParam = (key: string) => {

@@ -1,14 +1,14 @@
 import expect from '@nilscox/expect';
+import { createUserDto } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
-import { MockHttpResponse, StubHttpAdapter } from '../../http/stub-http.adapter';
+import { StubHttpAdapter } from '../../http/stub-http.adapter';
 
 import { ApiAuthenticationAdapter } from './api-authentication.adapter';
 
 describe('ApiAuthenticationAdapter', () => {
   let http: StubHttpAdapter;
   let adapter: ApiAuthenticationAdapter;
-  let mockResponse: MockHttpResponse;
 
   beforeEach(() => {
     http = new StubHttpAdapter();
@@ -16,48 +16,79 @@ describe('ApiAuthenticationAdapter', () => {
   });
 
   describe('getAuthenticatedUser', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('GET', '/account');
-    });
-
     it("fetches the authenticated user's account information", async () => {
-      mockResponse({ body: { id: 'userId', nick: 'nick' } });
+      const user = createUserDto();
 
-      await expect(adapter.getAuthenticatedUser()).toResolve({ id: 'userId', nick: 'nick' });
+      http.response = { body: user };
+
+      await expect(adapter.getAuthenticatedUser()).toResolve(user);
+
+      expect(http.requests).toInclude({ method: 'GET', url: '/account' });
     });
 
     it('returns undefined when the user is not authenticated', async () => {
-      mockResponse({ status: 401 });
+      http.response = { status: 401 };
 
       await expect(adapter.getAuthenticatedUser()).toResolve(undefined);
     });
   });
 
   describe('signUp', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('POST', '/auth/sign-up', {
+    it('signs up', async () => {
+      http.response = { body: createUserDto() };
+
+      await expect(adapter.signUp('nick', 'email', 'password')).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/auth/sign-up',
         body: { nick: 'nick', email: 'email', password: 'password' },
       });
-
-      mockResponse({});
     });
 
-    it('signs in', async () => {
-      await expect(adapter.signUp('nick', 'email', 'password')).toResolve();
+    it('handles AlreadyAuthenticated error', async () => {
+      http.error = { code: 'UnauthorizedError' };
+
+      await expect(adapter.signUp('nick', 'email', 'password')).toReject(new Error('AlreadyAuthenticated'));
     });
   });
 
   describe('signIn', () => {
-    beforeEach(() => {
-      mockResponse = http.mock('POST', '/auth/sign-in', {
+    it('signs in', async () => {
+      http.response = { body: createUserDto() };
+
+      await expect(adapter.signIn('email', 'password')).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/auth/sign-in',
         body: { email: 'email', password: 'password' },
       });
-
-      mockResponse({});
     });
 
-    it('signs in', async () => {
-      await expect(adapter.signIn('email', 'password')).toResolve();
+    it('handles InvalidCredentials error', async () => {
+      http.error = { code: 'InvalidCredentialsError' };
+
+      await expect(adapter.signIn('email', 'password')).toReject(new Error('InvalidCredentials'));
+    });
+
+    it('handles AlreadyAuthenticated error', async () => {
+      http.error = { code: 'UnauthorizedError' };
+
+      await expect(adapter.signIn('email', 'password')).toReject(new Error('AlreadyAuthenticated'));
+    });
+  });
+
+  describe('signOut', () => {
+    it('signs out', async () => {
+      http.response = {};
+
+      await expect(adapter.signOut()).toResolve();
+
+      expect(http.requests).toInclude({
+        method: 'POST',
+        url: '/auth/sign-out',
+      });
     });
   });
 });

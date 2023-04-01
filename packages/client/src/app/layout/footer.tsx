@@ -1,6 +1,8 @@
 import { clsx } from 'clsx';
 
-import { Link , SearchParamLink } from '../../elements/link';
+import { useUser } from '~/hooks/use-user';
+
+import { Link, SearchParamLink } from '../../elements/link';
 import { useSnackbar } from '../../elements/snackbar';
 import discordLogo from '../../images/logos/discord-logo.png';
 import facebookLogo from '../../images/logos/facebook-logo.png';
@@ -11,7 +13,7 @@ type FooterProps = {
 };
 
 export const Footer = ({ className }: FooterProps): JSX.Element => {
-  const user: any = null;
+  const user = useUser();
 
   return (
     <footer className="py-5">

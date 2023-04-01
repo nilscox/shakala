@@ -1,6 +1,7 @@
 import { SignInBody, SignUpBody, UserDto } from '@shakala/shared';
 import { injected } from 'brandi';
 
+import { HttpError } from '~/adapters/http/http-error';
 import { TOKENS } from '~/app/tokens';
 
 import { HttpPort } from '../../http/http.port';
@@ -25,18 +26,31 @@ export class ApiAuthenticationAdapter implements AuthenticationPort {
   }
 
   async signUp(nick: string, email: string, password: string): Promise<void> {
-    await this.http.post<SignUpBody>('/auth/sign-up', {
-      nick,
-      email,
-      password,
-    });
+    const onError = (error: HttpError) => {
+      if (error.code === 'UnauthorizedError') {
+        throw new Error('AlreadyAuthenticated');
+      }
+
+      throw error;
+    };
+
+    await this.http.post<SignUpBody>('/auth/sign-up', { nick, email, password }, { onError });
   }
 
   async signIn(email: string, password: string): Promise<void> {
-    await this.http.post<SignInBody>('/auth/sign-in', {
-      email,
-      password,
-    });
+    const onError = (error: HttpError) => {
+      if (error.code === 'InvalidCredentialsError') {
+        throw new Error('InvalidCredentials');
+      }
+
+      if (error.code === 'UnauthorizedError') {
+        throw new Error('AlreadyAuthenticated');
+      }
+
+      throw error;
+    };
+
+    await this.http.post<SignInBody>('/auth/sign-in', { email, password }, { onError });
   }
 
   async signOut(): Promise<void> {

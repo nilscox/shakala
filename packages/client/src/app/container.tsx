@@ -19,10 +19,12 @@ declare global {
 }
 
 export type AppConfig = {
+  isDevelopment: boolean;
   apiBaseUrl: string;
 };
 
 const config: AppConfig = {
+  isDevelopment: true,
   apiBaseUrl: 'http://localhost:8000/api',
 };
 

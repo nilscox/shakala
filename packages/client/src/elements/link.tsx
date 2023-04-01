@@ -1,6 +1,8 @@
 import { clsx } from 'clsx';
 import { ComponentProps, HTMLProps } from 'react';
 
+import { useSearchParams } from '~/hooks/use-search-params';
+
 import { usePathname } from '../hooks/use-pathname';
 
 type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
@@ -42,7 +44,7 @@ type SearchParamLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
 
 export const SearchParamLink = ({ param, value, disabled, ...props }: SearchParamLinkProps) => {
   const pathname = usePathname();
-  const searchParams = new URLSearchParams();
+  const searchParams = new URLSearchParams(useSearchParams());
 
   if (disabled) {
     return <span aria-disabled {...props} />;

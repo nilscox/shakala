@@ -7,7 +7,7 @@ export const useId = () => {
 
   useEffect(() => {
     setClientId(id);
-  });
+  }, [setClientId, id]);
 
   if (process.env.NODE_ENV === 'test') {
     return id;

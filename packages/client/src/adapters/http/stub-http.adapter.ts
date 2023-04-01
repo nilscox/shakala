@@ -16,7 +16,7 @@ export class StubHttpAdapter implements HttpPort {
   }
 
   set error(error: Partial<HttpError>) {
-    this.responses.push(error);
+    this.responses.push(Object.assign(new HttpError(null as never, { status: 500 } as never), error));
   }
 
   async get<ResponseBody>(

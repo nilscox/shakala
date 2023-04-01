@@ -7,8 +7,9 @@ import { useErrorHandler } from './use-error-handler';
 import { invalidateQuery } from './use-mutate';
 
 type UseSubmitOptions<Result> = {
-  onSuccess?: (result: Result) => void;
   invalidate?: ReturnType<typeof invalidateQuery>;
+  onSuccess?: (result: Result) => void;
+  onError?: (error: Error) => void;
 };
 
 export const useSubmit = <Values extends FieldValues, Result>(
@@ -34,7 +35,15 @@ export const useSubmit = <Values extends FieldValues, Result>(
         return;
       }
 
-      handleError(error);
+      if (options?.onError && error instanceof Error) {
+        try {
+          options.onError(error);
+        } catch (error) {
+          handleError(error);
+        }
+      } else {
+        handleError(error);
+      }
     }
   };
 };

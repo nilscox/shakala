@@ -18,7 +18,7 @@ export default {
 } satisfies Meta;
 
 export const snackbar: StoryFn = () => (
-  <div className="col gap-6 items-start">
+  <div className="col items-start gap-6">
     <Snackbar type={SnackType.success} transition={undefined} onRemove={action('onRemove')}>
       Bien joué !
     </Snackbar>

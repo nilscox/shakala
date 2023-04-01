@@ -1,4 +1,4 @@
-import { render as renderTL } from '@testing-library/react';
+import { render as renderTL, renderHook as renderHookTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContainerProvider } from 'brandi-react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -66,30 +66,33 @@ export const setupTest = () => {
     });
   };
 
+  const wrapper = ({ children }: { children: JSX.Element }) => (
+    <ContainerProvider container={container}>
+      <PageContextProvider value={pageContext}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider>
+            <SnackbarProvider>{children}</SnackbarProvider>
+          </RouterProvider>
+        </QueryClientProvider>
+      </PageContextProvider>
+    </ContainerProvider>
+  );
+
   const render = (ui: React.ReactElement) => {
     const user = userEvent.setup();
 
-    renderTL(ui, {
-      wrapper: ({ children }) => {
-        return (
-          <ContainerProvider container={container}>
-            <PageContextProvider value={pageContext}>
-              <QueryClientProvider client={queryClient}>
-                <RouterProvider>
-                  <SnackbarProvider>{children}</SnackbarProvider>
-                </RouterProvider>
-              </QueryClientProvider>
-            </PageContextProvider>
-          </ContainerProvider>
-        );
-      },
-    });
+    const result = renderTL(ui, { wrapper });
 
-    return user;
+    return { ...user, ...result };
+  };
+
+  const renderHook = <Props, Result>(hook: (initialProps: Props) => Result) => {
+    return renderHookTL(hook, { wrapper });
   };
 
   return {
     render,
+    renderHook,
     setRouteParam,
     setSearchParam,
     ...adapters,
