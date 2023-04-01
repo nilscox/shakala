@@ -1,9 +1,7 @@
-import { clsx } from 'clsx';
-
 import { Avatar } from '~/elements/avatar/avatar';
 import { Chip } from '~/elements/chip';
-import { NavLink } from '~/elements/link';
 import { useSnackbar } from '~/elements/snackbar';
+import { VerticalTab, VerticalTabs } from '~/elements/vertical-tabs';
 import { useMutate } from '~/hooks/use-mutate';
 import { useNavigate } from '~/hooks/use-router';
 import { useUser } from '~/hooks/use-user';
@@ -29,7 +27,7 @@ export const ProfileLayout = ({ children }: ProfileLayoutProps) => (
 
 const Sidebar = () => {
   const user = useUser();
-  const totalUnseenNotifications = 3; // todo
+  const totalUnseenNotifications = 2; // todo
 
   const navigate = useNavigate();
   const snackbar = useSnackbar();
@@ -57,80 +55,39 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <ul className="links-nocolor font-medium">
-        <SidebarItem to="/profil" Icon={IconProfile}>
+      <VerticalTabs>
+        <VerticalTab to="/profil" Icon={IconProfile}>
           Profil
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem to="/profil/notifications" Icon={IconSubscribe}>
+        <VerticalTab
+          to="/profil/notifications"
+          Icon={IconSubscribe}
+          right={totalUnseenNotifications > 0 && <Chip className="ml-auto">{totalUnseenNotifications}</Chip>}
+        >
           Notifications
-          {totalUnseenNotifications > 0 && <Chip className="ml-auto">{totalUnseenNotifications}</Chip>}
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem to="/profil/badges" Icon={IconTrophy}>
+        <VerticalTab to="/profil/badges" Icon={IconTrophy}>
           Badges
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem to="/profil/reputation" Icon={IconVerified}>
+        <VerticalTab to="/profil/reputation" Icon={IconVerified}>
           Réputation
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem to="/profil/brouillons" Icon={IconEdit}>
+        <VerticalTab to="/profil/brouillons" Icon={IconEdit}>
           Brouillons
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem to="/profil/timeline" Icon={IconArrowDown}>
+        <VerticalTab to="/profil/timeline" Icon={IconArrowDown}>
           Timeline
-        </SidebarItem>
+        </VerticalTab>
 
-        <SidebarItem Icon={IconSignOut} onClick={signOut}>
+        <VerticalTab Icon={IconSignOut} onClick={signOut}>
           Déconnexion
-        </SidebarItem>
-      </ul>
+        </VerticalTab>
+      </VerticalTabs>
     </aside>
-  );
-};
-
-type SidebarItemProps = {
-  to?: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  onClick?: () => void;
-  children: React.ReactNode;
-};
-
-const SidebarItem = ({ to, Icon, onClick, children }: SidebarItemProps) => {
-  const kids = (
-    <>
-      {Icon && <Icon className="h-4 w-4 text-muted" />}
-      {children}
-    </>
-  );
-
-  const className = clsx(
-    'row my-0.5 w-full items-center gap-1 rounded border-l-4 border-transparent py-0.5 px-2 transition-colors hover:bg-inverted/5'
-  );
-
-  if (!to) {
-    return (
-      <li>
-        <button className={className} onClick={onClick}>
-          {kids}
-        </button>
-      </li>
-    );
-  }
-
-  return (
-    <li>
-      <NavLink
-        exact
-        href={to}
-        className={className}
-        activeClassName="!border-warning bg-inverted/5 font-semibold"
-        onClick={onClick}
-      >
-        {kids}
-      </NavLink>
-    </li>
   );
 };
