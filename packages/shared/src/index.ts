@@ -17,9 +17,11 @@ export * from './types/methods';
 export * from './types/replace';
 
 export * from './utils/array';
+export * from './utils/assert';
 export * from './utils/contains';
 export * from './utils/create-factory';
 export * from './utils/create-map';
+export * from './utils/defined';
 export * from './utils/first';
 export * from './utils/get-ids';
 export * from './utils/get';

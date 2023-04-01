@@ -1,4 +1,4 @@
-import { AnyFunction } from '@shakala/shared';
+import { AnyFunction, assert } from '@shakala/shared';
 import { Token } from 'brandi';
 
 import { container } from '~/app/container';
@@ -6,8 +6,6 @@ import { TOKENS } from '~/app/tokens';
 import { PageContextServer, Query } from '~/renderer/page-context';
 
 import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
-
-import { assert } from './assert';
 
 type QueryParameters<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter> = [
   adapterToken: Token<Adapter>,

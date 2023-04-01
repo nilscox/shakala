@@ -4,6 +4,7 @@ import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
 
 import { Layout } from '~/app/layout/layout';
 import { TOKENS } from '~/app/tokens';
+import { AuthForm } from '~/modules/authentication/types';
 
 import { AppProviders } from '../app/app-providers';
 import { prefetchQuery } from '../utils/prefetch-query';
@@ -21,6 +22,14 @@ export async function render(pageContext: PageContextServer) {
   const queries = [...commonQueries, ...(exports.queries ?? [])];
 
   await Promise.all(queries.map((query) => query(pageContext, token)));
+
+  if (exports.authenticationRequired) {
+    const result = checkAuthentication(pageContext);
+
+    if (result) {
+      return result;
+    }
+  }
 
   const dehydratedState = dehydrate(queryClient);
 
@@ -47,6 +56,20 @@ export async function render(pageContext: PageContextServer) {
     },
   };
 }
+
+const checkAuthentication = ({ queryClient, urlOriginal }: PageContextServer) => {
+  const user = queryClient.getQueryData(['ApiAuthenticationAdapter', 'getAuthenticatedUser', []]);
+
+  if (user) {
+    return;
+  }
+
+  return {
+    pageContext: {
+      redirectTo: '/?' + new URLSearchParams({ auth: AuthForm.signIn, next: urlOriginal }),
+    },
+  };
+};
 
 type DocumentProps = {
   title?: string;

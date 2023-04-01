@@ -1,8 +1,7 @@
+import { assert } from '@shakala/shared';
 import { createContext, useContext } from 'react';
 
 import { PageContext } from '~/renderer/page-context';
-
-import { assert } from '../utils/assert';
 
 const pageContext = createContext<PageContext>(null as never);
 

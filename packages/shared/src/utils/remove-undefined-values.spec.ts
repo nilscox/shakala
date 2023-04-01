@@ -1,4 +1,5 @@
 import expect from '@nilscox/expect';
+import { describe, it } from 'vitest';
 
 import { removeUndefinedValues } from './remove-undefined-values';
 

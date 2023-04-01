@@ -14,10 +14,12 @@ type PageContextCustom = {
   exports: {
     Layout?: React.ComponentType<React.PropsWithChildren>;
     queries?: Query[];
+    authenticationRequired?: boolean;
   };
 };
 
 type ServerContext = {
+  redirectTo?: string;
   token?: string;
   queryClient: QueryClient;
 };

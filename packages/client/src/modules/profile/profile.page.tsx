@@ -1,3 +1,4 @@
+import { defined } from '@shakala/shared';
 import { FormEventHandler, useRef } from 'react';
 
 import { Button, SubmitButton } from '~/elements/button';
@@ -12,6 +13,7 @@ import { ProfileTitle } from './profile-title';
 
 export { ProfileLayout as Layout } from './profile-layout';
 export { ProfilePage as Page };
+export const authenticationRequired = true;
 
 const ProfilePage = () => (
   <>
@@ -31,7 +33,7 @@ const ProfileFormField = (props: React.ComponentProps<typeof FormField>) => (
 );
 
 const NickForm = () => {
-  const user = useUser();
+  const user = defined(useUser());
 
   return (
     <form onSubmit={withPreventDefault(() => console.log('change nick'))}>
@@ -41,14 +43,14 @@ const NickForm = () => {
         description="Le nom sous lequel vous apparaissez"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.nick} placeholder="pseudo" className="max-w-1 flex-1" />
+        <Input defaultValue={user.nick} placeholder="pseudo" className="max-w-1 flex-1" />
       </ProfileFormField>
     </form>
   );
 };
 
 const EmailForm = () => {
-  const user = useUser();
+  const user = defined(useUser());
 
   return (
     <form onSubmit={withPreventDefault(() => console.log('change email'))}>
@@ -58,7 +60,7 @@ const EmailForm = () => {
         description="L'adresse que vous utilisez pour vous connecter"
         after={<SubmitButton secondary>Changer</SubmitButton>}
       >
-        <Input defaultValue={user?.email} placeholder="votre@adresse.email" className="max-w-1 flex-1" />
+        <Input defaultValue={user.email} placeholder="votre@adresse.email" className="max-w-1 flex-1" />
       </ProfileFormField>
     </form>
   );

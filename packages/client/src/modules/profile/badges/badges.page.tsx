@@ -4,6 +4,7 @@ import { ProfileTitle } from '../profile-title';
 
 export { ProfileLayout as Layout } from '../profile-layout';
 export { BadgesPage as Page };
+export const authenticationRequired = true;
 
 const BadgesPage = () => (
   <>

@@ -50,15 +50,29 @@ async function main() {
   });
 }
 
+type PageContextAdded = {
+  redirectTo?: string;
+};
+
+type PageContextInit = {
+  urlOriginal: string;
+  token?: string;
+  queryClient: QueryClient;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const handleRequest: RequestHandler = async (req, res, next) => {
   const queryClient = new QueryClient();
 
-  const { httpResponse } = await renderPage({
+  const { httpResponse, redirectTo } = await renderPage<PageContextAdded, PageContextInit>({
     urlOriginal: req.originalUrl,
     token: req.cookies.token,
     queryClient,
   });
+
+  if (redirectTo) {
+    return res.redirect(307, redirectTo);
+  }
 
   if (!httpResponse) {
     return next();

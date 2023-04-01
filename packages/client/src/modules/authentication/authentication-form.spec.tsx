@@ -10,7 +10,7 @@ import { AuthForm } from './types';
 
 // todo: fix authentication tests
 describe.skip('AuthenticationForm', () => {
-  const { render, setSearchParam, authenticationAdapter } = setupTest();
+  const { render, setSearchParam, authenticationAdapter, router } = setupTest();
 
   afterEach(cleanup);
 
@@ -57,5 +57,17 @@ describe.skip('AuthenticationForm', () => {
     user.rerender(<AuthenticationForm onClose={stub()} />);
 
     expect(screen.getByPlaceholderText('Email')).toHaveValue('user@domain.tld');
+  });
+
+  it('redirects after authentication succeeded', async () => {
+    setSearchParam('auth', AuthForm.signIn);
+    setSearchParam('next', '/profil');
+
+    const user = render(<AuthenticationForm onClose={stub()} />);
+
+    await user.click(screen.getByRole('button', { name: 'Connexion' }));
+
+    expect(router.url.pathname).toEqual('/profil');
+    expect(router.url.searchParams.get('next')).toBe(null);
   });
 });

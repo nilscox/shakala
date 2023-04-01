@@ -1,7 +1,9 @@
+import { mergeConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+import baseConfig from '../../vitest.config';
+
+export default mergeConfig(baseConfig, {
   plugins: [dts()],
   build: {
     outDir: 'lib',

@@ -103,7 +103,7 @@
 
 .ReactModal__Overlay {
   opacity: 0;
-  transition: opacity 200ms ease-in-out;
+  transition: opacity 200ms ease;
 }
 
 .ReactModal__Overlay--after-open {
@@ -114,7 +114,7 @@
   opacity: 0;
 }
 
-.ReactModal__Body--open #__next {
-  filter: grayscale(0.9);
-  transition: filter linear 200ms;
+.ReactModal__Body--open #app {
+  filter: grayscale(0.8) blur(1.5px);
+  transition: filter 200ms ease;
 }

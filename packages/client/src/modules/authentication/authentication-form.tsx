@@ -7,6 +7,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useSnackbar } from '~/elements/snackbar';
+import { useNavigate } from '~/hooks/use-navigate';
+import { useGetSearchParam } from '~/hooks/use-search-params';
 import { useSubmit } from '~/hooks/use-submit';
 
 import { useConfigValue } from '../../hooks/use-config-value';
@@ -28,8 +30,10 @@ type AuthenticationFormProps = {
 };
 
 export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
+  const nextParam = useGetSearchParam('next');
   const isDevelopment = useConfigValue('isDevelopment');
-  const [invalidCredentials, setInvalidCredentials] = useState(false);
+
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const formType = useAuthenticationForm();
@@ -43,6 +47,8 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
     },
   });
 
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+
   const authenticationAdapter = useInjection(TOKENS.authentication);
 
   const handleSubmit = useSubmit(form, useSubmitAuthForm(), {
@@ -50,6 +56,10 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
     onSuccess() {
       onClose();
       snackbar.success('Vous êtes maintenant connecté·e');
+
+      if (nextParam) {
+        navigate(nextParam);
+      }
     },
     onError(error) {
       if (error.message === 'InvalidCredentials') {

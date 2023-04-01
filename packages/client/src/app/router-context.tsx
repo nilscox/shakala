@@ -1,9 +1,9 @@
+import { assert } from '@shakala/shared';
 import { useInjection } from 'brandi-react';
 import { createContext, Reducer, useCallback, useContext, useEffect, useReducer } from 'react';
 
 import { VPSRouterAdapter } from '~/adapters/router/vps-router.adapter';
 import { useUpdateEffect } from '~/hooks/use-update-effect';
-import { assert } from '~/utils/assert';
 import { isClient } from '~/utils/is-server';
 
 import { usePageContext } from './page-context';

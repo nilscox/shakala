@@ -1,5 +1,6 @@
+import { assert } from '@shakala/shared';
+
 import { useGetSearchParam } from '~/hooks/use-search-params';
-import { assert } from '~/utils/assert';
 
 import { isAuthForm } from './types';
 
