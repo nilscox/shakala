@@ -5,7 +5,7 @@ import type { PageContextBuiltInClient } from 'vite-plugin-ssr/client/router';
 type Page = (pageProps: PageProps) => React.ReactElement;
 type PageProps = object;
 
-export type Query = (pageContext: PageContextServer, token?: string) => Promise<void>;
+export type PrefetchQuery = (pageContext: PageContextServer, token?: string) => Promise<void>;
 
 type PageContextCustom = {
   Page: Page;
@@ -13,7 +13,7 @@ type PageContextCustom = {
   routeParams: Record<string, string>;
   exports: {
     Layout?: React.ComponentType<React.PropsWithChildren>;
-    queries?: Query[];
+    queries?: PrefetchQuery[];
     authenticationRequired?: boolean;
   };
 };

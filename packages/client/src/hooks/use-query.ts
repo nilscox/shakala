@@ -1,15 +1,16 @@
-import { AnyFunction } from '@shakala/shared';
 import { Token } from 'brandi';
 import { useInjection } from 'brandi-react';
 import { useQuery as useReactQuery } from 'react-query';
 
-export const useQuery = <Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+import { getQueryKey, QueryAdapter } from '~/utils/query-key';
+
+export const useQuery = <Adapter extends QueryAdapter<Method>, Method extends keyof Adapter>(
   adapterToken: Token<Adapter>,
   method: Method,
   ...params: Parameters<Adapter[Method]>
 ) => {
   const adapter = useInjection(adapterToken);
-  const queryKey = [adapter.constructor.name, method, params];
+  const queryKey = getQueryKey(adapterToken, method, ...params);
 
   const { data, error } = useReactQuery(
     queryKey,

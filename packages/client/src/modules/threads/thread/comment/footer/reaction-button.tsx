@@ -1,11 +1,12 @@
 import { CommentDto, ReactionType } from '@shakala/shared';
 
 import { TOKENS } from '~/app/tokens';
-import { invalidateQuery, useMutate } from '~/hooks/use-mutate';
+import { useMutate } from '~/hooks/use-mutate';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useUser } from '~/hooks/use-user';
 import ThumbDownIcon from '~/icons/thumb-down.svg';
 import ThumbUpIcon from '~/icons/thumb-up.svg';
+import { getQueryKey } from '~/utils/query-key';
 
 import { FooterButton } from './footer-button';
 
@@ -22,7 +23,7 @@ export const ReactionButton = ({ comment, reactionType, children }: ReactionButt
   const isAuthor = comment.author.id === user?.id;
 
   const setReaction = useMutate(TOKENS.comment, 'setReaction', {
-    invalidate: invalidateQuery(TOKENS.thread, 'getThread', threadId),
+    invalidate: getQueryKey(TOKENS.thread, 'getThread', threadId),
   });
 
   return (

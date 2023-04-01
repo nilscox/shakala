@@ -10,6 +10,7 @@ import { useSnackbar } from '~/elements/snackbar';
 import { useNavigate } from '~/hooks/use-navigate';
 import { useGetSearchParam } from '~/hooks/use-search-params';
 import { useSubmit } from '~/hooks/use-submit';
+import { getQueryKey } from '~/utils/query-key';
 
 import { useConfigValue } from '../../hooks/use-config-value';
 
@@ -49,10 +50,8 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
 
   const [invalidCredentials, setInvalidCredentials] = useState(false);
 
-  const authenticationAdapter = useInjection(TOKENS.authentication);
-
   const handleSubmit = useSubmit(form, useSubmitAuthForm(), {
-    invalidate: [authenticationAdapter.constructor.name, 'getAuthenticatedUser'],
+    invalidate: getQueryKey(TOKENS.authentication, 'getAuthenticatedUser'),
     onSuccess() {
       onClose();
       snackbar.success('Vous êtes maintenant connecté·e');

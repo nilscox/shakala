@@ -1,29 +1,29 @@
-import { AnyFunction, assert } from '@shakala/shared';
+import { assert } from '@shakala/shared';
 import { Token } from 'brandi';
 
 import { container } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
-import { PageContextServer, Query } from '~/renderer/page-context';
+import { PageContextServer, PrefetchQuery } from '~/renderer/page-context';
 
 import { ApiFetchHttpAdapter } from '../adapters/http/fetch-http.adapter';
 
-type QueryParameters<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter> = [
-  adapterToken: Token<Adapter>,
-  method: Method,
-  ...params: Parameters<Adapter[Method]>
-];
+import { getQueryKey, QueryAdapter, QueryParameters } from './query-key';
 
-export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+type GetQuery<Adapter extends QueryAdapter<Method>, Method extends keyof Adapter> = (
+  pageContext: PageContextServer
+) => QueryParameters<Adapter, Method> | void;
+
+export function prefetchQuery<Adapter extends QueryAdapter<Method>, Method extends keyof Adapter>(
   ...parameters: QueryParameters<Adapter, Method>
-): Query;
+): PrefetchQuery;
 
-export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
-  getQuery: (pageContext: PageContextServer) => QueryParameters<Adapter, Method> | void
-): Query;
+export function prefetchQuery<Adapter extends QueryAdapter<Method>, Method extends keyof Adapter>(
+  getQuery: GetQuery<Adapter, Method>
+): PrefetchQuery;
 
-export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+export function prefetchQuery<Adapter extends QueryAdapter<Method>, Method extends keyof Adapter>(
   ...args: unknown[]
-): Query {
+): PrefetchQuery {
   const http = container.get(TOKENS.http);
 
   assert(http instanceof ApiFetchHttpAdapter, 'expected http to be instance of ApiFetchHttpAdapter');
@@ -34,7 +34,7 @@ export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Metho
     let params: Parameters<Adapter[Method]>;
 
     if (args.length === 1) {
-      const getQuery = args[0] as (pageContext: PageContextServer) => QueryParameters<Adapter, Method> | void;
+      const getQuery = args[0] as GetQuery<Adapter, Method>;
       const result = getQuery(pageContext);
 
       if (!result) {
@@ -43,11 +43,11 @@ export function prefetchQuery<Adapter extends Record<Method, AnyFunction>, Metho
 
       [adapterToken, method, ...params] = result;
     } else {
-      [adapterToken, method, ...params] = args as [Token<Adapter>, Method, ...Parameters<Adapter[Method]>];
+      [adapterToken, method, ...params] = args as QueryParameters<Adapter, Method>;
     }
 
     const adapter = container.get(adapterToken);
-    const queryKey = [adapter.constructor.name, method, params];
+    const queryKey = getQueryKey(adapterToken, method, ...params);
 
     await pageContext.queryClient.prefetchQuery(queryKey, async () => {
       const httpClone = http.clone();

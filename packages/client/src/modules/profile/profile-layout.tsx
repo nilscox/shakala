@@ -14,6 +14,7 @@ import IconSignOut from '~/icons/sign-out.svg';
 import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
+import { getQueryKey } from '~/utils/query-key';
 
 type ProfileLayoutProps = {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ const Sidebar = () => {
   const snackbar = useSnackbar();
 
   const signOut = useMutate(TOKENS.authentication, 'signOut', {
-    invalidate: [TOKENS.authentication, 'getAuthenticatedUser'],
+    invalidate: getQueryKey(TOKENS.authentication, 'getAuthenticatedUser'),
     onSuccess() {
       snackbar.info("Vous n'êtes maintenant plus connecté·e");
       navigate('/');

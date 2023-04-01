@@ -7,6 +7,8 @@ import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter'
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { TOKENS } from '~/app/tokens';
 
+import { getQueryKey } from '../query-key';
+
 type StubApiAdapters = {
   authentication: StubAuthenticationAdapter;
   thread: StubThreadAdapter;
@@ -25,7 +27,7 @@ export const configureStory = <Args extends object>(configure: ConfigureStory<Ar
     } as StubApiAdapters;
 
     const queryClient = useQueryClient();
-    const getUserQueryKey = [adapters.authentication.constructor.name, 'getAuthenticatedUser', []];
+    const getUserQueryKey = getQueryKey(TOKENS.authentication, 'getAuthenticatedUser');
 
     if ('authenticated' in args) {
       // todo: not working?

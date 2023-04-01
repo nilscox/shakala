@@ -4,9 +4,9 @@ import { TOKENS } from '~/app/tokens';
 import { Button, SubmitButton } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { MarkdownPreviewInput } from '~/elements/markdown-preview-input';
-import { invalidateQuery } from '~/hooks/use-mutate';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useSubmit } from '~/hooks/use-submit';
+import { getQueryKey } from '~/utils/query-key';
 
 export type CommentForm = {
   text: string;
@@ -38,7 +38,7 @@ export const CommentForm = ({
   });
 
   const handleSubmit = useSubmit(form, async ({ text }) => onSubmit(text), {
-    invalidate: invalidateQuery(TOKENS.thread, 'getThread', threadId),
+    invalidate: getQueryKey(TOKENS.thread, 'getThread', threadId),
     onSuccess: (commentId) => {
       form.setValue('text', '');
       onSubmitted?.(commentId);

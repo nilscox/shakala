@@ -1,7 +1,7 @@
 import { render as renderTL, renderHook as renderHookTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContainerProvider } from 'brandi-react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, QueryKey } from 'react-query';
 import { beforeEach } from 'vitest';
 
 import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-authentication.adapter';
@@ -66,6 +66,10 @@ export const setupTest = () => {
     });
   };
 
+  const setQueryData = (queryKey: QueryKey, data: unknown) => {
+    queryClient.setQueryData(queryKey, data);
+  };
+
   const wrapper = ({ children }: { children: JSX.Element }) => (
     <ContainerProvider container={container}>
       <PageContextProvider value={pageContext}>
@@ -95,6 +99,7 @@ export const setupTest = () => {
     renderHook,
     setRouteParam,
     setSearchParam,
+    setQueryData,
     ...adapters,
   };
 };

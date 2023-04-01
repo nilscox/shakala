@@ -1,13 +1,14 @@
 import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 
+import { QueryKey } from '~/utils/query-key';
+
 import { ValidationErrors } from '../utils/validation-errors';
 
 import { useErrorHandler } from './use-error-handler';
-import { invalidateQuery } from './use-mutate';
 
 type UseSubmitOptions<Result> = {
-  invalidate?: ReturnType<typeof invalidateQuery>;
+  invalidate?: QueryKey;
   onSuccess?: (result: Result) => void;
   onError?: (error: Error) => void;
 };
