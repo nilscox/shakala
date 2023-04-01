@@ -1,7 +1,8 @@
 import assert from 'assert';
 
 import { CommandBus, EventHandler, QueryBus, registerEventHandler, TOKENS } from '@shakala/common';
-import { createNotification, NotificationPayloadMap, NotificationType } from '@shakala/notification';
+import { createNotification } from '@shakala/notification';
+import { NotificationPayloadMap, NotificationType } from '@shakala/shared';
 import { getUser } from '@shakala/user';
 import { injected } from 'brandi';
 

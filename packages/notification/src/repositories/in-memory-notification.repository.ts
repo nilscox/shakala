@@ -28,7 +28,7 @@ export class InMemoryNotificationRepository
     const results: Array<PaginatedItem<ListUserNotificationsResult>> = notifications.map((notification) => ({
       id: notification.id,
       type: notification.type,
-      created: notification.date.toString(),
+      date: notification.date.toString(),
       seen: notification.seenDate?.toString() ?? false,
       payload: notification.payload,
     }));

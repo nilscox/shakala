@@ -3,6 +3,7 @@ import { Chip } from '~/elements/chip';
 import { useSnackbar } from '~/elements/snackbar';
 import { VerticalTab, VerticalTabs } from '~/elements/vertical-tabs';
 import { useMutate } from '~/hooks/use-mutate';
+import { useQuery } from '~/hooks/use-query';
 import { useNavigate } from '~/hooks/use-router';
 import { useUser } from '~/hooks/use-user';
 import IconArrowDown from '~/icons/arrow-down.svg';
@@ -13,6 +14,7 @@ import IconSubscribe from '~/icons/subscribe.svg';
 import IconTrophy from '~/icons/trophy.svg';
 import IconVerified from '~/icons/verified.svg';
 import { getQueryKey } from '~/utils/query-key';
+import { withSuspense } from '~/utils/with-suspense';
 
 type ProfileLayoutProps = {
   children: React.ReactNode;
@@ -27,7 +29,6 @@ export const ProfileLayout = ({ children }: ProfileLayoutProps) => (
 
 const Sidebar = () => {
   const user = useUser();
-  const totalUnseenNotifications = 2; // todo
 
   const navigate = useNavigate();
   const snackbar = useSnackbar();
@@ -60,11 +61,7 @@ const Sidebar = () => {
           Profil
         </VerticalTab>
 
-        <VerticalTab
-          to="/profil/notifications"
-          Icon={IconSubscribe}
-          right={totalUnseenNotifications > 0 && <Chip className="ml-auto">{totalUnseenNotifications}</Chip>}
-        >
+        <VerticalTab to="/profil/notifications" Icon={IconSubscribe} right={<UnseenNotificationsChip />}>
           Notifications
         </VerticalTab>
 
@@ -91,3 +88,17 @@ const Sidebar = () => {
     </aside>
   );
 };
+
+const UnseenNotificationsChip = withSuspense(
+  () => {
+    const totalUnseenNotifications = useQuery(TOKENS.account, 'getNotificationsCount');
+
+    if (totalUnseenNotifications === 0) {
+      return null;
+    }
+
+    return <Chip className="ml-auto">{totalUnseenNotifications}</Chip>;
+  },
+  'UnseenNotificationsChip',
+  () => null
+);

@@ -33,4 +33,32 @@ describe('ApiAccountAdapter', () => {
       expect(http.requests).toInclude({ method: 'GET', url: '/account/activities', search: { page: 42 } });
     });
   });
+
+  describe('getNotificationsCount', () => {
+    it('fetches the total number of unseen notifications', async () => {
+      http.response = { body: 42 };
+
+      await expect(adapter.getNotificationsCount()).toResolve(42);
+
+      expect(http.requests).toInclude({ method: 'GET', url: '/notification/count' });
+    });
+  });
+
+  describe('getNotifications', () => {
+    it('fetches the list of notifications', async () => {
+      http.response = { body: [], headers: new Headers({ 'Pagination-Total': '0' }) };
+
+      await expect(adapter.getNotifications()).toResolve({ items: [], total: 0 });
+
+      expect(http.requests).toInclude({ method: 'GET', url: '/notification', search: {} });
+    });
+
+    it('fetches the list of notifications on a given page', async () => {
+      http.response = { body: [], headers: new Headers({ 'Pagination-Total': '0' }) };
+
+      await expect(adapter.getNotifications(51)).toResolve();
+
+      expect(http.requests).toInclude({ method: 'GET', url: '/notification', search: { page: 51 } });
+    });
+  });
 });

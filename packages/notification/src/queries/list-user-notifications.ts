@@ -1,7 +1,7 @@
 import { Paginated, Pagination, queryCreator, QueryHandler, registerQuery } from '@shakala/common';
+import { NotificationPayloadMap, NotificationType } from '@shakala/shared';
 import { injected } from 'brandi';
 
-import { NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
 import { NotificationRepository } from '../repositories/notification.repository';
 import { NOTIFICATION_TOKENS } from '../tokens';
 
@@ -14,7 +14,7 @@ type ListUserNotificationsQuery = {
 export type ListUserNotificationsResult = Paginated<{
   id: string;
   type: NotificationType;
-  created: string;
+  date: string;
   seen: false | string;
   payload: NotificationPayloadMap[NotificationType];
 }>;

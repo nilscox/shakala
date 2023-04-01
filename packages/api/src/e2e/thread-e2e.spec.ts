@@ -1,9 +1,10 @@
 import expect from '@nilscox/expect';
-import { listUserNotifications, NotificationType } from '@shakala/notification';
+import { listUserNotifications } from '@shakala/notification';
 import {
   CreateCommentBody,
   CreateThreadBody,
   EditCommentBody,
+  NotificationType,
   ReactionType,
   ReportCommentBody,
   SetReactionBody,

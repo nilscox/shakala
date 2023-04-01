@@ -13,6 +13,7 @@
   "dependencies": {
     "@shakala/common": "workspace:*",
     "@shakala/persistence": "workspace:*",
+    "@shakala/shared": "workspace:*",
     "brandi": "^5.0.0"
   },
   "devDependencies": {

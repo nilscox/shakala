@@ -1,8 +1,8 @@
 import expect from '@nilscox/expect';
 import { StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
+import { NotificationType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
-import { NotificationType } from '../../entities/notification.entity';
 import { InMemoryNotificationRepository } from '../../repositories/in-memory-notification.repository';
 
 import { CreateNotificationHandler } from './create-notification';

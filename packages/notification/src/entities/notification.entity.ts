@@ -1,45 +1,5 @@
-import { EntityProps, Timestamp, Entity } from '@shakala/common';
-
-export enum NotificationType {
-  rulesUpdated = 'rulesUpdated',
-  threadCreated = 'threadCreated',
-  replyCreated = 'replyCreated',
-}
-
-export type NotificationPayloadMap = {
-  [NotificationType.rulesUpdated]: {
-    version: string;
-    changes: string;
-  };
-
-  [NotificationType.threadCreated]: {
-    threadId: string;
-    author: {
-      id: string;
-      nick: string;
-      profileImage?: string;
-    };
-    text: string;
-  };
-
-  [NotificationType.replyCreated]: {
-    threadId: string;
-    threadDescription: string;
-    parentId: string;
-    parentAuthor: {
-      id: string;
-      nick: string;
-      profileImage?: string;
-    };
-    replyId: string;
-    replyAuthor: {
-      id: string;
-      nick: string;
-      profileImage?: string;
-    };
-    text: string;
-  };
-};
+import { Entity, EntityProps, Timestamp } from '@shakala/common';
+import { NotificationPayloadMap, NotificationType } from '@shakala/shared';
 
 type NotificationProps<Type extends NotificationType> = EntityProps<{
   type: Type;

@@ -6,9 +6,10 @@ import {
   SqlRepository,
   SqlUser,
 } from '@shakala/persistence';
+import { NotificationType, NotificationPayloadMap } from '@shakala/shared';
 import { injected } from 'brandi';
 
-import { Notification, NotificationPayloadMap, NotificationType } from '../entities/notification.entity';
+import { Notification } from '../entities/notification.entity';
 import { GetNotificationsCountResult } from '../queries/get-notifications-count';
 import { ListUserNotificationsResult } from '../queries/list-user-notifications';
 
@@ -64,9 +65,9 @@ export class SqlNotificationRepository
       items: sqlNotifications.map((sqlNotification) => ({
         id: sqlNotification.id,
         type: sqlNotification.type as NotificationType,
-        payload: sqlNotification.payload as NotificationPayloadMap[NotificationType],
-        created: sqlNotification.createdAt.toISOString(),
+        date: sqlNotification.createdAt.toISOString(),
         seen: sqlNotification.seenAt?.toISOString() ?? false,
+        payload: sqlNotification.payload as NotificationPayloadMap[NotificationType],
       })),
       total,
     };

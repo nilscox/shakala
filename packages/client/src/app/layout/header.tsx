@@ -82,13 +82,13 @@ const AuthenticationLink = ({ authenticated, className, children }: Authenticati
 };
 
 const UnseenNotificationsChip = () => {
-  const total = 0;
+  const total = useQuery(TOKENS.account, 'getNotificationsCount');
 
   if (total === 0) {
     return null;
   }
 
-  return <Chip className="absolute -top-1 -right-1 animate-scale-in">{total}</Chip>;
+  return <Chip className="absolute -top-1 -right-1 animate-scale-in ease-out">{total}</Chip>;
 };
 
 type NavigationProps = {

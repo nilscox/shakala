@@ -278,6 +278,7 @@ importers:
     specifiers:
       '@shakala/common': workspace:*
       '@shakala/persistence': workspace:*
+      '@shakala/shared': workspace:*
       '@types/node': ^18.14.1
       brandi: ^5.0.0
       ts-node: ^10.9.1
@@ -285,6 +286,7 @@ importers:
     dependencies:
       '@shakala/common': link:../common
       '@shakala/persistence': link:../persistence
+      '@shakala/shared': link:../shared
       brandi: 5.0.0
     devDependencies:
       '@types/node': 18.14.2
@@ -2934,7 +2936,7 @@ packages:
       '@storybook/csf-plugin': 7.0.0-rc.10
       '@storybook/csf-tools': 7.0.0-rc.10
       '@storybook/global': 5.0.0
-      '@storybook/mdx2-csf': 1.0.0-next.6
+      '@storybook/mdx2-csf': 1.0.0-next.7
       '@storybook/node-logger': 7.0.0-rc.10
       '@storybook/postinstall': 7.0.0-rc.10
       '@storybook/preview-api': 7.0.0-rc.10
@@ -3098,7 +3100,7 @@ packages:
       '@storybook/client-logger': 7.0.0-rc.10
       '@storybook/components': 7.0.0-rc.10_biqbaboplfbrettd7655fr4n2y
       '@storybook/core-events': 7.0.0-rc.10
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/docs-tools': 7.0.0-rc.10
       '@storybook/global': 5.0.0
       '@storybook/manager-api': 7.0.0-rc.10_biqbaboplfbrettd7655fr4n2y
@@ -3168,7 +3170,7 @@ packages:
       '@storybook/client-logger': 7.0.0-rc.10
       '@storybook/core-common': 7.0.0-rc.10
       '@storybook/csf-plugin': 7.0.0-rc.10
-      '@storybook/mdx2-csf': 1.0.0-next.6
+      '@storybook/mdx2-csf': 1.0.0-next.7
       '@storybook/node-logger': 7.0.0-rc.10
       '@storybook/preview': 7.0.0-rc.10
       '@storybook/preview-api': 7.0.0-rc.10
@@ -3274,7 +3276,7 @@ packages:
       '@babel/core': 7.21.3
       '@babel/preset-env': 7.20.2_@babel+core@7.21.3
       '@babel/types': 7.21.3
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/csf-tools': 7.0.0-rc.10
       '@storybook/node-logger': 7.0.0-rc.10
       '@storybook/types': 7.0.0-rc.10
@@ -3295,7 +3297,7 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       '@storybook/client-logger': 7.0.0-rc.10
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/global': 5.0.0
       '@storybook/theming': 7.0.0-rc.10_biqbaboplfbrettd7655fr4n2y
       '@storybook/types': 7.0.0-rc.10
@@ -3351,7 +3353,7 @@ packages:
       '@storybook/builder-manager': 7.0.0-rc.10
       '@storybook/core-common': 7.0.0-rc.10
       '@storybook/core-events': 7.0.0-rc.10
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/csf-tools': 7.0.0-rc.10
       '@storybook/docs-mdx': 0.0.1-next.6
       '@storybook/global': 5.0.0
@@ -3411,7 +3413,7 @@ packages:
       '@babel/parser': 7.21.3
       '@babel/traverse': 7.21.3
       '@babel/types': 7.21.3
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/types': 7.0.0-rc.10
       fs-extra: 11.1.0
       recast: 0.23.1
@@ -3420,8 +3422,8 @@ packages:
       - supports-color
     dev: true
 
-  /@storybook/csf/0.0.2-next.10:
-    resolution: {integrity: sha512-m2PFgBP/xRIF85VrDhvesn9ktaD2pN3VUjvMqkAL/cINp/3qXsCyI81uw7N5VEOkQAbWrY2FcydnvEPDEdE8fA==}
+  /@storybook/csf/0.0.2-next.11:
+    resolution: {integrity: sha512-xGt0YSVxZb43sKmEf1GIQD8xEbo+c+S6khDEL7Qu/pYA0gh5z3WUuhOlovnelYj/YJod+XRsfVvk23AaRfUJ4Q==}
     dependencies:
       type-fest: 2.19.0
     dev: true
@@ -3457,7 +3459,7 @@ packages:
       '@storybook/channels': 7.0.0-rc.10
       '@storybook/client-logger': 7.0.0-rc.10
       '@storybook/core-events': 7.0.0-rc.10
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/global': 5.0.0
       '@storybook/router': 7.0.0-rc.10_biqbaboplfbrettd7655fr4n2y
       '@storybook/theming': 7.0.0-rc.10_biqbaboplfbrettd7655fr4n2y
@@ -3477,8 +3479,8 @@ packages:
     resolution: {integrity: sha512-WmGyBFPCaW7ee57nSaPCb5teeI3mUBL+cRY3wXi7n+tzCHuWlYM/AWmQgOtb2goMgt7iZn76+uL9JUfTbvfRCg==}
     dev: true
 
-  /@storybook/mdx2-csf/1.0.0-next.6:
-    resolution: {integrity: sha512-m6plojocU/rmrqWd26yvm8D+oHZPZ6PtSSFmZIgpNDEPVmc8s4fBD6LXOAB5MiPI5f8KLUr2HVhOMZ97o5pDTw==}
+  /@storybook/mdx2-csf/1.0.0-next.7:
+    resolution: {integrity: sha512-xcQ8w4IecABAjsakaZTGiUEnEgFZzVKsMjqECjd+qdkwgD3R/kwrBdfyC15CLM5Ye1miPwYBIwJGeBXB9qxsZg==}
     dev: true
 
   /@storybook/node-logger/7.0.0-rc.10:
@@ -3501,7 +3503,7 @@ packages:
       '@storybook/channels': 7.0.0-rc.10
       '@storybook/client-logger': 7.0.0-rc.10
       '@storybook/core-events': 7.0.0-rc.10
-      '@storybook/csf': 0.0.2-next.10
+      '@storybook/csf': 0.0.2-next.11
       '@storybook/global': 5.0.0
       '@storybook/types': 7.0.0-rc.10
       '@types/qs': 6.9.7

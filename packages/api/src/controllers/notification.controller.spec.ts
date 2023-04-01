@@ -1,10 +1,6 @@
 import expect from '@nilscox/expect';
-import {
-  getNotificationsCount,
-  listUserNotifications,
-  markNotificationAsSeen,
-  NotificationType,
-} from '@shakala/notification';
+import { getNotificationsCount, listUserNotifications, markNotificationAsSeen } from '@shakala/notification';
+import { NotificationType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
 import { createControllerTest, ControllerTest } from '../tests/controller-test';

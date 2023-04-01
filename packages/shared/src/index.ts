@@ -1,4 +1,5 @@
 export * from './dtos/thread.dto';
+export * from './dtos/notification.dto';
 export * from './dtos/user.dto';
 
 export * from './schemas/authentication';

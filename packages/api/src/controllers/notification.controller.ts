@@ -2,6 +2,7 @@ import assert from 'assert';
 
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
 import { getNotificationsCount, listUserNotifications, markNotificationAsSeen } from '@shakala/notification';
+import { NotificationDto } from '@shakala/shared';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -13,11 +14,11 @@ export class NotificationController {
 
   constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {
     this.router.get('/', isAuthenticated, this.listNotifications);
-    this.router.get('/count', isAuthenticated, this.getUnreadNotificationsCount);
+    this.router.get('/count', isAuthenticated, this.getUnseenNotificationsCount);
     this.router.put('/:notificationId/seen', [isAuthenticated, hasWriteAccess], this.markNotificationAsSeen);
   }
 
-  getUnreadNotificationsCount: RequestHandler = async (req, res) => {
+  getUnseenNotificationsCount: RequestHandler<unknown, number> = async (req, res) => {
     assert(req.userId);
 
     const count = await this.queryBus.execute(
@@ -31,7 +32,7 @@ export class NotificationController {
     res.json(count);
   };
 
-  listNotifications: RequestHandler = async (req, res) => {
+  listNotifications: RequestHandler<unknown, NotificationDto[]> = async (req, res) => {
     assert(req.userId);
 
     const pagination = await validateRequest(req).pagination();

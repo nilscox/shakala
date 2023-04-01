@@ -1,6 +1,7 @@
 import { EntityFactory, randomId, Timestamp } from '@shakala/common';
+import { NotificationType } from '@shakala/shared';
 
-import { Notification, NotificationType } from './entities/notification.entity';
+import { Notification } from './entities/notification.entity';
 
 type Factories = {
   notification: EntityFactory<Notification>;
