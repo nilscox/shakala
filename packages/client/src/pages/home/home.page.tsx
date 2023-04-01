@@ -261,7 +261,7 @@ const TargetUsers = () => (
     <Heading id="a-qui-s-adresse-shakala">À qui s'adresse Shakala ?</Heading>
 
     <p>
-      Les zones de commentaires sont mises à disposition de tous, publiquement pour lire les messages, et
+      Les zones de commentaires sont mises à disposition de tous, publiquement pour voir les échanges, et
       après inscription pour y participer. Il n'est pas nécessaire de bien connaître les outils de la pensée
       critique, les biais cognitifs ou la méthode scientifique pour s'inscrire. Le but est de rassembler des
       personnes qui « jouent le jeu », qui cherchent à partager leurs opinions et à comprendre celles des
@@ -270,7 +270,7 @@ const TargetUsers = () => (
 
     <p>
       Si vous voulez creuser les sujets qui leurs tiennent à cœur, si vous vous posez des questions et
-      attendez des réponses critiques, ou si vous cherchez simplement à renforcer votre autodéfense
+      cherchez un dialogue critiques, ou si vous cherchez simplement à renforcer votre autodéfense
       intellectuelle, alors vous avez beaucoup à apporter à la communauté ! Vous pouvez apporter de l'inertie
       dans groupe de personnes qui ont un but commun : celui de mieux comprendre le monde.
     </p>
