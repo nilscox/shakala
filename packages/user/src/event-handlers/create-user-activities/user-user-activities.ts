@@ -1,4 +1,5 @@
 import { CommandBus, DomainEvent, EventHandler, registerEventHandler, TOKENS } from '@shakala/common';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import {
@@ -8,7 +9,6 @@ import {
 } from '../../commands/create-user/create-user';
 import { createUserActivity } from '../../commands/create-user-activity/create-user-activity';
 import { UserEmailValidatedEvent } from '../../commands/validate-user-email/validate-user-email';
-import { UserActivityPayload, UserActivityType } from '../../entities/user-activity.entity';
 import { USER_TOKENS } from '../../tokens';
 
 export class UserUserActivitiesHandler implements EventHandler<DomainEvent> {

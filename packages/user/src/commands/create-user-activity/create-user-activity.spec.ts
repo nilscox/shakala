@@ -1,8 +1,8 @@
 import expect from '@nilscox/expect';
 import { StubDateAdapter, StubGeneratorAdapter, Timestamp } from '@shakala/common';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
 
-import { UserActivityPayload, UserActivityType } from '../../entities/user-activity.entity';
 import { create } from '../../factories';
 import { InMemoryUserRepository } from '../../repositories/user/in-memory-user.repository';
 import { InMemoryUserActivityRepository } from '../../repositories/user-activity/in-memory-user-activity.repository';

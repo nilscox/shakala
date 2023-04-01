@@ -1,7 +1,8 @@
 import { EntityFactory, randomId, Timestamp, ValueObjectFactory } from '@shakala/common';
+import { UserActivityType } from '@shakala/shared';
 
 import { Nick } from './entities/nick.value-object';
-import { UserActivity, UserActivityType } from './entities/user-activity.entity';
+import { UserActivity } from './entities/user-activity.entity';
 import { User } from './entities/user.entity';
 
 type Factories = {

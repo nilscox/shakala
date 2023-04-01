@@ -12,11 +12,18 @@ import '../styles.css';
 export const clientRouting = true;
 export const hydrationCanBeAborted = true;
 
+declare global {
+  // eslint-disable-next-line no-var
+  var pageContext: PageContextClient;
+}
+
 let root: ReactDOM.Root;
 
 export const NoLayout = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
 export function render(pageContext: PageContextClient) {
+  globalThis.pageContext = pageContext;
+
   const { Page, pageProps, dehydratedState, exports } = pageContext;
   const PageLayout = exports.Layout ?? NoLayout;
 

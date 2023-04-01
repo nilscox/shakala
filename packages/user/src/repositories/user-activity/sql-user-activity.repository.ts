@@ -1,8 +1,9 @@
 import { Pagination, Timestamp } from '@shakala/common';
 import { PERSISTENCE_TOKENS, SqlRepository, SqlUserActivity } from '@shakala/persistence';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
 import { injected } from 'brandi';
 
-import { UserActivity, UserActivityPayload, UserActivityType } from '../../entities/user-activity.entity';
+import { UserActivity } from '../../entities/user-activity.entity';
 import { ListUserActivitiesResult } from '../../queries/list-user-activities';
 
 import { UserActivityRepository } from './user-activity.repository';
@@ -36,7 +37,7 @@ export class SqlUserActivityRepository
   async listUserActivities(userId: string, pagination: Pagination): Promise<ListUserActivitiesResult> {
     const [sqlUserActivities, total] = await this.repository.findAndCount(
       { user: userId },
-      { limit: pagination.limit, offset: pagination.offset }
+      { limit: pagination.limit, offset: pagination.offset, orderBy: { createdAt: 'DESC' } }
     );
 
     const items = sqlUserActivities.map((activity) => ({

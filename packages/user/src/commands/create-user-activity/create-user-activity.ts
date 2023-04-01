@@ -6,9 +6,10 @@ import {
   registerCommand,
   TOKENS,
 } from '@shakala/common';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
 import { injected } from 'brandi';
 
-import { UserActivity, UserActivityPayload, UserActivityType } from '../../entities/user-activity.entity';
+import { UserActivity } from '../../entities/user-activity.entity';
 import { UserActivityRepository } from '../../repositories/user-activity/user-activity.repository';
 import { USER_TOKENS } from '../../tokens';
 

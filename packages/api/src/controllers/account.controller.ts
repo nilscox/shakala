@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
-import { UserDto } from '@shakala/shared';
+import { UserActivityDto, UserDto } from '@shakala/shared';
 import {
   getUser,
   InvalidEmailValidationTokenError,
@@ -32,7 +32,7 @@ export class AccountController {
     res.json(result);
   };
 
-  listActivities: RequestHandler = async (req, res) => {
+  listActivities: RequestHandler<unknown, UserActivityDto[]> = async (req, res) => {
     assert(req.userId);
 
     const pagination = await validateRequest(req).pagination();

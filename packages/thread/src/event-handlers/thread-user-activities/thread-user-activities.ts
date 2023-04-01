@@ -1,5 +1,6 @@
 import { CommandBus, DomainEvent, EventHandler, registerEventHandler, TOKENS } from '@shakala/common';
-import { createUserActivity, UserActivityPayload, UserActivityType } from '@shakala/user';
+import { UserActivityType, UserActivityPayload } from '@shakala/shared';
+import { createUserActivity } from '@shakala/user';
 import { injected } from 'brandi';
 
 import { CommentCreatedEvent } from '../../commands/create-comment/create-comment';

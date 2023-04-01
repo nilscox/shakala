@@ -5,6 +5,7 @@ import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
 import { Layout } from '~/app/layout/layout';
 import { TOKENS } from '~/app/tokens';
 import { AuthForm } from '~/modules/authentication/types';
+import { getQueryKey } from '~/utils/query-key';
 
 import { AppProviders } from '../app/app-providers';
 import { prefetchQuery } from '../utils/prefetch-query';
@@ -59,7 +60,7 @@ export async function render(pageContext: PageContextServer) {
 }
 
 const checkAuthentication = ({ queryClient, urlOriginal }: PageContextServer) => {
-  const user = queryClient.getQueryData(['ApiAuthenticationAdapter', 'getAuthenticatedUser', []]);
+  const user = queryClient.getQueryData(getQueryKey(TOKENS.authentication, 'getAuthenticatedUser'));
 
   if (user) {
     return;

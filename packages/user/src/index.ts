@@ -16,6 +16,4 @@ export { listUserActivities } from './queries/list-user-activities';
 export { getUser, GetUserResult } from './queries/get-user';
 export { getProfileImage, GetProfileImageResult } from './queries/get-profile-image';
 
-export { UserActivityType, UserActivityPayload } from './entities/user-activity.entity';
-
 export { UserModule } from './user.module';

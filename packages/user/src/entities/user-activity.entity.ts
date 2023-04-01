@@ -1,47 +1,5 @@
 import { Entity, EntityProps, Timestamp } from '@shakala/common';
-import { ReactionType } from '@shakala/shared';
-
-export enum UserActivityType {
-  signUp = 'signUp',
-  signIn = 'signIn',
-  signOut = 'signOut',
-  emailAddressValidated = 'emailAddressValidated',
-  // profileImageChanged = 'profileImageChanged',
-  threadCreated = 'threadCreated',
-  rootCommentCreated = 'rootCommentCreated',
-  replyCreated = 'replyCreated',
-  commentEdited = 'commentEdited',
-  commentReactionSet = 'commentReactionSet',
-  commentReported = 'commentReported',
-}
-
-type ThreadActivityPayload = {
-  threadId: string;
-  description: string;
-  text: string;
-};
-
-type CommentActivityPayload = {
-  threadId: string;
-  threadDescription: string;
-  commentId: string;
-  commentText: string;
-};
-
-export type UserActivityPayload = {
-  [UserActivityType.signUp]: undefined;
-  [UserActivityType.signIn]: undefined;
-  [UserActivityType.signOut]: undefined;
-  [UserActivityType.emailAddressValidated]: undefined;
-
-  [UserActivityType.threadCreated]: ThreadActivityPayload;
-
-  [UserActivityType.rootCommentCreated]: CommentActivityPayload;
-  [UserActivityType.replyCreated]: CommentActivityPayload & { parentId: string };
-  [UserActivityType.commentEdited]: CommentActivityPayload;
-  [UserActivityType.commentReactionSet]: CommentActivityPayload & { reaction: ReactionType | null };
-  [UserActivityType.commentReported]: CommentActivityPayload & { reason?: string };
-};
+import { UserActivityPayload, UserActivityType } from '@shakala/shared';
 
 type UserActivityProps<Type extends UserActivityType = UserActivityType> = EntityProps<{
   type: Type;
