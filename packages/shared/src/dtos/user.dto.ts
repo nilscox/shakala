@@ -66,10 +66,10 @@ export type UserActivityPayload = {
 
 export const createUserActivityDto = <Type extends UserActivityType>(
   overrides?: Partial<UserActivityDto<Type>>
-): UserActivityDto<UserActivityType> => ({
+): UserActivityDto<Type> => ({
   id: randomId(),
   date: '',
-  type: UserActivityType.signUp,
-  payload: undefined,
+  type: '' as never,
+  payload: {} as never,
   ...overrides,
 });

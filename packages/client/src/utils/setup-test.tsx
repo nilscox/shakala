@@ -1,3 +1,4 @@
+import { UserDto } from '@shakala/shared';
 import { render as renderTL, renderHook as renderHookTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContainerProvider } from 'brandi-react';
@@ -13,6 +14,8 @@ import { container } from '~/app/container';
 import { StubPageContext, StubPageContextProvider } from '~/app/stub-page-context';
 import { TOKENS } from '~/app/tokens';
 import { SnackbarProvider } from '~/elements/snackbar';
+
+import { getQueryKey } from './query-key';
 
 type StubAdapters = {
   router: StubRouterAdapter;
@@ -58,6 +61,10 @@ export const setupTest = () => {
     queryClient.setQueryData(queryKey, data);
   };
 
+  const setUser = (user: UserDto) => {
+    setQueryData(getQueryKey(TOKENS.authentication, 'getAuthenticatedUser'), user);
+  };
+
   const wrapper = ({ children }: { children: JSX.Element }) => (
     <ContainerProvider container={container}>
       <StubPageContextProvider {...pageContext}>
@@ -86,6 +93,7 @@ export const setupTest = () => {
     setRouteParam,
     setSearchParam,
     setQueryData,
+    setUser,
     adapters,
   };
 };

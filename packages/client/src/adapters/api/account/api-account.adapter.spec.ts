@@ -61,4 +61,14 @@ describe('ApiAccountAdapter', () => {
       expect(http.requests).toInclude({ method: 'GET', url: '/notification', search: { page: 51 } });
     });
   });
+
+  describe('markNotificationAsSeen', () => {
+    it('marks a notification as seen', async () => {
+      http.response = {};
+
+      await expect(adapter.markNotificationAsSeen('notificationId')).toResolve();
+
+      expect(http.requests).toInclude({ method: 'PUT', url: '/notification/notificationId/seen' });
+    });
+  });
 });

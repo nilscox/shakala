@@ -42,7 +42,7 @@ const Sidebar = () => {
   });
 
   return (
-    <aside className="max-w-1">
+    <aside className="max-w-2 md:max-w-1">
       <div className="row gap-4 self-center p-4 md:p-6">
         <Avatar size="big" image={user?.profileImage} />
         <div>

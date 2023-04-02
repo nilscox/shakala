@@ -7,7 +7,7 @@ import { useMutation as useReactMutation, useQueryClient } from 'react-query';
 import { getQueryKey, QueryKey } from '~/utils/query-key';
 
 type UseMutationOptions<Result> = {
-  invalidate?: QueryKey;
+  invalidate?: QueryKey | QueryKey[];
   onSuccess?: (result: Result) => void;
 };
 
@@ -30,7 +30,13 @@ export const useMutate = <Adapter extends Record<Method, AnyFunction>, Method ex
       options?.onSuccess?.(result);
 
       if (options?.invalidate) {
-        void queryClient.invalidateQueries({ queryKey: options.invalidate });
+        const invalidate = Array.isArray(options.invalidate[0])
+          ? (options.invalidate as QueryKey[])
+          : ([options.invalidate] as QueryKey[]);
+
+        invalidate.forEach((queryKey) => {
+          void queryClient.invalidateQueries({ queryKey });
+        });
       }
     },
   });

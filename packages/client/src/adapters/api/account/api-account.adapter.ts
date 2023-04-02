@@ -33,6 +33,10 @@ export class ApiAccountAdapter implements AccountPort {
       total: Number(response.headers.get('Pagination-Total')),
     };
   }
+
+  async markNotificationAsSeen(notificationId: string): Promise<void> {
+    await this.http.put(`/notification/${notificationId}/seen`);
+  }
 }
 
 injected(ApiAccountAdapter, TOKENS.http);

@@ -3,11 +3,12 @@ import clsx from 'clsx';
 import { NavLink } from './link';
 
 type VerticalTabsProps = {
+  className?: string;
   children: React.ReactNode;
 };
 
-export const VerticalTabs = ({ children }: VerticalTabsProps) => (
-  <div role="tablist" className="links-nocolor font-medium">
+export const VerticalTabs = ({ className, children }: VerticalTabsProps) => (
+  <div role="tablist" className={clsx('links-nocolor font-medium', className)}>
     {children}
   </div>
 );

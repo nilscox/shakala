@@ -1,3 +1,5 @@
+import { randomId } from '../utils/random-id';
+
 export enum NotificationType {
   rulesUpdated = 'rulesUpdated',
   threadCreated = 'threadCreated',
@@ -46,3 +48,14 @@ export type NotificationDto<Type extends NotificationType = NotificationType> = 
   seen: string | false;
   payload: NotificationPayloadMap[Type];
 };
+
+export const createNotificationDto = <Type extends NotificationType>(
+  overrides?: Partial<NotificationDto<Type>>
+): NotificationDto<Type> => ({
+  id: randomId(),
+  type: '' as never,
+  date: '',
+  seen: false,
+  payload: {} as never,
+  ...overrides,
+});

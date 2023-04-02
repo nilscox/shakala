@@ -6,4 +6,5 @@ export interface AccountPort {
   getUserActivities(page?: number): Promise<Page<UserActivityDto>>;
   getNotificationsCount(): Promise<number>;
   getNotifications(page?: number): Promise<Page<NotificationDto>>;
+  markNotificationAsSeen(notificationId: string): Promise<void>;
 }
