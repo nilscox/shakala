@@ -23,7 +23,6 @@ describe('editComment', () => {
 
     const newMessage = new Message({
       id: 'messageId',
-      authorId: 'authorId',
       date: test.now,
       text: new Markdown('Edited!'),
     });
@@ -43,10 +42,7 @@ describe('editComment', () => {
 
 class Test {
   now = new Timestamp('2022-01-01');
-
-  initialMessage = create.message({
-    authorId: 'authorId',
-  });
+  initialMessage = create.message();
 
   comment = create.comment({
     id: 'commentId',

@@ -28,7 +28,7 @@ describe('SqlCommentReportRepository', () => {
     const user = await test.create.user();
     const { comment } = await test.createComment();
 
-    const commentReport = await test.create.commentReport({ comment, user });
+    const commentReport = await test.create.commentReport({ comment, reportedBy: user });
 
     await expect(test.repository.findBy({ commentId: comment.id, reportedById: user.id })).toResolve(
       expect.objectWith({ id: commentReport.id })

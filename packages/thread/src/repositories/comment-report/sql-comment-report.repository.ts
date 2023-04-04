@@ -21,7 +21,7 @@ export class SqlCommentReportRepository
     return new CommentReport({
       id: sqlCommentReport.id,
       commentId: sqlCommentReport.comment.id,
-      reportedById: sqlCommentReport.user.id,
+      reportedById: sqlCommentReport.reportedBy.id,
       reason: sqlCommentReport.reason ?? undefined,
     });
   }
@@ -38,7 +38,7 @@ export class SqlCommentReportRepository
   async findBy(options: FindCommentReportOptions): Promise<CommentReport | undefined> {
     const sqlCommentReport = await this.repository.findOne({
       comment: options.commentId,
-      user: options.reportedById,
+      reportedBy: options.reportedById,
     });
 
     if (sqlCommentReport) {

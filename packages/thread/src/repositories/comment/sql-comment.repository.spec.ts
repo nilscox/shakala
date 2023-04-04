@@ -24,14 +24,14 @@ describe('SqlCommentRepository', () => {
     const comment = create.comment({
       authorId: user.id,
       threadId: thread.id,
-      messages: [create.message({ authorId: user.id, text: create.markdown('comment') })],
+      messages: [create.message({ text: create.markdown('comment') })],
     });
 
     const reply = create.comment({
       authorId: user.id,
       threadId: thread.id,
       parentId: comment.id,
-      messages: [create.message({ authorId: user.id, text: create.markdown('reply') })],
+      messages: [create.message({ text: create.markdown('reply') })],
     });
 
     await test.repository.save(comment);
@@ -72,9 +72,9 @@ describe('SqlCommentRepository', () => {
 
     it('retrieves an edited comment', async () => {
       const { thread } = await test.createThread({ id: 'threadId' });
-      const { author, comment } = await test.createComment({ thread });
+      const { comment } = await test.createComment({ thread });
 
-      await test.create.message({ text: 'edit', author, comment, createdAt: test.now2 });
+      await test.create.message({ text: 'edit', comment, createdAt: test.now2 });
 
       const expected = createCommentQueryResult({
         text: 'edit',
@@ -144,13 +144,13 @@ describe('SqlCommentRepository', () => {
 
     it("retrieves a thread's comments matching a search query", async () => {
       const { thread } = await test.createThread();
-      const { author, comment1, comment2, reply1, reply2 } = await test.createComments(thread);
+      const { comment1, comment2, reply1, reply2 } = await test.createComments(thread);
 
       await test.create.message([
-        { author, comment: comment1, text: 'match' },
-        { author, comment: comment2, text: 'nope' },
-        { author, comment: reply1, text: 'match' },
-        { author, comment: reply2, text: 'nope' },
+        { comment: comment1, text: 'match' },
+        { comment: comment2, text: 'nope' },
+        { comment: reply1, text: 'match' },
+        { comment: reply2, text: 'nope' },
       ]);
 
       const results = await test.repository.findThreadComments(thread.id, {
@@ -185,7 +185,7 @@ class Test extends RepositoryTest {
   async createComment(overrides?: Partial<SqlComment>) {
     const author = overrides?.author ?? (await this.create.user({ id: 'authorId', nick: 'nick' }));
     const comment = await this.create.comment({ id: 'commentId', author, createdAt: this.now, ...overrides });
-    await this.create.message({ comment, author, text: 'text', createdAt: this.now });
+    await this.create.message({ comment, text: 'text', createdAt: this.now });
 
     return { author, comment };
   }
@@ -199,10 +199,10 @@ class Test extends RepositoryTest {
     const comment2 = await this.create.comment({ thread, author });
 
     await this.create.message([
-      { author, comment: comment1 },
-      { author, comment: comment2 },
-      { author, comment: reply1 },
-      { author, comment: reply2 },
+      { comment: comment1 },
+      { comment: comment2 },
+      { comment: reply1 },
+      { comment: reply2 },
     ]);
 
     return { author, comment1, comment2, reply1, reply2 };

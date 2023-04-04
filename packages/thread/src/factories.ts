@@ -38,7 +38,6 @@ export const create: Factories = {
   message(props) {
     return new Message({
       id: randomId(),
-      authorId: '',
       date: new Timestamp(0),
       text: this.markdown(),
       ...props,

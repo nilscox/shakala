@@ -40,7 +40,6 @@ export class CreateCommentHandler implements CommandHandler<CreateCommentCommand
 
     const message = new Message({
       id: await this.generator.generateId(),
-      authorId,
       date: this.dateAdapter.now(),
       text: new Markdown(text),
     });

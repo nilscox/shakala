@@ -15,4 +15,10 @@ export class SqlUser extends BaseSqlEntity {
 
   @Property()
   emailValidationToken!: string | null;
+
+  @Property()
+  lastLoginDate?: Date;
+
+  @Property()
+  hasWriteAccess!: boolean;
 }

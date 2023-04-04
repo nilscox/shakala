@@ -11,7 +11,7 @@ export class SqlCommentReport extends BaseSqlEntity {
   comment!: SqlComment;
 
   @ManyToOne({ eager: true })
-  user!: SqlUser;
+  reportedBy!: SqlUser;
 
   @Property({ nullable: true })
   reason!: string | null;

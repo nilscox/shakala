@@ -44,9 +44,6 @@ export class SqlComment extends BaseSqlEntity {
 
 @Entity({ tableName: 'message' })
 export class SqlMessage extends BaseSqlEntity {
-  @ManyToOne({ eager: true })
-  author!: SqlUser;
-
   @ManyToOne()
   comment!: SqlComment;
 

@@ -12,9 +12,9 @@ export class SqlNotification extends BaseSqlEntity {
   @ManyToOne()
   user!: SqlUser;
 
-  @Property({ type: 'jsonb', nullable: true })
-  payload!: unknown | null;
+  @Property({ type: 'jsonb' })
+  payload!: unknown;
 
-  @Property({ nullable: true })
+  @Property({ columnType: 'timestamp', nullable: true })
   seenAt!: Date | null;
 }

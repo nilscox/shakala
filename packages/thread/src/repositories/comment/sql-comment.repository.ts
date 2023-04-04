@@ -35,7 +35,6 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
         (message) =>
           new Message({
             id: message.id,
-            authorId: message.author.id,
             date: new Timestamp(message.createdAt),
             text: new Markdown(message.text),
           })
@@ -58,7 +57,6 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
       sqlComment.history.add(sqlMessage);
 
       sqlMessage.id = message.id;
-      sqlMessage.author = this.em.getReference(SqlUser, message.authorId);
       sqlMessage.comment;
       sqlMessage.text = message.text.toString();
       sqlMessage.createdAt = message.date.toDate();
