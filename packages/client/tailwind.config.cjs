@@ -51,6 +51,7 @@ module.exports = {
     minHeight: heights,
     maxHeight: heights,
     borderRadius: {
+      xs: '0.125rem',
       DEFAULT: '0.25rem',
       lg: '0.75rem',
       full: '100%',
@@ -164,6 +165,12 @@ module.exports = {
               marginTop: '0.5em',
               marginBottom: '0.5em',
               lineHeight: '1.4rem',
+              '&:first-of-type': {
+                marginTop: 0,
+              },
+              '&:last-of-type': {
+                marginBottom: 0,
+              },
             },
             li: {
               marginTop: 0.25,

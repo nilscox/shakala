@@ -3,10 +3,13 @@ import { useInjection } from 'brandi-react';
 import { clsx } from 'clsx';
 
 import { TOKENS } from '~/app/tokens';
+import { UserAvatarNick } from '~/app/user-avatar-nick';
 import { Avatar } from '~/elements/avatar/avatar';
+import { Button, SubmitButton } from '~/elements/button';
+import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { useUser } from '~/hooks/use-user';
 
-import { CommentForm } from './comment-form';
+import { useCommentForm } from './comment-form';
 
 type ReplyFormPros = {
   parent: CommentDto;
@@ -15,21 +18,12 @@ type ReplyFormPros = {
   closeReplyForm: () => void;
 };
 
-export const ReplyForm = ({ parent, isReplying, openReplyForm, closeReplyForm }: ReplyFormPros) => {
-  const commentAdapter = useInjection(TOKENS.comment);
-
+export const ReplyForm = ({ isReplying, openReplyForm, ...props }: ReplyFormPros) => {
   if (!isReplying) {
     return <FakeForm onFocus={openReplyForm} />;
   }
 
-  return (
-    <CommentForm
-      initialText=""
-      onCancel={closeReplyForm}
-      onSubmit={(text) => commentAdapter.createReply(parent.id, text)}
-      onSubmitted={closeReplyForm}
-    />
-  );
+  return <RealForm {...props} />;
 };
 
 type FakeFormProps = {
@@ -49,6 +43,48 @@ const FakeForm = ({ className, onFocus }: FakeFormProps) => {
         placeholder="Répondre"
         onFocus={onFocus}
       />
+    </form>
+  );
+};
+
+type RealFormPros = {
+  parent: CommentDto;
+  closeReplyForm: () => void;
+};
+
+const RealForm = ({ parent, closeReplyForm }: RealFormPros) => {
+  const commentAdapter = useInjection(TOKENS.comment);
+
+  const { editor, loading, error, onSubmit } = useCommentForm({
+    autofocus: true,
+    placeholder: 'Rédigez votre message',
+    onCancel: closeReplyForm,
+    onSubmitted: closeReplyForm,
+    onSubmit: (text) => commentAdapter.createReply(parent.id, text),
+  });
+
+  return (
+    <form onSubmit={onSubmit} className="px-1 py-0.5">
+      <div className="row justify-between gap-4 pb-1">
+        <UserAvatarNick />
+        <EditorToolbar editor={editor} />
+      </div>
+
+      <div className={clsx('ml-[0.6rem] border-l-4 pl-2')}>
+        <RichTextEditor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
+      </div>
+
+      <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">
+        {error}
+
+        <Button secondary onClick={closeReplyForm}>
+          Annuler
+        </Button>
+
+        <SubmitButton primary loading={loading}>
+          Envoyer
+        </SubmitButton>
+      </div>
     </form>
   );
 };

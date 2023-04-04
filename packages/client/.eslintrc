@@ -25,6 +25,7 @@
     "import/no-named-as-default": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "react/display-name": "off",
     "react/no-unescaped-entities": "off",
     "tailwindcss/no-arbitrary-value": "warn",
     "jsx-a11y/click-events-have-key-events": "off"
@@ -34,7 +35,8 @@
     {
       "files": ["*.stories.tsx", "src/utils/storybook.tsx"],
       "rules": {
-        "react-hooks/rules-of-hooks": "off"
+        "react-hooks/rules-of-hooks": "off",
+        "no-empty-pattern": "off"
       }
     }
   ]

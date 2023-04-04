@@ -1,10 +1,14 @@
 import { RootCommentDto } from '@shakala/shared';
+import { useInjection } from 'brandi-react';
 import clsx from 'clsx';
 import { useState } from 'react';
 
+import { Button, SubmitButton } from '~/elements/button';
+import { RichText } from '~/elements/rich-text';
+import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { CommentEditionForm } from '../comment-form/comment-edition-form';
+import { useCommentForm } from '../comment-form/comment-form';
 
 import { CommentFooter } from './comment-footer';
 import { CommentHeader } from './comment-header';
@@ -24,24 +28,26 @@ export const Comment = ({ comment }: CommentProps) => {
 
   return (
     <div id={comment.id} className="comment card">
-      <div className={clsx(isHighlighted && 'animate-highlight')} onMouseLeave={() => setShowActions(false)}>
-        <CommentHeader comment={comment} className="px-2 pt-2" />
-
-        {isEditing && <CommentEditionForm comment={comment} onClose={closeEditionForm} />}
-
-        {/* <Markdown markdown={text} highlight={searchQuery} className={clsx('m-2', isEditing && 'hidden')} /> */}
-        <div className={clsx('m-2', isEditing && 'hidden')}>{comment.text}</div>
-
-        <CommentFooter
-          className={clsx('px-2 pb-1', isEditing && 'hidden')}
-          comment={comment}
-          isEditing={isEditing}
-          onEdit={openEditionForm}
-          onReply={openReplyForm}
-          showActions={showActions}
-          onShowActions={() => setShowActions(true)}
-        />
-      </div>
+      {isEditing ? (
+        <CommentEditionForm comment={comment} onClose={closeEditionForm} />
+      ) : (
+        <div
+          className={clsx('p-2', isHighlighted && 'animate-highlight')}
+          onMouseLeave={() => setShowActions(false)}
+        >
+          <CommentHeader comment={comment} />
+          <RichText className="my-2">{comment.text}</RichText>
+          <CommentFooter
+            className={clsx(isEditing && 'hidden')}
+            comment={comment}
+            isEditing={isEditing}
+            onEdit={openEditionForm}
+            onReply={openReplyForm}
+            showActions={showActions}
+            onShowActions={() => setShowActions(true)}
+          />
+        </div>
+      )}
 
       <RepliesList
         parent={comment}
@@ -50,5 +56,50 @@ export const Comment = ({ comment }: CommentProps) => {
         closeReplyForm={closeReplyForm}
       />
     </div>
+  );
+};
+
+type CommentEditionFormProps = {
+  comment: RootCommentDto;
+  onClose: () => void;
+};
+
+export const CommentEditionForm = ({ comment, onClose }: CommentEditionFormProps) => {
+  const commentAdapter = useInjection(TOKENS.comment);
+
+  const { editor, loading, error, onSubmit } = useCommentForm({
+    autofocus: true,
+    initialHtml: comment.text,
+    onCancel: onClose,
+    onSubmitted: onClose,
+    onSubmit: async (text) => {
+      await commentAdapter.editComment(comment.id, text);
+      return comment.id;
+    },
+  });
+
+  return (
+    <form onSubmit={onSubmit} className="col flex-1 p-2">
+      <div className="row justify-between gap-4">
+        <CommentHeader comment={comment} />
+        <EditorToolbar editor={editor} />
+      </div>
+
+      <div className="my-2">
+        <RichTextEditor editor={editor} />
+      </div>
+
+      <div className="flex flex-row items-center justify-end gap-2">
+        {error}
+
+        <Button secondary onClick={onClose}>
+          Annuler
+        </Button>
+
+        <SubmitButton primary loading={loading}>
+          Envoyer
+        </SubmitButton>
+      </div>
+    </form>
   );
 };

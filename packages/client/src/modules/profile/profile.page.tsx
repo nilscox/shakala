@@ -5,7 +5,6 @@ import { Button, SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
 import { ExternalLink } from '~/elements/link';
-import { TextAreaAutoResize } from '~/elements/textarea-autoresize';
 import { useUser } from '~/hooks/use-user';
 import { withPreventDefault } from '~/utils/with-prevent-default';
 
@@ -116,7 +115,7 @@ const BioForm = () => {
         label="Bio"
         description="Quelques mots à propos de vous, visible publiquement"
       >
-        <TextAreaAutoResize rows={3} className="w-full rounded border p-1" />
+        <textarea rows={3} className="w-full rounded border p-1" />
       </ProfileFormField>
 
       <p className="my-0 text-xs text-muted">La première ligne sera affichée sous votre pseudo</p>

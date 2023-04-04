@@ -1,7 +1,7 @@
 import { NotificationDto, NotificationType } from '@shakala/shared';
 
 import { Link } from '~/elements/link';
-import { Markdown } from '~/elements/markdown';
+import { RichText } from '~/elements/rich-text';
 
 import { Notification } from '../notification';
 
@@ -16,7 +16,7 @@ export const RulesUpdatedNotification = ({ notification }: RulesUpdatedNotificat
       adapter votre utilisation de Shakala en conséquence.
     </p>
 
-    <Markdown className="my-2" markdown={notification.payload.changes} />
+    <RichText className="my-2">{notification.payload.changes}</RichText>
     <div className="my-2">{notification.payload.changes}</div>
 
     <p>

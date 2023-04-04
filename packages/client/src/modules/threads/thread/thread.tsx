@@ -6,9 +6,7 @@ import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Fallback } from '~/elements/fallback';
 import { useQuery } from '~/hooks/use-query';
 import { useSearchParam } from '~/hooks/use-search-params';
-import { useUser } from '~/hooks/use-user';
 import { DateFormat, formatDate } from '~/utils/date-utils';
-import { withSuspense } from '~/utils/with-suspense';
 
 import { Comment } from './comment/comment';
 import { RootCommentForm } from './comment-form/root-comment-form';
@@ -58,9 +56,7 @@ type CommentsListProps = {
   thread: ThreadDto;
 };
 
-const CommentsList = withSuspense(({ thread }: CommentsListProps) => {
-  const user = useUser();
-
+const CommentsList = ({ thread }: CommentsListProps) => {
   const [search] = useSearchParam('search');
   const [sortParam] = useSearchParam('sort');
   const sort = isCommentSort(sortParam) ? sortParam : undefined;
@@ -76,15 +72,11 @@ const CommentsList = withSuspense(({ thread }: CommentsListProps) => {
       {comments.length === 0 && <NoCommentFallback />}
 
       <div className="card">
-        <div className="flex flex-row items-center gap-4 p-2 pb-0">
-          <AvatarNick image={user?.profileImage} nick={user?.nick ?? 'Moi'} />
-        </div>
-
         <RootCommentForm thread={thread} />
       </div>
     </div>
   );
-}, 'CommentsList');
+};
 
 const NoCommentFallback = () => {
   const [search] = useSearchParam('search');

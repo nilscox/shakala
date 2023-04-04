@@ -5,7 +5,6 @@ import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 
-import { CommentEditionForm } from './comment-edition-form';
 import { ReplyForm } from './reply-form';
 import { RootCommentForm } from './root-comment-form';
 
@@ -66,25 +65,5 @@ describe('CommentForm', () => {
     await user.click(screen.getByText('Envoyer'));
 
     expect(closeReplyForm).called();
-  });
-
-  it('edits an existing comment', async () => {
-    const comment = createCommentDto({ id: 'commentId', text: 'initial text' });
-
-    adapters.comment.editComment.resolve();
-
-    const onClose = stub();
-
-    const user = render(<CommentEditionForm comment={comment} onClose={onClose} />);
-
-    const input = await screen.findByPlaceholderText('Rédigez votre message');
-
-    expect(input).toHaveValue('initial text');
-
-    await user.clear(input);
-    await user.type(input, 'edited text');
-    await user.click(screen.getByText('Envoyer'));
-
-    expect(onClose).called();
   });
 });

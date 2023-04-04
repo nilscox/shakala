@@ -1,9 +1,8 @@
 import { useForm } from 'react-hook-form';
 
 import { TOKENS } from '~/app/tokens';
-import { Button, SubmitButton } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
-import { MarkdownPreviewInput } from '~/elements/markdown-preview-input';
+import { useRichTextEditor } from '~/elements/rich-text-editor';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useSubmit } from '~/hooks/use-submit';
 import { getQueryKey } from '~/utils/query-key';
@@ -12,74 +11,63 @@ export type CommentForm = {
   text: string;
 };
 
-type CommentFormProps = {
+type UseCommentFormProps = {
   autofocus?: boolean;
   placeholder?: string;
-  initialText: string;
+  initialHtml?: string;
   onCancel?: () => void;
   onSubmit: (text: string) => Promise<string>;
   onSubmitted?: (commentId: string) => void;
 };
 
-export const CommentForm = ({
-  autofocus = true,
+export const useCommentForm = ({
+  autofocus,
   placeholder,
-  initialText,
-  onCancel,
+  initialHtml,
   onSubmit,
   onSubmitted,
-}: CommentFormProps) => {
+}: UseCommentFormProps) => {
   const threadId = useRouteParam('threadId');
 
   const form = useForm<CommentForm>({
     defaultValues: {
-      text: initialText,
+      text: initialHtml,
     },
   });
 
   const handleSubmit = useSubmit(form, async ({ text }) => onSubmit(text), {
-    invalidate: getQueryKey(TOKENS.thread, 'getThread', threadId),
+    invalidate: getQueryKey(TOKENS.thread, 'getThreadComments', threadId),
     onSuccess: (commentId) => {
       form.setValue('text', '');
       onSubmitted?.(commentId);
     },
   });
 
-  const error = form.formState.errors.text;
+  const editor = useRichTextEditor({
+    autofocus,
+    initialHtml,
+    placeholder,
+    onChange: (html) => form.setValue('text', html),
+  });
 
-  return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <MarkdownPreviewInput
-        // eslint-disable-next-line jsx-a11y/no-autofocus
-        autoFocus={autofocus}
-        rows={4}
-        placeholder={placeholder ?? 'Rédigez votre message'}
-        {...form.register('text')}
-      />
+  const loading = form.formState.isSubmitting;
 
-      <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">
-        {error?.message && (
-          <FieldError
-            className="mr-auto"
-            error={error.message}
-            errorsMap={{
-              min: "Le message n'est pas suffisamment long",
-              max: 'Le message est trop long (maximum : 20 000 caractères)',
-            }}
-          />
-        )}
+  const errorCode = form.formState.errors.text?.message;
+  const error = errorCode ? (
+    <FieldError
+      className="mr-auto"
+      error={errorCode}
+      errorsMap={{
+        min: "Le message n'est pas suffisamment long",
+        max: 'Le message est trop long (maximum : 20 000 caractères)',
+      }}
+    />
+  ) : undefined;
 
-        {onCancel && (
-          <Button secondary onClick={onCancel}>
-            Annuler
-          </Button>
-        )}
-
-        <SubmitButton primary loading={form.formState.isSubmitting}>
-          Envoyer
-        </SubmitButton>
-      </div>
-    </form>
-  );
+  return {
+    editor,
+    loading,
+    error,
+    onSubmit: form.handleSubmit(handleSubmit) as React.FormEventHandler,
+  };
 };

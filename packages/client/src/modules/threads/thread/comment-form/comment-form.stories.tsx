@@ -1,10 +1,11 @@
+import { createAuthorDto, createThreadDto } from '@shakala/shared';
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { maxWidthDecorator } from '~/utils/storybook';
+import { configureStory, maxWidthDecorator } from '~/utils/storybook';
 import { ValidationErrors } from '~/utils/validation-errors';
 
-import { CommentForm } from './comment-form';
+import { RootCommentForm } from './root-comment-form';
 
 type Args = {
   validationError: boolean;
@@ -15,7 +16,7 @@ export default {
   title: 'Domain/CommentForm',
   parameters: {
     pageContext: {
-      routeParams: { threadId: 'threadId' },
+      pathname: '/discussions/threadId',
     },
   },
   decorators: [
@@ -32,21 +33,23 @@ export default {
   },
 } satisfies Meta<Args>;
 
-export const commentForm: StoryFn<Args> = ({ validationError, unexpectedError }) => (
-  <CommentForm
-    initialText=""
-    onCancel={action('onCancel')}
-    onSubmit={async (text) => {
-      if (unexpectedError) {
-        throw new Error('Something went wrong');
-      }
+const thread = createThreadDto({ id: 'threadId', author: createAuthorDto({ nick: 'JJ Goldman' }) });
 
-      if (validationError) {
-        throw new ValidationErrors({ text: "This isn't very interesting" });
-      }
+export const commentForm: StoryFn<Args> = ({}) => {
+  return <RootCommentForm thread={thread} />;
+};
 
-      action('onSubmit')(text);
-      return '';
-    }}
-  />
-);
+commentForm.decorators = [
+  configureStory((adapters, { unexpectedError, validationError }) => {
+    if (unexpectedError) {
+      adapters.comment.createComment.reject(new Error('Something went wrong'));
+    } else if (validationError) {
+      adapters.comment.createComment.reject(new ValidationErrors({ text: "This isn't very interesting" }));
+    } else {
+      adapters.comment.createComment.implement(async (...args) => {
+        action('createComment')(args);
+        return 'commentId';
+      });
+    }
+  }),
+];
