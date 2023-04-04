@@ -8,7 +8,12 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ start, end, className, ...props }, ref): JSX.Element => (
-    <div className={clsx('row items-center rounded border bg-neutral', className)}>
+    <div
+      className={clsx(
+        'row items-center overflow-hidden rounded border bg-neutral focus-within:border-primary',
+        className
+      )}
+    >
       {start}
       <input ref={ref} className="w-full py-0.5 px-1 outline-none" {...props} />
       {end}

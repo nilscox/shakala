@@ -6,14 +6,15 @@ import { TOKENS } from '~/app/tokens';
 import { SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
+import { RichTextEditor, useRichTextEditor } from '~/elements/rich-text-editor';
 import { useSubmit } from '~/hooks/use-submit';
 
 export const ThreadForm = () => {
   const form = useForm<ThreadFormFields>({
     defaultValues: {
-      text: '',
       description: '',
       keywords: '',
+      text: '',
     },
   });
 
@@ -22,6 +23,11 @@ export const ThreadForm = () => {
 
   const handleSubmit = useSubmit(form, (data) => thread.createThread(data), {
     onSuccess: (threadId) => router.navigate(`/discussions/${threadId}`),
+  });
+
+  const editor = useRichTextEditor({
+    autofocus: false,
+    onChange: (text) => form.setValue('text', text),
   });
 
   return (
@@ -62,7 +68,10 @@ export const ThreadForm = () => {
           max: 'Le texte est trop long',
         }}
       >
-        <textarea rows={8} {...form.register('text')} />
+        <RichTextEditor
+          editor={editor}
+          className="min-h-2 rounded border bg-neutral p-1 focus-within:border-primary"
+        />
       </FormField>
 
       <SubmitButton primary className="self-end" loading={form.formState.isSubmitting}>

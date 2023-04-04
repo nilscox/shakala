@@ -20,6 +20,9 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
+  ssr: {
+    noExternal: ['@fortawesome/*'],
+  },
   test: {
     watch: false,
     reporters: ['verbose'],

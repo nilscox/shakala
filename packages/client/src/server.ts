@@ -64,11 +64,17 @@ type PageContextInit = {
 const handleRequest: RequestHandler = async (req, res, next) => {
   const queryClient = new QueryClient();
 
-  const { httpResponse, redirectTo } = await renderPage<PageContextAdded, PageContextInit>({
+  const result = await renderPage<PageContextAdded, PageContextInit>({
     urlOriginal: req.originalUrl,
     token: req.cookies.token,
     queryClient,
   });
+
+  const { httpResponse, redirectTo, errorWhileRendering } = result;
+
+  if (errorWhileRendering) {
+    return res.send(String(errorWhileRendering));
+  }
 
   if (redirectTo) {
     return res.redirect(307, redirectTo);
