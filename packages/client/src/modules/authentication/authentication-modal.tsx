@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { Modal, useModalState } from '~/elements/modal';
 import { useNavigate } from '~/hooks/use-router';
-import { useSearchParam } from '~/hooks/use-search-params';
+import { useSearchParam, useSetSearchParams } from '~/hooks/use-search-params';
 import { useUser } from '~/hooks/use-user';
 import { withSuspense } from '~/utils/with-suspense';
 
@@ -13,7 +13,8 @@ export const AuthenticationModal = withSuspense(() => {
   const user = useUser();
 
   const [authParam, setAuthParam] = useSearchParam('auth');
-  const [nextParam, setNextParam] = useSearchParam('next');
+  const [nextParam] = useSearchParam('next');
+  const setSearchParams = useSetSearchParams();
 
   const form = useAuthenticationFormUnsafe();
   const { isOpen, closeModal } = useModalState(form);
@@ -38,10 +39,7 @@ export const AuthenticationModal = withSuspense(() => {
       isOpen={isOpen}
       className="max-w-3"
       onRequestClose={closeModal}
-      onAfterClose={() => {
-        setAuthParam(undefined);
-        setNextParam(undefined);
-      }}
+      onAfterClose={() => setSearchParams({ auth: undefined, next: undefined })}
     >
       {form && <AuthenticationForm onClose={closeModal} />}
     </Modal>
