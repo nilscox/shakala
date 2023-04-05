@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { stub } from 'sinon';
 
+import { StubAccountAdapter } from '~/adapters/api/account/stub-account.adapter';
 import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-authentication.adapter';
 import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter';
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
@@ -53,10 +54,11 @@ export class StorybookRouterAdapter implements RouterPort {
 }
 
 export const containerDecorator: Decorator = (Story) => {
-  container.bind(TOKENS.router).toInstance(StorybookRouterAdapter).inSingletonScope();
+  container.bind(TOKENS.account).toInstance(StubAccountAdapter).inSingletonScope();
   container.bind(TOKENS.authentication).toInstance(StubAuthenticationAdapter).inSingletonScope();
-  container.bind(TOKENS.thread).toInstance(StubThreadAdapter).inSingletonScope();
   container.bind(TOKENS.comment).toInstance(StubCommentAdapter).inSingletonScope();
+  container.bind(TOKENS.router).toInstance(StorybookRouterAdapter).inSingletonScope();
+  container.bind(TOKENS.thread).toInstance(StubThreadAdapter).inSingletonScope();
 
   return (
     <ContainerProvider container={container}>

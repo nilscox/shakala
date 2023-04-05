@@ -27,7 +27,7 @@ describe('CreateThreadCreatedNotificationsHandler', () => {
         id: 'authorId',
         nick: 'author',
       },
-      text: 'text',
+      description: 'description',
     };
 
     expect(test.commandBus).toInclude(

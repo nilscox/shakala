@@ -2,6 +2,8 @@ import * as yup from 'yup';
 
 import { isEnumValue } from '../utils/is-enum-value';
 
+const minRichTextLength = (length: number) => '<p></p>'.length + length;
+
 export enum CommentSort {
   dateAsc = 'date-asc',
   dateDesc = 'date-desc',
@@ -25,8 +27,8 @@ export type GetThreadCommentsQuery = yup.InferType<typeof getThreadQuerySchema>;
 
 export const createThreadBodySchema = yup.object({
   description: yup.string().required().trim().min(4).max(60),
-  text: yup.string().required().trim().min(4).max(20000),
   keywords: yup.array().of(yup.string().required().trim().min(3).max(20)).max(20).required(),
+  text: yup.string().required().trim().min(minRichTextLength(4)).max(20000),
 });
 
 export type CreateThreadBody = yup.InferType<typeof createThreadBodySchema>;

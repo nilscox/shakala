@@ -19,7 +19,7 @@ export type NotificationPayloadMap = {
       nick: string;
       profileImage?: string;
     };
-    text: string;
+    description: string;
   };
 
   [NotificationType.replyCreated]: {

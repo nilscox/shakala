@@ -27,7 +27,10 @@ export const ThreadForm = () => {
 
   const editor = useRichTextEditor({
     autofocus: false,
-    onChange: (text) => form.setValue('text', text),
+    onChange: (text) => {
+      form.setValue('text', text);
+      form.clearErrors('text');
+    },
   });
 
   return (

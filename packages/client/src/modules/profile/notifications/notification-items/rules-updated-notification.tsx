@@ -17,7 +17,6 @@ export const RulesUpdatedNotification = ({ notification }: RulesUpdatedNotificat
     </p>
 
     <RichText className="my-2">{notification.payload.changes}</RichText>
-    <div className="my-2">{notification.payload.changes}</div>
 
     <p>
       Retrouvez la version complète de la charte mise à jour{' '}

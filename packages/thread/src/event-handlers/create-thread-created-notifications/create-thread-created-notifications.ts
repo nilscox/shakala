@@ -30,7 +30,7 @@ export class CreateThreadCreatedNotificationsHandler implements EventHandler<Thr
         nick: author.nick,
         profileImage: author.profileImage,
       },
-      text: thread.text.toString(),
+      description: thread.description.toString(),
     });
   }
 

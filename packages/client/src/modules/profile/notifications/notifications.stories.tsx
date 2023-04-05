@@ -21,7 +21,7 @@ const notification1 = createNotificationDto({
   payload: {
     threadId: 'threadId',
     author: createAuthorDto({ nick: 'nilscox' }),
-    text: 'Qui passe le plus de temps sur le poang ?',
+    description: 'Qui passe le plus de temps sur le poang ?',
   },
 });
 
@@ -31,11 +31,11 @@ const notification2 = createNotificationDto({
   seen: createDate('2022-10-20'),
   payload: {
     version: '49.3',
-    changes: [
-      "- Il n'est plus permis de se lécher les babines",
-      '- Il faut maintenant attendre devant la porte 30 minutes sans faire de bruit avant de pouvoir sortir',
-      "- Et mano tu arrêtes d'embêter raspout s'il te plait",
-    ].join('\n'),
+    changes: `<ul>
+      <li>Il n'est plus permis de se lécher les babines</li>
+      <li>Il faut maintenant attendre devant la porte 30 minutes sans faire de bruit avant de pouvoir sortir</li>
+      <li>Et mano tu arrêtes d'embêter raspout s'il te plait</li>
+    </ul>`,
   },
 });
 

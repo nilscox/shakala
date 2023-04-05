@@ -38,7 +38,6 @@ export const Comment = ({ comment }: CommentProps) => {
           <CommentHeader comment={comment} />
           <RichText className="my-2">{comment.text}</RichText>
           <CommentFooter
-            className={clsx(isEditing && 'hidden')}
             comment={comment}
             isEditing={isEditing}
             onEdit={openEditionForm}
@@ -86,7 +85,7 @@ export const CommentEditionForm = ({ comment, onClose }: CommentEditionFormProps
       </div>
 
       <div className="my-2">
-        <RichTextEditor editor={editor} />
+        {editor ? <RichTextEditor editor={editor} /> : <RichText>{comment.text}</RichText>}
       </div>
 
       <div className="flex flex-row items-center justify-end gap-2">

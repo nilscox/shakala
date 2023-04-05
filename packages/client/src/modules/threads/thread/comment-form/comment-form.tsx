@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { TOKENS } from '~/app/tokens';
@@ -35,10 +36,19 @@ export const useCommentForm = ({
     },
   });
 
+  useEffect(() => {
+    form.register('text');
+    return () => form.unregister('text');
+  }, [form]);
+
   const handleSubmit = useSubmit(form, async ({ text }) => onSubmit(text), {
     invalidate: getQueryKey(TOKENS.thread, 'getThreadComments', threadId),
     onSuccess: (commentId) => {
       form.setValue('text', '');
+      form.clearErrors('text');
+
+      editor?.chain().setContent('').run();
+
       onSubmitted?.(commentId);
     },
   });
@@ -47,7 +57,10 @@ export const useCommentForm = ({
     autofocus,
     initialHtml,
     placeholder,
-    onChange: (html) => form.setValue('text', html),
+    onChange: (html) => {
+      form.setValue('text', html);
+      form.clearErrors('text');
+    },
   });
 
   const loading = form.formState.isSubmitting;

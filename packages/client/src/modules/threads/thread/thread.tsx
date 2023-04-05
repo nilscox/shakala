@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { PageTitle } from '~/app/page-title';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { Fallback } from '~/elements/fallback';
+import { RichText } from '~/elements/rich-text';
 import { useQuery } from '~/hooks/use-query';
 import { useSearchParam } from '~/hooks/use-search-params';
 import { DateFormat, formatDate } from '~/utils/date-utils';
@@ -30,8 +31,7 @@ export const Thread = ({ thread }: ThreadProps) => (
         </div>
       </div>
 
-      {/* <Markdown markdown={text} className="card p-4 sm:p-5" /> */}
-      <div className="card p-4 sm:p-5">{thread.text}</div>
+      <RichText className="card p-4 sm:p-5">{thread.text}</RichText>
     </div>
 
     <ThreadFilters thread={thread} className="mb-4" />

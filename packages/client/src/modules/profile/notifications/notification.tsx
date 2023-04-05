@@ -1,4 +1,5 @@
 import { NotificationDto } from '@shakala/shared';
+import clsx from 'clsx';
 
 import { IconButton } from '~/elements/icon-button';
 import { useMutate } from '~/hooks/use-mutate';
@@ -13,7 +14,7 @@ type NotificationProps = {
 };
 
 export const Notification = ({ notification, title, children }: NotificationProps) => (
-  <div className="rounded bg-neutral p-4 drop-shadow-sm">
+  <div className={clsx('rounded bg-neutral p-4 drop-shadow-sm', notification.seen && 'opacity-60')}>
     <div className="row justify-between">
       <div>
         <time

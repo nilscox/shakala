@@ -1,5 +1,7 @@
 import { Link } from '@tiptap/extension-link';
 import { Placeholder } from '@tiptap/extension-placeholder';
+import Superscript from '@tiptap/extension-superscript';
+import Typography from '@tiptap/extension-typography';
 import { Underline } from '@tiptap/extension-underline';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -9,6 +11,13 @@ import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/solid.css';
 
 // cspell:words tiptap fortawesome fontawesome classname
+
+const CustomSuperscript = Superscript.extend({
+  group: 'inline',
+  content: 'text+',
+  inline: true,
+  exitable: true,
+});
 
 type UseRichTextEditorProps = {
   autofocus?: boolean;
@@ -34,6 +43,8 @@ export const useRichTextEditor = ({
     extensions: [
       StarterKit,
       Underline,
+      CustomSuperscript,
+      Typography.configure({ superscriptTwo: false, superscriptThree: false }),
       Placeholder.configure({ placeholder }),
       Link.configure({ openOnClick: false }),
     ],
@@ -62,50 +73,55 @@ export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
     <ToolbarItem
       icon="bold"
       active={editor?.isActive('bold')}
-      disabled={!editor?.can().chain().focus().toggleBold().run()}
       onClick={() => editor?.chain().focus().toggleBold().run()}
     />
 
     <ToolbarItem
       icon="italic"
       active={editor?.isActive('italic')}
-      disabled={!editor?.can().chain().focus().toggleItalic().run()}
       onClick={() => editor?.chain().focus().toggleItalic().run()}
     />
 
     <ToolbarItem
       icon="underline"
       active={editor?.isActive('underline')}
-      disabled={!editor?.can().chain().focus().toggleUnderline().run()}
       onClick={() => editor?.chain().focus().toggleUnderline().run()}
     />
 
     <ToolbarItem
       icon="strikethrough"
       active={editor?.isActive('strike')}
-      disabled={!editor?.can().chain().focus().toggleStrike().run()}
       onClick={() => editor?.chain().focus().toggleStrike().run()}
     />
 
     <ToolbarItem
       icon="link"
       active={editor?.isActive('list')}
-      disabled={!editor?.can().chain().focus().toggleLink({ href: '' }).run()}
-      onClick={() => editor?.chain().focus().toggleLink({ href: '' }).run()}
+      onClick={() => {
+        const href = window.prompt('Cible du lien', editor?.getAttributes('link').href);
+
+        if (href) {
+          editor?.chain().focus().toggleLink({ href }).run();
+        }
+      }}
     />
 
     <ToolbarItem
       icon="list-ul"
       active={editor?.isActive('bulletList')}
-      disabled={!editor?.can().chain().focus().toggleBulletList().run()}
       onClick={() => editor?.chain().focus().toggleBulletList().run()}
     />
 
     <ToolbarItem
       icon="list-ol"
       active={editor?.isActive('orderedList')}
-      disabled={!editor?.can().chain().focus().toggleOrderedList().run()}
       onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+    />
+
+    <ToolbarItem
+      icon="superscript"
+      active={editor?.isActive('superscript')}
+      onClick={() => editor?.chain().focus().toggleSuperscript().run()}
     />
   </div>
 );
@@ -113,14 +129,12 @@ export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
 type ToolbarItemProps = {
   icon: string;
   active?: boolean;
-  disabled?: boolean;
   onClick: () => void;
 };
 
-const ToolbarItem = ({ icon, active, disabled, onClick }: ToolbarItemProps) => (
+const ToolbarItem = ({ icon, active, onClick }: ToolbarItemProps) => (
   <button
     type="button"
-    disabled={disabled}
     className={clsx(
       'col h-5 w-5 items-center justify-center rounded-xs text-muted hover:bg-inverted/5',
       active && '!text-primary'

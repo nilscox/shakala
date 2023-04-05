@@ -12,7 +12,7 @@ export const ThreadCreatedNotification = ({ notification }: ThreadCreatedNotific
   <Notification notification={notification} title="Nouveau fil de discussion">
     <p>
       <strong>{notification.payload.author.nick}</strong> a créé un nouveau fil de discussion :{' '}
-      <Link href={`/discussions/${notification.payload.threadId}`}>{notification.payload.text}</Link>
+      <Link href={`/discussions/${notification.payload.threadId}`}>{notification.payload.description}</Link>
     </p>
   </Notification>
 );
