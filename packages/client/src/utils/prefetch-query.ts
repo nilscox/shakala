@@ -56,10 +56,7 @@ export function prefetchQuery<Adapter extends QueryAdapter<Method>, Method exten
         httpClone.setToken(token);
       }
 
-      const cb = adapter[method];
-      assert(typeof cb === 'function');
-
-      return cb.call({ ...adapter, http: httpClone }, ...params);
+      return adapter[method].call({ ...adapter, http: httpClone }, ...params);
     });
   };
 }
