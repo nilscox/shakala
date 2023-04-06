@@ -34,6 +34,10 @@ export class PersistenceModule extends Module {
       await this.container.get(PERSISTENCE_TOKENS.database).init();
     }
   }
+
+  async close() {
+    await this.container.get(PERSISTENCE_TOKENS.database).close();
+  }
 }
 
 const removeUndefinedValues = <T extends object>(obj: T): T => {

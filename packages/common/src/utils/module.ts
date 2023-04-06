@@ -11,6 +11,7 @@ export type ModuleConfig<M extends Module> = M extends { configure(config: infer
 export interface Module {
   configure(config?: unknown): void;
   init?(): Promise<void>;
+  close?(): Promise<void>;
 }
 
 export abstract class Module extends DependencyModule {
@@ -40,9 +41,7 @@ export abstract class Module extends DependencyModule {
   }
 
   protected bindToken<Cls>(token: Token<Cls>, Instance: ClassType<Cls>, expose = true) {
-    const tokenStr = token.__s.toString().replace(/^Symbol\((.*)\)$/, '$1');
-
-    this.logger.verbose('binding', tokenStr, '->', Instance.name);
+    this.logger.verbose('binding', token.__d, '->', Instance.name);
     this.bind(token).toInstance(Instance).inContainerScope();
 
     if (expose) {

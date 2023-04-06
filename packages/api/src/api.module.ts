@@ -31,4 +31,8 @@ export class ApiModule extends Module {
       this.bindToken(API_TOKENS.server, Server);
     }
   }
+
+  async close() {
+    await this.container.get(API_TOKENS.server).close();
+  }
 }

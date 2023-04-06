@@ -32,13 +32,7 @@ async function main() {
 
   const close = (sig: string) => {
     container.get(TOKENS.logger).verbose(`received signal ${sig}`);
-
-    void Promise.resolve()
-      .then(() => server.close())
-      .then(() => application.close())
-      .then(() => {
-        process.exitCode = 0;
-      });
+    void application.close();
   };
 
   process.on('SIGINT', close);

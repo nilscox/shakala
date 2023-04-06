@@ -54,7 +54,7 @@ export class ThreadModule extends Module {
       this.bindToken(THREAD_TOKENS.repositories.threadRepository, SqlThreadRepository);
       this.bindToken(THREAD_TOKENS.repositories.commentRepository, SqlCommentRepository);
       this.bindToken(THREAD_TOKENS.repositories.reactionRepository, SqlReactionRepository);
-      this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, SqlCommentSubscriptionRepository, false);
+      this.bindToken(THREAD_TOKENS.repositories.commentSubscriptionRepository, SqlCommentSubscriptionRepository);
       this.bindToken(THREAD_TOKENS.repositories.commentReportRepository, SqlCommentReportRepository);
     }
 

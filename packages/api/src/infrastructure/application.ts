@@ -57,19 +57,26 @@ export class Application {
   }
 
   async init() {
-    for (const module of Object.values<Module>(this.modules)) {
-      if (!module.init) {
-        continue;
+    await this.forEachModule(async (module) => {
+      if (module.init) {
+        this.logger.verbose(`initializing ${module.constructor.name}`);
+        await module.init();
       }
-
-      this.logger.verbose(`initializing ${module.constructor.name}`);
-      await module.init();
-    }
+    });
 
     this.configureEventHandlers();
+
+    this.logger.verbose('application initialized');
   }
 
   async close() {
+    await this.forEachModule(async (module) => {
+      if (module.close) {
+        this.logger.verbose(`closing ${module.constructor.name}`);
+        await module.close();
+      }
+    });
+
     this.logger.info('application closed');
   }
 
@@ -79,6 +86,8 @@ export class Application {
     if (!(publisher instanceof EventEmitter)) {
       return;
     }
+
+    this.logger.verbose('registering event handlers');
 
     for (const [EventClass, handlerTokens] of getEventHandlers()) {
       for (const token of handlerTokens) {
@@ -93,6 +102,12 @@ export class Application {
           });
         });
       }
+    }
+  }
+
+  private async forEachModule(cb: (module: Module) => Promise<void>) {
+    for (const module of Object.values<Module>(this.modules)) {
+      await cb(module);
     }
   }
 }
