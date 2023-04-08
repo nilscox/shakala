@@ -3,6 +3,7 @@ import clsx from 'clsx';
 
 import { IconButton } from '~/elements/icon-button';
 import { useMutate } from '~/hooks/use-mutate';
+import { useInvalidateQuery } from '~/hooks/use-query';
 import Check from '~/icons/check.svg';
 import { DateFormat, formatDate, formatDateRelativeOrAbsolute } from '~/utils/date-utils';
 import { getQueryKey } from '~/utils/query-key';
@@ -42,11 +43,13 @@ type MarkAsSeenButtonProps = {
 };
 
 const MarkAsSeenButton = ({ notification }: MarkAsSeenButtonProps) => {
+  const invalidate = useInvalidateQuery();
+
   const markAsSeen = useMutate(TOKENS.account, 'markNotificationAsSeen', {
-    invalidate: [
-      getQueryKey(TOKENS.account, 'getNotificationsCount'),
-      getQueryKey(TOKENS.account, 'getNotifications'),
-    ],
+    async onSuccess() {
+      await invalidate(getQueryKey(TOKENS.account, 'getNotificationsCount'));
+      await invalidate(getQueryKey(TOKENS.account, 'getNotifications'));
+    },
   });
 
   if (notification.seen) {

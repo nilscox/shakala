@@ -3,8 +3,8 @@ import { navigate } from 'vite-plugin-ssr/client/router';
 import { NavigateOptions, RouterPort } from './router.port';
 
 export class VPSRouterAdapter implements RouterPort {
-  navigate(url: string, options?: NavigateOptions): void {
-    void navigate(url, options);
+  async navigate(url: string, options?: NavigateOptions): Promise<void> {
+    await navigate(url, options);
   }
 
   get hash(): string {

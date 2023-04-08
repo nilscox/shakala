@@ -3,6 +3,6 @@ export type NavigateOptions = {
 };
 
 export interface RouterPort {
-  navigate(url: string, options?: NavigateOptions): void;
+  navigate(url: string, options?: NavigateOptions): Promise<void>;
   onHashChange(cb: (hash: string) => void): () => void;
 }

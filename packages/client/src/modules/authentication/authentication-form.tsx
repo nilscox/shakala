@@ -7,10 +7,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/elements/button';
 import { FieldError } from '~/elements/form-field';
 import { useSnackbar } from '~/elements/snackbar';
+import { useInvalidateQuery } from '~/hooks/use-query';
 import { useNavigate } from '~/hooks/use-router';
 import { useGetSearchParam } from '~/hooks/use-search-params';
 import { useSubmit } from '~/hooks/use-submit';
-import { getQueryKey } from '~/utils/query-key';
 
 import { useConfigValue } from '../../hooks/use-config-value';
 
@@ -50,14 +50,17 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
 
   const [invalidCredentials, setInvalidCredentials] = useState(false);
 
+  const invalidate = useInvalidateQuery();
+
   const handleSubmit = useSubmit(form, useSubmitAuthForm(), {
-    invalidate: getQueryKey(TOKENS.authentication, 'getAuthenticatedUser'),
-    onSuccess() {
+    async onSuccess() {
+      await invalidate([]);
+
       onClose();
       snackbar.success('Vous êtes maintenant connecté·e');
 
       if (nextParam) {
-        navigate(nextParam);
+        await navigate(nextParam);
       }
     },
     onError(error) {

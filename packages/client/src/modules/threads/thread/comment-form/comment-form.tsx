@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TOKENS } from '~/app/tokens';
 import { FieldError } from '~/elements/form-field';
 import { useRichTextEditor } from '~/elements/rich-text-editor';
+import { useInvalidateQuery } from '~/hooks/use-query';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useSubmit } from '~/hooks/use-submit';
 import { getQueryKey } from '~/utils/query-key';
@@ -35,9 +36,12 @@ export const useCommentForm = ({
     },
   });
 
+  const invalidate = useInvalidateQuery();
+
   const handleSubmit = useSubmit(form, async ({ text }) => onSubmit(text), {
-    invalidate: getQueryKey(TOKENS.thread, 'getThreadComments', threadId),
-    onSuccess: (commentId) => {
+    async onSuccess(commentId) {
+      await invalidate(getQueryKey(TOKENS.thread, 'getThreadComments', threadId));
+
       form.setValue('text', '');
       form.clearErrors('text');
 
