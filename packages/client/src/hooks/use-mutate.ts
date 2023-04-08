@@ -27,8 +27,6 @@ export const useMutate = <Adapter extends Record<Method, AnyFunction>, Method ex
 
   const { error, mutate } = useReactMutation(queryKey, execute, {
     onSuccess: (result: ReturnType<Adapter[Method]>) => {
-      options?.onSuccess?.(result);
-
       if (options?.invalidate) {
         const invalidate = Array.isArray(options.invalidate[0])
           ? (options.invalidate as QueryKey[])
@@ -38,6 +36,8 @@ export const useMutate = <Adapter extends Record<Method, AnyFunction>, Method ex
           void queryClient.invalidateQueries({ queryKey });
         });
       }
+
+      options?.onSuccess?.(result);
     },
   });
 

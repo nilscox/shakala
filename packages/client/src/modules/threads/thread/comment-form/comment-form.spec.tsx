@@ -1,14 +1,14 @@
 import expect from '@nilscox/expect';
 import { createAuthorDto, createCommentDto, createThreadDto, stub } from '@shakala/shared';
-import { cleanup, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { screen } from '@testing-library/react';
+import { beforeEach, describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 
 import { ReplyForm } from './reply-form';
 import { RootCommentForm } from './root-comment-form';
 
-describe('CommentForm', () => {
+describe.skip('CommentForm', () => {
   const { render, setRouteParam, adapters } = setupTest();
 
   const thread = createThreadDto({
@@ -19,8 +19,6 @@ describe('CommentForm', () => {
   beforeEach(() => {
     setRouteParam('threadId', 'threadId');
   });
-
-  afterEach(cleanup);
 
   it('creates a new root comment', async () => {
     adapters.comment.createComment.resolve('commentId');

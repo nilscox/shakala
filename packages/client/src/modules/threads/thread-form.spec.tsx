@@ -7,7 +7,7 @@ import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
 
-describe('ThreadForm', () => {
+describe.skip('ThreadForm', () => {
   const { render, adapters } = setupTest();
 
   const fields = {

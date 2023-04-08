@@ -1,15 +1,13 @@
 import * as yup from 'yup';
 
-const minRichTextLength = (length: number) => '<p></p>'.length + length;
-
 export const createCommentBodySchema = yup.object({
-  text: yup.string().required().trim().min(minRichTextLength(4)).max(20000),
+  text: yup.string().required().trim().min(4).max(20000),
 });
 
 export type CreateCommentBody = yup.InferType<typeof createCommentBodySchema>;
 
 export const editCommentBodySchema = yup.object({
-  text: yup.string().required().trim().min(minRichTextLength(4)).max(20000),
+  text: yup.string().required().trim().min(4).max(20000),
 });
 
 export type EditCommentBody = yup.InferType<typeof editCommentBodySchema>;

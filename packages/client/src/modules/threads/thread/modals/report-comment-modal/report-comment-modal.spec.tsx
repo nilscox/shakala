@@ -1,7 +1,7 @@
 import expect from '@nilscox/expect';
 import { createAuthorDto, createCommentDto } from '@shakala/shared';
-import { cleanup, screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 
@@ -20,8 +20,6 @@ describe('ReportCommentModal', () => {
     setSearchParam('signaler', comment.id);
     adapters.comment.getComment.resolve(comment);
   });
-
-  afterEach(cleanup);
 
   it('renders the modal allowing the user to report a comment', async () => {
     render(<ReportCommentModal />);

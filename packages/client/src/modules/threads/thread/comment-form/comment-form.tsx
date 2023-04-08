@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { TOKENS } from '~/app/tokens';
@@ -22,7 +21,7 @@ type UseCommentFormProps = {
 };
 
 export const useCommentForm = ({
-  autofocus,
+  autofocus = false,
   placeholder,
   initialHtml,
   onSubmit,
@@ -35,11 +34,6 @@ export const useCommentForm = ({
       text: initialHtml,
     },
   });
-
-  useEffect(() => {
-    form.register('text');
-    return () => form.unregister('text');
-  }, [form]);
 
   const handleSubmit = useSubmit(form, async ({ text }) => onSubmit(text), {
     invalidate: getQueryKey(TOKENS.thread, 'getThreadComments', threadId),

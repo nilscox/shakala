@@ -2,6 +2,8 @@ import expect, { assertion, AssertionFailed } from '@nilscox/expect';
 
 import { Stub } from './src/utils/stub';
 
+Error.stackTraceLimit = Infinity;
+
 declare global {
   namespace Expect {
     export interface StubAssertions extends FunctionAssertions<Stub<unknown, unknown[]>> {

@@ -1,7 +1,7 @@
 import expect from '@nilscox/expect';
 import { stub } from '@shakala/shared';
-import { cleanup, screen } from '@testing-library/react';
-import { afterEach, describe, it } from 'vitest';
+import { screen } from '@testing-library/react';
+import { describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 
@@ -11,8 +11,6 @@ import { AuthForm } from './types';
 // todo: fix authentication tests
 describe.skip('AuthenticationForm', () => {
   const { render, setSearchParam, adapters } = setupTest();
-
-  afterEach(cleanup);
 
   it('fills and submits the sign in form', async () => {
     setSearchParam('auth', AuthForm.signIn);
