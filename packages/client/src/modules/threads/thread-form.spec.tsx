@@ -1,19 +1,21 @@
 import expect from '@nilscox/expect';
 import { cleanup, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, it } from 'vitest';
+import { afterEach, describe, it, vi } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
 
-describe.skip('ThreadForm', () => {
+vi.mock('~/elements/rich-text-editor');
+
+describe('ThreadForm', () => {
   const { render, adapters } = setupTest();
 
   const fields = {
     description: () => screen.getByLabelText('Description'),
     keywords: () => screen.getByLabelText('Mots-clés'),
-    text: () => screen.getByLabelText('Texte'),
+    text: () => screen.getByTestId('mock-rich-text-editor'),
     submit: () => screen.getByRole('button', { name: 'Créer' }),
   };
 
@@ -36,7 +38,7 @@ describe.skip('ThreadForm', () => {
     });
   });
 
-  it('displays the field errors', async () => {
+  it.skip('displays the field errors', async () => {
     adapters.thread.createThread.reject(
       new ValidationErrors({
         description: 'min',

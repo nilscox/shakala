@@ -18,3 +18,5 @@ HTMLElement.prototype.dispatchEvent = function (event) {
   }
   return result;
 };
+
+window.scroll = () => {};
