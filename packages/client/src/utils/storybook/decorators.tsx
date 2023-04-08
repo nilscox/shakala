@@ -49,7 +49,7 @@ export const suspenseDecorator: Decorator = (Story) => (
 );
 
 export class StorybookRouterAdapter implements RouterPort {
-  navigate = action('navigate');
+  navigate = async () => action('navigate')();
   onHashChange = stub();
 }
 

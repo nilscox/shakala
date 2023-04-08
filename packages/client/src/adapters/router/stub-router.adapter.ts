@@ -11,7 +11,7 @@ export class StubRouterAdapter implements RouterPort {
     return this.url.pathname;
   }
 
-  navigate(url: string): void {
+  async navigate(url: string): Promise<void> {
     this.url = new URL(url, baseUrl);
   }
 
