@@ -8,7 +8,9 @@
     "start": "pnpm ts-node src/index.ts",
     "dev": "pnpm nodemon",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
-    "test": "NODE_NO_WARNINGS=1 vitest"
+    "test": "NODE_NO_WARNINGS=1 vitest",
+    "db:reset": "pnpm run --filter persistence db:reset && pnpm db:seed",
+    "db:seed": "pnpm ts-node src/scripts/seed.ts"
   },
   "nodemonConfig": {
     "watch": "..",

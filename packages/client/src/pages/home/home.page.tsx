@@ -1,4 +1,5 @@
 import { TOKENS } from '~/app/tokens';
+import { RichText } from '~/elements/rich-text';
 
 import { AvatarNick } from '../../elements/avatar/avatar-nick';
 import { Link } from '../../elements/link';
@@ -85,7 +86,7 @@ const LastThreads = withSuspense(() => {
           <div key={thread.id} className="card relative overflow-hidden p-4">
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
-            <div className="text-sm line-clamp-6">{thread.text}</div>
+            <RichText className="text-sm line-clamp-6">{thread.text}</RichText>
             {/* avoid having a interactive contents within the link */}
             <Link href={`/discussions/${thread.id}`} className="absolute inset-0" />
           </div>

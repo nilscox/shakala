@@ -18,6 +18,7 @@ import { USER_TOKENS } from './tokens';
 
 class UserModule extends Module {
   init(container: Container) {
+    this.expose(container, USER_TOKENS.repositories);
     this.expose(container, USER_TOKENS.commands);
     this.expose(container, USER_TOKENS.queries);
     this.expose(container, USER_TOKENS.eventHandlers);
