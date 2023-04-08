@@ -4,4 +4,4 @@ export { markNotificationAsSeen } from './commands/mark-notification-as-seen/mar
 export { getNotificationsCount } from './queries/get-notifications-count';
 export { listUserNotifications } from './queries/list-user-notifications';
 
-export { NotificationModule } from './notification.module';
+export { module } from './notification.module';

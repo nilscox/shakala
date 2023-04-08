@@ -5,8 +5,11 @@ import { AddressInfo } from 'net';
 import { Express } from 'express';
 import { CookieJar } from 'tough-cookie';
 
+import { ServerObserver } from './server-observer';
+
 export class FetchAgent {
   private server: Server;
+  private serverObserver: ServerObserver;
   private baseUrl?: string;
 
   private headers: Record<string, string> = {};
@@ -16,6 +19,7 @@ export class FetchAgent {
 
   constructor(app: Express) {
     this.server = createServer(app);
+    this.serverObserver = new ServerObserver(this.server);
   }
 
   setHeader(key: string, value: string) {
@@ -102,6 +106,8 @@ export class FetchAgent {
     if (!this.server.listening) {
       return;
     }
+
+    this.serverObserver.closeAllConnections();
 
     return new Promise<void>((resolve, reject) => {
       this.server.close((err) => {

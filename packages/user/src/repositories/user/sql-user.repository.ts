@@ -29,6 +29,7 @@ export class SqlUserRepository extends SqlRepository<User, SqlUser> implements U
       email: user.email,
       hashedPassword: user.hashedPassword,
       emailValidationToken: user.emailValidationToken ?? null,
+      hasWriteAccess: true,
       createdAt: user.signupDate.toDate(),
     });
   }

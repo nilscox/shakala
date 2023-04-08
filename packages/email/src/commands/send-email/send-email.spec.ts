@@ -1,28 +1,30 @@
 import expect from '@nilscox/expect';
-import { StubConfigAdapter, StubFilesystemAdapter } from '@shakala/common';
 import { beforeEach, describe, it } from 'vitest';
 
-import { FakeEmailCompilerAdapter } from '../../adapters/email-compiler/fake-email-compiler.adapter';
+import { FakeEmailRendererAdapter } from '../../adapters/email-renderer/fake-email-renderer.adapter';
 import { StubEmailSenderAdapter } from '../../adapters/email-sender/stub-email-sender.adapter';
 import { Email } from '../../entities/email';
+import { EmailKind } from '../../entities/emails-payloads';
 
-import { EmailKind, SendEmailCommand, SendEmailHandler } from './send-email';
+import { SendEmailCommand, SendEmailHandler } from './send-email';
 
 describe('[unit] SendEmailCommand', () => {
   let test: Test;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     test = new Test();
-    await test.arrange();
   });
 
   it('sends a welcome email to a user', async () => {
+    test.emailRenderer.text = 'text';
+    test.emailRenderer.html = 'html';
+
     const command: SendEmailCommand<EmailKind.welcome> = {
       kind: EmailKind.welcome,
       to: 'user@domain.tld',
       payload: {
-        appBaseUrl: 'https://app.url',
-        nick: 'tamer',
+        appBaseUrl: '',
+        nick: '',
         emailValidationLink: '',
       },
     };
@@ -33,8 +35,8 @@ describe('[unit] SendEmailCommand', () => {
       to: 'user@domain.tld',
       subject: 'Bienvenue sur Shakala !',
       body: {
-        text: 'Welcome tamer',
-        html: '<p>Welcome tamer</p>',
+        text: 'text',
+        html: 'html',
       },
     };
 
@@ -43,24 +45,10 @@ describe('[unit] SendEmailCommand', () => {
 });
 
 class Test {
-  fs = {
-    '/templates/welcome.txt': 'Welcome {nick}',
-    '/templates/welcome.mjml': '<p>Welcome {nick}</p>',
-  };
-
-  emailCompiler = new FakeEmailCompilerAdapter();
+  emailRenderer = new FakeEmailRendererAdapter();
   emailSender = new StubEmailSenderAdapter();
 
-  handler = new SendEmailHandler(
-    new StubConfigAdapter({ email: { templatesPath: '/templates' } }),
-    new StubFilesystemAdapter(this.fs),
-    this.emailCompiler,
-    this.emailSender
-  );
-
-  async arrange() {
-    await this.handler.init();
-  }
+  handler = new SendEmailHandler(this.emailRenderer, this.emailSender);
 
   act = this.handler.handle.bind(this.handler);
 }

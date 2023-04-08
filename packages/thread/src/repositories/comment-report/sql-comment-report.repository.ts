@@ -30,7 +30,7 @@ export class SqlCommentReportRepository
     return Object.assign(new SqlCommentReport(), {
       id: commentReport.id,
       comment: this.em.getReference(SqlComment, commentReport.commentId),
-      user: this.em.getReference(SqlUser, commentReport.reportedById),
+      reportedBy: this.em.getReference(SqlUser, commentReport.reportedById),
       reason: commentReport.reason ?? null,
     });
   }

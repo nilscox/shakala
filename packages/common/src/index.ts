@@ -1,6 +1,6 @@
 import './expect';
 
-export { CommonModule } from './common.module';
+export { module } from './common.module';
 export * from './tokens';
 
 export * from './cqs/command';

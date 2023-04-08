@@ -1,8 +1,21 @@
-import { StubCommandBus, StubGeneratorAdapter, StubQueryBus, TOKENS } from '@shakala/common';
+import {
+  module as commonModule,
+  StubCommandBus,
+  StubConfigAdapter,
+  StubGeneratorAdapter,
+  StubLoggerAdapter,
+  StubQueryBus,
+  TOKENS,
+} from '@shakala/common';
+import { module as emailModule } from '@shakala/email';
+import { module as notificationModule } from '@shakala/notification';
+import { module as persistenceModule } from '@shakala/persistence';
 import { ClassType } from '@shakala/shared';
-import { getUser } from '@shakala/user';
+import { module as threadModule } from '@shakala/thread';
+import { module as userModule, getUser } from '@shakala/user';
 import { afterEach } from 'vitest';
 
+import { module as apiModule } from '../api.module';
 import { container } from '../container';
 import { Application } from '../infrastructure/application';
 import { API_TOKENS } from '../tokens';
@@ -10,28 +23,39 @@ import { API_TOKENS } from '../tokens';
 import { FetchAgent } from './fetch-agent';
 import { TestServer } from './test-server';
 
-Error.stackTraceLimit = Infinity;
+const modules = [
+  commonModule,
+  persistenceModule,
+  emailModule,
+  notificationModule,
+  userModule,
+  threadModule,
+  apiModule,
+];
 
 export const createControllerTest = <Test extends ControllerTest>(TestClass: ClassType<Test>) => {
   let application: Application;
   let test: Test;
 
-  afterEach(async () => {
-    await application?.close();
-    await test?.server.close();
-    await test?.cleanup?.();
-  });
+  const setup = async () => {
+    modules.forEach((module) => module.capture());
 
-  return async () => {
-    application = new Application({
-      common: { logger: 'stub', buses: 'stub', generator: 'stub' },
-      email: { emailCompiler: 'fake', emailSender: 'stub' },
-      notification: { repositories: 'memory' },
-      persistence: { useDatabase: false },
-      thread: { repositories: 'memory' },
-      user: { repositories: 'memory', profileImage: 'stub' },
-      api: { server: 'test' },
+    const config = new StubConfigAdapter({
+      app: {
+        host: 'localhost',
+        port: 0,
+      },
     });
+
+    commonModule.bind(TOKENS.config).toConstant(config);
+    commonModule.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inTransientScope();
+
+    apiModule.bind(API_TOKENS.server).toInstance(TestServer).inSingletonScope();
+
+    persistenceModule.bypass();
+    emailModule.stub();
+
+    application = new Application();
 
     await application.init();
 
@@ -42,6 +66,15 @@ export const createControllerTest = <Test extends ControllerTest>(TestClass: Cla
 
     return test;
   };
+
+  afterEach(async () => {
+    await application?.close();
+    await test?.cleanup?.();
+
+    modules.forEach((module) => module.restore());
+  });
+
+  return setup;
 };
 
 export interface ControllerTest {
@@ -50,9 +83,18 @@ export interface ControllerTest {
 }
 
 export abstract class ControllerTest {
+  public readonly queryBus = new StubQueryBus();
+  public readonly commandBus = new StubCommandBus();
+  public readonly generator = new StubGeneratorAdapter();
+
+  get server() {
+    return container.get(API_TOKENS.server) as TestServer;
+  }
+
   constructor() {
-    container.bind(TOKENS.queryBus).toInstance(StubQueryBus).inContainerScope();
-    container.bind(TOKENS.commandBus).toInstance(StubCommandBus).inContainerScope();
+    commonModule.bind(TOKENS.queryBus).toConstant(this.queryBus);
+    commonModule.bind(TOKENS.commandBus).toConstant(this.commandBus);
+    commonModule.bind(TOKENS.generator).toConstant(this.generator);
   }
 
   createAgent() {
@@ -65,23 +107,5 @@ export abstract class ControllerTest {
 
   createUser(user: { id: string; email?: string; nick?: string }) {
     this.queryBus.on(getUser({ id: user.id })).return({ email: '', nick: '', emailValidated: true, ...user });
-  }
-
-  get = container.get.bind(container);
-
-  get server() {
-    return this.get(API_TOKENS.server) as TestServer;
-  }
-
-  get queryBus() {
-    return container.get(TOKENS.queryBus) as StubQueryBus;
-  }
-
-  get commandBus() {
-    return container.get(TOKENS.commandBus) as StubCommandBus;
-  }
-
-  get generator() {
-    return container.get(TOKENS.generator) as StubGeneratorAdapter;
   }
 }

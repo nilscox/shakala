@@ -33,6 +33,7 @@ export type DatabaseConfig = {
   password: string;
   database: string;
   debug: boolean;
+  allowGlobalContext: boolean;
 };
 
 export type EmailConfig = {

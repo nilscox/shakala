@@ -11,7 +11,7 @@ import {
 } from '@shakala/thread';
 import { beforeEach, describe, it } from 'vitest';
 
-import { createControllerTest, ControllerTest } from '../tests/controller-test';
+import { ControllerTest, createControllerTest } from '../tests/controller-test';
 
 describe('[intg] ThreadController', () => {
   const getTest = createControllerTest(Test);

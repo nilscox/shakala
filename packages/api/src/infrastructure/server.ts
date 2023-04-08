@@ -67,7 +67,7 @@ export class Server {
   async close() {
     this.logger.verbose('closing server');
 
-    if (this.server) {
+    if (this.server?.listening) {
       await promisify<void>(this.server.close.bind(this.server))();
     }
 

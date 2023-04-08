@@ -1,14 +1,13 @@
-import assert from 'assert';
+import { ConfigPort, TOKENS } from '@shakala/common';
+import { assert } from '@shakala/shared';
+import { injected } from 'brandi';
 
-import { AsyncFactory, injected } from 'brandi';
-
-import { Orm } from './create-orm';
-import { PERSISTENCE_TOKENS } from './tokens';
+import { createOrm, Orm } from './create-orm';
 
 export class Database {
   private orm?: Orm;
 
-  constructor(private readonly getOrm: AsyncFactory<Orm>) {}
+  constructor(private readonly config: ConfigPort) {}
 
   get initialized() {
     return this.orm !== undefined;
@@ -20,7 +19,7 @@ export class Database {
   }
 
   async init() {
-    this.orm = await this.getOrm();
+    this.orm = await createOrm(this.config.database);
 
     await this.orm.connect();
     await this.waitForDatabaseConnection();
@@ -44,7 +43,8 @@ export class Database {
   }
 
   async reset() {
-    const orm = this.orm ?? (await this.getOrm());
+    const orm = this.orm;
+    assert(orm);
 
     const schemaGenerator = orm.getSchemaGenerator();
 
@@ -53,4 +53,4 @@ export class Database {
   }
 }
 
-injected(Database, PERSISTENCE_TOKENS.ormFactory);
+injected(Database, TOKENS.config);

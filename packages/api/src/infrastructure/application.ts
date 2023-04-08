@@ -1,57 +1,36 @@
 import EventEmitter from 'events';
 
 import {
-  CommonModule,
   DomainEvent,
   getEventHandlers,
   LoggerPort,
+  module as commonModule,
   Module,
-  ModuleConfig,
   TOKENS,
 } from '@shakala/common';
-import { EmailModule } from '@shakala/email';
-import { NotificationModule } from '@shakala/notification';
-import { PersistenceModule } from '@shakala/persistence';
-import { ThreadModule } from '@shakala/thread';
-import { UserModule } from '@shakala/user';
+import { module as emailModule } from '@shakala/email';
+import { module as notificationModule } from '@shakala/notification';
+import { module as persistenceModule } from '@shakala/persistence';
+import { module as threadModule } from '@shakala/thread';
+import { module as userModule } from '@shakala/user';
 
-import { ApiModule } from '../api.module';
+import { module as apiModule } from '../api.module';
 import { container } from '../container';
 
-type Modules = {
-  common: CommonModule;
-  user: UserModule;
-  email: EmailModule;
-  notification: NotificationModule;
-  persistence: PersistenceModule;
-  thread: ThreadModule;
-  api: ApiModule;
-};
-
-export type ApplicationConfig = {
-  [Key in keyof Modules]: ModuleConfig<Modules[Key]>;
-};
-
 export class Application {
-  private modules: Modules = {
-    common: new CommonModule(container),
-    user: new UserModule(container),
-    email: new EmailModule(container),
-    notification: new NotificationModule(container),
-    persistence: new PersistenceModule(container),
-    thread: new ThreadModule(container),
-    api: new ApiModule(container),
-  };
+  private modules: Module[] = [
+    commonModule,
+    persistenceModule,
+    emailModule,
+    notificationModule,
+    userModule,
+    threadModule,
+    apiModule,
+  ];
 
   private logger: LoggerPort;
 
-  constructor(config: ApplicationConfig) {
-    container.bind(TOKENS.container).toConstant(container);
-
-    for (const [key, module] of Object.entries<Module>(this.modules)) {
-      module.configure(config[key as keyof Modules]);
-    }
-
+  constructor() {
     this.logger = container.get(TOKENS.logger);
     this.logger.tag = Application.name;
   }
@@ -60,7 +39,7 @@ export class Application {
     await this.forEachModule(async (module) => {
       if (module.init) {
         this.logger.verbose(`initializing ${module.constructor.name}`);
-        await module.init();
+        await module.init(container);
       }
     });
 
@@ -73,7 +52,7 @@ export class Application {
     await this.forEachModule(async (module) => {
       if (module.close) {
         this.logger.verbose(`closing ${module.constructor.name}`);
-        await module.close();
+        await module.close(container);
       }
     });
 

@@ -1,8 +1,13 @@
-import { TOKENS } from '@shakala/common';
-import { PERSISTENCE_TOKENS } from '@shakala/persistence';
+import { module as commonModule, StubConfigAdapter, StubLoggerAdapter, TOKENS } from '@shakala/common';
+import { module as emailModule } from '@shakala/email';
+import { module as notificationModule } from '@shakala/notification';
+import { module as persistenceModule, PERSISTENCE_TOKENS } from '@shakala/persistence';
 import { ClassType } from '@shakala/shared';
+import { module as threadModule } from '@shakala/thread';
+import { module as userModule } from '@shakala/user';
 import { afterEach } from 'vitest';
 
+import { module as apiModule } from '../api.module';
 import { container } from '../container';
 import { Application } from '../infrastructure/application';
 import { API_TOKENS } from '../tokens';
@@ -10,40 +15,71 @@ import { API_TOKENS } from '../tokens';
 import { MailDevAdapter } from './maildev.adapter';
 import { TestServer } from './test-server';
 
-Error.stackTraceLimit = Infinity;
+const modules = [
+  commonModule,
+  persistenceModule,
+  emailModule,
+  notificationModule,
+  userModule,
+  threadModule,
+  apiModule,
+];
 
 export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
   let test: T;
   let application: Application;
 
-  afterEach(async () => {
-    await test?.cleanup?.();
-    await test?.server.close();
-    await test?.database.close();
-    await test?.emails.clear();
-    await application.close();
-  });
+  const setup = async (): Promise<T> => {
+    modules.forEach((module) => module.capture());
 
-  return async (): Promise<T> => {
-    application = new Application({
-      common: { logger: 'stub', buses: 'local', generator: 'nanoid' },
-      email: { emailCompiler: 'mjml', emailSender: 'nodemailer' },
-      notification: { repositories: 'sql' },
-      persistence: { useDatabase: true, allowGlobalContext: true, dbName: 'tests' },
-      thread: { repositories: 'sql' },
-      user: { repositories: 'sql', profileImage: 'gravatar' },
-      api: { server: 'test' },
+    const config = new StubConfigAdapter({
+      app: {
+        apiBaseUrl: 'http://api.test',
+      },
+      database: {
+        host: 'localhost',
+        user: 'postgres',
+        database: 'tests',
+        allowGlobalContext: true,
+      },
+      email: {
+        host: 'localhost',
+        port: 1025,
+        from: 'test@shakala.local',
+        templatesPath: '../../email-templates',
+      },
     });
+
+    commonModule.bind(TOKENS.config).toConstant(config);
+    commonModule.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inTransientScope();
+
+    apiModule.bind(API_TOKENS.server).toInstance(TestServer).inSingletonScope();
+
+    application = new Application();
 
     await application.init();
 
     test = new TestClass();
+
+    await test?.emails.clear();
+    await test?.database.reset();
 
     await test.init();
     await test.arrange?.();
 
     return test;
   };
+
+  afterEach(async () => {
+    await test?.cleanup?.();
+    await test?.server.close();
+    await test?.database.close();
+    await application.close();
+
+    modules.forEach((module) => module.restore());
+  });
+
+  return setup;
 };
 
 export interface E2ETest {

@@ -10,4 +10,4 @@ export { getLastThreads, type GetLastThreadsResult } from './queries/get-last-th
 export { getThread, type GetThreadResult } from './queries/get-thread';
 export { getThreadComments } from './queries/get-thread-comments';
 
-export { ThreadModule } from './thread.module';
+export { module } from './thread.module';

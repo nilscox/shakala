@@ -1,51 +1,37 @@
-import { ClassType } from '@shakala/shared';
 import { Container, DependencyModule, Token } from 'brandi';
 
-import { LoggerPort } from '../adapters/logger/logger.port';
 import { TOKENS } from '../tokens';
 
-export type ModuleConfig<M extends Module> = M extends { configure(config: infer Config): void }
-  ? Config
-  : never;
+export class Module extends DependencyModule {
+  init?(container: Container): void | Promise<void>;
+  close?(container: Container): void | Promise<void>;
 
-export interface Module {
-  configure(config?: unknown): void;
-  init?(): Promise<void>;
-  close?(): Promise<void>;
-}
+  protected expose(container: Container, tokens: Record<string, Token>) {
+    const logger = container.get(TOKENS.logger);
 
-export abstract class Module extends DependencyModule {
-  private name: string;
-  protected _logger?: LoggerPort;
+    logger.tag = this.constructor.name;
 
-  constructor(protected readonly container: Container) {
-    super();
-    this.name = new.target.name;
+    Object.values(tokens).forEach((token) => {
+      // logger.verbose(`exposing ${token.__d}`);
+      container.use(token).from(this);
+    });
   }
 
-  get logger() {
-    if (!this._logger) {
-      this._logger = this.container.get(TOKENS.logger);
-      this._logger.tag = this.name;
-    }
+  snapshot?: ReturnType<Exclude<typeof this.vault.copy, undefined>>;
 
-    return this._logger;
+  capture(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.snapshot = this.vault.copy!();
   }
 
-  get commandBus() {
-    return this.container.get(TOKENS.commandBus);
-  }
-
-  get queryBus() {
-    return this.container.get(TOKENS.queryBus);
-  }
-
-  protected bindToken<Cls>(token: Token<Cls>, Instance: ClassType<Cls>, expose = true) {
-    this.logger.verbose('binding', token.__d, '->', Instance.name);
-    this.bind(token).toInstance(Instance).inContainerScope();
-
-    if (expose) {
-      this.container.use(token).from(this);
+  restore(): void {
+    if (this.snapshot) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.vault = this.snapshot.copy!();
+    } else {
+      console.error(
+        "Error: It looks like a trying to restore a non-captured container state. Did you forget to call 'capture()' method?"
+      );
     }
   }
 }

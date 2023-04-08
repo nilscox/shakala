@@ -37,7 +37,11 @@ describe('CreateThreadCreatedNotificationsHandler', () => {
 });
 
 class Test {
-  readonly thread = create.thread({ id: 'threadId', authorId: 'authorId', text: create.markdown('text') });
+  readonly thread = create.thread({
+    id: 'threadId',
+    authorId: 'authorId',
+    description: 'description',
+  });
 
   readonly threadRepository = new InMemoryThreadRepository([this.thread]);
   readonly commandBus = new StubCommandBus();

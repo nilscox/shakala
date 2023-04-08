@@ -1,7 +1,8 @@
+import { StubConfigAdapter } from '@shakala/common';
 import { ClassType, DeepPartial, randomId, ReactionType } from '@shakala/shared';
 import { afterEach } from 'vitest';
 
-import { createOrm, EM, Orm } from './create-orm';
+import { EM } from './create-orm';
 import { Database } from './database';
 import {
   SqlComment,
@@ -16,27 +17,23 @@ import {
 } from './entities';
 
 export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: ClassType<Test>) => {
-  let orm: Orm;
   let test: Test;
 
-  afterEach(async () => {
-    await test?.cleanup?.();
-    await orm?.close(true);
-  });
-
-  return async () => {
-    orm = await createOrm({
-      dbName: 'tests',
-      allowGlobalContext: true,
-    });
-
-    test = new TestClass(orm);
+  const setup = async () => {
+    test = new TestClass();
 
     await test.init();
     await test.arrange?.();
 
     return test;
   };
+
+  afterEach(async () => {
+    await test?.cleanup?.();
+    await test.database?.close();
+  });
+
+  return setup;
 };
 
 export interface RepositoryTest {
@@ -45,12 +42,19 @@ export interface RepositoryTest {
 }
 
 export class RepositoryTest {
-  database = new Database(async () => this.orm);
+  config = new StubConfigAdapter({
+    database: {
+      host: 'localhost',
+      user: 'postgres',
+      database: 'tests',
+      allowGlobalContext: true,
+    },
+  });
 
-  constructor(protected readonly orm: Orm) {}
+  database = new Database(this.config);
 
   get em() {
-    return this.orm.em.fork();
+    return this.database.em.fork();
   }
 
   get create() {
@@ -59,19 +63,7 @@ export class RepositoryTest {
 
   async init() {
     await this.database.init();
-    await this.configureOrm();
-    await this.resetDatabase();
-  }
-
-  async configureOrm() {
-    this.orm.config.getLogger().setDebugMode(false);
-  }
-
-  async resetDatabase() {
-    const schemaGenerator = this.orm.getSchemaGenerator();
-
-    await schemaGenerator.refreshDatabase();
-    await schemaGenerator.clearDatabase();
+    await this.database.reset();
   }
 }
 
@@ -116,6 +108,7 @@ export class SqlFactories {
     email: '',
     hashedPassword: '',
     emailValidationToken: null,
+    hasWriteAccess: true,
   });
 
   userActivity = this.factory(SqlUserActivity, {
@@ -135,7 +128,7 @@ export class SqlFactories {
 
   notification = this.factory(SqlNotification, {
     type: '',
-    payload: null,
+    payload: {},
   });
 
   reaction = this.factory(SqlReaction, {

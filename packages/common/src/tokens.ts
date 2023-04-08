@@ -1,4 +1,4 @@
-import { Container, token } from 'brandi';
+import { token } from 'brandi';
 
 import { CommandBus } from './adapters/command-bus/command-bus.port';
 import { ConfigPort } from './adapters/config/config.port';
@@ -11,7 +11,6 @@ import { QueryBus } from './adapters/query-bus/query-bus.port';
 import { EventPublisher } from './cqs/event-publisher';
 
 export const TOKENS = {
-  container: token<Container>('container'),
   commandBus: token<CommandBus>('commandBus'),
   config: token<ConfigPort>('config'),
   crypto: token<CryptoPort>('crypto'),

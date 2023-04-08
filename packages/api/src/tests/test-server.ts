@@ -6,9 +6,29 @@ import { Server } from '../infrastructure/server';
 import { jwt } from '../utils/jwt';
 
 import { FetchAgent } from './fetch-agent';
+import { ServerObserver } from './server-observer';
 
 export class TestServer extends Server {
+  private serverObserver?: ServerObserver;
   private agents = new Set<FetchAgent>();
+
+  override async listen() {
+    await super.listen();
+
+    if (this.server) {
+      this.serverObserver = new ServerObserver(this.server);
+    }
+  }
+
+  override async close() {
+    for (const agent of this.agents) {
+      await agent.closeServer();
+    }
+
+    this.serverObserver?.closeAllConnections();
+
+    await super.close();
+  }
 
   agent() {
     const agent = new FetchAgent(this.app);
@@ -25,14 +45,6 @@ export class TestServer extends Server {
     agent.setHeader('Cookie', `token=${token}`);
 
     return agent;
-  }
-
-  override async close() {
-    for (const agent of this.agents) {
-      await agent.closeServer();
-    }
-
-    await super.close();
   }
 }
 

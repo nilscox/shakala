@@ -16,4 +16,4 @@ export { listUserActivities } from './queries/list-user-activities';
 export { getUser, GetUserResult } from './queries/get-user';
 export { getProfileImage, GetProfileImageResult } from './queries/get-profile-image';
 
-export { UserModule } from './user.module';
+export { module } from './user.module';

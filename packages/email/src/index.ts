@@ -1,3 +1,5 @@
-export { sendEmail, EmailKind } from './commands/send-email/send-email';
+export { EmailKind } from './entities/emails-payloads';
 
-export { EmailModule } from './email.module';
+export { sendEmail } from './commands/send-email/send-email';
+
+export { module } from './email.module';

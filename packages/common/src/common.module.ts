@@ -1,51 +1,45 @@
+
+import { Container } from 'brandi';
+
 import { LocalCommandBus } from './adapters/command-bus/local-command-bus';
-import { StubCommandBus } from './adapters/command-bus/stub-command-bus.adapter';
 import { EnvConfigAdapter } from './adapters/config/env-config.adapter';
 import { BcryptAdapter } from './adapters/crypto/bcrypt.adapter';
 import { NativeDateAdapter } from './adapters/date/native-date.adapter';
 import { LocalFilesystemAdapter } from './adapters/filesystem/local-filesystem.adapter';
 import { NanoidGeneratorAdapter } from './adapters/generator/nanoid-generator.adapter';
-import { StubGeneratorAdapter } from './adapters/generator/stub-generator.adapter';
 import { ConsoleLoggerAdapter } from './adapters/logger/console-logger.adapter';
-import { StubLoggerAdapter } from './adapters/logger/stub-logger.port';
 import { EmitterEventPublisher } from './adapters/publisher/emitter-event-publisher';
 import { LocalQueryBus } from './adapters/query-bus/local-query-bus.adapter';
-import { StubQueryBus } from './adapters/query-bus/stub-query-bus.adapter';
 import { TOKENS } from './tokens';
 import { Module } from './utils/module';
 
-type CommonModuleConfig = {
-  logger: 'stub' | 'console';
-  buses: 'stub' | 'local';
-  generator: 'stub' | 'nanoid';
-};
+class CommonModule extends Module {
+  init(container: Container) {
+    this.expose(container, TOKENS);
 
-export class CommonModule extends Module {
-  configure(config: CommonModuleConfig): void {
-    if (config.logger === 'stub') {
-      this.container.bind(TOKENS.logger).toInstance(StubLoggerAdapter).inTransientScope();
-    } else {
-      this.container.bind(TOKENS.logger).toInstance(ConsoleLoggerAdapter).inTransientScope();
+    const commandBus = container.get(TOKENS.commandBus);
+    if (commandBus instanceof LocalCommandBus) {
+      commandBus.setContainer(container);
     }
 
-    if (config.buses === 'stub') {
-      this.bindToken(TOKENS.commandBus, StubCommandBus);
-      this.bindToken(TOKENS.queryBus, StubQueryBus);
-    } else {
-      this.bindToken(TOKENS.commandBus, LocalCommandBus);
-      this.bindToken(TOKENS.queryBus, LocalQueryBus);
+    const queryBus = container.get(TOKENS.queryBus);
+    if (queryBus instanceof LocalQueryBus) {
+      queryBus.setContainer(container);
     }
-
-    if (config.generator === 'stub') {
-      this.bindToken(TOKENS.generator, StubGeneratorAdapter);
-    } else {
-      this.bindToken(TOKENS.generator, NanoidGeneratorAdapter);
-    }
-
-    this.bindToken(TOKENS.config, EnvConfigAdapter);
-    this.bindToken(TOKENS.crypto, BcryptAdapter);
-    this.bindToken(TOKENS.date, NativeDateAdapter);
-    this.bindToken(TOKENS.filesystem, LocalFilesystemAdapter);
-    this.bindToken(TOKENS.publisher, EmitterEventPublisher);
   }
 }
+
+export const module = new CommonModule()
+
+module.bind(TOKENS.logger).toInstance(ConsoleLoggerAdapter).inTransientScope();
+
+module.bind(TOKENS.commandBus).toInstance(LocalCommandBus).inSingletonScope();
+module.bind(TOKENS.queryBus).toInstance(LocalQueryBus).inSingletonScope();
+
+module.bind(TOKENS.generator).toInstance(NanoidGeneratorAdapter).inSingletonScope();
+
+module.bind(TOKENS.config).toInstance(EnvConfigAdapter).inSingletonScope();
+module.bind(TOKENS.crypto).toInstance(BcryptAdapter).inSingletonScope();
+module.bind(TOKENS.date).toInstance(NativeDateAdapter).inSingletonScope();
+module.bind(TOKENS.filesystem).toInstance(LocalFilesystemAdapter).inSingletonScope();
+module.bind(TOKENS.publisher).toInstance(EmitterEventPublisher).inSingletonScope();

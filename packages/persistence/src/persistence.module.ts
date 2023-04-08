@@ -1,51 +1,31 @@
 import { Module } from '@shakala/common';
-import { pick } from '@shakala/shared';
+import { Container } from 'brandi';
 
-import { createOrm } from './create-orm';
 import { Database } from './database';
 import { OrmContext } from './orm-context';
 import { PERSISTENCE_TOKENS } from './tokens';
 
-type PersistenceModuleConfig = {
-  useDatabase: boolean;
-  allowGlobalContext?: boolean;
-  dbName?: string;
-};
-
 export class PersistenceModule extends Module {
-  private useDatabase = false;
-
-  configure(config: PersistenceModuleConfig): void {
-    this.useDatabase = config.useDatabase;
-
-    this.bind(PERSISTENCE_TOKENS.ormFactory).toFactory(() =>
-      createOrm(removeUndefinedValues(pick(config, 'allowGlobalContext', 'dbName')))
-    );
-
-    this.bind(PERSISTENCE_TOKENS.database).toInstance(Database).inContainerScope();
-    this.bind(PERSISTENCE_TOKENS.ormContext).toInstance(OrmContext).inContainerScope();
-
-    this.container.use(PERSISTENCE_TOKENS.database).from(this);
-    this.container.use(PERSISTENCE_TOKENS.ormContext).from(this);
+  async init(container: Container) {
+    this.expose(container, PERSISTENCE_TOKENS)
+    await container.get(PERSISTENCE_TOKENS.database).init();
   }
 
-  async init() {
-    if (this.useDatabase) {
-      await this.container.get(PERSISTENCE_TOKENS.database).init();
-    }
+  async close(container: Container) {
+    await container.get(PERSISTENCE_TOKENS.database).close();
   }
 
-  async close() {
-    await this.container.get(PERSISTENCE_TOKENS.database).close();
+  bypass() {
+    const noDatabase = {
+      init() {},
+      close() {},
+    } as Database
+
+    this.bind(PERSISTENCE_TOKENS.database).toConstant(noDatabase);
   }
 }
 
-const removeUndefinedValues = <T extends object>(obj: T): T => {
-  return Object.entries(obj).reduce((obj, [key, value]) => {
-    if (value === undefined) {
-      return obj;
-    }
+export const module = new PersistenceModule();
 
-    return { ...obj, [key]: value };
-  }, {} as T);
-};
+module.bind(PERSISTENCE_TOKENS.database).toInstance(Database).inContainerScope();
+module.bind(PERSISTENCE_TOKENS.ormContext).toInstance(OrmContext).inContainerScope();

@@ -73,10 +73,10 @@ class Test extends E2ETest {
 
   getValidationEmailLink = async () => {
     const text = await waitFor(this.getWelcomeEmailText);
-    const link = text.split('\n').filter((line) => line.match(/^http.*$/));
+    const [link] = text.split('\n').filter((line) => line.match(/^http.*$/));
 
     assert(link, 'cannot find email validation link');
 
-    return link[0].replace('http://localhost:3000', '');
+    return link.replace('http://api.test', '');
   };
 }
