@@ -1,0 +1,13 @@
+{
+  "name": "@shakala/e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.27.1",
+    "dotenv": "^16.0.3"
+  }
+}
