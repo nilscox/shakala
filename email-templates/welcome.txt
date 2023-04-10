@@ -3,7 +3,7 @@ Hello {{nick}}, bienvenue sur Shakala !
 Votre compte utilisateur vous permet d'interagir avec les autres membre.
 Pour l'activer, ouvrez sur le lien :
 
-{{emailValidationLink}}
+{{{emailValidationLink}}}
 
 A bientôt !
 

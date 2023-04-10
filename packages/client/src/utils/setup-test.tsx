@@ -1,13 +1,16 @@
-import { UserDto } from '@shakala/shared';
+import { Factory, UserDto } from '@shakala/shared';
 import { render as renderTL, renderHook as renderHookTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContainerProvider } from 'brandi-react';
-import { QueryClient, QueryClientProvider, QueryKey } from 'react-query';
+import { QueryClient, QueryClientProvider, QueryKey, setLogger } from 'react-query';
 import { beforeEach } from 'vitest';
 
+import { StubAccountAdapter } from '~/adapters/api/account/stub-account.adapter';
 import { StubAuthenticationAdapter } from '~/adapters/api/authentication/stub-authentication.adapter';
 import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter';
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
+import { HttpError } from '~/adapters/http/http-error';
+import { HttpRequest, HttpResponse } from '~/adapters/http/http.port';
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
 import { queryClientConfig } from '~/app/app-providers';
 import { container } from '~/app/container';
@@ -19,6 +22,7 @@ import { getQueryKey } from './query-key';
 
 type StubAdapters = {
   router: StubRouterAdapter;
+  account: StubAccountAdapter;
   authentication: StubAuthenticationAdapter;
   thread: StubThreadAdapter;
   comment: StubCommentAdapter;
@@ -34,14 +38,19 @@ export const setupTest = () => {
     pageContext = {};
     queryClient = new QueryClient(queryClientConfig);
 
+    const noop = () => {};
+    setLogger({ log: noop, warn: noop, error: noop });
+
     Object.assign(adapters, {
       router: new StubRouterAdapter(),
+      account: new StubAccountAdapter(),
       authentication: new StubAuthenticationAdapter(),
       thread: new StubThreadAdapter(),
       comment: new StubCommentAdapter(),
     });
 
     container.bind(TOKENS.router).toConstant(adapters.router);
+    container.bind(TOKENS.account).toConstant(adapters.account);
     container.bind(TOKENS.authentication).toConstant(adapters.authentication);
     container.bind(TOKENS.thread).toConstant(adapters.thread);
     container.bind(TOKENS.comment).toConstant(adapters.comment);
@@ -52,9 +61,14 @@ export const setupTest = () => {
     pageContext.routeParams[param] = value;
   };
 
-  const setSearchParam = (param: string, value: string) => {
+  const setSearchParam = (param: string, value: string | undefined) => {
     pageContext.searchParams ??= {};
-    pageContext.searchParams[param] = value;
+
+    if (value === undefined) {
+      delete pageContext.searchParams[param];
+    } else {
+      pageContext.searchParams[param] = value;
+    }
   };
 
   const setQueryData = (queryKey: QueryKey, data: unknown) => {
@@ -96,4 +110,11 @@ export const setupTest = () => {
     setUser,
     adapters,
   };
+};
+
+export const mockHttpError: Factory<HttpError> = (overrides) => {
+  const request = {} as HttpRequest;
+  const response = {} as HttpResponse;
+
+  return Object.assign(new HttpError(request, response), overrides);
 };

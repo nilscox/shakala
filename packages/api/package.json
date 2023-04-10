@@ -14,8 +14,11 @@
   },
   "nodemonConfig": {
     "watch": "..",
-    "ignore": "../client",
-    "ext": "ts"
+    "ext": "ts",
+    "ignore": [
+      "../client",
+      "../e2e"
+    ]
   },
   "dependencies": {
     "@shakala/common": "workspace:*",

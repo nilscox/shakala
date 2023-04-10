@@ -1,32 +1,28 @@
 import { TOKENS } from '~/app/tokens';
+import { AvatarNick } from '~/elements/avatar/avatar-nick';
+import { Link } from '~/elements/link';
 import { RichText } from '~/elements/rich-text';
-
-import { AvatarNick } from '../../elements/avatar/avatar-nick';
-import { Link } from '../../elements/link';
-import { useSnackbar } from '../../elements/snackbar';
-import { useQuery } from '../../hooks/use-query';
-import CommunityIcon from '../../icons/community.svg';
-import EditIcon from '../../icons/edit.svg';
-import FormatIcon from '../../icons/format.svg';
-import SearchIcon from '../../icons/search.svg';
-import SortIcon from '../../icons/sort.svg';
-import SubscribeIcon from '../../icons/subscribe.svg';
-import TrophyIcon from '../../icons/trophy.svg';
-import imageCharte from '../../images/charte.png';
-import imageIndépendance from '../../images/indépendance.png';
-import imageModeration from '../../images/moderation.png';
-import { prefetchQuery } from '../../utils/prefetch-query';
-import { withSuspense } from '../../utils/with-suspense';
+import { useQuery } from '~/hooks/use-query';
+import CommunityIcon from '~/icons/community.svg';
+import EditIcon from '~/icons/edit.svg';
+import FormatIcon from '~/icons/format.svg';
+import SearchIcon from '~/icons/search.svg';
+import SortIcon from '~/icons/sort.svg';
+import SubscribeIcon from '~/icons/subscribe.svg';
+import TrophyIcon from '~/icons/trophy.svg';
+import imageCharte from '~/images/charte.png';
+import imageIndépendance from '~/images/indépendance.png';
+import imageModeration from '~/images/moderation.png';
+import { useValidateEmail } from '~/modules/authentication/email-validation/use-validate-email';
+import { prefetchQuery } from '~/utils/prefetch-query';
+import { withSuspense } from '~/utils/with-suspense';
 
 export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 3)];
 
 export { HomePage as Page };
 
 const HomePage = () => {
-  const snackbar = useSnackbar();
-  void snackbar;
-
-  // useEmailValidationNotification(snackbar.success, snackbar.error);
+  useValidateEmail();
 
   return (
     <>

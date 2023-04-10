@@ -57,7 +57,15 @@ export const AuthenticationForm = ({ onClose }: AuthenticationFormProps) => {
       await invalidate([]);
 
       onClose();
-      snackbar.success('Vous êtes maintenant connecté·e');
+
+      if (formType === AuthForm.signUp) {
+        const address = form.getValues('email');
+        const message = `Votre compte a bien été créé ! Un email de confirmation vous a été envoyé à l'adresse ${address}.`;
+
+        snackbar.success(message);
+      } else {
+        snackbar.success('Vous êtes maintenant connecté·e');
+      }
 
       if (nextParam) {
         await navigate(nextParam);

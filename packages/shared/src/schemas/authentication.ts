@@ -10,7 +10,7 @@ export type SignUpBody = yup.InferType<typeof signUpBodySchema>;
 
 export const signInBodySchema = yup.object({
   email: yup.string().email().required(),
-  password: yup.string().min(6).max(255).required(),
+  password: yup.string().required(),
 });
 
 export type SignInBody = yup.InferType<typeof signInBodySchema>;

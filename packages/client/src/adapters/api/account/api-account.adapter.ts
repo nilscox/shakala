@@ -11,6 +11,10 @@ import { AccountPort } from './account.port';
 export class ApiAccountAdapter implements AccountPort {
   constructor(protected readonly http: HttpPort) {}
 
+  async validateEmail(token: string): Promise<void> {
+    await this.http.get(`/account/validate-email/${token}`);
+  }
+
   async getUserActivities(page?: number): Promise<Page<UserActivityDto>> {
     const response = await this.http.get<UserActivityDto[]>('/account/activities', { search: { page } });
 

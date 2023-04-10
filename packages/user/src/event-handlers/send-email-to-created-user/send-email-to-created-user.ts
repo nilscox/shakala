@@ -20,8 +20,8 @@ export class SendEmailToCreatedUserHandler implements EventHandler<UserCreatedEv
 
     assert(user.emailValidationToken, 'user has no email validation token');
 
-    const { apiBaseUrl, appBaseUrl } = this.config.app;
-    const emailValidationLink = `${apiBaseUrl}/account/validate-email/${user.emailValidationToken}`;
+    const { appBaseUrl } = this.config.app;
+    const emailValidationLink = `${appBaseUrl}/?email-validation-token=${user.emailValidationToken}`;
 
     const command = sendEmail({
       kind: EmailKind.welcome,

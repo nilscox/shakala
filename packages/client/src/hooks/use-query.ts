@@ -35,11 +35,7 @@ export const useInvalidateQuery = () => {
 
   return useCallback(
     (queryKey: QueryKey) => {
-      return queryClient.invalidateQueries({
-        queryKey,
-        inactive: true,
-        refetchInactive: true,
-      });
+      return queryClient.removeQueries({ queryKey });
     },
     [queryClient]
   );

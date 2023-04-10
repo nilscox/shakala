@@ -19,9 +19,9 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "tsc -b",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
-    "mikro-orm": "yarn mikro-orm-esm",
-    "db:migrate": "yarn mikro-orm migration:up",
-    "db:reset": "yarn mikro-orm migration:fresh"
+    "mikro-orm": "pnpm mikro-orm-esm",
+    "db:migrate": "pnpm mikro-orm migration:up",
+    "db:reset": "pnpm mikro-orm migration:fresh"
   },
   "mikro-orm": {
     "useTsNode": true,
