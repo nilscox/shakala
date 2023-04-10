@@ -1,3 +1,0 @@
-Test email.
-
-value: "{{value}}"

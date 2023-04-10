@@ -1,6 +1,0 @@
-<mj-section padding-top="10px">
-  <mj-column>
-    <mj-text color="#888">-- </mj-text>
-    <mj-text color="#888">L'équipe de Shakala</mj-text>
-  </mj-column>
-</mj-section>

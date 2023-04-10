@@ -1,6 +1,0 @@
-data
-node_modules
-.env
-
-/packages/*/tsconfig.tsbuildinfo
-/packages/*/dist
