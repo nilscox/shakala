@@ -1,9 +1,10 @@
 import { wait } from '@shakala/shared';
 import { injected } from 'brandi';
 
-import { AppConfig } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
 import { ValidationErrors } from '~/utils/validation-errors';
+
+import { AppConfig } from '../config/app-config';
 
 import { HttpError } from './http-error';
 import { HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';

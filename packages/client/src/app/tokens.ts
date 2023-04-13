@@ -4,10 +4,9 @@ import { AccountPort } from '~/adapters/api/account/account.port';
 import { AuthenticationPort } from '~/adapters/api/authentication/authentication.port';
 import { CommentPort } from '~/adapters/api/comment/comment.port';
 import { ThreadPort } from '~/adapters/api/thread/thread.port';
+import { AppConfig } from '~/adapters/config/app-config';
 import { HttpPort } from '~/adapters/http/http.port';
 import { RouterPort } from '~/adapters/router/router.port';
-
-import { AppConfig } from './container';
 
 export const TOKENS = {
   config: token<AppConfig>('config'),
