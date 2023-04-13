@@ -5,15 +5,7 @@ import url from 'node:url';
 import { injected } from 'brandi';
 import dotenv from 'dotenv';
 
-import {
-  ConfigPort,
-  AppConfig,
-  CorsConfig,
-  SessionConfig,
-  DatabaseConfig,
-  dumpConfig,
-  EmailConfig,
-} from './config.port';
+import { AppConfig, ConfigPort, CorsConfig, DatabaseConfig, EmailConfig, SessionConfig } from './config.port';
 
 export class EnvConfigAdapter implements ConfigPort {
   private version = getPackageVersion();
@@ -106,8 +98,6 @@ export class EnvConfigAdapter implements ConfigPort {
       templatesPath: this.get('EMAIL_TEMPLATES'),
     };
   }
-
-  dump = dumpConfig(this);
 }
 
 injected(EnvConfigAdapter);

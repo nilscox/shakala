@@ -1,4 +1,4 @@
-import { TOKENS } from '@shakala/common';
+import { dumpConfig, TOKENS } from '@shakala/common';
 import dotenv from 'dotenv';
 
 import { container } from './container';
@@ -15,6 +15,11 @@ main().catch((error) => {
 dotenv.config();
 
 async function main() {
+  const logger = container.get(TOKENS.logger);
+  const config = container.get(TOKENS.config);
+
+  logger.verbose(JSON.stringify(dumpConfig(config)));
+
   const application = new Application();
 
   await application.init();

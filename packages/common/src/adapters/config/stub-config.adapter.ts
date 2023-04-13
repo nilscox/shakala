@@ -1,14 +1,6 @@
 import { DeepPartial, merge } from '@shakala/shared';
 
-import {
-  AppConfig,
-  ConfigPort,
-  CorsConfig,
-  DatabaseConfig,
-  dumpConfig,
-  EmailConfig,
-  SessionConfig,
-} from './config.port';
+import { AppConfig, ConfigPort, CorsConfig, DatabaseConfig, EmailConfig, SessionConfig } from './config.port';
 
 type Config = {
   app: AppConfig;
@@ -81,6 +73,4 @@ export class StubConfigAdapter implements ConfigPort {
   get email(): EmailConfig {
     return this.config.email;
   }
-
-  dump = dumpConfig(this);
 }

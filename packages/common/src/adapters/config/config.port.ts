@@ -4,7 +4,6 @@ export interface ConfigPort {
   session: SessionConfig;
   database: DatabaseConfig;
   email: EmailConfig;
-  dump: unknown;
 }
 
 export type AppConfig = {
@@ -46,7 +45,7 @@ export type EmailConfig = {
   templatesPath: string;
 };
 
-export const dumpConfig = (config: ConfigPort) => () => {
+export const dumpConfig = (config: ConfigPort) => {
   const { app, cors, session, database, email } = config;
   const masked = '[masked]';
 
