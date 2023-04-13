@@ -9,7 +9,7 @@ import { QueryClient } from 'react-query';
 import { renderPage } from 'vite-plugin-ssr';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-const { NODE_ENV, HOST = '0.0.0.0', PORT = '8000' } = process.env;
+const { NODE_ENV, HOST = '0.0.0.0', PORT = '8000', SERVER_API_URL = 'http://localhost:3000' } = process.env;
 
 const prod = NODE_ENV === 'production';
 const root = path.resolve(__dirname, '..');
@@ -19,11 +19,9 @@ main().catch(console.error);
 async function main() {
   const app = express();
 
-  app.use('/api', proxy('http://localhost:3000'));
-
   app.use(
     '/user/:userId/profile-image',
-    proxy('http://localhost:3000', { proxyReqPathResolver: (req) => req.originalUrl })
+    proxy(SERVER_API_URL, { proxyReqPathResolver: (req) => req.originalUrl })
   );
 
   app.use(compression());

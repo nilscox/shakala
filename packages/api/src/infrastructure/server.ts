@@ -31,7 +31,7 @@ export class Server {
 
     this.app.use(this.logRequestHandler);
     this.app.use(cookieParser('secret'));
-    this.app.use(cors({ origin: true }));
+    this.app.use(cors({ origin: config.cors.reflectOrigin }));
     this.app.use(bodyParser.json());
     this.app.use(this.ormContextMiddleware);
     this.app.use(storeUserId);

@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "clear": "rm -rf tsconfig.tsbuildinfo",
-    "dev": "ts-node src/server.ts",
+    "build": "tsc -b",
+    "start": "ts-node src/server.ts",
+    "dev": "pnpm start",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "test": "NODE_NO_WARNINGS=1 NODE_ENV=test vitest",
     "storybook": "storybook dev -p 6006 --ci",
