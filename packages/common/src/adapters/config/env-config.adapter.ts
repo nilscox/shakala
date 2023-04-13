@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import url from 'node:url';
 
 import { injected } from 'brandi';
 import dotenv from 'dotenv';
@@ -111,9 +112,10 @@ export class EnvConfigAdapter implements ConfigPort {
 
 injected(EnvConfigAdapter);
 
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
 const getPackageVersion = () => {
-  const packageJsonPath = path.resolve('..', '..', '..', 'package.json');
-  const pkg = fs.readFileSync(new URL(packageJsonPath, import.meta.url));
+  const pkg = fs.readFileSync(path.resolve(__dirname, '..', '..', '..', 'package.json'));
   const { version } = JSON.parse(String(pkg)) as { version: string };
 
   return version;
