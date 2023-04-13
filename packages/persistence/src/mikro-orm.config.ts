@@ -18,10 +18,10 @@ export default defineConfig<PostgreSqlDriver>({
   metadataProvider: TsMorphMetadataProvider,
   type: 'postgresql',
   entities: Object.values(entities),
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  dbName: process.env.DB_NAME,
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  dbName: process.env.DATABASE_NAME,
   cache: {
     options: {
       cacheDir: 'node_modules/.cache/mikro-orm',

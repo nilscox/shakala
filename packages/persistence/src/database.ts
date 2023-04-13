@@ -19,7 +19,8 @@ export class Database {
   }
 
   async init() {
-    this.orm = await createOrm(this.config.database);
+    const { database: dbName, ...config } = this.config.database;
+    this.orm = await createOrm({ dbName, ...config });
 
     await this.orm.connect();
     await this.waitForDatabaseConnection();
