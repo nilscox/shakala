@@ -3,13 +3,19 @@ import url from 'node:url';
 
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import express, { RequestHandler } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import proxy from 'express-http-proxy';
 import { QueryClient } from 'react-query';
 import { renderPage } from 'vite-plugin-ssr';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-const { NODE_ENV, HOST = '0.0.0.0', PORT = '8000', SERVER_API_URL = 'http://localhost:3000' } = process.env;
+
+const {
+  NODE_ENV,
+  HOST = '0.0.0.0',
+  PORT = '8000',
+  VITE_SERVER_API_URL = 'http://localhost:3000',
+} = process.env;
 
 const prod = NODE_ENV === 'production';
 const root = path.resolve(__dirname, '..');
@@ -21,7 +27,7 @@ async function main() {
 
   app.use(
     '/user/:userId/profile-image',
-    proxy(SERVER_API_URL, { proxyReqPathResolver: (req) => req.originalUrl })
+    proxy(VITE_SERVER_API_URL, { proxyReqPathResolver: (req) => req.originalUrl })
   );
 
   app.use(compression());
@@ -41,6 +47,7 @@ async function main() {
     app.use(viteDevServer.middlewares);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   app.get(/.*/, handleRequest);
 
   app.listen(Number(PORT), HOST, () => {
@@ -58,8 +65,7 @@ type PageContextInit = {
   queryClient: QueryClient;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-const handleRequest: RequestHandler = async (req, res, next) => {
+async function handleRequest(req: Request, res: Response, next: NextFunction) {
   const queryClient = new QueryClient();
 
   const result = await renderPage<PageContextAdded, PageContextInit>({
@@ -71,7 +77,7 @@ const handleRequest: RequestHandler = async (req, res, next) => {
   const { httpResponse, redirectTo, errorWhileRendering } = result;
 
   if (errorWhileRendering) {
-    return res.send(String(errorWhileRendering));
+    return res.status(500).send(String(errorWhileRendering));
   }
 
   if (redirectTo) {
@@ -89,4 +95,4 @@ const handleRequest: RequestHandler = async (req, res, next) => {
   });
 
   res.status(statusCode).type(contentType).send(body);
-};
+}

@@ -77,7 +77,7 @@ const trapLinks = (router: RouterPort) => {
   const observer = new MutationObserver(() => {
     for (const link of document.getElementsByTagName('a')) {
       if (link.getAttribute('data-sb-link-trap') === 'true') {
-        return;
+        continue;
       }
 
       link.setAttribute('data-sb-link-trap', 'true');
