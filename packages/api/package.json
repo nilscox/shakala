@@ -13,6 +13,7 @@
     "db:seed": "pnpm ts-node src/scripts/seed.ts"
   },
   "nodemonConfig": {
+    "delay": 1000,
     "watch": "..",
     "ext": "ts",
     "ignore": [

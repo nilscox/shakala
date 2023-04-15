@@ -2,7 +2,6 @@ import { Module } from '@shakala/common';
 import { Container } from 'brandi';
 
 import { Database } from './database';
-import { OrmContext } from './orm-context';
 import { PERSISTENCE_TOKENS } from './tokens';
 
 export class PersistenceModule extends Module {
@@ -28,4 +27,3 @@ export class PersistenceModule extends Module {
 export const module = new PersistenceModule();
 
 module.bind(PERSISTENCE_TOKENS.database).toInstance(Database).inContainerScope();
-module.bind(PERSISTENCE_TOKENS.ormContext).toInstance(OrmContext).inContainerScope();

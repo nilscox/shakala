@@ -1,5 +1,4 @@
 import { TOKENS } from '@shakala/common';
-import { PERSISTENCE_TOKENS } from '@shakala/persistence';
 import { injected } from 'brandi';
 
 import { Server } from '../infrastructure/server';
@@ -48,4 +47,4 @@ export class TestServer extends Server {
   }
 }
 
-injected(TestServer, TOKENS.logger, TOKENS.config, PERSISTENCE_TOKENS.ormContext);
+injected(TestServer, TOKENS.logger, TOKENS.config);

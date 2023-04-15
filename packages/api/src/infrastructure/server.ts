@@ -2,7 +2,6 @@ import { Server as HttpServer } from 'http';
 import { promisify } from 'util';
 
 import { BaseError, ConfigPort, LoggerPort, TOKENS } from '@shakala/common';
-import { OrmContext, PERSISTENCE_TOKENS } from '@shakala/persistence';
 import bodyParser from 'body-parser';
 import { injected } from 'brandi';
 import cookieParser from 'cookie-parser';
@@ -20,11 +19,7 @@ export class Server {
   protected app: Express;
   protected server?: HttpServer;
 
-  constructor(
-    private readonly logger: LoggerPort,
-    private readonly config: ConfigPort,
-    private readonly ormContext: OrmContext
-  ) {
+  constructor(private readonly logger: LoggerPort, private readonly config: ConfigPort) {
     this.logger.tag = Server.name;
 
     this.app = express();
@@ -33,7 +28,6 @@ export class Server {
     this.app.use(cookieParser('secret'));
     this.app.use(cors({ origin: config.cors.reflectOrigin }));
     this.app.use(bodyParser.json());
-    this.app.use(this.ormContextMiddleware);
     this.app.use(storeUserId);
 
     this.app.use(container.get(API_TOKENS.controllers.healthcheckController).router);
@@ -93,10 +87,6 @@ export class Server {
     next();
   };
 
-  private ormContextMiddleware: RequestHandler = (req, res, next) => {
-    this.ormContext.middleware(next);
-  };
-
   private validationErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     if (!yup.ValidationError.isError(error)) {
       next(error);
@@ -148,4 +138,4 @@ export class Server {
   };
 }
 
-injected(Server, TOKENS.logger, TOKENS.config, PERSISTENCE_TOKENS.ormContext);
+injected(Server, TOKENS.logger, TOKENS.config);

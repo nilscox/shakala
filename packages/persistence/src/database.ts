@@ -9,13 +9,13 @@ export class Database {
 
   constructor(private readonly config: ConfigPort) {}
 
-  get initialized() {
-    return this.orm !== undefined;
-  }
-
   get em() {
     assert(this.orm, 'database is not initialized');
     return this.orm.em;
+  }
+
+  set debug(debug: boolean) {
+    this.em.config.getLogger().setDebugMode(debug);
   }
 
   async init() {

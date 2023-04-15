@@ -13,7 +13,7 @@ export abstract class SqlRepository<Entity, SqlEntity extends object> {
   protected abstract toSql(entity: Entity): SqlEntity;
 
   get em() {
-    return this.database.em;
+    return this.database.em.fork();
   }
 
   get repository(): EntityRepository<SqlEntity> {
