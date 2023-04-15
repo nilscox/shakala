@@ -49,7 +49,15 @@ export class ApiCommentAdapter implements CommentPort {
   }
 
   async editComment(commentId: string, text: string): Promise<void> {
-    await this.http.put<EditCommentBody>(`/comment/${commentId}`, { text });
+    const onError = (error: HttpError) => {
+      if (error.code === 'UserMustBeAuthorError') {
+        throw new Error('UserMustBeAuthorError');
+      }
+
+      throw error;
+    };
+
+    await this.http.put<EditCommentBody>(`/comment/${commentId}`, { text }, { onError });
   }
 
   async setReaction(commentId: string, reaction: ReactionType | null): Promise<void> {

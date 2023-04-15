@@ -37,7 +37,7 @@ describe('CommentForm', () => {
     expect(input).toHaveValue('');
   });
 
-  it('does clear the value when the comment creation did not complete', async () => {
+  it('clears the value when the comment creation did not complete', async () => {
     adapters.comment.createComment.reject(new Error());
 
     const user = render(<RootCommentForm thread={thread} />);
@@ -65,5 +65,20 @@ describe('CommentForm', () => {
     await user.click(screen.getByText('Envoyer'));
 
     expect(closeReplyForm).called();
+  });
+
+  it('shows an error message when the user is not the author of the comment', async () => {
+    const parent = createCommentDto({ id: 'parentId' });
+
+    adapters.comment.createReply.reject(new Error('UserMustBeAuthorError'));
+
+    const user = render(
+      <ReplyForm parent={parent} isReplying={true} openReplyForm={stub()} closeReplyForm={stub()} />
+    );
+
+    await user.type(screen.getByPlaceholderText('Rédigez votre message'), 'reply');
+    await user.click(screen.getByText('Envoyer'));
+
+    expect(screen.getByText("Vous devez être l'auteur du message pour pouvoir l'éditer.")).toBeVisible();
   });
 });

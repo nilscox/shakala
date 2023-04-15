@@ -64,6 +64,8 @@ injected(
 registerCommand(editComment, THREAD_TOKENS.commands.editCommentHandler);
 
 export class UserMustBeAuthorError extends BaseError<{ userId: string; commentId: string }> {
+  status = 403;
+
   constructor(userId: string, commentId: string) {
     super('user must be the author of the comment', { userId, commentId });
   }

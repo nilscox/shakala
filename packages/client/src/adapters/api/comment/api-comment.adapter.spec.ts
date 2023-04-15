@@ -65,6 +65,15 @@ describe('ApiCommentAdapter', () => {
         body: { text: 'text' },
       });
     });
+
+    it('handles UserMustBeAuthorError', async () => {
+      http.response = {
+        status: 403,
+        body: { code: 'UserMustBeAuthorError' },
+      };
+
+      await expect(adapter.editComment('commentId', 'text')).toReject(new Error('UserMustBeAuthorError'));
+    });
   });
 
   describe('setReaction', () => {

@@ -6,8 +6,9 @@ import { afterEach } from 'vitest';
 import '@shakala/shared/vitest.setup';
 
 setupDOMFormatter(prettyDOM);
-
 afterEach(cleanup);
+
+window.scroll = () => {};
 
 // https://github.com/capricorn86/happy-dom/issues/527#issuecomment-1174442116
 const originalDispatchEvent = HTMLElement.prototype.dispatchEvent;
@@ -18,5 +19,3 @@ HTMLElement.prototype.dispatchEvent = function (event) {
   }
   return result;
 };
-
-window.scroll = () => {};

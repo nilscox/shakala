@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TOKENS } from '~/app/tokens';
 import { FieldError } from '~/elements/form-field';
 import { useRichTextEditor } from '~/elements/rich-text-editor';
+import { useSnackbar } from '~/elements/snackbar';
 import { useInvalidateQuery } from '~/hooks/use-query';
 import { useRouteParam } from '~/hooks/use-route-params';
 import { useSubmit } from '~/hooks/use-submit';
@@ -29,6 +30,7 @@ export const useCommentForm = ({
   onSubmitted,
 }: UseCommentFormProps) => {
   const threadId = useRouteParam('threadId');
+  const snackbar = useSnackbar();
 
   const form = useForm<CommentForm>({
     defaultValues: {
@@ -48,6 +50,13 @@ export const useCommentForm = ({
       editor?.chain().setContent('').run();
 
       onSubmitted?.(commentId);
+    },
+    onError(error) {
+      if (error.message === 'UserMustBeAuthorError') {
+        snackbar.error("Vous devez être l'auteur du message pour pouvoir l'éditer.");
+      } else {
+        throw error;
+      }
     },
   });
 
