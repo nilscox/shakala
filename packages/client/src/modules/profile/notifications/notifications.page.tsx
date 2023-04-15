@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Fallback } from '~/elements/fallback';
 import { useQuery } from '~/hooks/use-query';
 import { prefetchQuery } from '~/utils/prefetch-query';
 import { withSuspense } from '~/utils/with-suspense';
@@ -25,6 +26,10 @@ const NotificationsList = withSuspense(() => {
   const [page, setPage] = useState(1);
   const { items: notifications, total } = useQuery(TOKENS.account, 'getNotifications', page);
 
+  if (notifications.length === 0) {
+    return <NoNotifications />;
+  }
+
   return (
     <Notifications
       notifications={notifications}
@@ -33,3 +38,7 @@ const NotificationsList = withSuspense(() => {
     />
   );
 }, 'NotificationsList');
+
+const NoNotifications = () => {
+  return <Fallback>Vous n'avez pas encore reçu de notification.</Fallback>;
+};

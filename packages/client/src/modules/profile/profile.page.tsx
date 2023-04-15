@@ -16,7 +16,7 @@ export const authenticationRequired = true;
 
 const ProfilePage = () => (
   <>
-    <ProfileTitle title="Profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
+    <ProfileTitle title="Votre profil" subTitle="Éditez les informations liées à votre profil sur Shakala" />
 
     <div className="col gap-6">
       <NickForm />
