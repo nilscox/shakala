@@ -27,7 +27,7 @@ export const Thread = ({ thread }: ThreadProps) => (
         <AvatarNick size="medium" nick={thread.author.nick} image={thread.author.profileImage} />
         <div className="text-muted">
           <time dateTime={thread.date}>{formatDate(thread.date, DateFormat.full)}</time>,{' '}
-          {/* {thread.comments.length} commentaires */}
+          {thread.totalComments} commentaires
         </div>
       </div>
 

@@ -1,5 +1,4 @@
 import { queryCreator, QueryHandler, registerQuery } from '@shakala/common';
-import { Maybe } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { ThreadRepository } from '../repositories/thread/thread.repository';
@@ -20,14 +19,15 @@ export type GetThreadResult = {
   keywords: string[];
   text: string;
   date: string;
+  totalComments: number;
 };
 
-export const getThread = queryCreator<GetThreadQuery, Maybe<GetThreadResult>>('getThread');
+export const getThread = queryCreator<GetThreadQuery, GetThreadResult | undefined>('getThread');
 
-export class GetThreadHandler implements QueryHandler<GetThreadQuery, Maybe<GetThreadResult>> {
+export class GetThreadHandler implements QueryHandler<GetThreadQuery, GetThreadResult | undefined> {
   constructor(private readonly threadRepository: ThreadRepository) {}
 
-  async handle(query: GetThreadQuery): Promise<Maybe<GetThreadResult>> {
+  async handle(query: GetThreadQuery): Promise<GetThreadResult | undefined> {
     return this.threadRepository.getThread(query.threadId);
   }
 }

@@ -1,6 +1,6 @@
 import { Timestamp } from '@shakala/common';
 import { PERSISTENCE_TOKENS, SqlRepository, SqlThread, SqlUser } from '@shakala/persistence';
-import { Maybe } from '@shakala/shared';
+import { getIds } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { Markdown } from '../../entities/markdown.value-object';
@@ -37,21 +37,36 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
 
   async getLastThreads(count: number): Promise<GetLastThreadsResult> {
     const sqlThreads = await this.repository.findAll({ populate: ['author'], limit: count });
+    const totalComments = await this.countComments(getIds(sqlThreads));
 
-    return sqlThreads.map((sqlThread) => this.mapThreadResult(sqlThread));
+    return sqlThreads.map((sqlThread) =>
+      this.mapThreadResult(sqlThread, totalComments.get(sqlThread.id) ?? 0)
+    );
   }
 
-  async getThread(threadId: string): Promise<Maybe<GetThreadResult>> {
+  async getThread(threadId: string): Promise<GetThreadResult | undefined> {
     const sqlThread = await this.repository.findOne(threadId, { populate: ['author'] });
 
     if (!sqlThread) {
       return undefined;
     }
 
-    return this.mapThreadResult(sqlThread);
+    const totalCommentsMap = await this.countComments([threadId]);
+    const totalComments = totalCommentsMap.get(threadId);
+
+    return this.mapThreadResult(sqlThread, totalComments ?? 0);
   }
 
-  private mapThreadResult(sqlThread: SqlThread): GetLastThreadsResult[number] {
+  private async countComments(threadIds: string[]): Promise<Map<string, number>> {
+    const results: Array<{ thread_id: string; count: string }> = await this.em.execute(
+      `select thread_id, count(id) from comment where thread_id in (?) group by thread_id`,
+      [threadIds]
+    );
+
+    return new Map(results.map(({ thread_id, count }) => [thread_id, Number(count)]));
+  }
+
+  private mapThreadResult(sqlThread: SqlThread, totalComments: number): GetLastThreadsResult[number] {
     return {
       id: sqlThread.id,
       author: {
@@ -63,6 +78,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       keywords: sqlThread.keywords,
       text: sqlThread.text,
       date: sqlThread.createdAt.toISOString(),
+      totalComments,
     };
   }
 }

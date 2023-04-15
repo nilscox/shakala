@@ -28,6 +28,7 @@ describe('SqlThreadRepository', () => {
           description: thread.description,
           keywords: thread.keywords,
           text: thread.text,
+          totalComments: 0,
         },
       ]);
     });
@@ -36,6 +37,7 @@ describe('SqlThreadRepository', () => {
   describe('getThread', () => {
     it('retrieves a thread from its id', async () => {
       const { thread, author } = await test.createThread();
+      await test.create.comment({ thread, author });
 
       expect(await test.repository.getThread(thread.id)).toEqual({
         id: thread.id,
@@ -48,6 +50,7 @@ describe('SqlThreadRepository', () => {
         description: thread.description,
         keywords: thread.keywords,
         text: thread.text,
+        totalComments: 1,
       });
     });
   });
