@@ -1,6 +1,7 @@
-import { CreateThreadBody, Maybe, RootCommentDto, ThreadDto } from '@shakala/shared';
+import { CreateThreadBody, RootCommentDto, ThreadDto } from '@shakala/shared';
 import { injected } from 'brandi';
 
+import { HttpError } from '~/adapters/http/http-error';
 import { TOKENS } from '~/app/tokens';
 
 import { ValidationErrors } from '../../../utils/validation-errors';
@@ -16,9 +17,17 @@ export class ApiThreadAdapter implements ThreadPort {
     return response.body;
   }
 
-  async getThread(threadId: string): Promise<Maybe<ThreadDto>> {
-    const response = await this.http.get<ThreadDto>(`/thread/${threadId}`);
-    return response.body;
+  async getThread(threadId: string): Promise<ThreadDto | undefined> {
+    try {
+      const response = await this.http.get<ThreadDto>(`/thread/${threadId}`);
+      return response.body;
+    } catch (error) {
+      if (error instanceof HttpError && error.status === 404) {
+        return undefined;
+      }
+
+      throw error;
+    }
   }
 
   async getThreadComments(threadId: string, options?: GetThreadCommentsOptions): Promise<RootCommentDto[]> {

@@ -1,11 +1,13 @@
 import { isCommentSort } from '@shakala/shared';
 
 import { TOKENS } from '~/app/tokens';
+import { Fallback } from '~/elements/fallback';
+import { Link } from '~/elements/link';
+import { useQuery } from '~/hooks/use-query';
+import { useRouteParam } from '~/hooks/use-route-params';
+import IconChevronLeft from '~/icons/chevron-left.svg';
+import { prefetchQuery } from '~/utils/prefetch-query';
 import { withSuspense } from '~/utils/with-suspense';
-
-import { useQuery } from '../../../hooks/use-query';
-import { useRouteParam } from '../../../hooks/use-route-params';
-import { prefetchQuery } from '../../../utils/prefetch-query';
 
 import { CommentHistoryModal } from './modals/comment-history-modal/comment-history-modal';
 import { ReportCommentModal } from './modals/report-comment-modal/report-comment-modal';
@@ -41,7 +43,7 @@ const ThreadPage = withSuspense(() => {
   const thread = useQuery(TOKENS.thread, 'getThread', threadId);
 
   if (!thread) {
-    return <>thread not found</>;
+    return <ThreadNotFound />;
   }
 
   return (
@@ -54,3 +56,12 @@ const ThreadPage = withSuspense(() => {
     </>
   );
 }, 'ThreadPage');
+
+const ThreadNotFound = () => (
+  <Fallback>
+    Ce fil de discussion n'existe pas (ou plus).
+    <Link href="/" className="row gap-1">
+      <IconChevronLeft className="w-2" /> Retour
+    </Link>
+  </Fallback>
+);

@@ -18,6 +18,10 @@ export class HttpError extends Error {
     }
   }
 
+  get status() {
+    return this.response.status;
+  }
+
   private static errorResponseBodySchema = yup.object({
     code: yup.string().required(),
     message: yup.string().required(),

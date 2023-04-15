@@ -9,7 +9,7 @@ type FallbackProps = {
 export const Fallback = ({ className, children }: FallbackProps) => (
   <div
     className={clsx(
-      'flex min-h-1 flex-col items-center justify-center font-bold text-muted md:min-h-2',
+      'col min-h-1 items-center justify-center gap-4 font-bold text-muted md:min-h-2',
       className
     )}
   >
