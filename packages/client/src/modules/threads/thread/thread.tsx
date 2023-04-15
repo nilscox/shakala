@@ -1,4 +1,4 @@
-import { isCommentSort, ThreadDto } from '@shakala/shared';
+import { AuthorDto, isCommentSort, ThreadDto } from '@shakala/shared';
 import { Helmet } from 'react-helmet';
 
 import { PageTitle } from '~/app/page-title';
@@ -23,14 +23,7 @@ export const Thread = ({ thread }: ThreadProps) => (
     <ThreadMeta {...thread} />
 
     <div className="my-5 md:my-10">
-      <div className="row mb-2 flex-wrap items-center justify-between gap-4">
-        <AvatarNick size="medium" nick={thread.author.nick} image={thread.author.profileImage} />
-        <div className="text-muted">
-          <time dateTime={thread.date}>{formatDate(thread.date, DateFormat.full)}</time>,{' '}
-          {thread.totalComments} commentaires
-        </div>
-      </div>
-
+      <ThreadHeader {...thread} />
       <RichText className="card p-4 sm:p-5">{thread.text}</RichText>
     </div>
 
@@ -50,6 +43,25 @@ const ThreadMeta = ({ description, keywords }: ThreadMetaProps) => (
     <meta name="description" content={description}></meta>
     <meta name="keywords" content={keywords.join(', ')}></meta>
   </Helmet>
+);
+
+type ThreadHeaderProps = {
+  author: AuthorDto;
+  date: string;
+  description: string;
+  totalComments: number;
+};
+
+const ThreadHeader = ({ author, date, description, totalComments }: ThreadHeaderProps) => (
+  <div className="row mb-2 flex-wrap items-center gap-4">
+    <AvatarNick size="medium" nick={author.nick} image={author.profileImage} />
+
+    <div className="flex-1 border-l-2 pl-2 font-medium text-muted line-clamp-1">{description}</div>
+
+    <div className="text-muted">
+      <time dateTime={date}>{formatDate(date, DateFormat.full)}</time>, {totalComments} commentaires
+    </div>
+  </div>
 );
 
 type CommentsListProps = {
