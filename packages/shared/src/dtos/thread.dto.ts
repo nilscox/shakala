@@ -64,6 +64,7 @@ export type ThreadDto = {
   keywords: string[];
   text: string;
   date: string;
+  edited: false | string;
   totalComments: number;
 };
 
@@ -74,5 +75,6 @@ export const createThreadDto = createFactory<ThreadDto>(() => ({
   keywords: [],
   text: '',
   date: '',
+  edited: false,
   totalComments: 0,
 }));

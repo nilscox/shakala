@@ -1,4 +1,5 @@
 import expect from '@nilscox/expect';
+import { stub } from '@shakala/shared';
 import { cleanup, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, it, vi } from 'vitest';
 
@@ -10,13 +11,13 @@ import { ThreadForm } from './thread-form';
 vi.mock('~/elements/rich-text-editor');
 
 describe('ThreadForm', () => {
-  const { render, adapters } = setupTest();
+  const { render } = setupTest();
 
   const fields = {
     description: () => screen.getByLabelText('Description'),
     keywords: () => screen.getByLabelText('Mots-clés'),
     text: () => screen.getByTestId('mock-rich-text-editor'),
-    submit: () => screen.getByRole('button', { name: 'Créer' }),
+    submit: (text: string) => screen.getByRole('button', { name: text }),
   };
 
   afterEach(() => {
@@ -24,22 +25,22 @@ describe('ThreadForm', () => {
   });
 
   it('fills and submits the form', async () => {
-    adapters.thread.createThread.resolve('threadId');
+    const onSubmit = stub();
 
-    const user = render(<ThreadForm />);
+    const user = render(<ThreadForm onSubmit={onSubmit} submitButtonText="submit" />);
 
     await user.type(fields.description(), 'description');
     await user.type(fields.keywords(), 'key words');
     await user.type(fields.text(), 'text');
-    await user.click(fields.submit());
+    await user.click(fields.submit('submit'));
 
-    await waitFor(() => {
-      expect(adapters.router.pathname).toEqual('/discussions/threadId');
-    });
+    expect(onSubmit).calledWith('description', 'key words', 'text');
   });
 
   it.skip('displays the field errors', async () => {
-    adapters.thread.createThread.reject(
+    const onSubmit = stub();
+
+    onSubmit.reject(
       new ValidationErrors({
         description: 'min',
         keywords: 'max',
@@ -47,12 +48,12 @@ describe('ThreadForm', () => {
       })
     );
 
-    const user = render(<ThreadForm />);
+    const user = render(<ThreadForm onSubmit={onSubmit} submitButtonText="submit" />);
 
     await user.type(fields.description(), 'description');
     await user.type(fields.keywords(), 'key words');
     await user.type(fields.text(), 'text');
-    await user.click(fields.submit());
+    await user.click(fields.submit('submit'));
 
     await waitFor(() => {
       expect(fields.description()).toHaveErrorMessage('La description est trop courte');

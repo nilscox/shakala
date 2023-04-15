@@ -19,6 +19,7 @@ export type GetThreadResult = {
   keywords: string[];
   text: string;
   date: string;
+  edited: false | string;
   totalComments: number;
 };
 

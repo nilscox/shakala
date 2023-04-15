@@ -22,7 +22,15 @@ export default {
 } satisfies Meta<Args>;
 
 // eslint-disable-next-line no-empty-pattern
-export const threadForm: StoryFn<Args> = ({}) => <ThreadForm />;
+export const threadForm: StoryFn<Args> = ({}) => (
+  <ThreadForm
+    onSubmit={async (fields) => {
+      action('onSubmit')(fields);
+      return 'threadId';
+    }}
+    submitButtonText="Créer"
+  />
+);
 
 threadForm.decorators = [
   configureStory(({ thread }, { validationError, unexpectedError }) => {

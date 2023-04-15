@@ -1,31 +1,53 @@
-import { useInjection } from 'brandi-react';
+import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 
 import { ThreadFormFields } from '~/adapters/api/thread/thread.port';
-import { TOKENS } from '~/app/tokens';
-import { SubmitButton } from '~/elements/button';
+import { Button, SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
-import { RichTextEditor, useRichTextEditor } from '~/elements/rich-text-editor';
+import { EditorToolbar, RichTextEditor, useRichTextEditor } from '~/elements/rich-text-editor';
+import { useSnackbar } from '~/elements/snackbar';
 import { useSubmit } from '~/hooks/use-submit';
 
-export const ThreadForm = () => {
+type ThreadFormProps = {
+  initialValues?: ThreadFormFields;
+  submitButtonText: string;
+  onCancel?: () => void;
+  onSubmit: (values: ThreadFormFields) => Promise<string>;
+  onSubmitted?: (threadId: string) => void;
+};
+
+export const ThreadForm = ({
+  initialValues,
+  submitButtonText,
+  onCancel,
+  onSubmit,
+  onSubmitted,
+}: ThreadFormProps) => {
+  const snackbar = useSnackbar();
+
   const form = useForm<ThreadFormFields>({
-    defaultValues: {
+    defaultValues: initialValues ?? {
       description: '',
       keywords: '',
       text: '',
     },
   });
 
-  const router = useInjection(TOKENS.router);
-  const thread = useInjection(TOKENS.thread);
-
-  const handleSubmit = useSubmit(form, (data) => thread.createThread(data), {
-    onSuccess: (threadId) => router.navigate(`/discussions/${threadId}`),
+  const handleSubmit = useSubmit(form, onSubmit, {
+    onSuccess: onSubmitted,
+    onError: (error) => {
+      // todo: test
+      if (error.message === 'UserMustBeAuthorError') {
+        snackbar.error("Vous devez être l'auteur du fil de discussion pour pouvoir l'éditer.");
+      } else {
+        throw error;
+      }
+    },
   });
 
   const editor = useRichTextEditor({
+    initialHtml: form.getValues('text'),
     autofocus: false,
     onChange: (text) => {
       form.setValue('text', text);
@@ -64,7 +86,11 @@ export const ThreadForm = () => {
 
       <FormField
         name="text"
-        label="Texte"
+        label={
+          <div className="row">
+            Texte <EditorToolbar className="ml-auto mb-0.5" editor={editor} />
+          </div>
+        }
         error={form.formState.errors.text?.message}
         errorsMap={{
           min: 'Le texte est trop court',
@@ -77,9 +103,14 @@ export const ThreadForm = () => {
         />
       </FormField>
 
-      <SubmitButton primary className="self-end" loading={form.formState.isSubmitting}>
-        Créer
-      </SubmitButton>
+      <div className="row justify-end gap-4">
+        <Button secondary onClick={onCancel} className={clsx(!onCancel && 'hidden')}>
+          Annuler
+        </Button>
+        <SubmitButton primary loading={form.formState.isSubmitting}>
+          {submitButtonText}
+        </SubmitButton>
+      </div>
     </form>
   );
 };

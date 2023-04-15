@@ -25,6 +25,7 @@ describe('createThread', () => {
     expect(created).toHaveProperty('text', new Markdown('Hello!'));
     expect(created).toHaveProperty('keywords', ['key', 'word']);
     expect(created).toHaveProperty('created', test.now);
+    expect(created).toHaveProperty('edited', test.now);
   });
 
   it('publishes a ThreadCreatedEvent', async () => {

@@ -3,6 +3,7 @@ import { token } from 'brandi';
 import { CreateCommentHandler } from './commands/create-comment/create-comment';
 import { CreateThreadHandler } from './commands/create-thread/create-thread';
 import { EditCommentHandler } from './commands/edit-comment/edit-comment';
+import { EditThreadHandler } from './commands/edit-thread/edit-thread';
 import { ReportCommentHandler } from './commands/report-comment/report-comment';
 import { SetCommentSubscriptionHandler } from './commands/set-comment-subscription/set-comment-subscription';
 import { SetReactionHandler } from './commands/set-reaction/set-reaction';
@@ -30,6 +31,7 @@ export const THREAD_TOKENS = {
   },
   commands: {
     createThreadHandler: token<CreateThreadHandler>('createThreadHandler'),
+    editThreadHandler: token<EditThreadHandler>('editThreadHandler'),
     createCommentHandler: token<CreateCommentHandler>('createCommentHandler'),
     editCommentHandler: token<EditCommentHandler>('editCommentHandler'),
     setReactionHandler: token<SetReactionHandler>('setReactionHandler'),

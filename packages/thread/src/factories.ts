@@ -24,6 +24,7 @@ export const create: Factories = {
       id: randomId(),
       authorId: '',
       created: new Timestamp(0),
+      edited: new Timestamp(0),
       keywords: [],
       description: '',
       text: create.markdown(),

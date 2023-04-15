@@ -35,7 +35,11 @@ export const useInvalidateQuery = () => {
 
   return useCallback(
     (queryKey: QueryKey) => {
-      return queryClient.removeQueries({ queryKey });
+      if (queryKey.length === 0) {
+        return queryClient.clear();
+      }
+
+      return queryClient.invalidateQueries({ queryKey });
     },
     [queryClient]
   );

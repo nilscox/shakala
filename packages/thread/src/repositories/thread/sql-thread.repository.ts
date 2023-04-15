@@ -21,6 +21,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       keywords: sqlEntity.keywords,
       authorId: sqlEntity.author.id,
       created: new Timestamp(sqlEntity.createdAt),
+      edited: new Timestamp(sqlEntity.createdAt),
     });
   }
 
@@ -32,6 +33,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       keywords: thread.keywords,
       author: this.em.getReference(SqlUser, thread.authorId),
       createdAt: thread.created.toDate(),
+      updatedAt: thread.edited.toDate(),
     } as SqlThread);
   }
 
@@ -78,6 +80,7 @@ export class SqlThreadRepository extends SqlRepository<Thread, SqlThread> implem
       keywords: sqlThread.keywords,
       text: sqlThread.text,
       date: sqlThread.createdAt.toISOString(),
+      edited: sqlThread.updatedAt === sqlThread.createdAt ? false : sqlThread.updatedAt.toISOString(),
       totalComments,
     };
   }

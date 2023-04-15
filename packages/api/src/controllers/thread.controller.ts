@@ -4,12 +4,19 @@ import { CommandBus, EntityNotFoundError, GeneratorPort, QueryBus, TOKENS } from
 import {
   CommentDto,
   createCommentBodySchema,
-  createThreadBodySchema,
+  createOrEditThreadBodySchema,
   getLastThreadsQuerySchema,
   getThreadQuerySchema,
   ThreadDto,
 } from '@shakala/shared';
-import { getThreadComments, createComment, createThread, getLastThreads, getThread } from '@shakala/thread';
+import {
+  getThreadComments,
+  createComment,
+  createThread,
+  getLastThreads,
+  getThread,
+  editThread,
+} from '@shakala/thread';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
 
@@ -30,6 +37,7 @@ export class ThreadController {
     this.router.get('/:threadId', this.getThread);
     this.router.get('/:threadId/comments', this.getThreadComments);
     this.router.post('/', guards, this.createThread);
+    this.router.put('/:threadId', guards, this.editThread);
     this.router.post('/:threadId/comment', guards, this.createComment);
   }
 
@@ -72,7 +80,7 @@ export class ThreadController {
   createThread: RequestHandler = async (req, res) => {
     assert(req.userId);
 
-    const body = await validateRequest(req).body(createThreadBodySchema);
+    const body = await validateRequest(req).body(createOrEditThreadBodySchema);
     const threadId = await this.generator.generateId();
     const authorId = req.userId;
 
@@ -80,6 +88,19 @@ export class ThreadController {
 
     res.status(201);
     res.send(threadId);
+  };
+
+  editThread: RequestHandler<{ threadId: string }> = async (req, res) => {
+    assert(req.userId);
+
+    const body = await validateRequest(req).body(createOrEditThreadBodySchema);
+    const threadId = req.params.threadId;
+    const authorId = req.userId;
+
+    await this.commandBus.execute(editThread({ threadId, authorId, ...body }));
+
+    res.status(204);
+    res.end();
   };
 
   createComment: RequestHandler<{ threadId: string }> = async (req, res) => {

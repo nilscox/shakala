@@ -10,14 +10,21 @@ export type QueryParameters<Adapter extends Record<Method, AnyFunction>, Method 
 export type QueryKey<
   Adapter extends QueryAdapter<Method> = QueryAdapter<PropertyKey>,
   Method extends keyof Adapter = keyof Adapter
-> = [string, Method, Parameters<Adapter[Method]>];
+> = [string, Method] | [string, Method, Parameters<Adapter[Method]>];
 
 export type QueryAdapter<Method extends PropertyKey> = Record<Method, AnyFunction>;
 
-export const getQueryKey = <Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
+export function getQueryKey<Adapter extends Record<Method, AnyFunction>, Method extends keyof Adapter>(
   token: Token<Adapter>,
   method: Method,
   ...params: Parameters<Adapter[Method]>
-): QueryKey<Adapter, Method> => {
+): QueryKey<Adapter, Method> {
   return [token.__d, method, params];
-};
+}
+
+export function getQueryKeyWithoutParams<
+  Adapter extends Record<Method, AnyFunction>,
+  Method extends keyof Adapter
+>(token: Token<Adapter>, method: Method): QueryKey<Adapter, Method> {
+  return [token.__d, method];
+}

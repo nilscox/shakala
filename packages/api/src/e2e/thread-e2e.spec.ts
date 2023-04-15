@@ -2,7 +2,7 @@ import expect from '@nilscox/expect';
 import { listUserNotifications } from '@shakala/notification';
 import {
   CreateCommentBody,
-  CreateThreadBody,
+  CreateOrEditThreadBody,
   EditCommentBody,
   NotificationType,
   ReactionType,
@@ -34,7 +34,7 @@ describe('[e2e] thread', () => {
     await editComment(commentId);
 
     async function createThread() {
-      const body: CreateThreadBody = {
+      const body: CreateOrEditThreadBody = {
         description: 'description',
         text: 'text',
         keywords: [],

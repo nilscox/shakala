@@ -1,4 +1,4 @@
-import { CreateThreadBody, RootCommentDto, ThreadDto } from '@shakala/shared';
+import { CreateOrEditThreadBody, RootCommentDto, ThreadDto } from '@shakala/shared';
 import { injected } from 'brandi';
 
 import { HttpError } from '~/adapters/http/http-error';
@@ -39,28 +39,48 @@ export class ApiThreadAdapter implements ThreadPort {
   }
 
   async createThread(fields: ThreadFormFields): Promise<string> {
-    const keywords = fields.keywords.split(' ').map((field) => field.trim());
-
-    const response = await this.http.post<CreateThreadBody, string>(
+    const response = await this.http.post<CreateOrEditThreadBody, string>(
       '/thread',
-      { ...fields, keywords },
-      {
-        onError(error) {
-          const validationError = ValidationErrors.from(error.response, (fieldName) => {
-            if (/keywords\[\d+\]/.exec(fieldName)) {
-              return 'keywords';
-            }
-
-            return fieldName;
-          });
-
-          throw validationError ?? error;
-        },
-      }
+      this.threadFormFieldsToBody(fields),
+      { onError: this.handleThreadFormError }
     );
 
     return response.body;
   }
+
+  async editThread(threadId: string, fields: ThreadFormFields): Promise<void> {
+    await this.http.put<CreateOrEditThreadBody, string>(
+      `/thread/${threadId}`,
+      this.threadFormFieldsToBody(fields),
+      { onError: this.handleThreadFormError }
+    );
+  }
+
+  private threadFormFieldsToBody = (fields: ThreadFormFields): CreateOrEditThreadBody => {
+    const keywords = fields.keywords.split(' ').map((field) => field.trim());
+
+    return {
+      ...fields,
+      keywords,
+    };
+  };
+
+  private handleThreadFormError = (error: HttpError) => {
+    // todo: test
+    if (error.code === 'UserMustBeAuthorError') {
+      throw new Error('UserMustBeAuthorError');
+    }
+
+    const validationError = ValidationErrors.from(error.response, (fieldName) => {
+      if (/keywords\[\d+\]/.exec(fieldName)) {
+        return 'keywords';
+      }
+
+      return fieldName;
+    });
+
+    throw validationError ?? error;
+  };
 }
 
 injected(ApiThreadAdapter, TOKENS.http);

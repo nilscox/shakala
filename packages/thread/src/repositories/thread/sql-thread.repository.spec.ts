@@ -2,6 +2,8 @@ import expect from '@nilscox/expect';
 import { createRepositoryTest, RepositoryTest } from '@shakala/persistence/test';
 import { beforeEach, describe, it } from 'vitest';
 
+import { create } from '../../factories';
+
 import { SqlThreadRepository } from './sql-thread.repository';
 
 describe('SqlThreadRepository', () => {
@@ -12,6 +14,20 @@ describe('SqlThreadRepository', () => {
     test = await getTest();
   });
 
+  describe('save', () => {
+    it('saves and updates a thread', async () => {
+      const author = await test.create.user();
+      const thread = create.thread({ authorId: author.id });
+
+      await test.repository.save(thread);
+      expect(await test.repository.findById(thread.id)).toEqual(thread);
+
+      thread.description = 'updated';
+      await test.repository.save(thread);
+      await expect(test.repository.findById(thread.id)).toResolve(thread);
+    });
+  });
+
   describe('getLastThreads', () => {
     it('retrieves the last threads', async () => {
       const { thread, author } = await test.createThread();
@@ -20,6 +36,7 @@ describe('SqlThreadRepository', () => {
         {
           id: thread.id,
           date: thread.createdAt.toISOString(),
+          edited: thread.updatedAt.toISOString(),
           author: {
             id: author.id,
             nick: author.nick,
@@ -42,6 +59,7 @@ describe('SqlThreadRepository', () => {
       expect(await test.repository.getThread(thread.id)).toEqual({
         id: thread.id,
         date: thread.createdAt.toISOString(),
+        edited: thread.updatedAt.toISOString(),
         author: {
           id: author.id,
           nick: author.nick,

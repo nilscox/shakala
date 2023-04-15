@@ -4,7 +4,7 @@ import { useInjection } from 'brandi-react';
 import { useCallback } from 'react';
 import { useMutation as useReactMutation } from 'react-query';
 
-import { getQueryKey } from '~/utils/query-key';
+import { getQueryKeyWithoutParams } from '~/utils/query-key';
 
 import { useErrorHandler } from './use-error-handler';
 
@@ -20,7 +20,7 @@ export const useMutate = <Adapter extends Record<Method, AnyFunction>, Method ex
   options?: UseMutationOptions<ReturnType<Adapter[Method]>>
 ) => {
   const adapter = useInjection(adapterToken);
-  const queryKey = getQueryKey(adapterToken, method, ...([] as never));
+  const queryKey = getQueryKeyWithoutParams(adapterToken, method);
 
   const handleError = useErrorHandler();
 

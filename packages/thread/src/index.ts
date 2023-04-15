@@ -1,6 +1,7 @@
 export { createComment } from './commands/create-comment/create-comment';
 export { createThread } from './commands/create-thread/create-thread';
 export { editComment } from './commands/edit-comment/edit-comment';
+export { editThread } from './commands/edit-thread/edit-thread';
 export { reportComment } from './commands/report-comment/report-comment';
 export { setCommentSubscription } from './commands/set-comment-subscription/set-comment-subscription';
 export { setReaction } from './commands/set-reaction/set-reaction';

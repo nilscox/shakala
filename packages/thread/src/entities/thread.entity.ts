@@ -8,6 +8,7 @@ export type ThreadProps = EntityProps<{
   text: Markdown;
   keywords: string[];
   created: Timestamp;
+  edited: Timestamp;
 }>;
 
 export class Thread extends Entity<ThreadProps> {
@@ -19,15 +20,35 @@ export class Thread extends Entity<ThreadProps> {
     return this.props.description;
   }
 
+  set description(description: string) {
+    this.props.description = description;
+  }
+
   get text() {
     return this.props.text;
+  }
+
+  set text(text: Markdown) {
+    this.props.text = text;
   }
 
   get keywords() {
     return this.props.keywords;
   }
 
+  set keywords(keywords: string[]) {
+    this.props.keywords = keywords;
+  }
+
   get created() {
     return this.props.created;
+  }
+
+  get edited() {
+    return this.props.edited;
+  }
+
+  set edited(edited: Timestamp) {
+    this.props.edited = edited;
   }
 }

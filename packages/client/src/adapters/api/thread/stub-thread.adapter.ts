@@ -7,4 +7,5 @@ export class StubThreadAdapter implements ThreadPort {
   getThread = stub<ThreadPort['getThread']>();
   getThreadComments = stub<ThreadPort['getThreadComments']>();
   createThread = stub<ThreadPort['createThread']>();
+  editThread = stub<ThreadPort['editThread']>();
 }

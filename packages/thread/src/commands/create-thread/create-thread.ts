@@ -41,6 +41,7 @@ export class CreateThreadHandler implements CommandHandler<CreateThreadCommand> 
       text: new Markdown(text),
       keywords,
       created: this.dateAdapter.now(),
+      edited: this.dateAdapter.now(),
     });
 
     await this.threadRepository.save(thread);

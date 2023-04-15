@@ -1,4 +1,5 @@
 import { first } from '@shakala/shared';
+import { useInjection } from 'brandi-react';
 
 import { TOKENS } from '~/app/tokens';
 import { Link } from '~/elements/link';
@@ -13,6 +14,9 @@ export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 1)];
 export { ThreadsListPage as Page };
 
 const ThreadsListPage = () => {
+  const router = useInjection(TOKENS.router);
+  const thread = useInjection(TOKENS.thread);
+
   return (
     <>
       <h2>Psst... ce projet est en développement !</h2>
@@ -32,7 +36,11 @@ const ThreadsListPage = () => {
 
       <h2>Créer un nouveau fil de discussion</h2>
 
-      <ThreadForm />
+      <ThreadForm
+        submitButtonText="Créer"
+        onSubmit={(fields) => thread.createThread(fields)}
+        onSubmitted={(threadId) => router.navigate(`/discussions/${threadId}`)}
+      />
     </>
   );
 };

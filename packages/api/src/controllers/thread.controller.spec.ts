@@ -1,8 +1,9 @@
 import expect from '@nilscox/expect';
-import { CommentSort, CreateCommentBody, CreateThreadBody } from '@shakala/shared';
+import { CommentSort, CreateCommentBody, CreateOrEditThreadBody } from '@shakala/shared';
 import {
   createComment,
   createThread,
+  editThread,
   getLastThreads,
   GetLastThreadsResult,
   getThread,
@@ -31,7 +32,9 @@ describe('[intg] ThreadController', () => {
         description: 'description',
         keywords: ['key', 'word'],
         date: 'date',
+        edited: false,
         text: 'text',
+        totalComments: 0,
       },
     ];
 
@@ -58,7 +61,9 @@ describe('[intg] ThreadController', () => {
       description: 'description',
       keywords: ['key', 'word'],
       date: 'date',
+      edited: false,
       text: 'text',
+      totalComments: 0,
     };
 
     it('retrieves a thread from its id', async () => {
@@ -130,7 +135,7 @@ describe('[intg] ThreadController', () => {
   describe('POST /thread', () => {
     const route = '/thread';
 
-    const body: CreateThreadBody = {
+    const body: CreateOrEditThreadBody = {
       description: 'description',
       text: 'text',
       keywords: ['key', 'word'],
@@ -164,6 +169,40 @@ describe('[intg] ThreadController', () => {
 
     it('fails with status 400 when the body is invalid', async () => {
       await expect(test.asUser.post(route, {})).toHaveStatus(400);
+    });
+  });
+
+  describe('PUT /thread/:threadId', () => {
+    const route = '/thread/threadId';
+
+    const body: CreateOrEditThreadBody = {
+      description: 'updated description',
+      text: 'updated text',
+      keywords: ['updated', 'keywords'],
+    };
+
+    beforeEach(() => {
+      test.generator.nextId = 'threadId';
+    });
+
+    it('invokes the editThread command', async () => {
+      await expect(test.asUser.put(route, body)).toHaveStatus(204);
+
+      expect(test.commandBus).toInclude(
+        editThread({
+          threadId: 'threadId',
+          authorId: 'userId',
+          ...body,
+        })
+      );
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().put(route, body)).toHaveStatus(401);
+    });
+
+    it('fails with status 400 when the body is invalid', async () => {
+      await expect(test.asUser.put(route, {})).toHaveStatus(400);
     });
   });
 

@@ -5,6 +5,7 @@ export interface ThreadPort {
   getThread(threadId: string): Promise<Maybe<ThreadDto>>;
   getThreadComments(threadId: string, options?: GetThreadCommentsOptions): Promise<RootCommentDto[]>;
   createThread(fields: ThreadFormFields): Promise<string>;
+  editThread(threadId: string, fields: ThreadFormFields): Promise<void>;
 }
 
 export type GetThreadCommentsOptions = {
