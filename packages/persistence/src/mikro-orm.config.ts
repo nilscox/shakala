@@ -33,7 +33,8 @@ export default defineConfig<PostgreSqlDriver>({
     disableForeignKeys: false,
   },
   pool: {
-    max: 5,
+    min: 0,
+    max: 1,
   },
   driverOptions: {
     connection: {
