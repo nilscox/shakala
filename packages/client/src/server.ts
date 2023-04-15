@@ -25,6 +25,8 @@ main().catch(console.error);
 async function main() {
   const app = express();
 
+  app.use('/api', proxy(VITE_SERVER_API_URL));
+
   app.use(
     '/user/:userId/profile-image',
     proxy(VITE_SERVER_API_URL, { proxyReqPathResolver: (req) => req.originalUrl })
