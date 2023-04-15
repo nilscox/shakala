@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 app_name=
+service_name=
 
 repo=
 branch=
@@ -20,22 +21,21 @@ email_user=
 email_password=
 email_from=
 
-koyeb service create backend \
+koyeb service create "$service_name" \
   --app "$app_name" \
   --git "$repo" \
   --git-branch "$branch" \
-  --git-build-command 'pnpm run-one @shakala/backend-infrastructure build' \
-  --git-run-command 'node ./packages/3-backend-infrastructure/dist/main.js' \
-  --instance-type 'micro' \
+  --git-build-command 'rm -rf node_modules && curl -fsSL https://get.pnpm.io/install.sh | SHELL=sh ENV=~/.shrc sh && . ~/.shrc && pnpm install && pnpm run --filter @shakala/api build' \
+  --git-run-command 'curl -fsSL https://get.pnpm.io/install.sh | SHELL=sh ENV=~/.shrc sh && . ~/.shrc && NODE_ENV=production pnpm run --filter @shakala/api start' \
+  --instance-type micro \
   --min-scale 2 \
   --max-scale 2 \
-  --ports "$port":http \
+  --ports "$port:http" \
   --regions fra \
   --routes "/api:$port" \
-  --env NODE_ENV=production \
-  --env HOST=0.0.0.0 \
+  --env GITHUB_TOKEN="@github-token" \
+  --env HOST="0.0.0.0" \
   --env PORT="$port" \
-  --env GITHUB_TOKEN=@github-token \
   --env API_BASE_URL="$base_url/api" \
   --env APP_BASE_URL="$base_url" \
   --env SESSION_SECRET="$session_secret" \
@@ -43,10 +43,10 @@ koyeb service create backend \
   --env DATABASE_USER="$db_user" \
   --env DATABASE_PASSWORD="$db_password" \
   --env DATABASE_NAME="$db_name" \
-  --env DATABASE_DEBUG=false \
+  --env DATABASE_DEBUG="false" \
   --env EMAIL_HOST="$email_host" \
   --env EMAIL_PORT="$email_port" \
-  --env EMAIL_SECURE=true \
+  --env EMAIL_SECURE="true" \
   --env EMAIL_USER="$email_user" \
   --env EMAIL_PASSWORD="$email_password" \
   --env EMAIL_FROM="$email_from" \
