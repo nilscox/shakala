@@ -31,8 +31,8 @@ export const VerticalTab = ({ to, Icon, onClick, right, children }: VerticalTabP
   );
 
   const className = clsx(
-    'row my-0.5 items-center gap-1 py-0.5 px-2',
-    'transition-colors hover:bg-inverted/5',
+    'row my-0.5 w-full items-center gap-1 py-0.5 px-2',
+    'transition-colors hover:bg-muted/10',
     'rounded border-l-4 border-transparent'
   );
 
@@ -50,7 +50,7 @@ export const VerticalTab = ({ to, Icon, onClick, right, children }: VerticalTabP
       exact
       href={to}
       className={className}
-      activeClassName="!border-warning bg-inverted/5 font-semibold"
+      activeClassName="!border-primary bg-muted/10 font-semibold"
       onClick={onClick}
     >
       {kids}
