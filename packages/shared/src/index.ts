@@ -6,6 +6,7 @@ export * from './schemas/authentication';
 export * from './schemas/comment';
 export * from './schemas/common';
 export * from './schemas/thread';
+export * from './schemas/profile';
 
 export * from './types/any-function';
 export * from './types/class-type';

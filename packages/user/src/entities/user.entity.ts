@@ -15,6 +15,10 @@ export class User extends Entity<UserProps> {
     return this.props.nick;
   }
 
+  set nick(nick: Nick) {
+    this.props.nick = nick;
+  }
+
   get email() {
     return this.props.email;
   }

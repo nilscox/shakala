@@ -3,6 +3,7 @@ import {
   getUser,
   InvalidEmailValidationTokenError,
   listUserActivities,
+  updateUserProfile,
   validateUserEmail,
 } from '@shakala/user';
 import { beforeEach, describe, it } from 'vitest';
@@ -17,7 +18,7 @@ describe('[intg] AccountController', () => {
     test = await getTest();
   });
 
-  describe('/account', () => {
+  describe('GET /account', () => {
     const route = '/account';
 
     it("retrieves the authenticated user's profile", async () => {
@@ -29,7 +30,7 @@ describe('[intg] AccountController', () => {
     });
   });
 
-  describe('/account/activities', () => {
+  describe('GET /account/activities', () => {
     const route = '/account/activities';
 
     it("retrieves the authenticated user's activities", async () => {
@@ -62,7 +63,7 @@ describe('[intg] AccountController', () => {
     });
   });
 
-  describe('/account/validate-email/:token', () => {
+  describe('GET /account/validate-email/:token', () => {
     const route = (token: string) => `/account/validate-email/${token}`;
 
     it('invokes the validateUserEmail command', async () => {
@@ -95,6 +96,29 @@ describe('[intg] AccountController', () => {
 
     it('fails with status 401 when the user is not authenticated', async () => {
       await expect(test.createAgent().get(route('token'))).toHaveStatus(401);
+    });
+  });
+
+  describe('PUT /account/profile', () => {
+    const route = '/account/profile';
+
+    it('invokes the validateUserEmail command', async () => {
+      await expect(test.asUser.put(route, { nick: 'nick' })).toHaveStatus(204);
+
+      expect(test.commandBus).toInclude(
+        updateUserProfile({
+          userId: 'userId',
+          nick: 'nick',
+        })
+      );
+    });
+
+    it('fails with status 400 when the request body in invalid', async () => {
+      await expect(test.asUser.put(route, { nick: '' })).toHaveStatus(400);
+    });
+
+    it('fails with status 401 when the user is not authenticated', async () => {
+      await expect(test.createAgent().put(route)).toHaveStatus(401);
     });
   });
 });

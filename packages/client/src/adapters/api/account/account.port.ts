@@ -8,4 +8,5 @@ export interface AccountPort {
   getNotificationsCount(): Promise<number>;
   getNotifications(page?: number): Promise<Page<NotificationDto>>;
   markNotificationAsSeen(notificationId: string): Promise<void>;
+  changeNick(nick: string): Promise<void>;
 }

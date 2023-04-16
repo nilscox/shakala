@@ -5,6 +5,7 @@ import { GravatarProfileImageAdapter } from './adapters/profile-image/gravatar-p
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
+import { UpdateUserProfileHandler } from './commands/update-user-profile/update-user-profile';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { UserUserActivitiesHandler } from './event-handlers/create-user-activities/user-user-activities';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
@@ -36,6 +37,7 @@ module.bind(USER_TOKENS.commands.createUserHandler).toInstance(CreateUserHandler
 module.bind(USER_TOKENS.commands.createUserActivityHandler).toInstance(CreateUserActivityHandler).inSingletonScope();
 module.bind(USER_TOKENS.commands.checkUserPasswordHandler).toInstance(CheckUserPasswordHandler).inSingletonScope();
 module.bind(USER_TOKENS.commands.validateUserEmailHandler).toInstance(ValidateUserEmailHandler).inSingletonScope();
+module.bind(USER_TOKENS.commands.updateUserProfileHandler).toInstance(UpdateUserProfileHandler).inSingletonScope();
 
 module.bind(USER_TOKENS.queries.listUsersHandler).toInstance(ListUsersHandler).inSingletonScope();
 module.bind(USER_TOKENS.queries.listUserActivitiesHandler).toInstance(ListUserActivitiesHandler).inSingletonScope();

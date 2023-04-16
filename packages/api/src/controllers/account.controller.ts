@@ -1,12 +1,13 @@
 import assert from 'assert';
 
 import { CommandBus, QueryBus, TOKENS } from '@shakala/common';
-import { UserActivityDto, UserDto } from '@shakala/shared';
+import { updateUserProfileBodySchema, UserActivityDto, UserDto } from '@shakala/shared';
 import {
   getUser,
   InvalidEmailValidationTokenError,
-  validateUserEmail,
   listUserActivities,
+  updateUserProfile,
+  validateUserEmail,
 } from '@shakala/user';
 import { injected } from 'brandi';
 import { RequestHandler, Router } from 'express';
@@ -21,6 +22,7 @@ export class AccountController {
     this.router.get('/', isAuthenticated, this.getProfile);
     this.router.get('/activities', isAuthenticated, this.listActivities);
     this.router.get('/validate-email/:token', isAuthenticated, this.validateEmail);
+    this.router.put('/profile', isAuthenticated, this.updateProfile);
   }
 
   getProfile: RequestHandler<unknown, UserDto> = async (req, res) => {
@@ -49,6 +51,7 @@ export class AccountController {
     res.json(items);
   };
 
+  // todo: POST
   validateEmail: RequestHandler<{ token: string }> = async (req, res) => {
     assert(req.userId);
 
@@ -60,6 +63,7 @@ export class AccountController {
         })
       );
 
+      // todo: 204
       res.status(200);
       res.end();
     } catch (error) {
@@ -69,6 +73,22 @@ export class AccountController {
 
       throw error;
     }
+  };
+
+  updateProfile: RequestHandler = async (req, res) => {
+    assert(req.userId);
+
+    const body = await validateRequest(req).body(updateUserProfileBodySchema);
+
+    await this.commandBus.execute(
+      updateUserProfile({
+        userId: req.userId,
+        ...body,
+      })
+    );
+
+    res.status(204);
+    res.end();
   };
 }
 

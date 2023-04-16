@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { cloneElement, ReactElement, ReactNode } from 'react';
+import { cloneElement, ReactElement, ReactNode, useRef } from 'react';
 
 import { useId } from '../hooks/use-id';
 
@@ -58,6 +58,13 @@ type FieldProps = Pick<FormFieldProps, 'name' | 'error' | 'children' | 'after'> 
 };
 
 const Field = ({ id, name, error, children, after }: FieldProps) => {
+  // avoid re-rendering when after changes
+  const hasAfter = useRef(false);
+
+  if (after) {
+    hasAfter.current = true;
+  }
+
   const field = cloneElement(children as ReactElement, {
     name,
     id,
@@ -66,7 +73,7 @@ const Field = ({ id, name, error, children, after }: FieldProps) => {
     'aria-errormessage': error ? `${id}-error` : undefined,
   });
 
-  if (!after) {
+  if (!hasAfter.current) {
     return field;
   }
 

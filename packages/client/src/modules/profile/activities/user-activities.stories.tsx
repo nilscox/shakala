@@ -4,6 +4,8 @@ import { stub } from 'sinon';
 
 import { UserActivities } from './user-activities';
 
+// cspell:word tizote
+
 export default {
   title: 'Domain/UserActivities',
 } satisfies Meta;
@@ -45,6 +47,14 @@ const activities = [
   createUserActivityDto({
     type: UserActivityType.signIn,
     date: date(),
+  }),
+  createUserActivityDto({
+    type: UserActivityType.nickChanged,
+    date: date(),
+    payload: {
+      oldValue: 'Biloute',
+      newValue: 'Tizote',
+    },
   }),
   // createUserActivityDto({
   //   type: UserActivityType.profileImageChanged,

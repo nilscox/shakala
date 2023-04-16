@@ -14,7 +14,7 @@ export const ProfileTitle = ({ title, subTitle, pageTitle }: ProfileTitleProps) 
     <div className="mb-4 md:mt-4 md:mb-6">
       <h2 className="leading-4 text-inherit">{title}</h2>
       <div className="text-sm font-medium text-muted">{subTitle}</div>
-      <PageTitle>{`profil de ${user?.nick}${pageTitle ? ` : ${pageTitle}` : ''}`}</PageTitle>
+      <PageTitle>{`Profil de ${user?.nick}${pageTitle ? ` : ${pageTitle}` : ''}`}</PageTitle>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { DomainEvent } from '../ddd/domain-event';
+import { AnyDomainEvent } from '../ddd/domain-event';
 
-export interface EventHandler<Event extends DomainEvent> {
+export interface EventHandler<Event extends AnyDomainEvent> {
   handle(event: Event): Promise<void>;
 }

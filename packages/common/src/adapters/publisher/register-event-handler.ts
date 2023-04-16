@@ -2,11 +2,11 @@ import { ClassType } from '@shakala/shared';
 import { Token } from 'brandi';
 
 import { EventHandler } from '../../cqs/event-handler';
-import { DomainEvent } from '../../ddd/domain-event';
+import { AnyDomainEvent } from '../../ddd/domain-event';
 
-const eventHandlers = new Map<ClassType<DomainEvent>, Token<EventHandler<DomainEvent>>[]>();
+const eventHandlers = new Map<ClassType<AnyDomainEvent>, Token<EventHandler<AnyDomainEvent>>[]>();
 
-export const registerEventHandler = <Event extends DomainEvent>(
+export const registerEventHandler = <Event extends AnyDomainEvent>(
   EventClass: ClassType<Event>,
   handlerToken: Token<EventHandler<Event>>
 ) => {

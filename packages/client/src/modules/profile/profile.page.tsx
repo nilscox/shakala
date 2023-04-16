@@ -1,11 +1,16 @@
 import { defined } from '@shakala/shared';
-import { FormEventHandler, useRef } from 'react';
+import { useInjection } from 'brandi-react';
+import { FormEventHandler, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { Button, SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
 import { ExternalLink } from '~/elements/link';
+import { useInvalidateQuery } from '~/hooks/use-query';
+import { useSubmit } from '~/hooks/use-submit';
 import { useUser } from '~/hooks/use-user';
+import { getQueryKey } from '~/utils/query-key';
 import { withPreventDefault } from '~/utils/with-prevent-default';
 
 import { ProfileTitle } from './profile-title';
@@ -34,15 +39,42 @@ const ProfileFormField = (props: React.ComponentProps<typeof FormField>) => (
 const NickForm = () => {
   const user = defined(useUser());
 
+  const form = useForm<{ nick: string }>({
+    defaultValues: { nick: user.nick },
+  });
+
+  useEffect(() => {
+    form.reset({ nick: user.nick });
+  }, [form, user]);
+
+  const invalidate = useInvalidateQuery();
+
+  const accountAdapter = useInjection(TOKENS.account);
+  const changeNick = useSubmit(form, ({ nick }) => accountAdapter.changeNick(nick), {
+    onSuccess: () => invalidate(getQueryKey(TOKENS.authentication, 'getAuthenticatedUser')),
+  });
+
   return (
-    <form onSubmit={withPreventDefault(() => console.log('change nick'))}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form onSubmit={form.handleSubmit(changeNick)}>
       <ProfileFormField
         name="nick"
         label="Votre pseudo"
         description="Le nom sous lequel vous apparaissez"
-        after={<SubmitButton secondary>Changer</SubmitButton>}
+        after={
+          form.formState.isDirty && (
+            <SubmitButton secondary loading={form.formState.isSubmitting}>
+              Changer
+            </SubmitButton>
+          )
+        }
+        error={form.formState.errors.nick?.message}
+        errorsMap={{
+          min: 'Ce pseudo est trop court',
+          max: 'Ce pseudo est trop long',
+        }}
       >
-        <Input defaultValue={user.nick} placeholder="pseudo" className="max-w-1 flex-1" />
+        <Input placeholder="pseudo" className="max-w-1 flex-1" {...form.register('nick')} />
       </ProfileFormField>
     </form>
   );
@@ -51,15 +83,30 @@ const NickForm = () => {
 const EmailForm = () => {
   const user = defined(useUser());
 
+  const form = useForm<{ email: string }>({
+    defaultValues: { email: user.email },
+  });
+
+  useEffect(() => {
+    form.reset({ email: user.email });
+  }, [form, user]);
+
   return (
-    <form onSubmit={withPreventDefault(() => console.log('change email'))}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form onSubmit={form.handleSubmit(() => console.log('change email'))}>
       <ProfileFormField
         name="email"
         label="Adresse email"
         description="L'adresse que vous utilisez pour vous connecter"
-        after={<SubmitButton secondary>Changer</SubmitButton>}
+        after={
+          form.formState.isDirty && (
+            <SubmitButton secondary loading={form.formState.isSubmitting}>
+              Changer
+            </SubmitButton>
+          )
+        }
       >
-        <Input defaultValue={user.email} placeholder="votre@adresse.email" className="max-w-1 flex-1" />
+        <Input placeholder="votre@adresse.email" className="max-w-1 flex-1" {...form.register('email')} />
       </ProfileFormField>
     </form>
   );

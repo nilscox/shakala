@@ -41,6 +41,10 @@ export class ApiAccountAdapter implements AccountPort {
   async markNotificationAsSeen(notificationId: string): Promise<void> {
     await this.http.put(`/notification/${notificationId}/seen`);
   }
+
+  async changeNick(nick: string): Promise<void> {
+    await this.http.put('/account/profile', { nick });
+  }
 }
 
 injected(ApiAccountAdapter, TOKENS.http);

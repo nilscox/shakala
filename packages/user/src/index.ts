@@ -6,6 +6,8 @@ export {
 export { createUser } from './commands/create-user/create-user';
 export { createUserActivity } from './commands/create-user-activity/create-user-activity';
 
+export { updateUserProfile } from './commands/update-user-profile/update-user-profile';
+
 export {
   validateUserEmail,
   InvalidEmailValidationTokenError,

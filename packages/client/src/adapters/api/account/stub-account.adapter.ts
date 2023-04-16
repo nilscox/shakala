@@ -8,4 +8,5 @@ export class StubAccountAdapter implements AccountPort {
   getNotificationsCount = stub<AccountPort['getNotificationsCount']>();
   getNotifications = stub<AccountPort['getNotifications']>();
   markNotificationAsSeen = stub<AccountPort['markNotificationAsSeen']>();
+  changeNick = stub<AccountPort['changeNick']>();
 }

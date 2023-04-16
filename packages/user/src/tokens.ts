@@ -4,6 +4,7 @@ import { ProfileImagePort } from './adapters/profile-image/profile-image.port';
 import { CheckUserPasswordHandler } from './commands/check-user-password/check-user-password';
 import { CreateUserHandler } from './commands/create-user/create-user';
 import { CreateUserActivityHandler } from './commands/create-user-activity/create-user-activity';
+import { UpdateUserProfileHandler } from './commands/update-user-profile/update-user-profile';
 import { ValidateUserEmailHandler } from './commands/validate-user-email/validate-user-email';
 import { UserUserActivitiesHandler } from './event-handlers/create-user-activities/user-user-activities';
 import { SendEmailToCreatedUserHandler } from './event-handlers/send-email-to-created-user/send-email-to-created-user';
@@ -27,6 +28,7 @@ export const USER_TOKENS = {
     createUserActivityHandler: token<CreateUserActivityHandler>('createUserActivityHandler'),
     checkUserPasswordHandler: token<CheckUserPasswordHandler>('checkUserPasswordHandler'),
     validateUserEmailHandler: token<ValidateUserEmailHandler>('validateUserEmailHandler'),
+    updateUserProfileHandler: token<UpdateUserProfileHandler>('updateUserProfileHandler'),
   },
   queries: {
     listUsersHandler: token<ListUsersHandler>('listUsersHandler'),

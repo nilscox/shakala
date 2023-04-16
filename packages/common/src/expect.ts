@@ -1,12 +1,12 @@
 import '@nilscox/expect';
 
-import { DomainEvent } from './ddd/domain-event';
+import { AnyDomainEvent } from './ddd/domain-event';
 import { StubEventPublisher } from './utils/stub-event-publisher';
 
 declare global {
   namespace Expect {
     export interface EventPublisherAssertions extends ObjectAssertions<StubEventPublisher> {
-      toHavePublished<Event extends DomainEvent>(event: Event): Event;
+      toHavePublished<Event extends AnyDomainEvent>(event: Event): Event;
     }
 
     export interface Assertions extends EventPublisherAssertions {}

@@ -1,5 +1,11 @@
-import { DomainEvent } from '../ddd/domain-event';
+import { AnyDomainEvent } from '../ddd/domain-event';
+
+export interface TransactionalEventPublisher {
+  addEvent(event: AnyDomainEvent): void;
+  commit(): void;
+}
 
 export interface EventPublisher {
-  publish(event: DomainEvent): void;
+  publish(event: AnyDomainEvent): void;
+  begin(): TransactionalEventPublisher;
 }
