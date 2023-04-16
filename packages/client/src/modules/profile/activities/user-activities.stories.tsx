@@ -56,11 +56,6 @@ const activities = [
       newValue: 'Tizote',
     },
   }),
-  // createUserActivityDto({
-  //   type: UserActivityType.profileImageChanged,
-  //   date: date(),
-  //   payload: { image: '' },
-  // }),
   createUserActivityDto({
     type: UserActivityType.threadCreated,
     date: date(),

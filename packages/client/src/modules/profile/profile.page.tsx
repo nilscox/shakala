@@ -1,9 +1,9 @@
 import { defined } from '@shakala/shared';
 import { useInjection } from 'brandi-react';
-import { FormEventHandler, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { FieldValues, FormState, useForm } from 'react-hook-form';
 
-import { Button, SubmitButton } from '~/elements/button';
+import { SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
 import { ExternalLink } from '~/elements/link';
@@ -26,14 +26,32 @@ const ProfilePage = () => (
     <div className="col gap-6">
       <NickForm />
       <EmailForm />
-      <ProfileImageForm />
+      <ProfileImage />
       <BioForm />
     </div>
   </>
 );
 
-const ProfileFormField = (props: React.ComponentProps<typeof FormField>) => (
-  <FormField consistentErrorHeight={false} className="col gap-1" {...props} />
+type ProfileFormFieldProps = React.ComponentProps<typeof FormField> & {
+  formState: FormState<FieldValues>;
+};
+
+const ProfileFormField = ({ formState, ...props }: ProfileFormFieldProps) => (
+  <FormField
+    consistentErrorHeight={false}
+    className="col gap-1"
+    // keep the fragment to avoid re-rendering the field and loose focus
+    after={
+      <>
+        {formState.isDirty && (
+          <SubmitButton secondary loading={formState.isSubmitting}>
+            Changer
+          </SubmitButton>
+        )}
+      </>
+    }
+    {...props}
+  />
 );
 
 const NickForm = () => {
@@ -61,13 +79,7 @@ const NickForm = () => {
         name="nick"
         label="Votre pseudo"
         description="Le nom sous lequel vous apparaissez"
-        after={
-          form.formState.isDirty && (
-            <SubmitButton secondary loading={form.formState.isSubmitting}>
-              Changer
-            </SubmitButton>
-          )
-        }
+        formState={form.formState}
         error={form.formState.errors.nick?.message}
         errorsMap={{
           min: 'Ce pseudo est trop court',
@@ -98,13 +110,7 @@ const EmailForm = () => {
         name="email"
         label="Adresse email"
         description="L'adresse que vous utilisez pour vous connecter"
-        after={
-          form.formState.isDirty && (
-            <SubmitButton secondary loading={form.formState.isSubmitting}>
-              Changer
-            </SubmitButton>
-          )
-        }
+        formState={form.formState}
       >
         <Input placeholder="votre@adresse.email" className="max-w-1 flex-1" {...form.register('email')} />
       </ProfileFormField>
@@ -112,58 +118,29 @@ const EmailForm = () => {
   );
 };
 
-const ProfileImageForm = () => {
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    const form = new FormData(event.currentTarget);
-    const image = form.get('profileImage') as File;
+const ProfileImage = () => (
+  <div>
+    <div className="font-semibold text-muted">Image de profil</div>
 
-    // todo: profile image upload
-    image;
-  };
-
-  const formRef = useRef<HTMLFormElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const submitRef = useRef<HTMLButtonElement>(null);
-
-  return (
-    <form ref={formRef} onSubmit={withPreventDefault(handleSubmit)}>
-      <ProfileFormField name="profile-image" label="Image de profile" className="hidden">
-        <Button primary className="self-start bg-muted" onClick={() => inputRef.current?.click()}>
-          Choisir un fichier...
-        </Button>
-      </ProfileFormField>
-
-      <div className="font-semibold text-muted">Image de profil</div>
-
-      <p className="max-w-4 border-l-4 pl-2 text-sm text-muted">
-        Les images de profil sont gérées par <ExternalLink href="https://gravatar.com">gravatar</ExternalLink>
-        . Pour changer la votre, vous devez créer un compte sur gravatar avec l'adresse email utilisée sur
-        Shakala.
-      </p>
-
-      <input
-        ref={inputRef}
-        type="file"
-        name="profileImage"
-        className="hidden"
-        onChange={() => submitRef.current?.click()}
-      />
-
-      <button ref={submitRef} type="submit" className="hidden" />
-    </form>
-  );
-};
+    <p className="max-w-4 border-l-4 pl-2 text-sm text-muted">
+      Les images de profil sont gérées par <ExternalLink href="https://gravatar.com">gravatar</ExternalLink>.
+      Pour la changer, vous devez créer un compte sur gravatar avec l'adresse email utilisée sur Shakala.
+    </p>
+  </div>
+);
 
 const BioForm = () => {
   return (
     <form className="col" onSubmit={withPreventDefault(() => console.log('change bio'))}>
-      <ProfileFormField
+      <FormField
         name="bio"
         label="Bio"
         description="Quelques mots à propos de vous, visible publiquement"
+        className="col gap-1"
+        consistentErrorHeight={false}
       >
         <textarea rows={3} className="w-full rounded border p-1" />
-      </ProfileFormField>
+      </FormField>
 
       <p className="my-0 text-xs text-muted">La première ligne sera affichée sous votre pseudo</p>
 

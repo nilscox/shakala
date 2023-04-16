@@ -28,7 +28,6 @@ export enum UserActivityType {
   signOut = 'signOut',
   emailAddressValidated = 'emailAddressValidated',
   nickChanged = 'nickChanged',
-  // profileImageChanged = 'profileImageChanged',
   threadCreated = 'threadCreated',
   rootCommentCreated = 'rootCommentCreated',
   replyCreated = 'replyCreated',
