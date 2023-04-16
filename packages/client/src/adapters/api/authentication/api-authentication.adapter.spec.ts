@@ -19,7 +19,9 @@ describe('ApiAuthenticationAdapter', () => {
     it("fetches the authenticated user's account information", async () => {
       const user = createUserDto();
 
-      http.response = { body: user };
+      http.response = {
+        body: user,
+      };
 
       await expect(adapter.getAuthenticatedUser()).toResolve(user);
 
@@ -27,7 +29,9 @@ describe('ApiAuthenticationAdapter', () => {
     });
 
     it('returns undefined when the user is not authenticated', async () => {
-      http.response = { status: 401 };
+      http.response = {
+        status: 401,
+      };
 
       await expect(adapter.getAuthenticatedUser()).toResolve(undefined);
     });
@@ -35,7 +39,9 @@ describe('ApiAuthenticationAdapter', () => {
 
   describe('signUp', () => {
     it('signs up', async () => {
-      http.response = { body: createUserDto() };
+      http.response = {
+        body: createUserDto(),
+      };
 
       await expect(adapter.signUp('nick', 'email', 'password')).toResolve();
 
@@ -47,7 +53,9 @@ describe('ApiAuthenticationAdapter', () => {
     });
 
     it('handles AlreadyAuthenticated error', async () => {
-      http.error = { code: 'UnauthorizedError' };
+      http.error = {
+        body: { code: 'UnauthorizedError' },
+      };
 
       await expect(adapter.signUp('nick', 'email', 'password')).toReject(new Error('AlreadyAuthenticated'));
     });
@@ -55,7 +63,9 @@ describe('ApiAuthenticationAdapter', () => {
 
   describe('signIn', () => {
     it('signs in', async () => {
-      http.response = { body: createUserDto() };
+      http.response = {
+        body: createUserDto(),
+      };
 
       await expect(adapter.signIn('email', 'password')).toResolve();
 
@@ -67,13 +77,17 @@ describe('ApiAuthenticationAdapter', () => {
     });
 
     it('handles InvalidCredentials error', async () => {
-      http.error = { code: 'InvalidCredentialsError' };
+      http.error = {
+        body: { code: 'InvalidCredentialsError' },
+      };
 
       await expect(adapter.signIn('email', 'password')).toReject(new Error('InvalidCredentials'));
     });
 
     it('handles AlreadyAuthenticated error', async () => {
-      http.error = { code: 'UnauthorizedError' };
+      http.error = {
+        body: { code: 'UnauthorizedError' },
+      };
 
       await expect(adapter.signIn('email', 'password')).toReject(new Error('AlreadyAuthenticated'));
     });

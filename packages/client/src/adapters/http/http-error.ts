@@ -13,7 +13,7 @@ export class HttpError extends Error {
 
     if (HttpError.isApplicationErrorBody(body)) {
       this.code = body.code;
-      this.message = body.message;
+      this.message = body.message ?? this.message;
       this.details = body.details;
     }
   }
@@ -24,7 +24,7 @@ export class HttpError extends Error {
 
   private static errorResponseBodySchema = yup.object({
     code: yup.string().required(),
-    message: yup.string().required(),
+    message: yup.string(),
     details: yup.object(),
   });
 

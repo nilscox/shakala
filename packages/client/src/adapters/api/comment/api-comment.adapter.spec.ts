@@ -17,7 +17,9 @@ describe('ApiCommentAdapter', () => {
 
   describe('getComment', () => {
     it('retrieves an existing comment', async () => {
-      http.response = { body: { id: 'commentId' } };
+      http.response = {
+        body: { id: 'commentId' },
+      };
 
       await expect(adapter.getComment('commentId')).toResolve(expect.objectWith({ id: 'commentId' }));
 
@@ -27,7 +29,9 @@ describe('ApiCommentAdapter', () => {
 
   describe('createComment', () => {
     it('creates a new comment', async () => {
-      http.response = { body: 'commentId' };
+      http.response = {
+        body: 'commentId',
+      };
 
       await expect(adapter.createComment('threadId', 'text')).toResolve('commentId');
 
@@ -41,7 +45,9 @@ describe('ApiCommentAdapter', () => {
 
   describe('createReply', () => {
     it('creates a new reply', async () => {
-      http.response = { body: 'replyId' };
+      http.response = {
+        body: 'replyId',
+      };
 
       await expect(adapter.createReply('parentId', 'text')).toResolve('replyId');
 
@@ -67,8 +73,7 @@ describe('ApiCommentAdapter', () => {
     });
 
     it('handles UserMustBeAuthorError', async () => {
-      http.response = {
-        status: 403,
+      http.error = {
         body: { code: 'UserMustBeAuthorError' },
       };
 
@@ -92,7 +97,9 @@ describe('ApiCommentAdapter', () => {
     });
 
     it('unsets a reaction to a comment', async () => {
-      http.response = { body: { type: null } };
+      http.response = {
+        body: { type: null },
+      };
 
       await expect(adapter.setReaction('commentId', null)).toResolve();
 
@@ -144,7 +151,9 @@ describe('ApiCommentAdapter', () => {
     });
 
     it('reports a comment with a message', async () => {
-      http.response = { body: { reason: 'reason' } };
+      http.response = {
+        body: { reason: 'reason' },
+      };
 
       await expect(adapter.reportComment('commentId', 'reason')).toResolve();
 
@@ -156,7 +165,9 @@ describe('ApiCommentAdapter', () => {
     });
 
     it('does not fail when the comment was already reported', async () => {
-      http.error = { code: 'CommentAlreadyReportedError' };
+      http.error = {
+        body: { code: 'CommentAlreadyReportedError' },
+      };
 
       await expect(adapter.reportComment('commentId')).toResolve();
     });

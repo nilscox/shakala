@@ -34,7 +34,12 @@ describe('ThreadForm', () => {
     await user.type(fields.text(), 'text');
     await user.click(fields.submit('submit'));
 
-    expect(onSubmit).calledWith('description', 'key words', 'text');
+    expect(onSubmit).calledWith({
+      description: 'description',
+      keywords: 'key words',
+      // todo: custom comparator
+      text: expect.stringMatching(/text/),
+    });
   });
 
   it.skip('displays the field errors', async () => {

@@ -1,6 +1,4 @@
-import util from 'node:util';
-
-import { removeUndefinedValues } from '@shakala/shared';
+import { assert, removeUndefinedValues } from '@shakala/shared';
 
 import { HttpError } from './http-error';
 import { HttpMethod, HttpPort, HttpRequest, HttpResponse, RequestOptions } from './http.port';
@@ -15,8 +13,8 @@ export class StubHttpAdapter implements HttpPort {
     this.responses.push(response);
   }
 
-  set error(error: Partial<HttpError>) {
-    this.responses.push(Object.assign(new HttpError(null as never, { status: 500 } as never), error));
+  set error(response: Partial<HttpResponse>) {
+    this.responses.push({ status: 500, ...response });
   }
 
   async get<ResponseBody>(
@@ -49,29 +47,31 @@ export class StubHttpAdapter implements HttpPort {
       })
     );
 
-    const response: HttpResponse = {
-      status: 200,
-      body: undefined,
-      headers: new Headers(),
-    };
+    const response = this.getNextResponse();
 
-    const result = this.responses.pop();
+    if (Math.floor(response.status / 100) !== 2) {
+      const error = new HttpError(request, response);
 
-    if (!result) {
-      throw new Error(`StubHttpAdapter: no response for request ${util.inspect(request)}`);
-    }
-
-    if (result instanceof HttpError) {
       if (options?.onError) {
-        response.body = options.onError(result);
+        response.body = options.onError(error);
       } else {
-        throw result;
+        throw error;
       }
     }
 
+    return response;
+  }
+
+  private getNextResponse(): HttpResponse<unknown> {
+    const response = this.responses.pop();
+
+    assert(response, 'StubHttpAdapter: no next response');
+
     return {
+      status: 200,
+      body: undefined,
+      headers: new Headers(),
       ...response,
-      ...result,
     };
   }
 }
