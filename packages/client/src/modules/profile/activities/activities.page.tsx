@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
 import { TOKENS } from '~/app/tokens';
-import { useQuery } from '~/hooks/use-query';
+import { usePaginatedQuery } from '~/hooks/use-query';
 import { prefetchQuery } from '~/utils/prefetch-query';
 import { withSuspense } from '~/utils/with-suspense';
 
@@ -28,15 +26,11 @@ const TimelinePage = () => (
 );
 
 const Activities = withSuspense(() => {
-  const [page, setPage] = useState(1);
-  const { items: activities, total } = useQuery(TOKENS.account, 'getUserActivities', page);
-
-  return (
-    <UserActivities
-      activities={activities}
-      hasMore={activities.length < total}
-      loadMore={() => setPage(page + 1)}
-      loading={false}
-    />
+  const [activities, { hasMore, loadMore }] = usePaginatedQuery(
+    TOKENS.account,
+    'getUserActivities',
+    (page) => [page] as [number]
   );
+
+  return <UserActivities activities={activities} hasMore={hasMore} loadMore={loadMore} loading={false} />;
 }, 'Activities');

@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
 import { Fallback } from '~/elements/fallback';
-import { useQuery } from '~/hooks/use-query';
+import { usePaginatedQuery } from '~/hooks/use-query';
 import { prefetchQuery } from '~/utils/prefetch-query';
 import { withSuspense } from '~/utils/with-suspense';
 
@@ -23,20 +21,17 @@ const NotificationPage = () => (
 );
 
 const NotificationsList = withSuspense(() => {
-  const [page, setPage] = useState(1);
-  const { items: notifications, total } = useQuery(TOKENS.account, 'getNotifications', page);
+  const [notifications, { hasMore, loadMore }] = usePaginatedQuery(
+    TOKENS.account,
+    'getNotifications',
+    (page) => [page] as [number]
+  );
 
   if (notifications.length === 0) {
     return <NoNotifications />;
   }
 
-  return (
-    <Notifications
-      notifications={notifications}
-      hasMore={notifications.length < total}
-      loadMore={() => setPage(page + 1)}
-    />
-  );
+  return <Notifications notifications={notifications} hasMore={hasMore} loadMore={loadMore} />;
 }, 'NotificationsList');
 
 const NoNotifications = () => {
