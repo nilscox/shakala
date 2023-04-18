@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "test": "NODE_NO_WARNINGS=1 NODE_ENV=test vitest",
     "storybook": "storybook dev -p 6006 --ci",
-    "bulid-storybook": "storybook build"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@fontsource/open-sans": "^4.5.14",
