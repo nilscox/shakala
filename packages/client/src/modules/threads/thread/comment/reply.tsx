@@ -78,6 +78,7 @@ const ReplyEditionForm = ({ reply, onClose }: ReplyEditionFormProps) => {
         <EditorToolbar editor={editor} />
       </div>
 
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="ml-[0.6rem] border-l-4 pl-2">
         <RichTextEditor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
       </div>

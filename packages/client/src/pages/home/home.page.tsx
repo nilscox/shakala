@@ -47,7 +47,7 @@ const Outline = () => (
   <div className="my-8 md:my-12">
     <div className="my-8 text-xxl font-medium text-primary md:px-12">Musclez votre esprit critique 💪🧠</div>
     <div className="md:row flex flex-col-reverse items-center gap-4">
-      {/* // eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <PublicDiscussion className="max-w-1 text-[#334662] md:max-w-[30rem]" />
 
       <div className="flex-1">

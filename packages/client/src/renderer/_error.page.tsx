@@ -16,14 +16,14 @@ const ErrorPage = ({ is404 }: ErrorPagePros) => {
 
 const UnexpectedError = () => (
   <Fallback>
-    <div className="text-xxl border-b-4 mb-6">500</div>
+    <div className="mb-6 border-b-4 text-xxl">500</div>
     <div>Tout ne s'est pas passé come prévu...</div>
   </Fallback>
 );
 
 const NotFound = () => (
   <Fallback>
-    <div className="text-xxl border-b-4 mb-6">404</div>
+    <div className="mb-6 border-b-4 text-xxl">404</div>
     <div>Cette page n'existe pas</div>
   </Fallback>
 );

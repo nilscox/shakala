@@ -1,3 +1,4 @@
+import expect from '@nilscox/expect';
 import { BaseError, StubQueryBus, TOKENS } from '@shakala/common';
 import { getUser } from '@shakala/user';
 import cookieParser from 'cookie-parser';
@@ -6,7 +7,6 @@ import express, { NextFunction, Request, RequestHandler, Response } from 'expres
 import { afterEach, beforeEach, describe, it } from 'vitest';
 
 import { container } from '../container';
-import expect from '@nilscox/expect';
 import { FetchAgent } from '../tests/fetch-agent';
 import { jwt } from '../utils/jwt';
 

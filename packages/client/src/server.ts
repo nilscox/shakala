@@ -36,6 +36,7 @@ async function main() {
   app.use(cookieParser());
 
   if (prod) {
+    // eslint-disable-next-line import/no-named-as-default-member
     app.use(express.static(path.join(root, 'dist', 'client')));
   } else {
     const vite = await import('vite');
