@@ -9,7 +9,7 @@ type LinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   keepScrollPosition?: boolean;
 };
 
-export const Link = ({ href, openInNewTab, onClick, children, keepScrollPosition, ...props }: LinkProps) => (
+export const Link = ({ href, openInNewTab, children, keepScrollPosition, ...props }: LinkProps) => (
   // eslint-disable-next-line react/jsx-no-target-blank
   <a
     href={href}
@@ -60,8 +60,12 @@ export const SearchParamLink = ({ param, value, disabled, ...props }: SearchPara
   return <Link keepScrollPosition href={[pathname, searchParams].join('?')} {...props} />;
 };
 
-export const ExternalLink = ({ children, ...props }: HTMLProps<HTMLAnchorElement>) => (
-  <a rel="external noreferrer" {...props}>
+type ExternalLinkProps = HTMLProps<HTMLAnchorElement> & {
+  openInNewTab?: boolean;
+};
+
+export const ExternalLink = ({ openInNewTab, children, ...props }: ExternalLinkProps) => (
+  <a rel="external noreferrer" target={openInNewTab ? '_blank' : undefined} {...props}>
     {children}
   </a>
 );

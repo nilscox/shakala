@@ -1,8 +1,11 @@
+import clsx from 'clsx';
+
 import { TOKENS } from '~/app/tokens';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
-import { Link } from '~/elements/link';
+import { ExternalLink, Link, SearchParamLink } from '~/elements/link';
 import { RichText } from '~/elements/rich-text';
 import { useQuery } from '~/hooks/use-query';
+import IconArrowDown from '~/icons/arrow-down.svg';
 import CommunityIcon from '~/icons/community.svg';
 import EditIcon from '~/icons/edit.svg';
 import FormatIcon from '~/icons/format.svg';
@@ -10,12 +13,17 @@ import SearchIcon from '~/icons/search.svg';
 import SortIcon from '~/icons/sort.svg';
 import SubscribeIcon from '~/icons/subscribe.svg';
 import TrophyIcon from '~/icons/trophy.svg';
-import imageCharte from '~/images/charte.png';
-import imageIndépendance from '~/images/indépendance.png';
-import imageModeration from '~/images/moderation.png';
 import { useValidateEmail } from '~/modules/authentication/email-validation/use-validate-email';
+import { AuthForm } from '~/modules/authentication/types';
 import { prefetchQuery } from '~/utils/prefetch-query';
 import { withSuspense } from '~/utils/with-suspense';
+
+import Authentication from './images/authentication.svg';
+import Direction from './images/direction.svg';
+import Online from './images/online.svg';
+import PairProgramming from './images/pair-programming.svg';
+import PublicDiscussion from './images/public-discussion.svg';
+import StandOut from './images/stand-out.svg';
 
 export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 3)];
 
@@ -29,25 +37,40 @@ const HomePage = () => {
       <Outline />
       <LastThreads />
       <Motivations />
-      <KeyFeatures />
+      <Features />
       <CurrentStatus />
-      <TargetUsers />
     </>
   );
 };
-
+``;
 const Outline = () => (
-  <div className="my-8 mx-4 md:my-12 md:mx-10">
-    <div className="my-6 px-8 text-center text-xl">
-      Vous rêvez de pouvoir discuter des sujets qui vous tiennent à cœur dans de « bonnes conditions » ?
-    </div>
-    <div className="text-lg">
-      <p>Et bien c'est le but de ce site 😊</p>
-      <p>
-        Sur Shakala, vous pouvez participer à des discussions où chacun s'engage à respecter{' '}
-        <Link href="/charte">une charte</Link>, un ensemble de règles pensées pour favoriser{' '}
-        <strong>des échanges critiques et bienveillants</strong>.
-      </p>
+  <div className="my-8 md:my-12">
+    <div className="my-8 px-12 text-xxl font-medium text-primary">Musclez votre esprit critique 💪🧠</div>
+    <div className="row items-center gap-4">
+      {/* // eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+      <PublicDiscussion className="max-w-[30rem] text-[#334662]" />
+
+      <div className="flex-1">
+        <p className="text-lg">
+          Shakala, c'est comme une salle de sport, mais <strong>pour le cerveau</strong>.
+        </p>
+
+        <p>
+          C'est <em>un espace d'échanges critiques</em>, où vous pouvez discuter des sujets qui vous tiennent
+          à cœur avec des personnes qui partagent vos centres d'intérêts... mais peut-être pas vos opinions !
+        </p>
+
+        <Link
+          href="#shakala-en-cinq-questions"
+          className="row"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('shakala-en-cinq-questions')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          En savoir plus <IconArrowDown className="ml-0.5" />
+        </Link>
+      </div>
     </div>
   </div>
 );
@@ -58,7 +81,7 @@ type HeadingProps = {
 };
 
 const Heading = ({ id, children }: HeadingProps) => (
-  <div className="mt-10 mb-4 flex flex-row items-center gap-4">
+  <div className="row items-center gap-4">
     <h2 id={id} className="py-0 text-primary">
       {children}
     </h2>
@@ -77,12 +100,13 @@ const LastThreads = withSuspense(() => {
     <>
       <Heading id="dernières-discussions">Dernières discussions</Heading>
 
-      <div className="my-5 grid grid-cols-1 gap-5 md:grid-cols-3">
+      <div className="my-10 grid grid-cols-1 gap-5 md:grid-cols-3">
         {threads.map((thread) => (
           <div key={thread.id} className="card relative overflow-hidden p-4">
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
-            <RichText className="text-sm line-clamp-6">{thread.text}</RichText>
+            <div className="mb-2 text-sm font-semibold text-muted line-clamp-2">{thread.description}</div>
+            <RichText className="text-sm line-clamp-5">{thread.text}</RichText>
             {/* avoid having a interactive contents within the link */}
             <Link href={`/discussions/${thread.id}`} className="absolute inset-0" />
           </div>
@@ -94,59 +118,135 @@ const LastThreads = withSuspense(() => {
 
 const Motivations = () => (
   <>
-    <Heading id="pourquoi-ce-site">Pourquoi ce site ?</Heading>
+    <Heading id="shakala-en-cinq-questions">Shakala en 5 questions</Heading>
 
-    {/* cspell:word pfff */}
-    <p className="m-10 text-lg">
-      Vous-êtes vous déjà dit <em>"Pfff... les gens sur internet quoi... 🤦" ?</em>
-    </p>
+    <Question Image={Online} layout="row">
+      <p id="pourquoi-ce-site-existe-t-il" className="text-lg font-semibold">
+        1. Pourquoi ce site existe-t-il ?
+      </p>
 
-    <div className="flex flex-col md:flex-row">
-      <div className="mb-2 flex-1 border-b pb-2 md:mr-2 md:mb-0 md:border-r md:border-b-0 md:pr-2 md:pb-0">
-        <p>
-          Depuis quelques dizaines d'années, la digitalisation des modes de communication a enclenché une
-          vraie <a href="https://fr.wikipedia.org/wiki/R%C3%A9volution_num%C3%A9rique">révolution</a>, qui a
-          radicalement bouleversé notre façon de nous informer <strong>et de communiquer</strong>.
-        </p>
-        <p>
-          Face à cela, un problème inédit émerge : il est difficile de discuter de manière sérieuse sur la
-          toile, et il devient presque naturel de "troller" sur certains réseaux...
-        </p>
-      </div>
+      <p>
+        Depuis quelques dizaines d'années, la digitalisation des modes de communication a enclenché une vraie{' '}
+        <a href="https://fr.wikipedia.org/wiki/R%C3%A9volution_num%C3%A9rique">révolution</a>, qui a
+        radicalement bouleversé notre façon de nous informer <strong>et de communiquer</strong>.
+      </p>
 
-      <div className="flex-1">
-        <p>
-          Comment discuter sereinement avec celles et ceux qui partagent nos centres d'intérêts ? Des outils
-          permettant de <strong>réfléchir ensemble</strong> commencent à voir le jour, mais ils sont encore
-          rares.
-        </p>
-        <p>
-          Le but de Shakala, c'est d'offrir la possibilité à tous d'ouvrir un dialogue avec des personnes
-          intéressées et à l'écoute, dans un cadre propice à des échanges qui ont du sens.
-        </p>
-      </div>
-    </div>
+      <p>
+        Face à cela, un nouveau problème émerge : il devient difficile de discuter de manière sérieuse sur la
+        toile. Les réseaux sociaux sont devenus des terrains fertiles pour les <em>pensées alternatives</em>,
+        où chacun dit et croit ce qu'il veut.
+      </p>
 
-    <p className="pt-4">
-      Plus de détails sur les objectifs et ambitions de la plateforme sont expliqués sur{' '}
-      <Link href="/motivations">la page motivations</Link>.
-    </p>
+      <p>
+        Le but de Shakala, c'est de permettre <strong>des échanges qui ont du sens</strong>.
+      </p>
+    </Question>
+
+    <Question Image={Authentication} layout="row-reverse">
+      <p id="comment-faire" className="text-lg font-semibold">
+        2. Mais alors, comment faire ?
+      </p>
+
+      <p>Shakala est construit autour de trois points clés :</p>
+
+      {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+      <ul className="ml-5 list-disc [&>li]:my-1">
+        <li>
+          <strong>La charte</strong>. Elle définit l'état d'esprit à adopter dans les conversations, apportant
+          le filtre nécessaire pour garantir des échanges pertinents.
+        </li>
+
+        <li>
+          <strong>La modération</strong>. Basée sur un système décentralisé, elle est assurée par des membres
+          volontaires de la communauté en échange de points de réputation.
+        </li>
+
+        <li>
+          <strong>L'indépendance</strong>. Gratuit et open-source, Shakala ne sera jamais lié à une autorité
+          capable d'influer dans les discussions d'une quelconque manière.
+        </li>
+      </ul>
+    </Question>
+
+    <Question Image={StandOut} layout="row">
+      <p id="à-qui-s-adresse-shakala" className="text-lg font-semibold">
+        3. À qui s'adresse Shakala ?
+      </p>
+
+      <p>
+        Il n'est pas nécessaire de connaître les outils de la pensée critique, les biais cognitifs ou la
+        méthode scientifique pour participer. Le but est de rassembler des personnes qui « jouent le jeu »,
+        qui cherchent à partager leurs opinions et à comprendre celles des autres avec bienveillance et
+        humilité.
+      </p>
+
+      <p>
+        Shakala s'adresse à des personnes qui cherchent à{' '}
+        <strong>renforcer leur autodéfense intellectuelle</strong> via des échanges critiques.
+      </p>
+    </Question>
+
+    <Question Image={PairProgramming} layout="row-reverse">
+      <p id="liens-d-intérêts" className="text-lg font-semibold">
+        4. Quel intérêt pour l'équipe qui développe le projet ?
+      </p>
+
+      <p>
+        L'équipe n'est en réalité composée que de deux développeurs, qui mettent en place Shakala dans un but
+        de pratiquer l'artisanat logiciel sur un cas concret. Cela explique également pourquoi il n'y a pas de
+        communauté active qui fait vivre les discussions.
+      </p>
+
+      <p>
+        Il n'existe <strong>aucun enjeu financier</strong> autour du projet, et aucun lien d'intérêt autre que
+        l'intérêt pour l'esprit critique et le développement d'applications web.
+      </p>
+    </Question>
+
+    <Question Image={Direction} layout="row">
+      <p id="par-où-commencer" className="text-lg font-semibold">
+        5. Par où commencer ?
+      </p>
+
+      <p>
+        Vous pouvez voir les échanges depuis <Link href="/discussions">cette page</Link>, mais vous ne pourrez
+        interagir qu'après avoir{' '}
+        <SearchParamLink keepScrollPosition param="auth" value={AuthForm.signUp}>
+          créé un compte
+        </SearchParamLink>
+        . Pour participer, nous n'attendons rien de plus de votre part que le respect de{' '}
+        <Link href="/charte">la charte</Link>
+      </p>
+
+      <p>
+        Convaincu·e ? N'hésitez pas à nous <Link href="/faq#contact">envoyer un petit message</Link> si vous
+        souhaitez être tenu informé·e lorsque de vraies discussions verront le jour ! Nous sommes également à
+        l'écoute de vos retours et idées{' '}
+        <ExternalLink openInNewTab href="https://improve.shakala.nilscox.dev/feedback">
+          sur cette page
+        </ExternalLink>
+        .
+      </p>
+    </Question>
   </>
 );
 
-type KeyFeatureProps = {
-  image: string;
-  name: string;
+type QuestionProps = {
+  Image: React.FunctionComponent<React.ComponentProps<'svg'> & { title?: string }>;
+  layout: 'row' | 'row-reverse';
   children: React.ReactNode;
 };
 
-const KeyFeature = ({ image, name, children }: KeyFeatureProps) => (
-  <div className="max-w-1 flex-1">
-    <div>
-      <img src={image} className="mx-auto max-h-1 py-2 opacity-80" alt={name} />
-    </div>
-    <div className="text-center text-lg font-bold">{name}</div>
-    <div className="mt-1 text-xs">{children}</div>
+const Question = ({ Image, layout, children }: QuestionProps) => (
+  <div
+    className={clsx('my-10 flex items-center', {
+      'flex-row': layout === 'row',
+      'flex-row-reverse': layout === 'row-reverse',
+    })}
+  >
+    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+    <Image className="min-w-2 max-w-2 text-[#334662]" />
+    <div>{children}</div>
   </div>
 );
 
@@ -162,33 +262,17 @@ const Feature = ({ Icon, children }: FeatureProps) => (
   </li>
 );
 
-const KeyFeatures = () => (
+const Features = () => (
   <>
-    <Heading id="points-clés">Les points clés</Heading>
+    <Heading id="fonctionnalités">Ce que propose Shakala</Heading>
 
-    <div className="my-8 flex flex-col items-center gap-6 sm:flex-row">
-      <KeyFeature image={imageCharte} name="La charte">
-        Elle définit l'état d'esprit à adopter dans les conversations, apportant le filtre nécessaire pour
-        garantir des échanges pertinents
-      </KeyFeature>
-
-      <KeyFeature image={imageModeration} name="La modération">
-        Basée sur un système décentralisé, elle est assurée par des membres volontaires de la communauté en
-        échange de points de réputation
-      </KeyFeature>
-
-      <KeyFeature image={imageIndépendance} name="L'indépendance">
-        Gratuit et open-source, Shakala ne sera jamais lié à une autorité capable d'influer dans les
-        discussions d'une quelconque manière
-      </KeyFeature>
-    </div>
-
-    <p className="my-8 max-w-5">
-      Ce sont les piliers fondateurs qui font le succès de la plateforme. Mais ce n'est pas tout ! D'autres
-      fonctionnalités viennent rendre les fils de discussions plus pratiques et pertinents :
+    <p className="my-8">
+      Shakala, c'est avant tout un groupe de personnes qui se sont mis d'accord pour communiquer ensemble sur
+      des sujets qui leur tiennent à cœur, et comprendre leurs différences de points de vue. Dans cette
+      optique, la plateforme met à disposition un certain nombre de fonctionnalités :
     </p>
 
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <ul className="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
       <Feature Icon={SearchIcon}>
         Il est possible de <strong>rechercher par mots clés</strong> parmi tous les messages
       </Feature>
@@ -209,8 +293,8 @@ const KeyFeatures = () => (
       </Feature>
 
       <Feature Icon={SubscribeIcon}>
-        Il est possible de s'abonner aux messages, pour <strong>être notifié</strong> lorsqu'une réponse est
-        publiée
+        Il est possible de s'abonner aux messages, pour <strong>recevoir une notification</strong> lorsqu'une
+        réponse est publiée
       </Feature>
 
       <Feature Icon={EditIcon}>
@@ -228,60 +312,22 @@ const KeyFeatures = () => (
 
 const CurrentStatus = () => (
   <>
-    <Heading id="premiers-utilisateurs">A la recherche des premiers utilisateurs</Heading>
+    <Heading id="premiers-utilisateurs">Ambition VS réalité</Heading>
 
-    <p>
-      Ce projet n'est pour l'instant qu'une idée, présentée sur ce site pour voir à quoi ça pourrait
-      ressembler. Il n'y a donc pas encore de communauté active qui fait vivre les discussions. Si vous
-      souhaitez être informé(e) lorsque la plateforme sera lancée officiellement, vous pouvez{' '}
-      <a href="https://nilscoxdev.typeform.com/to/aesePz0o">nous laisser votre email</a> (nous ne
-      l'utiliseront que pour ça, promis).
+    <p className="mt-4">
+      Ce projet n'est pour l'instant qu'une idée, un concept, un rêve. Il n'y a donc pas encore de communauté
+      active qui fait vivre les discussions. Les fonctionnalités présentées plus haut ne sont pas toutes
+      disponibles, mais c'est la vision cible.
     </p>
 
     <p>
-      Si vous êtes convaincu que Shakala vous sera utile, nous sommes friands de connaître vos impressions !
-      Que ce soit pour partager vos idées, proposer des améliorations, ou même juste discuter du projet, nous
-      serions ravis d'échanger <a href="mailto:nilscox.dev@gmail.com">par mail</a> ou{' '}
-      <a href="https://discord.gg/huwfqra">sur discord</a>. Et même si c'est juste pour dire que vous trouvez
-      l'idée sympa, c'est aussi le genre d'encouragement qui pourra ne que nous motiver.&nbsp;🤗
-    </p>
-
-    <p>
-      Au fait, pourquoi ce nom, "Shakala" ? Franchement, c'est parce qu'on avait pas d'idée et qu'on avait
-      besoin d'un nom. Si vous avez mieux, on prend !
-    </p>
-  </>
-);
-
-const TargetUsers = () => (
-  <>
-    <Heading id="a-qui-s-adresse-shakala">À qui s'adresse Shakala ?</Heading>
-
-    <p>
-      Les zones de commentaires sont mises à disposition de tous, publiquement pour voir les échanges, et
-      après inscription pour y participer. Il n'est pas nécessaire de bien connaître les outils de la pensée
-      critique, les biais cognitifs ou la méthode scientifique pour s'inscrire. Le but est de rassembler des
-      personnes qui « jouent le jeu », qui cherchent à partager leurs opinions et à comprendre celles des
-      autres, avec courtoisie et humilité.
-    </p>
-
-    <p>
-      Si vous voulez creuser les sujets qui leurs tiennent à cœur, si vous vous posez des questions et
-      cherchez un dialogue critiques, ou si vous cherchez simplement à renforcer votre autodéfense
-      intellectuelle, alors vous avez beaucoup à apporter à la communauté ! Vous pouvez apporter de l'inertie
-      dans groupe de personnes qui ont un but commun : celui de mieux comprendre le monde.
-    </p>
-
-    <p>
-      Et si ce n'est pas vraiment ce que vous cherchez, cet outil vous permettra de participer à des
-      discussions intéressantes, d'être écouté·e et corrigé·e pour de bonnes raisons.
-    </p>
-
-    <p>
-      À terme, l'objectif est qu'autour de Shakala se développe une communauté de personnes dont l'intégrité
-      ne peut être remise en question. Pour en faire partie, nous n'attendons rien de plus de votre part que
-      le respect de la charte. Et pour aller plus loin, vous pouvez devenir modérateur ou participer à la
-      construction du projet.
+      Peut-être qu'un jour, Shakala sera utilisé par des personnes cherchant réellement à muscler leur esprit
+      critique, mais ce n'est pas l'objectif actuel du projet (cf.{' '}
+      <Link href="#liens-d-intérêts">liens d'intérêts</Link>). Ce qu'il nous manque pour en arriver là, c'est
+      une personne convaincu·e par l'ambition de Shakala, et volontaire pour dédier un peu de son temps à nous
+      porter main forte sur la communication (réseaux sociaux, diffusion auprès des communautés sceptiques,
+      sponsors...). Si cette personne c'est vous, <Link href="/faq#contact">contactez-nous</Link> sans plus
+      attendre !
     </p>
   </>
 );

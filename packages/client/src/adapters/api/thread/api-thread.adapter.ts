@@ -65,14 +65,14 @@ export class ApiThreadAdapter implements ThreadPort {
     };
   };
 
+  // todo: test
   private handleThreadFormError = (error: HttpError) => {
-    // todo: test
     if (error.code === 'UserMustBeAuthorError') {
       throw new Error('UserMustBeAuthorError');
     }
 
     const validationError = ValidationErrors.from(error.response, (fieldName) => {
-      if (/keywords\[\d+\]/.exec(fieldName)) {
+      if (/keywords\["\d+"\]/.exec(fieldName)) {
         return 'keywords';
       }
 

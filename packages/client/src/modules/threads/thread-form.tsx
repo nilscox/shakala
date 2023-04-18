@@ -68,7 +68,7 @@ export const ThreadForm = ({
           max: 'La description est trop longue',
         }}
       >
-        <Input required {...form.register('description')} />
+        <Input required className="w-full max-w-4" {...form.register('description')} />
       </FormField>
 
       <FormField
@@ -81,7 +81,7 @@ export const ThreadForm = ({
           max: 'Un des mots-clés est trop long',
         }}
       >
-        <Input {...form.register('keywords')} />
+        <Input className="w-full max-w-4" {...form.register('keywords')} />
       </FormField>
 
       <FormField
@@ -99,7 +99,7 @@ export const ThreadForm = ({
       >
         <RichTextEditor
           editor={editor}
-          className="min-h-2 rounded border bg-neutral p-1 focus-within:border-primary"
+          className="min-h-2 w-full rounded border bg-neutral p-1 focus-within:border-primary"
         />
       </FormField>
 

@@ -22,14 +22,9 @@ const ThreadsListPage = () => {
       <h2>Psst... ce projet est en développement !</h2>
 
       <p>
-        Il s'agit d'un "proof of concept", un site permettant de se rendre compte de ce à quoi pourrait
-        ressembler une plateforme comme Shakala. Il n'y a donc pas de communauté active qui fait vivre les
-        discussions... pour l'instant !
-      </p>
-
-      <p>
-        Si ce projet vous plaît et que vous pensez qu'il devrait voir le jour (pour de vrai), envoyez-nous un
-        petit message pour nous montrer votre soutien !
+        Plus tard, vous trouverez sur cette page la liste des fils de discussion, et pourrez effectuer une
+        recherche par catégorie ou par mots clés. Pour l'instant, vous pouvez juste créer une nouvelle
+        discussion :)
       </p>
 
       <ThreadLink />
