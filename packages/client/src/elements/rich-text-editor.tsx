@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/solid.css';
 
-// cspell:words tiptap fortawesome fontawesome classname
+// cspell:words fortawesome fontawesome classname exitable
 
 const CustomSuperscript = Superscript.extend({
   group: 'inline',

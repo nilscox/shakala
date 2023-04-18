@@ -1,15 +1,21 @@
 {
+  "ignorePaths": ["**/*.svg"],
   "words": [
+    "bytea",
+    "clonedeep",
     "clsx",
+    "downvote",
+    "downvotes",
+    "dtos",
+    "dumpable",
     "facebook",
     "firefox",
     "fontsource",
     "healthcheck",
     "hookform",
     "ilike",
+    "intg",
     "keyframes",
-    "linecap",
-    "linejoin",
     "linkedin",
     "maildev",
     "mano",
@@ -17,12 +23,18 @@
     "mjml",
     "nilscox",
     "nocolor",
+    "pkey",
     "pnpm",
     "postgres",
     "postgresql",
     "roadmap",
+    "scrollbars",
     "shakala",
     "tailwindcss",
-    "timestamptz"
+    "testid",
+    "timestamptz",
+    "tiptap",
+    "upvote",
+    "upvotes"
   ]
 }

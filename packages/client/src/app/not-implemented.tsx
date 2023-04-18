@@ -1,6 +1,8 @@
 import { Fallback } from '~/elements/fallback';
 import { ExternalLink } from '~/elements/link';
 
+// cspell:word prio, upvotez
+
 export const NotImplemented = () => (
   <Fallback className="gap-2">
     <div className="text-xl">501 Not Implemented</div>

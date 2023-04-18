@@ -96,6 +96,7 @@ describe('ApiCommentAdapter', () => {
       });
     });
 
+    // cspell:word unsets
     it('unsets a reaction to a comment', async () => {
       http.response = {
         body: { type: null },

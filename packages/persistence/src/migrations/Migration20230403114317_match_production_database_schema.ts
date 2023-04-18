@@ -1,5 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
+// cspell:word sess
+
 export class Migration20230403114317 extends Migration {
 
   async up(): Promise<void> {

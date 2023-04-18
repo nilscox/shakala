@@ -4,6 +4,8 @@ import { TOKENS } from '~/app/tokens';
 import { ExternalLink, Link } from '../../elements/link';
 import { prefetchQuery } from '../../utils/prefetch-query';
 
+// cspell:word languagetool
+
 export const queries = [prefetchQuery(TOKENS.thread, 'getLastThreads', 3)];
 
 export { RulesPage as Page };

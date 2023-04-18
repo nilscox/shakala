@@ -48,7 +48,7 @@ const notification3 = createNotificationDto({
     parentId: 'parentId',
     parentAuthor: createAuthorDto({ id: 'userId' }),
     replyId: 'replyId',
-    replyAuthor: createAuthorDto({ nick: 'Nilsou' }),
+    replyAuthor: createAuthorDto({ nick: 'Nils' }),
     text: "Bah c'est moi, non ?",
   },
 });
