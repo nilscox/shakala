@@ -29,22 +29,28 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tests
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
+      maildev:
+        image: maildev/maildev
+
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup
       - run: pnpm test
         env:
-          SESSION_SECRET: secret
           DATABASE_HOST: postgres
           DATABASE_USER: postgres
           DATABASE_PASSWORD: postgres
-          DATABASE_NAME: test
+          DATABASE_NAME: tests
+          MAILDEV_HOST: maildev
+          MAILDEV_SMTP_PORT: 1025
+          MAILDEV_API_PORT: 1080
 
   lint:
     name: Lint
@@ -52,6 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup
+      - run: pnpm typecheck
       - run: pnpm lint
 
   spellcheck:

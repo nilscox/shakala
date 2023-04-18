@@ -6,7 +6,7 @@ import { SqlComment } from './sql-comment.entity';
 import { SqlUser } from './sql-user.entity';
 
 @Entity({ tableName: 'comment_subscription' })
-// todo: fix intg tests with unique constraint (refresh database fails)
+// https://github.com/mikro-orm/mikro-orm/issues/4013
 // @Unique({ properties: ['comment', 'user'] })
 export class SqlCommentSubscription extends BaseSqlEntity {
   @ManyToOne()

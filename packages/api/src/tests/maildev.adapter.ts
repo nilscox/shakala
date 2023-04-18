@@ -11,8 +11,10 @@ type MailDevEmail = {
   headers: Record<string, string>;
 };
 
+const { MAILDEV_HOST = 'localhost', MAILDEV_API_PORT = '1080' } = process.env;
+
 export class MailDevAdapter {
-  private baseUrl = `http://localhost:1080`;
+  private baseUrl = `http://${MAILDEV_HOST}:${MAILDEV_API_PORT}`;
 
   async clear() {
     await wait(200);

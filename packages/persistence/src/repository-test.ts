@@ -44,13 +44,20 @@ export interface RepositoryTest {
   cleanup?(): Promise<void>;
 }
 
+const {
+  DATABASE_HOST = 'localhost',
+  DATABASE_USER = 'postgres',
+  DATABASE_NAME = 'tests',
+  DATABASE_PASSWORD,
+} = process.env;
+
 export class RepositoryTest {
   config = new StubConfigAdapter({
     database: {
-      host: 'localhost',
-      user: 'postgres',
-      database: 'tests',
-      allowGlobalContext: true,
+      host: DATABASE_HOST,
+      user: DATABASE_USER,
+      database: DATABASE_NAME,
+      password: DATABASE_PASSWORD,
     },
   });
 

@@ -32,20 +32,29 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
   const setup = async (): Promise<T> => {
     modules.forEach((module) => module.capture());
 
+    const {
+      DATABASE_HOST = 'localhost',
+      DATABASE_USER = 'postgres',
+      DATABASE_NAME = 'tests',
+      DATABASE_PASSWORD,
+      MAILDEV_HOST = 'localhost',
+      MAILDEV_SMTP_PORT = '1025',
+    } = process.env;
+
     const config = new StubConfigAdapter({
       app: {
         apiBaseUrl: 'http://api.test',
         appBaseUrl: 'http://app.test',
       },
       database: {
-        host: 'localhost',
-        user: 'postgres',
-        database: 'tests',
-        allowGlobalContext: true,
+        host: DATABASE_HOST,
+        user: DATABASE_USER,
+        database: DATABASE_NAME,
+        password: DATABASE_PASSWORD,
       },
       email: {
-        host: 'localhost',
-        port: 1025,
+        host: MAILDEV_HOST,
+        port: Number(MAILDEV_SMTP_PORT),
         from: 'test@shakala.local',
         templatesPath: '../../email-templates',
       },

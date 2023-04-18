@@ -15,8 +15,8 @@ const packageSource = (pkg, ...rest) => {
 export default defineConfig({
   test: {
     watch: false,
-    testTimeout: 2000,
-    hookTimeout: 2000,
+    testTimeout: 15000,
+    hookTimeout: 15000,
     threads: false,
     setupFiles: [packageDirectory('shared', 'vitest.setup.ts'), packageSource('common', 'vitest.setup.ts')],
     reporters: ['verbose'],

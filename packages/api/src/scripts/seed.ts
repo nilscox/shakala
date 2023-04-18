@@ -31,7 +31,6 @@ async function seed() {
   container.use(TOKENS.config).from(commonModule);
 
   const config = new StubConfigAdapter(container.get(TOKENS.config));
-  config.database.allowGlobalContext = true;
   commonModule.bind(TOKENS.config).toConstant(config);
 
   try {

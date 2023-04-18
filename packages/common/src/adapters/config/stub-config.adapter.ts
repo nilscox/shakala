@@ -27,7 +27,6 @@ export class StubConfigAdapter implements ConfigPort {
     session: {
       secret: 'secret',
       secure: false,
-      pruneExpiredSessions: false,
     },
     database: {
       host: '',
@@ -35,7 +34,6 @@ export class StubConfigAdapter implements ConfigPort {
       password: '',
       database: '',
       debug: false,
-      allowGlobalContext: false,
     },
     email: {
       host: '',
