@@ -1,6 +1,6 @@
 import { StubConfigAdapter } from '@shakala/common';
 import { ClassType, DeepPartial, randomId, ReactionType } from '@shakala/shared';
-import { afterEach } from 'vitest';
+import { afterAll, afterEach } from 'vitest';
 
 import { EM } from './create-orm';
 import { Database } from './database';
@@ -30,6 +30,9 @@ export const createRepositoryTest = <Test extends RepositoryTest>(TestClass: Cla
 
   afterEach(async () => {
     await test?.cleanup?.();
+  });
+
+  afterAll(async () => {
     await test.database?.close();
   });
 

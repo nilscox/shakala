@@ -4,6 +4,7 @@ import { MikroORM, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import config from './mikro-orm.config';
 
 export async function createOrm(overrides?: Partial<Options<PostgreSqlDriver>>) {
+  // console.log({ ...config, ...overrides });
   return MikroORM.init({ ...config, ...overrides });
 }
 

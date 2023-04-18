@@ -50,8 +50,8 @@ describe('[e2e] user', () => {
       } satisfies SignUpBody)
     ).toHaveStatus(201);
 
-    const link = await test.getValidationEmailLink();
-    await expect(agent.get(link)).toHaveStatus(200);
+    const token = await test.getEmailValidationToken();
+    await expect(agent.get(`/account/validate-email/${token}`)).toHaveStatus(200);
 
     const user = await getUser();
     expect(user).toHaveProperty('emailValidated', true);
@@ -71,12 +71,12 @@ class Test extends E2ETest {
     return emails[0].text;
   };
 
-  getValidationEmailLink = async () => {
+  getEmailValidationToken = async () => {
     const text = await waitFor(this.getWelcomeEmailText);
     const [link] = text.split('\n').filter((line) => line.match(/^http.*$/));
 
     assert(link, 'cannot find email validation link');
 
-    return link.replace('http://api.test', '');
+    return new URL(link).searchParams.get('email-validation-token');
   };
 }

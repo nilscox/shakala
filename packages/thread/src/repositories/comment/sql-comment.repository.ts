@@ -99,7 +99,7 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
     return rootComments.map((comment) => ({
       ...this.mapCommentResult(comment),
       replies: replies
-        .filter((reply) => reply.parent === comment)
+        .filter((reply) => reply.parent?.id === comment.id)
         .map((reply) => this.mapCommentResult(reply)),
     }));
   }

@@ -35,6 +35,7 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
     const config = new StubConfigAdapter({
       app: {
         apiBaseUrl: 'http://api.test',
+        appBaseUrl: 'http://app.test',
       },
       database: {
         host: 'localhost',
@@ -71,6 +72,9 @@ export const createE2eTest = <T extends E2ETest>(TestClass: ClassType<T>) => {
   };
 
   afterEach(async () => {
+    // wait for domain events handlers to finish
+    await new Promise((r) => setTimeout(r, 50));
+
     await test?.cleanup?.();
     await test?.server.close();
     await test?.database.close();
