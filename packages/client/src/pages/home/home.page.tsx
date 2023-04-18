@@ -42,13 +42,13 @@ const HomePage = () => {
     </>
   );
 };
-``;
+
 const Outline = () => (
   <div className="my-8 md:my-12">
-    <div className="my-8 px-12 text-xxl font-medium text-primary">Musclez votre esprit critique 💪🧠</div>
-    <div className="row items-center gap-4">
+    <div className="my-8 text-xxl font-medium text-primary md:px-12">Musclez votre esprit critique 💪🧠</div>
+    <div className="md:row flex flex-col-reverse items-center gap-4">
       {/* // eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-      <PublicDiscussion className="max-w-[30rem] text-[#334662]" />
+      <PublicDiscussion className="max-w-1 text-[#334662] md:max-w-[30rem]" />
 
       <div className="flex-1">
         <p className="text-lg">
@@ -62,13 +62,13 @@ const Outline = () => (
 
         <Link
           href="#shakala-en-cinq-questions"
-          className="row"
+          className="block text-center md:text-left"
           onClick={(e) => {
             e.preventDefault();
             document.getElementById('shakala-en-cinq-questions')?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
-          En savoir plus <IconArrowDown className="ml-0.5" />
+          En savoir plus <IconArrowDown className="ml-0.5 inline-block align-top" />
         </Link>
       </div>
     </div>
@@ -239,9 +239,9 @@ type QuestionProps = {
 
 const Question = ({ Image, layout, children }: QuestionProps) => (
   <div
-    className={clsx('my-10 flex items-center', {
-      'flex-row': layout === 'row',
-      'flex-row-reverse': layout === 'row-reverse',
+    className={clsx('my-6 flex flex-col-reverse items-center gap-6 md:my-10 md:gap-0', {
+      'md:flex-row': layout === 'row',
+      'md:flex-row-reverse': layout === 'row-reverse',
     })}
   >
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
