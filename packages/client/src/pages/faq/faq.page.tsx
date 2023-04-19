@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { PageTitle } from '~/app/page-title';
 import { TOKENS } from '~/app/tokens';
-import { useTrackEvent } from '~/app/tracking';
+import { useTrackEvent } from '~/hooks/tracking';
 
 import { ExternalLink, Link } from '../../elements/link';
 import { prefetchQuery } from '../../utils/prefetch-query';

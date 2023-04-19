@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 
 import { TOKENS } from '~/app/tokens';
-import { useTrackEvent } from '~/app/tracking';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { ExternalLink, Link, SearchParamLink } from '~/elements/link';
 import { RichText } from '~/elements/rich-text';
+import { useTrackEvent } from '~/hooks/tracking';
 import { useQuery } from '~/hooks/use-query';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import CommunityIcon from '~/icons/community.svg';
@@ -73,7 +73,7 @@ const ReadMoreCTA = () => {
   return (
     <Link
       href="#shakala-en-cinq-questions"
-      className="block text-center md:text-left"
+      className="block text-center md:inline-block"
       onClick={(e) => {
         e.preventDefault();
         track('Home', 'ReadMoreClicked');
