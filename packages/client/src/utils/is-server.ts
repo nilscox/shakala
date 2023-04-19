@@ -1,5 +1,5 @@
 export const isServer = () => {
-  return typeof window === 'undefined';
+  return import.meta.env.SSR;
 };
 
 export const isClient = () => {

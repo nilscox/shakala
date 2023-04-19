@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import { TOKENS } from '~/app/tokens';
+import { useTrackEvent } from '~/app/tracking';
 import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { ExternalLink, Link, SearchParamLink } from '~/elements/link';
 import { RichText } from '~/elements/rich-text';
@@ -60,20 +61,29 @@ const Outline = () => (
           à cœur avec des personnes qui partagent vos centres d'intérêts... mais peut-être pas vos opinions !
         </p>
 
-        <Link
-          href="#shakala-en-cinq-questions"
-          className="block text-center md:text-left"
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById('shakala-en-cinq-questions')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
-          En savoir plus <IconArrowDown className="ml-0.5 inline-block align-top" />
-        </Link>
+        <ReadMoreCTA />
       </div>
     </div>
   </div>
 );
+
+const ReadMoreCTA = () => {
+  const track = useTrackEvent();
+
+  return (
+    <Link
+      href="#shakala-en-cinq-questions"
+      className="block text-center md:text-left"
+      onClick={(e) => {
+        e.preventDefault();
+        track('Home', 'ReadMoreClicked');
+        document.getElementById('shakala-en-cinq-questions')?.scrollIntoView({ behavior: 'smooth' });
+      }}
+    >
+      En savoir plus <IconArrowDown className="ml-0.5 inline-block align-top" />
+    </Link>
+  );
+};
 
 type HeadingProps = {
   id: string;

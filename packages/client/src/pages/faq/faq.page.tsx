@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PageTitle } from '~/app/page-title';
 import { TOKENS } from '~/app/tokens';
+import { useTrackEvent } from '~/app/tracking';
 
 import { ExternalLink, Link } from '../../elements/link';
 import { prefetchQuery } from '../../utils/prefetch-query';
@@ -92,7 +93,7 @@ const FAQPage = () => (
 const questions: Record<string, QuestionProps[]> = {
   account: [
     {
-      question: <>Est-il possible d'utiliser Shakala sans créer de compte ?</>,
+      question: "Est-il possible d'utiliser Shakala sans créer de compte ?",
       answer: (
         <>
           Oui, mais uniquement pour lire les messages. La création d'un compte utilisateur est nécessaire si
@@ -102,7 +103,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Comment créer un compte ?</>,
+      question: 'Comment créer un compte ?',
       answer: (
         <>
           Vous pouvez créer un nouveau compte utilisateur en cliquant sur "Connexion" (en haut de toutes les
@@ -112,7 +113,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Comment supprimer un compte ?</>,
+      question: 'Comment supprimer un compte ?',
       answer: (
         <>
           En conformité avec le règlement général sur la protection des données (RGPD), vous pouvez demander
@@ -125,7 +126,7 @@ const questions: Record<string, QuestionProps[]> = {
 
   product: [
     {
-      question: <>Comment marche la mise en forme des messages ?</>,
+      question: 'Comment marche la mise en forme des messages ?',
       answer: (
         <>
           Les messages supportent la syntaxe markdown, qui permet une mise en forme simple : utilisez par
@@ -138,7 +139,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Comment indiquer son degré de confiance en exposant ?</>,
+      question: 'Comment indiquer son degré de confiance en exposant ?',
       answer: (
         <>
           La charte vous encourage à expliciter votre degré de confiance dans ce que vous pensez. Pour se
@@ -149,7 +150,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Comment est assurée la modération ?</>,
+      question: 'Comment est assurée la modération ?',
       answer: (
         <>
           Les messages signalés sont traités par des membres volontaires de la communauté, via un système de
@@ -159,7 +160,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Qui peut devenir modérateur ?</>,
+      question: 'Qui peut devenir modérateur ?',
       answer: (
         <>
           Tous les membres de Shakala peuvent devenir modérateur s'ils souhaitent s'investir dans la
@@ -171,7 +172,7 @@ const questions: Record<string, QuestionProps[]> = {
 
   project: [
     {
-      question: <>Comment le projet est-il financé ?</>,
+      question: 'Comment le projet est-il financé ?',
       answer: (
         <>
           Le but de la plateforme n'est pas de faire du profit, et aucun financement n'est en jeu. Les seuls
@@ -182,7 +183,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Peut-on participer au projet ?</>,
+      question: 'Peut-on participer au projet ?',
       answer: (
         <>
           Que ce soit pour donner vos impressions ou proposer des axes d'amélioration, vous êtes
@@ -194,7 +195,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Comment suivre l'évolution du projet ?</>,
+      question: "Comment suivre l'évolution du projet ?",
       answer: (
         <>
           La <ExternalLink href="https://trello.com/b/CfC8aQ80/tasks">roadmap</ExternalLink> est accessible
@@ -206,7 +207,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Qui développe Shakala ?</>,
+      question: 'Qui développe Shakala ?',
       answer: (
         <>
           Le projet est développé par une <ExternalLink href="https://nilscox.dev">petite</ExternalLink>{' '}
@@ -217,7 +218,7 @@ const questions: Record<string, QuestionProps[]> = {
     },
 
     {
-      question: <>Votre question ne figure pas dans cette liste... ?</>,
+      question: 'Votre question ne figure pas dans cette liste... ?',
       answer: (
         <>
           <Link href="/faq#contact">Posez-la nous directement</Link>, nous l'y ajouterons sans tarder :)
@@ -228,12 +229,19 @@ const questions: Record<string, QuestionProps[]> = {
 };
 
 type QuestionProps = {
-  question: React.ReactNode;
+  question: string;
   answer: React.ReactNode;
 };
 
 const Question = ({ question, answer }: QuestionProps) => {
   const [open, setOpen] = useState(false);
+  const track = useTrackEvent();
+
+  useEffect(() => {
+    if (open) {
+      track('FAQ', 'QuestionOpened', { name: question });
+    }
+  }, [open, track, question]);
 
   return (
     <div className="my-2">

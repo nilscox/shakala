@@ -7,6 +7,7 @@ import { PageContext } from '~/renderer/page-context';
 
 import { container } from './container';
 import { PageContextProvider } from './page-context';
+import { TrackingProvider } from './tracking';
 
 export const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
@@ -29,10 +30,12 @@ type AppProvidersProps = {
 export const AppProviders = ({ context, queryClient = clientQueryClient, children }: AppProvidersProps) => (
   <ContainerProvider container={container}>
     <PageContextProvider value={context}>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <SnackbarProvider>{children}</SnackbarProvider>
-      </QueryClientProvider>
+      <TrackingProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
+          <SnackbarProvider>{children}</SnackbarProvider>
+        </QueryClientProvider>
+      </TrackingProvider>
     </PageContextProvider>
   </ContainerProvider>
 );

@@ -17,7 +17,13 @@ describe('prefetchQuery', () => {
     const queryClient = new QueryClient();
     const pageContext = { queryClient } as PageContextServer;
 
-    const http = new ApiFetchHttpAdapter({ isDevelopment: false, apiBaseUrl: '' });
+    const http = new ApiFetchHttpAdapter({
+      isDevelopment: false,
+      apiBaseUrl: '',
+      analyticsUrl: '',
+      analyticsSiteId: NaN,
+    });
+
     const adapter = new ApiThreadAdapter(http);
 
     container.bind(TOKENS.thread).toConstant(adapter);

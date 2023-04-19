@@ -2,6 +2,6 @@ import { useInjection } from 'brandi-react';
 
 import { AppConfig } from '~/adapters/config/app-config';
 
-export const useConfigValue = (key: keyof AppConfig) => {
+export const useConfigValue = <Key extends keyof AppConfig>(key: Key): AppConfig[Key] => {
   return useInjection(TOKENS.config)[key];
 };
