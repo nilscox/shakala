@@ -1,3 +1,4 @@
+import { TOKENS } from '~/app/tokens';
 import { Fallback } from '~/elements/fallback';
 import { usePaginatedQuery } from '~/hooks/use-query';
 import { prefetchQuery } from '~/utils/prefetch-query';

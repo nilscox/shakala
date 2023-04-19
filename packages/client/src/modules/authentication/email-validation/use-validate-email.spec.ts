@@ -4,6 +4,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
 import { container } from '~/app/container';
+import { TOKENS } from '~/app/tokens';
 import { mockHttpError, setupTest } from '~/utils/setup-test';
 
 import { useValidateEmail } from './use-validate-email';

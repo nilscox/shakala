@@ -1,6 +1,7 @@
 import { NotificationDto } from '@shakala/shared';
 import clsx from 'clsx';
 
+import { TOKENS } from '~/app/tokens';
 import { IconButton } from '~/elements/icon-button';
 import { useMutate } from '~/hooks/use-mutate';
 import { useInvalidateQuery } from '~/hooks/use-query';
