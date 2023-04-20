@@ -16,7 +16,7 @@ export const Avatar = ({ image, loading, size = 'small', className }: AvatarProp
       className={clsx(
         'rounded-full border bg-neutral object-cover',
         {
-          'h-5 w-5': size === 'small',
+          'h-[1.625rem] w-[1.625rem]': size === 'small',
           'h-6 w-6': size === 'medium',
           'h-8 w-8': size === 'big',
         },

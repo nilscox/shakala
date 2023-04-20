@@ -17,15 +17,16 @@ type ActivityComponentProps = {
 };
 
 export const Activity = ({ isFirst, activity, icon, children }: ActivityComponentProps) => (
-  <div className="row items-center gap-4">
-    <div>
+  <div className="row items-stretch gap-4">
+    <div className="col">
       <div className="ml-5 h-2 border-l" />
       <div className="flex h-8 w-8 items-center justify-center rounded-full border text-muted">{icon}</div>
-      <div className={clsx('ml-5 h-2', !isFirst && 'border-l')} />
+      <div className={clsx('ml-5 flex-1', !isFirst && 'border-l')} />
     </div>
 
-    <div>
-      <div className="relative -top-2 h-0 text-xs font-medium text-muted/75">
+    {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
+    <div className="mt-1 mb-2 [&>p]:my-0">
+      <div className="text-xs font-medium text-muted/75">
         <time dateTime={activity.date} title={formatDate(activity.date, DateFormat.full)}>
           {formatDateRelativeOrAbsolute(activity.date)}
         </time>

@@ -9,7 +9,7 @@ type AvatarNickProps = Pick<ComponentProps<typeof Avatar>, 'size' | 'image'> & {
 };
 
 export const AvatarNick = ({ nick, ...props }: AvatarNickProps): JSX.Element => (
-  <div className="flex flex-row items-center gap-2">
+  <div className="flex flex-row items-center gap-1">
     <Avatar {...props} />
     <span className={clsx('font-medium text-muted', contains(['medium', 'big'], props.size) && 'text-lg')}>
       {nick}

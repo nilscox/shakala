@@ -18,8 +18,7 @@ const RulesPage = () => (
 
     <p>
       Cette charte définit l'état d'esprit à adopter sur Shakala. Elle est composée de sept règles simples,
-      inspirée de la pensée critique, et construites dans le but de{' '}
-      <strong>favoriser des échanges qui ont du sens</strong>.
+      réfléchies dans le but de <strong>favoriser des échanges constructifs</strong>.
     </p>
 
     {/* apporter de la nuance */}
