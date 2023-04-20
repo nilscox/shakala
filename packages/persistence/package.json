@@ -20,6 +20,7 @@
     "build": "tsc -b",
     "lint": "eslint --config ../../.eslintrc.ci.js src",
     "mikro-orm": "pnpm mikro-orm-esm",
+    "db:create-migration": "pnpm mikro-orm migration:create",
     "db:migrate": "pnpm mikro-orm migration:up",
     "db:reset": "pnpm mikro-orm migration:fresh"
   },

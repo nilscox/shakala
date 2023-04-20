@@ -107,6 +107,13 @@ describe('SqlCommentRepository', () => {
       expect(result).toHaveProperty('isSubscribed', true);
       expect(result).toHaveProperty('replies.0.isSubscribed', true);
     });
+
+    it('filters out hidden comments', async () => {
+      const { thread, author } = await test.createThread();
+      const { comment } = await test.createComment({ id: 'parentId', thread, author, hidden: true });
+
+      expect(await test.repository.findComment(comment.id)).toBeUndefined();
+    });
   });
 
   describe('findThreadComments', () => {

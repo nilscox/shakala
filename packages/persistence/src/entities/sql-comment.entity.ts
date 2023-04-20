@@ -1,4 +1,4 @@
-import { Collection, Entity, Formula, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
+import { Collection, Entity, Filter, Formula, ManyToOne, OneToMany, Property } from '@mikro-orm/core';
 import { ReactionType } from '@shakala/shared';
 
 import { BaseSqlEntity } from '../base-sql-entity';
@@ -7,6 +7,7 @@ import { SqlThread } from './sql-thread.entity';
 import { SqlUser } from './sql-user.entity';
 
 @Entity({ tableName: 'comment' })
+@Filter({ name: 'not-hidden', default: true, cond: { hidden: false } })
 export class SqlComment extends BaseSqlEntity {
   @ManyToOne()
   thread!: SqlThread;
@@ -22,6 +23,9 @@ export class SqlComment extends BaseSqlEntity {
 
   @OneToMany(() => SqlComment, (comment) => comment.parent)
   replies = new Collection<SqlComment>(this);
+
+  @Property({ default: false })
+  hidden!: boolean;
 
   @Property({ persist: false })
   userReaction!: ReactionType | null;

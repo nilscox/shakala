@@ -71,6 +71,13 @@ describe('SqlThreadRepository', () => {
         totalComments: 1,
       });
     });
+
+    it('filters out hidden threads', async () => {
+      const author = await test.create.user();
+      const thread = await test.create.thread({ author, hidden: true });
+
+      expect(await test.repository.getThread(thread.id)).toBeUndefined();
+    });
   });
 });
 

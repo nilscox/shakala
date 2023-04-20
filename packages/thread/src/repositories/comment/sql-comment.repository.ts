@@ -112,6 +112,7 @@ export class SqlCommentRepository extends SqlRepository<Comment, SqlComment> imp
 
     void qb.select('*');
     void qb.where(where);
+    void qb.andWhere({ hidden: false });
 
     void qb.leftJoinAndSelect('author', 'author');
     void qb.leftJoinAndSelect('history', 'commentHistory');
