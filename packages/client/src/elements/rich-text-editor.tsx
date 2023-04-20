@@ -73,30 +73,35 @@ export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
     <ToolbarItem
       icon="bold"
       active={editor?.isActive('bold')}
+      title="Gras"
       onClick={() => editor?.chain().focus().toggleBold().run()}
-    />
+      />
 
     <ToolbarItem
       icon="italic"
       active={editor?.isActive('italic')}
+      title="Italique"
       onClick={() => editor?.chain().focus().toggleItalic().run()}
-    />
+      />
 
     <ToolbarItem
       icon="underline"
       active={editor?.isActive('underline')}
+      title="Souligner"
       onClick={() => editor?.chain().focus().toggleUnderline().run()}
-    />
+      />
 
     <ToolbarItem
       icon="strikethrough"
       active={editor?.isActive('strike')}
+      title="Barrer"
       onClick={() => editor?.chain().focus().toggleStrike().run()}
-    />
+      />
 
     <ToolbarItem
       icon="link"
       active={editor?.isActive('list')}
+      title="Lien"
       onClick={() => {
         const href = window.prompt('Cible du lien', editor?.getAttributes('link').href);
 
@@ -104,23 +109,26 @@ export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
           editor?.chain().focus().toggleLink({ href }).run();
         }
       }}
-    />
+      />
 
     <ToolbarItem
       icon="list-ul"
       active={editor?.isActive('bulletList')}
+      title="List à point"
       onClick={() => editor?.chain().focus().toggleBulletList().run()}
-    />
+      />
 
     <ToolbarItem
       icon="list-ol"
       active={editor?.isActive('orderedList')}
+      title="List ordonnée"
       onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-    />
+      />
 
     <ToolbarItem
       icon="superscript"
       active={editor?.isActive('superscript')}
+      title="Indice de confiance"
       onClick={() => editor?.chain().focus().toggleSuperscript().run()}
     />
   </div>
@@ -129,10 +137,11 @@ export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
 type ToolbarItemProps = {
   icon: string;
   active?: boolean;
+  title?: string;
   onClick: () => void;
 };
 
-const ToolbarItem = ({ icon, active, onClick }: ToolbarItemProps) => (
+const ToolbarItem = ({ icon, active, title, onClick }: ToolbarItemProps) => (
   <button
     type="button"
     className={clsx(
@@ -140,6 +149,7 @@ const ToolbarItem = ({ icon, active, onClick }: ToolbarItemProps) => (
       active && '!text-primary'
     )}
     onClick={onClick}
+    title={title}
   >
     {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
     <i className={`fa-solid fa-${icon}`} />
