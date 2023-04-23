@@ -36,6 +36,7 @@ async function main() {
   app.use(cookieParser());
 
   if (prod) {
+    app.use(redirectHttps);
     // eslint-disable-next-line import/no-named-as-default-member
     app.use(express.static(path.join(root, 'dist', 'client')));
   } else {
@@ -67,6 +68,14 @@ type PageContextInit = {
   token?: string;
   queryClient: QueryClient;
 };
+
+function redirectHttps(req: Request, res: Response, next: NextFunction) {
+  if (prod && !req.secure) {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+
+  next();
+}
 
 async function handleRequest(req: Request, res: Response, next: NextFunction) {
   const queryClient = new QueryClient();
