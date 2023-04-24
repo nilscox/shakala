@@ -5,7 +5,6 @@ import { TOKENS } from '~/app/tokens';
 import { Link } from '~/elements/link';
 import { useQuery } from '~/hooks/use-query';
 import { prefetchQuery } from '~/utils/prefetch-query';
-import { withSuspense } from '~/utils/with-suspense';
 
 import { ThreadForm } from './thread-form';
 
@@ -40,7 +39,7 @@ const ThreadsListPage = () => {
   );
 };
 
-const ThreadLink = withSuspense(() => {
+const ThreadLink = () => {
   const thread = first(useQuery(TOKENS.thread, 'getLastThreads', 1));
 
   if (!thread) {
@@ -53,4 +52,4 @@ const ThreadLink = withSuspense(() => {
       <Link href={`/discussions/${thread.id}`}>sur cette page</Link>.
     </p>
   );
-}, 'ThreadLink');
+};

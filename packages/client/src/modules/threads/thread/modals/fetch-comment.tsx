@@ -28,4 +28,4 @@ export const FetchComment = withSuspense(({ commentId, onNotFound, children }: F
   }
 
   return children(comment);
-}, 'FetchComment');
+});

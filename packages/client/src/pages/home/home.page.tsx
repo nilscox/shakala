@@ -125,7 +125,7 @@ const LastThreads = withSuspense(() => {
       </div>
     </>
   );
-}, 'LastThreads');
+});
 
 const Motivations = () => (
   <>

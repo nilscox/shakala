@@ -33,4 +33,4 @@ const Activities = withSuspense(() => {
   );
 
   return <UserActivities activities={activities} hasMore={hasMore} loadMore={loadMore} loading={false} />;
-}, 'Activities');
+});

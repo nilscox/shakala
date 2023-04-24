@@ -1,8 +1,9 @@
-import { ForwardedRef, forwardRef, Suspense } from 'react';
+import { ForwardedRef, forwardRef, Suspense, useEffect, useState } from 'react';
+
+import { Spinner } from '~/elements/spinner';
 
 export const withSuspense = <Ref, Props>(
   Component: React.ComponentType<{ ref: ForwardedRef<Ref> } & Props>,
-  displayName?: string,
   Loader_: React.ComponentType = Loader
 ) => {
   const WithSuspense = forwardRef<Ref, Props>((props, ref) => (
@@ -11,14 +12,16 @@ export const withSuspense = <Ref, Props>(
     </Suspense>
   ));
 
-  if (displayName) {
-    Component.displayName = displayName;
-    WithSuspense.displayName = `withSuspense(${displayName})`;
-  } else {
-    WithSuspense.displayName = `withSuspense()`;
-  }
-
   return WithSuspense;
 };
 
-const Loader = () => <div className="col min-h-1 items-center justify-center">Loading...</div>;
+const Loader = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShow(true), 150);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return <div className="col min-h-1 items-center justify-center">{show && <Spinner />}</div>;
+};

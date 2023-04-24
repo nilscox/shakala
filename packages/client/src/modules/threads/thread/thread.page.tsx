@@ -55,7 +55,7 @@ const ThreadPage = withSuspense(() => {
       <ShareCommentModal />
     </>
   );
-}, 'ThreadPage');
+});
 
 const ThreadNotFound = () => (
   <Fallback>

@@ -4,12 +4,11 @@ import { Modal, useModalState } from '~/elements/modal';
 import { useNavigate } from '~/hooks/use-router';
 import { useSearchParam, useSetSearchParams } from '~/hooks/use-search-params';
 import { useUser } from '~/hooks/use-user';
-import { withSuspense } from '~/utils/with-suspense';
 
 import { AuthenticationForm } from './authentication-form';
 import { useAuthenticationFormUnsafe } from './use-authentication-form';
 
-export const AuthenticationModal = withSuspense(() => {
+export const AuthenticationModal = () => {
   const user = useUser();
 
   const [authParam, setAuthParam] = useSearchParam('auth');
@@ -44,4 +43,4 @@ export const AuthenticationModal = withSuspense(() => {
       {form && <AuthenticationForm onClose={closeModal} />}
     </Modal>
   );
-});
+};

@@ -11,7 +11,6 @@ import facebook from '~/images/logos/facebook-logo.png';
 import link from '~/images/logos/link.png';
 import linkedin from '~/images/logos/linkedin-logo.png';
 import twitter from '~/images/logos/twitter-logo.png';
-import { withSuspense } from '~/utils/with-suspense';
 
 import { FetchComment } from './fetch-comment';
 
@@ -43,7 +42,7 @@ type ShareCommentProps = {
   comment: CommentDto;
 };
 
-const ShareComment = withSuspense(({ comment }: ShareCommentProps) => {
+const ShareComment = ({ comment }: ShareCommentProps) => {
   const snackbar = useSnackbar();
 
   const permalink = usePermalink(comment.id);
@@ -97,7 +96,7 @@ const ShareComment = withSuspense(({ comment }: ShareCommentProps) => {
       </div>
     </>
   );
-}, 'ShareComment');
+};
 
 const usePermalink = (commentId: string) => {
   const threadId = useRouteParam('threadId');

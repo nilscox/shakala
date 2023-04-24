@@ -101,6 +101,5 @@ const UnseenNotificationsChip = withSuspense(
 
     return <Chip className="ml-auto">{totalUnseenNotifications}</Chip>;
   },
-  'UnseenNotificationsChip',
   () => null
 );

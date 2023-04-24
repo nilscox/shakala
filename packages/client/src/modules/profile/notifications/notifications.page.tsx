@@ -33,7 +33,7 @@ const NotificationsList = withSuspense(() => {
   }
 
   return <Notifications notifications={notifications} hasMore={hasMore} loadMore={loadMore} />;
-}, 'NotificationsList');
+});
 
 const NoNotifications = () => {
   return <Fallback>Vous n'avez pas encore reçu de notification.</Fallback>;

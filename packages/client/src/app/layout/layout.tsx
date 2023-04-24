@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { MatomoScript } from '~/adapters/tracking/matomo-tracking.adapter';
 import { useTrackPageViews } from '~/hooks/tracking';
 import { AuthenticationModal } from '~/modules/authentication/authentication-modal';
@@ -14,9 +16,15 @@ type LayoutProps = {
 export const Layout = ({ children }: LayoutProps) => (
   <>
     <PageTitle />
+
     <Header className="mx-auto max-w-6" />
-    <main className="mx-auto min-h-3 max-w-6 px-2 sm:px-4">{children}</main>
+
+    <Suspense>
+      <main className="mx-auto min-h-3 max-w-6 px-2 sm:px-4">{children}</main>
+    </Suspense>
+
     <Footer className="mx-auto max-w-6" />
+
     <AuthenticationModal />
     <MatomoScript />
     <TrackPageViews />
