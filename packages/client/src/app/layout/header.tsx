@@ -1,5 +1,7 @@
 import { clsx } from 'clsx';
 
+import { useUser } from '~/hooks/use-user';
+
 import { Avatar } from '../../elements/avatar/avatar';
 import { Chip } from '../../elements/chip';
 import { Link, NavLink, SearchParamLink } from '../../elements/link';
@@ -35,7 +37,7 @@ const Heading = () => (
 );
 
 const Authentication = () => {
-  const user = useQuery(TOKENS.authentication, 'getAuthenticatedUser');
+  const user = useUser();
 
   const getNick = () => {
     if (!user) {

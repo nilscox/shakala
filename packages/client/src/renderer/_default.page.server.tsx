@@ -16,7 +16,7 @@ import type { PageContextServer } from './page-context';
 export const passToClient = ['pageProps', 'routeParams', 'dehydratedState'];
 
 const commonQueries = [
-  prefetchQuery(({ token }) => (token ? [TOKENS.authentication, 'getAuthenticatedUser'] : undefined)),
+  prefetchQuery(TOKENS.authentication, 'getAuthenticatedUser'),
   prefetchQuery(({ token }) => (token ? [TOKENS.account, 'getNotificationsCount'] : undefined)),
 ];
 
