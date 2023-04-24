@@ -5,6 +5,7 @@ import { AvatarNick } from '~/elements/avatar/avatar-nick';
 import { ExternalLink, Link, SearchParamLink } from '~/elements/link';
 import { RichText } from '~/elements/rich-text';
 import { useTrackEvent } from '~/hooks/tracking';
+import { useConfigValue } from '~/hooks/use-config-value';
 import { useQuery } from '~/hooks/use-query';
 import IconArrowDown from '~/icons/arrow-down.svg';
 import CommunityIcon from '~/icons/community.svg';
@@ -232,7 +233,7 @@ const Motivations = () => (
         Convaincu·e ? N'hésitez pas à nous <Link href="/faq#contact">envoyer un petit message</Link> si vous
         souhaitez être tenu informé·e lorsque de vraies discussions verront le jour ! Nous sommes également à
         l'écoute de vos retours et idées{' '}
-        <ExternalLink openInNewTab href="https://improve.shakala.nilscox.dev/feedback">
+        <ExternalLink openInNewTab href={useConfigValue('feedbackUrl')}>
           sur cette page
         </ExternalLink>
         .

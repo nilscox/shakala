@@ -3,6 +3,7 @@ import { QueryClient } from 'react-query';
 import { describe, it } from 'vitest';
 
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
+import { emptyConfig } from '~/adapters/config/empty-config.adapter';
 import { container } from '~/app/container';
 import { TOKENS } from '~/app/tokens';
 import { PageContextServer } from '~/renderer/page-context';
@@ -17,12 +18,7 @@ describe('prefetchQuery', () => {
     const queryClient = new QueryClient();
     const pageContext = { queryClient } as PageContextServer;
 
-    const http = new ApiFetchHttpAdapter({
-      isDevelopment: false,
-      apiBaseUrl: '',
-      analyticsUrl: '',
-      analyticsSiteId: NaN,
-    });
+    const http = new ApiFetchHttpAdapter(emptyConfig);
 
     const adapter = new ApiThreadAdapter(http);
 

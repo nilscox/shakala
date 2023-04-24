@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 
+import { useConfigValue } from '~/hooks/use-config-value';
 import { useUser } from '~/hooks/use-user';
 
 import { Link, SearchParamLink } from '../../elements/link';
@@ -14,6 +15,11 @@ type FooterProps = {
 
 export const Footer = ({ className }: FooterProps): JSX.Element => {
   const user = useUser();
+
+  const discordUrl = useConfigValue('discordUrl');
+  const roadmapUrl = useConfigValue('roadmapUrl');
+  const feedbackUrl = useConfigValue('feedbackUrl');
+  const repositoryUrl = useConfigValue('repositoryUrl');
 
   return (
     <footer className="py-5">
@@ -37,9 +43,9 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
           </FooterColumn>
 
           <FooterColumn>
-            <a href="https://improve.shakala.nilscox.dev/feedback">Proposer une idée</a>
-            <a href="https://trello.com/b/CfC8aQ80/tasks">Roadmap</a>
-            <a href="https://github.com/nilscox/shakala">Code source</a>
+            <a href={feedbackUrl}>Proposer une idée</a>
+            <a href={roadmapUrl}>Roadmap</a>
+            <a href={repositoryUrl}>Code source</a>
           </FooterColumn>
 
           <FooterColumn>
@@ -49,7 +55,7 @@ export const Footer = ({ className }: FooterProps): JSX.Element => {
             <SocialLink image={twitterLogo} imageAlt="twitter-logo">
               Twitter
             </SocialLink>
-            <SocialLink href="https://discord.gg/Np8yJ43V" image={discordLogo} imageAlt="twitter-logo">
+            <SocialLink href={discordUrl} image={discordLogo} imageAlt="twitter-logo">
               Discord
             </SocialLink>
           </FooterColumn>
