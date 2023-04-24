@@ -31,32 +31,42 @@ const MotivationsPage = () => (
       <li>vérifier la source des faits énoncés</li>
       <li>faire attention aux incohérences</li>
       <li>avoir conscience des biais cognitifs pouvant altérer son jugement</li>
-      <li>savoir reconnaître une pseudo-science</li>
+      <li>savoir faire la différence entre science et pseudo-science</li>
       <li>et bien d'autres pièges qu'il faut apprendre à éviter...</li>
     </ul>
 
     <p>
-      Sans prendre le temps d'y réfléchir, on peut facilement accorder autant de valeur au tweet d'un « expert
-      » auto-proclamé qu'à une enquête journalistique effectuée par des professionnels. Force est de constater
-      qu'il n'est pas toujours évident d'user de notre rationalité lorsque nous devons nous faire une opinion,
-      et plus particulièrement sur les sujets qui nous tiennent à cœur.
+      Si on ne fait pas attention, on peut facilement accorder autant de crédit au blog d'un « expert »
+      auto-proclamé qu'à une enquête journalistique effectuée par des professionnels. Force est de constater
+      qu'il n'est pas toujours évident d'user de notre rationalité lorsque nous devons nous faire une opinion
+      sur un sujet, et plus particulièrement lorsque ce sujet nous tiennent à cœur.
     </p>
 
     <p>
-      Mais élaborer une réflexion rationnelle seul peut se révéler difficile. Pour creuser un sujet, apporter
-      des doutes lorsque c'est nécessaire, il faut pouvoir partager ses idées avec des personnes à l'écoute,
-      si possible dans un cadre propice à des échanges construits et argumentés. Ce n'est pas le but de la
-      plupart des espaces de discussion existants sur la toile, et en particulier sur les réseaux sociaux.
+      Mais élaborer une réflexion rationnelle seul peut n'est pas toujours évident. Pour mieux comprendre un
+      sujet, il est intéressant de comprendre pourquoi certaines personnes ont un avis différent du notre,
+      quel a été leur chemin de pensée pour en arriver là. Et si ce type de discussion peut avoir lieu dans un
+      cadre propice à des échanges construits et argumentés, c'est encore mieux.
     </p>
 
-    <h2 id="les-objectifs">Les objectifs</h2>
+    <p>
+      Ce carde n'est pas celui qu'on trouve sur la plupart des espaces de discussion existants sur la toile,
+      et en particulier sur les réseaux sociaux.
+    </p>
+
+    <h2 id="l-objectif">L'objectif</h2>
 
     <p>
       Shakala, c'est une plateforme web où chacun est libre de proposer des sujets de conversation, et
       d'échanger par écrit avec des personnes qui partagent un intérêt pour ces sujets. Le but étant que
       chacun puisse donner son point de vue, son chemin de pensée, et comprendre celui des autres
-      participants. Mais comment assurer des échanges constructifs ? C'est un vrai défi. Pour cela, deux
-      points sont essentiels : la charte et la modération.
+      participants. Autrement dit, le but est de permettre des discussions d'opinion dans un cadre
+      constructif.
+    </p>
+
+    <p>
+      Mais alors... Comment assurer des échanges constructifs ? C'est un vrai défi. Pour cela, deux points
+      sont essentiels : la charte et la modération.
     </p>
 
     <p>
