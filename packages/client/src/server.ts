@@ -14,6 +14,7 @@ const {
   NODE_ENV,
   HOST = '0.0.0.0',
   PORT = '8000',
+  NO_INDEX = 'false',
   VITE_SERVER_API_URL = 'http://localhost:3000',
 } = process.env;
 
@@ -34,6 +35,13 @@ async function main() {
 
   app.use(compression());
   app.use(cookieParser());
+
+  if (NO_INDEX === 'true') {
+    app.get('/robots.txt', (_req, res) => {
+      res.set('Content-Type', 'text/plain');
+      res.send('User-agent: *\nDisallow: /');
+    });
+  }
 
   if (prod) {
     // eslint-disable-next-line import/no-named-as-default-member
