@@ -61,7 +61,7 @@ describe('CommentForm', () => {
       <ReplyForm parent={parent} isReplying={true} openReplyForm={stub()} closeReplyForm={closeReplyForm} />
     );
 
-    await user.type(screen.getByPlaceholderText('Rédigez votre message'), 'reply');
+    await user.type(await screen.findByPlaceholderText('Rédigez votre message'), 'reply');
     await user.click(screen.getByText('Envoyer'));
 
     expect(closeReplyForm).called();
@@ -76,7 +76,7 @@ describe('CommentForm', () => {
       <ReplyForm parent={parent} isReplying={true} openReplyForm={stub()} closeReplyForm={stub()} />
     );
 
-    await user.type(screen.getByPlaceholderText('Rédigez votre message'), 'reply');
+    await user.type(await screen.findByPlaceholderText('Rédigez votre message'), 'reply');
     await user.click(screen.getByText('Envoyer'));
 
     expect(screen.getByText("Vous devez être l'auteur du message pour pouvoir l'éditer.")).toBeVisible();
