@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { TOKENS } from '~/app/tokens';
 import { Button, SubmitButton } from '~/elements/button';
 import { RichText } from '~/elements/rich-text';
-import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { useBoolean } from '~/hooks/use-boolean';
 
 import { useCommentForm } from '../comment-form/comment-form';
@@ -78,16 +77,16 @@ export const CommentEditionForm = ({ comment, onClose }: CommentEditionFormProps
     },
   });
 
+  const { Toolbar, Editor } = useInjection(TOKENS.richTextEditor);
+
   return (
     <form onSubmit={onSubmit} className="col flex-1 p-2">
       <div className="row justify-between gap-4">
         <CommentHeader comment={comment} />
-        <EditorToolbar editor={editor} />
+        <Toolbar editor={editor} />
       </div>
 
-      <div className="my-2">
-        {editor ? <RichTextEditor editor={editor} /> : <RichText>{comment.text}</RichText>}
-      </div>
+      <div className="my-2">{editor ? <Editor editor={editor} /> : <RichText>{comment.text}</RichText>}</div>
 
       <div className="flex flex-row items-center justify-end gap-2">
         {error}

@@ -1,11 +1,12 @@
+import { useInjection } from 'brandi-react';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 
 import { ThreadFormFields } from '~/adapters/api/thread/thread.port';
+import { TOKENS } from '~/app/tokens';
 import { Button, SubmitButton } from '~/elements/button';
 import { FormField } from '~/elements/form-field';
 import { Input } from '~/elements/input';
-import { EditorToolbar, RichTextEditor, useRichTextEditor } from '~/elements/rich-text-editor';
 import { useSnackbar } from '~/elements/snackbar';
 import { useSubmit } from '~/hooks/use-submit';
 
@@ -46,7 +47,9 @@ export const ThreadForm = ({
     },
   });
 
-  const editor = useRichTextEditor({
+  const { useEditor, Editor, Toolbar } = useInjection(TOKENS.richTextEditor);
+
+  const { editor } = useEditor({
     initialHtml: form.getValues('text'),
     autofocus: false,
     onChange: (text) => {
@@ -88,7 +91,7 @@ export const ThreadForm = ({
         name="text"
         label={
           <div className="row">
-            Texte <EditorToolbar className="ml-auto mb-0.5" editor={editor} />
+            Texte <Toolbar className="ml-auto mb-0.5" editor={editor} />
           </div>
         }
         error={form.formState.errors.text?.message}
@@ -97,7 +100,7 @@ export const ThreadForm = ({
           max: 'Le texte est trop long',
         }}
       >
-        <RichTextEditor
+        <Editor
           editor={editor}
           className="min-h-2 w-full rounded border bg-neutral p-1 focus-within:border-primary"
         />

@@ -3,12 +3,16 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import Superscript from '@tiptap/extension-superscript';
 import Typography from '@tiptap/extension-typography';
 import { Underline } from '@tiptap/extension-underline';
-import { Editor, EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, Editor as TipTapEditor, useEditor as useTipTapEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
+
+import { RichTextEditor } from './rich-text-editor.port';
 
 import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/solid.css';
+
+type TipTapRichTextEditor = RichTextEditor<TipTapEditor | null>;
 
 // cspell:words fortawesome fontawesome classname exitable
 
@@ -19,20 +23,8 @@ const CustomSuperscript = Superscript.extend({
   exitable: true,
 });
 
-type UseRichTextEditorProps = {
-  autofocus?: boolean;
-  initialHtml?: string;
-  placeholder?: string;
-  onChange?: (html: string) => void;
-};
-
-export const useRichTextEditor = ({
-  autofocus,
-  initialHtml,
-  placeholder,
-  onChange,
-}: UseRichTextEditorProps = {}) => {
-  return useEditor({
+const useEditor: TipTapRichTextEditor['useEditor'] = ({ autofocus, initialHtml, placeholder, onChange }) => {
+  const editor = useTipTapEditor({
     content: initialHtml,
     editorProps: {
       attributes: {
@@ -52,23 +44,18 @@ export const useRichTextEditor = ({
       onChange?.(editor.getHTML());
     },
   });
+
+  return {
+    editor,
+    clear: () => editor?.chain().setContent('').run(),
+  };
 };
 
-type RichTextEditorProps = {
-  editor: Editor | null;
-  className?: string;
+const Editor: TipTapRichTextEditor['Editor'] = ({ editor, className, ...props }) => {
+  return <EditorContent editor={editor} className={clsx(className, 'col')} {...props} />;
 };
 
-export const RichTextEditor = ({ editor, className }: RichTextEditorProps) => {
-  return <EditorContent editor={editor} className={clsx(className, 'col')} />;
-};
-
-type EditorToolbarProps = {
-  editor: Editor | null;
-  className?: string;
-};
-
-export const EditorToolbar = ({ editor, className }: EditorToolbarProps) => (
+const Toolbar: TipTapRichTextEditor['Toolbar'] = ({ editor, className }) => (
   <div className={clsx('row items-center gap-1', className)}>
     <ToolbarItem
       icon="bold"
@@ -155,3 +142,9 @@ const ToolbarItem = ({ icon, active, title, onClick }: ToolbarItemProps) => (
     <i className={`fa-solid fa-${icon}`} />
   </button>
 );
+
+export const tiptapRichTextEditor: TipTapRichTextEditor = {
+  useEditor,
+  Editor,
+  Toolbar,
+};

@@ -1,9 +1,9 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryFn } from '@storybook/react';
+import { useInjection } from 'brandi-react';
 
+import { TOKENS } from '~/app/tokens';
 import { maxWidthDecorator } from '~/utils/storybook';
-
-import { EditorToolbar, RichTextEditor, useRichTextEditor } from '../rich-text-editor';
 
 type Args = {
   autofocus: boolean;
@@ -22,15 +22,17 @@ export default {
 } satisfies Meta<Args>;
 
 export const richTextEditor: StoryFn<Args> = (args) => {
-  const editor = useRichTextEditor({
+  const { useEditor, Editor, Toolbar } = useInjection(TOKENS.richTextEditor);
+
+  const editor = useEditor({
     onChange: action('onChange'),
     ...args,
   });
 
   return (
     <>
-      <RichTextEditor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
-      <EditorToolbar editor={editor} className="mt-1" />
+      <Editor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
+      <Toolbar editor={editor} className="mt-1" />
     </>
   );
 };

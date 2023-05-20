@@ -1,5 +1,5 @@
 import { Factory, UserDto } from '@shakala/shared';
-import { render as renderTL, renderHook as renderHookTL } from '@testing-library/react';
+import { renderHook as renderHookTL, render as renderTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContainerProvider } from 'brandi-react';
 import { QueryClient, QueryClientProvider, QueryKey, setLogger } from 'react-query';
@@ -11,6 +11,8 @@ import { StubCommentAdapter } from '~/adapters/api/comment/stub-comment.adapter'
 import { StubThreadAdapter } from '~/adapters/api/thread/stub-thread.adapter';
 import { HttpError } from '~/adapters/http/http-error';
 import { HttpRequest, HttpResponse } from '~/adapters/http/http.port';
+import { RichTextEditor } from '~/adapters/rich-text-editor/rich-text-editor.port';
+import { stubRichTextEditor } from '~/adapters/rich-text-editor/stub-rich-text-editor.adapter';
 import { StubRouterAdapter } from '~/adapters/router/stub-router.adapter';
 import { queryClientConfig } from '~/app/app-providers';
 import { container } from '~/app/container';
@@ -21,6 +23,7 @@ import { SnackbarProvider } from '~/elements/snackbar';
 import { getQueryKey } from './query-key';
 
 type StubAdapters = {
+  richTextEditor: RichTextEditor;
   router: StubRouterAdapter;
   account: StubAccountAdapter;
   authentication: StubAuthenticationAdapter;
@@ -42,6 +45,7 @@ export const setupTest = () => {
     setLogger({ log: noop, warn: noop, error: noop });
 
     Object.assign(adapters, {
+      richTextEditor: stubRichTextEditor,
       router: new StubRouterAdapter(),
       account: new StubAccountAdapter(),
       authentication: new StubAuthenticationAdapter(),
@@ -49,6 +53,7 @@ export const setupTest = () => {
       comment: new StubCommentAdapter(),
     });
 
+    container.bind(TOKENS.richTextEditor).toConstant(adapters.richTextEditor);
     container.bind(TOKENS.router).toConstant(adapters.router);
     container.bind(TOKENS.account).toConstant(adapters.account);
     container.bind(TOKENS.authentication).toConstant(adapters.authentication);

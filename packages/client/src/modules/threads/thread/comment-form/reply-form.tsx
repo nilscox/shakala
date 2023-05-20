@@ -6,7 +6,6 @@ import { TOKENS } from '~/app/tokens';
 import { UserAvatarNick } from '~/app/user-avatar-nick';
 import { Avatar } from '~/elements/avatar/avatar';
 import { Button, SubmitButton } from '~/elements/button';
-import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { useUser } from '~/hooks/use-user';
 
 import { useCommentForm } from './comment-form';
@@ -63,16 +62,18 @@ const RealForm = ({ parent, closeReplyForm }: RealFormPros) => {
     onSubmit: (text) => commentAdapter.createReply(parent.id, text),
   });
 
+  const { Editor, Toolbar } = useInjection(TOKENS.richTextEditor);
+
   return (
     <form onSubmit={onSubmit} className="px-1 py-0.5">
       <div className="row justify-between gap-4 pb-1">
         <UserAvatarNick />
-        <EditorToolbar editor={editor} />
+        <Toolbar editor={editor} />
       </div>
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className={clsx('ml-[0.6rem] border-l-4 pl-2')}>
-        <RichTextEditor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
+        <Editor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
       </div>
 
       <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">

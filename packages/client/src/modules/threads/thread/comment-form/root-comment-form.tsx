@@ -4,7 +4,6 @@ import { useInjection } from 'brandi-react';
 import { TOKENS } from '~/app/tokens';
 import { UserAvatarNick } from '~/app/user-avatar-nick';
 import { SubmitButton } from '~/elements/button';
-import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { usePathname } from '~/hooks/use-router';
 
 import { useCommentForm } from './comment-form';
@@ -28,14 +27,16 @@ export const RootCommentForm = ({ thread }: RootCommentFormProps) => {
     },
   });
 
+  const { Editor, Toolbar } = useInjection(TOKENS.richTextEditor);
+
   return (
     <form onSubmit={onSubmit} className="col flex-1 bg-neutral">
       <div className="row justify-between gap-4 p-2">
         <UserAvatarNick />
-        <EditorToolbar editor={editor} />
+        <Toolbar editor={editor} />
       </div>
 
-      <RichTextEditor editor={editor} className="min-h-1 px-1" />
+      <Editor editor={editor} className="min-h-1 px-1" />
 
       <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">
         {error}

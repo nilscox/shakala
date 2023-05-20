@@ -5,7 +5,6 @@ import { clsx } from 'clsx';
 import { TOKENS } from '~/app/tokens';
 import { Button, SubmitButton } from '~/elements/button';
 import { RichText } from '~/elements/rich-text';
-import { EditorToolbar, RichTextEditor } from '~/elements/rich-text-editor';
 import { useBoolean } from '~/hooks/use-boolean';
 
 import { useCommentForm } from '../comment-form/comment-form';
@@ -72,16 +71,18 @@ const ReplyEditionForm = ({ reply, onClose }: ReplyEditionFormProps) => {
     },
   });
 
+  const { Toolbar, Editor } = useInjection(TOKENS.richTextEditor);
+
   return (
-    <form id={reply.id} className="py-0.5 px-1" onSubmit={onSubmit}>
+    <form id={reply.id} className="px-1 py-0.5" onSubmit={onSubmit}>
       <div className="row justify-between gap-4 pb-1">
         <CommentHeader comment={reply} />
-        <EditorToolbar editor={editor} />
+        <Toolbar editor={editor} />
       </div>
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
       <div className="ml-[0.6rem] border-l-4 pl-2">
-        <RichTextEditor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
+        <Editor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
       </div>
 
       <div className="flex flex-row items-center justify-end gap-2 px-1 pt-1">

@@ -1,14 +1,12 @@
 import expect from '@nilscox/expect';
 import { createAuthorDto, createCommentDto, createThreadDto, stub } from '@shakala/shared';
 import { screen } from '@testing-library/react';
-import { beforeEach, describe, it, vi } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 
 import { ReplyForm } from './reply-form';
 import { RootCommentForm } from './root-comment-form';
-
-vi.mock('~/elements/rich-text-editor');
 
 describe('CommentForm', () => {
   const { render, setRouteParam, adapters } = setupTest();

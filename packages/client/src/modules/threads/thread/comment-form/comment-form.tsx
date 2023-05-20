@@ -1,8 +1,8 @@
+import { useInjection } from 'brandi-react';
 import { useForm } from 'react-hook-form';
 
 import { TOKENS } from '~/app/tokens';
 import { FieldError } from '~/elements/form-field';
-import { useRichTextEditor } from '~/elements/rich-text-editor';
 import { useSnackbar } from '~/elements/snackbar';
 import { useInvalidateQuery } from '~/hooks/use-query';
 import { useRouteParam } from '~/hooks/use-route-params';
@@ -47,7 +47,7 @@ export const useCommentForm = ({
       form.setValue('text', '');
       form.clearErrors('text');
 
-      editor?.chain().setContent('').run();
+      clear();
 
       onSubmitted?.(commentId);
     },
@@ -60,7 +60,7 @@ export const useCommentForm = ({
     },
   });
 
-  const editor = useRichTextEditor({
+  const { editor, clear } = useInjection(TOKENS.richTextEditor).useEditor({
     autofocus,
     initialHtml,
     placeholder,

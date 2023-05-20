@@ -1,14 +1,12 @@
 import expect from '@nilscox/expect';
 import { stub } from '@shakala/shared';
 import { cleanup, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, it, vi } from 'vitest';
+import { afterEach, describe, it } from 'vitest';
 
 import { setupTest } from '~/utils/setup-test';
 import { ValidationErrors } from '~/utils/validation-errors';
 
 import { ThreadForm } from './thread-form';
-
-vi.mock('~/elements/rich-text-editor');
 
 describe('ThreadForm', () => {
   const { render } = setupTest();
@@ -16,7 +14,7 @@ describe('ThreadForm', () => {
   const fields = {
     description: () => screen.getByLabelText('Description'),
     keywords: () => screen.getByLabelText('Mots-clés'),
-    text: () => screen.getByTestId('mock-rich-text-editor'),
+    text: () => screen.getByLabelText('Texte'),
     submit: (text: string) => screen.getByRole('button', { name: text }),
   };
 
@@ -42,7 +40,7 @@ describe('ThreadForm', () => {
     });
   });
 
-  it.skip('displays the field errors', async () => {
+  it('displays the field errors', async () => {
     const onSubmit = stub();
 
     onSubmit.reject(
