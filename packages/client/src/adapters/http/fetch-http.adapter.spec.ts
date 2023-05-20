@@ -81,7 +81,7 @@ describe('FetchHttpAdapter', () => {
       '/',
       expect.objectWith({
         method: 'POST',
-        headers: new Headers({ 'Content-Type': 'application,json' }),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         body: '{"id":42}',
       }),
     ]);
