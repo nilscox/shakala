@@ -5,6 +5,7 @@ import { describe, it } from 'vitest';
 
 import { NodeMailerEmailSenderAdapter } from './node-mailer-email-sender.adapter';
 
+// eslint-disable-next-line import/no-unresolved
 import '@shakala/shared/vitest.setup';
 
 describe('[unit] NodeMailerEmailSenderAdapter', () => {
