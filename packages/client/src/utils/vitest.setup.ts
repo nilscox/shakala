@@ -9,13 +9,3 @@ setupDOMFormatter(prettyDOM);
 afterEach(cleanup);
 
 window.scroll = () => {};
-
-// https://github.com/capricorn86/happy-dom/issues/527#issuecomment-1174442116
-const originalDispatchEvent = HTMLElement.prototype.dispatchEvent;
-HTMLElement.prototype.dispatchEvent = function (event) {
-  const result = originalDispatchEvent.call(this, event);
-  if (event.type === 'click' && this.tagName === 'BUTTON') {
-    this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-  }
-  return result;
-};

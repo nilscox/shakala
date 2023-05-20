@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import proxy from 'express-http-proxy';
 import { QueryClient } from 'react-query';
-import { renderPage } from 'vite-plugin-ssr';
+import { renderPage } from 'vite-plugin-ssr/server';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 

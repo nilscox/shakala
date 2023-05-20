@@ -1,6 +1,6 @@
 import * as ReactDOMServer from 'react-dom/server';
 import { dehydrate, Hydrate } from 'react-query';
-import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr';
+import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr/server';
 
 import { Layout } from '~/app/layout/layout';
 import { TOKENS } from '~/app/tokens';

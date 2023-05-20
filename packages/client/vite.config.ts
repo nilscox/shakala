@@ -1,7 +1,6 @@
 import path from 'node:path';
 
 import react from '@vitejs/plugin-react';
-import { PluginOption } from 'vite';
 import ssr from 'vite-plugin-ssr/plugin';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -9,7 +8,7 @@ import { defineConfig } from 'vitest/config';
 
 const isStorybook = process.env.IS_STORYBOOK;
 
-const plugins: PluginOption[] = isStorybook
+const plugins = isStorybook
   ? [tsconfigPaths(), svgr({ exportAsDefault: true })]
   : [tsconfigPaths(), react(), ssr(), svgr({ exportAsDefault: true })];
 
