@@ -1,5 +1,8 @@
 {
   "packageManager": "pnpm@8.5.1",
+  "engines": {
+    "node": "19.x"
+  },
   "scripts": {
     "build": "tsc -b",
     "clean": "pnpm run -r clean",
