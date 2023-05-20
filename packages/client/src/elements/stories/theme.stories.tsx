@@ -75,7 +75,7 @@ type BorderRadiusProps = {
 const BorderRadius = ({ className, name }: BorderRadiusProps) => (
   <div className="flex flex-row items-center gap-2">
     <div
-      className={clsx('h-6 w-6 border-t border-l', className)}
+      className={clsx('h-6 w-6 border-l border-t', className)}
       style={{ borderEndStartRadius: 0, borderEndEndRadius: 0, borderStartEndRadius: 0 }}
     />
     <Label>{name}</Label>

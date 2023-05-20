@@ -25,7 +25,7 @@ export const Activity = ({ isFirst, activity, icon, children }: ActivityComponen
     </div>
 
     {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-    <div className="mt-1 mb-2 [&>p]:my-0">
+    <div className="mb-2 mt-1 [&>p]:my-0">
       <div className="text-xs font-medium text-muted/75">
         <time dateTime={activity.date} title={formatDate(activity.date, DateFormat.full)}>
           {formatDateRelativeOrAbsolute(activity.date)}

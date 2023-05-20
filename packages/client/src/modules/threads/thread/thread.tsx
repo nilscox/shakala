@@ -87,7 +87,7 @@ const ThreadHeader = ({ author, date, edited, description, totalComments }: Thre
   <div className="row mb-2 flex-wrap items-center gap-4">
     <AvatarNick size="medium" nick={author.nick} image={author.profileImage} />
 
-    <div className="flex-1 border-l-2 pl-2 font-medium text-muted line-clamp-1">{description}</div>
+    <div className="line-clamp-1 flex-1 border-l-2 pl-2 font-medium text-muted">{description}</div>
 
     <div className="text-muted">
       <DateTime

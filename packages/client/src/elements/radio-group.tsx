@@ -28,7 +28,7 @@ export const RadioItem = ({ id, name, title, defaultChecked, children }: RadioIt
       className="peer sr-only"
     />
     <label
-      className="row h-full cursor-pointer items-center py-0.5 px-2 peer-checked:bg-muted/10 peer-focus-visible:outline"
+      className="row h-full cursor-pointer items-center px-2 py-0.5 peer-checked:bg-muted/10 peer-focus-visible:outline"
       htmlFor={id}
       title={title}
     >

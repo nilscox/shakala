@@ -38,7 +38,7 @@ const FakeForm = ({ className, onFocus }: FakeFormProps) => {
       <Avatar image={user?.profileImage} />
       <input
         readOnly
-        className="w-full rounded border py-0.5 px-1"
+        className="w-full rounded border px-1 py-0.5"
         placeholder="Répondre"
         onFocus={onFocus}
       />
@@ -76,7 +76,7 @@ const RealForm = ({ parent, closeReplyForm }: RealFormPros) => {
         <Editor editor={editor} className="min-h-1 rounded border bg-neutral p-1" />
       </div>
 
-      <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">
+      <div className="flex flex-row items-center justify-end gap-2 px-2 py-1">
         {error}
 
         <Button secondary onClick={closeReplyForm}>

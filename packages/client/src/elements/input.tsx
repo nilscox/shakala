@@ -15,7 +15,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       )}
     >
       {start}
-      <input ref={ref} className="w-full py-0.5 px-1 outline-none" {...props} />
+      <input ref={ref} className="w-full px-1 py-0.5 outline-none" {...props} />
       {end}
     </div>
   )

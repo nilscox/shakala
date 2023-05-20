@@ -38,7 +38,7 @@ export const RootCommentForm = ({ thread }: RootCommentFormProps) => {
 
       <Editor editor={editor} className="min-h-1 px-1" />
 
-      <div className="flex flex-row items-center justify-end gap-2 py-1 px-2">
+      <div className="flex flex-row items-center justify-end gap-2 px-2 py-1">
         {error}
 
         <SubmitButton primary loading={loading}>

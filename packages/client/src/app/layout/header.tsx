@@ -14,7 +14,7 @@ type HeaderProps = {
 };
 
 export const Header = ({ className }: HeaderProps): JSX.Element => (
-  <header className="links-nocolor bg-inverted pt-6 pb-2 text-inverted">
+  <header className="links-nocolor bg-inverted pb-2 pt-6 text-inverted">
     <div className={clsx('px-4', className)}>
       <div className="relative flex flex-row justify-between gap-4">
         <Authentication />
@@ -50,7 +50,7 @@ const Authentication = () => {
   return (
     <AuthenticationLink
       authenticated={Boolean(user)}
-      className="absolute top-0 right-0 flex flex-row items-center gap-2"
+      className="absolute right-0 top-0 flex flex-row items-center gap-2"
     >
       <span className={clsx('font-bold')}>{getNick()}</span>
       <div className="relative h-6 w-6">
@@ -90,7 +90,7 @@ const UnseenNotificationsChip = () => {
     return null;
   }
 
-  return <Chip className="absolute -top-1 -right-1 animate-scale-in ease-out">{total}</Chip>;
+  return <Chip className="absolute -right-1 -top-1 animate-scale-in ease-out">{total}</Chip>;
 };
 
 type NavigationProps = {

@@ -30,7 +30,7 @@ export const Reply = ({ reply }: ReplyProps) => {
   return (
     <div
       id={reply.id}
-      className={clsx('py-0.5 px-1', isHighlighted && 'animate-highlight')}
+      className={clsx('px-1 py-0.5', isHighlighted && 'animate-highlight')}
       onMouseLeave={closeActions}
     >
       <CommentHeader comment={reply} className="pb-1" />

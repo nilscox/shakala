@@ -116,8 +116,8 @@ const LastThreads = withSuspense(() => {
           <div key={thread.id} className="card relative overflow-hidden p-4">
             <AvatarNick nick={thread.author.nick} image={thread.author.profileImage} />
             <hr className="my-1" />
-            <div className="mb-2 text-sm font-semibold text-muted line-clamp-2">{thread.description}</div>
-            <RichText className="text-sm line-clamp-5">{thread.text}</RichText>
+            <div className="mb-2 line-clamp-2 text-sm font-semibold text-muted">{thread.description}</div>
+            <RichText className="line-clamp-5 text-sm">{thread.text}</RichText>
             {/* avoid having a interactive contents within the link */}
             <Link href={`/discussions/${thread.id}`} className="absolute inset-0" />
           </div>

@@ -31,7 +31,7 @@ export const VerticalTab = ({ to, Icon, onClick, right, children }: VerticalTabP
   );
 
   const className = clsx(
-    'row my-0.5 w-full items-center gap-1 py-0.5 px-2',
+    'row my-0.5 w-full items-center gap-1 px-2 py-0.5',
     'transition-colors hover:bg-muted/10',
     'rounded border-l-4 border-transparent'
   );

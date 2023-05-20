@@ -57,7 +57,7 @@ export const Snackbar = ({ className, type, transition, onRemove, children }: Sn
           <Icon className="h-5 w-5 text-white" />
         </div>
         <div className="flex-1 p-2">{children}</div>
-        <div className="py-4 px-2">
+        <div className="px-2 py-4">
           <IconButton
             icon={<CrossIcon className="h-4 w-4 text-muted" />}
             onClick={onRemove}

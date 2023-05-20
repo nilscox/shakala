@@ -91,7 +91,7 @@ export const ThreadForm = ({
         name="text"
         label={
           <div className="row">
-            Texte <Toolbar className="ml-auto mb-0.5" editor={editor} />
+            Texte <Toolbar className="mb-0.5 ml-auto" editor={editor} />
           </div>
         }
         error={form.formState.errors.text?.message}
