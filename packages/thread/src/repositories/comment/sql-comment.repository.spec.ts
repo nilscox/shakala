@@ -1,5 +1,5 @@
 import expect from '@nilscox/expect';
-import { SqlComment, SqlThread } from '@shakala/persistence/src';
+import { SqlComment, SqlThread } from '@shakala/persistence';
 import { createRepositoryTest, RepositoryTest } from '@shakala/persistence/test';
 import { CommentSort, createFactory, first, ReactionType } from '@shakala/shared';
 import { beforeEach, describe, it } from 'vitest';
