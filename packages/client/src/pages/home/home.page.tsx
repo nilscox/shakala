@@ -149,7 +149,8 @@ const Motivations = () => (
       </p>
 
       <p>
-        Le but de Shakala, c'est de permettre <strong>des échanges qui ont du sens</strong>.
+        Le but de Shakala, c'est de permettre des échanges basés sur <strong>l'esprit critique </strong> et{' '}
+        <strong>l'autodéfense intellectuelle</strong>.
       </p>
     </Question>
 
@@ -158,13 +159,13 @@ const Motivations = () => (
         2. Mais alors, comment faire ?
       </p>
 
-      <p>Shakala est construit autour de trois points clés :</p>
+      <p>Cette plateforme est construite autour de trois points clés :</p>
 
       {/* eslint-disable-next-line tailwindcss/no-arbitrary-value */}
-      <ul className="ml-5 list-disc [&>li]:my-1">
+      <ol className="ml-5 list-decimal [&>li]:my-1">
         <li>
-          <strong>La charte</strong>. Elle définit l'état d'esprit à adopter dans les conversations, apportant
-          le filtre nécessaire pour garantir des échanges pertinents.
+          <strong>La charte</strong>. Elle définit l'état d'esprit à adopter dans les conversations :
+          suspendre son jugement, apporter des sources, etc.
         </li>
 
         <li>
@@ -176,7 +177,7 @@ const Motivations = () => (
           <strong>L'indépendance</strong>. Gratuit et open-source, Shakala ne sera jamais lié à une autorité
           capable d'influer dans les discussions d'une quelconque manière.
         </li>
-      </ul>
+      </ol>
     </Question>
 
     <Question Image={StandOut} layout="row">
@@ -187,12 +188,11 @@ const Motivations = () => (
       <p>
         Il n'est pas nécessaire de connaître les outils de la pensée critique, les biais cognitifs ou la
         méthode scientifique pour participer. Le but est de rassembler des personnes qui « jouent le jeu »,
-        qui cherchent à partager leurs opinions et à comprendre celles des autres avec bienveillance et
-        humilité.
+        qui cherchent à confronter leurs opinions à celles des autres avec bienveillance et humilité.
       </p>
 
       <p>
-        Shakala s'adresse à des personnes qui cherchent à{' '}
+        Shakala s'adresse donc principalement à des personnes qui cherchent à{' '}
         <strong>renforcer leur autodéfense intellectuelle</strong> via des échanges critiques.
       </p>
     </Question>
@@ -204,13 +204,13 @@ const Motivations = () => (
 
       <p>
         L'équipe n'est en réalité composée que de deux développeurs, qui mettent en place Shakala dans un but
-        de pratiquer l'artisanat logiciel sur un cas concret. Cela explique également pourquoi il n'y a pas de
-        communauté active qui fait vivre les discussions.
+        de pratiquer l'artisanat logiciel sur un cas concret. Cela explique d'ailleurs pourquoi il n'y a pas
+        de communauté active qui fait vivre les discussions.
       </p>
 
       <p>
-        Il n'existe <strong>aucun enjeu financier</strong> autour du projet, et aucun lien d'intérêt autre que
-        l'intérêt pour l'esprit critique et le développement d'applications web.
+        Il n'existe et <strong>aucun lien d'intérêt</strong> autour du projet, et en particulier aucun enjeu
+        financier.
       </p>
     </Question>
 
@@ -234,7 +234,7 @@ const Motivations = () => (
         souhaitez être tenu informé·e lorsque de vraies discussions verront le jour ! Nous sommes également à
         l'écoute de vos retours et idées{' '}
         <ExternalLink openInNewTab href={useConfigValue('feedbackUrl')}>
-          sur cette page
+          par ici
         </ExternalLink>
         .
       </p>
@@ -298,9 +298,9 @@ const Features = () => (
         qui ont eu le plus d'impact
       </Feature>
 
-      <Feature Icon={CommunityIcon}>
-        La plateforme est <strong>pilotée par la communauté</strong>, partagez-nous vos impressions et
-        proposez vos idées !
+      <Feature Icon={EditIcon}>
+        Les discussions disposent d'un système <strong>d'édition collaborative</strong> : tout le monde peut
+        proposer d'améliorer un message
       </Feature>
 
       <Feature Icon={SubscribeIcon}>
@@ -308,9 +308,9 @@ const Features = () => (
         réponse est publiée
       </Feature>
 
-      <Feature Icon={EditIcon}>
-        Les discussions disposent d'un système <strong>d'édition collaborative</strong> : tout le monde peut
-        proposer d'améliorer un message
+      <Feature Icon={CommunityIcon}>
+        La plateforme est <strong>pilotée par la communauté</strong>, partagez-nous vos impressions et
+        proposez vos idées !
       </Feature>
 
       <Feature Icon={TrophyIcon}>
