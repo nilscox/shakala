@@ -23,7 +23,9 @@ export class Database {
     this.orm = await createOrm({ dbName, ...config });
 
     await this.orm.connect();
-    await this.waitForDatabaseConnection();
+
+    // prevent blocking deployment because of max concurrent connections
+    // await this.waitForDatabaseConnection();
   }
 
   async close() {
