@@ -38,7 +38,7 @@ export default defineConfig<PostgreSqlDriver>({
   },
   driverOptions: {
     connection: {
-      ssl: process.env.DB_SECURE === 'true',
+      ssl: process.env.DATABASE_SECURE === 'true',
     },
   },
 });
